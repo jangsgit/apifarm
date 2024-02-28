@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <title th:text="${ system_title }"></title>
+    <link rel="stylesheet" href="/resource/windowContainer/css/jquery.scrollbar.min.css">
+    <link rel="stylesheet" href="/resource/windowContainer/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resource/windowContainer/css/nth-icons.css">
+    <link rel="stylesheet" href="/resource/windowContainer/css/nth-tabs.css">
+    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/theme-top-mes.css">
+    <link rel="stylesheet" href="/css/theme-left-mes.css">
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+        <div class="logo">
+            <div id="navbarBarMenu1" style="display: none;">
+                <button type="button" class="open_menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+            <h1 id="mainlogotitle" th:text="${ system_title }"></h1>
+        </div>
+        <div class="navbar">
+            <div class="left_align">
+                <div id="navbarBarMenu2" style="display: none;">
+                    <button type="button" class="open_menu">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </button>
+                </div>
+                <div class="profiles_txt" id="notify_text"></div>
+                <div class="profiles_txt">
+                    <span th:text="${ profiles }"></span><input type="hidden" id="default_menu_code" th:value="${default_menu_code}" />
+                </div>
+            </div>
+      <div class="right_align" style="padding: 7px 14px;">
+        <!--
+        <div class="notification_box">
+          <button type="button" id="notiButton" class="" data-navpopOpen="notification">
+            <i class="icon ion-ios-mail"></i>
+            <span class="indicator" id="msgCntHeader">0</span>
+          </button>                     
+          <div class="navpop_cont notification_mbox animated flipInX" data-navpopCont="notification">
+            <div class="pop_body rtmsg_body scrollbar-inner">
+              <ul id="msgList">
+              </ul>
+            </div>
+            <div class="pop_footer rtmsg_footer" id="realtimemsgfooter" style="display: none;">
+              <span id="msgCnt" class="text">0</span> <span>개의 새로운 메시지가 있습니다.</span>
+              <button type="button" class="btn-delete" id="rtmsgDelAll" title="메시지 전체삭제"><span class="icon"></span></button>
+            </div>
+          </div> 
+        </div>
+        -->
+
+        <div class="profile_box">
+          <button type="button" id="profile" data-navpopOpen="profile">
+            <span class="profile_info" id="userName1" th:text="${ userinfo.userProfile.name }"></span>
+            <i class="fas fa-angle-down"></i>
+          </button>
+          <div class="navpop_cont profile_mbox animated flipInX" data-navpopCont="profile">
+            <div class="pop_head">
+                <strong><span class="text" id="userName2" th:text="${ username }"></span></strong> <span>님</span>
+                (<span class="profile_state" data-commonCd="로그인 중">로그인 중</span>)
+              <!--<button type="button" data-navpopClose="profile"><i class="icon nth-icon-close-mini"></i></button>-->
+            </div>    
+            <div class="pop_body">
+              <ul>
+                  <li id="myinfo"><a href="#"><i class="icon ion-md-person"></i><span data-commonCd="내 정보">내 정보</span></a></li>
+                  <li id="myLanguage"><a href="#"><i class="icon ion-md-globe"></i><span data-commonCd="언어설정">언어설정</span></a></li>
+                  <li id="logout"><a href="#"><i class="icon ion-md-exit"></i><span data-commonCd="로그아웃">로그아웃</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="theme_box">
+          <button type="button" id="themebox" data-navpopOpen="themebox">
+            <i class="icon-notebook"></i>
+          </button>
+          <div class="navpop_cont theme_mbox animated flipInY" data-navpopCont="themebox">
+            <div class="pop_head">
+                <span data-commonCd="테마관리 (브라우저별로 적용됩니다.)">테마관리 (브라우저별로 적용됩니다.)</span>
+                <button type="button" data-navpopClose="themebox"><i class="icon nth-icon-close-mini"></i></button>
+            </div>
+            <div class="pop_body">
+                <div class="p-2">
+                    <div class="row row-flush mb-2">
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-mes" data-load-left-css="/css/theme-left-mes"><input type="radio" name="setting-theme" checked="checked"><span class="icon-check"></span><span class="split"><span class="color bg-white"></span><span class="color bg-white-light"></span></span><span class="color bg-white"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-b" data-load-left-css="/css/theme-left-a"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-info"></span><span class="color bg-info-light"></span></span><span class="color bg-white"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-c" data-load-left-css="/css/theme-left-a"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-green"></span><span class="color bg-green-light"></span></span><span class="color bg-white"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-d" data-load-left-css="/css/theme-left-a"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-purple"></span><span class="color bg-purple-light"></span></span><span class="color bg-white"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-e" data-load-left-css="/css/theme-left-a"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-danger"></span><span class="color bg-danger-light"></span></span><span class="color bg-white"></span></label></div>
+                        </div>
+                    </div>
+                    <div class="row row-flush mb-2">
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-a" data-load-left-css="/css/theme-left-b"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-white"></span><span class="color bg-white-light"></span></span><span class="color bg-gray-dark"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-f" data-load-left-css="/css/theme-left-b"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-info-dark"></span><span class="color bg-info"></span></span><span class="color bg-gray-dark"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-g" data-load-left-css="/css/theme-left-b"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-green-dark"></span><span class="color bg-green"></span></span><span class="color bg-gray-dark"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-h" data-load-left-css="/css/theme-left-b"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-purple-dark"></span><span class="color bg-purple"></span></span><span class="color bg-gray-dark"></span></label></div>
+                        </div>
+                        <div class="col-r mb-2">
+                            <div class="setting-color"><label data-load-top-css="/css/theme-top-i" data-load-left-css="/css/theme-left-b"><input type="radio" name="setting-theme"><span class="icon-check"></span><span class="split"><span class="color bg-danger-dark"></span><span class="color bg-danger"></span></span><span class="color bg-gray-dark"></span></label></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--header [E]-->
+  </div>
+  <div class="container">
+    <div class="menu_area">
+      <div class="menu_wrap">
+        <div class="tabs" data-tab="tabWrap">
+          <ul class="tab_links">
+            <li>
+              <button type="button" data-tablink=".tabs .all_menu" class="icon">
+                <span class="icon"></span><h data-commonCd="전체메뉴">전체메뉴</h>
+              </button>
+            </li>
+            <li>
+              <button type="button" data-tablink=".tabs .my_menu">
+                <span class="icon"></span><h data-commonCd="내 메뉴">내 메뉴</h>
+              </button>
+            </li>
+          </ul>
+          <div class="tab_contents scrollbar-inner all_menu">
+            <ul class="gnb" id="left-menu">
+            </ul>
+          </div>
+          <div class="tab_contents scrollbar-inner my_menu">
+            <ul class="gnb" id="bookmark-menu">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="con_area">
+      <div class="contents">
+        <div class="nth-tabs" id="main-tabs"></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <!--footer [S]-->
+    <span class="footer-left" id="link_privatepolicy" data-commonCd="개인정보 처리방침">개인정보 처리방침</span>
+    <span class="footer-left" id="link_emailreject" data-commonCd="이메일 무단수집 거부">이메일 무단수집 거부</span>
+    <span class="footer-right">Copyright ⓒ (주)엑타스. All Rights Reserved.</span>
+    <!--footer [E]-->
+  </div>
+</div>
+
+<script type="text/javascript" src="/resource/jquery.min.js"></script>
+<script type="text/javascript" src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
+    
+<script type="text/javascript">
+    $('html').attr('lang', sessionStorage.getItem('lang_code'));
+</script>
+<script type="text/javascript" src="/resource/windowContainer/js/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="/resource/windowContainer/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/ax5ui/ax5ui.all.min.js?v=1000"></script>
+
+<!-- 메뉴탭 이동 script -->
+<script type="text/javascript" src="/resource/windowContainer/js/html5sortable.js"></script>
+<script type="text/javascript" src="/js/nth-tabs.js?v=1030"></script>
+
+<th:block th:replace="system_js :: system_js" ></th:block>
+
+<script src="/js/common.js?v=1060"></script>
+<script type="text/javascript" src="/js/yumenu.js?v=1070"></script>
+<script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
+<script type="text/javascript" src="/js/ax5commUtil.js?v=1070"></script>
+<script type="text/javascript">
+    let nthTabs = null;
+    $(document).ready(function () {
+
+        let lang_cd = i18n.getLanguageCode();
+        //i18n.initializeCommonData(lang_cd);
+        i18n.initializeMenuData(lang_cd);
+
+        //let default_menu = 'wm_dashboard_summary';
+        let default_menu = $('#default_menu_code').val();
+          nthTabs = $('#main-tabs').nthTabs();
+        if (default_menu != '') {
+            nthTabs.addTab({
+                id: default_menu,
+                title: 'Main',
+                url: '/gui/' + default_menu + '/default',
+                active: true,
+                allowClose: false
+            });
+            if (!$('[href*=#' + default_menu + ']').find('i').hasClass('fa-star')) {
+                $('[href*=#' + default_menu + ']').prepend('<i class="fas fa-star' + ('false' == 'true' ? ' bookmark' : '') + '"></i>');
+            }
+            $('.nav-tabs .fa-star').off('click').on('click', function (e) {
+                $(this).toggleClass('bookmark');
+                fnBookMarkSave(default_menu, $(this).hasClass('bookmark'));
+            });
+            setTimeout(function () {
+                var $targetMenu = $('#left-menu').find('a[data-objid=' + default_menu + ']').closest('li.has-sub');
+                $targetMenu.addClass('open');
+                $targetMenu.children('ul').show();
+            }, 100);
+        }
+        else {
+            nthTabs.addTab({
+                id: default_menu,
+                title: 'dddd',
+                url: '/gui/' + default_menu + '/default',
+                active: true,
+                allowClose: false
+            });
+            if (!$('[href*=' + default_menu + ']').find('i').hasClass('fa-star')) {
+                $('[href*=' + default_menu + ']').prepend('<i class="fas fa-star' + ('false' == 'true' ? ' bookmark' : '') + '"></i>');
+                $('.nav-tabs .fa-star').off('click').on('click', function (e) {
+                    $(this).toggleClass('bookmark');
+                    fnBookMarkSave(default_menu, $(this).hasClass('bookmark'));
+                });
+            }
+            setTimeout(function () {
+                let $targetMenu = $('#left-menu').find('a[data-objid=' + default_menu + ']').closest('li.has-sub');
+                $targetMenu.addClass('open');
+                $targetMenu.children('ul').show();
+            }, 100);
+        }
+        $('.scrollbar-inner').scrollbar();
+        var parentClass = $(this).parent('li');
+        if (!$(this).hasClass('on')) {
+            $('.documents a').removeClass('on');
+            $(this).addClass('on');
+        }
+        if (parentClass.attr('class') == 'documents') {
+            $('.gnb li').removeClass('open');
+            $('.gnb li > ul').slideUp(100);
+        }
+        if (localStorage.getItem('theme-top') === null && localStorage.getItem('theme-left') === null) {
+            dynamicLinkCss('/css/theme-top-mes', '/css/theme-left-mes');
+        } else {
+            dynamicLinkCss(localStorage.getItem('theme-top'), localStorage.getItem('theme-left'));
+        }
+
+        //let _mainUrl = 'wm_dashboard_summary';
+        let _mainUrl = default_menu;
+        // 모바일 구분
+        if ('B' == 'F') {
+            _mainUrl = '#OBJ0000000199';
+            $('#navbarBarMenu1').show();
+            $('#navbarBarMenu2').hide();
+            $('.menu_wrap').addClass('mobile_menu_wrap');
+            $('.menu_area').addClass('mobile_menu_area');
+            $('.con_area').addClass('mobile_con_area');
+        }
+        else {
+            $('#navbarBarMenu1').hide();
+            $('#navbarBarMenu2').show();
+        }
+
+        // 메뉴 자동으로 닫히게
+        if ($(window).innerWidth() < 800) {
+            $('body').addClass('open');
+            $('.wrap').addClass('menu_close');
+            $('.con_area').addClass('open');
+        }
+
+        var jsmedia = window.matchMedia("screen and (max-width:799px)");
+        jsmedia.addListener(function (e) {
+            if (e.matches) {
+                $('body').addClass('open');
+                $('.wrap').addClass('menu_close');
+                $('.con_area').addClass('open');
+                $('.menu_wrap').addClass('mobile_menu_wrap');
+                $('.menu_area').addClass('mobile_menu_area');
+                $('.con_area').addClass('mobile_con_area');
+            } else {
+                $('body').removeClass('open');
+                $('.wrap').removeClass('menu_close');
+                $('.con_area').removeClass('open');
+                $('.menu_wrap').removeClass('mobile_menu_wrap');
+                $('.menu_area').removeClass('mobile_menu_area');
+                $('.con_area').removeClass('mobile_con_area');
+            }
+        });
+
+        //$('#mainlogotitle').text("");
+        $('#mainlogotitle').on('click', function () {
+            nthTabs.toggleTab(_mainUrl);
+        });
+
+        //menu slide(left open)
+        $('.open_menu').click(function () {
+            $(this).toggleClass('menu_close');
+            $('.wrap').toggleClass('menu_close');
+        });
+        //menu slide(left open)
+        $('.open_menu').click(function () {
+            $('.con_area').toggleClass('open');
+            $('.left_area').toggleClass('open');
+            $('body').toggleClass('open');
+        });
+
+        // TAB메뉴 Context Menu
+        $('#tabdragdrop').on('contextmenu', 'li', function (e) {
+            if ($(this).attr('not-allow-close') === undefined) {
+                $('.otherAuthmaintab').show();
+                if ($(this).hasClass('active')) {
+                    $('.otherAuthtab').show();
+                } else {
+                    $('.otherAuthtab').hide();
+                }
+            } else {
+                $('.otherAuthmaintab').hide();
+            }
+            var leftxpo = 260;
+            if ($('.menu_close .menu_area').css('left') !== undefined) {
+                leftxpo = 15;
+            }
+            var left = e.pageX - leftxpo;
+            $('#contextTabMenu').toggle().css({
+                left: left + 'px'
+            }).attr('targetObjId', $(this).children('a').attr('href'));
+            return false;
+        });
+
+        $(".profile_box").click(function () {
+            $(".profile_mbox").toggle();
+        })
+
+        $(".btn_nbox_close").click(function () {
+            $(".notification_mbox").hide();
+        });
+
+        $(".btn_pbox_close").click(function () {
+            $(".profile_mbox").hide();
+        });
+
+
+        $('#logout').on('click', function (e) {
+            e.preventDefault();
+            Alert.confirm('', '로그아웃하시겠습니까?', function () {
+                i18n.resetData();
+                location.href = '/logout';
+            });
+        });
+
+        let notify_text = `Yesterday was a history, Tomorrow is a mystery, but today is a gift.
+That's why we called a present
+Divide and Conquer!
+깨진 유리창은 주변에 전파된다
+정품, 정량, 정위치, 청결, 습관화(3정 5S).
+모든 문제를 눈에 보이게 하라.
+Don't Repeat Yourself(DRY).
+Define the problem before solving it.
+No pain, No gain.
+No Input, No Output.
+Gabege In, Gabage Out(GIGO).
+1대 29대 300. 하인리히 법칙.
+갈까 말까 할 때는 가라.
+살까 말까 할 때는 사지 마라.
+말할까 말까 할 때는 말하지 마라.
+줄까 말까 할 때는 줘라.
+성공은 두 번 이루어진다. 한 번은 마음. 그 다음은 리얼.
+배우고 때로 익히면, 또한 즐겁지 아니한가? (공자)
+배워서 남 주자.
+一日不讀書 口中生荊棘 하루라도 책을 읽지 않으면 입안에 가시가 돋힌다.
+측정할 수 없는 것은 개선할 수 없다.
+Quality is planned, designed, and built in-not inspected in.`;
+
+        CR = String.fromCharCode(10);
+        let notify_list = notify_text.split(CR);
+
+        let notify_index = 0;
+
+        let timer = setInterval(function () { 
+            return;
+
+            if (notify_index >= notify_list.length)
+                notify_index = 0;
+            let notify_text = notify_list[notify_index];
+            $('#notify_text').text(notify_text);
+            notify_index++;
+        }, 5000);
+
+        // 내정보 클릭
+        $('#myinfo').on('click', function (e) {
+            e.preventDefault();
+            Ax5Modal.open({ url: '/page/account/myinfo', width: 400, height: 300 });
+            $(".profile_contbox").hide();
+        });
+
+        // 언어설정
+        $('#myLanguage').on('click', function (e) {
+            e.preventDefault();
+            Ax5Modal.open({ url: '/page/account/language', width: 400, height: 200 });
+            $(".profile_contbox").hide();
+        });
+        
+        // 테마변경
+        $('.setting-color > label').on('click', function (e) {
+            dynamicLinkCss($(this).data('load-top-css'), $(this).data('load-left-css'));
+        });
+
+        // 개인정보 처리방침 클릭
+        $('#link_privatepolicy').on('click', function (e) {
+            Ax5Modal.open({ url: '/page/popup/privacy_policy', width: 800, height: 200 });
+        });
+
+        // 이메일 무단수집 거부 클릭
+        $('#link_emailreject').on('click', function (e) {
+            Ax5Modal.open({ url: '/page/popup/email_unauthorized_collection_policy', width: 800, height: 400 });
+        });
+
+        // 오픈소스 사용공지 필요
+    });
+    
+</script>
+        
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+</body>
+</html>

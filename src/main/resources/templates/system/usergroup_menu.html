@@ -1,0 +1,268 @@
+<html layout:decorate="~{layout_page}">
+<th:block layout:fragment="content">
+<div class="content_wrap">
+    <section>
+        <div class="title_box ">
+            <div class="left_align">
+                <h3 data-labelCd="메뉴 권한">메뉴 권한</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+        </div>
+
+        <div class="table_box search">
+            <form id="searchForm" autocomplete="off">
+                <div class="row">
+                    <div class="col-5 col-lg-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_md" data-labelCd="사용자 그룹">사용자 그룹</span>
+                            </div>
+                                <select class="form-control2" id="cboUserGroup" name="cboUserGroup"></select>
+                        </div>
+                    </div>
+                    <div class="col-5 col-lg-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_md" data-labelCd="메뉴폴더">메뉴폴더</span>
+                            </div>
+                                <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder"></select>
+                        </div>
+                    </div>
+                    <div class="col-1" >
+                            <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+
+    </section>
+    <section>
+        <div class="grid_box">
+            <div class="title_box">
+                <span class="right_align rpt" data-labelCd="메뉴 권한 설정">메뉴 권한 설정</span>
+                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
+            </div>
+                    <div class="h-600" data-ax5grid="usergroupmenu-grid" ></div>
+        </div>
+
+    </section>
+</div>
+</th:block>
+<th:block layout:fragment="scripts">
+<script type="text/javascript">
+
+
+    class UserGroupMenuPage {
+        constructor() {
+            this.grid = null;
+            this.init();
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="usergroupmenu-grid"]'),
+                sortable: false,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38,  // 헤더 높이
+
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        //e.colIndex
+                        //e.dindex
+                        //c.value
+                        //e.item
+                        //e.list
+                        //_this.grid.select(this.dindex);
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'name', label: '코드명', width: 250, align: 'left', sortable: false, treeControl: true },
+                    {
+                        key: 'r',
+                        label: "<input type='checkbox' id='checkReadAll'/>읽기",
+                        width: 100,
+                        align: 'center',
+
+                        sortable: false,
+                        editor: {
+                            type: "checkbox",
+                            disabled: function () {
+                                return this.item.is_folder;
+                            }
+                        }
+                    },
+                    {
+                        key: 'w',
+                        label: "<input type='checkbox' id='checkWriteAll' />쓰기",
+                        width: 100, align: 'center', sortable: false,
+                        editor: {
+                            type: "checkbox",
+                            disabled: function () {
+                                return this.item.is_folder;
+                            }
+                        }
+                    },
+                    /*
+                    {
+                        key: 'x', label: '권한없음', width: 100, align: 'center', sortable: false,
+                        editor: {
+                            type: "checkbox",
+                            disabled: function () {
+                                return this.item.is_folder;
+                            }
+                        }
+                    },
+                    */
+                ],
+                tree: {
+                    use: true,
+                    indentWidth: 15,
+                    arrowWidth: 15,
+                    iconWidth: 18,
+                    icons: {
+                      openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+                      collapsedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+                      groupIcon: '<i class="fa fa-minus-square" aria-hidden="true"></i>',
+                      collapsedGroupIcon: '<i class="fa fa-plus-square" aria-hidden="true"></i>',
+                      //itemIcon: '-'
+                    },
+                    columnKeys: {
+                      parentKey: 'pid',
+                      selfKey: 'id'
+                    }
+                },              
+            };
+
+            this.grid = new ax5.ui.grid(config);
+            AjaxUtil.fillSelectOptions($('#cboUserGroup'), 'user_group', '', '');
+            AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
+
+            $('#btnSave').click(function (e) {
+                _this.saveUserGroupMenu()
+            });
+
+            let $checkReadAll = $('#checkReadAll');
+
+            $checkReadAll.click(function (e) {
+                $.each(_this.grid.list, function (idx, item) {
+                    if (item.menu_code != '') {
+                        _this.grid.setValue(idx, 'r', e.target.checked);
+                    }
+                });
+            });
+
+            let $checkWriteAll = $('#checkWriteAll');
+            $checkWriteAll.click(function (e) {
+                $.each(_this.grid.list, function (idx, item) {
+                    if (item.menu_code != '') {
+                        _this.grid.setValue(idx, 'w', e.target.checked);
+                    }
+                });
+            });
+        }
+        
+        searchDataBind() {
+            let _this = this;
+            let url = '/api/system/usergroupmenu/read';
+            let param = {
+                'group_id': $('#cboUserGroup').val(), 
+                'folder_id': $('#cboMenuFolder').val(),
+            };
+            let result = AjaxUtil.getSyncData(url, param);
+            if (result.success) {
+                let recordsTotal = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+            }
+
+            //page.setButtonDisable(true, false, false);
+        }//searchDataBind
+
+        saveUserGroupMenu() {
+            let _this = this;
+            let url = '/api/system/usergroupmenu/save';
+            let group_id = $('#cboUserGroup').val();
+            let data = {group_id: group_id, Q : ''};
+
+            let items = [];
+            $.each(_this.grid.list, function (idx, item) {
+                let menu_code = item.menu_code;
+                if (menu_code != "") {
+
+                    if (item.r == 'false') item.r = false;
+                    if (item.w == 'false') item.w = false;
+
+                    items.push({
+                        menu_code: item.menu_code,
+                        r: item.r,
+                        w: item.w,
+                        ugm_id: item.ugm_id,
+                    });
+                }
+            });            
+            data.Q = JSON.stringify(items);
+            //데이터입력체크루틴 누락
+            //_this.grid.sel
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+                let fnSuccess = function (result) {                    
+                    if(result.success){
+                        Notify.success('저장되었습니다'); // Notification
+                        _this.searchDataBind();
+                    }                    
+                };
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            }, function () { });
+            
+        }
+
+    }
+
+    let page = null;
+
+    $(document).ready(function (e) {
+        page = new UserGroupMenuPage();
+        page.searchDataBind();
+        $('#btnSearch').click(function (ex) {
+            page.searchDataBind();
+        });
+
+        $('#cboUserGroup,#cboMenuFolder').change(function (ex) {
+            page.searchDataBind();
+        });
+
+        $('#btn_save_group_menu').click(function (e) {
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.saveUserGroupMenu() },
+                function () { }
+            );
+        });
+
+    });
+</script>
+</th:block>
+</html>

@@ -1,0 +1,604 @@
+<html layout:decorate="~{layout_page}">
+
+<th:block layout:fragment="content">
+
+<div class="content_wrap">
+
+    <section class="section mb-1">
+
+        <div class="title_box ">
+            <div class="left_align">
+                <h3>작업자 건강진단서</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>        
+        </div>
+
+        <div class="table_box search" >
+
+            <div class="row" >
+                <div class="col-4 col-xl-4" >
+                    <div class="input-group" >
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_lg" data-labelCd="작업자 명">작업자 명</span>
+                        </div>
+                        <input type="text" class="form-control2" id="keyword" name="keyword"/>
+                    </div>
+                </div>
+
+                <div class="col-1" >
+                    <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div> 
+                        
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="section">
+                <div class="grid_box">
+                    <div class="title_box">
+                         <span class="right_align rpt">건강진단서</span>
+                        <button type="button" class="btn-default y_write_auth" id="btnNew"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn-default" id="btnEdit"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="btn-danger y_write_auth" id="btnDel"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="btn-default " id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                        <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+                    </div>
+                    <div class="h-630" data-ax5grid="report_grid" ></div>  
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-tmpl" id="reportCreateTemplate">
+<div class="row">
+    <div class="content_wrap popup col-12">
+        <section class="pt-2">
+            <form id="detailForm">
+                <input type="hidden" id="id" name="id" value="{%=o.id%}">
+                <div class="table_box sub" id="detail_box">
+                    <div class="row">
+
+                         <div class="col-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">작업자</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="PersonName" name="PersonName" value="{%=o.PersonName%}"/>
+                                 <select class="form-control2" id="Person_id" name="Person_id"  value="{%=o.Person_id%}" style="display:none;"></select>
+                            </div>
+                        </div> 
+
+                        <div class="col-6">
+                            <div class="input-group" data-ax5picker="basic" id="date_TestDate">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">검진일</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="TestDate" name="TestDate" value="{%=o.TestDate%}"/>
+                                <span class="input-group-text fs-xl"><i class="fas fa-calendar-alt calendar_color" ></i></span>
+                            </div>
+                        </div>	
+
+                        <div class="col-6">
+                            <div class="input-group" data-ax5picker="basic" id="date_IssueDate" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">발급일</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="IssueDate" name="IssueDate" value="{%=o.IssueDate%}"/>
+                                <span class="input-group-text fs-xl"><i class="fas fa-calendar-alt calendar_color" ></i></span>
+                            </div>
+                        </div>	
+
+                        <div class="col-6">
+                            <div class="input-group" data-ax5picker="basic" id="date_ExpireDate" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">만료일</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="ExpireDate" name="ExpireDate" value="{%=o.ExpireDate%}"/>
+                                <span class="input-group-text fs-xl"><i class="fas fa-calendar-alt calendar_color" ></i></span>
+                            </div>
+                        </div>	
+
+                        <div class="col-6">
+                            <div class="input-group" data-ax5picker="basic" id="date_NextTestDate" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">차기검사일</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="NextTestDate" name="NextTestDate" value="{%=o.NextTestDate%}"/>
+                                <span class="input-group-text fs-xl"><i class="fas fa-calendar-alt calendar_color" ></i></span>
+                            </div>
+                        </div>
+                        <!--	
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4_area">비고</span>
+                                </div>
+                                <textarea class="form-control2" id="description" name="description">{%=o.description%}</textarea>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </form>
+
+        <section class="section">
+            <div class="popup_button_group bottom">
+                <div class="left_align">
+                <button type="button" class="btn-popup" id="btnSave" ><span>저장</span></button>
+                <button type="button" class="btn-popup" id="modal-close-button"><span>닫기</span></button>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="grid_box" id='image_upload1'></div>
+
+        </section>
+
+    </div>
+    <div class="col-4">
+        <img id="imgPhoto" src="" height="600" width="400" />
+    </div>
+</div>
+</script>
+</th:block>
+
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+<th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+<script type="text/javascript">
+    class reportPage {
+        constructor() {
+            this.grid = null;
+            this.uploader = null;
+            this.init(); 
+
+            this.baseUrl = '/api/haccp/person_certi';
+            this.certificate_code = 'person_medical_report';
+            this.table_name = 'person_certi';
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="report_grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: true, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        _this.grid.select(this.dindex);
+                    }
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+               columns: [
+                   { key: 'id', label: '번호', width: 100, align: 'left'},
+                   { key: 'dept_name', label: '소속', width: 100, align: 'left'},
+                   { key: 'person_name', label: '작업자', width: 100, align: 'left' },
+                   { key: 'test_date', label: '검진일', width: 100, align: 'center' },
+                   { key: 'issue_date', label: '발급일', width: 100, align: 'center' },
+                   { key: 'expire_date', label: '만료일', width: 100, align: 'center' },
+                   { key: 'next_test_date', label: '차기검진일', width: 100, align: 'center', 
+                    styleClass: function () {
+	
+							var nextTestDate = new Date(this.item.next_test_date);
+							var nextMonth = new Date();
+							var nextWeek = new Date();
+							
+							//오늘
+							var today = new Date();
+							//한달후
+							var secondDate = new Date(nextMonth.setMonth(nextMonth.getMonth() + 1));
+							//7일후
+							var thirdDate = new Date(nextWeek.setDate(nextWeek.getDate() + 7));
+							
+							
+							var color = null;
+							
+							if(nextTestDate < today) {
+								color = "grid-cell-red"
+							}
+							
+							if(today <= nextTestDate && nextTestDate <= secondDate) {
+								color = "grid-cell-yellow"
+							}
+							if(today <= nextTestDate && nextTestDate <= thirdDate) {
+								color = "grid-cell-blue"
+							}
+							
+							return color
+						
+							
+                    }
+                   },
+                   {
+                       key: 'files', label: '파일', width: 150, align: 'left', 
+                       formatter: function () {
+                           let result = '';
+                           let files = this.item.files
+                           if (files != null && files[0] != null) {
+                               files.forEach(function (file) {
+                                   result += '<a href="javascript:gridFileDownload(\'' + file.attach_name + '\',' + file.file_id + ',\'' + file.file_name + '\')" title="'+ file.file_name + '">&nbsp;<i class="far fa-file" aria-hidden="true" ></i >&nbsp;</a>&nbsp;'
+                               });
+                           }
+                           return result;
+                       }
+                   },
+                   { key: 'description', label: '설명', width: 300, align: 'left', hidden: true },
+                ]
+            };
+
+            this.grid = new ax5.ui.grid(config);
+            this.grid_config = config; 
+
+            //AjaxUtil.fillSelectOptions($('#cbodetailForm'), 'doc_form', 'choose', false, 'file');
+            //AjaxUtil.fillSelectOptions($('#detailForm').find('#doc_form_id'), 'doc_form', 'choose', false, 'file');
+        }
+
+        // 버튼 활성화 설정
+        //setButtonDisable(_boolnew, _boolsave, _booldel) {
+        //    $('[id=btnNew]').prop('disabled', _boolnew);
+        //    $('[id=btnEdit]').prop('disabled', _boolsave);
+        //    $('[id=btnDel]').prop('disabled', _booldel);
+        //}
+
+        //버튼 활성화 
+        setButtonState() {
+            let pk = this.grid.getList("selected");
+            $('#btnNew').prop('disabled', false);
+            $('#btnSave').prop('disabled', false);
+            if (pk) {
+                $('#btnDel').prop('disabled', false);
+                $('#btnEdit').prop('disabled', false);
+            }
+            else {
+                $('#btnDel').prop('disabled', true);
+                $('#btnEdit').prop('disabled', true);
+            }
+        }
+
+        //모달
+        showDataEdit(data) {
+            let _this = this;
+            let content = tmpl('reportCreateTemplate', data);
+            let $content = $(content);
+            let modalContainer;
+            if (!data.doc_form_id) {
+                modalContainer = new PopupDraggable('건강진단서 등록');
+            } else {
+                modalContainer = new PopupDraggable('건강진단서 수정');
+            }
+            modalContainer.open({ width: 800, height: 800, $content });
+   
+            $content.find('#date_TestDate').ax5DatePicker({
+                direction: 'top',
+                onStateChanged: function () {
+                    let val = $content.find('#date_TestDate').val();
+                }
+            });
+            $content.find('#date_IssueDate').ax5DatePicker({ direction: 'top' });
+            $content.find('#date_ExpireDate').ax5DatePicker({ direction: 'top' });
+            $content.find('#date_NextTestDate').ax5DatePicker({ direction: 'top' });
+
+            $('#TestDate').change(function (e) {
+                let val = $('#TestDate').val();
+                let test_date = new Date(val);
+                let data_year = test_date.getFullYear();
+                data_year++;
+                let expire_date = new Date(test_date);
+                expire_date.setFullYear(data_year);
+                expire_date.setDate(expire_date.getDate()-1);
+
+                let next_date = new Date(expire_date);
+                next_date.setDate(next_date.getDate() - 7);
+
+                expire_date = CommonUtil.formatYYYYMMDD(expire_date);
+                next_date = CommonUtil.formatYYYYMMDD(next_date);
+
+
+                $('#ExpireDate').val(expire_date);
+                $('#NextTestDate').val(next_date);
+            });
+         
+            $content.find('#btnSave').on('click', function () {
+                let $form = $content.find('#detailForm');
+                Alert.confirm('', 
+                    '저장하시겠습니까?',
+                    function () { _this.saveData($form, modalContainer); },
+                    function () { }
+                );
+            }); 
+
+            //let files = data.files;
+            //if (files != null && files[0] != null) {
+            //    let imgSrc = '';
+            //    files.forEach(function (file) {
+            //        imgSrc = imageUri(file.attach_name, file.file_id);
+                    
+            //    });
+            //    $('#imgPhoto').attr('src', imgSrc);
+            //}
+        }
+
+        // 문서 목록 조회
+        searchMainData() {
+            let _this = this;
+                        
+            let param = {
+                'certificate_code': _this.certificate_code,
+                'keyword': $('#keyword').val(),
+            };
+
+            let result = AjaxUtil.getSyncData(_this.baseUrl + "/read_person_medical_report", param);
+            if (result != null) {
+
+                let count = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+            }
+            //_this.setButtonDisable(false, true, true);
+            _this.setButtonState();
+        }
+
+
+        showDetailData(id) {
+            let _this = this;
+            let param = {
+                'id': id, 
+            };
+            
+            let result = AjaxUtil.getSyncData(_this.baseUrl + "/detail", param);
+
+            if (result) {
+                //page.setButtonDisable(false, false, false);
+                page.setButtonState();
+            }
+            page.uploader.mode = 'active';
+
+        }
+        
+        // 문서 정보 저장
+        saveData($form, modalContainer) {
+            let _this = this;
+            let url = _this.baseUrl + '/save_person_medical_report';
+            let data = FormUtil.extractForm($form);
+            //data['CertificateCode'] = _this.certificate_code;
+            data['fileId'] = $("#srchFileId").val();
+
+            // 필수입력 check routine
+            if (!data.PersonName) {
+                Alert.alert('', '작업자명을 입력해주세요.');
+                return false;
+            }
+            
+            let fnSuccess = function () {
+                modalContainer.close();
+                Notify.success('저장되었습니다');
+                _this.searchMainData();
+            }
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        // 문서 정보 삭제
+        deleteData(id) {
+            let _this = this;
+            let url = _this.baseUrl + '/delete';
+            //let id = $('#detailForm').find('#id').val();
+            let data = { 'id': id }; 
+            let fnSuccess = function (res) {
+               _this.deleteFile(id);
+            }
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+		deleteFile(id) {
+            let _this = this;
+            let url = '/api/common/attach_file/deleteFile';
+            //let id = $('#docForm').find('#id').val();
+            let data = { 'DataPk': id }; 
+            let fnSuccess = function (res) {
+                Notify.success('삭제되었습니다');
+                _this.searchMainData();
+            }
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);	
+		}
+        //엑셀다운로드
+        exportExcel() {
+            var targetview = this.grid;
+            // 현재 html코드로 데이터 만들어 확장자만 xls로 변경해주고 있음
+            targetview.exportExcel('건강진단서.xls');
+        }
+
+        //파일 업로더    
+        setUploader(id) {
+            let _this = this;
+
+            let uploader = new ax5FileUploadClass('image_upload1', id,
+                {
+                    table_name: _this.table_name,
+                    attach_name: 'basic',
+                    accept_files: 'png,jpg,gif',
+                    multiple: true,
+                    max_count: 5,
+                    file_size: 100,
+                    upload_callback: function (param) {
+                        uploader.showLastImage('imgPhoto');
+                        //let file_id = $('#srchFileId').val();
+                        //let imgSrc = uploader.imageUri(file_id);
+                        //$('#imgPhoto').attr('src', imgSrc);
+                    },
+                    delete_callback: function (param) {
+                        //let file_id = $('#srchFileId').val();
+                        $('#imgPhoto').attr('src', '');
+                    },
+                    file_click_callback: function (file_id) {
+                        uploader.showImage('imgPhoto', file_id);
+                        //let imgSrc = uploader.imageUri(file_id);
+                        //$('#imgPhoto').attr('src', imgSrc);
+                    },
+                    can_write: userinfo.can_write(),
+                });
+            _this.uploader = uploader;
+
+            //_this.upload1 = new UploadOneImage(1, {
+            //        table_name: _this.table_name,
+            //        data_pk: data.id,
+            //        attach_name: 'basic',
+            //        file_id: data.file_id,
+            //        upload_div_id: 'image_upload1',
+            //        //upload_form_id: 'xxx',
+            //        image_width: '100%',
+            //        image_height: 'auto'
+            //    }
+            //);
+            //_this.upload1.printFormDiv('uploadForm');
+        }
+    }
+  
+    let page = null;
+
+    $(document.body).ready(function (e) {
+        page = new reportPage();
+
+         //그리드 컬럼 설정
+        page.popColSetting = new popColSetting();
+        let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid', page.grid);
+
+        if (userinfo.group_code == 'admin') {
+            $('#btnGridSetting').css('visibility', 'visible');
+        }
+
+        $('#btnGridSetting').click(function (e) {
+            let _this = this;
+            let fix_cols = page.grid_config.frozenColumnIndex;
+            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix': false, 'fix_cols': fix_cols });
+        });
+        
+		page.searchMainData();
+	
+        //$('#date_to').val(this_year + '-12-31');
+
+
+        // 검색버튼 클릭
+        $('#btnSearch').click(function (e) {
+            page.searchMainData();
+        });
+
+        // 신규버튼
+        $('#btnNew').click(function (e) {
+
+            let data = {
+                'id': '',
+            };
+
+            page.showDataEdit(data);
+            page.setUploader(null);
+            
+            //$("#addFile").prop('disabled', false);
+            
+            ////$('[data-uploaded-box="fileuploadAx"]').show();
+            //$('#fileUploadBox').show();
+
+        });
+
+         // 수정버튼
+        $('#btnEdit').click(function (e) {
+            let items = page.grid.getList("selected");
+            if (items.length > 0) {
+                let id = items[0].id;
+                let url = page.baseUrl + '/detail';
+                result = AjaxUtil.getSyncData(url, { 'id': id });
+                
+                page.showDataEdit(result.data);
+                page.setUploader(id);
+                page.uploader.showFirstImage('imgPhoto');
+                //if (page.uploader.file_id_list.length > 0) {
+                //    let file_id = page.uploader.file_id_list[0];
+                //    let imgSrc = page.uploader.imageUri(file_id);
+                //    $('#imgPhoto').attr('src', imgSrc);
+                //}
+
+
+                //$('#addFile').prop('disabled', false);
+                //$('#DataPk').val(id);
+                ////$('[data-uploaded-box="fileuploadAx"]').show();
+                //$('#fileUploadBox').show();
+
+                ////파일조회
+                //let attparam = { "action": 'detailFiles', "TableName": page.table_name, 'DataPk': id, attachName: 'basic' };
+                //YuFileUploader.getAttachFiles(attparam);
+            } else {
+                Alert.alert('', '수정할 문서를 선택해 주세요.')
+            }
+        });
+
+        // 삭제버튼
+        $('#btnDel').click(function (e) {
+
+            let items = page.grid.getList("selected");
+            if (items.length > 0) {
+                Alert.confirm('', "삭제하시겠습니까?",
+                    function () {
+                        let id = items[0].id;
+                        page.deleteData(id);
+                    },
+                    function () { }
+                );
+            } else {
+                Alert.alert('', '삭제할 건강진단서를 선택해 주세요.')
+
+            }
+
+        });
+
+		
+        //엑셀
+        $('#btnExcel').click(function (e) {
+            page.exportExcel();
+        });
+	
+    });
+
+    // 그리드 파일 다운로드
+    function imageUri(attachName, fileId) {
+        let tableName = page.table_name;
+        let url = '/api/files/download?TableName=' + tableName + '&AttachName=' + attachName + '&file_id=' + fileId;
+        return url;
+    }
+
+    function gridFileDownload(attachName, fileId, fileNm) {
+        let tableName = page.table_name;
+        //let url = '/api/files/download?TableName=' + tableName + '&AttachName=' + attachName + '&file_id=' + fileId;
+        let url = imageUri(attachName, fileId);
+        AjaxUtil.downloadFile(url, fileNm);
+    }
+</script>
+</th:block>
+</html>

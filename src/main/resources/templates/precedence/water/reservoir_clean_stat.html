@@ -1,0 +1,295 @@
+<html layout:decorate="~{layout_page}">
+<th:block layout:fragment="content">
+<div class="content_wrap">
+
+    <section class="section">
+        <div class="title_box ">
+            <div class="left_align">
+                <h3 data-labelCd="저수조용수 관리점검표 목록">저수조용수 관리점검표 목록</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderRefresh" title="새로고침"><i class="fas fa-undo-alt"></i></button>
+        </div>
+
+        <div class="table_box search">
+            <div class="row">
+                <div class="col-8 col-lg-4 col-xl-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_sm" data-labelCd="점검월">점검월</span>
+                        </div>
+                        <input type="month" class="form-control2" value="" id="srchStartDt" name="srchStartDt" placeholder="" title="" />
+                        <span class="slow_sign">~</span>
+                        <input type="month" class="form-control2" value="" id="srchEndDt" name="srchEndDt" placeholder="" title="" />
+                    </div>
+                </div>
+                <div class="col-4 col-lg-3 col-xl-2" >
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_t4">결재상태</span>
+                        </div>
+                            <select class="form-control2" id="cboState" name="cboState" ></select>
+                    </div>
+                </div> 
+                <div class="col-1">
+                    <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div id="approveBox"></div>
+        <div class="grid_box" id="prodListGrid">
+            <div class="title_box">
+                <span class="right_align rpt" data-labelCd="일지현황">일지현황</span>
+                <button type="button" class="btn-default" id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                <button type="button" class="btn-default" id="btnAdd">등록</button>
+            </div>
+            <div class="h-600" data-ax5grid="document_grid"></div>
+        </div>
+    </section>
+</div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+<script type="text/javascript">
+    class materialStorehouseStat {
+        constructor() {
+            this.grid = null;
+            this.baseUrl = '/api/precedence/reservoir_clean_stat';
+            this.init();
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="document_grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 25,  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {                        
+                        _this.grid.select(this.dindex);
+                        _this.detail(this);
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    //{ key: 'Title', label: '일지명', width: 350, align: 'center' },
+                    {
+                        key: 'StateName', label: '결재상태', width: 100, align: 'center', styleClass: function () {
+                            return CommonUtil.convertApprStateCss(this.item.StateName, this.item.State);
+                        }
+                    },
+                    {
+                        key: 'LineName', label: '결재현황', width: 350, align: 'left',
+                        formatter: function () {
+                            return CommonUtil.convertApprLineNameHtml(this.item.LineName, this.item.LineNameState);
+                        }
+                    },
+                    { key: 'DataDate', label: '월', width: 120, align: 'center' },
+                    {
+                        key: 'SearchYN', label: '조회', width: 80, align: 'center',
+                        formatter: function () {
+                            let html = '';
+                            if (this.item.SearchYN == 'Y') {
+                                html = '<button class="btn-default" style="width:100%; height:0.9em; font-size:1em; padding:0; margin:0">조회</button>'
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        key: 'EditYN', label: '수정', width: 80, align: 'center',
+                        formatter: function () {
+                            let html = '';
+                            if (this.item.EditYN == 'Y') {
+                                html = '<button class="btn-default" style="width:100%; height:0.9em; font-size:1em; padding:0; margin:0">수정</button>'
+                            }
+                            return html;
+
+                        }
+                    },
+                    {
+                        key: 'DeleteYN', label: '삭제', width: 80, align: 'center',
+                        formatter: function () {
+                            let html = '';
+                            if (this.item.DeleteYN == 'Y') {
+                                html = '<button class="btn-danger" style="width:100%; height:0.9em; font-size:1em; padding:0; margin:0">삭제</button>'
+                            }
+                            return html;
+
+                        }
+                    },
+                ]
+            };
+            this.grid = new ax5.ui.grid(config);
+            this.grid_config = config;
+        }
+
+        // 일지 상세
+        detail(data) {
+            let _this = this;
+            if (data.column.key == 'SearchYN' && data.item.SearchYN == 'Y') {
+                location.href = '/gui/' + gui.gui_code + '/edit?bh_id=' + data.item.id + '&data_date=' + data.item.DataDate + '&view_mode=true' + this.createSearchCond('&');
+            } else if (data.column.key == 'EditYN' && data.item.EditYN == 'Y') {
+                location.href = '/gui/' + gui.gui_code + '/edit?bh_id=' + data.item.id + '&data_date=' + data.item.DataDate + this.createSearchCond('&');
+            } else if (data.column.key == 'DeleteYN' && data.item.DeleteYN == 'Y') {
+                Alert.confirm('', '삭제하시겠습니까?', function () {
+                    // 삭제 서비스 호출                    
+                    let param = {
+                        bh_id: data.item.id,
+                    }
+                    let fnSuccess = function (resp) {
+                        if (resp.success) {
+                            Notify.success('삭제하였습니다.');
+                            _this.searchMainData();
+                        } else {
+                            Alert.alert('', resp.message);
+                        }
+                    };
+                    AjaxUtil.postAsyncData(_this.baseUrl + '/mst_delete', param, fnSuccess);
+                });
+            }
+        }
+
+        add() {
+            location.href = '/gui/' + gui.gui_code + '/edit?bh_id=0' + this.createSearchCond('&');
+        }
+
+        // 검색조건만들기
+        createSearchCond(t) {
+            return t + 'searchcond=' + $('#srchStartDt').val() + ' ' + $('#srchEndDt').val() + ' ' + $('#cboState').val();
+        }
+
+        // 검색조건설정
+        setSearchCond() {
+            if (gparam && gparam.searchcond && gparam.searchcond != 'undefined') {
+                let arr = gparam.searchcond.split('|');
+                $('#srchStartDt').val(arr[0]);
+                $('#srchEndDt').val(arr[1]);
+                $('#cboState').val(arr[2]);
+            }
+        }
+
+        // 일지 조회
+        searchMainData() {
+            let _this = this;
+
+            let base_date = $('#srchStartDt').val()
+			let start_day = base_date + '-01'
+			let tempDate = new Date($('#srchEndDt').val());
+
+			let last_day = $('#srchEndDt').val() + '-' + new Date(tempDate.getFullYear(), tempDate.getMonth() + 1, 0).getDate()
+
+            let param = {
+                'action': 'appr_stat',
+                'start_date': start_day,
+                'end_date': last_day,
+                'appr_status': $('#cboState').val(),
+            }
+
+            let result = AjaxUtil.getSyncData(_this.baseUrl + '/appr_stat', param);            
+            if (result.data != null) {
+                let count = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+                //_this.grid.setHeight(count * 30 + 100);
+                _this.grid.repaint();
+            }
+        }
+
+        // 일지 출력
+        printDiary() {
+            let dataList = [];
+            $.each($('input[name=chkPrint]:checked'), function (index, item) {
+                let param = {
+                    'bh_id': $(item).attr('data-bhid'),
+                };
+
+                dataList.push(param);
+            });
+
+            if (dataList.length == 0) {
+                Alert.alert('', '선택된 일지가 없습니다.');
+                return;
+            }
+
+            let param = {
+                'title': '저수조용수 관리점검표',
+                'data_list': JSON.stringify(dataList),
+            };
+
+            let result = AjaxUtil.postSyncData(this.baseUrl + '?action=print_all', param, function () { });
+            if (result.success) {
+                CommonUtil.openWindow('/api/files/pdf_viewer?file_id=' + result.file_id)
+            }
+            else {
+                Alert.alert('', '일지 생성 중 오류가 발생했습니다. 관리자에게 문의하세요.');
+            }
+        }
+
+        // 엑셀 다운로드
+        exportExcel() {
+            var targetview = this.grid;
+            targetview.exportExcel('저수조 청소현황.xls');
+        }
+    }
+
+    $(document).ready(function (e) {
+        page = new materialStorehouseStat();
+
+        AjaxUtil.fillSelectOptions($('#cboState'), 'system_code', 'all', false, 'appr_status');        
+
+        let today_string = new Date();
+		let currentMonth = (today_string.getMonth() + 1) < 10 ? '0' + (today_string.getMonth() + 1) : (today_string.getMonth() + 1);
+		let format_today = today_string.getFullYear() + '-' + currentMonth;
+
+		$('#srchStartDt').val(format_today);
+		$('#srchEndDt').val(format_today);                        
+
+        $('#btnSearch').click(function (e) {
+            page.searchMainData();
+        });
+
+        // 엑셀 다운로드
+        $('#btnExcel').on('click', function () {
+            page.exportExcel();
+        });
+
+        $('#btnAdd').on('click', function () {
+            page.add();
+        });
+
+        //일괄출력 버튼
+        $('#btnPrint').on('click', function () {
+            page.printDiary();
+        });
+
+        //page.setSearchCond();
+        page.searchMainData();
+    });
+
+</script>
+</th:block>
+</html>

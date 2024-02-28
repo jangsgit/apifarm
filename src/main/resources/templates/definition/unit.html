@@ -1,0 +1,327 @@
+<html layout:decorate="~{layout_page}">
+
+<th:block layout:fragment="content">
+
+<div class="content_wrap">
+    <section class="section">
+
+        <div class="title_box">
+            <div class="left_align">
+                <h3 data-labelCd="단위정보">단위 정보</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>        
+        </div>
+        
+        <div class="table_box search" >
+
+            <div class="row" >
+
+                <div class="col-6 col-lg-3 col-xl-2" >
+                    <div class="input-group" >
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_md" data-labelCd="단위명">단위명</span>
+                        </div>
+                        <input class="form-control2" value="" id="txtUnit" name="txtUnit" />
+                    </div>
+                </div>
+
+                <div class="col-1" >
+                        <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div> 
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="grid_box">
+            <div class="title_box">
+                <span class="right_align rpt" data-labelCd="단위 정보">단위 정보</span>
+                <button type="button" class="btn-default" id="btnExcel"><i class="fas fa-file-excel"></i></button> 
+                <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+            </div>
+            <div class="h-500" data-ax5grid="unit-grid" ></div>  
+        </div>
+
+    </section>
+
+    <section class="section">
+            <div class="title_box">
+                <span class="right_align rpt" data-labelCd="상세 정보">상세 정보</span>
+                <button type="button" class="btn-default" id="btnNew" name="btnNew"><i class="fas fa-plus"></i></button>
+                <button type="button" class="btn-danger" id="btnDel" ><i class="fas fa-trash"></i></button>
+                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
+            </div>
+        <form id="unitForm">
+            <div class="table_box sub">
+                    <div class="row">
+
+                        <input class="form-control2"  type="text" id="id" name="id" hidden/>
+
+                        <div class="col-6 col-md-4 col-lg-4" >
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_md" data-labelCd="단위명">단위명</span>
+                                </div>
+                                <input class="form-control2" id="name" name="name" disabled required/>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-4" >
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_md" data-labelCd="낱개단위">낱개단위</span>
+                                </div>
+                                <select class="form-control2" id="piece_yn" name="pieceYN" disabled>
+                                    <option value="">No</option>
+                                    <option value="Y">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12" >
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_md" data-labelCd="설명">설명</span>
+                                </div>
+                                <textarea class="form-control2 h-26" id="description" name="description" disabled value=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </form>
+    </section>
+
+</div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+
+<script type="text/javascript">
+    class UnitPage {
+        constructor() {
+			this.url = '/api/definition/unit';
+            this.grid = null;
+            this.init(); 
+            this.dataSource = null;
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="unit-grid"]'),
+                sortable: true,
+
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        //e.colIndex
+                        //e.dindex
+                        //c.value
+                        //e.column
+                        //e.item
+                        //e.list
+                        _this.grid.select(this.dindex);
+                        _this.showDetail(e.item.id);
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+               columns: [
+                    //{ key: 'id', label: '번호', width: 100, align: 'left', hidden: false },
+                    { key: 'name', label: '단위명', width: 150, align: 'left' },
+                    { key: 'description', label: '설명', width: 300, align: 'left' },
+                    { key: 'piece_yn', label: '낱개단위YN', width: 100, align: 'center' },
+                ]
+            };
+
+            this.grid = new ax5.ui.grid(config);
+            this.grid_config = config;
+        }
+        
+        //버튼 활성화 
+        setButtonState() {
+            //let pk = $('unitForm').find('#id').val();
+            //let pk = this.grid.getList('selected');
+            let pk = $('#id').val();
+            $('#btnNew').prop('disabled', false);
+            $('#btnSave').prop('disabled', false);
+            if (pk) {
+                $('#btnDel').prop('disabled',false);
+            }
+            else {
+                $('#btnDel').prop('disabled', true);
+            }
+        }
+
+        showDetail(idx) {
+            let param = { 'unit_id': idx, "action": 'detail' };
+            let result = AjaxUtil.getSyncData(this.url+'/detail', param);
+            
+            if (result.success) {
+                FormUtil.BindDataForm(result.data, $('#unitForm'));
+                $('#description').text(result.data.description);
+            }
+            page.setButtonState();
+        }
+
+        searchMainData() {
+            let _this = this;
+            let data = {
+				'unit_name' : $('#txtUnit').val(),
+				'action' : 'read'
+			};
+            let result = AjaxUtil.getSyncData(this.url+'/read', data);
+
+            $('#unitForm')[0].reset();
+            $('#description').text('');
+            $('#unitForm').find('select, input, textarea').each(function () {
+                if (!$(this).is(':disabled')) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+            if (result.success) {
+                let recordsTotal = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+                _this.setButtonState();
+            }
+        }//searchMainData
+
+        saveUnit() {
+            let _this = this;
+            //let url = '/api/definition/unit?action=save';
+
+            //let data = $('#unitForm').serialize();
+            let data = FormUtil.extractForm($('#unitForm'));
+
+            let fnSuccess = function (res) {
+				if (res.success) {
+					Notify.success('저장되었습니다'); // Notification
+                	_this.searchMainData();
+				} else {
+					Alert.alert('', res.message);
+				}
+                
+            };
+           AjaxUtil.postAsyncData(this.url+'/save', data, fnSuccess);
+        }
+
+        deleteUnit(id) {
+            let _this = this;
+            let url = '/api/definition/unit?action=delete';
+            let data = { id: id };
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    Notify.success('삭제되었습니다'); // Notification
+                    _this.searchMainData();
+                } else {
+                    Alert.alert('', res.message);
+                }
+            };
+            AjaxUtil.postAsyncData(url, data,fnSuccess);
+        }
+
+
+    }
+    var page = null;
+    $(document.body).ready(function (e) {
+
+        page = new UnitPage();
+
+		//그리드 컬럼 설정
+        page.popColSetting = new popColSetting();
+        let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid',  page.grid);
+		
+        if (userinfo.group_code == 'admin') {
+            $('#btnGridSetting').css('visibility','visible');  
+        }		
+	
+        $('#btnGridSetting').click(function (e) {
+            let _this = this;
+            let fix_cols = page.grid_config.frozenColumnIndex;
+            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
+        });	
+
+        page.searchMainData();
+
+        // 검색버튼 클릭
+        $('#btnSearch').click(function (e) { page.searchMainData(); });
+
+        // 엔터키 검색
+        $('#txtUnit').on('keypress', function (e) {
+            if (event.keyCode == 13) {
+                page.searchMainData();
+            }
+        });
+
+        // 엑셀 다운로드
+        $('#btnExcel').click(function (e) {
+            page.grid.exportExcel('단위정보.xls');
+        });
+
+        //신규버튼 클릭
+        $('#btnNew').click(function (e) {
+
+            $('#unitForm')[0].reset();
+            $('#id').val('');
+            $('#description').val('');
+            
+            $('#unitForm input, select').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            $('#unitForm textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+            //page.setButtonDisable(true, false, true);
+            page.setButtonState();
+        });
+
+        //저장버튼 클릭
+        $('#btnSave').click(function (e) {
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.saveUnit() },
+                function () { }
+            );
+        });
+
+        //삭제버튼 클릭
+        $('#btnDel').click(function (e) {
+            let id = $('#unitForm').find('#id').val()
+            Alert.confirm('', 
+                '삭제하시겠습니까?',
+                function () { page.deleteUnit(id) },
+                function () { }
+            );
+            //page.searchMainData();
+        });
+
+    });
+</script>
+
+</th:block>
+</html>

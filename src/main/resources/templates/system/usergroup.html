@@ -1,0 +1,319 @@
+<html layout:decorate="~{layout_page}">
+
+<th:block layout:fragment="content">
+
+<div class="content_wrap">
+    
+    <section>
+        <div class="title_box">
+            <div class="left_align">
+                <h3 data-labelCd="사용자 그룹">사용자 그룹</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+        </div>
+
+    </section>
+
+    <section>
+                <div class="grid_box">
+                    <div class="title_box">
+                        <span class="right_align rpt" data-labelCd="사용자 그룹 목록">사용자 그룹 목록</span>
+                    </div>
+                            <div class="h-500" data-ax5grid="usergroup-grid" ></div>
+                </div>
+
+    </section>
+
+    <section>
+            <div class="title_box">
+                <span class="right_align rpt" data-labelCd="상세정보">상세정보</span>
+                <button type="button" class="btn-default" id="btnNew"><i class="fas fa-plus"></i></button>
+                <button type="button" class="btn-cancel" id="btnDel"><i class="fas fa-trash"></i></button>
+                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
+            </div>
+        <form id="usergroupForm">
+            <div class="table_box sub">
+                <div class="row">
+                    <input type="hidden" id="id" name="id" value="" />
+
+                    <div class="col-6 col-md-3 col-lg-3" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t7" data-labelCd="코드">코드</span>
+                            </div>
+                            <input type="text" class="form-control2" id="code" name="code" disabled required/>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-3 col-lg-3" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t7" data-labelCd="그룹명">그룹명</span>
+                            </div>
+                            <input type="text" class="form-control2" id="name" name="name" disabled required/>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-12">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t7_area" data-labelCd="설명">설명</span>
+                            </div>
+                            <textarea class="form-control2" id="description" name="description" disabled></textarea>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+
+<script type="text/javascript">
+
+
+    class UserGroupPage {
+        constructor() {
+            this.grid = null;
+            this.init();
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="usergroup-grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        //e.colIndex
+                        //e.dindex
+                        //c.value
+                        //e.column
+                        //e.item
+                        //e.list
+                        _this.grid.select(this.dindex);
+                        _this.showDetailUserGroup(e.item.id);
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'code', label: '코드', width: 100, align: 'center', sortable: false },
+                    { key: 'name', label: '그룹명', width: 250, align: 'left' },
+                    { key: 'description', label: '설명', width: 350, align: 'left', sortable: false },
+                    //{ key: 'created', label: '생성일', width: 150, align: 'center', sortable: false },
+                ]
+            };
+
+            this.grid = new ax5.ui.grid(config);
+        }
+
+        setButtonState() {
+            let pk = $('#id').val();
+            $('#btnNew').prop('disabled', false);
+            
+
+            if (pk) {
+                $('#btnDel').prop('disabled', false);
+                $('#btnSave').prop('disabled', false);
+            } else {
+                $('#btnDel').prop('disabled', true);
+                $('#btnSave').prop('disabled', true);
+            }
+        }
+    
+        showDetailUserGroup(idx) {
+            let param = { 'id': idx, "action": 'detail' };
+            let url = '/api/system/usergroup';
+            let result = AjaxUtil.getSyncData(url+'/detail', param);
+            if (result.success) {
+                FormUtil.BindDataForm(result.data, $('#usergroupForm'));
+                $('#description').text(result.data.description);
+
+                //if (result.disabled == false) {
+                //    $('#disabled').prop('checked', true);
+                //}
+            }
+
+            //page.setButtonDisable(false, false, false);
+            page.setButtonState();
+        }
+
+        searchDataBind() {
+            let _this = this;
+
+            let url = '/api/system/usergroup';
+
+            let result = AjaxUtil.getSyncData(url+'/read', '');
+            if (result != null) {
+                let recordsTotal = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+            }
+
+            //page.setButtonDisable(false, true, true);
+            page.setButtonState();
+        }//searchDataBind
+
+        saveUserGroup() {
+            let _this = this;
+            let url = '/api/system/usergroup/save';
+            
+            //let data = $('#usergroupForm').serialize();
+            let data = FormUtil.extractForm($('#usergroupForm'));
+
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    Notify.success('저장되었습니다'); // Notification
+                    _this.searchDataBind();
+                } else if (!res.success) {
+                    Alert.alert('', res.message);
+                }
+
+                $('#id').val('');
+                $('#usergroupForm')[0].reset();
+                $('#description').text('');
+
+                $('#usergroupForm #code').attr('readonly', false);
+                $('#usergroupForm input').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#usergroupForm textarea').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                _this.setButtonState();
+            };
+           AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        deleteUserGroup() {
+            let _this = this;
+            let url = '/api/system/usergroup/delete';
+            let id = $('#usergroupForm').find('#id').val();
+            let data = { id: id };
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    Notify.success('삭제되었습니다'); // Notification
+                    _this.searchDataBind();
+
+                } else if (!res.success) {
+                    Alert.alert('', res.message);
+                }
+
+                $('#id').val('');
+                $('#usergroupForm')[0].reset();
+                $('#description').text('');
+
+                $('#usergroupForm #code').attr('readonly', false);
+                $('#usergroupForm input').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#usergroupForm textarea').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                _this.setButtonState();
+            };
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+
+        }
+    }
+
+    let page = null;
+
+    $(document).ready(function (e) {
+        page = new UserGroupPage();
+        page.searchDataBind();
+
+        $('#btn_search').click(function (ex) {
+            page.searchDataBind();
+        });
+
+
+        $('#btnNew').click(function (e) {
+
+            $('#id').val('');
+            $('#usergroupForm')[0].reset();
+            $('#description').text('');
+
+            $('#usergroupForm #code').attr('readonly', false);
+            $('#usergroupForm input').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            $('#usergroupForm textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+            //page.setButtonDisable(true, false, true);
+            page.setButtonState();
+            $('#btnSave').prop('disabled', false);
+
+
+            //$('#usergroupForm').reset();
+
+        });
+
+        $('#btnSave').click(function (e) {
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.saveUserGroup() },
+                function () { }
+            );
+        });
+
+        $('#btnDel').click(function (e) {
+            Alert.confirm('', 
+                '삭제하시겠습니까?',
+                function () { page.deleteUserGroup() },
+                function () { }
+            );
+        });
+    });
+</script>
+
+
+</th:block>
+</html>

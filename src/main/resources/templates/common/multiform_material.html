@@ -1,0 +1,310 @@
+<th:block th:fragment="multiform_material">
+<script type="text/x-tmpl" id="multiMatTemplate">
+    {% if (o.type == 'combobox') { %}
+    <select class="form-control2" id="{%=o.element_id%}" name="{%=o.element_id%}" >
+    </select>
+    {% } else if (o.type == 'popup') { %}
+    <div class="input-group" >
+        <input type="hidden" id="{%=o.element_id%}" name="{%=o.element_id%}" />
+        <input class="form-control2" id="{%=o.element_id%}_text" name="{%=o.element_id%}_text" />
+        <button type="button" class="btn-default" id="{%=o.button_id%}">...</button>
+    </div>
+    {% } %}
+</script>
+<script type="text/x-tmpl" id="mult_matSearchTemplate">
+<div class="content_wrap popup">
+        <!--<header>
+            <h4 id="popTitle">품목 선택</h4>
+            <div class="popup_close_box"><button class="btn_popup_close" id="material-search-close"><i class="fas fa-times"></i></button></div>
+        </header>-->
+
+    <section class="pt-2">
+
+        <div class="table_box search">
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t4" data-commonCd="품목구분">품목구분</span>
+                            </div>
+                             <select class="form-control2" id='cboMaterialType' name="cboMaterialType" ></select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t4" data-commonCd="품목그룹">품목그룹</span>
+                            </div>
+                             <select class="form-control2" id='cboMaterialGrp' name="cboMaterialGrp" ></select>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_t4" data-commonCd="품목명">품목명</span>
+                            </div>
+                             <input class="form-control2" type="text" id="keyword" name="keyword" />
+                        </div>
+                    </div>
+                    
+                    <div class="col-1" >
+                            <button type="button" class="btn-default" id="btnMaterialSearch" title="조회"><i class="fas fa-search"></i></button>
+                    </div> 
+
+                </div>
+        </div>
+        <div class="grid_box">
+                <div class="h-300" data-ax5grid="material-search-grid" ></div>
+        </div>
+
+    </section>
+
+    <section class="popupcontent" >
+        <div class="align_left">
+            <button type="button" class="btn-popup" id="btnMaterialSelect" ><span data-commonCd="선택">선택</span></button>
+            <button type="button" class="btn-popup" id="btn-material-search-close"><span data-commonCd="닫기">닫기</span></button>
+            <button type="button" class="btn-popup" id="btnTest"><span data-commonCd="새로고침">새로고침</span></button>
+        </div>
+    </section>
+
+</div>
+</script>
+
+<script type="text/javascript">
+    class MatSelector {
+        constructor(selector_id, type, element_id, material_type, option) {
+            // this.data = data;
+            this.type = 'combobox';
+            if (type == 'popup')
+                this.type = 'popup';
+            this.element_id = element_id;
+            this.material_type = material_type;
+            this.option = option;
+            if (option && option.button_id)
+                this.button_id = option.button_id;
+            else
+                this.button_id = 'btnPopMaterial';
+            let data = {
+                type: this.type,
+                element_id: element_id,
+                button_id: this.button_id,
+            };
+            let mat_html = tmpl('multiMatTemplate', data);
+            $('#' + selector_id).html(mat_html);
+
+            this.init();
+        }
+        init() {
+            let _this = this;
+            if (_this.type == 'combobox') {
+               let null_option = 'all';
+                let selected_value = '';
+                let condition1 = '';
+                let condition2 = '';
+                let condition3 = _this.material_type;
+                let data_fill = true;
+                if (_this.option) {
+                    null_option = this.option.null_option;
+                    selected_value = this.option.selected_value;
+                    
+                    condition1 = this.option.condition1;
+                    condition2 = this.option.condition2;
+                    if (this.option.condition3)
+                        condition3 = this.option.condition3;
+                    data_fill = this.option.data_fill;
+                }
+                if (data_fill)
+                    AjaxUtil.fillSelectOptions($('#' + _this.element_id), 'material', null_option, selected_value, condition1, condition2, condition3);
+                else {
+                    let text = null_option;
+                   if (null_option == 'choose') {
+                        text = i18n.getCommonText('선택');//'선택하세요(Choose)';
+                    }
+                    else if (null_option == 'all') {
+                        text = i18n.getCommonText('전체'); //'전체(All
+                    }
+ 
+                    let combo_option = $('<option>',
+                    {
+                        value: '',
+                        text: text,
+                    });
+                    $('#' + _this.element_id).append(combo_option);
+
+                }
+            }
+            if (_this.type == 'popup') {
+                $('#' + _this.button_id).click(function (e) {
+                    let searchcallback = function (items) {
+                        let row = items;
+                        $('#' + _this.element_id).val(row.id);
+                        $('#' + _this.element_id + '_text').val(row.Name);
+
+                        if (_this.option.clickCallback) {
+                            _this.option.clickCallback();
+                        }
+                    };
+
+                    let poppage = new PopMatComponent();
+                    poppage.material_type = _this.material_type;
+                    let $poppage = $(poppage);
+                    poppage.show(searchcallback);
+                });
+            }
+        }
+    }
+
+    class PopMatComponent {
+        constructor() {
+            this.grid = null;
+            this.selectedItem = null;
+            this.callback = null;
+            this.modalContainer = new PopupDraggable('품목 선택');
+            this.$btnMaterialSearch = null;
+            this.$cboMaterialGroup = null;
+            this.$btnMaterialSelect = null;
+            this.$keyword = null;
+            this.material_type = null;
+        }
+
+        searchDataBind() {
+            let _this = this;
+            let url = '/api/popup/search_material';
+            let data = {
+                'material_type': _this.$cboMaterialType.val(),
+                'material_group': _this.$cboMaterialGrp.val(),
+                'keyword': _this.$keyword.val(),
+            };
+
+            let result = AjaxUtil.getSyncData(url, data);
+            if (result.success) {
+                let recordsTotal = result.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+            }
+
+            //검색버튼을 누르고 초기화한다
+            this.selectedItem = null;
+        }
+
+        selectData(item) {
+            if (typeof this.callback !== 'undefined' && this.callback != null) {
+                this.callback(item);
+            }
+            this.close();
+        }
+
+        show(callback) {
+            let _this = this;
+
+            this.callback = callback;
+
+            let content = tmpl('mult_matSearchTemplate', {});
+            let $content = $(content);
+            this.modalContainer.open({ width: 760, height: 480, $content });
+
+            let config = {
+                target: $('[data-ax5grid="material-search-grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function () {
+                        _this.grid.select(this.dindex);
+                    },
+                    onDBLClick: function () {
+                        _this.grid.select(this.dindex);
+                        _this.selectData(this.item);
+                        _this.selectedItem = this.item;
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    //{ key: 'id', label: '품목번호', width: 50, align: 'right', sortable: false },
+                    { key: 'MaterialTypeName', label: '품목구분', width: 80, align: 'center', sortable: false },
+                    { key: 'group_name', label: '품목그룹', width: 120, align: 'left', sortable: false },
+                    { key: 'Code', label: '품목코드', width: 150, align: 'center', sortable: false },
+                    { key: 'Name', label: '품목명', width: 300, align: 'left', sortable: false },
+                    { key: 'unit_name', label: '단위', width: 60, align: 'center', sortable: false },
+                    //{ key: 'Description', label: '설명', width: 250, align: 'center', sortable: false },
+                ]
+            };
+
+            this.grid = new ax5.ui.grid(config);
+            this.$btnMaterialSearch = $content.find('#btnMaterialSearch');
+            this.$cboMaterialType = $content.find('#cboMaterialType');
+            this.$cboMaterialGrp = $content.find('#cboMaterialGrp');
+            this.$keyword = $content.find('#keyword');
+            this.$btnMaterialSelect = $content.find('#btnMaterialSelect');
+
+            AjaxUtil.fillSelectOptions(this.$cboMaterialType, 'system_code', null, false, 'mat_type', this.material_type);
+            AjaxUtil.fillSelectOptions(this.$cboMaterialGrp, 'material_group', 'all', false, this.$cboMaterialType.val());
+
+            //if (this.material_type != null) {
+            //    this.$cboMaterialType.val(this.material_type);
+            //}
+            //this.$cboMaterialType.val('product');
+
+            this.$cboMaterialType.change(function (e) {
+                AjaxUtil.fillSelectOptions(_this.$cboMaterialGrp, 'material_group', 'all', false, _this.$cboMaterialType.val());
+            })
+
+            this.$btnMaterialSearch.click(function (e) {
+                _this.searchDataBind();
+            });
+
+            this.$btnMaterialSelect.click(function (e) {
+                // 그리드에서 현재 선택된 item을 찾아서 호출한다.
+                let items = _this.grid.getList("selected");
+                if (items.length == 0) {
+                    return false;
+                }
+                _this.selectData(items[0]);
+            });
+
+            this.$keyword.on('keypress', function (e) {
+                if (event.keyCode == 13) {
+                    _this.searchDataBind();
+                }
+            });
+
+
+            //닫기버튼을 아래 ID로 사용한다면 호출하는 화면에서 이벤트 처리 필요없음
+            $content.find('#material-search-close, #btn-material-search-close').on('click', function () {
+                _this.close();
+            });
+
+            //새로고침
+            let $btnTest = $('#btnTest');
+
+            $btnTest.click(function (e) {
+                _this.grid.init().repaint();
+            });
+        }
+
+        close() {
+            this.modalContainer.close();
+        }
+    }
+</script>

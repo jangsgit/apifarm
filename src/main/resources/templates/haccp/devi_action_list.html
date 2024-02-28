@@ -1,0 +1,195 @@
+<html layout:decorate="~{layout_page}">
+<th:block layout:fragment="content">
+<div class="content_wrap">
+    <section class="section">
+        <div class="title_box">
+            <div class="left_align">
+                <h3 data-labelCd="선행요건 이상발생 내역">선행요건 이상발생 내역</h3>
+            </div>
+            <button type="button" class="btn-default pull-right" id="btnHeaderFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress"></i></button>
+        </div>
+        <div class="table_box search">
+            <div class="row">
+                <div class="col-11 col-md-6 col-lg-5" >
+                    <div class="input-group" >
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_sm" data-labelCd="점검일">점검일</span>
+                        </div> 
+                        <div data-ax5picker="multi" id="srchDt">
+                            <div class="input-group-append">
+                                <input class="tac " type="text" id="srchStartDt" name="srchStartDt" />
+                                <span class="input-group-text fs-xl">
+                                    <i class="fas fa-calendar-alt calendar_color" ></i>
+                                </span>
+                                <span class="slow_sign">~</span>
+                                <input class="tac " type="text" id="srchEndDt" name="srchEndDt" />
+                                <span class="input-group-text fs-xl">
+                                    <i class="fas fa-calendar-alt calendar_color"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="col-6 col-md-3 col-lg-3 col-xl-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_md" data-labelCd="일지명">일지명</span>
+                        </div>
+                        <input type="text" class="form-control2" id="keyword" name="keyword"/>
+                    </div>
+                </div>
+
+                <div class="col-1">
+                    <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+                
+        <div class="grid_box">
+            <div class="title_box">
+                 <span class="right_align rpt" data-labelCd="이상발생 내역">이상발생 내역</span>
+                <button type="button" class="btn-default" id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class=" fast fa-cog"></i>Setting</button>
+            </div>
+            <div class="h-500" data-ax5grid="devi_action_grid" id="checkResultList"></div>
+        </div>
+    </section>
+</div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+<th:block th:replace="/common/approve_box :: approve_box"></th:block>
+<script type="text/javascript" src="/js/grid.js"></script>
+<!--<script type="text/javascript" src="/static/js/grid.js?ver=22080801"></script>-->
+<script type="text/javascript">
+    
+    class DeviActionPage {
+        constructor() {
+            this.grid = null;
+            this.url = '/api/haccp/devi_action_list';
+            this.init();
+        } 
+
+        init() {
+            let _this = this;
+
+            let devi_action_config = {
+                target: $('[data-ax5grid="devi_action_grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                    },
+                    onDataChanged: function (e) {
+                        //_this.saveDeviationResult();
+                    }
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'happen_date', label: '점검일', width: 100, align: 'left' },
+                    { key: 'happen_place', label: '일지명', width: 250, align: 'left' },
+                    { key: 'abnormal_detail', label: '이상발생내역', width: 600, align: 'left' },
+                    { key: 'action_detail', label: '조치내역 및 결과', width: 200, align: 'left' },
+                    { key: 'creater_name', label: '조치자', width: 80, align: 'left' },
+                    { key: 'action_name', label: '작성자', width: 80, align: 'left' },
+                ]
+            };
+            this.grid = new ax5.ui.grid(devi_action_config);
+            this.grid_config = devi_action_config;
+        }
+
+        searchMainData() {
+            let _this = this;
+            
+            let param = {
+                'keyword':  $('#keyword').val(),
+                'date_from': $('#srchStartDt').val(),
+                'date_to': $('#srchEndDt').val()
+            };
+
+            let result = AjaxUtil.getSyncData(_this.url + '/read', param);
+            
+            if (result != null) {
+                let count = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+
+                //GridUtil.adjustHeight(_this.grid_config, count);
+
+            }
+
+        }
+    }
+        
+    let page = null;
+    let popup = null;
+    let modalContainer = null;
+    var picker = new ax5.ui.picker();
+
+    $(document).ready(function (e) {
+        page = new DeviActionPage();
+
+        $('#srchDt').ax5DatePicker({ direction: 'top' });
+        picker.bind({
+            target: $('[data-ax5picker="multi"]'),
+            direction: "top",
+            content: {
+                width: 206,  //130 270
+                margin: 10,
+                type: 'date',
+                config: {
+                    control: {
+                        left: '<i class="fa fa-chevron-left"></i>',
+                        yearTmpl: '%s',
+                        monthTmpl: '%s',
+                        right: '<i class="fa fa-chevron-right"></i>'
+                    },
+                    lang: {
+                        yearTmpl: "%s년",
+                        months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+                        dayTmpl: "%s"
+                    }
+                }
+            }
+           
+        });
+                
+        $('#srchStartDt').val(CommonUtil.getYYYYMMDD(-15));
+        $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+        $('#srchDt').ax5DatePicker({ direction: 'top' });
+
+
+        $('#btnSearch').click(function (e) {
+            page.searchMainData();
+        });
+        
+        page.searchMainData();
+    });
+
+</script>
+</th:block>
+</html>

@@ -1,0 +1,221 @@
+<html layout:decorate="~{layout_page}">
+<th:block layout:fragment="content">
+<div class="content_wrap">
+
+    <section class="section">
+        <div class="title_box ">
+            <div class="left_align">
+                <h3 data-labelCd="로그인 로그">로그인 로그</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+        </div>
+
+        <div class="table_box search">
+            <form id="searchForm" autocomplete="off">
+                <div class="row">
+
+                    <div class="col-12 col-lg-5 col-xl-4" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_sm" data-labelCd="발생일">발생일</span>
+                            </div> 
+                            <div data-ax5picker="multi" id="srchDt">
+                                <div class="input-group-append">
+                                <input class="tac " type="text" id="srchStartDt" name="srchStartDt" />
+                                    <span class="input-group-text fs-xl">
+                                        <i class="fas fa-calendar-alt calendar_color" ></i>
+                                    </span>
+                                <span class="slow_sign">~</span>
+                                <input class="tac " type="text" id="srchEndDt" name="srchEndDt" />
+                                    <span class="input-group-text fs-xl">
+                                        <i class="fas fa-calendar-alt calendar_color"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-11 col-lg-3">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_sm" data-labelCd="이름">이름</span>
+                            </div>
+                             <input class="form-control2" id="keyword" name="keyword"/>
+                        </div>
+                    </div>
+
+                        <div class="col-1" >
+                                <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                        </div>
+
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!--<div class="row">-->
+        <div class="col-lg-12">
+            <section>
+                <div class="grid_box">
+                    <div class="title_box">
+                        <span class="right_align rpt" data-labelCd="로그인 내역">로그인 내역</span>
+                        <button type="button" class="btn-default " id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                        <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+                    </div>
+                    <div class="h-600" data-ax5grid="log-grid" ></div>
+                </div>
+
+            </section>
+        </div>
+
+    <!--</div>-->
+</div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+
+<script type="text/javascript">
+
+
+    class LoginLogPage {
+        constructor() {
+            this.grid = null;
+            this.init();
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="log-grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'id', label: 'No', width: 70, align: 'center', sortable: false },
+                    { key: 'type', label: '구분', width: 100, align: 'center', sortable: false },
+                    //{ key: 'addr', label: 'IP Address', width: 250, align: 'left' },
+                    { key: 'addr', label: 'IP Address', width: 250, align: 'left',formatter: function(){
+                    	return this.value.value;
+                	}},
+                    { key: 'login_id', label: '사번', width: 150, align: 'left', sortable: false },
+                    { key: 'name', label: '이름', width: 150, align: 'center', sortable: false },
+                    { key: 'created', label: '일시', width: 150, align: 'center', sortable: false },
+                ]
+            };
+
+            this.grid_config = config;
+            this.grid = new ax5.ui.grid(config);
+
+            $('#srchDt').ax5DatePicker({ direction: 'top' });
+            $('#srchStartDt').val(CommonUtil.getYYYYMMDD());
+            $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+
+        }
+
+
+        searchDataBind() {
+            let _this = this;
+
+            let param = $('#searchForm').serialize();
+            let url = '/api/system/loginlog';
+            let result = AjaxUtil.getSyncData(url + '/read', param);
+            if (result != null) {
+                let recordsTotal = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+            }
+
+        }//searchDataBind
+
+    }
+    var page = null;
+    $(document).ready(function (e) {
+        page = new LoginLogPage();
+
+        picker.bind({
+            target: $('[data-ax5picker="multi"]'),  
+            direction: "top",
+   			locale: {
+				format: 'YYYY-MM-DD'
+			},
+            content: {
+                width:  214, 
+                margin: 10,
+                type: 'date',
+                
+                config: {
+                    control: {
+                        left: '<i class="fa fa-arrow-left"></i>',  
+                        yearTmpl: '%s',
+                        monthTmpl: '%s',
+                        right: '<i class="fa fa-arrow-right"></i>'
+                    },
+                    lang: {
+                        yearTmpl: "%s년",
+                        months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+                        dayTmpl: "%s"
+                    }
+                }
+            },
+            btns: {
+
+            },
+
+        });
+
+		//그리드 컬럼 설정
+        page.popColSetting = new popColSetting();
+        let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid',  page.grid);
+		
+        if (userinfo.group_code == 'admin') {
+            $('#btnGridSetting').css('visibility','visible');  
+        }		
+	
+        $('#btnGridSetting').click(function (e) {
+            let _this = this;
+            let fix_cols = page.grid_config.frozenColumnIndex;
+            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
+        });	
+
+        page.searchDataBind();
+
+        $('#btnSearch').click(function (ex) {
+            page.searchDataBind();
+        });
+
+        // 엑셀 다운로드
+        $('#btnExcel').click(function (e) {
+            page.grid.exportExcel('로그인로그.xls');
+        });
+
+    });
+</script>
+
+
+</th:block>
+</html>
+

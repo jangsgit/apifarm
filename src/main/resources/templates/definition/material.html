@@ -1,0 +1,1965 @@
+<html layout:decorate="~{layout_page}">
+
+<th:block layout:fragment="content">
+<script type="text/javascript" src="/js/fileupload.js?v=20220503"></script> <!--?v=1003-->
+
+<div class="content_wrap">
+    <section class="section">
+
+        <div class="title_box">
+            <div class="left_align">
+                <h3 data-labelCd="품목 정보">품목 정보</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+        </div>
+
+        <div class="table_box search">
+            <div class="row" >
+
+                <div class="col-6 col-md-3 col-lg-2" >
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_md" data-labelCd="품목구분">품목구분</span>
+                        </div>
+                        <select class="form-control2" id="cboMaterialType" name="cboMaterialType"></select>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-2" >
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_md" data-labelCd="품목그룹">품목그룹</span>
+                        </div>
+                        <select class="form-control2" id="cboMaterialGroup" name="cboMaterialGroup"></select>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-3 col-lg-3" >
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_md" data-labelCd="품목명">품목명</span>
+                        </div>
+                        <input type="text" class="form-control2" id="keyword" name="keyword">
+                    </div>
+                </div>
+
+                <div class="col-1" >
+                    <button type="button" class="btn-default" id="btnBanSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div> 
+
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+
+        <div class="grid_box" >
+            <div class="title_box">
+                <button type="button" class="btn-default" id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+            </div>
+                <div class="h-280" data-ax5grid="material-grid" ></div>  
+        </div>
+
+    </section>
+
+
+    <section class="section">
+
+        <div class="title_box mb-2">
+            <button type="button" class="btn-default" id="btnNew"><i class="fas fa-plus"></i></button>
+            <button type="button" class="btn-danger" id="btnDelete"><i class="fas fa-trash"></i></button>
+            <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
+        </div>
+
+        <div class="tabs" data-tab="tabWrap" >
+            <div class="title_box">
+                <div class="left_align">
+                    <ul class="tab_links">
+                        <li><a href="#" data-tablink="#tab_basic" name="tab_basic" class="tab" data-labelCd="기본정보">기본정보</a></li>
+                        <li><a href="#" data-tablink="#tab_production" name="tab_production" class="tab" data-labelCd="생산/출하정보">생산/출하정보</a></li>
+                        <li><a href="#" data-tablink="#tab_inventory" name="tab_inventory" class="tab" data-labelCd="발주/재고정보">발주/재고정보</a></li>
+                        <li><a href="#" data-tablink="#tab_bom" name="tab_bom" class="tab" data-labelCd="BOM">BOM</a></li>
+                        <li><a href="#" data-tablink="#tab_bom_reverse" name="tab_bom_reverse" class="tab" data-labelCd="BOM(역전개)">BOM(역전개)</a></li>
+                        <li><a href="#" data-tablink="#tab_unitcost" name="tab_unitcost" class="tab" data-labelCd="단가정보">단가정보</a></li>
+                        <li><a href="#" data-tablink="#tab_test_master" name="tab_test_master" class="tab" data-labelCd="검사정보">검사정보</a></li>
+                        <li><a href="#" data-tablink="#tab_routing" name="tab_routing" class="tab" data-labelCd="라우팅">라우팅</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="tab" id="tab_basic">
+                    <div class="tab_con_box">
+                        <div class="title_box">
+                            <span class="right_align rpt" data-labelCd="기본정보">기본정보</span>
+                        </div>
+                        <div class="table_box">
+                            <form id="matBasicForm">
+                                        
+                                <div class="table_box sub">
+                                    <div class="row" >
+
+                                        <!--<div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11">품목번호</span>
+                                                </div>-->
+                                                <input class="form-control2" type="text" id="id" name="id" hidden/>
+                                            <!--</div>
+                                        </div>-->
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="*품목그룹">*품목그룹</span>
+                                                </div>
+                                                <select class="form-control2" id="MaterialGroup_id" name="MaterialGroup_id" disabled required></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="*품목코드(바코드)">*품목코드(바코드)</span>
+                                                </div>
+                                                <input  class="form-control2" id="Code" name="Code" required disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="*품목명">*품목명</span>
+                                                </div>
+                                                <input class="form-control2" id="Name" name="Name" required disabled/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="*단위(생산/투입)">*단위(생산/투입)</span>
+                                                </div>
+                                                <select class="form-control2" type="text" id="Unit_id" name="Unit_id" disabled required></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="*공장">*공장</span>
+                                                </div>
+                                                <select class="form-control2" id="Factory_id" name="Factory_id" disabled required></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="(생산/발주)로트사이즈">(생산/발주)로트사이즈</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="LotSize" name="LotSize" disabled/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="고객바코드">고객바코드</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="CustomerBarcode" name="CustomerBarcode" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="두께(mm)">두께(mm)</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="Thickness" name="Thickness" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="폭(mm)">폭(mm)</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="Width" name="Width" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="길이(mm)">길이(mm)</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="Length" name="Length"  disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="높이(mm)">높이(mm)</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="Height" name="Height" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="중량">중량</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="Weight" name="Weight" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="Color">Color</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Color" name="Color" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="분류1">분류1</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Class1" name="Class1"  disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="분류2">분류2</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Class2" name="Class2" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="분류3">분류3</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Class3" name="Class3" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="용도">용도</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Usage" name="Usage" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="규격1">규격1</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Standard1" name="Standard1" disabled>
+                                            </div>
+                                        </div>
+                                                
+                                        <div class="col-6 col-md-3 col-lg-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11" data-labelCd="규격2">규격2</span>
+                                                </div>
+                                                <input class="form-control2" type="text" id="Standard2" name="Standard2" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text fit_box_t11_area" data-labelCd="비고">비고</span>
+                                                </div>
+                                                <textarea class="form-control2" id="Description" name="Description" disabled></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_production">
+                    <div class="tab_con_box">
+                        <div class="title_box">
+                            <span class="right_align rpt" data-labelCd="생산/출하정보">생산/출하정보</span>
+                        </div>
+                        <div class="table_box sub">
+                            <form id="matProductionForm">
+                                <div class="row">
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="기본 워크센터">기본 워크센터</span>
+                                            </div>
+                                            <select class="form-control2 "  id="WorkCenter_id" name="WorkCenter_id" disabled></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="셍산 설비">생산 설비</span>
+                                            </div>
+                                            <select class="form-control2 " id="Equipment_id" name="Equipment_id" disabled ></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="표준 생산 시간">표준 생산 시간</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="StandardTime" name="StandardTime"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="생산 시간 단위">생산 시간 단위</span>
+                                            </div>
+                                                <select class="form-control2" id="StandardTimeUnit" name="StandardTimeUnit" disabled >
+                                                        <option value="min">분</option>
+                                                        <option value="sec">초</option>
+                                                </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="기본 작업자 수">기본 작업자 수</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="InputManCount" name="InputManCount"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="기본 ManHour">기본 ManHour</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="InputManHour" name="InputManHour"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t7" data-labelCd="부가세 면제">부가세 면제</span>
+                                            </div>
+                                            <select class="form-control2" id="VatExemptionYN" name="VatExemptionYN"disabled>
+                                                <option value="N">면제아님</option>
+                                                <option value="Y">면제</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_inventory">
+                    <div class="tab_con_box">
+                        <div class="title_box">
+                            <span class="right_align rpt" data-labelCd="발주/재고정보">발주/재고정보</span>
+                        </div>
+                        <div class="table_box sub">
+                            <form id="matStockForm">
+                                <div class="row">
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="발주 기준">발주 기준</span>
+                                            </div>
+                                            <select class="form-control2 " id="PurchaseOrderStandard" name="PurchaseOrderStandard"  disabled>
+					                            <option value="mrp">ROP</option>
+					                            <option value="rop">MRP</option>
+				                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="리드타임(일)">리드타임(일)</span>
+                                            </div>
+                                            <input class="form-control2 " type="number" id="LeadTime" name="LeadTime" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="최소 발주량">최소 발주량</span> 
+                                            </div>
+                                            <input class="form-control2" type="number" id="MinOrder" name="MinOrder"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="최대 발주량">최대 발주량</span>
+                                            </div>
+                                                <input class="form-control2" type="number" id="MaxOrder" name="MaxOrder"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="*기본 재고 창고">*기본 재고 창고</span>
+                                            </div>
+                                            <select class="form-control2" id="StoreHouse_id" name="StoreHouse_id" disabled ></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="창고 내 위치">창고 내 위치</span>
+                                            </div>
+                                            <input class="form-control2" type="text" id="StoreHouseLoc" name="StoreHouseLoc" disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text fit_box_t15" data-labelCd="자재 관리 등급">자재 관리 등급</span>
+                                            </div>
+				                            <select class="form-control2" id="ManagementLevel" name="ManagementLevel"  disabled >
+				                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="포장단위수량">포장단위수량</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="PackingUnitQty" name="PackingUnitQty"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="포장단위">포장단위</span>
+                                            </div>
+                                            <input class="form-control2" type="text" id="PackingUnitName" name="PackingUnitName"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-8" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text ">보관/입출고 시 생산/투입 단위가 몇 개 포장되어 존재하는지. 20/bag 이라면 포장단위수량 20, 포당단위명 bag 입력.</span>
+                                                <small></small>
+                                            </div>
+                                                        
+                                        </div>
+                                    </div>
+                                     
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="안전재고">안전재고</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="SafetyStock" name="SafetyStock"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="최대재고">최대재고</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="MaxStock" name="MaxStock"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="공정 안전재고">공정 안전재고</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="ProcessSafetyStock" name="ProcessSafetyStock"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-2" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t10" data-labelCd="사용기한(일)">사용기한(일)</span>
+                                            </div>
+                                            <input class="form-control2" type="number" id="ValidDays" name="ValidDays"  disabled/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-1 mt-5" >
+                                 	   <div class="input-group" >
+	                                        <input type="checkbox" id="lot_use_yn" name="lot_use_yn" value="Y" disabled/>
+	                                    		LOT관리 유무
+                                 	   </div>
+                                    </div>
+                                    
+                                    <div class="col-12" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="재고량">재고량</span>
+                                            </div>
+                                            <input class="form-control2 readonly" type="number" id="CurrentStock" name="CurrentStock"  disabled readonly/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="가용재고량">가용재고량</span>
+                                            </div>
+                                            <input class="form-control2 readonly" type="number" id="AvailableStock" name="AvailableStock"  disabled readonly/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="예약재고량">예약재고량</span>
+                                            </div>
+                                            <input class="form-control2 readonly" type="number" id="ReservationStock" name="ReservationStock"  disabled readonly/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 col-md-3" >
+                                        <div class="input-group" >
+                                            <div class="input-group-prepend"> 
+                                                <span class="input-group-text fit_box_t15" data-labelCd="출고예정량(수주/계획 기준)">출고예정량(수주/계획 기준)</span>
+                                            </div>
+                                            <input class="form-control2 readonly" type="number" id="ExpectedOutput" name="ExpectedOutput"  disabled readonly/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_unitcost">
+                    <div class="tab_con_box">
+                        <form id="priceForm">
+                            <div class="col-6 col-md-3" >
+                                <div class="input-group" >
+                                    <div class="input-group-prepend"> 
+                                        <span class="input-group-text fit_box_t5" data-labelCd="평균단가">평균단가</span>
+                                    </div>
+                                    <input class="form-control2" type="number" id="UnitPrice" name="UnitPrice"  disabled />
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row"></div>
+                        <div class="grid_box">
+                            <div class="title_box">
+                                <span class="right_align rpt" data-labelCd="(판매/구매)거래처별 단가정보">(판매/구매)거래처별 단가정보</span>
+                                <button type="button" class="btn-default" id="btnPriceHistory"><span data-labelCd="히스토리조회">히스토리조회</span></button>
+                                <button type="button" class="btn-default" id="btnPriceNew"><span data-labelCd="신규">신규</span></button>
+                                <button type="button" class="btn-default" id="btnPriceSave"><span data-labelCd="단가등록/변경">단가등록/변경</span></button>
+                                <button type="button" class="btn-danger" id="btnPriceDelete"><span data-labelCd="단가삭제">단가삭제</span></button>
+                                <button type="button" class="btn-default" id="btnPriceUpdate"><span data-labelCd="단가수정">단가수정</span></button>
+                                <small2>단가정보는 왼쪽 버튼을 통해 별도로 저장됩니다. 기존 이력을 남기려면 단가등록/변경 버튼을 누르시고 이력을 남기지 않으시려면 단가 수정 버튼을 누르십시오.</small2>
+                            </div>
+                            <div class="h-180" data-ax5grid="price-grid" ></div>
+                        </div>
+
+                        <div class="tab_box">
+                            <div class="table_box sub">
+                                <form id="companyPriceForm">
+                                    <input type="text" id="price_id" name="price_id" hidden/>
+                                    <div class="row">
+                                        <div class="col-6 col-md-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend"> 
+                                                    <span class="input-group-text fit_box_t5" data-labelCd="*업체">*업체</span>
+                                                </div>
+                                                <select class="form-control2" type="number" id="Company_id" name="Company_id"  disabled required> </select>
+                                            </div>
+                                        </div>         
+                                                
+                                        <div class="col-6 col-md-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend"> 
+                                                    <span class="input-group-text fit_box_t5" data-labelCd="*변경 단가">*변경 단가</span>
+                                                </div>
+                                                <input class="form-control2" type="number" id="UnitPrice" name="UnitPrice"  disabled required/>
+                                            </div>
+                                        </div> 
+
+                                        <div class="col-6 col-md-3" >
+                                            <div class="input-group" >
+                                                <div class="input-group-prepend"> 
+                                                    <span class="input-group-text fit_box_t5" data-labelCd="*적용시작일">*적용시작일</span>
+                                                </div>
+                                                <input class="form-control2" type="date" id="ApplyStartDate" name="ApplyStartDate"  disabled required/>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_bom">
+                    <div class="tab_con_box">
+                        <div class="tab_box">
+                            <div class="grid_box ">
+                                <div class="title_box">
+                                    <span class="right_align rpt" data-labelCd="BOM(정전개)">BOM(정전개)</span>
+                                </div>
+                                <div class="h-600" data-ax5grid="bom-grid" ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_bom_reverse">
+                    <div class="tab_con_box">
+                        <div class="grid_box">
+                            <div class="title_box">
+                                <span class="right_align rpt" data-labelCd="BOM(역전개)">BOM (역전개)</span>
+                            </div>
+                            <div class="h-600" data-ax5grid="bom-reverse-grid"></div>  
+                        </div>
+                    </div>
+                </div>
+                <div class="tab hidden" id="tab_test_master">
+                    <div class="tab_con_box">
+                        <div class="grid_box">
+                            <div class="title_box">
+                                <span class="right_align rpt" data-labelCd="검사 정보">검사 정보</span>
+                                <form id="matTestForm">
+                                    <div class="mb-2" >
+                                        <input type="checkbox" id="InTestYN" name="InTestYN" value="Y" />
+                                        수입 검사 필수
+                                        <input type="checkbox"  id="OutTestYN" name="OutTestYN" value="Y" />
+                                        출하 검사 필수
+                                        <select class="s-150" id="cboTestMasterGroup" name="cboTestMasterGroup" ></select>
+                                        <select class="s-150" id="cboTestMaster" name="cboTestMaster" ></select>
+                                        <button type="button" class="btn-default" id="btnAddTestMaster"><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn-danger y_write_auth" id="btnDelTestMaster" style="float:none"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn-default y_write_auth" id="btnSaveTest"><span data-labelCd="저장">저장</span></button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="h-200" data-ax5grid="test-master-grid"></div>  
+                        </div>
+                    </div>
+                </div>                        
+                <div class="tab hidden" id="tab_routing">
+                    <div class="tab_con_box">
+                        <div class="grid_box">
+                            <div class="title_box">
+                                <span class="right_align rpt" data-labelCd="라우팅">라우팅</span>
+                                <form id="matRoutingForm">
+                                    <select class="s-150" id="Routing_id" name="Routing_id"></select>
+                                    <button disabled type="button" class="btn-default y_write_auth" id="btnRoutingSave" ><i class="fas fa-save"></i></button>
+                                </form>
+                            </div>
+                            <div class="h-200" data-ax5grid="routing-grid"></div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>            
+</div>
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+
+<script type="text/javascript">
+    class MaterialPage {
+        constructor() {
+            this.url = '/api/definition/material';
+            this.grid = null;
+            this.delMoldClassIds = [];
+            this.init();
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="material-grid"]'),
+                frozenColumnIndex: 5, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        let mat_pk = e.item.id;
+                        _this.grid.select(this.dindex);
+
+                        _this.showDetail(mat_pk);
+                        //_this.showPriceList(e.item.id);
+                        _this.price_grid.setData([]);
+                        $('#companyPriceForm')[0].reset();
+                        _this.test_grid.setData([]);
+                        //_this.setPriceButtonDisabled(false, true, true);
+                        //_this.setPriceButtonDisabled(false, false, true);
+                        _this.setPriceButtonState();
+
+                        //let tab = $('.tab_links li:visible');
+                        if (_this.current_tab == 'tab_unitcost') {
+                            _this.showPriceList(mat_pk);
+                        }
+                        else if (_this.current_tab == 'tab_bom') {
+                            if (mat_pk)
+                                page.showBomList(mat_pk);
+                        }
+                        else if (_this.current_tab == 'tab_bom_reverse') {
+                            if (mat_pk)
+                                page.showBomReverseList(mat_pk);
+                        }
+                        else if (_this.current_tab == 'tab_routing') {
+                            let routing_pk = $('#Routing_id').val();
+                            //if (routing_pk)
+                            page.showRoutingProcessList(routing_pk);
+                        }
+                        else if (_this.current_tab == 'tab_test_master') {
+                            //if (mat_pk)
+                            page.showTestList(mat_pk);
+                        }
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'id', label: '품목번호', width: 50, align: 'right', hidden: false },
+                    { key: 'mat_type_name', label: '품목구분', width: 50, align: 'center' },
+                    { key: 'mat_grp_name', label: '품목그룹', width: 120, align: 'left' },
+                    { key: 'mat_code', label: '품목코드', width: 150, align: 'center' },
+                    { key: 'mat_name', label: '품목명', width: 200, align: 'left' },
+                    { key: 'unit_name', label: '단위', width: 50, align: 'center' },
+                    { key: 'factory_name', label: '공장', width: 100, align: 'left' },
+                    { key: 'lotUseYn', label: 'LOT관리 유무', width: 100, align: 'center' },
+                    { key: 'lot_size', label: '로트사이즈', width: 100, align: 'right', formatter:'money' },
+                    { key: 'customer_barcode', label: '고객바코드', width: 100, align: 'left' },
+                    { key: 'thickness', label: '두께', width: 100, align: 'right' },
+                    { key: 'width', label: '폭', width: 100, align: 'right', formatter:'money' },
+                    { key: 'length', label: '길이', width: 100, align: 'right', formatter:'money' },
+                    { key: 'height', label: '높이', width: 100, align: 'right', formatter:'money' },
+                    { key: 'color', label: 'Color', width: 100, align: 'left' },
+                    { key: 'usage', label: '용도', width: 100, align: 'left' },
+                    { key: 'class1', label: '분류1', width: 100, align: 'left' },
+                    { key: 'class2', label: '분류2', width: 100, align: 'left' },
+                    { key: 'class3', label: '분류3', width: 100, align: 'left' },
+                    { key: 'starndard1', label: '규격1', width: 100, align: 'right' },
+                    { key: 'standard2', label: '규격2', width: 100, align: 'right' },
+                    { key: 'description', label: '설명', width: 100, align: 'right' },
+                    { key: 'workcenter_name', label: '기본워크센터', width: 150, align: 'left' },
+                    { key: 'standard_time', label: '표준생산시간', width: 50, align: 'right' },
+                    { key: 'input_man_count', label: '기본작업자수', width: 50, align: 'right' },
+                    { key: 'input_man_hour', label: '기본ManHour', width: 100, align: 'right' },
+                    { key: 'vat_exempt_yn', label: '부가세면제', width: 100, align: 'center' },
+                    { key: 'purchase_order_standard', label: '발주기준', width: 100, align: 'center' },
+                    { key: 'leadtime', label: '리드타임(일)', width: 150, align: 'right' },
+                    { key: 'min_order', label: '최소발주량', width: 100, align: 'right', formatter:'money' },
+                    { key: 'max_order', label: '최대발주량', width: 100, align: 'right', formatter:'money' },
+                    { key: 'storehouse_name', label: '기본재고창고', width: 100, align: 'left' },
+                    { key: 'storehouse_loc', label: '창고내위치', width: 100, align: 'left' },
+                    { key: 'manage_level', label: '자재관리등급', width: 100, align: 'left' },
+                    { key: 'packing_unit_qty', label: '포장수량', width: 100, align: 'right', formatter:'money' },
+                    { key: 'packing_unit_name', label: '포장단위', width: 100, align: 'center' },
+                    { key: 'safety_stock', label: '안전재고', width: 100, align: 'right', formatter:'money' },
+                    { key: 'max_stock', label: '최대재고', width: 100, align: 'right', formatter:'money' },
+                    { key: 'process_safety_stock', label: '공정안전재고', width: 100, align: 'right', formatter:'money' },
+                    { key: 'unit_price', label: '평균단가', width: 100, align: 'right', formatter:'money' },
+                    { key: 'valid_days', label: '사용기한(일)', width: 100, align: 'right', formatter:'money' },
+                    { key: 'intest_yn', label: '수입검사필수', width: 50, align: 'center' },
+                    { key: 'outtest_yn', label: '출하검사필수', width: 50, align: 'center' },
+                    { key: 'routing_name', label: '라우팅', width: 100, align: 'left' },
+                    { key: '_created', label: '등록일', width: 100, align: 'center' },
+                ],
+                contextMenu: {
+                    iconWidth: 20,
+                    acceleratorWidth: 100,
+                    itemClickAndClose: true,
+                    icons: {
+                        'arrow': '<i class="fa fa-caret-right"></i>'
+                    },
+                    items: [
+                        { action: 'settings', label: "컬럼설정" },
+                    ],
+                    popupFilter: function (item, param) {
+                        return false;
+                        
+                        //if(param.element) {
+                        //    return true;
+                        //}
+                        //else {
+                        //    return param.item.Material_Type == "부재료";
+                        //}
+                    },
+                    onClick: function (item, param) {
+                        //if (item.action == 'settings')
+                        //    return;
+                    }
+                }
+            };
+
+            this.grid_config = config;  // 컬럼설정 팝업에 넘기기 위한 용도로 저장해 놓음.
+            this.grid = new ax5.ui.grid(config);
+            this.grid.setData([]);
+
+            let priceConfig = {
+                target: $('[data-ax5grid="price-grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        _this.showPriceDetail(e.item.id);
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'CompanyName', label: '업체명', width: 200, align: 'left', sortable: true  },
+                    { key: 'UnitPrice', label: '단가', width: 120, align: 'right', sortable: true },
+                    { key: 'FormerUnitPrice', label: '이전단가', width: 120, align: 'right', sortable: true },
+                    { key: 'ApplyStartDate', label: '적용시작일', width: 120, align: 'center', sortable: true },
+                    { key: 'ApplyEndDate', label: '적용종료일', width: 120, align: 'center', sortable: true },
+                    { key: 'ChangerName', label: '변경자', width: 120, align: 'left', sortable: true },
+                    { key: 'ChangeDate', label: '변경일', width: 120, align: 'center', sortable: true },
+                ]
+            };
+
+            this.price_grid = new ax5.ui.grid(priceConfig);
+            this.price_grid.setData([]);
+
+            let bomConfig = {
+                target: $('[data-ax5grid="bom-grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: '_level', label: '레벨', width: 100, align: 'left' },
+                    { key: 'my_key', label: 'my_key', width: 100, align: 'left' },
+                    { key: 'mat_type', label: '구분', width: 100, align: 'center' },
+                    { key: 'mat_name', label: '품목', width: 200, align: 'left', treeControl: true },
+                    { key: 'unit', label: '단위', width: 100, align: 'center' },
+                    { key: 'mat_code', label: '품목코드', width: 100, align: 'center' },
+                    { key: 'bom_ratio', label: '소요량', width: 120, align: 'right' },
+                ],
+                tree: {
+                    use: true,
+                    indentWidth: 15,
+                    arrowWidth: 15,
+                    iconWidth: 18,
+                    icons: {
+                      openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+                      collapsedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+                      groupIcon: '<i class="fa fa-minus-square" aria-hidden="true"></i>',
+                      collapsedGroupIcon: '<i class="fa fa-plus-square" aria-hidden="true"></i>',
+                      //itemIcon: '-'
+                    },
+                    columnKeys: {
+                      parentKey: 'parent_key',
+                      selfKey: 'my_key'
+                    }
+                },
+            };
+
+            this.bom_grid = new ax5.ui.grid(bomConfig);
+            this.bom_grid.setData([]);
+
+            let bomReverseConfig = {
+                target: $('[data-ax5grid="bom-reverse-grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: '_level', label: '레벨', width: 100, align: 'left' },
+                    { key: 'mat_type', label: '구분', width: 100, align: 'center' },
+                    { key: 'mat_name', label: '모품목', width: 200, align: 'left', treeControl: true },
+                    { key: 'unit', label: '단위', width: 100, align: 'center' },
+                    { key: 'mat_code', label: '모품목코드', width: 100, align: 'center' },
+                    { key: 'bom_ratio', label: '투입량', width: 120, align: 'right' },
+                ],
+                tree: {
+                    use: true,
+                    indentWidth: 15,
+                    arrowWidth: 15,
+                    iconWidth: 18,
+                    icons: {
+                      openedArrow: '<i class="fa fa-caret-down" aria-hidden="true"></i>',
+                      collapsedArrow: '<i class="fa fa-caret-right" aria-hidden="true"></i>',
+                      groupIcon: '<i class="fa fa-minus-square" aria-hidden="true"></i>',
+                      collapsedGroupIcon: '<i class="fa fa-plus-square" aria-hidden="true"></i>',
+                      //itemIcon: '-'
+                    },
+                    columnKeys: {
+                      parentKey: 'parent_key',
+                      selfKey: 'my_key'
+                    }
+                },
+            };
+
+            this.bom_reverse_grid = new ax5.ui.grid(bomReverseConfig);
+            this.bom_reverse_grid.setData([]);
+
+            let RoutingConfig = {
+                target: $('[data-ax5grid="routing-grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'proc_order', label: '공정순서', width: 100, align: 'left' },
+                    { key: 'proc_code', label: '공정코드', width: 100, align: 'left' },
+                    { key: 'proc_name', label: '공정명', width: 200, align: 'left' },
+                    { key: 'proc_type', label: '공정유형', width: 100, align: 'left' },
+                ],
+            };
+
+            this.routing_grid = new ax5.ui.grid(RoutingConfig);
+            this.routing_grid.setData([]);
+
+            let testConfig = {
+                target: $('[data-ax5grid="test-master-grid"]'),
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: false, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                sortable: false, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
+                multiSort: false, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 30  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        _this.selected_test_master_pk = e.item.test_master_id;
+                    },
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+                columns: [
+                    { key: 'id', label: '번호', width: 100, align: 'center' },
+                    {
+                        key: 'delete', label: '삭제', width: 100, align: 'center',
+                        editor: { type: 'checkbox', config: { height: 17, trueValue: 'Y', falseValue: 'N' } },
+                    },
+                    { key: 'test_master_id', label: '검사마스터번호', hidden:'false', width: 200, align: 'left' },
+                    { key: 'test_class_name', label: '검사종류', width: 100, align: 'left' },
+                    { key: 'test_master_group_name', label: '검사마스터그룹', width: 100, align: 'left' },
+                    { key: 'test_master_name', label: '검사마스터', width: 100, align: 'left' },
+                    
+                ],
+            };
+
+            this.test_grid = new ax5.ui.grid(testConfig);
+            this.test_grid.setData([]);
+            
+            // filter dropdown load
+            AjaxUtil.fillSelectOptions($('#cboMaterialType'), 'system_code', 'all', false, 'mat_type');
+            AjaxUtil.fillSelectOptions($('#cboMaterialGroup'), 'material_group', 'all', false);
+                        
+            $('#cboMaterialType').on('change', function (e) {
+                let mat_type = $('#cboMaterialType').val();
+                AjaxUtil.fillSelectOptions($('#cboMaterialGroup'), 'material_group', 'all', false, mat_type);
+            });
+
+            $('#keyword').on('keypress', function (e) {
+                if (event.keyCode == 13) {
+                    _this.searchDataBind();
+                }
+            });
+
+            this.initForm();
+
+            this.setUploader();
+        }
+
+        // 탭 내부 dropdown load
+        initForm() {
+            AjaxUtil.fillSelectOptions($('#MaterialGroup_id'), 'material_group', 'choose', false); // 품목그룹
+            AjaxUtil.fillSelectOptions($('#Unit_id'), 'unit', 'choose', false); // 단위
+            AjaxUtil.fillSelectOptions($('#StoreHouse_id'), 'store_house', 'choose', false); // 창고
+            AjaxUtil.fillSelectOptions($('#Factory_id'), 'factory', "", false); // 공장
+            AjaxUtil.fillSelectOptions($('#WorkCenter_id'), 'workcenter', "choose", false); // 워크센터
+            AjaxUtil.fillSelectOptions($('#ManagementLevel'), 'user_code', 'choose', false, 'mat_manage_level');
+            AjaxUtil.fillSelectOptions($('#EquipmentGroup_id'), 'equipment_group', 'choose', false); // 설비그룹
+            AjaxUtil.fillSelectOptions($('#Routing_id'), 'routing', 'choose', false); // 라우팅
+            AjaxUtil.fillSelectOptions($('#Company_id'), 'company', 'choose', false); // 업체
+
+            AjaxUtil.fillSelectOptions($('#Equipment_id'), 'equipment', 'choose', false); // 생산설비
+            AjaxUtil.fillSelectOptions($('#MaterialStoreHouse_id'), 'store_house', 'choose', false); // 생산자재창고
+
+            AjaxUtil.fillSelectOptions($('#cboTestMasterGroup'), 'test_master_group', 'choose', false); // 검사마스터
+            AjaxUtil.fillSelectOptions($('#cboTestMaster'), 'test_master', 'choose', false); // 검사마스터
+        }
+
+        setButtonState() {
+            let pk = $('#matBasicForm').find('#id').val();
+            $('#btnNew').prop('disabled', false);
+            $('#btnSave').prop('disabled', false);
+            if (pk) {
+                $('#btnDelete').prop('disabled', false);
+                $('#btnProductionSave').prop('disabled', false);
+                $('#btnInventorySave').prop('disabled', false);
+                $('#btnRoutingSave').prop('disabled', false);
+            }
+            else {
+                $('#btnDelete').prop('disabled', true);
+                $('#btnProductionSave').prop('disabled', true);
+                $('#btnInventorySave').prop('disabled', true);
+                $('#btnRoutingSave').prop('disabled', true);
+            }
+        }
+
+        setPriceButtonState() {
+            let pk = $('#matBasicForm').find('#id').val();
+            let price_pk = $('#companyPriceForm').find('#price_id').val();
+            $('#btnPriceNew').prop('disabled', false);
+            $('#btnPriceSave').prop('disabled', false);
+            if (pk && price_pk) {
+                $('#btnPriceUpdate').prop('disabled', false);
+                $('#btnPriceDelete').prop('disabled', false);
+            }
+            else {
+                $('#btnPriceUpdate').prop('disabled', true);
+                $('#btnPriceDelete').prop('disabled', true);
+            }
+            
+        }
+
+        // 품목 리스트 조회
+        searchDataBind() {
+            let _this = this;
+            let data = {
+                'mat_type' : $('#cboMaterialType').val(),
+                'mat_group': $('#cboMaterialGroup').val(),
+                'keyword': $('#keyword').val(),
+                'action' : 'read'
+            };
+
+            let result = AjaxUtil.getSyncData(this.url+'/read', data);
+            if (result.success) {
+                let recordsTotal = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+
+                // 기본정보 리셋
+                $('#matBasicForm')[0].reset();
+                $('#matBasicForm').find('#id').val('');
+                // 재고정보 리셋
+                $('#matProductionForm')[0].reset();
+                // 재고정보 리셋
+                $('#matStockForm')[0].reset();
+                // 검사정보 리셋
+                $('#matTestForm')[0].reset();
+                // 라우팅정보 리셋
+                //$('#matRoutingForm')[0].reset();
+                // 도면 파일 리셋
+                //_this.setUploader();
+
+                //$('#mat_detail').find('input, select').each(function () {
+                $('.mat_detail').find('input, select').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                // 단가정보 리셋
+                $('#priceForm')[0].reset();
+
+                _this.price_grid.setData([]);
+                $('#companyPriceForm')[0].reset();
+                $('#companyPriceForm').find('#price_id').val('');
+                $('#companyPriceForm').find('input, select').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+            }
+
+            //this.setButtonDisable(false, true, true);
+            this.setButtonState();
+            //this.setPriceButtonDisabled(true, true, true);
+            this.setPriceButtonState();
+
+            this.uploader.mode = 'disabled';
+        }
+
+        // 품목 상세 조회
+        showDetail(mat_pk) {
+            let param = { 'id': mat_pk};
+            let result = AjaxUtil.getSyncData(this.url+'/detail', param);
+            if (result.success != null) {
+				let detailData = result.data;
+                FormUtil.BindDataForm(detailData, $('#matBasicForm'));
+                FormUtil.BindDataForm(detailData, $('#matProductionForm'));
+                FormUtil.BindDataForm(detailData, $('#matStockForm'));
+                FormUtil.BindDataForm(detailData, $('#matTestForm'));
+                FormUtil.BindDataForm(detailData, $('#priceForm'));
+                $('#Routing_id').val(detailData.Routing_id);
+                // lot 체크
+           		$('#matStockForm').find('#lot_use_yn').removeAttr('disabled');
+
+           		 if (detailData.lotUseYn == 'Y') {
+                   $('#matStockForm').find('#lot_use_yn').prop('checked', true);
+                } else {
+                   $('#matStockForm').find('#lot_use_yn').prop('checked', false);
+                }
+                //$('#Routing_id').trigger('change');
+                //FormUtil.BindDataForm(result, $('#matRoutingForm'));                
+            }
+
+            //this.setButtonDisable(false, false, false);
+            this.setButtonState();            
+            this.uploader.mode = 'active';
+        }
+
+        // 품목 기본정보 저장
+        saveData() {
+            let _this = this;
+            let validate = true;
+            let $target = null;
+
+            //$('#mat_detail').find('input, select').each(function () {
+            $('.mat_detail').find('input, select').each(function () {
+                if ($(this).is(':required')) {
+                    if (!$(this).val()) {
+                        validate = false;
+                        $target = $(this);
+                        return false;
+                    }
+                }
+            });
+
+            if (!validate) {
+                Alert.alert('', '필수 항목을 입력해주세요.', function () {
+                    $target.focus();
+                });
+                return;
+            }
+
+            let url = this.url+'/save';
+            let basicData = FormUtil.extractForm($('#matBasicForm'));
+            let productionData = FormUtil.extractForm($('#matProductionForm'));
+            let stockData = FormUtil.extractForm($('#matStockForm'));
+            //let testData = FormUtil.extractForm($('#matTestForm'));
+            let routingData = FormUtil.extractForm($('#matRoutingForm'));
+            let priceData = FormUtil.extractForm($('#priceForm'));
+            //let data = $.extend({}, basicData, productionData, stockData, testData, routingData);
+            let data = $.extend({}, basicData, productionData, stockData, routingData, priceData);
+                       
+            let fnSuccess = function (res) {
+                if (!res.success) {
+                    Alert.alert('', res.message);
+                } else {
+                    Notify.success("저장되었습니다.");
+                    _this.searchDataBind();
+                }
+            };
+
+            if (validate) {
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            } else {
+                Alert.alert('', '필수 항목을 입력해주세요.', function () {
+                    $target.focus();
+                });
+            }
+        }
+
+        // 라우팅정보 저장
+        saveRoutingData() {
+            let _this = this;
+            let validate = true;
+            let $target = null;
+ 
+            let url = this.url+'/saveRouting';
+            let mat_id = $('#id').val();
+            let routing_pk = $('#Routing_id').val();
+            let param = {
+                'mat_id' : mat_id,
+                'routing_pk' : routing_pk,
+            };
+                       
+            let fnSuccess = function (res) {
+                if (!res.success) {
+                    Alert.alert('', res.message);
+                } else {
+                    Notify.success("저장되었습니다.");
+                    //_this.searchDataBind();
+                }
+            };
+
+            AjaxUtil.postAsyncData(url, param, fnSuccess);
+
+        }
+
+        // 품목 정보 삭제
+        deleteData() {
+            let _this = this;
+            let url = this.url+'/delete';
+            let id = $('#matBasicForm').find('#id').val()
+            let data = { id: id };
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    Notify.success('삭제되었습니다'); // Notification
+                    _this.searchDataBind();
+                } else {
+                    Alert.alert('', res.message);
+                }
+            };
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        // 업체별 단가 리스트 조회
+        showPriceList(mat_pk) {
+            let _this = this;
+            let data = {'mat_pk': mat_pk};
+
+            let result = AjaxUtil.getSyncData(this.url+'/readPrice', data);
+            if (result != null) {
+                let count = result.data.length;
+                _this.price_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+
+                $('#companyPriceForm')[0].reset();
+                $('#companyPriceForm').find('#price_id').val('');
+                $('#companyPriceForm').find('input, select').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                //_this.setPriceButtonDisabled(false, true, true);
+                _this.setPriceButtonState();
+            }
+        }
+
+        // 업체별 단가히스토리 리스트 조회
+        showPriceHistoryList(mat_pk) {
+            let _this = this;
+            let data = {'mat_pk': mat_pk};
+
+            let result = AjaxUtil.getSyncData(this.url+'/readPriceHistory', data);
+            if (result != null) {
+                let recordsTotal = result.data.length;
+                _this.price_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: recordsTotal,
+                    }
+                });
+
+                $('#companyPriceForm')[0].reset();
+                $('#companyPriceForm').find('#price_id').val('');
+                $('#companyPriceForm').find('input, select').each(function () {
+                    if (!$(this).is(':disabled')) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                //_this.setPriceButtonDisabled(false, true, true);
+                _this.setPriceButtonState();
+            }
+        }
+
+        // 단가 상세 조회
+        showPriceDetail(idx) {
+            let param = { 'price_id': idx };
+            let result = AjaxUtil.getSyncData(this.url+'/detailPrice', param);
+            if (result != null) {
+                FormUtil.BindDataForm(result.data, $('#companyPriceForm'));
+            }
+
+            //this.setPriceButtonDisabled(false, false, false);
+            //this.setPriceButtonDisabled(false, true, false);
+            this.setPriceButtonState();
+        }
+
+        // 단가 정보 등록/변경
+        savePriceData() {
+            let _this = this;
+            let validate = true;
+            let $target = null;
+            let mat_id = $('#matBasicForm').find('#id').val();
+            let url = this.url+'/savePrice';
+            let data = FormUtil.extractForm($('#companyPriceForm'));
+
+
+            let price_grid = this.price_grid.list;
+            for (let i = 0; i < price_grid.length; i++) {
+                if (price_grid[i].Company_id == data.Company_id) {
+                    if (price_grid[i].ApplyStartDate == data.ApplyStartDate) {
+                        Alert.alert('', '적용 시작일을 확인해주세요.')
+                        $('#ApplyStartDate').focus();
+                        return;
+                    }
+                }
+            }
+
+            let fnSuccess = function (res) {
+                if (!res.success) {
+                    Alert.alert('', res.message);
+                } else {
+                    Notify.success('저장되었습니다');
+                    _this.showPriceList(mat_id);
+                }
+            };
+
+            $('#companyPriceForm').find('input, select').each(function () {
+                if ($(this).is(':required')) {
+                    if (!$(this).val()) {
+                        validate = false;
+                        $target = $(this);
+                        return false;
+                    }
+                }
+            });
+
+            data['Material_id'] = mat_id;
+            data['ChangerName'] = userinfo.username;
+
+            if (validate) {
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            } else {
+                Alert.alert('', '필수 항목을 입력해주세요.', function () {
+                    $target.focus();
+                });
+            }
+        }
+
+        // 단가 정보 수정
+        updatePriceData() {
+            let _this = this;
+            let validate = true;
+            let $target = null;
+            let mat_id = $('#matBasicForm').find('#id').val();
+            let url = this.url+'/updatePrice';
+            let data = FormUtil.extractForm($('#companyPriceForm'));
+            let fnSuccess = function (res) {
+                if (!res.success) {
+                    Alert.alert('', res.message);
+                } else {
+                    Notify.success('저장되었습니다');
+                    _this.showPriceList(mat_id);
+                }
+            };
+
+            $('#companyPriceForm').find('input, select').each(function () {
+                if ($(this).is(':required')) {
+                    if (!$(this).val()) {
+                        validate = false;
+                        $target = $(this);
+                        return false;
+                    }
+                }
+            });
+
+            //if ($('#ApplyStartDate').val() > $('#ApplyEndDate').val()) {
+            //    Alert.alert('', '적용기간을 확인해주세요.', function () {
+            //        $('#ApplyStartDate').focus();
+            //    });
+            //    return false;
+            //}
+
+            data['Material_id'] = mat_id;
+            data['ChangerName'] = userinfo.username;
+
+            if (validate) {
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            } else {
+                Alert.alert('', '필수 항목을 입력해주세요.', function () {
+                    $target.focus();
+                });
+            }
+        }
+
+        // 단가 정보 삭제
+        deletePriceData() {
+            let _this = this;
+            let url = this.url+'/deletePrice';
+            let id = $('#companyPriceForm').find('#price_id').val()
+            let mat_id = $('#matBasicForm').find('#id').val();
+            let data = { id: id };
+            let fnSuccess = function () {
+                Notify.success('삭제되었습니다'); // Notification
+                _this.showPriceList(mat_id);
+            };
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+
+        // BOM 조회
+        showBomList(mat_id) {
+            let _this = this;
+
+            let data = {
+                'mat_id': mat_id
+            };
+
+            let result = AjaxUtil.getSyncData(this.url+'/bom', data);
+            
+            //if (result.data != null) {
+                let count = result.data.length;
+                _this.bom_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+            //}
+            //_this.bom_grid.setData([]);
+            _this.bom_grid.repaint();
+        }
+
+        // BOM역전개 조회
+        showBomReverseList(mat_id) {
+            let _this = this;
+            let data = {
+                'mat_id': mat_id
+            };
+
+            let result = AjaxUtil.getSyncData(this.url+'/bomReverse', data);
+            if (result.success != null) {
+                let count = result.data.length;
+                _this.bom_reverse_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+            }
+        }
+
+        // ROUTING 공정정보 조회
+        showRoutingProcessList(routing_pk) {
+            let _this = this;
+            let data = {
+                'routing_pk': routing_pk
+            };
+
+            let result = AjaxUtil.getSyncData(this.url+'/routingProcess', data);
+            if (result != null) {
+                let count = result.data.length;
+                _this.routing_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+            }
+        }
+
+        //파일 업로더    
+        setUploader() {
+            let _this = this;
+            $('#addFile').prop('disabled', false);
+                        
+            let accept_files = 'jpg,jpeg,gif,png,xlsx,xls';
+            let accept = '.' + accept_files.split(',').join(',.');
+
+            //if ($('#fileUploadBox').children().length > 0)
+            //    return;
+            if (_this.uploader)
+                return;
+
+            _this.uploader = $('#fileUploadDiv').yuFileUploader(
+                {
+                    fileIdsCtl: '#srchFileId',
+                    dropZone: 'fileuploadAx',
+                    boxZone: 'fileuploadAx',
+                    others: '', // 파일저장 상위경로
+                    filepath: 'material', // 파일저장 하위경로
+                    addfileext: 'Y', // 저장시 파일확장자 포함 파일이름저장
+                    icons: {
+                        'download': '<i class="fa fa-download" aria-hidden="true"></i>',
+                        'delete': '<i class="fa fa-minus-circle" aria-hidden="true"></i>'
+                    },
+                    emptymsg: '파일을 Drag&amp;Drop하거나 클릭하여 업로드를 진행하세요' + '(업로드 후 저장버튼을 클릭하세요.)',
+                    
+                    multiple: true,  // 멑티업로드 허용여부
+                    maxcnt: 5, // 업로드 최대갯수
+                    accept: accept, // 허용 확장자 image/* .gif,.jpg,.png
+                    accepts: accept_files,    // 드래그로 업로드할 때 체크할 용도
+                    fileSize: 50,   // Mega
+                    tableName: 'material', 
+                    attachName: 'drawing', 
+                }
+            );
+            _this.uploader.can_write = userinfo.can_write();
+            _this.uploader.mode = 'disable';
+        }
+
+        //검사항목
+        showTestList(mat_pk) {
+            let _this = this;
+            if (!mat_pk)
+                return;
+
+            let url = this.url +'/testMaster';
+            let data = {
+                'mat_id':mat_pk,
+            };
+
+            let result = AjaxUtil.getSyncData(url, data);
+            if (result.data != null) {
+                let count = result.data.length;
+                _this.test_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+            }
+        }
+    }
+
+    let page = null;
+
+    $(document).ready(function (e) {
+        page = new MaterialPage();
+        //page.searchDataBind();
+
+        // 검색버튼
+        $('#btnHedaerSearch,#btnBanSearch').click(function (e) {
+            page.searchDataBind();
+        });
+
+        $('.tab_links .tab').click(function (e) {
+            let target = e.currentTarget.name;
+            page.current_tab = target;
+            let mat_pk = $('#matBasicForm').find('#id').val();
+            //if (mat_pk == '')
+            //    return;
+            page.test_grid.setData([]);
+
+            if (target == 'tab_unitcost') {
+                $('#tab_unitcost').removeClass("hidden");
+                if (mat_pk)
+                    page.showPriceList(mat_pk);
+            }
+            else if (target == 'tab_production') {
+                //$('.tabs .tab_production_tab').css('visibility', 'visible');
+                //$('#tab_production_tab').css('visibility', 'visible');
+            }
+            else if (target == 'tab_bom') {
+                $('#tab_bom').removeClass("hidden");
+                if (mat_pk)
+                    page.showBomList(mat_pk);
+            }
+            else if (target == 'tab_bom_reverse') {
+                $('#tab_bom_reverse').removeClass("hidden");
+                if (mat_pk)
+                    page.showBomReverseList(mat_pk);
+            }
+            else if (target == 'tab_routing') {
+                $('#tab_routing').removeClass("hidden");
+                let routing_pk = $('#Routing_id').val();
+                //if (routing_pk)
+                page.showRoutingProcessList(routing_pk);
+            }
+            else if (target == 'tab_test_master') {
+                $('#tab_test_master').removeClass("hidden");
+                //if (mat_pk)
+                page.showTestList(mat_pk);
+            }
+        });
+
+        // 기본정보 신규버튼
+        $('#btnNew').click(function (e) {
+            
+            // 기본정보 리셋
+            $('#matBasicForm')[0].reset();
+            $('#matBasicForm').find('#id').val('');
+            
+            $('#matBasicForm').find('input, select, textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+            $('#matProductionForm').find('input, select, textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+            $('#matStockForm').find('input, select, textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+            $('#priceForm').find('input, select, textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            // 생산정보 리셋
+            $('#matProductionForm')[0].reset();
+            // 재고정보 리셋
+            $('#matStockForm')[0].reset();
+            // 검사정보 리셋
+            $('#matTestForm')[0].reset();
+            // 라우팅정보 리셋
+            //$('#matRoutingForm')[0].reset();
+
+            // 단가정보 리셋
+            page.price_grid.setData([]);
+            $('#companyPriceForm')[0].reset();
+            $('#companyPriceForm').find('#price_id').val('');
+            
+            $('#companyPriceForm').find('input, select').each(function () {
+                if (!$(this).is(':disabled')) {
+                    $(this).attr('disabled', 'disabled');
+                }
+            });
+
+            page.grid.clearSelect();
+
+            //page.setButtonDisable(true, false, true);
+            page.setButtonState();
+            //page.setPriceButtonDisabled(true, true, true);
+            page.setPriceButtonState();
+
+            // uploder 
+            $('#DataPk').val('');
+
+            let today_string = CommonUtil.getYYYYMMDD();
+        });
+
+        // 기본정보 저장버튼
+        $('#btnSave').click(function (e) {
+            let basicData = FormUtil.extractForm($('#matBasicForm'));
+            let stockData = FormUtil.extractForm($('#matStockForm'));
+            let data = $.extend({}, basicData, stockData);
+            if (!data.MaterialGroup_id) {
+                Alert.alert('', '품목 그룹을 선택해 주세요');
+                return;
+            }
+            if (!data.Code) {
+                Alert.alert('', '품목코드(바코드)를 입력해 주세요');
+                return;
+            }
+            if (!data.Name) {
+                Alert.alert('', '품목명을 입력해 주세요');
+                return;
+            }
+            if (!data.Unit_id) {
+                Alert.alert('', '단위를 선택해 주세요');
+                return;
+            }
+            if (!data.Factory_id) {
+                Alert.alert('', '공장을 선택해 주세요');
+                return;
+            }
+            if (!data.StoreHouse_id) {
+                Alert.alert('', '기본 재고 창고를 선택해 주세요');
+                return;
+            }
+
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.saveData() },
+                function () { }
+            );
+        });
+
+        // 기본정보 삭제버튼
+        $('#btnDelete').click(function (e) {
+            Alert.confirm('', 
+                '삭제하시겠습니까?',
+                function () { page.deleteData() },
+                function () { }
+            );
+        });
+
+        // 단가 히스토리버튼
+        $('#btnPriceHistory').click(function (e) {
+            let mat_id = $('#matBasicForm').find('#id').val();
+            if (mat_id)
+                page.showPriceHistoryList(mat_id);
+        });
+
+        $('#cboTestMasterGroup').change(function (e) {
+            let group_pk = $('#cboTestMasterGroup').val();
+            AjaxUtil.fillSelectOptions($('#cboTestMaster'), 'test_master', 'choose', '', group_pk);
+        });
+
+        //검사정보 신규버튼
+        $('#btnAddTestMaster').click(function (e) {
+            let mat_id = $('#matBasicForm').find('#id').val();
+            let test_master_id = $('#cboTestMaster').val();
+            if (!test_master_id)
+                return;
+
+            // 중복체크
+            let already = false;
+            $.each(page.test_grid.list, function (index, row) {
+                if (test_master_id == row.test_master_id) {
+                    already = true;
+                    return false;   // break
+                }
+            });
+
+            if (already)
+                return;
+
+            row = {};
+            row["id"] = 0;
+            row["test_master_id"] = test_master_id;
+            row["test_class_name"] = '';
+            row["test_master_group_name"] = $('#cboTestMasterGroup option:selected').text();;
+            row["test_master_name"] = $('#cboTestMaster option:selected').text();
+
+            page.test_grid.addRow(
+                row,
+                'last',
+                { __index: undefined }
+            ); 
+
+            return;
+        });
+
+        //검사정보 저장버튼
+        $('#btnSaveTest').click(function (e) {
+            let url = page.url+'/save_test_master';
+            let mat_id = $('#matBasicForm').find('#id').val();
+            let InTestYN = $('#matTestForm').find('#InTestYN').prop('checked') ? 'Y': '';
+            let OutTestYN = $('#matTestForm').find('#OutTestYN').prop('checked') ? 'Y': '';
+
+            let list = page.test_grid.getList();
+            list = JSON.stringify(list);
+
+            let data = {
+                'mat_id': mat_id,
+                'InTestYN':InTestYN,
+                'OutTestYN':OutTestYN,
+                'Q': list,
+            };
+     
+            let result = AjaxUtil.postSyncData(url, data);
+            if (result.data != null) {
+                Notify.success("저장되었습니다.");
+                page.showTestList(mat_id);
+            }
+        });
+        
+        // 단가정보 신규버튼
+        $('#btnPriceNew').click(function (e) {
+            // 단가 상세정보 리셋
+            //$('#companyPriceForm')[0].reset();
+            $('#companyPriceForm').find('#price_id').val('');
+
+            $('#companyPriceForm').find('input, select').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+
+            page.price_grid.clearSelect();
+
+            //page.setPriceButtonDisabled(true, false, true);
+            page.setPriceButtonState();
+
+            let today_string = CommonUtil.getYYYYMMDD();
+            $('#companyPriceForm').find('#ApplyStartDate').val(today_string); //오늘날짜
+        });
+
+        // 단가등록/변경 버튼
+        $('#btnPriceSave').click(function (e) {
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.savePriceData() },
+                function () { }
+            );
+        });
+
+        // 단가정보 수정버튼
+        $('#btnPriceUpdate').click(function (e) {
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.updatePriceData() },
+                function () { }
+            );
+        });
+
+        // 단가정보 삭제버튼
+        $('#btnPriceDelete').click(function (e) {
+            Alert.confirm('', 
+                '삭제하시겠습니까?',
+                function () { page.deletePriceData() },
+                function () { }
+            );
+        });
+
+        // 라우팅 선택
+        $('#Routing_id').change(function (e) {
+            let route_pk = $('#Routing_id').val();
+            page.showRoutingProcessList(route_pk);
+        });
+
+        // 라우팅 저장버튼
+        $('#btnRoutingSave').click(function (e) {
+            Alert.confirm('', 
+                '라우팅 정보를 저장하시겠습니까?',
+                function () { page.saveRoutingData() },
+                function () { }
+            );
+        });
+        
+		
+        $('#btnExcel').click(function (e) {
+            page.grid.exportExcel('품목정보.xls');
+        });
+
+        //page.popColSetting = new popColSetting();
+
+        //let lang_code = i18n.getLanguageCode();
+        //let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid',  page.grid);
+        //let config = page.grid.config;
+        //config.columns = columns;
+        //page.grid.setConfig(config);
+
+        if (userinfo.group_code == 'admin') {
+            //$('#btnGridSetting').show();
+            //$('#btnGridSetting').attr('style', 'visibility:visible');  
+            $('#btnGridSetting').css('visibility','visible');  
+        }
+
+        //$('#btnGridSetting').click(function (e) {
+        //    let _this = this;
+        //    let fix_cols = page.grid_config.frozenColumnIndex;
+        //    page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
+        //});
+
+        page.searchDataBind();
+    });
+</script>
+
+</th:block>
+</html>

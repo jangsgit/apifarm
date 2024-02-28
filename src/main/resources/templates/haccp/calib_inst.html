@@ -1,0 +1,853 @@
+<html layout:decorate="~{layout_page}">
+<th:block layout:fragment="content">
+
+<div class="content_wrap">
+
+    <section class="section mb-1">
+
+        <div class="title_box ">
+            <div class="left_align">
+                <h3>검교정대상기기</h3>
+            </div>
+            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderRefresh" title="새로고침"><i class="fas fa-undo-alt"></i></button>
+        </div>
+
+        <div class="table_box search" >
+
+            <div class="row" >
+                <div class="col-4 col-xl-4" >
+                    <div class="input-group" >
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_lg" data-labelCd="기기명">기기명</span>
+                        </div>
+                        <input type="text" class="form-control2" value="" id="txtName" placeholder="" title="" />
+                    </div>
+                </div>
+                <div class="col-1" >
+                    <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
+                </div> 
+                        
+            </div>
+        </div>
+    </section>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <section class="section">
+                <div class="grid_box">
+                    <div class="title_box">
+                         <span class="right_align rpt">검교정대상 기기</span>
+                        <button type="button" class="btn-default " id="btnExcel"><i class="fas fa-file-excel"></i></button>
+                        <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+                    </div>
+                    <div class="h-350" data-ax5grid="calib_inst_grid" ></div>  
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <section class="section mb-1">
+        <div class="tabs" data-tab="tabWrap">
+            <div class="title_box">
+                <div class="left_align">
+                    <ul class="tab_links">
+                        <li >
+                        <a class="tab" data-tablink="#basicInfo" name="basicInfo" id="basicInfo_link" href="#" data-labelCd="기본정보">기본정보</a>
+                        </li>
+                        <li >
+                        <a class="tab" data-tablink="#calibResult" name="calibResult" id="calibResult_link" href="#" data-labelCd="검교정내역">검교정내역</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab" id="basicInfo">
+                    <div class="title_box mb-2">
+                        <span class="right_align rpt" data-labelCd="검교정대상기기" >검교정대상기기</span>
+                        <button type="button" class="btn-default" id="btnNew" name="btnNew"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btn-danger y_write_auth" id="btnDel" ><i class="fas fa-trash"></i></button>
+                        <button type="button" class="btn-default y_write_auth" id="btnSave" disabled><i class="fas fa-save"></i></button>
+                        <button type="button" class="btn-default y_write_auth" id="btnSaveAsNew" disabled>새 항목으로 저장</button>
+                    </div>
+                    <form id="detailForm">
+                        <input type="hidden" id="id" name="id" >
+                        <div class="table_box sub" id="detail_box">
+                            <div class="row">
+
+                                 <div class="col-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t4">기기명</span>
+                                        </div>
+                                        <input class="form-control2 tal" type="text" id="Name" name="Name" />
+                                    </div>
+                                </div> 
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t4">기기종류</span>
+                                        </div>
+                                        <select class="form-control2" id="CalibInstClass" name="CalibInstClass"  ></select>
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t6" data-labelCd="검교정주기">검교정주기</span>
+                                        </div>
+                                        <input class="form-control2 tar" type="number" id="CycleNumber" name="CycleNumber" required /><span class="input-group-text fit_box_t4" data-labelCd="개월">개월</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-4" >
+                                    <div class="input-group" >
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t6" data-labelCd="공인기관검교정일">공인기관검교정일</span>
+                                        </div>
+                                        <input class="form-control2" type="date" id="AuthorizedCalibDate" name="AuthorizedCalibDate" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-4" >
+                                    <div class="input-group" >
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t6" data-labelCd="자체검교정일">자체검교정일</span>
+                                        </div>
+                                        <input class="form-control2" type="date" id="SelfCalibDate" name="SelfCalibDate" required>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-12">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_t4_area">비고</span>
+                                        </div>
+                                        <textarea class="form-control2" id="Description" name="Description"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 col-md-4" >
+                                    <div class="input-group" >
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_md" data-labelCd="적용시작일">적용시작일</span>
+                                        </div>
+                                        <input class="form-control2" type="date" id="StartDate" name="StartDate" required>
+
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-4" >
+                                    <div class="input-group" >
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fit_box_md" data-labelCd="적용종료일">적용종료일</span>
+                                        </div>
+                                        <input class="form-control2" type="date" id="EndDate" name="EndDate" value="2100-12-31" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab" id="calibResult">
+                    <div class="title_box" id="resultBtn">
+                        <span class="right_align rpt" data-labelCd="검교정내역" >검교정내역</span>
+                        <button type="button" name="resultBtn" class="btn-default" id="btnNewResult"><i class="fas fa-plus"></i></button>
+                        <button type="button" name="resultBtn" class="btn-default" id="btnEditResult"><i class="fas fa-edit"></i></button>
+                        <button type="button" name="resultBtn" class="btn-danger y_write_auth" id="btnDelResult" ><i class="fas fa-trash"></i></button>
+                        <button type="button" name="resultBtn" class="btn-default " id="btnResultExcel"><i class="fas fa-file-excel"></i></button>
+                        <button type="button" name="resultBtn" class="btn-default" id="btnResultGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
+                    </div>
+                    <div class="grid_box" >
+                        <div class="h-230" data-ax5grid="calib_result_grid" ></div>  
+                    </div>
+                </div>
+            </div>
+    </div>
+    </section>
+   
+</div>
+    
+<script type="text/x-tmpl" id="resultSaveTemplate">
+
+    <div class="content_wrap modal-content popup">
+        <section class="pt-2">
+            <form id="resultForm">
+                <input type="hidden" id="id" name="id" value="{%=o.id%}">           
+                <input type="hidden" id="CalibInstrument_id" name="CalibInstrument_id" value="{%=o.CalibInstrument_id%}">
+                <div class="table_box sub" id="detail_box">
+                    <div class="row">
+
+                         <div class="col-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">기기명</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="CalibInstName" name="CalibInstName" value="{%=o.CalibInstName%}"/>
+                            </div>
+                        </div> 
+
+                        <div class="col-6">
+                            <div class="input-group" data-ax5picker="basic" id="date_TestDate">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">검교정일</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="CalibDate" name="CalibDate" value="{%=o.CalibDate%}"/>
+                                <span class="input-group-text fs-xl"><i class="fas fa-calendar-alt calendar_color" ></i></span>
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="input-group-text fit_box_lg">표준품 사진</span>
+                                </div>
+                                <div class="col-12" id="image_upload1">
+                                </div>
+                            </div>
+                        </div>	
+
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="input-group-text fit_box_lg">검교정품 사진</span>
+                                </div>
+                                <div class="col-12" id="image_upload2">
+                                </div>
+                            </div>
+                        </div>	
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">차이값</span>
+                                </div>
+                                <input class="form-control2 tac" type="text" id="Difference" name="Difference" value="{%=o.Difference%}"/>
+                               
+                            </div>
+                        </div>	
+
+                        <div class="col-4">
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">판정</span>
+                                </div>
+                                <select id="CalibJudge" name="CalibJudge">
+                                    <option value="">선택</option>
+                                    <option value="OK">합격</option>
+                                    <option value="NOK">불합격</option>
+                                </select>
+                            </div>
+                        </div>	
+                        <div class="col-4">
+                            <div class="input-group" >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4">사내/사외</span>
+                                </div>
+                                <select class="form-control2" id="cboGubun" name="cboGubun"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fit_box_t4_area">비고</span>
+                                </div>
+                                <textarea class="form-control2" id="content" name="Description">{%=o.Description%}</textarea>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="grid_box" id='attach_upload1'></div>
+                </div>
+
+                <section class="section">
+                    <div class="popup_button_group bottom">
+                        <div class="left_align">
+                        <button type="button" class="btn-popup" id="btnSaveResult" ><span>저장</span></button>
+                        <button type="button" class="btn-popup" id="modal-close-button"><span>닫기</span></button>
+
+                        </div>
+                    </div>
+                </section>
+
+            <div class="grid_box">
+ 
+            </div>
+        </form>
+        </section>
+        <div id="uploadForm"></div>
+
+    </div>
+
+
+</script>
+</th:block>
+
+<th:block layout:fragment="scripts">
+<th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+<th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+<th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+<script type="text/javascript">
+   
+    class CalibPage {
+        constructor() {
+            this.grid = null;
+            this.uploader = null;
+            this.init(); 
+            this.baseUrl = '/api/haccp/calib_inst';
+            this.table_name = 'haccp_calib_result';
+        }
+
+        init() {
+            let _this = this;
+            let config = {
+                target: $('[data-ax5grid="calib_inst_grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: true, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        let inst_id = e.item.id;
+                        _this.grid.select(this.dindex);
+                        _this.showDetailData(inst_id);
+                        _this.showResultGrid(inst_id);
+                    }
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+               columns: [
+                   { key: 'id', label: '번호', width: 100, align: 'left'},
+                   { key: 'calib_inst_name', label: '기기명', width: 100, align: 'left'},
+                   { key: 'calib_inst_class', label: '기기종류', width: 100, align: 'left' },
+                   { key: 'cycle_name', label: '검교정주기', width: 100, align: 'left' },
+                   { key: 'calib_judge', label: '판정', width: 100, align: 'center' },
+                   { key: 'author_calib_date', label: '공인기관검교정일', width: 100, align: 'center' },
+                   { key: 'self_calib_date', label: '자체검교정일', width: 100, align: 'center' },
+                   { key: 'next_calib_date', label: '차기검교정일', width: 100, align: 'center' },
+                   { key: 'delay_day', label: '지연여부', width: 100, align: 'center' },
+                   { key: 'start_date', label: '시작일', width: 100, align: 'center' },
+                   { key: 'end_date', label: '종료일', width: 100, align: 'center' },
+
+                   { key: 'description', label: '설명', width: 300, align: 'left' },
+                ]
+            };
+
+            this.grid = new ax5.ui.grid(config);
+            this.grid_config = config;             
+
+            let result_config = {
+                target: $('[data-ax5grid="calib_result_grid"]'),
+                sortable: true,
+                frozenColumnIndex: 0, // 열 고정
+                frozenRowIndex: 0,    // 행 고정
+                showLineNumber: true, // 열의 번호 보이기 여부
+                showRowSelector: false,  // checkbox(선택) 보이기 여부
+                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
+                multiSort: true, // 다중 정렬 여부
+                header: {
+                    align: 'center',  // 헤더의 기본 정렬
+                    columnHeight: 38  // 헤더 높이
+                },
+                body: {
+                    columnHeight: 25, // body의 기본 높이
+                    onClick: function (e) {
+                        _this.result_grid.select(this.dindex);
+                        let inst_id = e.item.id;
+                    }
+                },
+                page: {
+                    display: true,  // 페이징 보이기 여부
+                    statusDisplay: true,
+                },
+               columns: [
+                   { key: 'id', label: '번호', width: 100, align: 'left'},
+                   { key: 'calib_inst_id', label: '기기번호', width: 100, align: 'left', hidden:true},
+                   { key: 'calib_inst_class', label: '기기종류', width: 100, align: 'left' },
+                   { key: 'calib_inst_name', label: '기기명', width: 100, align: 'left' },
+                   { key: 'calib_date', label: '검교정일', width: 100, align: 'center' },
+                   { key: 'calibInstitution_name', label: '구분', width: 80, align: 'center' },
+                   { key: 'difference', label: '차이값', width: 100, align: 'center' },
+                   { key: 'calib_judge_name', label: '판정', width: 100, align: 'center' },
+                   { key: 'description', label: '특이사항', width: 300, align: 'left' },
+                ]
+            };
+
+            this.result_grid = new ax5.ui.grid(result_config);
+            this.result_grid_config = result_config; 
+        }        
+
+        //버튼 활성화 
+        setButtonState() {
+            let pk = this.grid.getList("selected");
+            $('#btnNew').prop('disabled', false);
+            $('#btnSave').prop('disabled', false);
+            if (pk) {
+                $('#btnDel').prop('disabled', false);
+                $('#btnEdit').prop('disabled', false);
+            }
+            else {
+                $('#btnDel').prop('disabled', true);
+                $('#btnEdit').prop('disabled', true);
+                $('#resultBtn').children('button').hide();
+            }
+        }        
+
+        //모달
+        showDataEdit(data) {
+            let _this = this;
+            let content = tmpl('resultSaveTemplate', data);
+            let $content = $(content);            
+            let modalContainer;
+            if (!data.id) {
+                modalContainer = new PopupDraggable('검교정결과 등록');
+            } else {
+                modalContainer = new PopupDraggable('검교정결과 수정');
+            }          
+            modalContainer.open({ width: 700, height: 570, $content });            
+   
+            $content.find('#CalibInstName').prop('disabled', true);
+            $content.find('#CalibDate').ax5DatePicker({ direction: 'top' });
+            AjaxUtil.fillSelectOptions($content.find('#cboGubun'), 'user_code', 'choose', false, 'inter_exter_type');
+            
+            $('#cboGubun').val(data.CalibInstitution);
+            $('#CalibJudge').val(data.CalibJudge);
+            
+            $content.find('#btnSaveResult').on('click', function () {
+                // resultForm 이용하지 말고 데이터 수작업으로 연동해야 됨.                
+                let $form = $content.find('#resultForm');
+                
+                Alert.confirm('', 
+                    '검교정결과를 저장하시겠습니까?',
+                    function () { _this.saveResultData($form, modalContainer); },
+                    function () { }
+                );
+            }); 
+
+            $('#DataPk').val(data.id);
+
+            _this.upload1 = new UploadOneImage(1, {
+                table_name: _this.table_name,
+                data_pk: data.id,
+                attach_name: 'standard_photo',
+                file_id: data.standard_file_id,
+                upload_div_id: 'image_upload1',
+                //upload_form_id: 'xxx',
+                image_width: '100%',
+                image_height: '120px',
+                callback: function (param) {                                                            
+                }
+            });
+
+            _this.upload1.printFormDiv('uploadForm');
+
+            _this.upload2 = new UploadOneImage(2, {
+                table_name: _this.table_name,
+                data_pk: data.id,
+                attach_name: 'calib_photo',
+                file_id: data.calib_file_id,
+                upload_div_id: 'image_upload2',
+                //upload_form_id: 'xxx',
+                image_width: '100%',
+                image_height: '120px',
+                callback: function (param) {                                    
+                }                
+            });                                    
+                        
+            let uploader = new ax5FileUploadClass('attach_upload1', data.id,
+            {
+                table_name: _this.table_name,
+                attach_name: 'basic',
+                accept_files: 'hwp,doc,docx,ppt,pptx,xls,xlsx,jpg,jpeg,gif,mbp,png,txt,zip,pdf',
+                multiple: true,
+                max_count: 5,
+                file_size: 100,
+                upload_callback: function (param) {
+                    uploader.showLastImage('imgPhoto');
+                },
+                delete_callback: function (param) {
+                    $('#imgPhoto').attr('src', '');
+                },
+                file_click_callback: function (file_id) {
+                    uploader.showImage('imgPhoto', file_id);
+                },
+                can_write: !$('#viewMode').val(),
+            });
+            $('#addFile').hide();
+            $('#removeFileAll').hide();    
+                                                 
+        }
+
+        searchMainData() {
+            let _this = this;
+                        
+            let param = {
+                'action': 'read',                
+                'calibInstName': $('#txtName').val(),
+                'table_name': _this.table_name,
+            };
+
+            let result = AjaxUtil.getSyncData(_this.baseUrl+'/read', param);
+            
+            if (result.data != null) {
+
+                let count = result.data.length;
+                _this.grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+
+                _this.grid.setHeight(result.length * 33 + 100);
+            }            
+            _this.setButtonState();
+        }
+        
+        showDetailData(id) {
+            let _this = this;
+            let param = {
+                'action': 'detail',
+                'id': id, 
+            };
+            
+            let result = AjaxUtil.getSyncData(_this.baseUrl + '/detail', param);
+
+            if (result.data != null) {
+                FormUtil.BindDataForm(result.data, $('#detailForm'));
+                page.setButtonState();
+            }
+        }
+
+        showResultGrid(inst_id) {                                    
+            if (!inst_id) {
+                $('#resultBtn').children('button').hide();
+            } else {
+                 $('#resultBtn').children('button').show();
+            }
+            
+            let _this = this;
+            let param = {
+                'action': 'calib_result_list',
+                'calib_inst_id': inst_id, 
+            };
+           
+            let result = AjaxUtil.getSyncData(_this.baseUrl + '/calib_result_list', param);
+
+            if (result.data) {
+                let count = result.data.length;
+                _this.result_grid.setData({
+                    list: result.data,
+                    page: {
+                        display: true,
+                        totalElements: count,
+                    }
+                });
+
+                _this.result_grid.setHeight(result.data.length * 33 + 100);
+            }
+        }
+        
+        // 문서 정보 저장
+        saveData() {
+            let _this = this;
+            let url = _this.baseUrl + '/save';
+            let data = FormUtil.extractForm($('#detailForm'));
+            data.table_name = _this.table_name;
+
+            // 필수입력 check routine
+            if (!data.Name) {
+                Alert.alert('', '기기명을 입력해주세요.');
+                return false;
+            }
+            
+            let fnSuccess = function () {
+                Notify.success('저장되었습니다');
+                _this.searchMainData();
+            }
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        // 문서 정보 삭제
+        deleteData(id) {
+            let _this = this;
+            let url = _this.baseUrl + '/delete';
+            //let id = $('#detailForm').find('#id').val();
+            let data = { 'id': id }; 
+            let fnSuccess = function (res) {
+                Notify.success('삭제되었습니다');
+                _this.searchMainData();
+            }
+
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        // 검교정결과 저장
+        saveResultData($form, modalContainer) {
+            let _this = this;
+            let url = '/api/haccp/calib_result/save';
+            let data = FormUtil.extractForm($form);                        
+            data.CalibInstitution = data.cboGubun;   
+             
+            let file_ids = $('#srchFileId').val()+ ',' +_this.upload1.file_id + ',' + _this.upload2.file_id; 
+            
+            if(!_this.upload1.file_id && !$('#srchFileId').val() && !_this.upload1.file_id) {
+				file_ids = null;
+			}
+            
+            if(!_this.upload1.file_id && !$('#srchFileId').val() && _this.upload2.file_id) {
+				file_ids = _this.upload2.file_id;
+			}
+            
+            if(!_this.upload2.file_id && !$('#srchFileId').val() && _this.upload1.file_id) {
+				file_ids = _this.upload1.file_id;
+			}
+			
+            if(!_this.upload2.file_id && !_this.upload1.file_id && $('#srchFileId').val()) {
+				file_ids = $('#srchFileId').val();
+			}
+			
+            if(!_this.upload2.file_id && $('#srchFileId').val() && _this.upload1.file_id) {
+				file_ids = $('#srchFileId').val() + ',' +_this.upload1.file_id;
+			}
+			
+            if(!_this.upload1.file_id && $('#srchFileId').val() && _this.upload2.file_id) {
+				file_ids = $('#srchFileId').val() + ',' +_this.upload2.file_id;
+			}
+			
+            if(!$('#srchFileId').val() && _this.upload1.file_id && _this.upload2.file_id) {
+				file_ids = _this.upload1.file_id+ ',' +_this.upload2.file_id;
+			}
+			
+            data['file_ids'] = file_ids;                        
+            // 필수입력 check routine
+            if (!data.CalibDate) {
+                Alert.alert('', '검교정일을 입력해 주세요.');
+                return false;
+            }
+            
+            let fnSuccess = function () {
+                modalContainer.close();
+                Notify.success('저장되었습니다');
+                let inst_id = data.CalibInstrument_id;                
+                _this.showResultGrid(inst_id);
+            }
+
+          	AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        //엑셀다운로드
+        exportExcel() {
+            var targetview = this.grid;
+            // 현재 html코드로 데이터 만들어 확장자만 xls로 변경해주고 있음
+            targetview.exportExcel('검교정대상.xls');
+        }
+    }
+  
+    let page = null;
+
+    $(document.body).ready(function (e) {
+        page = new CalibPage();
+        
+        let today = CommonUtil.getYYYYMMDD();
+        let this_year = today.substring(0, 4);
+        page.today = today;
+        page.this_year = this_year;
+        
+        $('#StartDate').val(this_year + '-01-01');
+        $('#EndDate').val('2100-12-31');
+                
+        //page.searchMainData();
+
+        AjaxUtil.fillSelectOptions($('#CalibInstClass'), 'user_code', '', '', 'calib_inst_class');
+        AjaxUtil.fillSelectOptions($('#CycleBase'), 'system_code', '', '', 'cycle_base');
+        
+        // 검색버튼 클릭
+        $('#btnSearch').click(function (e) {
+            page.searchMainData();
+        });
+
+        // 신규버튼
+        $('#btnNew').click(function (e) {
+            $('#detailForm')[0].reset();
+            $('#detailForm').find('#id').val('');
+            $('#detailForm').find('#CycleNumber').val('12');
+            $('#detailForm').find('#StartDate').val(page.this_year + '-01-01');
+            $('#detailForm').find('#EndDate').val('2100-12-31');
+
+            $('#detail_box').find('input, select, textarea').each(function () {
+                if ($(this).is(':disabled')) {
+                    $(this).removeAttr('disabled');
+                }
+            });
+                                                                           
+            page.setButtonState();
+
+        });
+
+        $('#btnSave').click(function () {
+
+            //let $form = $('#detailForm');
+            Alert.confirm('', 
+                '저장하시겠습니까?',
+                function () { page.saveData(); },
+                function () { }
+            );
+        }); 
+
+
+        // 삭제버튼
+        $('#btnDel').click(function (e) {
+
+            let items = page.grid.getList("selected");
+            if (items.length > 0) {
+                Alert.confirm('', "삭제하시겠습니까?",
+                    function () {
+                        let id = items[0].id;
+                        page.deleteData(id);
+                    },
+                    function () { }
+                );
+            } else {
+                Alert.alert('', '삭제할 검진대상기기를 선택해 주세요.')
+
+            }
+
+        });
+
+        $('#btnNewResult').click(function (e) {
+            let $form = $('#detailForm');
+            let CalibInstrument_id = $form.find('#id').val();
+            let CalibInstName = $form.find('#Name').val();            
+            let data = {
+                'id': '',
+                'CalibInstrument_id': CalibInstrument_id,
+                'CalibInstName': CalibInstName,
+                'standard_file_id': '',
+                'calib_file_id': '',
+            };
+
+            page.showDataEdit(data);
+
+        });
+
+         // 수정버튼
+        $('#btnEditResult').click(function (e) {            
+            let items = page.result_grid.getList("selected");            
+
+            if (items.length > 0) {
+                let id = items[0].id;
+                let url = '/api/haccp/calib_result';
+                let param = {
+                    action: 'detail',
+                    id: id,
+                    table_name: page.table_name,
+                };                
+                let result = AjaxUtil.getSyncData(url + '/detail', param); 
+                page.showDataEdit(result.data);
+
+            } else {
+                Alert.alert('', '수정할 검교정내역을 선택해 주세요.')
+            }
+        });
+
+        $('#btnDelResult').click(function (e) {
+            Alert.confirm('', 
+                '검교정내역을 삭제하시겠습니까?',
+                function () {
+                    let items = page.result_grid.getList("selected");
+                    if (items.length > 0) {
+                        let item = items[0];
+                        let id = item.id;
+                        let url = '/api/haccp/calib_result/delete';
+                        let data = {
+                            id: id,
+                            calib_inst_id: item.calib_inst_id
+                        };
+                        let fnSuccess = function () {
+                            Notify.success('삭제되었습니다');
+                            let inst_id = item.calib_inst_id;
+                            page.showResultGrid(inst_id);
+                        }
+
+                        AjaxUtil.postAsyncData(url, data, fnSuccess);
+
+                    } else {
+                        Alert.alert('', '삭제할 검교정내역을 선택해 주세요.')
+                    }
+                },
+                function () { }
+            );
+        });
+
+        $('#calibResult_link').click(function (e) {
+            let temp = page.grid.getList('selected')            
+            if (!temp || temp.length == 0) {
+                $('#resultBtn').children('button').hide();
+            } else {
+                 $('#resultBtn').children('button').show();
+            }
+        });
+
+         //그리드 컬럼 설정
+        page.popColSetting = new popColSetting();
+        let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid', page.grid);
+
+        if (userinfo.group_code == 'admin') {
+            $('#btnGridSetting').css('visibility', 'visible');
+        }
+
+        $('#btnGridSetting').click(function (e) {
+            let _this = this;
+            let fix_cols = page.grid_config.frozenColumnIndex;            
+            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix': false, 'fix_cols': fix_cols });
+        });
+
+        //엑셀
+        $('#btnExcel').click(function (e) {
+            page.exportExcel();
+        });
+
+        page.searchMainData();
+	
+    });
+
+    function imageUri(attachName, fileId) {
+        if (fileId) {            
+            //let url = '/api/files/download?TableName=' + tableName + '&AttachName=' + attachName + '&file_id=' + fileId;
+            let t = new Date()
+            let url = '/api/files/download?file_id=' + fileId + '&t=' + t;
+            return url;
+        }
+        else
+            return '';
+    }
+
+    function gridFileDownload(attachName, fileId, fileNm) {        
+        //let url = '/api/files/download?TableName=' + tableName + '&AttachName=' + attachName + '&file_id=' + fileId;
+        let url = imageUri(attachName, fileId);
+        if (url)
+            AjaxUtil.downloadFile(url, fileNm);
+    }
+
+</script>
+</th:block>
+</html>
