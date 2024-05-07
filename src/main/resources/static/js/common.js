@@ -72,7 +72,7 @@ var JQuery = {
 
 var Ajax = {
     defaults: {
-        progressBarText: '엑타스 MES...'
+        progressBarText: '레플러스 MES...'
     },
     setProgressBarText: function (text) {
         Ajax.defaults.progressBarText = text;
