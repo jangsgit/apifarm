@@ -1,27 +1,23 @@
 package mes.app.files;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -371,6 +367,55 @@ public class FilesController {
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}	
+	}
+
+	@PostMapping("/grid_form")
+	public void grid_form(@RequestBody MultiValueMap<String, Object> Q, HttpServletResponse response) throws IOException {
+		System.out.print(Q);
+
+		String qValues = Q.get("Q").get(0).toString();
+
+		Pattern pattern = Pattern.compile("\"([^\"]+)\"");
+
+		List<String> extractedStrings = new ArrayList<>();
+		Matcher matcher = pattern.matcher(qValues);
+		while (matcher.find()){
+			extractedStrings.add(matcher.group(1));
+		}
+
+
+
+
+
+		try{
+			Workbook workbook = createExcel(extractedStrings);
+
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			response.setHeader("Content-Disposition", "attachment; filename=data.xlsx");
+
+			workbook.write(response.getOutputStream());
+			workbook.close();
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+
+
+	}
+
+	private Workbook createExcel(List<String> files) throws IOException {
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Data");
+
+		Row headerRow = sheet.createRow(0);
+		int colIndex = 0;
+		for(String key: files){
+			Cell cell = headerRow.createCell(colIndex++);
+			cell.setCellValue(key);
+		}
+
+		return workbook;
+
 	}
 	
 }

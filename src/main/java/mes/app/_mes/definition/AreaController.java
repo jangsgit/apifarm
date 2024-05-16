@@ -1,4 +1,4 @@
-package mes.app.definition;
+package mes.app._mes.definition;
 
 import java.util.List;
 import java.util.Map;

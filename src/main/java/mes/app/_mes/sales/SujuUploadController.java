@@ -64,10 +64,10 @@ public class SujuUploadController {
 //		Timestamp start = Timestamp.valueOf(start_date);
 //		Timestamp end = Timestamp.valueOf(end_date);
 		
-		List<Map<String, Object>> items = this.sujuUploadService.getSujuUploadList(date_kind, start_date, end_date);
+		//List<Map<String, Object>> items = this.sujuUploadService.getSujuUploadList(date_kind, start_date, end_date);
 		
 		AjaxResult result = new AjaxResult();
-		result.data = items;
+		//result.data = items;
 		
 		return result;
 	}
@@ -302,33 +302,29 @@ public class SujuUploadController {
 		
 	    String sql = "";
 		List<Map<String, Object>> qItems = CommonUtil.loadJsonListMap(Q.getFirst("Q").toString());
-		
-		if (qItems.size() == 0) {
+
+		if(qItems.size() == 0){
 			result.success = false;
 			return result;
 		}
-		
-		for(int i = 0; i < qItems.size(); i++) {
+
+
+		for(int i=0; i < qItems.size(); i++){
 			Integer id = Integer.parseInt(qItems.get(i).get("id").toString());
-	    	String state = CommonUtil.tryString(qItems.get(i).get("state"));
-	    	
-	    	MapSqlParameterSource paramMap = new MapSqlParameterSource();
+
+			MapSqlParameterSource paramMap = new MapSqlParameterSource();
 			paramMap.addValue("id", id);
-			
-			if (state.equals("엑셀")) {
+
 				sql = """
-					delete from suju_bulk where id = :id
-				  """;
+						delete from suju_bulk2 where id = :id
+						""";
 				this.sqlRunner.execute(sql, paramMap);
-				result.success=true;
-				
-	        } else {
-	        	result.success = false;
-	        	result.message="엑셀 상태만 삭제할 수 있습니다.";
-	        }
-			
-	    }
-		
+				result.success = true;
+
+
+
+		}
+
 		return result;
 	}
 	
