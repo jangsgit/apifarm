@@ -19,7 +19,21 @@
     <link rel="stylesheet" href="/css/sf21_all_6.css?v=1000">   
     <link rel="stylesheet" href="/css/sf21_all_5.css?v=1000">
     <link rel="stylesheet" href="/css/sf21_frame.css?v=1043">    
+    <link rel="stylesheet" type="text/css" href="/css/jquery.datetimepicker.css"/>
 
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/import.css">
+
+    <script src="/js/vendor/jquery-3.6.0.js"></script>
+    <script src="/js/vendor/jquery-ui.min.js"></script>
+    <script src="/js/ui.js"></script> <!-- Common js -->
+
+    <link href="/styles/wijmo.min.css" rel="stylesheet"  />
+    <script src="/scripts/vendors/controls/wijmo.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.grid.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.chart.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.input.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.gauge.min.js"></script>
 </head>
 <style>
     .time-group{
@@ -28,6 +42,50 @@
     .grid-cell-black2{
         background: #f2f2f2;
     }
+
+    .wj-flexgrid .wj-header {
+        background-color: #EDEFF5;
+        color:black;
+        font-weight:bold;
+    }
+
+    #theGrid.wj-flexgrid .wj-cell {
+        padding: 12px;
+
+    }
+    #theGrid.wj-flexgrid .downloads {
+
+        padding-top: 0px;
+    }
+
+
+    .wj-cell.high-value {
+
+        background: lightgrey;
+    }
+
+
+    <!-- -->
+    .wj-flexgrid .wj-header {
+        background-color: #EDEFF5;
+        color: black;
+        font-weight:bold;
+    }
+
+    /*모달 팝업 영역 스타일링*/
+    .modal {
+        /*팝업 배경*/
+        display: none; /*평소에는 보이지 않도록*/
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background: rgba(0,0,0,0.5);
+    }
+
+
 
 </style>
 <body class="animated fadeIn">
@@ -51,12 +109,12 @@
     <script type="text/javascript" src="/js/common.js?v=1100"></script>
     <script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
     <script type="text/javascript" src="/js/ax5commUtil.js?v=1060"></script>
+    <script src="/js/jquery.datetimepicker.full.min.js"></script>
 
     <th:block layout:fragment="content"></th:block>
     <script type="text/javascript">
 
-
-        $(document).ready(function () {
+    $(document).ready(function () {
             yullinAuth.removeWriteButton();
             
             var _wintitle = CommonUtil.getParameters('wintitle');
