@@ -64,7 +64,7 @@ public class AccountController {
 	@Autowired
 	TB_RP945Repository tb_rp945Repository;
 
-	
+
 	@Resource(name="authenticationManager")
     private AuthenticationManager authManager;
 	
@@ -73,8 +73,6 @@ public class AccountController {
     		HttpServletRequest request,
     		HttpServletResponse response,
     		HttpSession session, Authentication auth) {
-
-
 
 		ModelAndView mv = new ModelAndView("login");		
 		
@@ -118,7 +116,7 @@ public class AccountController {
 
 
 
-    	
+
     	AjaxResult result = new AjaxResult();
     	
     	HashMap<String, Object> data = new HashMap<String, Object>();
@@ -165,9 +163,7 @@ public class AccountController {
     		@RequestParam("loginPwd2") final String loginPwd2,    		
     		Authentication auth
     		) {
-
-
-
+    	
     	User user = (User)auth.getPrincipal();
         AjaxResult result = new AjaxResult();
         
@@ -247,19 +243,12 @@ public class AccountController {
 
 			AjaxResult result = new AjaxResult();
  			//StringUtils.hasText: 파라미터문자가 공백을 제외하고 길이가 1이상인 경우인지 따진다. null 받지 않는다.
-			if(StringUtils.hasText(password)==false | StringUtils.hasText(passwordchk)==false){
-				result.success = false;
-				result.message = "비밀번호가 양식에 맞지 않습니다. ";
-				return result;
-			}
+
 
 			//dto에 담는다 . TODO: 근데 컬럼명하고 파라미터명을 다르게 한 것은 보안때문에 작명을 다르게 함. 그리고 controller에서 entity 매핑보다는 dto가 더 안전하다
 			// TODO: 로그인할때만 이런식으로 할것.
 			try {
-
-
-
-				TB_RP940Dto dto = TB_RP940Dto.builder()
+					TB_RP940Dto dto = TB_RP940Dto.builder()
 						.agency(agency)
 						.agencyDepartment(agencyDepartment)
 						.authType(authType)

@@ -2,7 +2,25 @@
 // 공통콤보, validatin 등
 
 'use strict';
+//랜덤문자열 생성 50(랜덤문자열 42자리 + 오늘날짜 )자리로
+function generateRandomStringWithDate(length = 32) {
+    // 오늘 날짜를 "YYYYMMDD" 형식으로 가져오기
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+    const dd = String(today.getDate()).padStart(2, '0');
+    const formattedDate = `${yyyy}${mm}${dd}`;
 
+    // 지정된 길이의 랜덤 문자열 생성
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+        randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    // 랜덤 문자열과 날짜를 결합하여 반환
+    return `${randomString}${formattedDate}`;
+}
 
 var JQuery = {
     extends: function () {

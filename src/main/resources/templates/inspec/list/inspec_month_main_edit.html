@@ -1,0 +1,349 @@
+<html layout:decorate="~{layout_page}">
+
+<th:block layout:fragment="content">
+    <div class="content_wrap">
+        <input type="hidden" id="bhId" th:value="${bh_id}" />
+        <input type="hidden" id="data_date" th:value="${data_date}" />
+        <input type="hidden" id="search_cond" th:value="${searchcond}" />
+        <input type="hidden" id="viewMode" th:value="${view_mode}" />
+        <section class="section">
+            <div class="title_box ">
+                <div class="left_align">
+                    <h3 data-labelCd="차량관리대장 등록">차량관리대장 등록</h3>
+                </div>
+                <button type="button" class="btn-default" id="btnSave">저장</button>
+
+                <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
+                <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            </div>
+
+            <div class="table_box sub">
+                <div class="row">
+
+                    <div class="col-6" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_md" data-labelCd="도급계약명 수급사명">도급계약명 수급사명</span>
+                            </div>
+                            <input class="form-control2" id="supplier" name="supplier" />
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="width: 110%">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_sm" data-labelCd="등록일자">등록일자</span>
+                        </div>
+                        <div data-ax5picker="multi" id="srchDt">
+                            <div class="input-group-append">
+                                <input class="tac " type="text" id="checkdt" name="checkdt" style="width: 200px" autocomplete="off"/>
+                                <span class="input-group-text fs-xl">
+                                    <i class="fas fa-calendar-alt calendar_color" ></i>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="width: 110%">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_sm" data-labelCd="점검일자시작일자">점검일자시작일자</span>
+                        </div>
+                        <div data-ax5picker="multi" id="srchDt">
+                            <div class="input-group-append">
+                                <input class="tac " type="text" id="checkstdt" name="checkstdt" autocomplete="off"/>
+                                <span class="input-group-text fs-xl">
+                                    <i class="fas fa-calendar-alt calendar_color" ></i>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="width: 110%">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text fit_box_sm" data-labelCd="점검일자종료일자">점검일자종료일자</span>
+                        </div>
+                        <div data-ax5picker="multi" id="srchDt">
+                            <div class="input-group-append">
+                                <input class="tac " type="text" id="checkendt" name="checkendt"  autocomplete="off"/>
+                                <span class="input-group-text fs-xl">
+                                    <i class="fas fa-calendar-alt calendar_color" ></i>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-6" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_md" data-labelCd="점검자">점검자</span>
+                            </div>
+                            <input class="form-control2" id="checkusr" name="checkusr" />
+                        </div>
+                    </div>
+
+                    <div class="col-6" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_md" data-labelCd="점검장소">점검장소</span>
+                            </div>
+                            <input class="form-control2" id="checkarea" name="checkarea" />
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="col-12" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_area" data-labelCd="점검사항">점검사항</span>
+                            </div>
+                            <textarea  class="form-control2 " id="checkitem" name="checkitem" ></textarea>
+
+                        </div>
+                    </div>
+
+                    <div class="col-12" >
+                        <div class="input-group" >
+                            <div class="input-group-prepend">
+                                <span class="input-group-text fit_box_config" data-labelCd="개선방안">개선방안</span>
+
+                            </div>
+                            <textarea class="form-control2" id="checkplan" name="checkplan" style="height:390px;" ></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="grid_box" id="prodListGrid">
+                <div class="grid_box" id="complainList">
+                    <div class="h-380" data-ax5grid="check_item_result_grid" style="height: 0px"></div>
+                </div>
+            </div>
+            <div class="grid_box" id='image_upload1'></div>
+        </section>
+
+
+
+
+    </div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        let filelist = [];
+
+        function filevalueinit (param){
+            filelist = param;
+
+        }
+
+
+        $('#checkstdt').datetimepicker({
+
+        });
+        $('#checkendt').datetimepicker({
+
+        });
+        /*$('#regdate').datetimepicker({
+            timepicker: false,
+            mask: true
+        });*/
+
+        jQuery('#checkdt').datetimepicker({
+            format:'Y/m/d',
+            onShow:function( ct ){
+                this.setOptions({
+                    maxDate:jQuery('#date_timepicker_end').val()?jQuery('#date_timepicker_end').val():false
+                })
+            },
+            timepicker:false
+        });
+
+
+
+
+        class CheckResultDiaryPage {
+            constructor() {
+                this.grid = null;
+                this.uploader = null;
+
+                this.resultGrid = null;
+                this.checkMasterName = '차량관리대장 등록'
+                this.baseUrl = '/api/precedence/vehicle_management';
+                this.init();
+            }
+
+            init() {
+                let _this = this;
+
+                this.gparam = {
+                    bh_id : $('#bhId').val(),
+                    data_date : $('#data_date').val(),
+                    search_cond: $('#search_cond').val(),
+                    view_mode: $('#viewMode').val(),
+                };
+
+                let resultConfig = {
+
+
+                }
+                this.resultGrid = new ax5.ui.grid(resultConfig);
+                //this.result_grid_config = resultConfig;
+
+
+            }
+
+
+            // 엑셀 다운로드
+            exportExcel() {
+                var targetview = this.resultGrid;
+                targetview.exportExcel('차량관리대장.xls');
+            }
+
+
+            setUploader(data) {
+                let _this = this;
+
+                let checkdt = $('#checkdt').val();
+
+                console.log(data);
+
+                let uploader = new ax5FileUploadClass2('image_upload1', $("#bhId").val(),
+                    {
+                        table_name: '순회점검일지첨부파일',
+                        attach_name: 'basic',
+                        accept_files: 'hwp,doc,docx,ppt,pptx,xls,xlsx,jpg,jpeg,gif,mbp,png,txt,zip,pdf',
+                        upload_url : '/api/inspec_report/upload',
+
+                        multiple: true,
+                        max_count: 5,
+                        file_size: 100,
+                        upload_callback: function (param) {
+                            uploader.showLastImage('imgPhoto');
+                            console.log('업로드콜백')
+                            let uploadcallback = uploader.upload_CallBackFunction();
+                            console.log(uploadcallback)
+                            filevalueinit(uploadcallback);
+
+                        },
+                        delete_callback: function (param) {
+                            $('#imgPhoto').attr('src', '');
+                            console.log('델리트콜백')
+                            let uploadcallback = uploader.upload_CallBackFunction();
+                            console.log(uploadcallback)
+                            filevalueinit(uploadcallback);
+                        },
+                        file_click_callback: function (file_id) {
+                            uploader.showImage('imgPhoto', file_id);
+                            console.log('파일클릭콜백')
+                        },
+                        can_write:true,
+                    }
+
+                );
+
+
+            };
+
+
+        }
+
+
+
+        let page = null;
+
+
+
+        $(document).ready(function (e) {
+
+
+
+
+            page = new CheckResultDiaryPage();
+
+
+            $('#btnSave').click(function (e){
+
+
+                console.log('filelist12', filelist);
+                let fileNmList = [];
+                let fileExtList = [];
+                let fileSizeList = [];
+                let fileSaveNmList = [];
+
+                fileNmList = filelist.map(item => item.fileNm);
+                fileExtList = filelist.map(item => item.fileExt);
+                fileSizeList = filelist.map(item => item.fileSize);
+                fileSaveNmList = filelist.map(item => item.fileSaveNm);
+
+
+                Alert.confirm('', '저장하시겠습니까?', function() {
+
+                        const randomString = generateRandomStringWithDate();
+
+                        let data = {
+                            'supplier' : $('#supplier').val(),
+                            'checkdt': $('#checkdt').val(),
+                            'checkstdt' : $('#checkstdt').val(),
+                            'checkendt' : $('#checkendt').val(),
+                            'checkusr' : $('#checkusr').val(),
+                            'checkarea' : $('#checkarea').val(),
+                            'checkitem' : $('#checkitem').val(),
+                            'checkplan'  : $('#checkplan').val(),
+                            'randomuuid' : randomString,
+                            'fileNamelist' : JSON.stringify(fileNmList),
+                            'fileExtList' : JSON.stringify(fileExtList),
+                            'fileSizeList' : JSON.stringify(fileSizeList.join(',')),
+                            'fileSaveNmList' : JSON.stringify(fileSaveNmList),
+
+
+
+                            //'_csrf' : $('[name=_csrf]').val()
+                        }
+
+
+                        let fnSuccess = function (res) {
+                            if(res.success){
+                                Notify.success('저장하였습니다.');
+
+                            }
+                        }
+
+                        AjaxUtil.postAsyncData('/api/inspec_report/save/', data, fnSuccess);
+                        /*$.ajax({
+                            type: 'POST',
+                            url: '/api/inspec_report/save/',
+                            data: JSON.stringify(data),
+                            contentType: 'application/json; charset=UTF-8',
+                            dataType: 'json',
+                            success: fnSuccess
+                        });*/
+
+                    },
+                    function () {}
+
+
+                )
+            })
+
+
+            page.setUploader();
+
+
+        });
+    </script>
+</th:block>
+</html>

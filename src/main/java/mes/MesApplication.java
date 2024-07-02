@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 
-@EntityScan(basePackages = "mes.domain.entity")
+@EntityScan(basePackages = {"mes.domain.entity"})
 public class MesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MesApplication.class, args);
