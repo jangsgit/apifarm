@@ -3,658 +3,584 @@
     <div class="content_wrap">
 
         <section class="section">
-
-            <div class="title_box ">
-                <div class="left_align">
-                    <h3 data-labelCd="발전량등록">발전량등록</h3>
+            <div class="layout-contents">
+                <!-- Page Title -->
+                <div class="page-title-wrap">
+                    <div class="left">
+                        <h2>매출등록</h2>
+                        <a href="#" title="북마크" class="bookmark toggle">
+                            내메뉴
+                        </a>
+                    </div>
+                    <ul class="page-navi">
+                        <li><img src="../assets/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                        <li>서비스분석</li>
+                        <li>매출등록</li>
+                    </ul>
                 </div>
+                <!-- Select -->
+                <div class="search-wrap">
+                    <ul>
+                        <li>
+                            <select title="지역">
+                                <option>대구</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select title="구">
+                                <option>성서산단</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select title="동">
+                                <option>성서</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-wrap">
+                    <ul class="tab-links">
+                        <li>
+                            <a href="#tab1" title="목록">목록</a>
+                        </li>
+                        <li>
+                            <a href="#tab2" title="등록">등록</a>
+                        </li>
+                    </ul>
+                    <div class="tab-contents">
+                        <!-- Section -->
+                        <section class="tab-item" id="tab1">
+                            <div class="section-top">
+                                <div class="search-wrap">
+                                    <dl>
+                                        <dt>
+                                            매출년월<span class="eq">*</span>
+                                        </dt>
+                                        <dd>
+                                            <ul class="date-box">
+                                                <li>
+                                                    <input type="month" id="date1" name="startDate">
+                                                    <label for="date1" class="hide">시작일</label>
+                                                </li>
+                                                <li>
+                                                    <input type="month" id="date2" name="endDate">
+                                                    <label for="date2" class="hide">종료일</label>
+                                                </li>
 
-                <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
-                <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
-            </div>
+                                                    <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>
 
-            <div class="table_box search">
+                                            </ul>
+                                        </dd>
+                                    </dl>
 
-                <div class="row">
+                                </div>
+                                <div class="button-wrap">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                                <img src="../assets/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                                엑셀다운로드
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn btn-delete" title="삭제">
+                                                <img src="../assets/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                                삭제
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn btn-edit" title="수정">
+                                                <img src="../assets/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                                수정
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn btn-print" title="매출등록 출력">
+                                                <img src="../assets/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                                매출등록 출력
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> <!--//section-top end -->
+                            <div class="table-wrap">
+                                <table class="list-table">
+                                    <caption>매출등록 테이블</caption>
+                                    <colgroup>
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wp10">
+                                        <col class="wauto">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>매출년월</th>
+                                        <th>발전량</th>
+                                        <th>SMP단가</th>
+                                        <th>SMP매출</th>
+                                        <th>REC단가</th>
+                                        <th>REC수량</th>
+                                        <th>REC매출</th>
+                                        <th>총매출</th>
 
-                    <div class="col-6 col-md-6 col-lg-5" >
-                        <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="일자">일자</span>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="salesData">
+                                        <!-- Data will be filled by JavaScript -->
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>계</th>
+                                        <td id="sum-energyQty"></td>
+                                        <td id="sum-smpCost"></td>
+                                        <td id="sum-smpAmt"></td>
+                                        <td id="sum-recCost"></td>
+                                        <td id="sum-recQty"></td>
+                                        <td id="sum-recAmt"></td>
+                                        <td id="sum-stotAmt"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <div data-ax5picker="multi" id="srchDt">
-                                <div class="input-group-append">
-                                    <input class="tac " type="text" id="date_from" name="date_from" />
-                                    <span class="input-group-text fs-xl">
-                                    <i class="fas fa-calendar-alt calendar_color" ></i>
-                                </span>
-                                    <span class="slow_sign">~</span>
-                                    <input class="tac " type="text" id="date_to" name="date_to" />
-                                    <span class="input-group-text fs-xl">
-                                    <i class="fas fa-calendar-alt calendar_color"></i>
-                                </span>
+                            <div class="btn-wrap">
+                                <div class="center">
+                                    <ul class="paging-wrap">
+                                        <li><a href="#" title="처음" class="btn-first"></a></li>
+                                        <li><a href="#" title="이전" class="btn-prev"></a></li>
+                                        <li class="on"><a href="#" title="1">1</a></li>
+                                        <li><a href="#" title="2">2</a></li>
+                                        <li><a href="#" title="3">3</a></li>
+                                        <li><a href="#" title="4">4</a></li>
+                                        <li><a href="#" title="5" class="disable">5</a></li>
+                                        <li><a href="#" title="다음" class="btn-next"></a></li>
+                                        <li><a href="#" title="마지막" class="btn-last"></a></li>
+                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </section>
 
-
-                    <div class="col-1" >
-                        <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
-                    </div>
-
-                </div>
-            </div>
-
-
-        </section>
-
-
-        <section class="section ">
-            <div class="grid_box">
-                <div class="title_box">
-                    <div >
-                        <span class="right_align rpt" data-labelCd="발전량내역">발전량내역</span>
-                        <button type="button" class="btn-default" id="btnShowUpload"><span data-labelCd="엑셀 업로드">엑셀 업로드</span></button>
-
-                        <button type="button" class="btn-danger y_write_auth" id="btnDelete" ><i class="fas fa-trash"></i></button>
-                        <button type="button" class="btn-default" id="btnDownloadTemplate"><span data-labelCd="양식 다운로드">양식 다운로드</span></button>
-                        <button type="button" class="btn-default" id="btnExcel" title="엑셀 다운로드"><i class="fas fa-file-excel"></i></button>
-                    </div>
-                </div>
-                <div class="h-650" data-ax5grid="sujuGrid" ></div>
-            </div>
-        </section>
-
-        <section>
-            <div class="title_box">
-                <span class="right_align rpt" data-labelCd="상세정보">상세정보</span>
-                <button type="button" class="btn-default" id="btnNew"><i class="fas fa-plus"></i></button>
-                <button type="button" class="btn-cancel" id="btnDel"><i class="fas fa-trash"></i></button>
-                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
-            </div>
-            <form id="usergroupForm">
-                <div class="table_box sub">
-                    <div class="row">
-                        <input type="hidden" id="id" name="id" value="" />
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" style="width: 450px;">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="일자">일자</span>
+                        <section class="tab-item" id="tab2">
+                            <div class="section-top">
+                                <div class="title-wrap">
+                                    <h3>매출 등록</h3>
                                 </div>
-                                <input type="text" class="form-control2" id="date" name="date" disabled required/>
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="발전기코드">발전기코드</span>
+                                <div class="button-wrap">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                                <img src="../assets/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                                신규등록
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn btn-delete" id="btnDelete" title="삭제">
+                                                <img src="../assets/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                                삭제
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="btn btn-edit" title="저장" id="btnSave">
+                                                <img src="../assets/images/icon/ico-save.svg" alt="저장 아이콘">
+                                                저장
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
+                                            <a href="#" class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
+                                                <img src="../assets/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                                수정
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <input type="text" class="form-control2" id="Baljungi_code" name="Baljungi_code" disabled required/>
                             </div>
-                        </div>
 
-
-                        <div class="input-group time-group" style="margin-top: 5px; margin-left: 50px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="01시" placeholder="01시">01시</span>
+                            <form action="/api/sales/upload" id="saleForm" method="post" >
+<!--                                value 임의로 하드코딩함. 추후 수정하기. -->
+                                <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
+                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
+                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
+                                <input type="hidden" id="spworknm" name="spworknm" value="def" />
+                                <input type="hidden" id="spcompnm" name="spcompnm" value="def" />
+                                <input type="hidden" id="spplannm" name="spplannm" value="def" />
+                            <div class="table-wrap">
+                                <table class="write-table">
+                                    <caption>매출등록 테이블</caption>
+                                    <colgroup>
+                                        <col class="wp12">
+                                        <col class="wp40">
+                                        <col class="wp12">
+                                        <col class="wp40">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th>
+                                            <label for="date3">
+                                                매출년월
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="month" id="date3" name="salesym" maxlength="7" required/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="test">
+                                                발전량
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test1" class="wp100" name="energyQty" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="test">
+                                                SMP 매출
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test2" class="wp100"  name="smpAmt" />
+                                        </td>
+                                        <th>
+                                            <label for="test">
+                                                SMP 단가
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test3" class="wp100" name="smpCost"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="test">
+                                                REC 수량
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test4" class="wp100" name="recQty"/>
+                                        </td>
+                                        <th>
+                                            <label for="test">
+                                                REC 실단가
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test5" class="wp100" name="recCost"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td></td>
+                                        <th>
+                                            <label for="test">
+                                                REC 평균단가
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test6" class="wp100" name="recAverageCost" disabled />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="test">
+                                                REC 매출
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test7" class="wp100" name="recAmt"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <label for="test">
+                                                총 발전 매출
+                                            </label>
+                                        </th>
+                                        <td>
+                                            <input type="text" id="test" class="wp100" name="stotAmt" disabled />
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <input type="text" class="form-control2" id="time01" name="time01" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="02시" placeholder="02시">02시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time02" name="time02" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="03시" placeholder="03시">03시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time03" name="time03" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="04시" placeholder="04시">04시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time04" name="time04" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="05시" placeholder="05시">05시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time05" name="time05" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="06시" placeholder="06시">06시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time06" name="time06" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="07시" placeholder="07시">07시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time07" name="time07" disabled="" required="">
-                        </div>
-
-                     </div>
-
-                    <div class="row">
-
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" style="width: 450px;">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="발전기명">발전기명</span>
-                                </div>
-                                <input type="text" class="form-control2" id="Baljungi_name" name="Baljungi_name" disabled required/>
-
-                            </div>
-                        </div>
-
-
-                        <div class="input-group time-group" style="margin-top: 5px; margin-left: 50px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="08시" placeholder="08시">08시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time08" name="time08" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="09시" placeholder="09시">09시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time09" name="time09" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="10시" placeholder="10시">10시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time10" name="time10" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="11시" placeholder="11시">11시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time11" name="time11" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="12시" placeholder="12시">12시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time12" name="time12" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="13시" placeholder="13시">13시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time13" name="time13" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="14시" placeholder="14시">14시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time14" name="time14" disabled="" required="">
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" style="width: 450px;">
-
-                            </div>
-                        </div>
-
-
-                        <div class="input-group time-group" style="margin-top: 5px; margin-left: 50px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="15시" placeholder="15시">15시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time15" name="time15" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="16시" placeholder="16시">16시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time16" name="time16" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="17시" placeholder="17시">17시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time17" name="time17" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="18시" placeholder="18시">18시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time18" name="time18" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="19시" placeholder="19시">19시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time19" name="time19" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="20시" placeholder="20시">20시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time20" name="time20" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="21시" placeholder="21시">21시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time21" name="time21" disabled="" required="">
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" style="width: 450px;">
-
-                            </div>
-                        </div>
-
-
-                        <div class="input-group time-group" style="margin-top: 5px; margin-left: 50px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="22시" placeholder="22시">22시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time22" name="time22" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="23시" placeholder="23시">23시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time23" name="time23" disabled="" required="">
-                        </div>
-                        <div class="input-group time-group" style=" margin-top: 5px;">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelcd="24시" placeholder="24시">24시</span>
-                            </div>
-                            <input type="text" class="form-control2" id="time24" name="time24" disabled="" required="">
-                        </div>
-
-
-                    </div>
-                </div>
-            </form>
+                            </form>
+                        </section>
+                    </div> <!--//tab-contens end-->
+                </div> <!--//tab-wrap end-->
+            </div> <!--//layout-contents end -->
         </section>
     </div>
 
-    <script type="text/x-tmpl" id="excelUploadTemplate">
-        <div class="content_wrap popup" id="div_excel_upload">
-            <!--<header>
-                <h4>엑셀 업로드</h4>
-                <div class="popup_close_box"><button class="btn_popup_close" id="modal-close"><i class="fas fa-times"></i></button></div>
-            </header>-->
 
-            <section class="pt-2">
-
-
-                <form id="excelUploadForm">
-                <div class="table_box sub">
-                    <div class="row">
-
-                        <div class="col-12" >
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_md" data-labelCd="일자">일자</span>
-                                </div>
-                                <input class="form-control2 tac" type="date" id="data_date" name="data_date" value=""  />
-                            </div>
-                        </div>
-
-                        <div class="col-12" >
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_md" data-labelCd="첨부파일">첨부파일</span>
-                                </div>
-                                <input class="form-control2 tac" type="file" id="upload_file" name="upload_file" enctype="multipart/form-data" accept=".xls, .xlsx"/>
-                            </div>
-                        </div>
-
-                    </div>
-               </div>
-               </form>
-                <div class="pt-2">
-                    <span style="padding-top:30px;">*업로드 시 상태는 Excel이며, 수주전환 이전데이터만 삭제가능합니다.</span>
-                    <textarea id="upload_message" style='display:none;width:100%;height:150px;'></textarea>
-                </div>
-
-            </section>
-
-           <section class="popupcontent" >
-                <div class="left_align ">
-                    <button type="button" class="btn-popup y_write_auth" id="btn_excel_save" >저장</button>
-                    <button type="button" class="btn-popup" id="modal-close-button">닫기</button>
-                </div>
-
-
-            </section>
-
-        </div>
-    </script>
 </th:block>
 
 <th:block layout:fragment="scripts">
     <script type="text/javascript">
-        class SujuUploadPage {
-            constructor() {
-                this.grid = null;
-                this.baseUrl = '/api/sale/upload/sale_upload_main';
-                this.init();
+        $(document).ready(function () {
+
+            // 전역 변수로 선택된 매출 ID를 저장
+            let selectedSalesId = null;
+
+            // 검색
+            $('.btn-srch').click(function() {
+                var startDate = $('#date1').val();
+                var endDate = $('#date2').val();
+                fetchSalesData(startDate, endDate); // 데이터 가져오는 함수에 시작일과 종료일 인자 추가
+            });
+
+
+            $('#btnSave').click(function () {
+                if (validateForm()) {
+                    saveSalesInfo();
+                }
+            });
+
+            function validateForm() {
+                var isValid = true;
+                var salesym = $('#date3').val().trim(); // 매출년월 필드 값 가져오기
+
+                if (!salesym) { // 매출년월이 비어있는지 확인
+                    alert('매출년월을 입력해주세요.');
+                    $('#date3').focus(); // 매출년월 필드에 포커스 주기
+                    isValid = false;
+                }
+
+                $('#saleForm').find('input[required], select[required]').each(function () {
+                    if (!$(this).val()) {
+                        // alert('모든 필수 항목을 입력해주세요.');
+                        $(this).focus();
+                        isValid = false;
+                        return false; // break loop
+                    }
+                });
+                return isValid;
             }
 
-            init() {
-                let _this = this;
-                let config = {
-                    target: $('[data-ax5grid="sujuGrid"]'),
-                    frozenColumnIndex: 0, // 열 고정
-                    frozenRowIndex: 0,    // 행 고정
-                    showLineNumber: true, // 열의 번호 보이기 여부
-                    showRowSelector: true,  // checkbox(선택) 보이기 여부
-                    multipleSelect: true, // 여러행 선택 가능 여부 (false시 단독 선택)
-                    sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                    multiSort: true, // 다중 정렬 여부
-                    header: {
-                        align: 'center',  // 헤더의 기본 정렬
-                        columnHeight: 35  // 헤더 높이
-                    },
-                    body: {
-                        columnHeight: 25, // body의 기본 높이
-                        onClick: function (e) {
-                            this.self.select(this.dindex);
-                            _this.showDetailUserGroup(e.item.number);
+            // 저장
+            function saveSalesInfo() {
 
+                var formData = {
+                    spworkcd: $('#spworkcd').val(),
+                    spcompcd: $('#spcompcd').val(),
+                    spplancd: $('#spplancd').val(),
+                    spworknm: $('#spworknm').val(),
+                    spcompnm: $('#spcompnm').val(),
+                    spplannm: $('#spplannm').val(),
+                    salesym: $('#date3').val(),
+                    energyQty: $('#test1').val(),
+                    smpAmt: $('#test2').val(),
+                    smpCost: $('#test3').val(),
+                    recQty: $('#test4').val(),
+                    recCost: $('#test5').val(),
+                    recAverageCost: $('#test6').val(),
+                    recAmt: $('#test7').val(),
+                    stotAmt: $('#test').val()
+                };
+                $.ajax({
+                    url: 'http://localhost:8070/api/sales/upload',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('저장되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                        } else {
+                            alert('오류: ' + response.message);
                         }
                     },
-                    page: {
-                        display: true,  // 페이징 보이기 여부
-                        statusDisplay: true,
-                    },
-                    columns: [
-                        { key: 'number', label: 'No.', width: 0, align: 'center', display: false },
-                        { key: 'date', label: '일자', width: 110, align: 'center' },
-                        { key: 'Baljungi_code', label: '발전기코드', width: 100, align: 'center' },
-                        { key: 'Baljungi_name', label: '발전기명', width: 250, align: 'center' },
-                        { key: 'charge', label: '충전/방전', width: 100, align: 'center' },
-                        { key: 'time01', label: '01시', width: 100, align: 'center', formatter: 'money' },{ key: 'time02', label: '02시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time03', label: '03시', width: 100, align: 'center', formatter: 'money' },{ key: 'time04', label: '04시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time05', label: '05시', width: 100, align: 'center', formatter: 'money' },{ key: 'time06', label: '06시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time07', label: '07시', width: 100, align: 'center', formatter: 'money' },{ key: 'time08', label: '08시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time09', label: '09시', width: 100, align: 'center', formatter: 'money' },{ key: 'time10', label: '10시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time11', label: '11시', width: 100, align: 'center', formatter: 'money' },{ key: 'time12', label: '12시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time13', label: '13시', width: 100, align: 'center', formatter: 'money' },{ key: 'time14', label: '14시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time15', label: '15시', width: 100, align: 'center', formatter: 'money' },{ key: 'time16', label: '16시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time17', label: '17시', width: 100, align: 'center', formatter: 'money' },{ key: 'time18', label: '18시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time19', label: '19시', width: 100, align: 'center', formatter: 'money' },{ key: 'time20', label: '20시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time21', label: '21시', width: 100, align: 'center', formatter: 'money' },{ key: 'time22', label: '22시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'time23', label: '23시', width: 100, align: 'center', formatter: 'money' },{ key: 'time24', label: '24시', width: 100, align: 'center', formatter: 'money' },
-                        { key: 'sum', label: '합계', width: 80, align: 'center' },
-                        { key: 'suju_qty', label: '등록일자', width: 80, align: 'right' ,formatter:'money'},
-                        { key: 'jumun_date', label: '등록자', width: 120, align: 'center' },
-                        { key: 'due_date', label: '최종수정일', width: 120, align: 'center' }
-
-
-                    ],
-                    footSum: [
-                        [
-                            {label: "합계", colspan: 5, align: "center"},
-                            {key: "time01", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time02", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time03", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time04", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time05", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time06", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time07", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time08", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time09", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time10", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time11", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time12", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time13", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time14", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time15", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time16", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time17", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time18", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time19", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time20", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time21", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time22", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time23", collector: "sum", formatter: "money", align: "center"},
-                            {key: "time24", collector: "sum", formatter: "money", align: "center"},
-
-
-                        ]]
-                };
-                this.grid = new ax5.ui.grid(config);
-
-                let nowDate = CommonUtil.getYYYYMMDD();
-                let dueDate = CommonUtil.getYYYYMMDD(10);
-
-                // 엔터키 검색
-                $('#keyword').on('keypress', function (e) {
-                    if (event.keyCode == 13) {
-                        _this.searchDataBind();
+                    error: function () {
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
                     }
                 });
             }
 
-            // 엑셀 다운로드
-            exportExcel(){
-                var targetview = this.grid;
+            // 매출 데이터 불러오기
+            // function fetchSalesData() {
+            //     var startDate = $('#date1').val();
+            //     var endDate = $('#date2').val();
+            //     var url = '/api/sales/fetch';
+            //
+            //     // 날짜가 설정되었으면 URL에 쿼리 파라미터 추가
+            //     if (startDate && endDate) {
+            //         url += '?startDate=' + startDate + '&endDate=' + endDate;
+            //     }
 
-                targetview.exportExcel('발전량등록.xls');
-
-            }
-
-
-
-            showDetailUserGroup(idx) {
-
-                let param = { 'number' : idx, "action": 'detail'};
-                let url = '/api/sale/upload/sale_upload_main';
-                let result = AjaxUtil.getSyncData(url + '/detail', param);
-                if(result.success) {
-                    FormUtil.BindDataForm(result.data, $('#usergroupForm'));
-
+            function fetchSalesData(startDate, endDate) {
+                var url = '/api/sales/fetch';
+                if (startDate && endDate) {
+                    url += '?startDate=' + startDate + '&endDate=' + endDate;
                 }
-                page.setButtonState();
 
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        var rows = '';
 
-                /*Alert.confirm('',
-                    '저장하시겠습니까?',
-                    function () {
-                        console.log(idx);
-                    },
-                    function () { }
-                );*/
-            }
+                        var totals = {
+                            energyQty: 0,
+                            smpCost: 0,
+                            smpAmt: 0,
+                            recCost: 0,
+                            recQty: 0,
+                            recAmt: 0,
+                            stotAmt: 0
+                        };
 
+                        response.forEach(function(sale) {
+                            rows += '<tr>' +
+                                '<td>' + sale.salesym + '</td>' +
+                                '<td>' + sale.energyQty + '</td>' +
+                                '<td>' + sale.smpCost + '</td>' +
+                                '<td>' + sale.smpAmt + '</td>' +
+                                '<td>' + sale.recCost + '</td>' +
+                                '<td>' + sale.recQty + '</td>' +
+                                '<td>' + sale.recAmt + '</td>' +
+                                '<td>' + sale.stotAmt + '</td>' +
+                                '</tr>';
 
-            // 엑셀 업로드 버튼
-            showPopupExcelUpload(data) {
-                let _this = this;
-                let content = tmpl('excelUploadTemplate', data);
-                let $content = $(content);
-                $content.find('#data_date').val(data.data_date);
-                $content.find('#day_index').val(data.day_index);
-
-                //팝업공통모듈
-                let modalContainer = new PopupDraggable('엑셀 업로드');
-                modalContainer.open({ width: 440, height: 180, $content });
-
-                $content.find('#data_date').ax5DatePicker({ direction: 'top' });
-
-                $content.find('#btn_excel_save').on('click', function () {
-                    let $form = $content.find('#excelUploadForm');
-                    Alert.confirm('',
-                        '저장하시겠습니까?',
-                        function () {
-                            _this.saveSujuBulkData($form, modalContainer);
-                            //modalContainer.close();
-                        },
-                        function () { }
-                    );
-                });
-            }
-
-            saveSujuBulkData($form, modalContainer){
-                let _this = this;
-                var form = $('#excelUploadForm')[0];
-                var formData = new FormData(form);
-
-                //formData['data_date'] = $('#srchStartDt').val();
-                formData.append("uploadfile", $('#upload_file')[0].files[0].name);
-
-                let result = AjaxUtil.postFileSyncData(_this.baseUrl + '/upload_save', formData);
-
-                if(result) {
-                    let message = '저장되었습니다.';
-                    if (result.success) {
-                        Notify.success(message);
-                        _this.searchDataBind();
-                        modalContainer.close();
-                    } else {
-                        console.log('error2');
-                        let $divMessage = modalContainer.$content.find('#upload_message');
-                        $divMessage.text(JSON.stringify(result.error_items));
-                        $divMessage.show();
-                    }
-
-                }
-            }
-
-            searchDataBind(){
-                let _this = this;
-
-
-                let data = {
-                    'flag' : 'upload'
-                };
-
-
-                let fnseccess = function (result) {
-                    if(result.data != null) {
-                        let recordsTotal = result.data.length;
-                        _this.grid.setData({
-                            list: result.data,
-                            page: {
-                                display: true,
-                                totalElements: recordsTotal,
-                            }
+                            // 합계 계산
+                            totals.energyQty += sale.energyQty;
+                            totals.smpCost += sale.smpCost;
+                            totals.smpAmt += sale.smpAmt;
+                            totals.recCost += sale.recCost;
+                            totals.recQty += sale.recQty;
+                            totals.recAmt += sale.recAmt;
+                            totals.stotAmt += sale.stotAmt;
                         });
+
+                        $('#salesData').html(rows);
+                        $('#sum-energyQty').text(totals.energyQty);
+                        $('#sum-smpCost').text(totals.smpCost);
+                        $('#sum-smpAmt').text(totals.smpAmt);
+                        $('#sum-recCost').text(totals.recCost);
+                        $('#sum-recQty').text(totals.recQty);
+                        $('#sum-recAmt').text(totals.recAmt);
+                        $('#sum-stotAmt').text(totals.stotAmt);
+                    },
+                    error: function (error) {
+                        console.error('데이터 로드 실패:', error);
+                        alert('데이터를 불러오는 데 실패했습니다.');
                     }
-                };
-                AjaxUtil.getAsyncData(_this.baseUrl + '/read',data, fnseccess);
-
+                });
             }
 
-            //데이터 삭제
-            deleteSujuBulkData(items){
-                let _this = this;
+            // 매출 데이터를 클릭했을 때 이벤트 핸들러
+            $(document).on('click', '.list-table tbody tr', function() {
+                // 각 행에서 데이터 가져오기
+                var salesym = $(this).find('td').eq(0).text(); // 매출년월
+                var energyQty = $(this).find('td').eq(1).text(); // 발전량
+                var smpCost = $(this).find('td').eq(2).text(); // SMP 단가
+                var smpAmt = $(this).find('td').eq(3).text(); // SMP 매출
+                var recCost = $(this).find('td').eq(4).text(); // REC 단가
+                var recQty = $(this).find('td').eq(5).text(); // REC 수량
+                var recAmt = $(this).find('td').eq(6).text(); // REC 매출
+                var stotAmt = $(this).find('td').eq(7).text(); // 총 매출
 
-                let data = {
-                    Q: JSON.stringify(items)
-                }
+                // 폼 필드에 데이터 채우기
+                $('#date3').val(salesym);
+                $('#test1').val(energyQty);
+                $('#test3').val(smpCost);
+                $('#test2').val(smpAmt);
+                $('#test5').val(recCost);
+                $('#test4').val(recQty);
+                $('#test7').val(recAmt);
+                $('#test').val(stotAmt);
 
-                let fnSuccess = function (res) {
-                    if(res.success){
-                        Notify.success('삭제되었습니다');
-                        _this.searchDataBind();
-                    } else {
-                        Alert.alert('', res.message);
+                // 버튼 상태 전환
+                $('#btnSave').hide(); // 저장 버튼 숨기기
+                $('#btnEdit').show(); // 수정 버튼 표시
+
+                // 탭 전환
+                switchTab('#tab2');
+            });
+
+            // 수정
+            $('#btnEdit').click(function() {
+                var formData = {
+                    salesym: $('#date3').val(),
+                    energyQty: $('#test1').val(),
+                    smpAmt: $('#test2').val(),
+                    smpCost: $('#test3').val(),
+                    recQty: $('#test4').val(),
+                    recCost: $('#test5').val(),
+                    recAverageCost: $('#test6').val(),
+                    recAmt: $('#test7').val(),
+                    stotAmt: $('#test').val(),
+
+                    spworkcd: $('#spworkcd').val(),
+                    spcompcd: $('#spcompcd').val(),
+                    spplancd: $('#spplancd').val(),
+                    spworknm: $('#spworknm').val(),
+                    spcompnm: $('#spcompnm').val(),
+                    spplannm: $('#spplannm').val()
+                };
+
+                $.ajax({
+                    url: '/api/sales/update/' + formData.salesym,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        if (response.success) {
+                            alert('수정되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                            $('#btnEdit').hide(); // 수정 버튼 숨기기
+                            $('#btnSave').show(); // 저장 버튼 표시
+                        } else {
+                            alert('오류: ' + response.message);
+                        }
+                    },
+                    error: function() {
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
                     }
-                };
-                AjaxUtil.postAsyncData(_this.baseUrl + '/delete', data, fnSuccess);
-            }
-
-           //수주업로드 양식 다운로드
-            downloadExcelForm(){
-                let _this = this;
-
-                let fileName = "수주업로드양식.xlsx";
-                let url = '/api/files/mes_form?file_name=' + fileName;
-                let data = {
-                    'file_name' : '수주업로드양식.xlsx'
-                };
-
-                AjaxUtil.downloadFile(url, fileName);
-
-            }
-
-        }
-
-        let page = null;
-        var picker = new ax5.ui.picker();
-
-        $(document).ready(function (e) {
-            page = new SujuUploadPage();
-
-
-
-            // 엑셀 업로드 버튼
-            $('#btnShowUpload').click(function (e) {
-                let data = {
-                    'id': '',
-                    'data_date': CommonUtil.getYYYYMMDD(),
-                };
-                page.showPopupExcelUpload(data);
+                });
             });
 
-            // 삭제 버튼
-            $('#btnDelete').click(function (e) {
-                let items = page.grid.getList('selected');
-                if(items.length > 0){
-                    Alert.confirm('', '삭제하시겠습니까?',
-                        function(){
-                            page.deleteSujuBulkData(items);
-                        },
-                        function() {}
-                    );
-                } else {
-                    Alert.alert('', '삭제할 항목을 선택해주세요.', function () {
-                        $(this).focus();
-                    });
+            // 삭제 버튼 클릭 이벤트
+            $('#btnDelete').click(function() {
+                if (!confirm('정말로 삭제하시겠습니까?')) {
+                    return;
                 }
 
-            })
+                var salesym = $('#date3').val();
 
-            //엑셀 다운로드
-            $('#btnExcel').on('click', function () {
-                page.exportExcel();
+                $.ajax({
+                    url: 'http://localhost:8070/api/sales/delete/' + salesym,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.success) {
+                            alert('삭제되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                        } else {
+                            alert('오류: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
+                    }
+                });
             });
 
-            // 양식 다운로드
-            $('#btnDownloadTemplate').click(function (e) {
-                page.downloadExcelForm();
-            });
+            // 데이터 초기 로드
+            fetchSalesData();
 
-            // 삭제 버튼
-            /*$('#btnDelete').click(function (e) {
-                let items = page.grid.getList('selected');
-                if (items.length > 0) {
-                    Alert.confirm('', '삭제하시겠습니까?',
-                        function () {
-                            page.deleteSujuBulkData(items);
-                        },
-                        function () { }
-                    );
-                } else {
-                    Alert.alert('', '삭제할 항목을 선택해주세요.', function () {
-                        $(this).focus();
-                    });
-                }
-            });*/
+            // 탭 전환 함수
+            function switchTab(tabId) {
+                $('.tab-links a[href="' + tabId + '"]').click();
+            }
+        });
 
-        })
     </script>
 </th:block>
 </html>

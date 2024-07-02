@@ -40,10 +40,14 @@ public class SecurityConfiguration {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers().frameOptions().sameOrigin(); 
         //http.csrf().disable();
-        http.csrf().ignoringAntMatchers("/api/files/upload/**");
+		http.csrf().ignoringAntMatchers("/api/sales/**");
+		
+		// CSRF 비활성화 설정
+//		http.csrf().ignoringAntMatchers("/api/files/upload/**", "/api/sale/upload/save");
         
         http.authorizeRequests().mvcMatchers("/login","/logout", "/useridchk/**", "/Register/save").permitAll()
         .mvcMatchers("/setup").hasAuthority("admin")		// hasRole -> hasAuthority로 수정
+				.mvcMatchers("/api/sales/**").permitAll()
         .anyRequest().authenticated();
 
         http.formLogin()
