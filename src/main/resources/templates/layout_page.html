@@ -16,15 +16,13 @@
             document.write('<link rel="stylesheet" href="' + localStorage.getItem('theme-top') + '-content.css">');
         }
     </script>
-    <link rel="stylesheet" href="/css/sf21_all_6.css?v=1000">   
+    <link rel="stylesheet" href="/css/sf21_all_6.css?v=1000">
     <link rel="stylesheet" href="/css/sf21_all_5.css?v=1000">
     <link rel="stylesheet" href="/css/sf21_frame.css?v=1043">
 
-    <!--  웹퍼블리싱 css  -->
-    <link rel="stylesheet" type="text/css" href="/assets/css/import.css">
-    <script src="/assets/js/vendor/jquery-3.6.0.js"></script>
-    <script src="/assets/js/vendor/jquery-ui.min.js"></script>
-    <script src="/assets/js/ui.js"></script> <!-- Common js -->
+    <script src="/js/vendor/jquery-3.6.0.js"></script>
+    <script src="/js/vendor/jquery-ui.min.js"></script>
+    <script src="/js/ui.js"></script> <!-- Common js -->
 
     <link href="/styles/wijmo.min.css" rel="stylesheet"  />
     <script src="/scripts/vendors/controls/wijmo.min.js"></script>
@@ -32,7 +30,6 @@
     <script src="/scripts/vendors/controls/wijmo.chart.min.js"></script>
     <script src="/scripts/vendors/controls/wijmo.input.min.js"></script>
     <script src="/scripts/vendors/controls/wijmo.gauge.min.js"></script>
-
 </head>
 <style>
     .time-group{
@@ -42,72 +39,116 @@
         background: #f2f2f2;
     }
 
+    .wj-flexgrid .wj-header {
+        background-color: #EDEFF5;
+        color:black;
+        font-weight:bold;
+    }
+
+    #theGrid.wj-flexgrid .wj-cell {
+        padding: 12px;
+
+    }
+    #theGrid.wj-flexgrid .downloads {
+
+        padding-top: 0px;
+    }
+
+
+    .wj-cell.high-value {
+
+        background: lightgrey;
+    }
+
+
+    <!-- -->
+    .wj-flexgrid .wj-header {
+        background-color: #EDEFF5;
+        color: black;
+        font-weight:bold;
+    }
+
+    /*모달 팝업 영역 스타일링*/
+    .modal {
+        /*팝업 배경*/
+        display: none; /*평소에는 보이지 않도록*/
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+        background: rgba(0,0,0,0.5);
+    }
+
+
+
 </style>
 <body class="animated fadeIn">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <script src="/resource/jquery.min.js"></script>
-    <script src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
-    <script src="/resource/jquery-validation/1.17.0/additional-methods.min.js"></script>
-    <script src="/resource/filedownload/jquery.fileDownload.js"></script>
-    <script src="/resource/ax5ui/ax5ui.all.min.js"></script>
-    <script src="/resource/se2/js/HuskyEZCreator.js"></script>
-    <script src="/resource/timepicker/jquery.timepicker.min.js"></script>
-    <script src="/resource/jquery.multi-select-ak.js"></script>
-    <script src="/resource/moment.min.js"></script>
-    <script src="/resource/windowContainer/js/jquery.scrollbar.min.js"></script>
-    <script src="/resource/windowContainer/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/resource/paho-mqtt/mqttws31.min.js"></script>
-    <script type="text/javascript" src="/resource/select2/select2.min.js"></script>
-    <script src="/resource/JavaScript-Templates/tmpl.min.js"></script>
-    <th:block th:replace="system_js :: system_js" ></th:block>
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<script src="/resource/jquery.min.js"></script>
+<script src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
+<script src="/resource/jquery-validation/1.17.0/additional-methods.min.js"></script>
+<script src="/resource/filedownload/jquery.fileDownload.js"></script>
+<script src="/resource/ax5ui/ax5ui.all.min.js"></script>
+<script src="/resource/se2/js/HuskyEZCreator.js"></script>
+<script src="/resource/timepicker/jquery.timepicker.min.js"></script>
+<script src="/resource/jquery.multi-select-ak.js"></script>
+<script src="/resource/moment.min.js"></script>
+<script src="/resource/windowContainer/js/jquery.scrollbar.min.js"></script>
+<script src="/resource/windowContainer/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/paho-mqtt/mqttws31.min.js"></script>
+<script type="text/javascript" src="/resource/select2/select2.min.js"></script>
+<script src="/resource/JavaScript-Templates/tmpl.min.js"></script>
+<th:block th:replace="system_js :: system_js" ></th:block>
 
-    <script type="text/javascript" src="/js/common.js?v=1100"></script>
-    <script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
-    <script type="text/javascript" src="/js/ax5commUtil.js?v=1060"></script>
+<script type="text/javascript" src="/js/common.js?v=1100"></script>
+<script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
+<script type="text/javascript" src="/js/ax5commUtil.js?v=1060"></script>
+<script src="/js/jquery.datetimepicker.full.min.js"></script>
 
-    <th:block layout:fragment="content"></th:block>
-    <script type="text/javascript">
+<th:block layout:fragment="content"></th:block>
+<script type="text/javascript">
 
+    $(document).ready(function () {
+        yullinAuth.removeWriteButton();
 
-        $(document).ready(function () {
-            yullinAuth.removeWriteButton();
-            
-            var _wintitle = CommonUtil.getParameters('wintitle');
-            if (_wintitle != '') {
-                $('title').text(_wintitle);
-            }
-            authDisableBtn(''); // 버튼권한 처리==>정리대상
-            authDisableTab(''); // TAB권한 처리==>정리대상
-            var searchheight = parseInt($('.autoheight-search').height() === null ? '0' : $('.autoheight-search').height()) + 65;
-            if ($('.autoheight-div') !== null) {
-                $('.autoheight-div').height($(document).height() - searchheight);
-            }
-            if ($('section.popupcontent') !== null) {
-                $('section.popupcontent').height($(window).height() - 130);
-            }
+        var _wintitle = CommonUtil.getParameters('wintitle');
+        if (_wintitle != '') {
+            $('title').text(_wintitle);
+        }
+        authDisableBtn(''); // 버튼권한 처리==>정리대상
+        authDisableTab(''); // TAB권한 처리==>정리대상
+        var searchheight = parseInt($('.autoheight-search').height() === null ? '0' : $('.autoheight-search').height()) + 65;
+        if ($('.autoheight-div') !== null) {
+            $('.autoheight-div').height($(document).height() - searchheight);
+        }
+        if ($('section.popupcontent') !== null) {
+            $('section.popupcontent').height($(window).height() - 130);
+        }
 
-            $('#btnHedaerFilter').click(function (e) {
-                $(".table_box.search").toggle(300);
-            });
-
-            $('#btnHeaderCompress').click(function (e) {
-                let $wrap = window.parent.$('.wrap');
-
-                window.parent.$('.header').toggle();
-                window.parent.$('.page-tabs').toggle();
-                
-                if (window.parent.$('.header').css('display') == 'none') {
-                    $('#iCompress').replaceWith("<i class='fas fa-compress-alt' id='iCompress'></i>");
-                    $wrap.addClass('menu_close');
-                } else {
-                    $('#iCompress').replaceWith("<i class='fas fa-compress' id='iCompress'></i>");
-                    $wrap.removeClass('menu_close');
-                }
-            });
-
+        $('#btnHedaerFilter').click(function (e) {
+            $(".table_box.search").toggle(300);
         });
-    </script>    
-    <th:block layout:fragment="scripts"></th:block>
+
+        $('#btnHeaderCompress').click(function (e) {
+            let $wrap = window.parent.$('.wrap');
+
+            window.parent.$('.header').toggle();
+            window.parent.$('.page-tabs').toggle();
+
+            if (window.parent.$('.header').css('display') == 'none') {
+                $('#iCompress').replaceWith("<i class='fas fa-compress-alt' id='iCompress'></i>");
+                $wrap.addClass('menu_close');
+            } else {
+                $('#iCompress').replaceWith("<i class='fas fa-compress' id='iCompress'></i>");
+                $wrap.removeClass('menu_close');
+            }
+        });
+
+    });
+</script>
+<th:block layout:fragment="scripts"></th:block>
 </body>
 </html>
 
