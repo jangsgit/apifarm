@@ -1,0 +1,1241 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <!--<div class="layout-contents">
+        &lt;!&ndash; Page Title &ndash;&gt;
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>순회점검등록</h2>
+                <a href="#" title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>순회점검등록</li>
+            </ul>
+        </div>
+        &lt;!&ndash; Select &ndash;&gt;
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+
+
+
+            <div class="tab-contents">
+                &lt;!&ndash; Section &ndash;&gt;
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        점검자<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="text1" class="input-srch" placeholder="점검자명 검색">
+                                        <a href="#a" class="btn-srch" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        점검여부<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>전체</option>
+                                        <option>완료</option>
+                                        <option>미완료</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-print" title="순회점검일지 출력">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        순회점검일지 출력
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> &lt;!&ndash;//section-top end &ndash;&gt;
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
+                    </div>
+                    &lt;!&ndash;<div class="container-fluid">
+                        <div id="theGrid">
+                        </div>
+                    </div>&ndash;&gt;
+                    &lt;!&ndash;<div class="table-wrap">
+                        <table class="list-table">
+                            <caption>공지사항 테이블</caption>
+                            <colgroup>
+                                <col class="wp5">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wauto">
+                                <col class="wp10">
+                                <col class="wp10">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>지역</th>
+                                <th>산단명</th>
+                                <th>발전소명</th>
+                                <th>등록일자</th>
+                                <th>점검자</th>
+                                <th>점검장소</th>
+                                <th>점검시간</th>
+                                <th>점검일지 다운로드</th>
+                                <th>점검일지 업로드</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>대구</td>
+                                <td>성서산단</td>
+                                <td>성서</td>
+                                <td>2024-06-10</td>
+                                <td>홍길동</td>
+                                <td>성서산단</td>
+                                <td>06.10 13:00 ~ 06.10 15:00</td>
+                                <td>
+                                    <a href="#" title="다운로드" class="btn-filedown">다운로드</a>
+                                </td>
+                                <td>
+                                    <a href="#" title="업로드" class="btn">
+                                        업로드
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>&ndash;&gt;
+                    <div class="btn-wrap">
+                        <div class="center">
+                            <ul class="paging-wrap">
+                                <li><a href="#" title="처음" class="btn-first"></a></li>
+                                <li><a href="#" title="이전" class="btn-prev"></a></li>
+                                <li class="on"><a href="#" title="1">1</a></li>
+                                <li><a href="#" title="2">2</a></li>
+                                <li><a href="#" title="3">3</a></li>
+                                <li><a href="#" title="4">4</a></li>
+                                <li><a href="#" title="5" class="disable">5</a></li>
+                                <li><a href="#" title="다음" class="btn-next"></a></li>
+                                <li><a href="#" title="마지막" class="btn-last"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                &lt;!&ndash; Section &ndash;&gt;
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>점검 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="test">
+                                        도급계약명 수급사명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="test" class="wp100" placeholder="도급계약명">
+                                </td>
+                                <th>
+                                    <label for="date1">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="date1" name="" value="2024-06-27" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="date2">
+                                        점검시작일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="date2" name="">
+                                </td>
+                                <th>
+                                    <label for="date3">
+                                        점검종료일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="date3" name="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="text2">
+                                        점검자
+                                    </label>
+                                </th>
+                                <td class="fl-ac">
+                                    <input type="text" id="text2" class="wp80" placeholder="점검자">
+                                    <button class="mg-l8" onclick="addInputField(this)">점검자 추가</button>
+                                </td>
+                                <th>
+                                    <label for="text3">
+                                        점검장소 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="test3" class="wp100" placeholder="점검장소">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="textarea1">
+                                        점검사항
+                                    </label>
+                                </th>
+                                <td>
+                                    <textarea id="textarea1" placeholder="점검사항"></textarea>
+                                </td>
+                                <th>
+                                    <label for="textarea2">
+                                        개선방향
+                                    </label>
+                                </th>
+                                <td>
+                                    <textarea id="textarea2" placeholder="개선방향"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td colspan="3">
+                                    <section class="section" style="border-radius: 10px">
+                                        <div class="grid_box" id="prodListGrid">
+                                            <div class="grid_box" id="complainList">
+                                                <div class="h-380" data-ax5grid="check_item_result_grid" style="height: 0px"></div>
+                                            </div>
+                                        </div>
+                                        <div class="grid_box" id="image_upload1">
+                                            <div data-ax5uploader="fileuploadAx" class="fileuploaddiv" id="fileUploadDiv">
+                                                <span class="fileuploadTitle"><span>첨부파일</span> [.hwp,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.gif,.mbp,.png,.txt,.zip,.pdf] [1개당 최대Size: 100MB, 최대파일수: 5개]</span>
+                                                <button class="btn-default " data-ax5uploader-button="selector" id="addFile">파일선택</button>
+                                                <button class="btn-default " id="removeFileAll">전체삭제</button>
+                                                <div data-uploaded-box="fileuploadAx" data-ax5uploader-uploaded-box="inline" id="fileUploadBox" data-ax5uploader-dropzone="36">
+
+                                                    <div class="text-center" style="padding: 10px;"><em class="fa fa-upload text-muted uploadIcon"></em><br>파일을 Drag&amp;Drop하거나 클릭하여 업로드를 진행하세요</div>
+
+                                                </div>
+                                                <input type="hidden" id="srchFileId" name="srchFileId">
+                                                <input type="hidden" id="DataPk" name="DataPk" value="">
+                                            </div>
+                                        </div>
+                                    </section>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> &lt;!&ndash;//tab-contens end&ndash;&gt;
+        </div> &lt;!&ndash;//tab-wrap end&ndash;&gt;
+    </div>-->
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>순회점검등록</h2>
+                <a href="#" title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>순회점검등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        점검자<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="점검자명 검색">
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        점검여부<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>전체</option>
+                                        <option>완료</option>
+                                        <option>미완료</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-print" title="순회점검일지 출력">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        순회점검일지 출력
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
+                    </div>
+                    <div class="btn-wrap">
+                        <div class="center">
+                            <ul class="paging-wrap">
+                                <li><a href="#" title="처음" class="btn-first"></a></li>
+                                <li><a href="#" title="이전" class="btn-prev"></a></li>
+                                <li class="on"><a href="#" title="1">1</a></li>
+                                <li><a href="#" title="2">2</a></li>
+                                <li><a href="#" title="3">3</a></li>
+                                <li><a href="#" title="4">4</a></li>
+                                <li><a href="#" title="5" class="disable">5</a></li>
+                                <li><a href="#" title="다음" class="btn-next"></a></li>
+                                <li><a href="#" title="마지막" class="btn-last"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>점검 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        도급계약명 수급사명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="도급계약명">
+                                </td>
+                                <th>
+                                    <label for="checkdt">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id=checkdt name="checkdt" autocomplete="off">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        점검시작일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                        점검종료일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkusr">
+                                        점검자
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="5">
+                                        <button onclick="addInputField(this)" class="mg-l8">점검자 추가</button>
+                                    </div>
+                                </td>
+                                <th>
+                                    <label for="checkarea">
+                                        점검장소 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="점검장소">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkitem">
+                                        점검사항
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="checkitem" name="checkitem" maxlength="200" placeholder="점검사항"></textarea>
+                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>
+                                    </div>
+                                </td>
+                                <th>
+                                    <label for="checkplan">
+                                        개선방향
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="checkplan" name="checkplan" maxlength="200" placeholder="개선방향"></textarea>
+                                        <p class="text-count" id="text-count2" name="checkplan">0/200</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td colspan="3">
+                                    <div id="uploadComponent1" class="upload-component">
+                                        <div class="upload-filebox">
+                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                            <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                            <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
+                                            <p>Maximun upload file size <span>1GiB</span></p>
+                                        </div>
+                                        <div class="upload-filelist">
+                                            <div class="title">
+                                                <h5>Files (0)</h5>
+                                                <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                            </div>
+                                            <ul class="filelist">
+                                            </ul>
+                                            <div id="file-list"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+
+            <div class="popup-wrapper w700" id="popup1">
+                <div class="popup-title">
+                    <h3>점검일지 업로드</h3>
+                    <a href="#" title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                        <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp20">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="date6">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-clear">
+                                        <input type="date" id="date6" name="" value="2024-06-27">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="popuptext1">
+                                        점검자
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-clear"><input type="text" id="popuptext1" class="wp60" placeholder="점검자"><span class="btn-clear">×</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="popuptext2">
+                                        점검장소
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-clear"><input type="text" id="popuptext2" class="wp100" placeholder="점검장소"><span class="btn-clear">×</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td>
+                                    <div id="uploadComponent2" class="upload-component">
+                                        <div class="upload-filebox">
+                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                            <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                            <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                            <p>Maximun upload file size <span>1GiB</span></p>
+                                        </div>
+                                        <div class="upload-filelist">
+                                            <div class="title">
+                                                <h5>Files (0)</h5>
+                                                <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                            </div>
+                                            <ul class="filelist">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="popup-button">
+                    <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+                    <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                </div>
+
+            </div>
+
+    </div>
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+
+
+        function closePopup(){
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';
+        }
+
+        function showPopup(){
+
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'block';
+            modalOpen.style.display = 'block';
+            /*var popup = document.getElementById('popup1');
+
+            popup.style.display = 'block';*/
+        }
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr
+                },
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    { binding: 'rownum', header: '순번', width: 60 ,align: 'center'},
+                    { binding: 'spworknm', header: '지역명', width: 140, align: 'center' },
+                    { binding: 'spcompnm', header: '산단명', width: 140, align: 'center' },
+                    { binding: 'spplannm', header: '발전소명', width: 140, align: 'center' },
+                    { binding: 'checkdt', header: '등록일자', width: 140, align: 'center' },
+                    { binding: 'checkusr', header: '점검자', width: 140, align: 'center' },
+                    { binding: 'checkarea', header: '점검장소', width: 200, align: 'center' },
+                    { binding: 'checktmdt', header: '점검시간', width: 260, align: 'center' },
+                    {
+                        header: '점검일지 다운로드', binding: 'downloads', width: 160, align: 'center', cssClass: 'filedown',
+                        cellTemplate: '<a href="#" title="다운로드" class="btn-filedown">다운로드</a>'
+                    },
+                    {
+                        header: '점검일지 업로드', binding: 'downloads', width: 170, align: 'center', cssClass: 'downloads',
+                        cellTemplate: '<a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
+                            '                                                        업로드\n' +
+                            '                                                    </a>'
+                    }
+
+
+                ],  //홀짝 로우 음영주기
+                loadedRows: function (s, e) {
+
+                    console.log(s.cells);
+
+                    for (var i = 0; i < s.rows.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                    for (var i = 0; i < s.cells.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                },
+                itemsSource: viewdata
+            });
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+        }
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        <!-- 점검자 추가 버튼 이벤트-->
+        function addInputField(button) {
+            // 새로운 td 요소를 생성합니다.
+            var newTd = document.createElement('div');
+            newTd.className = 'input-btnbox';
+
+            // 새로운 input 요소를 생성합니다.
+            var newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.className = 'wp100';
+            newInput.placeholder = '점검자';
+            newInput.name = 'checkusr'
+            newInput.maxLength = 5;
+
+            // 삭제 버튼을 생성합니다.
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = '점검자 삭제';
+            deleteButton.onclick = function() {
+                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+            };
+            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
+            deleteButton.style.color = 'red';
+            deleteButton.style.marginTop = '5px';
+            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
+            newTd.appendChild(newInput);
+            newTd.appendChild(deleteButton);
+
+            // 클릭된 버튼의 부모 td 요소를 찾습니다.
+            var parentTd = button.parentElement;
+
+            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+        }
+
+        function deleteInputField(inputField) {
+            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+            var tdToDelete = inputField.parentElement;
+            tdToDelete.parentElement.removeChild(tdToDelete);
+        }
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+        function filevalueinit (param){
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchusr' : $('#searchusr').val()
+            }
+
+            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            if(result.success){
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+            var cnt = 1;
+            for (var i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    rownum: inspecDto[i]["rownum"],
+                    spworknm: inspecDto[i]["spworknm"],
+                    spcompnm: inspecDto[i]["spcompnm"],
+                    spplannm: inspecDto[i]["spplannm"],
+                    checkdt: inspecDto[i]["checkdt"],
+                    checkusr: inspecDto[i]["checkusr"],
+                    checkarea: inspecDto[i]["checkarea"],
+                    checktmdt: inspecDto[i]["checktmdt"],
+
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+            var cols = new wijmo.grid.Column();
+            cols.binding = 'rownum';
+            cols.header = '순번';
+            cols.align = "center";
+            cols.width = 60;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spworknm';
+            cols.header = '지역명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spcompnm';
+            cols.header = '산단명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spplannm';
+            cols.header = '발전소명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkdt';
+            cols.header = '등록일자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkusr';
+            cols.header = '점검자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkarea';
+            cols.header = '점검장소';
+            cols.align = "center";
+            cols.width = 200;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checktmdt';
+            cols.header = '점검시간';
+            cols.align = "center";
+            cols.width = 260;
+            theGrid.columns.push(cols);
+
+
+
+        }
+
+        $(document).ready(function (e) {
+
+
+            page = new CheckResultDiaryPage();
+
+
+
+
+
+            $('#btnSave').click(function (e){
+
+
+                Alert.confirm('', '저장하시겠습니까?', function() {
+
+                        let fileInput = document.getElementById('fileInput1');
+                        let files = fileInput.files;
+                        let formData = new FormData();
+
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append('filelist', files[i]);
+                        }
+
+                        const randomString = generateRandomStringWithDate();
+
+                        var inputs = document.querySelectorAll('input[name="checkusr"]');
+                        var values = [];
+
+                        inputs.forEach(function(input){
+                            values.push(input.value);
+
+                        })
+
+                        var checkusrString = values.join(',');
+
+
+
+                        // 다른 데이터를 FormData에 추가합니다.
+                        formData.append('supplier', $('#supplier').val());
+                        formData.append('checkdt', $('#checkdt').val());
+                        formData.append('checkstdt', $('#checkstdt').val());
+                        formData.append('checkendt', $('#checkendt').val());
+                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+                        formData.append('checkarea', $('#checkarea').val());
+                        formData.append('checkitem', $('#checkitem').val());
+                        formData.append('checkplan', $('#checkplan').val());
+                        formData.append('randomuuid', randomString);
+                        formData.append('_csrf', $('[name=_csrf]').val());
+
+
+                        $.ajax({
+                            url: '/api/inspec_report/save',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                            success: function (response) {
+                                if(response.success){
+                                    Alert.alert('', response.message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Alert.alert('', '에러가발생하였습니다.');
+                            }
+                        });
+
+
+                    },
+                    function () {}
+
+
+                )
+            })
+
+
+            page.setUploader();
+
+
+        });
+    </script>
+</th:block>
+
+</html>
