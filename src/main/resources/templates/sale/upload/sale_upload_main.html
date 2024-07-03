@@ -1,319 +1,317 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
-    <div class="content_wrap">
 
-        <section class="section">
-            <div class="layout-contents">
-                <!-- Page Title -->
-                <div class="page-title-wrap">
-                    <div class="left">
-                        <h2>매출등록</h2>
-                        <a href="#" title="북마크" class="bookmark toggle">
-                            내메뉴
-                        </a>
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>매출등록</h2>
+                <a href="#" title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
+                <li>매출등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    매출년월<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+
+                                        <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>
+
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-print" title="매출등록 출력">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        매출등록 출력
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="table-wrap">
+                        <table class="list-table">
+                            <caption>매출등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wp10">
+                                <col class="wauto">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>매출년월</th>
+                                <th>발전량</th>
+                                <th>SMP단가</th>
+                                <th>SMP매출</th>
+                                <th>REC단가</th>
+                                <th>REC수량</th>
+                                <th>REC매출</th>
+                                <th>총매출</th>
+
+                            </tr>
+                            </thead>
+                            <tbody id="salesData">
+                            <!-- Data will be filled by JavaScript -->
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>계</th>
+                                <td id="sum-energyQty"></td>
+                                <td id="sum-smpCost"></td>
+                                <td id="sum-smpAmt"></td>
+                                <td id="sum-recCost"></td>
+                                <td id="sum-recQty"></td>
+                                <td id="sum-recAmt"></td>
+                                <td id="sum-stotAmt"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                    <ul class="page-navi">
-                        <li><img src="../assets/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                        <li>서비스분석</li>
-                        <li>매출등록</li>
-                    </ul>
-                </div>
-                <!-- Select -->
-                <div class="search-wrap">
-                    <ul>
-                        <li>
-                            <select title="지역">
-                                <option>대구</option>
-                            </select>
-                        </li>
-                        <li>
-                            <select title="구">
-                                <option>성서산단</option>
-                            </select>
-                        </li>
-                        <li>
-                            <select title="동">
-                                <option>성서</option>
-                            </select>
-                        </li>
-                    </ul>
-                </div>
-                <div class="tab-wrap">
-                    <ul class="tab-links">
-                        <li>
-                            <a href="#tab1" title="목록">목록</a>
-                        </li>
-                        <li>
-                            <a href="#tab2" title="등록">등록</a>
-                        </li>
-                    </ul>
-                    <div class="tab-contents">
-                        <!-- Section -->
-                        <section class="tab-item" id="tab1">
-                            <div class="section-top">
-                                <div class="search-wrap">
-                                    <dl>
-                                        <dt>
-                                            매출년월<span class="eq">*</span>
-                                        </dt>
-                                        <dd>
-                                            <ul class="date-box">
-                                                <li>
-                                                    <input type="month" id="date1" name="startDate">
-                                                    <label for="date1" class="hide">시작일</label>
-                                                </li>
-                                                <li>
-                                                    <input type="month" id="date2" name="endDate">
-                                                    <label for="date2" class="hide">종료일</label>
-                                                </li>
+                    <div class="btn-wrap">
+                        <div class="center">
+                            <ul class="paging-wrap">
+                                <li><a href="#" title="처음" class="btn-first"></a></li>
+                                <li><a href="#" title="이전" class="btn-prev"></a></li>
+                                <li class="on"><a href="#" title="1">1</a></li>
+                                <li><a href="#" title="2">2</a></li>
+                                <li><a href="#" title="3">3</a></li>
+                                <li><a href="#" title="4">4</a></li>
+                                <li><a href="#" title="5" class="disable">5</a></li>
+                                <li><a href="#" title="다음" class="btn-next"></a></li>
+                                <li><a href="#" title="마지막" class="btn-last"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
 
-                                                <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>매출 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-delete" id="btnDelete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="btn btn-edit" title="저장" id="btnSave">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                                <li>
+                                    <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
+                                    <a href="#" class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
+                                        <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                                            </ul>
-                                        </dd>
-                                    </dl>
-
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a href="#" class="btn btn-excell" title="엑셀다운로드">
-                                                <img src="../assets/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                                엑셀다운로드
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn btn-delete" title="삭제">
-                                                <img src="../assets/images/icon/ico-delete.svg" alt="엑셀 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn btn-edit" title="수정">
-                                                <img src="../assets/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn btn-print" title="매출등록 출력">
-                                                <img src="../assets/images/icon/ico-print.svg" alt="엑셀 아이콘">
-                                                매출등록 출력
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div> <!--//section-top end -->
-                            <div class="table-wrap">
-                                <table class="list-table">
-                                    <caption>매출등록 테이블</caption>
-                                    <colgroup>
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wp10">
-                                        <col class="wauto">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th>매출년월</th>
-                                        <th>발전량</th>
-                                        <th>SMP단가</th>
-                                        <th>SMP매출</th>
-                                        <th>REC단가</th>
-                                        <th>REC수량</th>
-                                        <th>REC매출</th>
-                                        <th>총매출</th>
-
-                                    </tr>
-                                    </thead>
-                                    <tbody id="salesData">
-                                    <!-- Data will be filled by JavaScript -->
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>계</th>
-                                        <td id="sum-energyQty"></td>
-                                        <td id="sum-smpCost"></td>
-                                        <td id="sum-smpAmt"></td>
-                                        <td id="sum-recCost"></td>
-                                        <td id="sum-recQty"></td>
-                                        <td id="sum-recAmt"></td>
-                                        <td id="sum-stotAmt"></td>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="btn-wrap">
-                                <div class="center">
-                                    <ul class="paging-wrap">
-                                        <li><a href="#" title="처음" class="btn-first"></a></li>
-                                        <li><a href="#" title="이전" class="btn-prev"></a></li>
-                                        <li class="on"><a href="#" title="1">1</a></li>
-                                        <li><a href="#" title="2">2</a></li>
-                                        <li><a href="#" title="3">3</a></li>
-                                        <li><a href="#" title="4">4</a></li>
-                                        <li><a href="#" title="5" class="disable">5</a></li>
-                                        <li><a href="#" title="다음" class="btn-next"></a></li>
-                                        <li><a href="#" title="마지막" class="btn-last"></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="tab-item" id="tab2">
-                            <div class="section-top">
-                                <div class="title-wrap">
-                                    <h3>매출 등록</h3>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a href="#" class="btn btn-excell" title="엑셀다운로드">
-                                                <img src="../assets/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                                신규등록
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn btn-delete" id="btnDelete" title="삭제">
-                                                <img src="../assets/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="btn btn-edit" title="저장" id="btnSave">
-                                                <img src="../assets/images/icon/ico-save.svg" alt="저장 아이콘">
-                                                저장
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
-                                            <a href="#" class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
-                                                <img src="../assets/images/icon/ico-edit.svg" alt="수정 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <form action="/api/sales/upload" id="saleForm" method="post" >
-                                <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
-                                <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spworknm" name="spworknm" value="def" />
-                                <input type="hidden" id="spcompnm" name="spcompnm" value="def" />
-                                <input type="hidden" id="spplannm" name="spplannm" value="def" />
-                                <div class="table-wrap">
-                                    <table class="write-table">
-                                        <caption>매출등록 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th>
-                                                <label for="date3">
-                                                    매출년월
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="month" id="date3" name="salesym" maxlength="7" required/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="test">
-                                                    발전량
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test1" class="wp100" name="energyQty" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="test">
-                                                    SMP 매출
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test2" class="wp100"  name="smpAmt" />
-                                            </td>
-                                            <th>
-                                                <label for="test">
-                                                    SMP 단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test3" class="wp100" name="smpCost"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="test">
-                                                    REC 수량
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test4" class="wp100" name="recQty"/>
-                                            </td>
-                                            <th>
-                                                <label for="test">
-                                                    REC 실단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test5" class="wp100" name="recCost"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <td></td>
-                                            <th>
-                                                <label for="test">
-                                                    REC 평균단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test6" class="wp100" name="recAverageCost" disabled />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="test">
-                                                    REC 매출
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test7" class="wp100" name="recAmt"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="test">
-                                                    총 발전 매출
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="test" class="wp100" name="stotAmt" disabled />
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                        </section>
-                    </div> <!--//tab-contens end-->
-                </div> <!--//tab-wrap end-->
-            </div> <!--//layout-contents end -->
-        </section>
+                    <form action="/api/sales/upload" id="saleForm" method="post">
+                        <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
+                        <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spworknm" name="spworknm" value="def"/>
+                        <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
+                        <input type="hidden" id="spplannm" name="spplannm" value="def"/>
+                        <div class="table-wrap">
+                            <table class="write-table">
+                                <caption>매출등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="date3">
+                                            매출년월
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="month" id="date3" name="salesym" maxlength="7" required/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            발전량
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test1" class="wp100" name="energyQty"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            SMP 매출
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test2" class="wp100" name="smpAmt"/>
+                                    </td>
+                                    <th>
+                                        <label for="test">
+                                            SMP 단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test3" class="wp100" name="smpCost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            REC 수량
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test4" class="wp100" name="recQty"/>
+                                    </td>
+                                    <th>
+                                        <label for="test">
+                                            REC 실단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test5" class="wp100" name="recCost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td></td>
+                                    <th>
+                                        <label for="test">
+                                            REC 평균단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test6" class="wp100" name="recAverageCost" disabled/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            REC 매출
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test7" class="wp100" name="recAmt"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            총 발전 매출
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test" class="wp100" name="stotAmt" disabled/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    </section>
     </div>
 
 
@@ -327,7 +325,7 @@
             let selectedSalesId = null;
 
             // 검색
-            $('.btn-srch').click(function() {
+            $('.btn-srch').click(function () {
                 var startDate = $('#date1').val();
                 var endDate = $('#date2').val();
                 fetchSalesData(startDate, endDate); // 데이터 가져오는 함수에 시작일과 종료일 인자 추가
@@ -435,7 +433,7 @@
                             stotAmt: 0
                         };
 
-                        response.forEach(function(sale) {
+                        response.forEach(function (sale) {
                             rows += '<tr>' +
                                 '<td>' + sale.salesym + '</td>' +
                                 '<td>' + sale.energyQty + '</td>' +
@@ -474,7 +472,7 @@
             }
 
             // 매출 데이터를 클릭했을 때 이벤트 핸들러
-            $(document).on('click', '.list-table tbody tr', function() {
+            $(document).on('click', '.list-table tbody tr', function () {
                 // 각 행에서 데이터 가져오기
                 var salesym = $(this).find('td').eq(0).text(); // 매출년월
                 var energyQty = $(this).find('td').eq(1).text(); // 발전량
@@ -504,7 +502,7 @@
             });
 
             // 수정
-            $('#btnEdit').click(function() {
+            $('#btnEdit').click(function () {
                 var formData = {
                     salesym: $('#date3').val(),
                     energyQty: $('#test1').val(),
@@ -529,7 +527,7 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     data: JSON.stringify(formData),
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             alert('수정되었습니다.');
                             fetchSalesData(); // 데이터 재로드
@@ -540,14 +538,14 @@
                             alert('오류: ' + response.message);
                         }
                     },
-                    error: function() {
+                    error: function () {
                         alert('서버와의 통신 중 오류가 발생했습니다.');
                     }
                 });
             });
 
             // 삭제 버튼 클릭 이벤트
-            $('#btnDelete').click(function() {
+            $('#btnDelete').click(function () {
                 if (!confirm('정말로 삭제하시겠습니까?')) {
                     return;
                 }
