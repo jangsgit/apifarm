@@ -33,7 +33,7 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>매출등록</h2>
-                <a href="#" title="북마크" class="bookmark toggle">
+                <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
@@ -92,15 +92,12 @@
                                             <label for="date2" class="hide">종료일</label>
                                         </li>
                                         <li>
-                                            <a href="#" class="btn btn-delete" title="검색" id="btn-srch">
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
                                                 <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
                                         </li>
-
-<!--                                        <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>-->
-
                                     </ul>
                                 </dd>
                             </dl>
@@ -109,17 +106,17 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="엑셀다운로드">
                                         <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
                                         엑셀다운로드
                                     </a>
                                 </li>
-<!--                                <li>-->
-<!--                                    <a href="#" class="btn btn-print" title="매출등록 출력">-->
-<!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
-<!--                                        매출등록 출력-->
-<!--                                    </a>-->
-<!--                                </li>-->
+                                <!--                                <li>-->
+                                <!--                                    <a class="btn btn-print" title="매출등록 출력">-->
+                                <!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
+                                <!--                                        매출등록 출력-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
@@ -166,21 +163,21 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="btn-wrap">
-                        <div class="center">
-                            <ul class="paging-wrap">
-                                <li><a href="#" title="처음" class="btn-first"></a></li>
-                                <li><a href="#" title="이전" class="btn-prev"></a></li>
-                                <li class="on"><a href="#" title="1">1</a></li>
-                                <li><a href="#" title="2">2</a></li>
-                                <li><a href="#" title="3">3</a></li>
-                                <li><a href="#" title="4">4</a></li>
-                                <li><a href="#" title="5" class="disable">5</a></li>
-                                <li><a href="#" title="다음" class="btn-next"></a></li>
-                                <li><a href="#" title="마지막" class="btn-last"></a></li>
-                            </ul>
-                        </div>
-                    </div>
+<!--                    <div class="btn-wrap">-->
+<!--                        <div class="center">-->
+<!--                            <ul class="paging-wrap">-->
+<!--                                <li><a title="처음" class="btn-first"></a></li>-->
+<!--                                <li><a title="이전" class="btn-prev"></a></li>-->
+<!--                                <li class="on"><a title="1">1</a></li>-->
+<!--                                <li><a title="2">2</a></li>-->
+<!--                                <li><a title="3">3</a></li>-->
+<!--                                <li><a title="4">4</a></li>-->
+<!--                                <li><a title="5" class="disable">5</a></li>-->
+<!--                                <li><a title="다음" class="btn-next"></a></li>-->
+<!--                                <li><a title="마지막" class="btn-last"></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </section>
 
                 <section class="tab-item" id="tab2">
@@ -191,26 +188,26 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="신규등록">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="btn btn-delete" id="btnDelete" title="삭제">
+                                    <a class="btn btn-delete" id="btnDelete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" class="btn btn-edit" title="저장" id="btnSave">
+                                    <a class="btn btn-edit" title="저장" id="btnSave">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
                                     </a>
                                 </li>
                                 <li>
                                     <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
-                                    <a href="#" class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
+                                    <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
                                         <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
                                         수정
                                     </a>
@@ -352,7 +349,7 @@
             let selectedSalesId = null;
 
             // 검색
-            $('.btn-srch').click(function () {
+            $('#btn-srch').click(function () {
                 var startDate = $('#date1').val();
                 var endDate = $('#date2').val();
                 fetchSalesData(startDate, endDate); // 데이터 가져오는 함수에 시작일과 종료일 인자 추가
@@ -449,7 +446,6 @@
                     dataType: 'json',
                     success: function (response) {
                         var rows = '';
-
                         var totals = {
                             energyQty: 0,
                             smpCost: 0,
@@ -596,6 +592,21 @@
                     }
                 });
             });
+
+            // 신규등록 버튼 클릭 이벤트
+            $('.btn-excell').click(function (event) {
+                // 기본 동작 방지 (페이지 새로고침 방지)
+                event.preventDefault();
+
+                // 입력 폼의 모든 입력 필드 초기화
+                $('#saleForm input[type="text"], #saleForm input[type="month"]').val('');
+
+                // 다른 필요한 UI 조정 또는 호출
+                $('#btnEdit').hide(); // 수정 버튼 숨기기
+                $('#btnSave').show(); // 저장 버튼 표시
+
+            });
+
 
             // 데이터 초기 로드
             fetchSalesData();
