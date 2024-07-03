@@ -1,4 +1,31 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 60px; /* 충분한 공간을 확보 */
+        }
+
+        .input-wrapper .unit {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            bottom: 0;
+            height: 20px;
+            line-height: 20px; /* input 높이에 맞게 조절 */
+            margin: auto;
+            font-size: 12px;
+            color: #999;
+            pointer-events: none; /* 텍스트가 클릭 이벤트를 받지 않도록 설정 */
+        }
+    </style>
+</head>
 <th:block layout:fragment="content">
 
     <div class="layout-contents">
@@ -64,8 +91,15 @@
                                             <input type="month" id="date2" name="endDate">
                                             <label for="date2" class="hide">종료일</label>
                                         </li>
+                                        <li>
+                                            <a href="#" class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
 
-                                        <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>
+<!--                                        <a href="#a" class="btn-srch" title="검색" id="btn-srch"></a>-->
 
                                     </ul>
                                 </dd>
@@ -80,24 +114,12 @@
                                         엑셀다운로드
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="#" class="btn btn-delete" title="삭제">
-                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
-                                        삭제
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="btn btn-edit" title="수정">
-                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                        수정
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="btn btn-print" title="매출등록 출력">
-                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
-                                        매출등록 출력
-                                    </a>
-                                </li>
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-print" title="매출등록 출력">-->
+<!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
+<!--                                        매출등록 출력-->
+<!--                                    </a>-->
+<!--                                </li>-->
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
@@ -231,8 +253,9 @@
                                             발전량
                                         </label>
                                     </th>
-                                    <td>
+                                    <td class="input-wrapper">
                                         <input type="text" id="test1" class="wp100" name="energyQty"/>
+                                        <span class="unit">kWh</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -241,8 +264,9 @@
                                             SMP 매출
                                         </label>
                                     </th>
-                                    <td>
+                                    <td class="input-wrapper">
                                         <input type="text" id="test2" class="wp100" name="smpAmt"/>
+                                        <span class="unit">백만원</span>
                                     </td>
                                     <th>
                                         <label for="test">
@@ -259,8 +283,9 @@
                                             REC 수량
                                         </label>
                                     </th>
-                                    <td>
+                                    <td class="input-wrapper">
                                         <input type="text" id="test4" class="wp100" name="recQty"/>
+                                        <span class="unit">백만원</span>
                                     </td>
                                     <th>
                                         <label for="test">
@@ -289,18 +314,20 @@
                                             REC 매출
                                         </label>
                                     </th>
-                                    <td>
+                                    <td class="input-wrapper">
                                         <input type="text" id="test7" class="wp100" name="recAmt"/>
+                                        <span class="unit">백만원</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        <label for="test">
+                                        <label for="test" class="input-wrapper">
                                             총 발전 매출
                                         </label>
                                     </th>
-                                    <td>
+                                    <td class="input-wrapper">
                                         <input type="text" id="test" class="wp100" name="stotAmt" disabled/>
+                                        <span class="unit">백만원</span>
                                     </td>
                                 </tr>
                                 </tbody>
