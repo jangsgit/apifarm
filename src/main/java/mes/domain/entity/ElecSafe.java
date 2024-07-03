@@ -56,8 +56,13 @@ public class ElecSafe {
     @Column(name="\"inusernm\"")
     String inusernm;    // 입력자명
 
+    @Column(name="\"title\"")
+    String title;       // 제목
 
+    @Column(name="\"inspecloc\"")
+    String inspecloc;   // 점검장소
 
-
+    @Column(name="\"inspecdt\"")
+    String inspecdt;    // 점검일자
 
 }
