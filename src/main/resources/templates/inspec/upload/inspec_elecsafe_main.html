@@ -56,7 +56,7 @@
                                 <div class="search-wrap">
                                     <dl>
                                         <dt>
-                                            점검일자<span class="eq">*</span>
+                                            등록일자<span class="eq">*</span>
                                         </dt>
                                         <dd>
                                             <ul class="date-box">
@@ -74,28 +74,14 @@
                                     <dl>
                                         <dt>
                                             <label for="searchusr">
-                                                점검자<span class="eq">*</span>
+                                                점검명<span class="eq">*</span>
                                             </label>
                                         </dt>
                                         <dd>
                                             <div class="srch-box">
                                                 <input type="text" id="searchusr" class="input-srch"
-                                                       placeholder="점검자명 검색">
+                                                       placeholder="점검명 검색">
                                                 <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
-                                            </div>
-                                        </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>
-                                            <label for="inspec_cop">
-                                                협력사<span class="eq">*</span>
-                                            </label>
-                                        </dt>
-                                        <dd>
-                                            <div class="srch-box">
-                                                <input type="text" id="inspec_cop" class="input-srch"
-                                                       placeholder="협력사명 검색">
-                                                <a href="#a" class="btn-srch" title="검색"></a>
                                             </div>
                                         </dd>
                                     </dl>
@@ -118,12 +104,6 @@
                                             <a class="btn btn-edit" title="수정">
                                                 <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                                 수정
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-print" title="순회점검일지 출력">
-                                                <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
-                                                순회점검일지 출력
                                             </a>
                                         </li>
                                     </ul>
@@ -177,20 +157,19 @@
                                         <tr>
                                             <th>
                                                 <label for="title">
-                                                    제목
+                                                    점검명
                                                 </label>
                                             </th>
                                             <td>
-                                                <input type="text" id="title" class="wp100" placeholder="제목">
+                                                <input type="text" id="title" class="wp100" placeholder="점검명">
                                             </td>
                                             <th>
-                                                <label for="inspec_year">
-                                                    점검년도
+                                                <label for="resistdt">
+                                                    등록일자
                                                 </label>
                                             </th>
                                             <td>
-                                                <select id="inspec_year" name="inspec_year">
-                                                </select>
+                                                <input type="date" id="resistdt">
                                             </td>
                                         </tr>
                                         <tr>
@@ -200,7 +179,7 @@
                                                 </label>
                                             </th>
                                             <td>
-                                                <input type="date" id="inspec_date1" name="inspec_date">
+                                                <input type="date" id="inspec_date1">
                                             </td>
                                             <th>
                                                 <label for="doc_select">
@@ -220,7 +199,21 @@
                                                 </label>
                                             </th>
                                             <td>
-                                                <input type="text" id="inspec_loc" class="wp100" placeholder="점검장소">
+                                                <select type="text" id="inspec_loc" class="wp100" placeholder="점검장소">
+                                                    <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지발전소</option>
+                                                </select>
+                                            </td>
+                                            <th>
+                                                <label for="inspec_result">
+                                                    점검결과
+                                                </label>
+                                            </th>
+                                            <td>
+                                                <select id="inspec_result" placeholder="점검결과" >
+                                                    <option VALUE="양호">양호</option>
+                                                    <option VALUE="좋음">좋음</option>
+                                                    <option VALUE="나쁨">나쁨</option>
+                                                </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -229,7 +222,7 @@
                                                     점검사항
                                                 </label>
                                             </th>
-                                            <td>
+                                            <td colspan="3">
                                                 <div class="textarea-box">
                                                     <textarea id="endresult" placeholder="점검사항"></textarea>
                                                     <p class="text-count" id="text-count1">0/100</p>
@@ -306,19 +299,17 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'rownum', header: '순번', width: 60 ,align: 'center'},
-                    { binding: 'inspecdt', header: '점검일자', width: 140, align: 'center' },
-                    { binding: 'spworknm', header: '산단지역본부', width: 140, align: 'center' },
-                    { binding: 'spcompnm', header: '산단명', width: 140, align: 'center' },
-                    { binding: 'spplannm', header: '발전소명', width: 140, align: 'center' },
-                    { binding: 'inusernm', header: '작성자', width: 140, align: 'center' },
-                    { binding: 'endresult', header: '점검결과', width: 350, align: 'center' },
+                    { binding: 'rownum', header: '순번', width: 80 ,align: 'center'},
+                    { binding: 'registdt', header: '등록일자', width: 160, align: 'center' },
+                    { binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center' },
+                    { binding: 'spcompnm', header: '산단명', width: 160, align: 'center' },
+                    { binding: 'spplannm', header: '발전소명', width: 160, align: 'center' },
+                    { binding: 'title', header: '점검명', width: 260, align: 'center' },
+                    { binding: 'inspecresult', header: '점검결과', width: 160, align: 'center' },
+                    { binding: 'inspecdt', header: '점검일자', width: 160, align: 'center' },
                     {
-                        header: '첨부파일', binding: 'downloads', width: 160, align: 'center', cssClass: 'filedown',
-                        cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>'
-                    },
-                    {
-                        header: '비고', binding: 'downloads', width: 300, align: 'center' }
+                        header: '첨부파일', binding: 'downloads', width: '*', align: 'center', cssClass: 'filedown',
+                    }
 
                 ],  //홀짝 로우 음영주기
                 loadedRows: function (s, e) {
@@ -368,8 +359,10 @@
                 // }
 
                 formData.append('title', $('#title').val());
+                formData.append('resistdt', $('#resistdt').val());
                 formData.append('inspec_date1', $('#inspec_date1').val());
                 formData.append('inspec_loc', $('#inspec_loc').val());
+                formData.append('inspec_result', $('#inspec_result').val());
                 formData.append('endresult', $('#endresult').val());
                 formData.append('_csrf', $('[name=_csrf]').val());
 
@@ -382,7 +375,7 @@
                     success: function (response) {
                         if (response.success) {
                             Alert.alert('', '저장에 성공했습니다.' + response.message);
-                            location.reload();
+
                         } else {
                             Alert.alert('', '저장에 실패했습니다. ' + response.message);
                         }

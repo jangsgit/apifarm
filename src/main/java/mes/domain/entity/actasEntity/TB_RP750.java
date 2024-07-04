@@ -1,4 +1,4 @@
-package mes.domain.entity;
+package mes.domain.entity.actasEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +15,10 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ElecSafe {
+public class TB_RP750 {
 
     @EmbeddedId
-    private ElecSafePk id;
+    private TB_RP750_PK id;
 
     @Column(name="\"spworknm\"")
     String spworknm;    // 관할지역명
@@ -65,4 +65,9 @@ public class ElecSafe {
     @Column(name="\"inspecdt\"")
     String inspecdt;    // 점검일자
 
+    @Column(name="\"registdt\"")
+    String registdt;    // 등록일자
+
+    @Column(name="\"inspecresult\"")
+    String inspecresult;    // 점검결과
 }

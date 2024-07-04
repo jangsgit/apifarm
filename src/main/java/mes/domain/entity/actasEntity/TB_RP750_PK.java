@@ -1,4 +1,4 @@
-package mes.domain.entity;
+package mes.domain.entity.actasEntity;
 
 import lombok.Data;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 @Data
-public class ElecSafePk implements Serializable {
+public class TB_RP750_PK implements Serializable {
 
     private String spworkcd;    // 관할지역코드
     private String spcompcd;    // 발전산단코드

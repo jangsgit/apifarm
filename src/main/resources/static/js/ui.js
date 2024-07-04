@@ -55,6 +55,8 @@ $(document).ready(function() {
     // 초기에 첫 번째 탭을 활성화
     $(".tab-item:first").show();
     $(".tab-links li:first").addClass("active");
+
+
     
 });
 
@@ -273,6 +275,14 @@ $(document).ready(function() {
             $(".dep2 > li.active > a").parents("ul").show();
             $(".dep3 > li.active > a").parents("ul").show();
             $(".dep4 > li.active > a").parents("ul").show();
+
+            // Add 'on' class when 'dep4' link is clicked
+            $(".dep3 > li > a").on('click', function(e){
+                e.preventDefault();
+                var $parentLi = $(this).parent('li');
+                $(".dep3 > li").removeClass('on');
+                $parentLi.addClass('on');
+            });
 
         },
         activeOff : function($target){
