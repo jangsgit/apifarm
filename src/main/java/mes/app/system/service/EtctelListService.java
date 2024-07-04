@@ -18,6 +18,27 @@ public class EtctelListService {
     @Autowired
     SqlRunner sqlRunner;
 
+    public List<Map<String, Object>> getEtctelList(String searchusr, String searchusr1){
+        MapSqlParameterSource params = new MapSqlParameterSource();
+
+        params.addValue("searchusr", "%"+searchusr+"%");
+        params.addValue("searchusr1", "%"+searchusr1+"%");
+
+        String sql= """
+                select 
+                ROW_NUMBER() OVER (ORDER BY indatem DESC) AS rownum,
+                *, 
+                from tb_rp980 tb980
+                where 1 = 1
+                and "checkusr" like :paramusr 
+                and "checkusr1" like :paramusr1
+                order by indatem desc
+                """;
+        List<Map<String, Object>> items = this.sqlRunner.getRows(sql,params);
+        return items;
+
+    }
+
 
     // 비상연락망 저장
     public List<Map<String, Object>> tb_rp980add(TB_RP980Dto dto) {

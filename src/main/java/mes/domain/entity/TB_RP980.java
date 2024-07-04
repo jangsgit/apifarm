@@ -7,6 +7,7 @@ import mes.domain.DTO.TB_RP980Dto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -50,7 +51,7 @@ public class TB_RP980 {
     private String divinm;
 
     @Column(name = "INDATEM")
-    private LocalDateTime indatem;
+    private Date indatem;
 
     @Column(name = "INUSERID")
     private String inuserid;

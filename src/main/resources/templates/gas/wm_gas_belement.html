@@ -1,0 +1,814 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>도시가스성분업로드</h2>
+                <a href="#" title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
+                <li>도시가스성분업로드</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="분석결과">분석결과</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="상세성분">상세성분</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록년월<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="">
+                                            <label for="month1" class="hide">시작일</label>
+                                        </li>
+<!--                                        <li>-->
+<!--                                            <input type="month" id="date2" name="">-->
+<!--                                            <label for="month2" class="hide">종료일</label>-->
+<!--                                        </li>-->
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <!--                            <dl>-->
+                            <!--                                <dt>-->
+                            <!--                                    <label for="text1">-->
+                            <!--                                        점검자<span class="eq">*</span>-->
+                            <!--                                    </label>-->
+                            <!--                                </dt>-->
+                            <!--                                <dd>-->
+                            <!--                                    <div class="srch-box">-->
+                            <!--                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="점검자명 검색">-->
+                            <!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>-->
+                            <!--                                    </div>-->
+                            <!--                                </dd>-->
+                            <!--                            </dl>-->
+                            <!--                            <dl>-->
+                            <!--                                <dt>-->
+                            <!--                                    <label for="select1">-->
+                            <!--                                        점검여부<span class="eq">*</span></dt>-->
+                            <!--                                </label>-->
+                            <!--                                <dd>-->
+                            <!--                                    <select id="select1" class="w120">-->
+                            <!--                                        <option>전체</option>-->
+                            <!--                                        <option>완료</option>-->
+                            <!--                                        <option>미완료</option>-->
+                            <!--                                    </select>-->
+                            <!--                                </dd>-->
+                            <!--                            </dl>-->
+                        </div>
+                        <div class="button-wrap">
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
+<!--                                        엑셀다운로드-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-delete" title="삭제">-->
+<!--                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-edit" title="수정">-->
+<!--                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">-->
+<!--                                        수정-->
+<!--                                    </a>-->
+<!--                                </li>-->
+                                <!--                                <li>-->
+                                <!--                                    <a href="#" class="btn btn-print" title="순회점검일지 출력">-->
+                                <!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
+                                <!--                                        순회점검일지 출력-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
+                                <li>
+<!--                                    <a href="#"  class="btn btn-save" title="등록">-->
+                                    <a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">
+                                        <img src="/images/icon/ico-plus.svg" alt="엑셀 아이콘">
+                                        등록
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 600px"></div>
+                    </div>
+
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+<!--                        <div class="title-wrap">-->
+<!--                            <h3>점검 등록</h3>-->
+<!--                        </div>-->
+<!--                        <div class="button-wrap">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">-->
+<!--                                        신규등록-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-delete" title="삭제">-->
+<!--                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" class="btn btn-edit" id="btnSave" title="저장">-->
+<!--                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">-->
+<!--                                        저장-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조성성분
+                                </dt>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    평균조성(Mole %)
+                                </dt>
+                            </dl>
+
+                        </div>
+                    </div>
+                    <div class="table-wrap" style="padding-left: 15px; padding-right:15px;">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp15">
+                                <col class="wp12">
+                                <col class="wp15">
+                                <col class="wp12">
+                                <col class="wp15">
+                                <col class="wp12">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        C3H8 (propane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        I-C4H10 (I-Butane)
+                                    </label>
+                                </th>
+
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        N-C4H10 (N-Butance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        I-C5H12 (I-Pentance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        N-C5H12 (N-Pentance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                       N2 (Nitrogen)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+
+                                <th>
+                                    <label for="checkstdt">
+                                        CH4(Methane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                        CO2 (Carbon dioxide)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        C2H6 (Ethane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkarea">
+
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100"  readonly>
+                                </td>
+
+                                <th>
+                                    <label for="checkstdt">
+
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100"  readonly>
+                                </td>
+                                <th>
+                                    <label for="checkplan">
+                                        총 합
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div class="container-fluid">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid2" style="max-height: 600px"></div>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>공급가스 분석결과 업로드 </h3>
+                <a href="#" title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>공급가스 분석결과 업로드 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">
+                                    등록일자
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="date" id="date6" name="" value="2024-06-27">
+                                </div>
+                            </td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <th>-->
+<!--                                <label for="popuptext1">-->
+<!--                                    점검자-->
+<!--                                </label>-->
+<!--                            </th>-->
+<!--                            <td>-->
+<!--                                <div class="input-clear"><input type="text" id="popuptext1" class="wp60" placeholder="점검자"><span class="btn-clear">×</span></div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <th>-->
+<!--                                <label for="popuptext2">-->
+<!--                                    점검장소-->
+<!--                                </label>-->
+<!--                            </th>-->
+<!--                            <td>-->
+<!--                                <div class="input-clear"><input type="text" id="popuptext2" class="wp100" placeholder="점검장소"><span class="btn-clear">×</span></div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <span> * 업로드시 PDF 파일이어야 합니다.</span>
+                                            <h5>Files (0)</h5>
+                                            <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+
+
+        function closePopup(){
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';
+        }
+
+        function showPopup(){
+
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'block';
+            modalOpen.style.display = 'block';
+            /*var popup = document.getElementById('popup1');
+
+            popup.style.display = 'block';*/
+        }
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let data3 = [
+                { category: 'C3H8(Propane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'I-C4H10 (i-Butane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'N-C4H10 (n-Butane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'I-C5H12 (i-Pentane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'N-C5H12 (n-Pentane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'N2 (Nitrogen)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'CH4 (Methane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'CO2 (Carbon dioxide)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: 'C2H6 (Ethane)', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' },
+                { category: '계', january: '', february: '', march: '', april: '', may: '', june: '', july: '', august: '', september: '', october: '', november: '', december: '', total: '' }
+            ];
+
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr
+                },
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr
+                },
+                async: false,
+                success: function(res){
+                    console.log('wijmo', res.data);
+                    data3 = res.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            viewdata2 = new wijmo.collections.CollectionView(data3);
+
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    { binding: '', header: '년월', width: 170, align: 'center' },
+                    { binding: '', header: '관리소명', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '분석기기', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '일자', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '발열량', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '비중', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: 'CH4농도', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '가중평균', width: 170, align: 'center', aggregate: 'Sum' },
+                    { binding: '', header: '비고', width: 170, align: 'center', aggregate: 'Sum' },
+                ],
+                //홀짝 로우 음영주기
+                loadedRows: function (s, e) {
+
+                    for (var i = 0; i < s.rows.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                    for (var i = 0; i < s.cells.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                },
+                itemsSource: viewdata
+
+            });
+
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    { binding: 'category', header: '구분', width: 104, align: 'center', isReadOnly:true },
+                    { binding: 'january', header: '1월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'february', header: '2월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'march', header: '3월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'april', header: '4월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'may', header: '5월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'june', header: '6월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'july', header: '7월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'august', header: '8월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'september', header: '9월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'october', header: '10월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'november', header: '11월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'december', header: '12월', width: 110, align: 'center', aggregate: 'Sum' },
+                    { binding: 'total', header: '계', width: 110, align: 'center', isReadOnly: true }
+                ],
+
+                //홀짝 로우 음영주기
+                loadedRows: function (s, e) {
+
+                    for (var i = 0; i < s.rows.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                    for (var i = 0; i < s.cells.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
+
+                    }
+                },
+                itemsSource: viewdata2
+
+            });
+
+
+
+
+            // theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            // theGrid.bottomLeftCells.setCellData(0,0,'Σ');
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid2.rowHeaders.columns.splice(0,1);
+
+
+        }<!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        <!-- 점검자 추가 버튼 이벤트-->
+        // function addInputField(button) {
+        //     // 새로운 td 요소를 생성합니다.
+        //     var newTd = document.createElement('div');
+        //     newTd.className = 'input-btnbox';
+        //
+        //     // 새로운 input 요소를 생성합니다.
+        //     var newInput = document.createElement('input');
+        //     newInput.type = 'text';
+        //     newInput.className = 'wp100';
+        //     newInput.placeholder = '점검자';
+        //     newInput.name = 'checkusr'
+        //     newInput.maxLength = 5;
+        //
+        //     // 삭제 버튼을 생성합니다.
+        //     var deleteButton = document.createElement('button');
+        //     deleteButton.textContent = '점검자 삭제';
+        //     deleteButton.onclick = function() {
+        //         deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+        //     };
+        //     deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
+        //     deleteButton.style.color = 'red';
+        //     deleteButton.style.marginTop = '5px';
+        //     // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
+        //     newTd.appendChild(newInput);
+        //     newTd.appendChild(deleteButton);
+        //
+        //     // 클릭된 버튼의 부모 td 요소를 찾습니다.
+        //     var parentTd = button.parentElement;
+        //
+        //     // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+        //     parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+        // }
+
+        // function deleteInputField(inputField) {
+        //     // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+        //     var tdToDelete = inputField.parentElement;
+        //     tdToDelete.parentElement.removeChild(tdToDelete);
+        // }
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+        function filevalueinit (param){
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchusr' : $('#searchusr').val()
+            }
+
+            let result =  AjaxUtil.getSyncData('/api/cost_upload/read', data);
+
+            if(result.success){
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        // function grid_binding(data){
+        //     var inspecDto = data;
+        //     var inspecData = [];
+        //
+        //     for (var i = 0; i < inspecDto.length; i++) {
+        //         inspecData.push({
+        //             rownum: inspecDto[i]["rownum"],
+        //             spworknm: inspecDto[i]["spworknm"],
+        //             spcompnm: inspecDto[i]["spcompnm"],
+        //             spplannm: inspecDto[i]["spplannm"],
+        //             checkdt: inspecDto[i]["checkdt"],
+        //             checkusr: inspecDto[i]["checkusr"],
+        //             checkarea: inspecDto[i]["checkarea"],
+        //             checktmdt: inspecDto[i]["checktmdt"],
+        //
+        //         });
+        //
+        //     }
+        //
+        //     theGrid.columns.clear();
+        //     theGrid.autoGenerateColumns = false;
+        //     viewdata.sourceCollection = inspecData;
+        //
+        //     var cols = new wijmo.grid.Column();
+        //     cols.binding = 'rownum';
+        //     cols.header = '순번';
+        //     cols.align = "center";
+        //     cols.width = 60;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spworknm';
+        //     cols.header = '지역명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spcompnm';
+        //     cols.header = '산단명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spplannm';
+        //     cols.header = '발전소명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkdt';
+        //     cols.header = '등록일자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkusr';
+        //     cols.header = '점검자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkarea';
+        //     cols.header = '점검장소';
+        //     cols.align = "center";
+        //     cols.width = 200;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checktmdt';
+        //     cols.header = '점검시간';
+        //     cols.align = "center";
+        //     cols.width = 260;
+        //     theGrid.columns.push(cols);
+        //
+        //
+        //
+        // }
+
+        $(document).ready(function (e) {
+
+
+            page = new CheckResultDiaryPage();
+
+
+            $('#btnSave').click(function (e){
+
+
+                Alert.confirm('', '저장하시겠습니까?', function() {
+
+                        let fileInput = document.getElementById('fileInput1');
+                        let files = fileInput.files;
+                        let formData = new FormData();
+
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append('filelist', files[i]);
+                        }
+
+                        const randomString = generateRandomStringWithDate();
+
+                        var inputs = document.querySelectorAll('input[name="checkusr"]');
+                        var values = [];
+
+                        inputs.forEach(function(input){
+                            values.push(input.value);
+
+                        })
+
+                        var checkusrString = values.join(',');
+
+
+
+                        // 다른 데이터를 FormData에 추가합니다.
+                        formData.append('supplier', $('#supplier').val());
+                        formData.append('checkdt', $('#checkdt').val());
+                        formData.append('checkstdt', $('#checkstdt').val());
+                        formData.append('checkendt', $('#checkendt').val());
+                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+                        formData.append('checkarea', $('#checkarea').val());
+                        formData.append('checkitem', $('#checkitem').val());
+                        formData.append('checkplan', $('#checkplan').val());
+                        formData.append('randomuuid', randomString);
+                        formData.append('_csrf', $('[name=_csrf]').val());
+
+
+                        $.ajax({
+                            url: '/api/inspec_report/save',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                            success: function (response) {
+                                if(response.success){
+                                    Alert.alert('', response.message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Alert.alert('', '에러가발생하였습니다.');
+                            }
+                        });
+
+
+                    },
+                    function () {}
+
+
+                )
+            })
+
+
+            page.setUploader();
+
+
+        });
+    </script>
+</th:block>
+
+</html>
