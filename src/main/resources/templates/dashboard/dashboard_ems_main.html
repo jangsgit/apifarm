@@ -1,0 +1,962 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko">-->
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> <!-- Slide css -->
+
+<!--    <link rel="stylesheet" type="text/css" href="/css/import.css">-->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
+
+<!--    <script src="/js/ui.js"></script> &lt;!&ndash; Common js &ndash;&gt;-->
+</head>
+
+<!--<body>-->
+<!--    <div class="page-wrapper page-home">&lt;!&ndash; ★페이지 Class명 &ndash;&gt;-->
+<!--        &lt;!&ndash; [대시보드] 헤더  &ndash;&gt;-->
+<!--        <div class="dashboard-layout-header">-->
+<!--            <header>-->
+<!--                <div class="left">-->
+<!--                    <div class="logo">-->
+<!--                        <a href="dashboard_ems_main.html" title="홈" class="logo">-->
+<!--                            <h1><img src="../assets/images/logo/logo.svg" alt="로고"></h1>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                    <a href="#" title="연료전지 전용 생성형 AI GPT" class="btn-aigpt">-->
+<!--                        <img src="../assets/images/icon/ico-gpt.svg" alt="gpt 아이콘">-->
+<!--                        연료전지 전용 생성형 AI GPT-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="right">-->
+<!--                    <div class="info">-->
+<!--                        <dl>-->
+<!--                            <dt>REC 현물정산가격정보</dt>-->
+<!--                            <dd>-->
+<!--                                <span>평균</span>-->
+<!--                                <p>74,949</p>-->
+<!--                            </dd>-->
+<!--                        </dl>-->
+<!--                        <dl>-->
+<!--                            <dt>SMP정보</dt>-->
+<!--                            <dd>-->
+<!--                                135.69-->
+<!--                            </dd>-->
+<!--                        </dl>-->
+<!--                    </div>-->
+<!--                    <div class="weather">-->
+<!--                        <div class="wt-main">-->
+<!--                            <p class="area">연료전지발전소 대구</p>-->
+<!--                            <div class="wt-graphic">-->
+<!--                                <img src="../assets/images/icon/weather/ico-wt1.svg" alt="맑음">-->
+<!--                                <p>-->
+<!--                                    26<span class="celsius">℃</span>-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="wt-detail">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <img src="../assets/images/icon/ico-umbrella.svg" alt="강수">-->
+<!--                                    20%-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <img src="../assets/images/icon/ico-water.svg" alt="습도">-->
+<!--                                    25%-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <img src="../assets/images/icon/ico-wind.svg" alt="풍속">-->
+<!--                                    16m/s-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; 사용자 로그인 상태&ndash;&gt;-->
+<!--                    <a href="#" class="user" title="사용자">-->
+<!--                        <img src="../assets/images/icon/ico-user.svg" alt="사용자 아이콘">-->
+<!--                        <span class="user-name">-->
+<!--                            홍길동-->
+<!--                        </span>-->
+<!--                        <span>관리자</span>-->
+<!--                    </a>-->
+<!--                    <div class="user-box">-->
+<!--                        <ul>-->
+<!--                            <li>-->
+<!--                                <a href="#" title="내 정보">내 정보</a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#" title="로그아웃">로그아웃</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </header>-->
+<!--        </div> &lt;!&ndash; //dashboard-layout-header end&ndash;&gt;-->
+<!--        &lt;!&ndash; [대시보드] 컨덴츠  &ndash;&gt;-->
+<!--        <div class="dashboard-layout-contents">-->
+
+<!--            &lt;!&ndash; [대시보드] 왼쪽 컨텐츠 영역 &ndash;&gt;-->
+<!--            <div class="dashboard-layout-left">-->
+<!--                &lt;!&ndash; (레이아웃) 사이드바  &ndash;&gt;-->
+<!--                <div class="dashboard-layout-sidebar">-->
+<!--                    <ul class="layout-sidebar-tab">-->
+<!--                        <li class="active">-->
+<!--                            <a href="#menu" title="전체메뉴">전체메뉴</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#bookmark" title="내메뉴">내메뉴</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                    <div class="layout-sidebar-tabcont">-->
+<!--                        <nav class="layout-nav sidebar-tabcont" id="menu">-->
+<!--                            <ul class="dep1">-->
+<!--                                <li class="dep1-1">-->
+<!--                                    <a href="#a" title="모니터링" class="ico-lnb01">-->
+<!--                                        모니터링-->
+<!--                                    </a>-->
+<!--                                    <ul class="dep2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="모니터링">모니터링</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="EMS모니터링">EMS모니터링</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="상세모니터링">상세모니터링</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="현장CCTV">현장CCTV</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="현장모니터링">현장모니터링</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="종합관제">종합관제</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="발전량감시">발전량감시</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="장애감시">장애감시</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="운전이력">운전이력</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li> -->
+<!--                                <li class="dep1-1">-->
+<!--                                    <a href="#a" title="서비스분석" class="ico-lnb02">-->
+<!--                                        서비스분석-->
+<!--                                    </a>-->
+<!--                                    <ul class="dep2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="매출관리">-->
+<!--                                                매출관리-->
+<!--                                            </a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="서비스분석현황">서비스분석현황</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="발전량등록">발전량등록</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="기간별발전량조회">기간별발전량조회</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="월별매출현황">월별매출현황</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="매출등록">매출등록</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="SMP등록">SMP등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="REC현물단가등록">REC현물단가등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="REC일별매도단가등록">REC일별매도단가등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="매출조회">매출조회</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="손익분석">손익분석</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="비용관리">-->
+<!--                                                비용관리-->
+<!--                                            </a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="비용등록">비용등록</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="월별비용항목별조회">월별비용항목별조회</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="기간별비용조회">기간별비용조회</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="기간별IT비용조회">기간별IT비용조회</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="도시가스청구서등록">도시가스청구서등록</a>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="청구서조회">청구서조회</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="도시가스정보조회">도시가스정보조회</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li> -->
+<!--                                <li class="dep1-1">-->
+<!--                                    <a href="#a" title="운영관리" class="ico-lnb03">-->
+<!--                                        운영관리-->
+<!--                                    </a>-->
+<!--                                    <ul class="dep2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="발전소관리">발전소관리</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="연료전지발전소현황">연료전지발전소현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="발전소등록">발전소등록</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="티켓관리">종합관제</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="티켓현황">티켓현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="티켓등록">티켓등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="티켓이력">티켓이력</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="티켓통계">티켓통계</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                                <li class="dep1-1">-->
+<!--                                    <a href="#a" title="점검관리" class="ico-lnb04">-->
+<!--                                        점검관리-->
+<!--                                    </a>-->
+<!--                                    <ul class="dep2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="순회점검관리">순회점검관리</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="순회점검현황">순회점검현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="순회점검등록.html" title="순회점검등록">순회점검등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="순회점검통계">순회점검통계</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="합동안전점검현황">합동안전점검현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="합동안전검검등록">합동안전검검등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="로봇점검현황">로봇점검현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="로봇이벤트현황">로봇이벤트현황</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="전기안전관리">전기안전관리</a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="전기안전관리현황">전기안전관리현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="전기안전자료등록">전기안전자료등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="문서관리현황">문서관리현황</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="문서등록">문서등록</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                                <li class="dep1-1">-->
+<!--                                    <a href="#a" title="시스템설정" class="ico-lnb05">-->
+<!--                                        시스템설정-->
+<!--                                    </a>-->
+<!--                                    <ul class="dep2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="사용자 정보">-->
+<!--                                                사용자 정보-->
+<!--                                            </a>-->
+<!--                                            <ul class="dep3">-->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="사용자 그룹">사용자 그룹</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="사용자 등록">사용자 등록</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="메뉴권한">메뉴권한</a>-->
+<!--                                                </li>                                                -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="로그인로그">로그인로그</a>-->
+<!--                                                </li>                                        -->
+<!--                                                <li>-->
+<!--                                                    <a href="#" title="시스템로그">시스템로그</a>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </nav> &lt;!&ndash; // nav end &ndash;&gt;-->
+<!--                        <div class="layout-bookmark sidebar-tabcont" id="bookmark">-->
+<!--                            <ul class="bookmark-list">-->
+<!--                                <li>-->
+<!--                                    <a href="#" title="1Depth">1Depth</a>-->
+<!--                                    <ul class="depth2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                                <li>-->
+<!--                                    <a href="#" title="1Depth">1Depth</a>-->
+<!--                                    <ul class="depth2">-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                        <li>-->
+<!--                                            <a href="#" title="2Depth">2Depth</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div> &lt;!&ndash; // bookmark end &ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="layout-sidebar-bottom">-->
+<!--                        <img src="../assets/images/logo/logo_kicox.svg" alt="kicox logo">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>&lt;!&ndash; //dashboard-layout-left end&ndash;&gt;-->
+
+<!--            &lt;!&ndash; [대시보드] 오른쪽 컨텐츠 영역 &ndash;&gt;-->
+<!--            <div class="dashboard-layout-right">-->
+<!--                &lt;!&ndash;- (레이아웃) MDI 영역 &ndash;&gt;-->
+<!--                <div class="layout-mdi">-->
+<!--                    <ul class="toggle-group">-->
+<!--                        <li class="home on">-->
+<!--                            <a href="dashboard_ems_main.html" title="홈"></a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            순회점검등록-->
+<!--                            <a href="#" title="닫기">-->
+<!--                                <img src="../assets/images/icon/btn-mdi-close.svg" alt="닫기">-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            EMS 모니터링-->
+<!--                            <a href="#" title="닫기">-->
+<!--                                <img src="../assets/images/icon/btn-mdi-close.svg" alt="닫기">-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+                <!--- (레이아웃) Contents 영역 -->
+                <div class="layout-contents">
+                    <!-- Page Title -->
+                    <div class="page-title-wrap">
+                        <div class="left">
+                            <h2>EMS모니터링</h2>
+                            <a title="북마크" class="bookmark toggle">
+                                내메뉴
+                            </a>
+                        </div>
+                        <ul class="page-navi">
+                            <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                        </ul>
+                    </div>
+                    <!-- Select -->
+                    <div class="search-wrap">
+                        <ul>
+                            <li>
+                                <select title="지역">
+                                    <option>대구</option>
+                                </select>
+                            </li>
+                            <li>
+                                <select title="구">
+                                    <option>성서산단</option>
+                                </select>
+                            </li>                            
+                            <li>
+                                <select title="동">
+                                    <option>성서</option>
+                                </select>
+                            </li>
+                        </ul>
+                        <div class="card-btn-wrap">
+                            <div class="btn swiper-button-prev"></div>
+                            <div class="btn swiper-button-next"></div>
+                            <a title="카드설정" class="btn btn-popup-open" data-popup="popup1">
+                                <img src="/images/icon/btn-setting.svg" alt="설정아이콘">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row row-1">
+                        <div class="card-wrap swiper card-swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>INPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>LNG사용량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">Nm³</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="down"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>Elec. OUTPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>전기생산량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">kWh</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="up"></span> 2.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>Heat OUTPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>열 생산량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">Mcal</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="down"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>F/C Efficiency</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>전기효율</dt>
+                                            <dd>
+                                                45.5 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>열효율</dt>
+                                            <dd>
+                                                39.0 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>INCOME</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>예상수익</dt>
+                                            <dd>
+                                                999,999 <span class="unit">원</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="up"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>INPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>LNG사용량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">Nm³</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="down"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>Elec. OUTPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>전기생산량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">kWh</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="up"></span> 2.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>Heat OUTPUT</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>열 생산량</dt>
+                                            <dd>
+                                                9,999 <span class="unit">Mcal</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="down"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>F/C Efficiency</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>전기효율</dt>
+                                            <dd>
+                                                45.5 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>열효율</dt>
+                                            <dd>
+                                                39.0 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                                <div class="swiper-slide">
+                                    <section>
+                                        <div class="title">
+                                            <h3>INCOME</h3>
+                                            <a title="더보기" class="btn-plus"></a>
+                                        </div>
+                                        <dl>
+                                            <dt>예상수익</dt>
+                                            <dd>
+                                                999,999 <span class="unit">원</span>
+                                            </dd>
+                                        </dl>                                
+                                        <dl>
+                                            <dt>전일대비</dt>
+                                            <dd>
+                                                <span class="up"></span> 1.20 <span class="unit">%</span>
+                                            </dd>
+                                        </dl>
+                                    </section>
+                                </div>
+                            </div> <!--//swiper-wrapper end -->
+                        </div> <!--//main-card-wrap end -->
+                    </div>
+                    <div class="row row-2">
+                        <section class="wp48">
+                            <div class="title-wrap">
+                                <h3>연료전지 실시간 CCTV</h3>
+                            </div>
+                            <div class="cctv-wrap">
+                                <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp105">
+                            </div>
+                        </section>
+                        <div class="col wp48">
+                            <section>
+                                <div class="title-wrap">
+                                    <h3>시간대별 현황</h3>
+                                    <ul class="tab-links">
+                                        <li>
+                                            <a href="#tab1" title="title">title</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2" title="title">title</a>
+                                        </li>                                        
+                                        <li>
+                                            <a href="#tab3" title="title">title</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab4" title="title">title</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item h280" id="tab1">
+                                        <div class="chart-wrap">
+                                            <img src="/images/sample/sample-chart.svg" alt="">
+                                        </div>
+                                    </div>
+                                    <!-- tab1 -->
+                                    <div class="tab-item h280" id="tab2">
+                                        <div class="chart-wrap">
+                                            
+                                        </div>
+                                    </div>
+                                    <!-- tab1 -->
+                                    <div class="tab-item h280" id="tab3">
+                                        <div class="chart-wrap">
+
+                                        </div>
+                                    </div>
+                                    <!-- tab1 -->
+                                    <div class="tab-item h280" id="tab4">
+                                        <div class="chart-wrap">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="title-wrap">
+                                    <h3>발전/매출 현황</h3>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>공지사항 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wp20">
+                                            <col class="wp20">
+                                            <col class="wp20">
+                                            <col class="wp20">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>전기</th>
+                                                <th>열</th>
+                                                <th>수익(천원)</th>
+                                                <th>종효율(평균)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>일간</th>
+                                                <td>20 MWh</td>
+                                                <td>14 Mcal</td>
+                                                <td>76 천원</td>
+                                                <td>84.9 %</td>
+                                            </tr>
+                                            <tr>
+                                                <th>연간</th>
+                                                <td>20 MWh</td>
+                                                <td>14 Mcal</td>
+                                                <td>76 천원</td>
+                                                <td>84.9 %</td>
+                                            </tr>
+                                            <tr class="sum">
+                                                <th>누적</th>
+                                                <td>20 MWh</td>
+                                                <td>14 Mcal</td>
+                                                <td>76 천원</td>
+                                                <td>84.9 %</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div> <!--//layout-contents end -->
+                <footer>
+                    <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+                </footer>
+            </div> <!-- //dashboard-layout-right end-->
+            
+        </div> <!-- //dashboard-layout-contents end-->
+        <!-- [대시보드] 팝업  -->
+        <div class="dashboard-layout-popup">
+            <div class="popup-overlay"></div>
+            <div class="popup-wrapper wp80" id="popup1">
+                <div class="popup-title">
+                    <h3>카드 수정</h3>
+                    <a title="팝업닫기" class="btn-popup-close">
+                        <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="card-wrap card-edit-wrap">
+                        <div class="gesture-box">
+                            <img src="/images/icon/ico-gesture.png" alt="제스처 안내">
+                        </div>
+                        <section>
+                            <div class="title">
+                                <h3>INPUT</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>LNG사용량</dt>
+                                <dd>
+                                    9,999 <span class="unit">Nm³</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="down"></span> 1.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section>
+                            <div class="title">
+                                <h3>Elec. OUTPUT</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>전기생산량</dt>
+                                <dd>
+                                    9,999 <span class="unit">kWh</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="up"></span> 2.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section>
+                            <div class="title">
+                                <h3>Heat OUTPUT</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>열 생산량</dt>
+                                <dd>
+                                    9,999 <span class="unit">Mcal</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="down"></span> 1.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section>
+                            <div class="title">
+                                <h3>F/C Efficiency</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>전기효율</dt>
+                                <dd>
+                                    45.5 <span class="unit">%</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>열효율</dt>
+                                <dd>
+                                    39.0 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section>
+                            <div class="title">
+                                <h3>INCOME</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>예상수익</dt>
+                                <dd>
+                                    999,999 <span class="unit">원</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="up"></span> 1.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        
+                        <section>
+                            <div class="title">
+                                <h3>Heat OUTPUT</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>열 생산량</dt>
+                                <dd>
+                                    9,999 <span class="unit">Mcal</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="down"></span> 1.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section>
+                            <div class="title">
+                                <h3>F/C Efficiency</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>전기효율</dt>
+                                <dd>
+                                    45.5 <span class="unit">%</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>열효율</dt>
+                                <dd>
+                                    39.0 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                        <section class="card-hidden">
+                            <div class="title">
+                                <h3>INCOME</h3>
+                                <a title="숨김" class="btn-hidden"></a>
+                            </div>
+                            <dl>
+                                <dt>예상수익</dt>
+                                <dd>
+                                    999,999 <span class="unit">원</span>
+                                </dd>
+                            </dl>                                
+                            <dl>
+                                <dt>전일대비</dt>
+                                <dd>
+                                    <span class="up"></span> 1.20 <span class="unit">%</span>
+                                </dd>
+                            </dl>
+                        </section>
+                    </div> <!--//swiper-wrapper end -->
+                </div>
+                <div class="popup-button">
+                    <button class="btn-popup-close">취소</button>
+                    <button class="btn-navy">저장</button>
+                </div>
+            </div>
+        </div> <!-- //dashboard-layout-popup end -->
+
+    </div> <!-- //page-wrapper end-->
+
+    <script>
+        var swiper = new Swiper(".card-swiper", {
+            slidesPerView: 5,            
+            spaceBetween: 20,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+<!--</body>-->
+</th:block>
+</html>

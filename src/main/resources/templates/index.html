@@ -26,14 +26,30 @@
 <div class="page-wrapper sub-page">
     <div class="dashboard-layout-header">
         <header>
-            <div class="logo">
-                <h1><img src="/images/logo/logo.svg" alt="로고"></h1>
+            <div class="left">
+                <div class="logo">
+                    <h1><img src="/images/logo/logo.svg" alt="로고"></h1>
+                </div>
+                <a href="#" title="연료전지 전용 생성형 AI GPT" class="btn-aigpt">
+                    <img src="/images/icon/ico-gpt.svg" alt="gpt 아이콘">
+                    연료전지 전용 생성형 AI GPT
+                </a>
             </div>
-            <div class="utill">
-                <div class="profiles_txt" id="notify_text"></div>
-                <div class="profiles_txt">
-                    <span th:text="${ profiles }"></span><input type="hidden" id="default_menu_code"
-                                                                th:value="${default_menu_code}"/>
+            <div class="right">
+                <div class="info">
+                    <dl>
+                        <dt>REC 현물정산가격정보</dt>
+                        <dd>
+                            <span>평균</span>
+                            <p>74,949</p>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt>SMP정보</dt>
+                        <dd>
+                            135.69
+                        </dd>
+                    </dl>
                 </div>
                 <div class="weather">
                     <div class="wt-main">
@@ -62,6 +78,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- 사용자 로그인 상태-->
                 <a class="user" title="사용자">
                     <img src="/images/icon/ico-user.svg" alt="사용자 아이콘">
@@ -132,11 +149,13 @@
                                         모니터링
                                     </a>
                                     <ul class="dep2">
-                                        <li>
+                                        <li class="active">
                                             <a href="#" title="모니터링">모니터링</a>
-                                            <ul class="dep3">
-                                                <li>
-                                                    <a href="#" title="EMS모니터링">EMS모니터링</a>
+                                            <ul class="dep3 documents">
+                                                <li class="on">
+                                                    <a href="#" menuurl="/gui/wm_dashboard_ems" data-manual="false"
+                                                       data-bookmark="false" data-objid="wm_dashboard_ems"
+                                                       title="EMS모니터링">EMS모니터링</a>
                                                 </li>
                                                 <li>
                                                     <a href="#" title="상세모니터링">상세모니터링</a>
@@ -285,12 +304,12 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dep1-1 active">
+                                <li class="dep1-1">
                                     <a href="#a" title="점검관리" class="ico-lnb04">
                                         점검관리
                                     </a>
-                                    <ul class="dep2" style="display: block;">
-                                        <li class="active">
+                                    <ul class="dep2">
+                                        <li>
                                             <a href="#" title="순회점검관리">순회점검관리</a>
                                             <ul class="dep3 documents">
                                                 <li>
@@ -317,7 +336,7 @@
                                         </li>
                                         <li>
                                             <a href="#" title="전기안전관리">전기안전관리</a>
-                                            <ul class="dep3 documents" >
+                                            <ul class="dep3 documents">
                                                 <li>
                                                     <a href="#" menuurl="/gui/wm_elecsafe_input" data-manual="false"
                                                        data-bookmark="false" data-objid="wm_elecsafe_input"
@@ -463,15 +482,15 @@
         //i18n.initializeCommonData(lang_cd);
         i18n.initializeMenuData(lang_cd);
 
-        //let default_menu = 'wm_dashboard_summary';
-        let default_menu = $('#default_menu_code').val();
+        let default_menu = 'wm_dashboard_ems';
+        // let default_menu = $('#default_menu_code').val();
         nthTabs = $('#main-tabs').nthTabs();
 
 
         if (default_menu != '') {
             nthTabs.addTab({
                 id: default_menu,
-                title: 'Main',
+                title: 'EMS모니터링',
                 url: '/gui/' + default_menu + '/default',
                 active: true,
                 allowClose: false

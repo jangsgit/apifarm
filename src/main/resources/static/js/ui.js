@@ -55,8 +55,6 @@ $(document).ready(function() {
     // 초기에 첫 번째 탭을 활성화
     $(".tab-item:first").show();
     $(".tab-links li:first").addClass("active");
-
-
     
 });
 
@@ -73,6 +71,7 @@ $(document).ready(function() {
         $('.popup-wrapper').fadeOut(200);
     });
 });
+
 
 /*=================================================================================
  * UI 공통
@@ -104,7 +103,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('textarea').on('input', function() {
         const textLength = $(this).val().length;
-        $(this).next('.text-count').text(`${textLength}/200`);
+        $(this).next('.text-count').text(`${textLength}/100`);
     });
 });
 
@@ -147,7 +146,7 @@ $(document).ready(function() {
                     const li = $('<li>').html(`
                         <p>${file.name} <span>(${fileSize})</span></p>
                         <a href="#" title="삭제" class="btn-file-delete">
-                            <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                            <img src="../assets/images/icon/ico-filedelete.svg" alt="삭제아이콘">
                         </a>
                     `);
                     $fileList.append(li);
@@ -161,13 +160,6 @@ $(document).ready(function() {
             const li = $(this).closest('li');
             const fileName = li.find('p').text().split(' (')[0];
             uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
-
-            $('input[type="file"][multiple]').each(function() {
-                const files = Array.from(this.files);
-                const remainingFiles = files.filter(file => file.name !== fileName);
-
-            });
-
             li.remove();
             updateFileCount();
         });
@@ -190,6 +182,37 @@ $(document).ready(function() {
     });
 });
 
+/*     cardlist 선택  */
+$(document).ready(function () {
+    // Click event to toggle 'on' class
+    $('.card-edit-wrap section').click(function () {
+        $('.card-edit-wrap section').removeClass('on');
+        $(this).addClass('on');
+    });
+
+    // Drag and drop functionality
+    $('.card-edit-wrap').sortable({
+        items: 'section',
+        placeholder: 'ui-state-highlight',
+        helper: 'clone', // Using a clone of the dragged element for better performance
+        tolerance: 'pointer', // Improves the drop detection accuracy
+        start: function(event, ui) {
+            $(".gesture-box").hide();
+        },
+        stop: function (event, ui) {
+            // When dragging stops, remove 'on' class from all sections
+            $('.card-edit-wrap section').removeClass('on');
+            // Add 'on' class to the dragged section
+            ui.item.addClass('on');
+        }
+    });
+
+    // Click event to toggle 'card-hidden' class
+    $('.btn-hidden').click(function (e) {
+        e.stopPropagation(); // Prevent the click event from bubbling up to the section
+        $(this).closest('section').toggleClass('card-hidden');
+    });
+});
 
 /*=================================================================================
  * Layout 공통
