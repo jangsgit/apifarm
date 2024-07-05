@@ -134,11 +134,11 @@ public class InspecController {
         }
 
         tbRp710dto.setSpworkcd("001");
-        tbRp710dto.setSpworknm("엑타스");
+        tbRp710dto.setSpworknm("대구");
         tbRp710dto.setSpcompcd("001");
-        tbRp710dto.setSpcompnm("발전산단명");
+        tbRp710dto.setSpcompnm("대구성서공단");
         tbRp710dto.setSpplancd("001");
-        tbRp710dto.setSpplannm("발전소명");
+        tbRp710dto.setSpplannm("KT대구물류센터 연료전지발전소");
         tbRp710dto.setCheckdt(checkdtconvertvalue);
         tbRp710dto.setCheckno(formattedValue);
         tbRp710dto.setCheckstdt(checkstdt);

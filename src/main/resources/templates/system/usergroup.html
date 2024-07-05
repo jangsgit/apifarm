@@ -1,319 +1,605 @@
-<html layout:decorate="~{layout_page}">
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
 
 <th:block layout:fragment="content">
 
-<div class="content_wrap">
-    
-    <section>
-        <div class="title_box">
-            <div class="left_align">
-                <h3 data-labelCd="사용자 그룹">사용자 그룹</h3>
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>사용자그룹</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
             </div>
-            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
-            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>시스템설정</li>
+                <li>사용자정보</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                     <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="width: 470px"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>사용자 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        코드
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="코드">
+                                </td>
+                                <th>
+                                    <label for="supplier2">
+                                        그룹명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="그룹명">
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                    설명
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="description" name="description" maxlength="100" class="wp100" placeholder="설명">
+                                </td>
+                            </tr>
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>점검일지 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">
+                                    등록일자
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="date" id="date6" name="" value="2024-06-27">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popuptext1">
+                                    점검자
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear"><input type="text" id="popuptext1" class="wp60" placeholder="점검자"><span class="btn-clear">×</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popuptext2">
+                                    점검장소
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear"><input type="text" id="popuptext2" class="wp100" placeholder="점검장소"><span class="btn-clear">×</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+            </div>
+
         </div>
 
-    </section>
-
-    <section>
-                <div class="grid_box">
-                    <div class="title_box">
-                        <span class="right_align rpt" data-labelCd="사용자 그룹 목록">사용자 그룹 목록</span>
-                    </div>
-                            <div class="h-500" data-ax5grid="usergroup-grid" ></div>
-                </div>
-
-    </section>
-
-    <section>
-            <div class="title_box">
-                <span class="right_align rpt" data-labelCd="상세정보">상세정보</span>
-                <button type="button" class="btn-default" id="btnNew"><i class="fas fa-plus"></i></button>
-                <button type="button" class="btn-cancel" id="btnDel"><i class="fas fa-trash"></i></button>
-                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
-            </div>
-        <form id="usergroupForm">
-            <div class="table_box sub">
-                <div class="row">
-                    <input type="hidden" id="id" name="id" value="" />
-
-                    <div class="col-6 col-md-3 col-lg-3" >
-                        <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelCd="코드">코드</span>
-                            </div>
-                            <input type="text" class="form-control2" id="code" name="code" disabled required/>
-                        </div>
-                    </div>
-
-                    <div class="col-6 col-md-3 col-lg-3" >
-                        <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7" data-labelCd="그룹명">그룹명</span>
-                            </div>
-                            <input type="text" class="form-control2" id="name" name="name" disabled required/>
-                        </div>
-                    </div>
-                    
-
-                    <div class="col-12">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_t7_area" data-labelCd="설명">설명</span>
-                            </div>
-                            <textarea class="form-control2" id="description" name="description" disabled></textarea>
-                        </div>
-                    </div>
+    </div>
 
 
-                </div>
-            </div>
-        </form>
-    </section>
-</div>
+
+
 
 
 </th:block>
-
 <th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
-<script type="text/javascript">
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let selectedFiles = [];
 
 
-    class UserGroupPage {
-        constructor() {
-            this.grid = null;
-            this.init();
+        function test(files){
+            console.log('파일테스트', files);
+            const fileList = document.getElementById('upload-filelist');
+            for(let i=0; i < files.length; i++){
+                selectedFiles.push(files[i]);
+            }
         }
 
-        init() {
-            let _this = this;
-            let config = {
-                target: $('[data-ax5grid="usergroup-grid"]'),
-                sortable: true,
-                frozenColumnIndex: 0, // 열 고정
-                frozenRowIndex: 0,    // 행 고정
-                showLineNumber: false, // 열의 번호 보이기 여부
-                showRowSelector: false,  // checkbox(선택) 보이기 여부
-                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
-                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                multiSort: true, // 다중 정렬 여부
-                header: {
-                    align: 'center',  // 헤더의 기본 정렬
-                    columnHeight: 38  // 헤더 높이
+        function getTextValue(e) {
+            // 기본 동작 (예: 링크 이동)을 막습니다.
+            e.preventDefault();
+
+            // e.currentTarget은 클릭된 btn-file-delete 요소를 가리킵니다.
+            const button = e.currentTarget;
+            // 부모 li 요소를 찾습니다.
+            const liElement = button.closest('li');
+            // li 요소 내의 p 태그를 찾습니다.
+            const pElement = liElement.querySelector('p');
+            // p 태그의 텍스트 내용을 가져옵니다.
+            const textValue = pElement.textContent;
+
+            // 텍스트 값을 콘솔에 출력합니다.
+            console.log(textValue);
+
+            // 필요에 따라 다른 작업을 수행할 수 있습니다.
+        }
+
+
+
+
+
+
+        function closePopup(){
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';
+        }
+
+        function showPopup(){
+
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'block';
+            modalOpen.style.display = 'block';
+            /*var popup = document.getElementById('popup1');
+
+            popup.style.display = 'block';*/
+        }
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/system/usergroup/read',
+                type: 'GET',
+                data: {
+
                 },
-                body: {
-                    columnHeight: 25, // body의 기본 높이
-                    onClick: function (e) {
-                        //e.colIndex
-                        //e.dindex
-                        //c.value
-                        //e.column
-                        //e.item
-                        //e.list
-                        _this.grid.select(this.dindex);
-                        _this.showDetailUserGroup(e.item.id);
-                    },
-                },
-                page: {
-                    display: true,  // 페이징 보이기 여부
-                    statusDisplay: true,
-                },
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
                 columns: [
-                    { key: 'code', label: '코드', width: 100, align: 'center', sortable: false },
-                    { key: 'name', label: '그룹명', width: 250, align: 'left' },
-                    { key: 'description', label: '설명', width: 350, align: 'left', sortable: false },
-                    //{ key: 'created', label: '생성일', width: 150, align: 'center', sortable: false },
-                ]
-            };
+                    { binding: 'code', header: '코드', width: 140, align: 'center' },
+                    { binding: 'name', header: '그룹명', width: 140, align: 'center' },
+                    { binding: 'description', header: '설명', width: 140, align: 'center' },
 
-            this.grid = new ax5.ui.grid(config);
-        }
+                ],  //홀짝 로우 음영주기
+                loadedRows: function (s, e) {
 
-        setButtonState() {
-            let pk = $('#id').val();
-            $('#btnNew').prop('disabled', false);
-            
+                    console.log(s.cells);
 
-            if (pk) {
-                $('#btnDel').prop('disabled', false);
-                $('#btnSave').prop('disabled', false);
-            } else {
-                $('#btnDel').prop('disabled', true);
-                $('#btnSave').prop('disabled', true);
-            }
-        }
-    
-        showDetailUserGroup(idx) {
-            let param = { 'id': idx, "action": 'detail' };
-            let url = '/api/system/usergroup';
-            let result = AjaxUtil.getSyncData(url+'/detail', param);
-            if (result.success) {
-                FormUtil.BindDataForm(result.data, $('#usergroupForm'));
-                $('#description').text(result.data.description);
+                    for (var i = 0; i < s.rows.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
 
-                //if (result.disabled == false) {
-                //    $('#disabled').prop('checked', true);
-                //}
-            }
-
-            //page.setButtonDisable(false, false, false);
-            page.setButtonState();
-        }
-
-        searchDataBind() {
-            let _this = this;
-
-            let url = '/api/system/usergroup';
-
-            let result = AjaxUtil.getSyncData(url+'/read', '');
-            if (result != null) {
-                let recordsTotal = result.data.length;
-                _this.grid.setData({
-                    list: result.data,
-                    page: {
-                        display: true,
-                        totalElements: recordsTotal,
                     }
-                });
-            }
+                    for (var i = 0; i < s.cells.length; i++) {
+                        var row = s.rows[i];
+                        if(i % 2 === 0){
+                            row.cssClass = 'high-value';
+                        }
+                        var item = row.dataItem;
 
-            //page.setButtonDisable(false, true, true);
-            page.setButtonState();
-        }//searchDataBind
-
-        saveUserGroup() {
-            let _this = this;
-            let url = '/api/system/usergroup/save';
-            
-            //let data = $('#usergroupForm').serialize();
-            let data = FormUtil.extractForm($('#usergroupForm'));
-
-            let fnSuccess = function (res) {
-                if (res.success) {
-                    Notify.success('저장되었습니다'); // Notification
-                    _this.searchDataBind();
-                } else if (!res.success) {
-                    Alert.alert('', res.message);
-                }
-
-                $('#id').val('');
-                $('#usergroupForm')[0].reset();
-                $('#description').text('');
-
-                $('#usergroupForm #code').attr('readonly', false);
-                $('#usergroupForm input').each(function () {
-                    if (!$(this).is(':disabled')) {
-                        $(this).attr('disabled', 'disabled');
                     }
-                });
-
-                $('#usergroupForm textarea').each(function () {
-                    if (!$(this).is(':disabled')) {
-                        $(this).attr('disabled', 'disabled');
-                    }
-                });
-
-                _this.setButtonState();
-            };
-           AjaxUtil.postAsyncData(url, data, fnSuccess);
-        }
-
-        deleteUserGroup() {
-            let _this = this;
-            let url = '/api/system/usergroup/delete';
-            let id = $('#usergroupForm').find('#id').val();
-            let data = { id: id };
-            let fnSuccess = function (res) {
-                if (res.success) {
-                    Notify.success('삭제되었습니다'); // Notification
-                    _this.searchDataBind();
-
-                } else if (!res.success) {
-                    Alert.alert('', res.message);
-                }
-
-                $('#id').val('');
-                $('#usergroupForm')[0].reset();
-                $('#description').text('');
-
-                $('#usergroupForm #code').attr('readonly', false);
-                $('#usergroupForm input').each(function () {
-                    if (!$(this).is(':disabled')) {
-                        $(this).attr('disabled', 'disabled');
-                    }
-                });
-
-                $('#usergroupForm textarea').each(function () {
-                    if (!$(this).is(':disabled')) {
-                        $(this).attr('disabled', 'disabled');
-                    }
-                });
-
-                _this.setButtonState();
-            };
-
-            AjaxUtil.postAsyncData(url, data, fnSuccess);
-
-        }
-    }
-
-    let page = null;
-
-    $(document).ready(function (e) {
-        page = new UserGroupPage();
-        page.searchDataBind();
-
-        $('#btn_search').click(function (ex) {
-            page.searchDataBind();
-        });
-
-
-        $('#btnNew').click(function (e) {
-
-            $('#id').val('');
-            $('#usergroupForm')[0].reset();
-            $('#description').text('');
-
-            $('#usergroupForm #code').attr('readonly', false);
-            $('#usergroupForm input').each(function () {
-                if ($(this).is(':disabled')) {
-                    $(this).removeAttr('disabled');
-                }
+                },
+                itemsSource: viewdata
             });
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: () => {
 
-            $('#usergroupForm textarea').each(function () {
-                if ($(this).is(':disabled')) {
-                    $(this).removeAttr('disabled');
                 }
-            });
-            //page.setButtonDisable(true, false, true);
-            page.setButtonState();
-            $('#btnSave').prop('disabled', false);
+            })
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+        }
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        <!-- 점검자 추가 버튼 이벤트-->
+        function addInputField(button) {
+            // 새로운 td 요소를 생성합니다.
+            var newTd = document.createElement('div');
+            newTd.className = 'input-btnbox';
+
+            // 새로운 input 요소를 생성합니다.
+            var newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.className = 'wp100';
+            newInput.placeholder = '점검자';
+            newInput.name = 'checkusr'
+            newInput.maxLength = 5;
+
+            // 삭제 버튼을 생성합니다.
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = '점검자 삭제';
+            deleteButton.onclick = function() {
+                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+            };
+            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
+            deleteButton.style.color = 'red';
+            deleteButton.style.marginTop = '5px';
+            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
+            newTd.appendChild(newInput);
+            newTd.appendChild(deleteButton);
+
+            // 클릭된 버튼의 부모 td 요소를 찾습니다.
+            var parentTd = button.parentElement;
+
+            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+        }
+
+        function deleteInputField(inputField) {
+            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+            var tdToDelete = inputField.parentElement;
+            tdToDelete.parentElement.removeChild(tdToDelete);
+        }
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+        function filevalueinit (param){
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchusr' : $('#searchusr').val(),
+                'searchfrdate': $('#searchfrdate').val(),
+                'searchtodate': $('#searchtodate').val()
+            }
+
+            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            if(result.success){
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+            var cnt = 1;
+            for (var i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    rownum: inspecDto[i]["rownum"],
+                    spworknm: inspecDto[i]["spworknm"],
+                    spcompnm: inspecDto[i]["spcompnm"],
+                    spplannm: inspecDto[i]["spplannm"],
+                    checkdt: inspecDto[i]["checkdt"],
+                    checkusr: inspecDto[i]["checkusr"],
+                    checkarea: inspecDto[i]["checkarea"],
+                    checktmdt: inspecDto[i]["checktmdt"],
+
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+            var cols = new wijmo.grid.Column();
 
 
-            //$('#usergroupForm').reset();
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spworknm';
+            cols.header = '지역명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spcompnm';
+            cols.header = '산단명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spplannm';
+            cols.header = '발전소명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkdt';
+            cols.header = '등록일자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkusr';
+            cols.header = '점검자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkarea';
+            cols.header = '점검장소';
+            cols.align = "center";
+            cols.width = 200;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checktmdt';
+            cols.header = '점검시간';
+            cols.align = "center";
+            cols.width = 260;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'downloads';
+            cols.header = '다운로드';
+            cols.align = "center";
+            cols.width = 160;
+            cols.cellTemplate = '<a title="다운로드" class="btn-filedown">다운로드</a>'
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'downloads';
+            cols.header = '업로드';
+            cols.align = "center";
+            cols.width = 170;
+            cols.cssClass = "downloads"
+            cols.cellTemplate = '<a title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
+                '                                                        업로드\n' +
+                '                                                    </a>'
+            theGrid.columns.push(cols);
+
+
+
+
+
+
+        }
+
+
+
+        $(document).ready(function (e) {
+
+
+            $('#btnSave').click(function (e){
+
+                console.log('selectedFiles: ', selectedFiles);
+
+                Alert.confirm('', '저장하시겠습니까?', function() {
+
+                        let fileInput = document.getElementById('fileInput1');
+                        let files = fileInput.files;
+                        let formData = new FormData();
+
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append('filelist', files[i]);
+                        }
+
+                        const randomString = generateRandomStringWithDate();
+
+                        var inputs = document.querySelectorAll('input[name="checkusr"]');
+                        var values = [];
+
+                        inputs.forEach(function (input) {
+                            values.push(input.value);
+
+                        })
+
+                        var checkusrString = values.join(',');
+
+
+                        // 다른 데이터를 FormData에 추가합니다.
+                        formData.append('supplier', $('#supplier').val());
+                        formData.append('checkdt', $('#checkdt').val());
+                        formData.append('checkstdt', $('#checkstdt').val());
+                        formData.append('checkendt', $('#checkendt').val());
+                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+                        formData.append('checkarea', $('#checkarea').val());
+                        formData.append('checkitem', $('#checkitem').val());
+                        formData.append('checkplan', $('#checkplan').val());
+                        formData.append('randomuuid', randomString);
+                        formData.append('_csrf', $('[name=_csrf]').val());
+
+
+                        $.ajax({
+                            url: '/api/inspec_report/save',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                            success: function (response) {
+                                if (response.success) {
+                                    Alert.alert('', response.message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Alert.alert('', '에러가발생하였습니다.');
+                            }
+                        });
+
+
+                    },
+                    function () {
+                    }
+                )
+            })
+
 
         });
-
-        $('#btnSave').click(function (e) {
-            Alert.confirm('', 
-                '저장하시겠습니까?',
-                function () { page.saveUserGroup() },
-                function () { }
-            );
-        });
-
-        $('#btnDel').click(function (e) {
-            Alert.confirm('', 
-                '삭제하시겠습니까?',
-                function () { page.deleteUserGroup() },
-                function () { }
-            );
-        });
-    });
-</script>
-
-
+    </script>
 </th:block>
+
 </html>
