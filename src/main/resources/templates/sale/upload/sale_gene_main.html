@@ -4,6 +4,19 @@
         .wj-header {
             text-align: center !important;
         }
+
+        #theGrid2.wj-flexgrid .wj-cell {
+            padding: 12px;
+
+        }
+        #theGrid2.wj-flexgrid .downloads {
+
+            padding-top: 0px;
+        }
+
+        /*#theGrid, #theGrid2 {*/
+        /*    overflow-x: auto;  !* 수평 스크롤바가 필요할 때 나타나게 설정 *!*/
+        /*}*/
     </style>
 </head>
 <th:block layout:fragment="content">
@@ -179,7 +192,7 @@
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem1"></p>
-                        <div id="theGrid1" style="max-height: 600px;"></div>
+                        <div id="theGrid" style="max-height: 600px; max-width: " ></div>
                     </div>
 <!--                    <div class="btn-wrap">-->
 <!--                        <div class="center">-->
@@ -349,7 +362,7 @@
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
     <script type="text/javascript">
 
-        var theGrid1;
+        var theGrid;
         var theGrid2;
         var viewdata;
         var viewdata1;
@@ -382,7 +395,7 @@
 
         function updateGrid(data) {
             viewdata.sourceCollection = data; // wijmo CollectionView를 사용하는 경우
-            theGrid1.refresh(); // wijmo 그리드 업데이트
+            theGrid.refresh(); // wijmo 그리드 업데이트
         }
 
         document.querySelector('.popup-button button').addEventListener('click', function() {
@@ -459,7 +472,7 @@
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
             // 목록 탭 그리드 초기화
-            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 isReadOnly: true,
@@ -569,7 +582,7 @@
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid1.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
             theGrid2.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -626,8 +639,8 @@
 
             }
 
-            theGrid1.columns.clear();
-            theGrid1.autoGenerateColumns = false;
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
             viewdata.sourceCollection = inspecData;
 
             var cols = new wijmo.grid.Column();
@@ -635,56 +648,56 @@
             cols.header = '순번';
             cols.align = "center";
             cols.width = 60;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'spworknm';
             cols.header = '지역명';
             cols.align = "center";
             cols.width = 140;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'spcompnm';
             cols.header = '산단명';
             cols.align = "center";
             cols.width = 140;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'spplannm';
             cols.header = '발전소명';
             cols.align = "center";
             cols.width = 140;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'checkdt';
             cols.header = '등록일자';
             cols.align = "center";
             cols.width = 140;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'checkusr';
             cols.header = '점검자';
             cols.align = "center";
             cols.width = 140;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'checkarea';
             cols.header = '점검장소';
             cols.align = "center";
             cols.width = 200;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
             cols = new wijmo.grid.Column();
             cols.binding = 'checktmdt';
             cols.header = '점검시간';
             cols.align = "center";
             cols.width = 260;
-            theGrid1.columns.push(cols);
+            theGrid.columns.push(cols);
 
 
 
