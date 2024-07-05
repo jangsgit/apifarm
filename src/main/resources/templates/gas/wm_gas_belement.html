@@ -127,7 +127,7 @@
                             <!--                                </li>-->
                             <li>
                                 <!--                                    <a href="#"  class="btn btn-save" title="등록">-->
-                                <a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open"
+                                <a title="업로드" onclick="showPopup()" class="btn btn-popup-open"
                                    data-popup="popup1">
                                     <img src="/images/icon/ico-plus.svg" alt="엑셀 아이콘">
                                     등록
@@ -313,7 +313,7 @@
         <div class="popup-wrapper w700" id="popup1">
             <div class="popup-title">
                 <h3>공급가스 분석결과 업로드 </h3>
-                <a href="#" title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
                     <img src="/images/icon/btn-popup-close.svg" alt="닫기">
                 </a>
             </div>
@@ -366,7 +366,7 @@
                                 <div id="uploadComponent2" class="upload-component">
                                     <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                        <a class="btn" title="파일업로드">파일업로드</a>
                                         <input type="file" id="fileInput2" class="fileInput" multiple="">
                                         <p>Maximun upload file size <span>1GiB</span></p>
                                     </div>
@@ -374,7 +374,7 @@
                                         <div class="title">
                                             <span> * 업로드시 PDF 파일이어야 합니다.</span>
                                             <h5>Files (0)</h5>
-                                            <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
                                         </div>
                                         <ul class="filelist">
                                         </ul>
@@ -482,28 +482,10 @@
                     {binding: 'y6', header: '비중', width: 170, align: 'center', aggregate: 'Sum'},
                     {binding: 'y7', header: 'CH4농도', width: 170, align: 'center', aggregate: 'Sum'},
                     {binding: 'y8', header: '가중평균', width: 170, align: 'center', aggregate: 'Sum'},
-                    {binding: 'y9', header: '비고', width: 175, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y9', header: '비고', width: 180, align: 'center', aggregate: 'Sum'},
                 ],
                 //홀짝 로우 음영주기
-                loadedRows: function (s, e) {
 
-                    for (var i = 0; i < s.rows.length; i++) {
-                        var row = s.rows[i];
-                        if (i % 2 === 0) {
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                    for (var i = 0; i < s.cells.length; i++) {
-                        var row = s.rows[i];
-                        if (i % 2 === 0) {
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                },
                 itemsSource: viewdata
 
             });
