@@ -71,7 +71,7 @@
 
     .wj-cell.high-value {
 
-        background: rgb(232,231,233);
+        /*background: rgb(232,231,233);*/
 
     }
 
@@ -80,6 +80,8 @@
         font-size: 15px;
         font-weight: normal;
         line-height: 150%;
+
+        background-color: transparent;
     }
 
 
@@ -89,6 +91,19 @@
         color: black;
         font-weight:bold;
     }
+
+    .wj-cells .wj-cell.wj-state-multi-selected {
+        background-color: #E5F9F9;
+        color: black;
+    }
+
+    .selected-row .wj-cell {
+        background-color: #E5F9F9;
+        color: black;
+    }
+
+
+
 
     /*모달 팝업 영역 스타일링*/
     .modal {
@@ -175,6 +190,23 @@
         });
 
     });
+
+
+    // 셀 클릭 이벤트 처리
+    // $(document).on('click', '.wj-flexgrid .wj-cell', function() {
+    //     var $row = $(this).closest('.wj-row');
+    //     $row.toggleClass('selected-row');
+    // });
+    $(document).on('click', '.wj-flexgrid .wj-cell', function() {
+        var $grid = $(this).closest('.wj-flexgrid');
+        // 그리드 내에 체크박스가 있는지 확인
+        if ($grid.find('input[type="checkbox"]').length === 0) {
+            var $row = $(this).closest('.wj-row');
+            $row.toggleClass('selected-row');
+        }
+    });
+
+
 </script>
 <th:block layout:fragment="scripts"></th:block>
 </body>
