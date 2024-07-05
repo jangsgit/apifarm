@@ -1,6 +1,6 @@
-package mes.app.inspec;
+package mes.app.actas_inspec;
 
-import mes.app.inspec.service.ElecSafeService;
+import mes.app.actas_inspec.service.ElecSafeService;
 import mes.domain.entity.actasEntity.TB_RP750;
 import mes.domain.entity.actasEntity.TB_RP750_PK;
 import mes.domain.entity.User;

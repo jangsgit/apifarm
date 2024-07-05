@@ -95,10 +95,6 @@ public class DocInputController {
             File saveFile = new File(path + File.separator + file_uuid_name);
             mFile.transferTo(saveFile);
 
-
-
-
-
             tbRp760dto.setFilepath(saveFilePath);
             tbRp760dto.setFilesvnm(file_uuid_name);
             tbRp760dto.setFileextns(ext);
