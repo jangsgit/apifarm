@@ -1,7 +1,11 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<style>
-
-</style>
+<head>
+    <style>
+        .wj-header {
+            text-align: center !important;
+        }
+    </style>
+</head>
 <th:block layout:fragment="content">
 
     <div class="layout-contents">
@@ -172,6 +176,7 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
+
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem1"></p>
                         <div id="theGrid1" style="max-height: 600px;"></div>
@@ -350,6 +355,39 @@
         var viewdata1;
         var viewdata2;
 
+        // 엑셀파일 업로드 / 조회
+        function uploadExcelAndLoadData() {
+            let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID 가정
+            formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
+
+            $.ajax({
+                url: '/api/upload/excel', // 서버의 엑셀 업로드 API 주소
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.success) {
+                        alert('파일이 성공적으로 업로드되었습니다.');
+                        updateGrid(response.data); // 응답에서 데이터를 받아 그리드 업데이트
+                    } else {
+                        alert('업로드 실패: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('업로드 중 서버와의 통신 오류가 발생했습니다.');
+                }
+            });
+        }
+
+        function updateGrid(data) {
+            viewdata.sourceCollection = data; // wijmo CollectionView를 사용하는 경우
+            theGrid1.refresh(); // wijmo 그리드 업데이트
+        }
+
+        document.querySelector('.popup-button button').addEventListener('click', function() {
+            uploadExcelAndLoadData(); // 업로드 및 데이터 로딩 함수 호출
+        });
 
         function closePopup(){
             const modal2 = document.querySelector('.modal');
@@ -374,22 +412,45 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+
+            // 하드코딩
             let data2 = [];
+            for (let i = 1; i <= 20; i++) {
+                data2.push({
+                    rownum: `${i < 20 ? '0' + i : i}`,
+                    standdt: `2023-09-${i < 20 ? '0' + i : i}`,
+                    powerid: 'AJ38',
+                    powernm: 'KT대구물류센터 연료전지',
+                    chargedv: '방전',
+                    mevalue01: 652288, mevalue02: 651565, mevalue03: 651565, mevalue04: 652288,
+                    mevalue05: 652288, mevalue06: 651565, mevalue07: 652288, mevalue08: 653012,
+                    mevalue09: 652288, mevalue10: 651565, mevalue11: 653012, mevalue12: 651565,
+                    mevalue13: 650842, mevalue14: 650119, mevalue15: 650842, mevalue16: 652288,
+                    mevalue17: 651565, mevalue18: 653012, mevalue19: 652288, mevalue20: 651565,
+                    mevalue21: 651565, mevalue22: 651565, mevalue23: 651565, mevalue24: 652288,
+                    mevaluet: 15644793,
+                    indatem: '2024-09-10',
+                    inusernm : '홍길동',
+                    duedate : '2024-09-10'
+                });
+            }
+
+            // let data2 = [];
             let searchusr = $('#searchusr').val();
 
             // inspec -> gene으로 수정하기
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : searchusr
-                },
-                async: false,
-                success: function(data){
-                    console.log('wijmo', data.data);
-                    data2 = data.data;
-                }
-            })
+            // $.ajax({
+            //     url: '/api/inspec_report/read',
+            //     type: 'GET',
+            //     data: {
+            //         'searchusr' : searchusr
+            //     },
+            //     async: false,
+            //     success: function(data){
+            //         console.log('wijmo', data.data);
+            //         data2 = data.data;
+            //     }
+            // })
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -402,22 +463,22 @@
                     //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                     { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
                     { binding: 'standdt', header: '일자', width: 100, align: 'center' },
-                    { binding: 'spcompnm', header: '발전기코드', width: 100, align: 'center' },
-                    { binding: 'powernm', header: '발전기명', width: 140, align: 'center' },
+                    { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
+                    { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
-                    { binding: 'mevalue01', header: '01시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue03', header: '03시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue04', header: '04시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue05', header: '05시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue06', header: '06시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue07', header: '07시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue08', header: '08시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue09', header: '09시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue10', header: '10시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue11', header: '11시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue12', header: '12시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue13', header: '13시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue14', header: '14시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue15', header: '15시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue16', header: '16시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue17', header: '17시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue18', header: '18시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue19', header: '19시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue20', header: '20시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue21', header: '21시', width: 100, align: 'center', format: 'n0'}, { binding: 'mevalue22', header: '22시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevalue23', header: '23시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue24', header: '24시', width: 100, align: 'center', format: 'n0' },
-                    { binding: 'mevaluet', header: '합계', width: 100, align: 'center', format: 'n0' },
+                    { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0'}, { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevaluet', header: '합계', width: 90, align: 'right', format: 'n0' },
                     { binding: 'indatem', header: '등록일자', width: 100, align: 'center' },
                     { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
                     { binding: 'duedate', header: '최종수정일', width: 100, align: 'center' }
@@ -457,7 +518,7 @@
                     //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                     { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
                     { binding: 'standdt', header: '일자', width: 100, align: 'center' },
-                    { binding: 'spcompnm', header: '발전기코드', width: 100, align: 'center' },
+                    { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
                     { binding: 'powernm', header: '발전기명', width: 140, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
                     { binding: 'mevalue01', header: '01시', width: 100, align: 'center', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 100, align: 'center', format: 'n0' },
@@ -550,7 +611,7 @@
                 inspecData.push({
                     rownum: inspecDto[i]["rownum"],
                     spworknm: inspecDto[i]["spworknm"],
-                    spcompnm: inspecDto[i]["spcompnm"],
+                    powerid: inspecDto[i]["powerid"],
                     spplannm: inspecDto[i]["spplannm"],
                     checkdt: inspecDto[i]["checkdt"],
                     checkusr: inspecDto[i]["checkusr"],
