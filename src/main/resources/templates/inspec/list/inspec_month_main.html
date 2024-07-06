@@ -114,7 +114,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-delete" title="삭제">
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
@@ -397,6 +397,7 @@
         var theGrid;
         var viewdata;
         let selectedFiles = [];
+        let SelectItem;
 
 
         function test(files){
@@ -483,6 +484,7 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
+                    { binding: 'spuncode', header: '고유명', width: 140, align: 'center' },
                     { binding: 'spworknm', header: '지역명', width: 140, align: 'center' },
                     { binding: 'spcompnm', header: '산단명', width: 140, align: 'center' },
                     { binding: 'spplannm', header: '발전소명', width: 140, align: 'center' },
@@ -527,8 +529,11 @@
                 itemsSource: viewdata
             });
             let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: () => {
+                itemChecked: (e, ctx) => {
+                     SelectItem = theGrid.rows.filter(r => r.isSelected);
 
+
+                     console.log(SelectItem);
                 }
             })
 
@@ -710,7 +715,7 @@
 
         $(document).ready(function (e) {
 
-
+            // 저장 시작
             $('#btnSave').click(function (e){
 
                 console.log('selectedFiles: ', selectedFiles);
@@ -772,6 +777,25 @@
                     function () {
                     }
                 )
+            })
+
+
+            //삭제
+            $('#btnDelete').click(function(e){
+
+                let delList = [];
+
+                console.log('길이', SelectItem.length);
+
+
+                for(let i=0; i < SelectItem.length; i++){
+                    delList.push(SelectItem[i]._data.spuncode);
+                }
+
+                console.log('삭제확인', delList);
+                Alert.confirm('', '삭제하시겠습니까?', function(){
+                    alert('삭제되었습니다.');
+                })
             })
 
 
