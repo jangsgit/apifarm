@@ -16,5 +16,7 @@ public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> 
   @Query(value = "SELECT t.checkno FROM TB_RP710 t WHERE t.checkdt = :checkdtconvertvalue ORDER BY t.checkno DESC limit 1", nativeQuery = true)
   Optional<String> findMaxChecknoByCheckdt(@Param("checkdtconvertvalue") String checkdtconvertvalue);
 
+  void deleteBySpuncode(String spuncode);
 
-  }
+
+}

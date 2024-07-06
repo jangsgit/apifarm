@@ -149,4 +149,6 @@ public class InspecService {
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
     }
+
+
 }

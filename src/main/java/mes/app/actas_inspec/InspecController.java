@@ -389,4 +389,31 @@ public class InspecController {
         return result;
 
     }
+
+    @PostMapping("/delete")
+    @Transactional
+    public AjaxResult delete(
+            @RequestParam(value = "spuncode") String spuncode
+    ){
+
+        AjaxResult result = new AjaxResult();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
+        String[] tokens = cleanJson.split(",");
+
+        List<String> paramList = List.of(tokens);
+
+        for(String param : paramList){
+            System.out.println(param);
+            //TODO: 이거 자식테이블먼저 삭제해야한다.
+            tb_rp710Repository.deleteBySpuncode(param);
+        }
+
+
+        result.success = true;
+        result.message = "성공";
+        return result;
+    }
 }

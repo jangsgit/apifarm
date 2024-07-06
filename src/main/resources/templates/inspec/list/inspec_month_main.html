@@ -794,7 +794,21 @@
 
                 console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function(){
-                    alert('삭제되었습니다.');
+
+                    let data = {
+                        'spuncode' : JSON.stringify(delList),
+                        '_csrf' :  $('[name=_csrf]').val()
+                    }
+
+                    let fnSuccess = function (res){
+                        if(res.success){
+                            Alert.alert('', '삭제되었습니다.');
+                        }
+                    }
+
+                    AjaxUtil.postAsyncData('/api/inspec_report/delete', data, fnSuccess);
+
+
                 })
             })
 
