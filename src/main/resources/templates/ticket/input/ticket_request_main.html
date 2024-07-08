@@ -9,33 +9,41 @@
                 <!-- Page Title -->
                 <div class="page-title-wrap">
                     <div class="left">
-                        <h2>연료전지발전소현황</h2>
+                        <h2>티켓현황</h2>
                         <a href="#" title="북마크" class="bookmark toggle">
                             내메뉴
                         </a>
                     </div>
                     <ul class="page-navi">
                         <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                        <li>발전소관리</li>
-                        <li>연료전지발전소현황</li>
+                        <li>종합관제</li>
+                        <li>티켓등록</li>
                     </ul>
                 </div>
                 <!-- Select -->
                 <div class="search-wrap">
                     <ul>
                         <li>
-                            <select title="지역">
-                                <option>대구</option>
+                            <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
+                                <option value="001">대구</option>
+                                <input type="hidden" id="spworknm" name="spworknm">
                             </select>
                         </li>
                         <li>
-                            <select title="구">
-                                <option>성서산단</option>
+                            <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
+                                <option value="001">성서산단</option>
+                                <input type="hidden" id="spcompnm" name="spcompnm">
                             </select>
                         </li>
                         <li>
                             <select title="동">
                                 <option>성서</option>
+                            </select>
+                        </li>
+                        <li>
+                            <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
+                                <option value="001">시설명</option>
+                                <input type="hidden" id="spplannm" name="spplannm">
                             </select>
                         </li>
                     </ul>
@@ -56,28 +64,33 @@
                                 <div class="search-wrap">
                                     <dl>
                                         <dt>
-                                            제조사<span class="eq">*</span>
+                                            등록일자<span class="eq">*</span>
                                         </dt>
                                         <dd>
                                             <ul class="date-box">
                                                 <li>
-                                                    <select id="11" name="">
-                                                        <option value="블룸에너지">블룸에너지</option>
-                                                    </select>
+                                                    <input type="date" id="startDate" name="startDate">
+                                                    <label for="startDate" class="hide">시작일</label>
                                                 </li>
                                                 <li>
-                                                    <select id="22" name="">
-                                                        <option value="가동유무" selected>가동유무</option>
-                                                        <option value="가동중">가동중</option>
-                                                        <option value="가동중지">가동중지</option>
-                                                    </select>
-                                                </li>
-                                                <li>
-                                                    <div style="margin-left: 20px" class="srch-box">
-                                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
-                                                    </div>
+                                                    <input type="date" id="endDate" name="endDate">
+                                                    <label for="endDate" class="hide">종료일</label>
                                                 </li>
                                             </ul>
+                                        </dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>
+                                            <label for="searchusr">
+                                                Ticket명<span class="eq">*</span>
+                                            </label>
+                                        </dt>
+                                        <dd>
+                                            <div class="srch-box">
+                                                <input type="text" id="searchusr" class="input-srch"
+                                                       placeholder="Ticket명 검색">
+                                                <a class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                            </div>
                                         </dd>
                                     </dl>
                                 </div>
@@ -113,7 +126,7 @@
                         <section class="tab-item" id="tab2">
                             <div class="section-top">
                                 <div class="title-wrap">
-                                    <h3>연료전지발전소등록</h3>
+                                    <h3>티켓등록</h3>
                                 </div>
                                 <div class="button-wrap">
                                     <ul>
@@ -141,149 +154,127 @@
                             <div class="table-wrap">
                                 <table class="write-table">
                                     <form id="customForm">
-                                        <caption>연료전지발전소 테이블</caption>
+                                        <caption>티켓 테이블</caption>
                                         <colgroup>
                                             <col class="wp12">
-                                            <col class="wp40">
+                                            <col class="wp25">
                                             <col class="wp12">
-                                            <col class="wp40">
+                                            <col class="wp55">
                                         </colgroup>
                                         <tbody>
                                         <tr>
                                             <th>
-                                                <label for="spworkcd">
-                                                    관할산단공
+                                                <label for="requester">
+                                                    Requester
                                                 </label>
                                             </th>
                                             <td>
-                                                <select id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                                                    <option value="001">대구</option>
-                                                    <option value="002">경기</option>
-                                                </select>
-                                                <input type="hidden" id="spworknm" name="spworknm">
+                                                <input type="text" id="requester" name="requester">
                                             </td>
-
                                             <th>
-                                                <label for="spcompcd">
-                                                    산단명
+                                                <label for="tketnm">
+                                                    티켓명
                                                 </label>
                                             </th>
                                             <td>
-                                                <select id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                                                    <option value="001">성서산단</option>
-                                                    <option value="002">성남산단</option>
-                                                </select>
-                                                <input type="hidden" id="spcompnm" name="spcompnm">
+                                                <input type="text" id="tketnm" name="tketnm" style="width: 100%">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>
-                                                <label for="spplannm">
-                                                    발전소명
+                                                <label for="tketcrdtm">
+                                                    발생일자
                                                 </label>
                                             </th>
                                             <td>
-                                                <input type="text" id="spplannm" name="spplannm" placeholder="대구물류센터">
+                                                <input type="date" id="tketcrdtm" name="tketcrdtm">
                                             </td>
                                             <th>
-                                                <label for="spwtycd">
-                                                    발전유형
+                                                <label for="tketflag">
+                                                    상태
                                                 </label>
                                             </th>
                                             <td>
-                                                <select id="spwtycd" name="spwtycd" onchange="updateSelect('spwtycd', 'spwtynm')">
-                                                    <option value="01">전지발전</option>
-                                                    <option value="02">전지발전2</option>
-                                                </select>
-                                                <input type="hidden" id="spwtynm" name="spwtynm">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="makercd">
-                                                    제조사
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="makercd" name="makercd" onchange="updateSelect('makercd', 'makernm')">
-                                                    <option value="001">블룸에너지</option>
-                                                    <option value="002">블룸에너지2</option>
-                                                </select>
-                                                <input type="hidden" id="makernm" name="makernm">
-                                            </td>
-                                            <th>
-                                                <label for="setupdt">
-                                                    설립년월일
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="setupdt" name="setupdt" placeholder="20.01.01">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="pwcapa">
-                                                    발전용량
-                                                </label>
-                                            </th>
-                                            <td colspan="3">
-                                                <input type="number" id="pwcapa" name="pwcapa" step="0.0001" placeholder="10" oninput="validateDecimal(this)">
-                                                <span style="font-weight: bold">kw</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="postno">
-                                                    주소
-                                                </label>
-                                            </th>
-                                            <td colspan="3">
-                                                <input type="text" id="postno" name="postno" placeholder="00000">
-                                                <input type="text" id="address1" name="address1" placeholder="대구">
-                                                <input type="text" id="address2" name="address2" placeholder="성서">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="workyn">
-                                                    가동유무
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="workyn" name="workyn">
-                                                    <option value="1">가동</option>
-                                                    <option value="2">가동중지</option>
+                                                <select id="tketflag" name="tketflag">
+                                                    <option value="1">오류</option>
                                                 </select>
                                             </td>
-                                            <th>
-                                                <label for="mcltcd">
-                                                    유지보수사
+                                        </tr>
+                                        <tr>
+                                            <th style="margin-bottom: 20px;">
+                                                <label for="requesterhp">
+                                                    연락처
                                                 </label>
                                             </th>
                                             <td>
-                                                <select type="text" id="mcltcd" name="mcltcd" onchange="updateSelect('mcltcd','mcltnm')">
-                                                    <option value="001">블룸에너지</option>
-                                                    <option value="002">블룸에너지2</option>
-                                                </select>
-                                                <input type="hidden" id="mcltnm" name="mcltnm">
+                                                <input type="text" id="requesterhp" name="requesterhp">
+                                            </td>
+                                            <th rowspan="5">
+                                                <label for="tketrem">
+                                                    내용
+                                                </label>
+                                            </th>
+                                            <td rowspan="5">
+                                                <div class="textarea-box">
+                                                    <textarea id="tketrem" placeholder="내용" style="height: 220px"></textarea>
+                                                    <p class="text-count" id="text-count">0/100</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td id="empty-cell" colspan="2" style="height: 30px"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <label for="inusernm">
+                                                    담당자
+                                                </label>
+                                            </th>
+                                            <td >
+                                                <input type="text" id="inusernm" name="inusernm">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>
-                                                <label for="mcltusrnm">
-                                                    관리자
+                                                <label for="tkettypenm">
+                                                    요청유형
                                                 </label>
                                             </th>
-                                            <td>
-                                                <input type="text" id="mcltusrnm" name="mcltusrnm" placeholder="홍길동">
+                                            <td >
+                                                <input type="text" id="tkettypenm" name="tkettypenm">
                                             </td>
+                                        </tr>
+                                        <tr>
                                             <th>
-                                                <label for="mcltusrhp">
-                                                    관리자 연락처
+                                                <label for="tketrcpnm">
+                                                    수신회사
                                                 </label>
                                             </th>
-                                            <td>
-                                                <input type="text" id="mcltusrhp" name="mcltusrhp" placeholder="010-0000-0000">
+                                            <td >
+                                                <input type="text" id="tketrcpnm" name="tketrcpnm">
+                                                <input type="hidden" id="tketrcpcd" name="tketrcpcd">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <label for="tketrusernm">
+                                                    수신자
+                                                </label>
+                                            </th>
+                                            <td >
+                                                <input type="text" id="tketrusernm" name="tketrusernm">
+                                                <input type="hidden" id="tketruserid" name="tketruserid">
+                                            </td>
+                                            <th rowspan="2">
+                                                <label for="tketactrem">
+                                                    조치
+                                                </label>
+                                            </th>
+                                            <td rowspan="2">
+                                                <div class="textarea-box">
+                                                    <textarea id="tketactrem" placeholder="조치내용"  style="height: 170px"></textarea>
+                                                    <p class="text-count" id="text-count1">0/100</p>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -292,10 +283,10 @@
                                                     비고
                                                 </label>
                                             </th>
-                                            <td colspan="3">
+                                            <td>
                                                 <div class="textarea-box">
-                                                    <textarea id="remark" placeholder="비고"></textarea>
-                                                    <p class="text-count" id="text-count1">0/100</p>
+                                                    <textarea id="remark"></textarea>
+                                                    <p class="text-count" id="text-count2">0/100</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -350,16 +341,15 @@
 
         document.readyState === 'complete' ? init() : window.onload = init;
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-
-        function init(){
+        function init() {
             fetchListData();
         }
 
-        function fetchListData() {
+        function fetchListData(){
             let data2 = [];
 
             $.ajax({
-                url: '/api/operate/power/read',
+                url: '/api/ticket/ticket/read',
                 type: 'GET',
                 async: false,
                 success: function(data){
@@ -376,20 +366,20 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'rownum', header: '순번', width: 60, align: 'center'},
-                        {binding: 'spworknm', header: '관할산단공', width: 120, align: 'center'},
-                        {binding: 'spcompnm', header: '산단명', width: 140, align: 'center'},
-                        {binding: 'spplannm', header: '발전소', width: 150, align: 'center'},
-                        {binding: 'spwtynm', header: '발전유형', width: 150, align: 'center'},
-                        {binding: 'makernm', header: '제조사', width: 150, align: 'center'},
-                        {binding: 'setupdt', header: '설립년월일', width: 120, align: 'center'},
-                        {binding: 'pwcapa', header: '발전용량', width: 140, align: 'center'},
-                        {binding: 'mcltusrnm', header: '관리자', width: 120, align: 'center'},
-                        {binding: 'mcltnm', header: '유지보수사', width: 120, align: 'center'},
-                        {binding: 'remark', header: '비고', width: 250, align: 'center'}
-
+                        {binding: 'tketcrdtm', header: '발생일자', width: 150, align: 'center'},
+                        {binding: 'tketnm', header: 'Ticket명', width: 150, align: 'center'},
+                        {binding: 'tkettypenm', header: '유형', width: 150, align: 'center'},
+                        {binding: 'tketrusernm', header: '수신자명', width: 150, align: 'center'},
+                        {binding: 'tketflag', header: '상태', width: 150, align: 'center'},
+                        {binding: 'tketactrem', header: '조치', width: 200, align: 'center'},
+                        {
+                            header: '파일', binding: 'downloads', width: 150, align: 'center', cssClass: 'filedown',
+                        },
+                        {binding: 'remark', header: '비고', width: '*', align: 'center'}
                     ],
                     itemsSource: viewdata
                 });
+                // 선택이 변경될 때, 현재 항목 업데이트
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
             } else{
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
@@ -400,37 +390,39 @@
         $(document).ready(function (e) {
 
             $('#btnSave').click(function (e){
+
+
                 Alert.confirm('', '저장하시겠습니까?', function() {
 
                         let formData = new FormData();
 
                         // 다른 데이터를 FormData에 추가합니다.
                         formData.append('spworkcd', $('#spworkcd').val());
-                        formData.append('spcompcd', $('#spcompcd').val());
                         formData.append('spworknm', $('#spworknm').val());
+                        formData.append('spcompcd', $('#spcompcd').val());
                         formData.append('spcompnm', $('#spcompnm').val());
+                        formData.append('spplancd', $('#spplancd').val());
                         formData.append('spplannm', $('#spplannm').val());
-                        formData.append('spwtycd', $('#spwtycd').val());
-                        formData.append('spwtynm', $('#spwtynm').val());
-                        formData.append('makercd', $('#makercd').val());
-                        formData.append('makernm', $('#makernm').val());
-                        formData.append('setupdt', $('#setupdt').val());
-                        formData.append('pwcapa', $('#pwcapa').val());
-                        formData.append('postno', $('#postno').val());
-                        formData.append('address1', $('#address1').val());
-                        formData.append('address2', $('#address2').val());
-                        formData.append('workyn', $('#workyn').val());
-                        formData.append('mcltcd', $('#mcltcd').val());
-                        formData.append('mcltnm', $('#mcltnm').val());
-                        formData.append('mcltusrnm', $('#mcltusrnm').val());
-                        formData.append('mcltusrhp', $('#mcltusrhp').val());
+                        formData.append('requester', $('#requester').val());
+                        formData.append('requesterhp', $('#requesterhp').val());
+                        formData.append('tketcrdtm', $('#tketcrdtm').val());
+                        formData.append('tketnm', $('#tketnm').val());
+                        formData.append('tkettypecd', $('#tkettypecd').val());
+                        formData.append('tkettypenm', $('#tkettypenm').val());
+                        formData.append('tketflag', $('#tketflag').val());
+                        formData.append('tketrem', $('#tketrem').val());
+                        formData.append('tketrcpcd', $('#tketrcpcd').val());
+                        formData.append('tketrcpnm', $('#tketrcpnm').val());
+                        formData.append('tketruserid', $('#tketruserid').val());
+                        formData.append('tketrusernm', $('#tketrusernm').val());
+                        formData.append('tketactrem', $('#tketactrem').val());
                         formData.append('remark', $('#remark').val());
                         formData.append('filelist', $('#filelist').val());
                         formData.append('_csrf', $('[name=_csrf]').val());
 
 
                         $.ajax({
-                            url: '/api/operate/power/save',
+                            url: '/api/ticket/ticket/save',
                             type: 'POST',
                             data: formData,
                             processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
@@ -440,28 +432,25 @@
                                     Alert.alert('', response.message, function (){
                                         $('#listTabLink').click();
                                         fetchListData();
-                                        document.getElementById('spworkcd').value = '';     // 관할산단공 select 초기화
-                                        document.getElementById('spworknm').value = '';     // 관할산단공 hidden input 초기화
-                                        document.getElementById('spcompcd').value = '';     // 산단명 select 초기화
-                                        document.getElementById('spcompnm').value = '';     // 산단명 hidden input 초기화
-                                        document.getElementById('spplannm').value = '';     // 발전소명 초기화
-                                        document.getElementById('spwtycd').value = '';      // 발전유형 select 초기화
-                                        document.getElementById('spwtynm').value = '';      // 발전유형 hidden input 초기화
-                                        document.getElementById('makercd').value = '';      // 제조사 select 초기화
-                                        document.getElementById('makernm').value = '';      // 제조사 hidden input 초기화
-                                        document.getElementById('setupdt').value = '';      // 설립년월일 초기화
-                                        document.getElementById('pwcapa').value = '';       // 발전용량 초기화
-                                        document.getElementById('postno').value = '';       // 주소 우편번호 초기화
-                                        document.getElementById('address1').value = '';     // 주소 시 초기화
-                                        document.getElementById('address2').value = '';     // 주소 구 초기화
-                                        document.getElementById('workyn').value = '';       // 가동유무 초기화
-                                        document.getElementById('mcltcd').value = '';       // 유지보수사 select 초기화
-                                        document.getElementById('mcltnm').value = '';       // 유지보수사 hidden input 초기화
-                                        document.getElementById('mcltusrnm').value = '';    // 관리자 이름 초기화
-                                        document.getElementById('mcltusrhp').value = '';    // 관리자 연락처 초기화
-                                        document.getElementById('remark').value = '';       // 비고 초기화
+                                        document.getElementById('spworknm').value = '';
+                                        document.getElementById('spcompnm').value = '';
+                                        document.getElementById('spplannm').value = '';
+                                        document.getElementById('tketcrdtm').value = '';
+                                        document.getElementById('tketnum').value = '';
+                                        document.getElementById('requester').value = '';
+                                        document.getElementById('requesterhp').value = '';
+                                        document.getElementById('tkettypecd').value = '';
+                                        document.getElementById('tkettypenm').value = '';
+                                        document.getElementById('tketflag').value = '';
+                                        document.getElementById('tketrem').value = '';
+                                        document.getElementById('tketrcpcd').value = '';
+                                        document.getElementById('tketrcpnm').value = '';
+                                        document.getElementById('tketruserid').value = '';
+                                        document.getElementById('tketrusernm').value = '';
+                                        document.getElementById('tketactrem').value = '';
+                                        document.getElementById('remark').value = '';
                                     });
-                                }else {
+                                } else {
                                     Alert.alert('', '저장에 실패했습니다. ');
                                 }
                             },
@@ -469,37 +458,26 @@
                                 Alert.alert('', '에러가발생하였습니다.');
                             }
                         });
+
+
                     }
                 )
             })
-            // 셀렉트값에 따라 id 히든으로 넘기기
+            // Initialize hidden inputs with the selected text values
             const selects = [
                 { selectId: 'spworkcd', hiddenInputId: 'spworknm' },
                 { selectId: 'spcompcd', hiddenInputId: 'spcompnm' },
-                { selectId: 'spwtycd', hiddenInputId: 'spwtynm' },
-                { selectId: 'makercd', hiddenInputId: 'makernm' },
-                { selectId: 'mcltcd', hiddenInputId: 'mcltnm' }
+                { selectId: 'spplancd', hiddenInputId: 'spplannm' }
             ];
             selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 
         });
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        // 셀렉트값에 따라 id 히든으로 넘기기
         function updateSelect(selectId, hiddenInputId) {
             var selectElement = document.getElementById(selectId);
             var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
             document.getElementById(hiddenInputId).value = selectedOptionText;
-        }
-
-        // 소수점 4자리까지
-        function validateDecimal(input) {
-            const value = input.value;
-            const regex = /^\d*\.?\d{0,4}$/;
-
-            if (!regex.test(value)) {
-                input.value = value.slice(0, -1);
-            }
         }
 
     </script>

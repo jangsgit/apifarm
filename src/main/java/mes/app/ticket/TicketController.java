@@ -1,11 +1,15 @@
-package mes.app.operate;
+package mes.app.ticket;
 
 import mes.app.operate.service.PowerService;
+import mes.app.ticket.service.TicketService;
 import mes.config.Settings;
 import mes.domain.entity.User;
+import mes.domain.entity.actasEntity.TB_RP820;
+import mes.domain.entity.actasEntity.TB_RP820_PK;
 import mes.domain.entity.actasEntity.TB_RP920;
 import mes.domain.entity.actasEntity.TB_RP920_PK;
 import mes.domain.model.AjaxResult;
+import mes.domain.repository.TB_RP820Repository;
 import mes.domain.repository.TB_RP920Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,14 +22,14 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/operate/power")
-public class PowerController {
+@RequestMapping("/api/ticket/ticket")
+public class TicketController {
 
     @Autowired
-    private PowerService powerService;
+    private TicketService ticketService;
 
     @Autowired
-    private TB_RP920Repository TBRP920Repository;
+    private TB_RP820Repository tb_rp820Repository;
 
     @Autowired
     Settings settings;
@@ -48,7 +52,7 @@ public class PowerController {
             endDate = "";
         }
 
-        items = this.powerService.getInspecList(searchusr, startDate, endDate);
+        items = this.ticketService.getInspecList(searchusr, startDate, endDate);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
@@ -57,9 +61,9 @@ public class PowerController {
     }
 
     @PostMapping("/save")
-    public AjaxResult savePower(@RequestParam Map<String, String> params,
-                                @RequestParam(value = "filelist", required = false) MultipartFile files,
-                                Authentication auth) throws IOException {
+    public AjaxResult saveTicket(@RequestParam Map<String, String> params,
+                                 @RequestParam(value = "filelist", required = false) MultipartFile files,
+                                 Authentication auth) throws IOException {
 
         User user = (User) auth.getPrincipal();
         Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -67,25 +71,26 @@ public class PowerController {
         String newKey = "";
         String nspworkcd = params.get("spworkcd");
         String nspcompcd = params.get("spcompcd");
+        String nspplancd = params.get("spplancd");
 
-        if (nspworkcd != null && nspcompcd != null) {
+        if (nspworkcd != null && nspcompcd != null && nspplancd != null) {
 
-            Optional<String> checknovalue = TBRP920Repository.findMaxChecknoBySpplancd(nspworkcd, nspcompcd);
+            Optional<String> checknovalue = tb_rp820Repository.findMaxChecknoBySpplancd(nspworkcd, nspcompcd, nspplancd);
             if (checknovalue.isPresent()) {
                 Integer checknointvalue = Integer.parseInt(checknovalue.get()) + 1;
-                newKey = String.format("%03d", checknointvalue);
+                newKey = checknointvalue.toString();
             } else {
-                newKey = "001";
+                newKey = "1";
             }
-
         }
 
-        TB_RP920_PK pk = new TB_RP920_PK();
+        TB_RP820_PK pk = new TB_RP820_PK();
         pk.setSpworkcd(nspworkcd);
         pk.setSpcompcd(nspcompcd);
-        pk.setSpplancd(newKey);
+        pk.setSpplancd(nspplancd);
+        pk.setTketnum(newKey);
 
-        TB_RP920 tbRp920 = new TB_RP920();
+        TB_RP820 tbRp820 = new TB_RP820();
 
         if(files != null){
 
@@ -115,37 +120,39 @@ public class PowerController {
             File saveFile = new File(path + File.separator + file_uuid_name);
             mFile.transferTo(saveFile);
 
-            tbRp920.setFilepath(saveFilePath);
-            tbRp920.setFilesvnm(file_uuid_name);
-            tbRp920.setFileornm(fileName);
-            tbRp920.setFilesize(fileSize);
-//            tbRp920.setFilerem();
+            tbRp820.setFilepath(saveFilePath);
+            tbRp820.setFilesvnm(file_uuid_name);
+            tbRp820.setFileornm(fileName);
+            tbRp820.setFilesize(fileSize);
+//            tbRp820.setFileextns(params.get("fileextns"));
+//            tbRp820.setFilerem();
         }
 
-        tbRp920.setPk(pk);
-        tbRp920.setSpworknm(params.get("spworknm"));
-        tbRp920.setSpcompnm(params.get("spcompnm"));
-        tbRp920.setSpplannm(params.get("spplannm"));
-        tbRp920.setSpwtycd(params.get("spwtycd"));
-        tbRp920.setSpwtynm(params.get("spwtynm"));
-        tbRp920.setMakercd(params.get("makercd"));
-        tbRp920.setMakernm(params.get("makernm"));
-        tbRp920.setSetupdt(params.get("setupdt"));
-        tbRp920.setPwcapa(Double.parseDouble(params.get("pwcapa")));
-        tbRp920.setPostno(params.get("postno"));
-        tbRp920.setAddress1(params.get("address1"));
-        tbRp920.setAddress2(params.get("address2"));
-        tbRp920.setWorkyn(params.get("workyn"));
-        tbRp920.setMcltcd(params.get("mcltcd"));
-        tbRp920.setMcltnm(params.get("mcltnm"));
-        tbRp920.setMcltusrnm(params.get("mcltusrnm"));
-        tbRp920.setMcltusrhp(params.get("mcltusrhp"));
-        tbRp920.setRemark(params.get("remark"));
-        tbRp920.setIndatem(now);
-        tbRp920.setInuserid(String.valueOf(user.getId()));
-        tbRp920.setInusernm(user.getUsername());
+        String c_tketcrdtm = params.get("tketcrdtm").replaceAll("-","");
 
-        boolean suceescode = powerService.save(tbRp920);
+        tbRp820.setPk(pk);
+        tbRp820.setSpworknm(params.get("spworknm"));
+        tbRp820.setSpcompnm(params.get("spcompnm"));
+        tbRp820.setSpplannm(params.get("spplannm"));
+        tbRp820.setTketcrdtm(c_tketcrdtm);
+        tbRp820.setRequester(params.get("requester"));
+        tbRp820.setRequesterhp(params.get("requesterhp"));
+        tbRp820.setTketnm(params.get("tketnm"));
+        tbRp820.setTkettypecd("02");
+        tbRp820.setTkettypenm(params.get("tkettypenm"));
+        tbRp820.setTketflag(params.get("tketflag"));
+        tbRp820.setTketrem(params.get("tketrem"));
+        tbRp820.setTketrcpcd(params.get("tketrcpcd"));
+        tbRp820.setTketrcpnm(params.get("tketrcpnm"));
+        tbRp820.setTketruserid(params.get("tketruserid"));
+        tbRp820.setTketrusernm(params.get("tketrusernm"));
+        tbRp820.setTketactrem(params.get("tketactrem"));
+        tbRp820.setRemark(params.get("remark"));
+        tbRp820.setIndatem(now);
+        tbRp820.setInuserid(String.valueOf(user.getId()));
+        tbRp820.setInusernm(user.getUsername());
+
+        boolean suceescode = ticketService.save(tbRp820);
         if (suceescode) {
             result.success = true;
             result.message = "저장하였습니다.";

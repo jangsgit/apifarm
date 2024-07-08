@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @Repository 
-public interface PowerRepository extends JpaRepository<TB_RP920, Integer> {
+public interface TB_RP920Repository extends JpaRepository<TB_RP920, Integer> {
 
     @Query(value = "SELECT MAX(t.spplancd) FROM TB_RP920 t WHERE t.spworkcd = :spworkcd AND t.spcompcd = :spcompcd", nativeQuery = true)
     Optional<String> findMaxChecknoBySpplancd(@Param("spworkcd") String spworkcd,

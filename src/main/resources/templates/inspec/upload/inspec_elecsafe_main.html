@@ -43,7 +43,7 @@
                 <div class="tab-wrap">
                     <ul class="tab-links">
                         <li>
-                            <a href="#tab1" title="목록">목록</a>
+                            <a href="#tab1" title="목록" id="listTabLink">목록</a>
                         </li>
                         <li>
                             <a href="#tab2" title="등록">등록</a>
@@ -281,6 +281,10 @@
         document.readyState === 'complete' ? init() : window.onload = init;
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            fetchListData();
+        }
+
+        function fetchListData(){
             let data2 = [];
 
             $.ajax({
@@ -288,113 +292,109 @@
                 type: 'GET',
                 async: false,
                 success: function(data){
-                    console.log('wijmo', data.data);
                     data2 = data.data;
                 }
             })
 
             viewdata = new wijmo.collections.CollectionView(data2);
-            // 데이터 그리드에 바인딩
-            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    { binding: 'rownum', header: '순번', width: 80 ,align: 'center'},
-                    { binding: 'registdt', header: '등록일자', width: 160, align: 'center' },
-                    { binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center' },
-                    { binding: 'spcompnm', header: '산단명', width: 160, align: 'center' },
-                    { binding: 'spplannm', header: '발전소명', width: 160, align: 'center' },
-                    { binding: 'title', header: '점검명', width: 260, align: 'center' },
-                    { binding: 'inspecresult', header: '점검결과', width: 160, align: 'center' },
-                    { binding: 'inspecdt', header: '점검일자', width: 160, align: 'center' },
-                    {
-                        header: '첨부파일', binding: 'downloads', width: '*', align: 'center', cssClass: 'filedown',
-                    }
 
-                ],
-                itemsSource: viewdata
-            });
-
-
-            // 선택이 변경될 때, 현재 항목 업데이트
-
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
-        }
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-
-        class ElecSafePage {
-            constructor() {
-                this.url = '/api/inspec/elec_safe';
-
-            }
-
-            // 정보 저장
-            saveData() {
-                let formData = new FormData($('#customForm')[0]);
-                // let filesList = $('#uploadComponent1')[0].uploadedFiles;
-                //
-                // for (var i = 0; i < filesList.length; i++) {
-                //     formData.append('filelist', filesList[i]);
-                // }
-
-                formData.append('title', $('#title').val());
-                formData.append('resistdt', $('#resistdt').val());
-                formData.append('inspec_date1', $('#inspec_date1').val());
-                formData.append('inspec_loc', $('#inspec_loc').val());
-                formData.append('inspec_result', $('#inspec_result').val());
-                formData.append('endresult', $('#endresult').val());
-                formData.append('_csrf', $('[name=_csrf]').val());
-
-                $.ajax({
-                    url: this.url + "/save",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        if (response.success) {
-                            Alert.alert('', '저장에 성공했습니다.' + response.message);
-
-                        } else {
-                            Alert.alert('', '저장에 실패했습니다. ' + response.message);
+            if(!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center'},
+                        {binding: 'registdt', header: '등록일자', width: 160, align: 'center'},
+                        {binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center'},
+                        {binding: 'spcompnm', header: '산단명', width: 160, align: 'center'},
+                        {binding: 'spplannm', header: '발전소명', width: 160, align: 'center'},
+                        {binding: 'title', header: '점검명', width: 260, align: 'center'},
+                        {binding: 'inspecresult', header: '점검결과', width: 160, align: 'center'},
+                        {binding: 'inspecdt', header: '점검일자', width: 160, align: 'center'},
+                        {
+                            header: '첨부파일', binding: 'downloads', width: '*', align: 'center', cssClass: 'filedown',
                         }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Alert.alert('', '에러가 발생하였습니다.');
-                    }
+
+                    ],
+                    itemsSource: viewdata
                 });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            } else{
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
             }
         }
 
         $(document).ready(function (e) {
 
-            var page = new ElecSafePage();
-
-
+            // 정보 저장
             $('#btnSave').click(function (e) {
-                e.preventDefault();
                 Alert.confirm('', '저장하시겠습니까?', function () {
-                    page.saveData();
 
-                });
-            });
-        });
+                        let formData = new FormData($('#customForm')[0]);
+                        // let filesList = $('#uploadComponent1')[0].uploadedFiles;
+                        //
+                        // for (var i = 0; i < filesList.length; i++) {
+                        //     formData.append('filelist', filesList[i]);
+                        // }
 
-        /* 점검년도 */
-        const currentYear = new Date().getFullYear();
-        const yearSelect = document.getElementById('inspec_year');
-        const startYear = currentYear - 5; // 5년 전부터
+                        formData.append('title', $('#title').val());
+                        formData.append('resistdt', $('#resistdt').val());
+                        formData.append('inspec_date1', $('#inspec_date1').val());
+                        formData.append('inspec_loc', $('#inspec_loc').val());
+                        formData.append('inspec_result', $('#inspec_result').val());
+                        formData.append('endresult', $('#endresult').val());
+                        formData.append('_csrf', $('[name=_csrf]').val());
 
-        // 년도 옵션을 동적으로 생성합니다.
-        for (let year = currentYear; year >= startYear; year--) {
-            const option = document.createElement('option');
-            option.value = year;
-            option.textContent = year;
-            yearSelect.appendChild(option);
-        }
+                        $.ajax({
+                            url: "/api/inspec/elec_safe/save",
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    Alert.alert('', response.message, function () {
+                                        $('#listTabLink').click();
+                                        fetchListData();
+                                        document.getElementById('title').value = '';
+                                        document.getElementById('resistdt').value = '';
+                                        document.getElementById('inspec_date1').value = '';
+                                        document.getElementById('inspec_loc').value = '';
+                                        document.getElementById('inspec_result').value = '';
+                                        document.getElementById('endresult').value = '';
+                                    });
 
-        // 기본 선택 년도를 현재 년도로 설정합니다.
-        yearSelect.value = currentYear;
+                                } else {
+                                    Alert.alert('', '저장에 실패했습니다. ');
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Alert.alert('', '에러가 발생하였습니다.');
+                            }
+                        });
+                    }
+                )
+            })
+
+            /* 점검년도 */
+            const currentYear = new Date().getFullYear();
+            const yearSelect = document.getElementById('inspec_year');
+            const startYear = currentYear - 5; // 5년 전부터
+
+            // 년도 옵션을 동적으로 생성합니다.
+            for (let year = currentYear; year >= startYear; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+
+            // 기본 선택 년도를 현재 년도로 설정합니다.
+            yearSelect.value = currentYear;
+        })
+
 
     </script>
 

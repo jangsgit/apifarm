@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository 
-public interface ElecSafeRepository extends JpaRepository<TB_RP750, Integer> {
+public interface TB_RP750Repository extends JpaRepository<TB_RP750, Integer> {
 	
 
 	

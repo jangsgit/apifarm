@@ -5,7 +5,7 @@ import mes.domain.entity.actasEntity.TB_RP750;
 import mes.domain.entity.actasEntity.TB_RP750_PK;
 import mes.domain.entity.User;
 import mes.domain.model.AjaxResult;
-import mes.domain.repository.ElecSafeRepository;
+import mes.domain.repository.TB_RP750Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ElecSafeController {
     ElecSafeService elecSafeService;
 
     @Autowired
-    ElecSafeRepository elecSafeRepository;
+    TB_RP750Repository TBRP750Repository;
 
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "startDate", required = false) String startDate,
@@ -107,9 +107,16 @@ public class ElecSafeController {
 
         AjaxResult result = new AjaxResult();
 
-        TBRP750 = elecSafeRepository.save(TBRP750);
+        boolean suceescode = elecSafeService.save(TBRP750);
 
         result.data = TBRP750;
+        if (suceescode) {
+            result.success = true;
+            result.message = "저장하였습니다.";
+        } else {
+            result.success = false;
+            result.message = "저장에 실패하였습니다.";
+        }
 
         return result;
 
