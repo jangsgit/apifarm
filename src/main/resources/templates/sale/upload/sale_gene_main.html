@@ -14,9 +14,11 @@
             padding-top: 0px;
         }
 
-        /*#theGrid, #theGrid2 {*/
-        /*    overflow-x: auto; !* 가로 스크롤 활성화 *!*/
-        /*}*/
+        .container-fluid {
+            overflow-x: scroll;
+        }
+
+
     </style>
 </head>
 <th:block layout:fragment="content">
@@ -105,7 +107,7 @@
                                     <label for="select2">
                                         시간<span class="eq">*</span></dt>
                                 </label>
-<!--                                시간 옵션 어떻게?-->
+                                <!--                                시간 옵션 어떻게?-->
                                 <dd>
                                     <select id="select2" class="w120">
                                         <option>전체</option>
@@ -194,21 +196,6 @@
                         <p id="selectedItem1"></p>
                         <div id="theGrid" style="max-height: 600px;" ></div>
                     </div>
-<!--                    <div class="btn-wrap">-->
-<!--                        <div class="center">-->
-<!--                            <ul class="paging-wrap">-->
-<!--                                <li><a title="처음" class="btn-first"></a></li>-->
-<!--                                <li><a title="이전" class="btn-prev"></a></li>-->
-<!--                                <li class="on"><a title="1">1</a></li>-->
-<!--                                <li><a title="2">2</a></li>-->
-<!--                                <li><a title="3">3</a></li>-->
-<!--                                <li><a title="4">4</a></li>-->
-<!--                                <li><a title="5" class="disable">5</a></li>-->
-<!--                                <li><a title="다음" class="btn-next"></a></li>-->
-<!--                                <li><a title="마지막" class="btn-last"></a></li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </section>
 
                 <!-- Section -->
@@ -261,21 +248,6 @@
                         <p id="selectedItem2"></p>
                         <div id="theGrid2" style="max-height: 600px;"></div>
                     </div>
-<!--                    <div class="btn-wrap">-->
-<!--                        <div class="center">-->
-<!--                            <ul class="paging-wrap">-->
-<!--                                <li><a title="처음" class="btn-first"></a></li>-->
-<!--                                <li><a title="이전" class="btn-prev"></a></li>-->
-<!--                                <li class="on"><a title="1">1</a></li>-->
-<!--                                <li><a title="2">2</a></li>-->
-<!--                                <li><a title="3">3</a></li>-->
-<!--                                <li><a title="4">4</a></li>-->
-<!--                                <li><a title="5" class="disable">5</a></li>-->
-<!--                                <li><a title="다음" class="btn-next"></a></li>-->
-<!--                                <li><a title="마지막" class="btn-last"></a></li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
@@ -439,12 +411,13 @@
                     powerid: 'AJ38',
                     powernm: 'KT대구물류센터 연료전지',
                     chargedv: '방전',
-                    mevalue01: 652288, mevalue02: 651565, mevalue03: 651565, mevalue04: 652288,
-                    mevalue05: 652288, mevalue06: 651565, mevalue07: 652288, mevalue08: 653012,
-                    mevalue09: 652288, mevalue10: 651565, mevalue11: 653012, mevalue12: 651565,
-                    mevalue13: 650842, mevalue14: 650119, mevalue15: 650842, mevalue16: 652288,
-                    mevalue17: 651565, mevalue18: 653012, mevalue19: 652288, mevalue20: 651565,
-                    mevalue21: 651565, mevalue22: 651565, mevalue23: 651565, mevalue24: 652288,
+                    toggle: '',
+                    mevalue01: 652288, mevalue02: 652288, mevalue03: 652288, mevalue04: 652288,
+                    mevalue05: 652288, mevalue06: 652288, mevalue07: 652288, mevalue08: 652288,
+                    mevalue09: 652288, mevalue10: 652288, mevalue11: 652288, mevalue12: 652288,
+                    mevalue13: 652288, mevalue14: 652288, mevalue15: 652288, mevalue16: 652288,
+                    mevalue17: 652288, mevalue18: 652288, mevalue19: 652288, mevalue20: 652288,
+                    mevalue21: 652288, mevalue22: 652288, mevalue23: 652288, mevalue24: 652288,
                     mevaluet: 15644793,
                     indatem: '2023-09-10',
                     inusernm : '홍길동',
@@ -479,53 +452,64 @@
                 columns: [
                     //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                     { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
-                    { binding: 'standdt', header: '일자', width: 100, align: 'center' },
+                    { binding: 'standdt', header: '일자', width: 115, align: 'center' },
                     { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
                     { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
                     { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0'}, { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevaluet', header: '합계', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'indatem', header: '등록일자', width: 100, align: 'center' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: "*", align: 'right', format: 'n0' },
+                    { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
                     { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                    { binding: 'duedate', header: '최종수정일', width: 100, align: 'center' }
+                    { binding: 'duedate', header: '최종수정일', width: 115, align: 'center' }
 
                 ],
-
-                //홀짝 로우 음영주기
-                // loadedRows: function (s, e) {
-                //
-                //     console.log(s.cells);
-                //
-                //     for (var i = 0; i < s.rows.length; i++) {
-                //         var row = s.rows[i];
-                //         if(i % 2 === 0){
-                //             row.cssClass = 'high-value';
-                //         }
-                //         var item = row.dataItem;
-                //
-                //     }
-                //     for (var i = 0; i < s.cells.length; i++) {
-                //         var row = s.rows[i];
-                //         if(i % 2 === 0){
-                //             row.cssClass = 'high-value';
-                //         }
-                //         var item = row.dataItem;
-                //
-                //     }
-                // },
                 itemsSource: viewdata
             });
+
+            // 초기에 04시~22시 컬럼을 숨김
+            toggleColumns(theGrid, false);
+
+            theGrid.formatItem.addHandler(function(sender, e) {
+                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
+                    if (e.cell.textContent === '...') {
+                        e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
+                        e.cell.onclick = function() {
+                            toggleColumns(theGrid, true); // 컬럼을 펼치고
+                            theGrid.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
+                        };
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                // '...' 컬럼 외의 다른 헤더를 클릭했을 때
+                if (!event.target.matches('.wj-cell')) return;
+                var headerText = event.target.textContent;
+                if (headerText !== '...' && theGrid.columns.getColumn('toggle').visible === false) {
+                    toggleColumns(theGrid, false); // 컬럼을 다시 접음
+                    theGrid.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
+                }
+            });
+
+            function toggleColumns(grid, show) {
+                for (let i = 4; i <= 22; i++) {
+                    let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
+                    if (column) column.visible = show;
+                }
+            }
+
+            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
             // 수정 탭 그리드 초기화
             theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
@@ -536,51 +520,64 @@
                 columns: [
                     //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                     { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
-                    { binding: 'standdt', header: '일자', width: 100, align: 'center' },
+                    { binding: 'standdt', header: '일자', width: 115, align: 'center' },
                     { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
                     { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
                     { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0'}, { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevaluet', header: '합계', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'indatem', header: '등록일자', width: 100, align: 'center' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: "*", align: 'right', format: 'n0' },
+                    { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
                     { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                    { binding: 'duedate', header: '최종수정일', width: 100, align: 'center' }
+                    { binding: 'duedate', header: '최종수정일', width: 115, align: 'center' }
 
-                ],  //홀짝 로우 음영주기
-                loadedRows: function (s, e) {
-
-                    console.log(s.cells);
-
-                    for (var i = 0; i < s.rows.length; i++) {
-                        var row = s.rows[i];
-                        if(i % 2 === 0){
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                    for (var i = 0; i < s.cells.length; i++) {
-                        var row = s.rows[i];
-                        if(i % 2 === 0){
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                },
+                ],
                 itemsSource: viewdata
             });
+
+            // 초기에 04시~22시 컬럼을 숨김
+            toggleColumns(theGrid2, false);
+
+            theGrid2.formatItem.addHandler(function(sender, e) {
+                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
+                    if (e.cell.textContent === '...') {
+                        e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
+                        e.cell.onclick = function() {
+                            toggleColumns(theGrid2, true); // 컬럼을 펼치고
+                            theGrid2.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
+                        };
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                // '...' 컬럼 외의 다른 헤더를 클릭했을 때
+                if (!event.target.matches('.wj-cell')) return;
+                var headerText = event.target.textContent;
+                if (headerText !== '...' && theGrid2.columns.getColumn('toggle').visible === false) {
+                    toggleColumns(theGrid2, false); // 컬럼을 다시 접음
+                    theGrid2.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
+                }
+            });
+
+            function toggleColumns(grid, show) {
+                for (let i = 4; i <= 22; i++) {
+                    let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
+                    if (column) column.visible = show;
+                }
+            }
+
+
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -826,6 +823,7 @@
         //         }
         //     });
         // });
+
 
     </script>
 </th:block>
