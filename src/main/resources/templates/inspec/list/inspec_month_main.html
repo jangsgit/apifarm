@@ -704,7 +704,22 @@
                 '                                                    </a>'
             theGrid.columns.push(cols);
 
+            var columns = [
+                { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
+                { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
+                { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
+                { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
+                { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
+                { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
+                { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
+                { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
+                { binding: 'downloads', header: '업로드', align: 'center', width: 170, cssClass: 'downloads', cellTemplate: '<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>' }
+            ];
 
+            for (var i = 0; i < columns.length; i++) {
+                var col = new wijmo.grid.Column(columns[i]);
+                theGrid.columns.push(col);
+            }
 
 
 
