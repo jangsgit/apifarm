@@ -383,40 +383,24 @@
                 showMarquee: true,
                 columns: [
                     { binding: 'salesym', header: '매출년월', width: 90, align: 'center'},
-                    { binding: 'energyQty', header: '발전량', width: 100, align: 'right' },
-                    { binding: 'smpCost', header: 'SMP 단가', width: 100, align: 'right' },
-                    { binding: 'smpAmt', header: 'SMP 매출', width: 140, align: 'right' },
-                    { binding: 'recCost', header: 'REC 단가', width: 100, align: 'right' },
-                    { binding: 'recQty', header: 'REC 수량', width: 100, align: 'right' },
-                    { binding: 'recAmt', header: 'REC 매출', width: 100, align: 'right' },
-                    { binding: 'stotAmt', header: '총 매출', width: 140, align: 'right' },
+                    { binding: 'energyQty', header: '발전량', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'smpCost', header: 'SMP 단가', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'smpAmt', header: 'SMP 매출', width: 140, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recCost', header: 'REC 단가', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recQty', header: 'REC 수량', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recAmt', header: 'REC 매출', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'stotAmt', header: '총 매출', width: 140, align: 'right', aggregate: 'Sum' },
                     { binding: 'description', header: '비고', width: '*', align: 'center' } // 컬럼 추가? 아니면 추후 삭제?
 
-                ],  //홀짝 로우 음영주기
-                // loadedRows: function (s, e) {
-                //
-                //     console.log(s.cells);
-                //
-                //     for (var i = 0; i < s.rows.length; i++) {
-                //         var row = s.rows[i];
-                //         if(i % 2 === 0){
-                //             row.cssClass = 'high-value';
-                //         }
-                //         var item = row.dataItem;
-                //
-                //     }
-                //     for (var i = 0; i < s.cells.length; i++) {
-                //         var row = s.rows[i];
-                //         if(i % 2 === 0){
-                //             row.cssClass = 'high-value';
-                //         }
-                //         var item = row.dataItem;
-                //
-                //     }
-                // },
+                ],
                 itemsSource: viewdata,
                 isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
             });
+
+            // Footer 행 추가
+            theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
+            theGrid.columnFooters.setCellData(0, 0, '계');
 
 
             // 선택이 변경될 때, 현재 항목 업데이트
@@ -525,110 +509,110 @@
             }
         }
 
-        function grid_binding(data){
-            var uploadDto = data;
-            var uploadData = [];
-            var cnt = 1;
-            for (var i = 0; i < uploadDto.length; i++) {
-                uploadData.push({
-                    rownum: uploadDto[i]["rownum"],
-                    spworknm: uploadDto[i]["spworknm"],
-                    spcompnm: uploadDto[i]["spcompnm"],
-                    spplannm: uploadDto[i]["spplannm"],
-                    checkdt: uploadDto[i]["checkdt"],
-                    checkusr: uploadDto[i]["checkusr"],
-                    checkarea: uploadDto[i]["checkarea"],
-                    checktmdt: uploadDto[i]["checktmdt"],
-
-                });
-                cnt++;
-            }
-
-            theGrid.columns.clear();
-            theGrid.autoGenerateColumns = false;
-            viewdata.sourceCollection = uploadData;
-
-            var cols = new wijmo.grid.Column();
-            cols.binding = 'rownum';
-            cols.header = '순번';
-            cols.align = "center";
-            cols.width = 60;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spworknm';
-            cols.header = '지역명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spcompnm';
-            cols.header = '산단명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spplannm';
-            cols.header = '발전소명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkdt';
-            cols.header = '등록일자';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkusr';
-            cols.header = '점검자';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkarea';
-            cols.header = '점검장소';
-            cols.align = "center";
-            cols.width = 200;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checktmdt';
-            cols.header = '점검시간';
-            cols.align = "center";
-            cols.width = 260;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'downloads';
-            cols.header = '다운로드';
-            cols.align = "center";
-            cols.width = 160;
-            cols.cellTemplate = '<a href="#" title="다운로드" class="btn-filedown">다운로드</a>'
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'downloads';
-            cols.header = '업로드';
-            cols.align = "center";
-            cols.width = 170;
-            cols.cssClass = "downloads"
-            cols.cellTemplate = '<a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
-                '                                                        업로드\n' +
-                '                                                    </a>'
-            theGrid.columns.push(cols);
-
-
-
-
-
-
-        }
+        // function grid_binding(data){
+        //     var uploadDto = data;
+        //     var uploadData = [];
+        //     var cnt = 1;
+        //     for (var i = 0; i < uploadDto.length; i++) {
+        //         uploadData.push({
+        //             rownum: uploadDto[i]["rownum"],
+        //             spworknm: uploadDto[i]["spworknm"],
+        //             spcompnm: uploadDto[i]["spcompnm"],
+        //             spplannm: uploadDto[i]["spplannm"],
+        //             checkdt: uploadDto[i]["checkdt"],
+        //             checkusr: uploadDto[i]["checkusr"],
+        //             checkarea: uploadDto[i]["checkarea"],
+        //             checktmdt: uploadDto[i]["checktmdt"],
+        //
+        //         });
+        //         cnt++;
+        //     }
+        //
+        //     theGrid.columns.clear();
+        //     theGrid.autoGenerateColumns = false;
+        //     viewdata.sourceCollection = uploadData;
+        //
+        //     var cols = new wijmo.grid.Column();
+        //     cols.binding = 'rownum';
+        //     cols.header = '순번';
+        //     cols.align = "center";
+        //     cols.width = 60;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spworknm';
+        //     cols.header = '지역명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spcompnm';
+        //     cols.header = '산단명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spplannm';
+        //     cols.header = '발전소명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkdt';
+        //     cols.header = '등록일자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkusr';
+        //     cols.header = '점검자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkarea';
+        //     cols.header = '점검장소';
+        //     cols.align = "center";
+        //     cols.width = 200;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checktmdt';
+        //     cols.header = '점검시간';
+        //     cols.align = "center";
+        //     cols.width = 260;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'downloads';
+        //     cols.header = '다운로드';
+        //     cols.align = "center";
+        //     cols.width = 160;
+        //     cols.cellTemplate = '<a href="#" title="다운로드" class="btn-filedown">다운로드</a>'
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'downloads';
+        //     cols.header = '업로드';
+        //     cols.align = "center";
+        //     cols.width = 170;
+        //     cols.cssClass = "downloads"
+        //     cols.cellTemplate = '<a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
+        //         '                                                        업로드\n' +
+        //         '                                                    </a>'
+        //     theGrid.columns.push(cols);
+        //
+        //
+        //
+        //
+        //
+        //
+        // }
 
         $(document).ready(function (e) {
 

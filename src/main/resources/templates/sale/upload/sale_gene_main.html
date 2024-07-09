@@ -18,6 +18,11 @@
             overflow-x: scroll;
         }
 
+        /* 토글 클릭시 애니메이션 효과*/
+        .wj-flexgrid .wj-colheaders, .wj-flexgrid .wj-cell {
+            transition: all 0.2s ease;
+        }
+
 
     </style>
 </head>
@@ -183,7 +188,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-popup-open" title="엑셀업로드" onclick="showPopup()" data-popup="popup1" id="btnShowUpload">
+                                    <a class="btn btn-popup-open" title="" onclick="showPopup()" data-popup="popup1" id="btnShowUpload">
                                         <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
                                         엑셀업로드
                                     </a>
@@ -264,6 +269,7 @@
                 </a>
             </div>
             <div class="popup-contents">
+                <form id="file-upload-form" enctype="multipart/form-data">
                 <div class="table-wrap">
                     <table class="write-table">
                         <caption>발전량등록 테이블</caption>
@@ -293,7 +299,7 @@
                                     <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <input type="file" id="fileInput2" class="fileInput" multiple>
                                         <p>Maximun upload file size <span>1GiB</span></p>
                                         <p>*업로드 시 상태는 Excel이며, 수주전환 이전데이터만 삭제가능합니다.</p>
                                     </div>
@@ -311,10 +317,11 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                    <div class="popup-button">
+                        <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+                        <button onclick="uploadExcelAndLoadData()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -343,10 +350,11 @@
         // 엑셀파일 업로드 / 조회
         function uploadExcelAndLoadData() {
             let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID 가정
-            formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
+            // formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
+            // 추가적인 데이터 : no, 등록일자, 등록자, 최종수정일
 
             $.ajax({
-                url: '/api/upload/excel', // 서버의 엑셀 업로드 API 주소
+                url: '/api/gene/upload/upload_save', // 서버의 엑셀 업로드 API 주소
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -421,7 +429,7 @@
                     mevaluet: 15644793,
                     indatem: '2023-09-10',
                     inusernm : '홍길동',
-                    duedate : '2023-09-12'
+                    updatem : '2023-09-12'
                 });
             }
 
@@ -457,7 +465,7 @@
                     { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
                     { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
                     { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
@@ -468,10 +476,10 @@
                     { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: "*", align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
                     { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
                     { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                    { binding: 'duedate', header: '최종수정일', width: 115, align: 'center' }
+                    { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
 
                 ],
                 itemsSource: viewdata
@@ -525,7 +533,7 @@
                     { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
                     { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
                     { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
                     { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
@@ -536,10 +544,10 @@
                     { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
                     { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
-                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: "*", align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
                     { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
                     { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                    { binding: 'duedate', header: '최종수정일', width: 115, align: 'center' }
+                    { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
 
                 ],
                 itemsSource: viewdata
@@ -706,6 +714,7 @@
 
 
             page = new CheckResultDiaryPage();
+
 
 
 
