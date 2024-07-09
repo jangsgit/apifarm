@@ -1,320 +1,469 @@
-<html layout:decorate="~{layout_page}">
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+
 <th:block layout:fragment="content">
-<div class="content_wrap">
-   <section >
-        <div class="title_box ">
-            <div class="left_align">
-                <h3 data-labelCd="메뉴 로그">메뉴 로그</h3>
+
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>메뉴 로그</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
             </div>
-            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
-            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>시스템설정</li>
+                <li>메뉴로그</li>
+            </ul>
         </div>
-
-        <div class="table_box search">
-
-            <form id="searchForm">
-                <div class="row">
-
-                    <div class="col-12 col-lg-5 col-xl-4" >
-                        <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="발생일">발생일</span>
-                            </div> 
-                            <div data-ax5picker="multi" id="srchDt">
-                                <div class="input-group-append">
-                                <input class="tac " type="text" id="date_from" name="date_from" />
-                                    <span class="input-group-text fs-xl">
-                                        <i class="fas fa-calendar-alt calendar_color" ></i>
-                                    </span>
-                                <span class="slow_sign">~</span>
-                                <input class="tac " type="text" id="date_to" name="date_to" />
-                                    <span class="input-group-text fs-xl">
-                                        <i class="fas fa-calendar-alt calendar_color"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-12 col-lg-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="메뉴">메뉴</span>
-                            </div>
-                                <select class="form-control2" id="cboMenu" name="cboMenu"></select>
-                        </div>
-                    </div>
-
-                    <div class="col-11 col-lg-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="사용자">사용자</span>
-                            </div>
-                            <select class="form-control2" id="cboUser" name="cboUser"></select>
-                        </div>
-                    </div>
-
-
-
-                        <div class="col-1" >
-                                <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
-                        </div>
-                </div>
-            </form>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
         </div>
-    </section>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="메뉴카운트">메뉴 카운트</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="메뉴로그">메뉴 로그</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <form id="searchForm">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    발생일<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input class="tac w150 " type="text" id="date_from" name="date_from" />
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input class="tac w150" type="text" id="date_to" name="date_to" />
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
 
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        <span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <select class="form-control2" id="cboMenu" name="cboMenu"></select>
+                                </dd>
+                            </dl>
 
-    <section class="h-700">
-        <div class="tabs" data-tab="tabWrap">
-            <div class="title_box">
-                <div class="left_align">
-                    <ul class="tab_links">
-                        <li><a href="#" data-tablink="#tab_count" class="tab" data-labelCd="메뉴 카운트">메뉴 카운트</a></li>
-                        <li><a href="#" data-tablink="#tab_log" class="tab" data-labelCd="메뉴 로그">메뉴 로그</a></li>
-                    </ul>
-                </div>
-            </div>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        사용자<span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <select class="form-control2" id="cboUser" name="cboUser"></select>
+                                </dd>
+                            </dl>
 
+                            </br>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        <span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <!--                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="점검자명 검색">-->
+                                        <a class="btn-srch" id="searchgrid" title="검색" ></a>
+                                    </div>
+                                </dd>
+                            </dl>
 
-
-                <div class="tab-content">
-                    <div class="tab" id="tab_count">
-                        <div class="grid_box">
-                            <div class="title_box">
-                                <span class="right_align rpt" data-labelCd="메뉴 카운트">메뉴 카운트</span>
-                                <button type="button" class="btn-default" id="btnGridSetting1" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
-                            </div>
-                                    <div class="h-580" data-ax5grid="count-grid" ></div>
                         </div>
-                    </div>
-
-                    <div class="tab" id="tab_log">
-                        <div class="grid_box">
-                            <div class="title_box">
-                                <span class="right_align rpt" data-labelCd="메뉴 로그">메뉴 로그</span>
-                                <button type="button" class="btn-default" id="btnGridSetting2" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
-                            </div>
-                                    <div class="h-580" data-ax5grid="log-grid" ></div>
+                        </form>
+                        <div class="button-wrap">
+                                <ul>
+                                    <li>
+                                        <a title="설정"  class="btn btn-edit btn-popup-open"
+                                           data-popup="popup1">
+                                            <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                            Setting
+                                        </a>
+                                    </li>
+                                </ul>
                         </div>
+
+
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
                     </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    발생일<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
 
-                </div>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        점검자<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchusr" name="searchusr" class="input-srch"
+                                               placeholder="점검자명 검색">
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                           onkeyup="searchData()"></a>
+                                    </div>
+                                </dd>
+                            </dl>
 
-        </div>
-        </section>
-</div>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        <span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>전체</option>
+                                        <option>완료</option>
+                                        <option>미완료</option>
+                                    </select>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        사용자<span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <select id="select2" class="w120">
+                                        <option>전체</option>
+                                        <option>완료</option>
+                                        <option>미완료</option>
+                                    </select>
+                                </dd>
+                            </dl>
+
+                            </br>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        <span class="eq"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+
+                                        <a  class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                           onkeyup="searchData()"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+
+                    </div>
+                    <div class="container-fluid">
+                        <p id="selectedItem1"></p>
+                        <div id="theGrid2"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+
 </th:block>
-
 <th:block layout:fragment="scripts">
-<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
-<script type="text/javascript">
-    
-    class MenuLogPage {
-        constructor() {
-            this.grid = null;
-            this.count_grid = null;
-            this.init();
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let selectedFiles = [];
+
+
+        function getTextValue(e) {
+            // 기본 동작 (예: 링크 이동)을 막습니다.
+            e.preventDefault();
+
+            // e.currentTarget은 클릭된 btn-file-delete 요소를 가리킵니다.
+            const button = e.currentTarget;
+            // 부모 li 요소를 찾습니다.
+            const liElement = button.closest('li');
+            // li 요소 내의 p 태그를 찾습니다.
+            const pElement = liElement.querySelector('p');
+            // p 태그의 텍스트 내용을 가져옵니다.
+            const textValue = pElement.textContent;
+
+            // 텍스트 값을 콘솔에 출력합니다.
+            console.log(textValue);
+
+            // 필요에 따라 다른 작업을 수행할 수 있습니다.
         }
 
-        init() {
-            let _this = this;
-            let config = {
-                target: $('[data-ax5grid="log-grid"]'),
-                sortable: true,
-                frozenColumnIndex: 0, // 열 고정
-                frozenRowIndex: 0,    // 행 고정
-                showLineNumber: false, // 열의 번호 보이기 여부
-                showRowSelector: false,  // checkbox(선택) 보이기 여부
-                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
-                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                multiSort: true, // 다중 정렬 여부
-                header: {
-                    align: 'center',  // 헤더의 기본 정렬
-                    columnHeight: 38  // 헤더 높이
-                },
-                body: {
-                    columnHeight: 25, // body의 기본 높이
-                },
-                page: {
-                    display: true,  // 페이징 보이기 여부
-                    statusDisplay: true,
-                },
-                columns: [
-                    { key: 'id', label: 'No', width: 70, align: 'center' },
-                    { key: 'folder_name', label: '메뉴폴더', width: 100, align: 'left', },
-                    { key: 'menu_name', label: '메뉴', width: 100, align: 'left', },
-                    { key: 'username', label: '아이디', width: 150, align: 'left', },
-                    { key: 'user_name', label: '이름', width: 150, align: 'left', },
-                    { key: 'click_date', label: '일시', width: 150, align: 'center', },
-                ]
-            };
-            let config_count = {
-                target: $('[data-ax5grid="count-grid"]'),
-                sortable: true,
-                frozenColumnIndex: 0, // 열 고정
-                frozenRowIndex: 0,    // 행 고정
-                showLineNumber: false, // 열의 번호 보이기 여부
-                showRowSelector: false,  // checkbox(선택) 보이기 여부
-                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
-                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                multiSort: false, // 다중 정렬 여부
-                header: {
-                    align: 'center',  // 헤더의 기본 정렬
-                    columnHeight: 38  // 헤더 높이
-                },
-                body: {
-                    columnHeight: 25, // body의 기본 높이
-                },
-                page: {
-                    display: true,  // 페이징 보이기 여부
-                    statusDisplay: true,
-                },
-                columns: [
-                    { key: 'folder_name', label: '메뉴폴더', width: 100, align: 'left', },
-                    { key: 'menu_name', label: '메뉴', width: 100, align: 'left', },
-                    { key: 'use_count', label: '사용횟수', width: 150, align: 'right', formatter: 'money', },
-                ]
-            };
 
-            this.grid = new ax5.ui.grid(config);
-            this.grid_config2 = config;
-            this.count_grid = new ax5.ui.grid(config_count);
-            this.grid_config1 = config_count;
-        }
+        document.readyState === 'complete' ? init() : window.onload = init;
 
-			searchDataBind() {
-            let _this = this;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let data3 = [];
             let param = FormUtil.extractForm($('#searchForm'));
-            let url = '/api/system/menulog/log_count';
 
-            let result = AjaxUtil.getSyncData(url, param);
-            if (result.data != null) {
-                let count = result.data.length;
-                _this.count_grid.setData({
-                    list: result.data,
-                    page: {
-                        display: true,
-                        totalElements: count,
-                    }
-                });
-            }
+            // 'date_from'과 'date_to'를 폼에서 추출
+            let date_from = $('#date_from').val();
+            let date_to = $('#date_to').val();
+            let cboMenu = $('#cboMenu').val();
+            let cboUser = $('#cboUser').val();
 
-            url = '/api/system/menulog/log_list';
-
-            result = AjaxUtil.getSyncData(url, param);
-            if (result.data != null) {
-                let count = result.data.length;
-                _this.grid.setData({
-                    list: result.data,
-                    page: {
-                        display: true,
-                        totalElements: count,
-                    }
-                });
-            }
-
-        }//searchDataBind
-
-    }
-    var page = null;
-    $(document).ready(function (e) {
-        page = new MenuLogPage();
-
-        picker.bind({
-            target: $('[data-ax5picker="multi"]'),  
-            direction: "top",
-   			locale: {
-				format: 'YYYY-MM-DD'
-			},
-            content: {
-                width:  214, 
-                margin: 10,
-                type: 'date',
-                
-                config: {
-                    control: {
-                        left: '<i class="fa fa-arrow-left"></i>',  
-                        yearTmpl: '%s',
-                        monthTmpl: '%s',
-                        right: '<i class="fa fa-arrow-right"></i>'
-                    },
-                    lang: {
-                        yearTmpl: "%s년",
-                        months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-                        dayTmpl: "%s"
-                    }
+            $.ajax({
+                url: '/api/system/menulog/log_count',
+                type: 'GET',
+                data: {
+                    'param': param,
+                    date_from: date_from,
+                    date_to: date_to,
+                    cboMenu: cboMenu,
+                    cboUser: cboUser
+                },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_count data:', textStatus, errorThrown);
                 }
-            },
-            btns: {
-                /*ok: {
-                    label: "조회", theme: "default", onClick: function () {
-                        this.self.close();
-                        page.searchDataBind();
-                        
+            })
 
-                    }
-                }*/
-            },
+            $.ajax({
+                url : '/api/system/menulog/log_list',
+                type: 'GET',
+                data: {
+                    'param' : param,
+                    date_from: date_from,
+                    date_to: date_to,
+                    cboMenu: cboMenu,
+                    cboUser: cboUser
+                },
+                async: false,
+                success: function (data){
+                    console.log('wijmo', data.data);
+                    data3 = data.data;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            })
 
-        });
+            viewdata = new wijmo.collections.CollectionView(data2);
+            viewdata2 = new wijmo.collections.CollectionView(data3);
 
-        $('#date_from').val(CommonUtil.getYYYYMMDD(-7));
-        $('#date_to').val(CommonUtil.getYYYYMMDD());
+            // 데이터 그리드에 바인딩
 
-        AjaxUtil.fillSelectOptions($('#cboMenu'), 'menu_item', 'all');
 
-        let url = '/api/system/menulog/user_list';
-        let user_list = AjaxUtil.getSyncData(url, {});
-        let $combo = $('#cboUser');
-        $combo.empty();
-        let option = $('<option>',
-            {
-                value: '',
-                text: '전체',
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    { binding: 'folder_name', header: '메뉴폴더', width: 200, align: 'center' },
+                    { binding: 'menu_name', header: '메뉴', width: 200, align: 'center' },
+                    { binding: 'use_count', header: '사용횟수', width: 200, align: 'center', format: 'n0' },
+                    {binding: '', header: '', width: 950, align: 'center'},
+                ],
+
+                itemsSource: viewdata
             });
-        $combo.append(option);
-        $.each(user_list.data, function (index, row) {
+
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'id', header: 'No', width: 160, align: 'center'},
+                    {binding: 'folder_name', header: '메뉴폴더', width: 160, align: 'center'},
+                    {binding: 'menu_name', header: '메뉴', width: 260, align: 'center'},
+                    {binding: 'username', header: '아이디', width: 160, align: 'center'},
+                    {binding: 'user_name', header: '이름', width: 160, align: 'center'},
+                    {binding: 'click_date', header: '일시', width: 260, align: 'center'},
+                    {binding: '', header: '', width: 400, align: 'center'},
+
+                ],
+
+                itemsSource: viewdata2
+            });
+
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: () => {
+
+                }
+            })
+
+            let selector2 = new wijmo.grid.selector.Selector(theGrid2, {
+                itemChecked: () => {
+
+                }
+            })
+
+            // 그리드 초기화
+            // new wijmo.grid.FlexGrid('#theGrid', theGrid);
+            // new wijmo.grid.FlexGrid('#theGrid2', theGrid2);
+
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            theGrid2.rowHeaders.columns.splice(0, 1);
+        }
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+
+        let filelist = [];
+
+        function filevalueinit(param) {
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        // function searchData() {
+        //     let data = {
+        //         'searchusr': $('#searchusr').val(),
+        //         'searchfrdate': $('#searchfrdate').val(),
+        //         'searchtodate': $('#searchtodate').val()
+        //     }
+        //
+        //     let result = AjaxUtil.getSyncData('/api/inspec_report/read', data);
+        //
+        //     if (result.success) {
+        //         console.log(result.data);
+        //         grid_binding(result.data);
+        //     }
+        // }
+
+        $(document).ready(function (e) {
+
+            $('#date_from').val(CommonUtil.getYYYYMMDD(-7));
+            $('#date_to').val(CommonUtil.getYYYYMMDD());
+
+            AjaxUtil.fillSelectOptions($('#cboMenu'), 'menu_item', 'all');
+
+            let url = '/api/system/menulog/user_list';
+            let user_list = AjaxUtil.getSyncData(url, {});
+            let $combo = $('#cboUser');
+            $combo.empty();
             let option = $('<option>',
                 {
-                    value: row['value'],
-                    text: row['text'],
+                    value: '',
+                    text: '전체',
                 });
             $combo.append(option);
-        });
+            $.each(user_list.data, function (index, row) {
+                let option = $('<option>',
+                    {
+                        value: row['value'],
+                        text: row['text'],
+                    });
+                $combo.append(option);
+            });
+//그리드 컬럼 설정
+            page.popColSetting = new popColSetting();
+            let columns1 = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'thegrid', page.count_grid);
+            let columns2 = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'thegrid2', page.grid);
 
-		//그리드 컬럼 설정
-        page.popColSetting = new popColSetting();
-        let columns1 = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid1', page.count_grid);
-        let columns2 = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid2', page.grid);
-		
-        if (userinfo.group_code == 'admin') {
-            $('#btnGridSetting1').css('visibility','visible');  
-            $('#btnGridSetting2').css('visibility','visible');  
-        }		
-	
-        $('#btnGridSetting1').click(function (e) {
-            let _this = this;
-            let fix_cols = page.grid_config1.frozenColumnIndex;
-            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid1', page.grid_config1.columns, page.count_grid, { 'order_fix':false,  'fix_cols' : fix_cols });
-        });	
-        $('#btnGridSetting2').click(function (e) {
-            let _this = this;
-            let fix_cols = page.grid_config2.frozenColumnIndex;
-            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid2', page.grid_config2.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
-        });	
+            if (userinfo.group_code == 'admin') {
+                $('#btnGridSetting1').css('visibility','visible');
+                $('#btnGridSetting2').css('visibility','visible');
+            }
 
-        page.searchDataBind();
+            $('#btnGridSetting1').click(function (e) {
+                let _this = this;
+                let fix_cols = page.grid_config1.frozenColumnIndex;
+                page.popColSetting.show(gui.gui_code, gui.template_key, 'thegrid', page.grid_config1.columns, page.count_grid, { 'order_fix':false,  'fix_cols' : fix_cols });
+            });
+            $('#btnGridSetting2').click(function (e) {
+                let _this = this;
+                let fix_cols = page.grid_config2.frozenColumnIndex;
+                page.popColSetting.show(gui.gui_code, gui.template_key, 'thegrid2', page.grid_config2.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
+            });
 
-        $('#btnSearch').click(function (ex) {
             page.searchDataBind();
+
+            $('#btnSearch').click(function (ex) {
+                page.searchDataBind();
+            });
+
+
+
+
         });
-
-    });
-</script>
-
-
+    </script>
 </th:block>
+
 </html>

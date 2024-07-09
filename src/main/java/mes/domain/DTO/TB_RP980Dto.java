@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TB_RP980Dto {
 
-    private String id;
+    private String emcontno;
     private String comp;
     private String per;
     private String tel;

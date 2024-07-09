@@ -1,221 +1,294 @@
-<html layout:decorate="~{layout_page}">
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+
 <th:block layout:fragment="content">
-<div class="content_wrap">
 
-    <section class="section">
-        <div class="title_box ">
-            <div class="left_align">
-                <h3 data-labelCd="로그인 로그">로그인 로그</h3>
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>로그인로그</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
             </div>
-            <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
-            <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>시스템설정</li>
+                <li>로그인로그</li>
+            </ul>
         </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <!--                <li>-->
+                <!--                    <a href="#tab2" title="등록">등록</a>-->
+                <!--                </li>-->
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <form id="searchForm" autocomplete="off">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        발생일<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <input class="tac w150 " type="text" id="srchStartDt" name="srchStartDt" />
+                                                <label for="srchStartDt" class="hide">시작일</label>
+                                            </li>
+                                            <li>
+                                                <input class="tac w150 " type="text" id="srchEndDt" name="srchEndDt"/>
+                                                <label for="srchEndDt" class="hide">종료일</label>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="text1">
+                                            이름<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="srch-box">
+                                            <input class="form-control2" id="keyword" name="keyword"/>
+                                            <a class="btn-srch" id="btnSearch" title="검색"></a>
+                                        </div>
+                                    </dd>
+                                </dl>
 
-        <div class="table_box search">
-            <form id="searchForm" autocomplete="off">
-                <div class="row">
-
-                    <div class="col-12 col-lg-5 col-xl-4" >
-                        <div class="input-group" >
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="발생일">발생일</span>
-                            </div> 
-                            <div data-ax5picker="multi" id="srchDt">
-                                <div class="input-group-append">
-                                <input class="tac " type="text" id="srchStartDt" name="srchStartDt" />
-                                    <span class="input-group-text fs-xl">
-                                        <i class="fas fa-calendar-alt calendar_color" ></i>
-                                    </span>
-                                <span class="slow_sign">~</span>
-                                <input class="tac " type="text" id="srchEndDt" name="srchEndDt" />
-                                    <span class="input-group-text fs-xl">
-                                        <i class="fas fa-calendar-alt calendar_color"></i>
-                                    </span>
-                                </div>
                             </div>
+                        </form>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
                     </div>
 
-
-                    <div class="col-11 col-lg-3">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="이름">이름</span>
-                            </div>
-                             <input class="form-control2" id="keyword" name="keyword"/>
-                        </div>
+                    <div class="btn-wrap">
                     </div>
+                </section>
 
-                        <div class="col-1" >
-                                <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
-                        </div>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
 
-                </div>
-            </form>
-        </div>
-    </section>
 
-    <!--<div class="row">-->
-        <div class="col-lg-12">
-            <section>
-                <div class="grid_box">
-                    <div class="title_box">
-                        <span class="right_align rpt" data-labelCd="로그인 내역">로그인 내역</span>
-                        <button type="button" class="btn-default " id="btnExcel"><i class="fas fa-file-excel"></i></button>
-                        <button type="button" class="btn-default" id="btnGridSetting" style="visibility:hidden"><i class="fas fa-cog"></i> Setting</button>
-                    </div>
-                    <div class="h-600" data-ax5grid="log-grid" ></div>
-                </div>
-
-            </section>
-        </div>
-
-    <!--</div>-->
-</div>
 </th:block>
-
 <th:block layout:fragment="scripts">
-<th:block th:replace="/common/columns_setting :: columns_setting" ></th:block>
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
+        var theGrid;
+        var viewdata;
 
-    class LoginLogPage {
-        constructor() {
-            this.grid = null;
-            this.init();
-        }
-
-        init() {
-            let _this = this;
-            let config = {
-                target: $('[data-ax5grid="log-grid"]'),
-                sortable: true,
-                frozenColumnIndex: 0, // 열 고정
-                frozenRowIndex: 0,    // 행 고정
-                showLineNumber: false, // 열의 번호 보이기 여부
-                showRowSelector: false,  // checkbox(선택) 보이기 여부
-                multipleSelect: false, // 여러행 선택 가능 여부 (false시 단독 선택)
-                sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                multiSort: true, // 다중 정렬 여부
-                header: {
-                    align: 'center',  // 헤더의 기본 정렬
-                    columnHeight: 38  // 헤더 높이
-                },
-                body: {
-                    columnHeight: 25, // body의 기본 높이
-                },
-                page: {
-                    display: true,  // 페이징 보이기 여부
-                    statusDisplay: true,
-                },
-                columns: [
-                    { key: 'id', label: 'No', width: 70, align: 'center', sortable: false },
-                    { key: 'type', label: '구분', width: 100, align: 'center', sortable: false },
-                    //{ key: 'addr', label: 'IP Address', width: 250, align: 'left' },
-                    { key: 'addr', label: 'IP Address', width: 250, align: 'left',formatter: function(){
-                    	return this.value.value;
-                	}},
-                    { key: 'login_id', label: '사번', width: 150, align: 'left', sortable: false },
-                    { key: 'name', label: '이름', width: 150, align: 'center', sortable: false },
-                    { key: 'created', label: '일시', width: 150, align: 'center', sortable: false },
-                ]
-            };
-
-            this.grid_config = config;
-            this.grid = new ax5.ui.grid(config);
-
-            $('#srchDt').ax5DatePicker({ direction: 'top' });
-            $('#srchStartDt').val(CommonUtil.getYYYYMMDD());
-            $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
-
-        }
+        document.readyState === 'complete' ? init() : window.onload = init;
 
 
-        searchDataBind() {
-            let _this = this;
-
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
             let param = $('#searchForm').serialize();
-            let url = '/api/system/loginlog';
-            let result = AjaxUtil.getSyncData(url + '/read', param);
-            if (result != null) {
-                let recordsTotal = result.data.length;
-                _this.grid.setData({
-                    list: result.data,
-                    page: {
-                        display: true,
-                        totalElements: recordsTotal,
-                    }
-                });
+            let srchStartDt = $('#srchStartDt').val();
+            let srchEndDt = $('#srchEndDt').val();
+            let keyword = $('#keyword').val();
+
+
+
+            $.ajax({
+                url: '/api/system/loginlog/read',
+                type: 'GET',
+                data: {
+                    'param': param,
+                    'srchStartDt':srchStartDt,
+                    'srchEndDt':srchEndDt,
+                    'keyword':keyword,
+                },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            })
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
             }
 
-        }//searchDataBind
+            viewdata = new wijmo.collections.CollectionView(data2);
 
-    }
-    var page = null;
-    $(document).ready(function (e) {
-        page = new LoginLogPage();
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'id', header: 'No', width: 150, align: 'center'},
+                    {binding: 'type', header: '구분', width: 160, align: 'center'},
+                    {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
+                    {binding: 'login_id', header: '사번', width: 160, align: 'center'},
+                    {binding: 'name', header: '이름', width: 160, align: 'center'},
+                    {binding: 'created', header: '일시', width: 260, align: 'center'},
+                    {binding: '', header: '', width: 450, align: 'center'},
+                ],
+                itemsSource: viewdata
+            });
 
-        picker.bind({
-            target: $('[data-ax5picker="multi"]'),  
-            direction: "top",
-   			locale: {
-				format: 'YYYY-MM-DD'
-			},
-            content: {
-                width:  214, 
-                margin: 10,
-                type: 'date',
-                
-                config: {
-                    control: {
-                        left: '<i class="fa fa-arrow-left"></i>',  
-                        yearTmpl: '%s',
-                        monthTmpl: '%s',
-                        right: '<i class="fa fa-arrow-right"></i>'
-                    },
-                    lang: {
-                        yearTmpl: "%s년",
-                        months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-                        dayTmpl: "%s"
-                    }
+
+            if (data2.length == 0 ){
+                console.log('Grid initialized with empty data.');
+            }
+
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: () => {
+
                 }
-            },
-            btns: {
+            })
+            // 선택이 변경될 때, 현재 항목 업데이트
 
-            },
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            theGrid.refresh();
+
+
+        }
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        let filelist = [];
+
+
+        let page = null;
+
+
+        $('#srchStartDt').val(CommonUtil.getYYYYMMDD());
+        $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+
+
+
+
+
+        $(document).ready(function (e) {
+
+
+            $('#btnSave').click(function (e) {
+
+                console.log('selectedFiles: ', selectedFiles);
+
+                Alert.confirm('', '저장하시겠습니까?', function () {
+
+                        let fileInput = document.getElementById('fileInput1');
+                        let files = fileInput.files;
+                        let formData = new FormData();
+
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append('filelist', files[i]);
+                        }
+
+                        const randomString = generateRandomStringWithDate();
+
+                        var inputs = document.querySelectorAll('input[name="checkusr"]');
+                        var values = [];
+
+                        inputs.forEach(function (input) {
+                            values.push(input.value);
+
+                        })
+
+                        var checkusrString = values.join(',');
+
+
+                        // 다른 데이터를 FormData에 추가합니다.
+                        formData.append('supplier', $('#supplier').val());
+                        formData.append('checkdt', $('#checkdt').val());
+                        formData.append('checkstdt', $('#checkstdt').val());
+                        formData.append('checkendt', $('#checkendt').val());
+                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+                        formData.append('checkarea', $('#checkarea').val());
+                        formData.append('checkitem', $('#checkitem').val());
+                        formData.append('checkplan', $('#checkplan').val());
+                        formData.append('randomuuid', randomString);
+                        formData.append('_csrf', $('[name=_csrf]').val());
+
+
+                        $.ajax({
+                            url: '/api/inspec_report/save',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                            success: function (response) {
+                                if (response.success) {
+                                    Alert.alert('', response.message);
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                Alert.alert('', '에러가발생하였습니다.');
+                            }
+                        });
+
+
+                    },
+                    function () {
+                    }
+                )
+            })
+
 
         });
-
-		//그리드 컬럼 설정
-        page.popColSetting = new popColSetting();
-        let columns = page.popColSetting.loadColumnData(gui.gui_code, gui.template_key, 'grid',  page.grid);
-		
-        if (userinfo.group_code == 'admin') {
-            $('#btnGridSetting').css('visibility','visible');  
-        }		
-	
-        $('#btnGridSetting').click(function (e) {
-            let _this = this;
-            let fix_cols = page.grid_config.frozenColumnIndex;
-            page.popColSetting.show(gui.gui_code, gui.template_key, 'grid', page.grid_config.columns, page.grid, { 'order_fix':false,  'fix_cols' : fix_cols });
-        });	
-
-        page.searchDataBind();
-
-        $('#btnSearch').click(function (ex) {
-            page.searchDataBind();
-        });
-
-        // 엑셀 다운로드
-        $('#btnExcel').click(function (e) {
-            page.grid.exportExcel('로그인로그.xls');
-        });
-
-    });
-</script>
-
-
+    </script>
 </th:block>
-</html>
 
+</html>

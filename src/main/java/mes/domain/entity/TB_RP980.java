@@ -1,6 +1,8 @@
 package mes.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mes.domain.DTO.TB_RP940Dto;
 import mes.domain.DTO.TB_RP980Dto;
@@ -12,12 +14,14 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "TB_RP980") // 비상연락체계 테이블
 public class TB_RP980 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EMCONTNO")  // 기본키
+    @Column(name = "EMCONTNO",length = 3, nullable = false)  // 기본키
     private String id;
 
     @Column(name = "EMCONCOMP") // 업체명
@@ -62,7 +66,7 @@ public class TB_RP980 {
 
     public static TB_RP980 toSaveEntity(TB_RP980Dto dto) {
         TB_RP980 entity = new TB_RP980();
-        entity.setId(dto.getId());
+        entity.setId(dto.getEmcontno());
         entity.setEmconcomp(dto.getComp());
         entity.setEmconper(dto.getPer());
         entity.setEmcontel(dto.getTel());

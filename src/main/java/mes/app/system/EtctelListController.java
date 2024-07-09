@@ -48,19 +48,19 @@ public class EtctelListController {
 
     @GetMapping("/read")
     public AjaxResult getList(
-            @RequestParam(value = "searchusr", required = false) String searchusr,
-            @RequestParam(value= "searchusr1", required = false) String searchusr1){
+            @RequestParam(value = "emconper", required = false) String emconper,
+            @RequestParam(value= "emconmno", required = false) String emconmno){
 
 
-        if (searchusr == null) {
-            searchusr = "";
+        if (emconper == null) {
+            emconper = "";
         }
-        if (searchusr1 == null) {
-            searchusr1 = "";
+        if (emconmno == null) {
+            emconmno = "";
         }
 
 
-        List<Map<String, Object>> items = this.etctelListService.getEtctelList(searchusr, searchusr1);
+        List<Map<String, Object>> items = this.etctelListService.getEtctelList(emconper, emconmno);
         AjaxResult result = new AjaxResult();
         result.data=items;
 
@@ -112,6 +112,7 @@ public class EtctelListController {
 
     @PostMapping("/save")
     public AjaxResult addEtctelList(
+            @RequestParam(value = "emcontno", required = false) String emcontno,
             @RequestParam(value="emconcomp", required=false) String comp,
             @RequestParam(value="emconper", required=false) String per,
             @RequestParam(value="emcontel", required=false) String tel,
@@ -136,7 +137,8 @@ public class EtctelListController {
 
         // DTO 생성 및 값 설정
         TB_RP980Dto tbRp980Dto = new TB_RP980Dto();
-        tbRp980Dto.setComp(comp);
+        tbRp980Dto.setEmcontno(emcontno);
+        tbRp980Dto.setComp("대구");
         tbRp980Dto.setPer(per);
         tbRp980Dto.setTel(tel);
         tbRp980Dto.setIndatem(now);
