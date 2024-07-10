@@ -132,8 +132,8 @@ public class DocInputController {
         tbRp760dto.setTitle(title);
         tbRp760dto.setInusernm("홍길동"); //TODO: 로그인 관련 시스템이 잡히면 나중에 추가
 
-        boolean suceescode = docService.save(tbRp760dto);
-        if (suceescode) {
+        boolean successcode = docService.save(tbRp760dto);
+        if (successcode) {
             result.success = true;
             result.message = "저장하였습니다.";
         } else {

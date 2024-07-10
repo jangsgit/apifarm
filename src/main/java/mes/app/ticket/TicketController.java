@@ -94,7 +94,7 @@ public class TicketController {
 
         if(files != null){
 
-            String path = settings.getProperty("file_upload_path") + "발전소";
+            String path = settings.getProperty("file_upload_path") + "티켓";
 
             float fileSize = (float) files.getSize();
 
@@ -152,8 +152,8 @@ public class TicketController {
         tbRp820.setInuserid(String.valueOf(user.getId()));
         tbRp820.setInusernm(user.getUsername());
 
-        boolean suceescode = ticketService.save(tbRp820);
-        if (suceescode) {
+        boolean successcode = ticketService.save(tbRp820);
+        if (successcode) {
             result.success = true;
             result.message = "저장하였습니다.";
         } else {

@@ -9,15 +9,15 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>티켓현황</h2>
-                <a href="#" title="북마크" class="bookmark toggle">
+                <h2>합동안전점검</h2>
+                <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>종합관제</li>
-                <li>티켓등록</li>
+                <li>점검관리</li>
+                <li>합동안전점검</li>
             </ul>
         </div>
         <!-- Select -->
@@ -64,7 +64,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    등록일자<span class="eq">*</span>
+                                    점검일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -82,13 +82,26 @@
                             <dl>
                                 <dt>
                                     <label for="searchusr">
-                                        Ticket명<span class="eq">*</span>
+                                        점검자<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="searchusr" class="input-srch"
-                                               placeholder="Ticket명 검색">
+                                               placeholder="점검자 검색">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchcom">
+                                        협력사<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchcom" class="input-srch"
+                                               placeholder="협력사 검색">
                                         <a class="btn-srch" title="검색" onclick="searchData()"
                                            onkeyup="searchData()"></a>
                                     </div>
@@ -127,7 +140,7 @@
                 <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="title-wrap">
-                            <h3>티켓등록</h3>
+                            <h3>합동안전점검 등록</h3>
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -155,140 +168,82 @@
                     <div class="table-wrap">
                         <table class="write-table">
                             <form id="customForm">
-                                <caption>티켓 테이블</caption>
+                                <caption>점검등록 테이블</caption>
                                 <colgroup>
                                     <col class="wp12">
-                                    <col class="wp25">
+                                    <col class="wp40">
                                     <col class="wp12">
-                                    <col class="wp55">
+                                    <col class="wp40">
                                 </colgroup>
                                 <tbody>
                                 <tr>
                                     <th>
-                                        <label for="requester">
-                                            Requester
+                                        <label for="checknm">
+                                            점검명
                                         </label>
                                     </th>
-                                    <td>
-                                        <input type="text" id="requester" name="requester">
-                                    </td>
-                                    <th>
-                                        <label for="tketnm">
-                                            티켓명
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketnm" name="tketnm" style="width: 100%">
+                                    <td colspan="3">
+                                        <input type="text" id="checknm" class="wp100" placeholder="점검명">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        <label for="tketcrdtm">
-                                            발생일자
+                                        <label for="checkdt">
+                                            점검일자
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="date" id="tketcrdtm" name="tketcrdtm">
+                                        <input type="date" id="checkdt">
                                     </td>
                                     <th>
-                                        <label for="tketflag">
-                                            상태
+                                        <label for="checkusr">
+                                            점검자
                                         </label>
                                     </th>
                                     <td>
-                                        <select id="tketflag" name="tketflag">
-                                            <option value="1">오류</option>
+                                        <input id="checkusr" name="checkusr" th:value="${ username }">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="checkarea">
+                                            점검장소
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="checkarea" class="wp100" placeholder="점검장소">
+                                            <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지발전소</option>
+                                        </select>
+                                    </td>
+                                    <th>
+                                        <label for="checkresult">
+                                            점검결과
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="checkresult" placeholder="점검결과">
+                                            <option VALUE="양호">양호</option>
+                                            <option VALUE="좋음">좋음</option>
+                                            <option VALUE="나쁨">나쁨</option>
                                         </select>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th style="margin-bottom: 20px;">
-                                        <label for="requesterhp">
-                                            연락처
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="requesterhp" name="requesterhp">
+                                <tr class="container-fluid">
+                                    <td colspan="4">
+                                        <p style="font-weight: bold" id="newRowAtTop">점검리스트</p>
+                                        <div id="theGrid1" style="max-height: 600px; width: 500px"></div>
                                     </td>
-                                    <th rowspan="5">
-                                        <label for="tketrem">
-                                            내용
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="checkrem">
+                                            점검의견
                                         </label>
                                     </th>
-                                    <td rowspan="5">
+                                    <td colspan="3">
                                         <div class="textarea-box">
-                                            <textarea id="tketrem" placeholder="내용" style="height: 220px"></textarea>
-                                            <p class="text-count" id="text-count">0/100</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="empty-cell" colspan="2" style="height: 30px"></td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="inusernm">
-                                            담당자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="inusernm" name="inusernm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tkettypenm">
-                                            요청유형
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tkettypenm" name="tkettypenm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tketrcpnm">
-                                            수신회사
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketrcpnm" name="tketrcpnm">
-                                        <input type="hidden" id="tketrcpcd" name="tketrcpcd">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tketrusernm">
-                                            수신자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketrusernm" name="tketrusernm">
-                                        <input type="hidden" id="tketruserid" name="tketruserid">
-                                    </td>
-                                    <th rowspan="2">
-                                        <label for="tketactrem">
-                                            조치
-                                        </label>
-                                    </th>
-                                    <td rowspan="2">
-                                        <div class="textarea-box">
-                                            <textarea id="tketactrem" placeholder="조치내용"
-                                                      style="height: 170px"></textarea>
+                                            <textarea id="checkrem" placeholder="점검의견"></textarea>
                                             <p class="text-count" id="text-count1">0/100</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="remark">
-                                            비고
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <div class="textarea-box">
-                                            <textarea id="remark"></textarea>
-                                            <p class="text-count" id="text-count2">0/100</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -300,14 +255,14 @@
                                         <div id="uploadComponent1" class="upload-component">
                                             <div class="upload-filebox">
                                                 <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                                <a class="btn" title="파일업로드">파일업로드</a>
                                                 <input type="file" id="fileInput1" class="fileInput" multiple>
                                                 <p>Maximun upload file size <span>1GiB</span></p>
                                             </div>
                                             <div class="upload-filelist">
                                                 <div class="title">
                                                     <h5>Files (0)</h5>
-                                                    <a href="#" title="Delete all" class="btn-file-deleteall">Delete
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete
                                                         all</a>
                                                 </div>
                                                 <ul class="filelist" id="filelist">
@@ -338,21 +293,24 @@
 
     <script type="text/javascript">
 
-        var theGrid;
+        var theGrid;    // 목록에 뿌림
+        var theGrid1;   // 등록에서 insert
         var viewdata;
+        var data1 = [];
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             fetchListData();
+            inputData();
         }
 
         function fetchListData() {
             let data2 = [];
 
             $.ajax({
-                url: '/api/ticket/ticket/read',
+                url: '/api/inspec/hap/read',
                 type: 'GET',
                 async: false,
                 success: function (data) {
@@ -368,21 +326,26 @@
                     autoGenerateColumns: false,
                     showMarquee: true,
                     columns: [
-                        {binding: 'rownum', header: '순번', width: 60, align: 'center'},
-                        {binding: 'tketcrdtm', header: '발생일자', width: 150, align: 'center'},
-                        {binding: 'tketnm', header: 'Ticket명', width: 150, align: 'center'},
-                        {binding: 'tkettypenm', header: '유형', width: 150, align: 'center'},
-                        {binding: 'tketrusernm', header: '수신자명', width: 150, align: 'center'},
-                        {binding: 'tketflag', header: '상태', width: 150, align: 'center'},
-                        {binding: 'tketactrem', header: '조치', width: 200, align: 'center'},
+                        {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '점검일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '산단명', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spplannm', header: '발전소명', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'checkusr', header: '작성자', width: 260, align: 'center', isReadOnly: true},
+                        {binding: 'checkresult', header: '점검결과', width: 160, align: 'center', isReadOnly: true},
                         {
-                            header: '파일', binding: 'downloads', width: 150, align: 'center', cssClass: 'filedown',
+                            header: '첨부파일',
+                            binding: 'downloads',
+                            width: '*',
+                            align: 'center',
+                            cssClass: 'filedown',
+                            isReadOnly: true
                         },
-                        {binding: 'remark', header: '비고', width: '*', align: 'center'}
+                        {binding: 'checkrem', header: '점검의견', width: 160, align: 'center', isReadOnly: true},
+
                     ],
                     itemsSource: viewdata
                 });
-                // 선택이 변경될 때, 현재 항목 업데이트
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
             } else {
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
@@ -390,80 +353,103 @@
             }
         }
 
+        // 점검리스트 input 박스
+        function inputData() {
+
+            var checkobj = "", checkitem = "", data1 = [];
+            for (var i = 0; i < 1; i++) {
+                data1.push({
+                    checkseq: i + 1,
+                    checkobj: checkobj,
+                    checkitem: checkitem
+                });
+            }
+            // 그리드
+            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+                itemsSource: data1,
+                allowAddNew: true,
+                allowDelete: true,
+                columns: [
+                    {binding: 'checkseq', header: 'NO.', width: 80, align: 'center'},
+                    {binding: 'checkobj', header: '점검대상', width: 210, align: 'center'},
+                    {binding: 'checkitem', header: '점검항목', width: 210, align: 'center'},
+                ],
+            });
+            // 새 열 추가
+            document.getElementById('newRowAtTop').addEventListener('click', function (e) {
+                theGrid1.newRowAtTop = e.target.checked;
+            });
+
+            // 넘버 자동 생성
+            theGrid1.collectionView.collectionChanged.addHandler(function (sender, e) {
+                if (e.action === wijmo.collections.NotifyCollectionChangedAction.Add) {
+                    var newItem = e.item;
+                    newItem.checkseq = sender.sourceCollection.length; // set new id to the number of items in the source
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', inputData);
+
         $(document).ready(function (e) {
 
+            // 정보 저장
             $('#btnSave').click(function (e) {
-
-
                 Alert.confirm('', '저장하시겠습니까?', function () {
+
+                    // theGrid1의 데이터를 data1 배열에 업데이트
+                    var updatedData1 = theGrid1.collectionView.items;
+
+                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+                    console.log("Updated data1:", updatedData1);
 
                     let formData = new FormData();
 
-                    // 다른 데이터를 FormData에 추가합니다.
                     formData.append('spworkcd', $('#spworkcd').val());
                     formData.append('spworknm', $('#spworknm').val());
                     formData.append('spcompcd', $('#spcompcd').val());
                     formData.append('spcompnm', $('#spcompnm').val());
                     formData.append('spplancd', $('#spplancd').val());
                     formData.append('spplannm', $('#spplannm').val());
-                    formData.append('requester', $('#requester').val());
-                    formData.append('requesterhp', $('#requesterhp').val());
-                    formData.append('tketcrdtm', $('#tketcrdtm').val());
-                    formData.append('tketnm', $('#tketnm').val());
-                    formData.append('tkettypecd', $('#tkettypecd').val());
-                    formData.append('tkettypenm', $('#tkettypenm').val());
-                    formData.append('tketflag', $('#tketflag').val());
-                    formData.append('tketrem', $('#tketrem').val());
-                    formData.append('tketrcpcd', $('#tketrcpcd').val());
-                    formData.append('tketrcpnm', $('#tketrcpnm').val());
-                    formData.append('tketruserid', $('#tketruserid').val());
-                    formData.append('tketrusernm', $('#tketrusernm').val());
-                    formData.append('tketactrem', $('#tketactrem').val());
-                    formData.append('remark', $('#remark').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checknm', $('#checknm').val());
+                    formData.append('checkusr', $('#checkusr').val());
+                    formData.append('checkresult', $('#checkresult').val());
+                    formData.append('checkrem', $('#checkrem').val());
                     formData.append('filelist', $('#filelist').val());
                     formData.append('_csrf', $('[name=_csrf]').val());
-
+                    // 점검리스트 데이터 추가
+                    formData.append('inspectlist', JSON.stringify(updatedData1));
 
                     $.ajax({
-                        url: '/api/ticket/ticket/save',
+                        url: "/api/inspec/hap/save",
                         type: 'POST',
                         data: formData,
-                        processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                        contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                        processData: false,
+                        contentType: false,
                         success: function (response) {
                             if (response.success) {
                                 Alert.alert('', response.message, function () {
                                     $('#listTabLink').click();
                                     fetchListData();
-                                    document.getElementById('requester').value = '';
-                                    document.getElementById('requesterhp').value = '';
-                                    document.getElementById('tketcrdtm').value = '';
-                                    document.getElementById('tketnm').value = '';
-                                    document.getElementById('tkettypenm').value = '';
-                                    document.getElementById('tketflag').value = '';
-                                    document.getElementById('tketrcpnm').value = '';
-                                    document.getElementById('tketrusernm').value = '';
-                                    document.getElementById('tketactrem').value = '';
-                                    document.getElementById('tketrem').value = '';
-                                    document.getElementById('remark').value = '';
+
                                 });
+
                             } else {
                                 Alert.alert('', '저장에 실패했습니다. ');
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            Alert.alert('', '에러가발생하였습니다.');
+                            Alert.alert('', '에러가 발생하였습니다.');
                         }
                     });
-
-
                 })
             })
             // select 아이디에 따라 히든 input 설정
             const selects = [
-                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
-                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
-                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+                { selectId: 'spworkcd', hiddenInputId: 'spworknm' },
+                { selectId: 'spcompcd', hiddenInputId: 'spcompnm' },
+                { selectId: 'spplancd', hiddenInputId: 'spplannm' }
             ];
             selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 

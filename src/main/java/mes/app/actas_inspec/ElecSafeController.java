@@ -107,10 +107,10 @@ public class ElecSafeController {
 
         AjaxResult result = new AjaxResult();
 
-        boolean suceescode = elecSafeService.save(TBRP750);
+        boolean successcode = elecSafeService.save(TBRP750);
 
         result.data = TBRP750;
-        if (suceescode) {
+        if (successcode) {
             result.success = true;
             result.message = "저장하였습니다.";
         } else {

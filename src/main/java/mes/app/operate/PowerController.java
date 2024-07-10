@@ -145,8 +145,8 @@ public class PowerController {
         tbRp920.setInuserid(String.valueOf(user.getId()));
         tbRp920.setInusernm(user.getUsername());
 
-        boolean suceescode = powerService.save(tbRp920);
-        if (suceescode) {
+        boolean successcode = powerService.save(tbRp920);
+        if (successcode) {
             result.success = true;
             result.message = "저장하였습니다.";
         } else {
