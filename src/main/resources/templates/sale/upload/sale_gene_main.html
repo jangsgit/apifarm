@@ -349,7 +349,17 @@
 
         // 엑셀파일 업로드 / 조회
         function uploadExcelAndLoadData() {
-            let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID 가정
+            let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID
+            let fileInput = document.getElementById('fileInput2'); // 파일 입력 필드의 ID
+            let files = fileInput.files;
+
+            if (files.length > 0) {
+                formData.append('upload_file', files[0]); // 'upload_file'이 서버에서 요구하는 파트 이름
+            } else {
+                Alert.alert('', '파일을 첨부해 주세요.');
+                return; // 파일이 없으면 여기서 함수 종료
+            }
+
             // formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
             // 추가적인 데이터 : no, 등록일자, 등록자, 최종수정일
 
@@ -357,18 +367,21 @@
                 url: '/api/gene/upload/upload_save', // 서버의 엑셀 업로드 API 주소
                 type: 'POST',
                 data: formData,
-                processData: false,
-                contentType: false,
+                processData: false, // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
                 success: function(response) {
                     if (response.success) {
-                        alert('파일이 성공적으로 업로드되었습니다.');
+                        // Alert.alert('', '파일이 성공적으로 업로드되었습니다.');
+                        Alert.alert('', response.message);
                         updateGrid(response.data); // 응답에서 데이터를 받아 그리드 업데이트
                     } else {
-                        alert('업로드 실패: ' + response.message);
+                        // alert('업로드 실패: ' + response.message);
+                        Alert.alert('', '업로드 실패: ' + response.message);
                     }
+
                 },
-                error: function() {
-                    alert('업로드 중 서버와의 통신 오류가 발생했습니다.');
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
                 }
             });
         }
@@ -710,85 +723,85 @@
 
         }
 
-        $(document).ready(function (e) {
-
-
-            page = new CheckResultDiaryPage();
-
-
-
-
-
-
-            $('#btnSave').click(function (e){
-
-
-                Alert.confirm('', '저장하시겠습니까?', function() {
-
-                        let fileInput = document.getElementById('fileInput1');
-                        let files = fileInput.files;
-                        let formData = new FormData();
-
-                        for (var i = 0; i < files.length; i++) {
-                            formData.append('filelist', files[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function(input){
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('checkitem', $('#checkitem').val());
-                        formData.append('checkplan', $('#checkplan').val());
-                        formData.append('randomuuid', randomString);
-                        formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if(response.success){
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {}
-
-
-                )
-            })
-
-
-            page.setUploader();
-
-
-        });
+        // $(document).ready(function (e) {
+        //
+        //
+        //     page = new CheckResultDiaryPage();
+        //
+        //
+        //
+        //
+        //
+        //
+        //     $('#btnSave').click(function (e){
+        //
+        //
+        //         Alert.confirm('', '저장하시겠습니까?', function() {
+        //
+        //                 let fileInput = document.getElementById('fileInput1');
+        //                 let files = fileInput.files;
+        //                 let formData = new FormData();
+        //
+        //                 for (var i = 0; i < files.length; i++) {
+        //                     formData.append('filelist', files[i]);
+        //                 }
+        //
+        //                 const randomString = generateRandomStringWithDate();
+        //
+        //                 var inputs = document.querySelectorAll('input[name="checkusr"]');
+        //                 var values = [];
+        //
+        //                 inputs.forEach(function(input){
+        //                     values.push(input.value);
+        //
+        //                 })
+        //
+        //                 var checkusrString = values.join(',');
+        //
+        //
+        //
+        //                 // 다른 데이터를 FormData에 추가합니다.
+        //                 formData.append('supplier', $('#supplier').val());
+        //                 formData.append('checkdt', $('#checkdt').val());
+        //                 formData.append('checkstdt', $('#checkstdt').val());
+        //                 formData.append('checkendt', $('#checkendt').val());
+        //                 formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+        //                 formData.append('checkarea', $('#checkarea').val());
+        //                 formData.append('checkitem', $('#checkitem').val());
+        //                 formData.append('checkplan', $('#checkplan').val());
+        //                 formData.append('randomuuid', randomString);
+        //                 formData.append('_csrf', $('[name=_csrf]').val());
+        //
+        //
+        //                 $.ajax({
+        //                     url: '/api/inspec_report/save',
+        //                     type: 'POST',
+        //                     data: formData,
+        //                     processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+        //                     contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+        //                     success: function (response) {
+        //                         if(response.success){
+        //                             Alert.alert('', response.message);
+        //                         }
+        //                     },
+        //                     error: function (jqXHR, textStatus, errorThrown) {
+        //                         Alert.alert('', '에러가발생하였습니다.');
+        //                     }
+        //                 });
+        //
+        //
+        //             },
+        //             function () {}
+        //
+        //
+        //         )
+        //     })
+        //
+        //
+        //     page.setUploader();
+        //
+        //
+        // });
 
         // // 목록 탭에서 데이터 선택
         // theGrid1.selectionChanged.addHandler(function (s, e) {
