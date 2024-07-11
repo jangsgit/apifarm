@@ -1,0 +1,456 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>제어이행</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>제어이행관리</li>
+                <li>제어이행</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
+                        <option value="001">대구</option>
+                        <input type="hidden" id="spworknm" name="spworknm">
+                    </select>
+                </li>
+                <li>
+                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
+                        <option value="001">성서산단</option>
+                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
+                        <option value="001">시설명</option>
+                        <input type="hidden" id="spplannm" name="spplannm">
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    제어일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchcom">
+                                        Ticket 명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchcom" class="input-srch"
+                                               placeholder="Ticket명 검색">
+                                        <a class="btn-srch" title="검색" onclick="searchData()"
+                                           onkeyup="searchData()"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 600px"></div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>합동안전점검 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <form id="customForm">
+                                <caption>점검등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="checknm">
+                                            점검명
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <input type="text" id="checknm" class="wp100" placeholder="점검명">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="checkdt">
+                                            점검일자
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="date" id="checkdt">
+                                    </td>
+                                    <th>
+                                        <label for="checkusr">
+                                            점검자
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input id="checkusr" name="checkusr" th:value="${ username }">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="checkarea">
+                                            점검장소
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="checkarea" class="wp100" placeholder="점검장소">
+                                            <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지발전소</option>
+                                        </select>
+                                    </td>
+                                    <th>
+                                        <label for="checkresult">
+                                            점검결과
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="checkresult" placeholder="점검결과">
+                                            <option VALUE="양호">양호</option>
+                                            <option VALUE="좋음">좋음</option>
+                                            <option VALUE="나쁨">나쁨</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="container-fluid">
+                                    <td colspan="4">
+                                        <p style="font-weight: bold" id="newRowAtTop">점검리스트</p>
+                                        <div id="theGrid1" style="max-height: 600px; width: 500px"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="checkrem">
+                                            점검의견
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <div class="textarea-box">
+                                            <textarea id="checkrem" placeholder="점검의견"></textarea>
+                                            <p class="text-count" id="text-count1">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        첨부파일
+                                    </th>
+                                    <td colspan="3">
+                                        <div id="uploadComponent1" class="upload-component">
+                                            <div class="upload-filebox">
+                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <input type="file" id="fileInput1" class="fileInput" multiple>
+                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                            </div>
+                                            <div class="upload-filelist">
+                                                <div class="title">
+                                                    <h5>Files (0)</h5>
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete
+                                                        all</a>
+                                                </div>
+                                                <ul class="filelist" id="filelist">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </form>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    </div> <!-- //dashboard-layout-right end-->
+
+    </div> <!-- //dashboard-layout-contents end-->
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;    // 목록에 뿌림
+        var theGrid1;   // 등록에서 insert
+        var viewdata;
+        var data1 = [];
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            fetchListData();
+            inputData();
+        }
+
+        function fetchListData() {
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/inspec/hap/read',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '점검일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '산단명', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spplannm', header: '발전소명', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'checkusr', header: '작성자', width: 260, align: 'center', isReadOnly: true},
+                        {binding: 'checkresult', header: '점검결과', width: 160, align: 'center', isReadOnly: true},
+                        {
+                            header: '첨부파일',
+                            binding: 'downloads',
+                            width: '*',
+                            align: 'center',
+                            cssClass: 'filedown',
+                            isReadOnly: true
+                        },
+                        {binding: 'checkrem', header: '점검의견', width: 160, align: 'center', isReadOnly: true},
+
+                    ],
+                    itemsSource: viewdata
+                });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+        // 점검리스트 input 박스
+        function inputData() {
+
+            var checkobj = "", checkitem = "", data1 = [];
+            for (var i = 0; i < 1; i++) {
+                data1.push({
+                    checkseq: i + 1,
+                    checkobj: checkobj,
+                    checkitem: checkitem
+                });
+            }
+            // 그리드
+            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+                itemsSource: data1,
+                allowAddNew: true,
+                allowDelete: true,
+                columns: [
+                    {binding: 'checkseq', header: 'NO.', width: 80, align: 'center'},
+                    {binding: 'checkobj', header: '점검대상', width: 210, align: 'center'},
+                    {binding: 'checkitem', header: '점검항목', width: 210, align: 'center'},
+                ],
+            });
+            // 새 열 추가
+            document.getElementById('newRowAtTop').addEventListener('click', function (e) {
+                theGrid1.newRowAtTop = e.target.checked;
+            });
+
+            // 넘버 자동 생성
+            theGrid1.collectionView.collectionChanged.addHandler(function (sender, e) {
+                if (e.action === wijmo.collections.NotifyCollectionChangedAction.Add) {
+                    var newItem = e.item;
+                    newItem.checkseq = sender.sourceCollection.length; // set new id to the number of items in the source
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', inputData);
+
+        $(document).ready(function (e) {
+
+            // 정보 저장
+            $('#btnSave').click(function (e) {
+                Alert.confirm('', '저장하시겠습니까?', function () {
+
+                    // theGrid1의 데이터를 data1 배열에 업데이트
+                    var updatedData1 = theGrid1.collectionView.items;
+
+                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+                    console.log("Updated data1:", updatedData1);
+
+                    let formData = new FormData();
+
+                    formData.append('spworkcd', $('#spworkcd').val());
+                    formData.append('spworknm', $('#spworknm').val());
+                    formData.append('spcompcd', $('#spcompcd').val());
+                    formData.append('spcompnm', $('#spcompnm').val());
+                    formData.append('spplancd', $('#spplancd').val());
+                    formData.append('spplannm', $('#spplannm').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checknm', $('#checknm').val());
+                    formData.append('checkusr', $('#checkusr').val());
+                    formData.append('checkresult', $('#checkresult').val());
+                    formData.append('checkrem', $('#checkrem').val());
+                    formData.append('filelist', $('#filelist').val());
+                    formData.append('_csrf', $('[name=_csrf]').val());
+                    // 점검리스트 데이터 추가
+                    formData.append('inspectlist', JSON.stringify(updatedData1));
+
+                    $.ajax({
+                        url: "/api/inspec/hap/save",
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                Alert.alert('', response.message, function () {
+                                    $('#listTabLink').click();
+                                    fetchListData();
+
+                                });
+
+                            } else {
+                                Alert.alert('', '저장에 실패했습니다. ');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Alert.alert('', '에러가 발생하였습니다.');
+                        }
+                    });
+                })
+            })
+            // select 아이디에 따라 히든 input 설정
+            const selects = [
+                { selectId: 'spworkcd', hiddenInputId: 'spworknm' },
+                { selectId: 'spcompcd', hiddenInputId: 'spcompnm' },
+                { selectId: 'spplancd', hiddenInputId: 'spplannm' }
+            ];
+            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+
+        });
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+    </script>
+
+</th:block>
+</html>
+
