@@ -55,7 +55,7 @@
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <form id="searchForm" autocomplete="off">
-                            <div class="search-wrap">
+                            <div class="search-wrap" style="padding: 0 15px;">
                                 <dl>
                                     <dt>
                                         발생일<span class="eq">*</span>
@@ -100,10 +100,14 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                    <div class="container-fluid" id="theGridContainer">
+                            <p id="selectedItem"></p>
+                            <div id="theGrid"></div>
+
+                        <div id="emptyMessage" class="empty-message " style="display:none; height: 450px; border: 1px solid rgba(0,0,0, .2);
+                         text-align: center; line-height: 450px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;   ">조회된 데이터가 없습니다</div>
                     </div>
+
 
                     <div class="btn-wrap">
                     </div>
@@ -156,50 +160,54 @@
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching log_list data:', textStatus, errorThrown);
                 }
-            })
-
-            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            if (data2.length === 0) {
-                let emptyRowsCount = 8;  // 원하는 빈 행의 수
-                for (let i = 0; i < emptyRowsCount; i++) {
-                    data2.push({});
-                }
-                console.log('Grid initialized with empty data.');
-            }
-
-            viewdata = new wijmo.collections.CollectionView(data2);
-
-            // 데이터 그리드에 바인딩
-            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'id', header: 'No', width: 150, align: 'center'},
-                    {binding: 'type', header: '구분', width: 160, align: 'center'},
-                    {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
-                    {binding: 'login_id', header: '사번', width: 160, align: 'center'},
-                    {binding: 'name', header: '이름', width: 160, align: 'center'},
-                    {binding: 'created', header: '일시', width: 260, align: 'center'},
-                    {binding: '', header: '', width: 450, align: 'center'},
-                ],
-                itemsSource: viewdata
             });
 
+            let gridContainer = $('#theGridContainer');
+            let emptyMessage = $('#emptyMessage');
+            $('#theGrid').remove();  // 기존 그리드를 제거합니다.
+            gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
 
-            if (data2.length == 0 ){
-                console.log('Grid initialized with empty data.');
-            }
 
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: () => {
+                viewdata = new wijmo.collections.CollectionView(data2);
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'id', header: 'No', width: 150, align: 'center'},
+                        {binding: 'type', header: '구분', width: 160, align: 'center'},
+                        {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
+                        {binding: 'login_id', header: '사번', width: 160, align: 'center'},
+                        {binding: 'name', header: '이름', width: 160, align: 'center'},
+                        {binding: 'created', header: '일시', width: 260, align: 'center'},
+                        {binding: '', header: '', width: 444, align: 'center'},
+                    ],
+                    itemsSource: viewdata
+                });
 
+
+                if (data2.length == 0) {
+                    console.log('Grid initialized with empty data.');
                 }
-            })
-            // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                let selector = new wijmo.grid.selector.Selector(theGrid, {
+                    itemChecked: () => {
 
-            theGrid.refresh();
+                    }
+                })
+                // 선택이 변경될 때, 현재 항목 업데이트
+
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+                theGrid.refresh();
+
+            // 데이터 배열이 비어있을 경우 메시지 표시
+            if (data2.length === 0) {
+                emptyMessage.show();
+                console.log('Grid initialized with empty data.');
+            } else {
+                emptyMessage.hide();
+            }
 
 
         }

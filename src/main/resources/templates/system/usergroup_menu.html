@@ -147,7 +147,7 @@
 
                     <!--                    grid 영역-->
                     <div class="container-fluid">
-                        <p id="selectedItem"></p>
+<!--                        <p id="selectedItem"></p>-->
                         <div id="theGrid"></div>
                     </div>
                     <div class="btn-wrap">
@@ -176,13 +176,13 @@
         var viewdata;
 
         document.readyState === 'complete' ? init() : window.onload = init;
-
-
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             let data2 = [];
             let group_id = $('#cboUserGroup').val();
             let folder_id = $('#cboMenuFolder').val();
+            let folderNames = {};  // 폴더 ID와 이름을 저장할 객체
+            let menuFolderName = '폴더명';  // 기본 폴더명, AJAX 응답 후 업데이트
+
 
             $.ajax({
                 url: '/api/system/usergroupmenu/read',
@@ -195,27 +195,32 @@
                 success: function (data) {
                     console.log('wijmo', data.data);
                     data2 = data.data;
-                }
-            })
 
-            //계층적 데이터 설정
-            // viewdata = new wijmo.collections.CollectionView(data2, {
-            //     getChildren: function (item) {
-            //         return item.children;
-            //     }
-            // });
+                    folderNames = data.FolderName || [];
+                    // folder_id에 해당하는 폴더명을 찾아서 menuFolderName에 할당
+                    const folder = folderNames.find(f => f.key == folder_id);
+                    if (folder) {
+                        menuFolderName = folder.value;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
 
             viewdata = new wijmo.collections.CollectionView(data2);
-            viewdata.childItemsPath = 'children';
-
-            // viewdata = new wijmo.collections.CollectionView(data2);
-
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    {binding: 'name', header: '코드명', width: 250, align: 'center'},
+                    {
+                        binding: 'name',
+                        header: '코드명',
+                        width: 250,
+                        align: 'center',
+                    },
                     {
                         binding: 'r',
                         header: '읽기',
@@ -223,12 +228,8 @@
                         align: 'center',
                         dataType: wijmo.DataType.Boolean,
                         isReadOnly: false,
-                        // editor: new wijmo.grid.input.CheckBox({
-                        //     disabled: function (row, col, cell) {
-                        //         // 필요에 따라 checkbox를 비활성화할 조건을 여기에 추가할 수 있습니다.
-                        //         return cell.item.isReadOnly;  // 예시: 셀의 isReadOnly 속성 값에 따라 비활성화
-                        //     }
-                        // })
+                        isContentHtml: true, // HTML 내용 사용 설정
+
                     },
                     {
                         binding: 'w',
@@ -237,231 +238,44 @@
                         align: 'center',
                         dataType: wijmo.DataType.Boolean,
                         isReadOnly: false,
-                        // headerRenderer: function (panel, col) {
-                        //     panel.innerHTML = "<input type='checkbox' id='checkWriteAll' />쓰기";
-                        // }
                     },
                     {binding: '', header: '', width: 900, align: 'center'},
+                    {
+                        header: menuFolderName,
+                        align: 'center',
+                        width: 250,
+                        binding: 'pid',  // pid 값을 폴더명으로 바인딩
+                        dataMap: new wijmo.grid.DataMap(folderNames, 'key', 'value')  // 폴더 ID와 폴더명을 매핑하여 표시
+                    },
                 ],
-                itemsSource: viewdata,
-                childItemsPath: 'children'
+                itemsSource: viewdata
             });
+
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: () => {
 
                 }
             })
+            // 선택이 변경될 때, 현재 항목 업데이트
+
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
+            theGrid.collectionView.groupDescriptions.push(new wijmo.collections.PropertyGroupDescription('pid'));
 
 
 
-                // 전체 읽기 체크박스 클릭 이벤트
-                $('#checkReadAll').click(function (e) {
-                    let checked = e.target.checked;
-                    viewdata.items.forEach((item) => {
-                        item.r = checked;
-                        if (item.children) {
-                            item.children.forEach((child) => {
-                                child.r = checked;
-                            });
-                        }
-                    });
-                    viewdata.refresh();
-                });
 
-                // 전체 쓰기 체크박스 클릭 이벤트
-                $('#checkWriteAll').click(function (e) {
-                    let checked = e.target.checked;
-                    viewdata.items.forEach((item) => {
-                        item.w = checked;
-                        if (item.children) {
-                            item.children.forEach((child) => {
-                                child.w = checked;
-                            });
-                        }
-                    });
-                    viewdata.refresh();
-                });
-
-
-                // is_folder가 true인 경우 체크박스 비활성화
-                theGrid.formatItem.addHandler((s, e) => {
-                    if (e.panel.cellType == wijmo.grid.CellType.Cell) {
-                        let col = s.columns[e.col];
-                        let item = s.rows[e.row].dataItem;
-                        if ((col.binding === 'r' || col.binding === 'w') && item.is_folder) {
-                            let input = e.cell.querySelector('input[type=checkbox]');
-                            if (input) {
-                                input.disabled = true;
-                            }
-                        }
-                    }
-                });
-
-                // 초기 콤보박스 채우기
-                AjaxUtil.fillSelectOptions($('#cboUserGroup'), 'user_group', '', '');
-                AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
-
-
-            <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-
-
-            let page = null;
-
-            function searchData() {
-                let data = {
-                    'group_id': $('#cboUserGroup').val(),
-                    'folder_id': $('#cboMenuFolder').val(),
-                }
-
-                let result = AjaxUtil.getSyncData('/api/system/usergroupmenu/read', data);
-
-                if (result.success) {
-                    console.log(result.data);
-                    grid_binding(result.data);
-                }
-            }
-
-
-            // function grid_binding(data) {
-            //     var usergroup_menu = data;
-            //     var usergroup_menu_data = [];
-            //     var cnt = 1;
-            //     for (var i = 0; i < usergroup_menu.length; i++) {
-            //         usergroup_menu_data.push({
-            //             name: usergroup_menu[i]["name"],
-            //             r: usergroup_menu[i]["r"],
-            //             w: usergroup_menu[i]["w"],
-            //
-            //
-            //         });
-            //         cnt++;
-            //     }
-            //
-            //     theGrid.columns.clear();
-            //     theGrid.autoGenerateColumns = false;
-            //     viewdata.sourceCollection = usergroup_menu_data;
-            //
-            //     var columns = [
-            //         {binding: 'name', header: '코드명', width: 250, align: 'center'},
-            //         {
-            //             binding: 'r',
-            //             header: '<input type="checkbox" id="checkReadAll"/>읽기',
-            //             width: 100,
-            //             align: 'center',
-            //             dataType: wijmo.DataType.Boolean,
-            //             isReadOnly: false
-            //         },
-            //         {
-            //             binding: 'w',
-            //             header: '<input type="checkbox" id="checkWriteAll" />쓰기',
-            //             width: 100,
-            //             align: 'center',
-            //             dataType: wijmo.DataType.Boolean,
-            //             isReadOnly: false
-            //         },
-            //     ];
-            //
-            //     for (var i = 0; i < columns.length; i++) {
-            //         var col = new wijmo.grid.Column(columns[i]);
-            //         theGrid.columns.push(col);
-            //     }
-            //
-            // }
-
-
-            $(document).ready(function (e) {
-
-                page.searchDataBind();
-                $('#btnSearch').click(function (ex) {
-                    page.searchDataBind();
-                });
-
-                $('#cboUserGroup,#cboMenuFolder').change(function (ex) {
-                    page.searchDataBind();
-                });
-
-                $('#btn_save_group_menu').click(function (e) {
-                    Alert.confirm('',
-                        '저장하시겠습니까?',
-                        function () {
-                            page.saveUserGroupMenu()
-                        },
-                        function () {
-                        }
-                    );
-                });
-
-
-                // $('#btnSave').click(function (e) {
-                //
-                //     console.log('selectedFiles: ', selectedFiles);
-                //
-                //     Alert.confirm('', '저장하시겠습니까?', function () {
-                //
-                //             let fileInput = document.getElementById('fileInput1');
-                //             let files = fileInput.files;
-                //             let formData = new FormData();
-                //
-                //             for (var i = 0; i < files.length; i++) {
-                //                 formData.append('filelist', files[i]);
-                //             }
-                //
-                //             const randomString = generateRandomStringWithDate();
-                //
-                //             var inputs = document.querySelectorAll('input[name="checkusr"]');
-                //             var values = [];
-                //
-                //             inputs.forEach(function (input) {
-                //                 values.push(input.value);
-                //
-                //             })
-                //
-                //             var checkusrString = values.join(',');
-                //
-                //
-                //             // 다른 데이터를 FormData에 추가합니다.
-                //             formData.append('supplier', $('#supplier').val());
-                //             formData.append('checkdt', $('#checkdt').val());
-                //             formData.append('checkstdt', $('#checkstdt').val());
-                //             formData.append('checkendt', $('#checkendt').val());
-                //             formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                //             formData.append('checkarea', $('#checkarea').val());
-                //             formData.append('checkitem', $('#checkitem').val());
-                //             formData.append('checkplan', $('#checkplan').val());
-                //             formData.append('randomuuid', randomString);
-                //             formData.append('_csrf', $('[name=_csrf]').val());
-                //
-                //
-                //             $.ajax({
-                //                 url: '/api/inspec_report/save',
-                //                 type: 'POST',
-                //                 data: formData,
-                //                 processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                //                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                //                 success: function (response) {
-                //                     if (response.success) {
-                //                         Alert.alert('', response.message);
-                //                     }
-                //                 },
-                //                 error: function (jqXHR, textStatus, errorThrown) {
-                //                     Alert.alert('', '에러가발생하였습니다.');
-                //                 }
-                //             });
-                //
-                //
-                //         },
-                //         function () {
-                //         }
-                //     )
-                // })
-
-
-            });
         }
+
+
+        let page = null;
+
+        // 초기 콤보박스 채우기
+        AjaxUtil.fillSelectOptions($('#cboUserGroup'), 'user_group', '', '');
+        AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
+
     </script>
 </th:block>
 

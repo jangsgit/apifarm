@@ -374,8 +374,60 @@
             // new wijmo.grid.FlexGrid('#theGrid', theGrid);
             // new wijmo.grid.FlexGrid('#theGrid2', theGrid2);
 
+
+
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
             theGrid2.rowHeaders.columns.splice(0, 1);
+
+            // create the fast scroller element
+            var theScroller = document.createElement('div');
+            theScroller.classList.add('fast-scroller');
+            for (var i = 65; i <= 90; i++) {
+                var initial = wjCore.createElement('<div>' + String.fromCharCode(i) + '</div>');
+                theScroller.appendChild(initial);
+            }
+            theGrid2.hostElement.firstElementChild.appendChild(theScroller);
+            theScroller.addEventListener('mousedown', function (e) {
+                //
+                // get initial we're looking for
+                var initial = e.target.textContent;
+                scrollTo(initial);
+                e.preventDefault();
+            });
+            //
+            // allow scrolling by typing the initial as well
+            theGrid2.hostElement.addEventListener('keypress', function (e) {
+                scrollTo(String.fromCharCode(e.keyCode));
+            });
+            //
+            // scroll the grid to show a given initial
+            function scrollTo(initial) {
+                if (initial.length == 1) {
+                    initial = initial.toUpperCase();
+                    for (var i = 0; i < theGrid2.rows.length; i++) {
+                        var row = theGrid2.rows[i];
+                        if (row instanceof wjGrid.GroupRow && row.dataItem.name == initial) {
+                            var rc = theGrid2.cells.getCellBoundingRect(i, 0, true);
+                            var pt = theGrid2.scrollPosition;
+                            //
+                            // scroll with animation
+                            if (true) {
+                                wjCore.animate(function (pct) {
+                                    var y = (pt.y * (1 - pct)) + (-rc.top * pct);
+                                    theGrid2.scrollPosition = new wjCore.Point(pt.x, y);
+                                }, 300);
+                            }
+                            else { // or without
+                                theGrid2.scrollPosition = new wjCore.Point(pt.x, -rc.top);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
