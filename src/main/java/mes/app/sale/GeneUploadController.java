@@ -3,6 +3,7 @@ package mes.app.sale;
 import mes.app.sale.service.GeneUploadService;
 import mes.config.Settings;
 import mes.domain.model.AjaxResult;
+import mes.domain.repository.TB_RP320Repository;
 import mes.domain.services.SqlRunner;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ import java.util.*;
 @RequestMapping("/api/gene/upload")
 public class GeneUploadController {
 	
-//	@Autowired
-//	TB_RP320Repository TB_RP320Repository;
+	@Autowired
+	TB_RP320Repository TB_RP320Repository;
 	
 	@Autowired
 	private GeneUploadService geneUploadService;
@@ -78,7 +79,8 @@ public class GeneUploadController {
 	
 	// 발전량 엑셀 업로드
 	@PostMapping("/upload_save")
-	public AjaxResult saveGeneData(@RequestParam(value = "upload_file") MultipartFile upload_file,
+	public AjaxResult saveGeneData(
+			@RequestParam(value = "upload_file") MultipartFile upload_file,
 								   MultipartHttpServletRequest multipartRequest,
 								   Authentication auth) throws FileNotFoundException, IOException {
 		
@@ -143,6 +145,10 @@ public class GeneUploadController {
 			}
 			String mevaluet = row.get(mevaluet_col);
 			
+//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//			LocalDate jumun_date = LocalDate.parse(jumun_date_str, formatter);
+//			LocalDate due_date = LocalDate.parse(due_date_str, formatter);
+			
 			MapSqlParameterSource paramMap = new MapSqlParameterSource();
 //			paramMap.addValue("number", number);
 			paramMap.addValue("standdt", standdt);
@@ -187,7 +193,6 @@ public class GeneUploadController {
 			
 			String log_data =
 					"index : " + i +
-//							", number : " + number +
 							", standdt : " + standdt +
 							", powerid : " + powerid +
 							", powernm : " + powernm +
@@ -217,6 +222,7 @@ public class GeneUploadController {
 							", mevalue23 : " + timelist.get(22) +
 							", mevalue24 : " + timelist.get(23) +
 							", mevaluet : " + mevaluet;
+			
 			try {
 				if(powerid != null && !powerid.isEmpty() && powernm != null && !powernm.isEmpty()){
 					this.sqlRunner.execute(sql, paramMap);
@@ -225,6 +231,7 @@ public class GeneUploadController {
 			} catch (Exception e){
 				error_items.put("log",log_data);
 				error_items.put("ex",e.getMessage());
+				continue;
 			}
 		}
 		
