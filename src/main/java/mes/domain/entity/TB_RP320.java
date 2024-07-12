@@ -16,48 +16,36 @@ import java.time.LocalDateTime;
 @Table(name = "TB_RP320")
 public class TB_RP320 {
 	
-	@Column(name = "powerid")
-	private String powerid;
+	@Column(name = "spworkcd")
+	private String spworkcd;
+	
+	@Column(name = "spworknm")
+	private String spworknm;
+	
+	@Column(name = "spcompcd")
+	private String spcompcd;
+	
+	@Column(name = "spcompnm")
+	private String spcompnm;
+	
+	@Column(name = "spplancd")
+	private String spplancd;
+	
+	@Column(name = "spplannm")
+	private String spplannm;
 	
 	@Id
 	@Column(name = "standdt")
 	private String standdt;
+	
+	@Column(name = "powerid")
+	private String powerid;
 	
 	@Column(name = "powernm")
 	private String powernm;
 	
 	@Column(name = "chargedv")
 	private String chargedv;
-	
-	@Column(name = "insuernm")
-	private String insuernm;
-	
-	@Column(name = "spworkcd")
-	private String spworkcd;
-	
-	@Column(name = "inuserid")
-	private String inuserid;
-	
-	@Column(name = "sppland")
-	private String sppland;
-	
-	@Column(name = "spplanm")
-	private String spplanm;
-	
-	@Column(name = "spworkm")
-	private String spworkm;
-	
-	@Column(name = "spcompd")
-	private String spcompd;
-	
-	@Column(name = "spcompm")
-	private String spcompm;
-	
-	@Column(name = "updatem")
-	private LocalDateTime updatem;
-	
-	@Column(name = "indatem")
-	private LocalDateTime indatem;
 	
 	// 실제 값에 따라서 precision, scale 추후 추가하기)
 	@Column(name = "mevalue01")
@@ -134,5 +122,17 @@ public class TB_RP320 {
 	
 	@Column(name = "mevaluet")
 	private BigDecimal mevaluet;
+	
+	@Column(name = "indatem")
+	private LocalDateTime indatem;
+	
+	@Column(name = "inuserid")
+	private String inuserid;
+	
+	@Column(name = "inusernm")
+	private String inusernm;
+	
+	@Column(name = "updatem")
+	private LocalDateTime updatem;
 	
 }
