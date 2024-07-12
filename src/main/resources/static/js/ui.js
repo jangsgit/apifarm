@@ -76,6 +76,31 @@ $(document).ready(function() {
 /*=================================================================================
  * UI 공통
 =================================================================================*/
+/*        Hader : ALram TAB          */
+$(document).ready(function() {
+
+    $(".alarm-tab-links a").click(function(event) {
+        event.preventDefault();
+
+        // 클릭된 탭 링크의 href 속성 값을 가져옴
+        var tabId = $(this).attr("href");
+
+        // 해당 탭을 보여주고 활성화
+        $(".alarm-tab-item").hide();
+        $(tabId).show();
+
+        // 현재 활성화된 탭을 나타내기 위해 클래스 추가/제거
+        $(".alarm-tab-links li").removeClass("active");
+        $(this).parent().addClass("active");
+    });
+
+    // 초기에 첫 번째 탭을 활성화
+    $(".alarm-tab-item:first").show();
+    $(".alarm-tab-links li:first").addClass("active");
+    
+});
+
+
 /*  Input Text delete  */
 $(document).ready(function() {
     $('input[type="text"]').each(function() {
@@ -217,6 +242,26 @@ $(document).ready(function () {
 /*=================================================================================
  * Layout 공통
 =================================================================================*/
+/*        Header - Alram        */
+$(document).ready(function() {
+    $('.alarm').on('click', function(event) {
+        event.preventDefault(); // 기본 동작을 막음 (필요에 따라 사용)
+        $('.alarm-box').slideToggle('fast'); // 서서히 펼쳐지거나 접히게 함
+    });
+
+    // 클릭 시 .user-box가 외부 클릭으로 닫히게 하려면
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('.alarm, .alarm-box').length) {
+            $('.alarm-box').slideUp('fast');
+        }
+    });
+
+    $('.btn-gray').on('click', function(event) {
+        event.preventDefault(); // 기본 동작을 막음 (필요에 따라 사용)
+        $('.alarm-box').slideUp('fast'); // 서서히 접히게 함
+    });
+});
+
 /*        Header - User        */
 $(document).ready(function() {
     $('.user').on('click', function(event) {
@@ -298,7 +343,6 @@ $(document).ready(function() {
             $(".dep2 > li.active > a").parents("ul").show();
             $(".dep3 > li.active > a").parents("ul").show();
             $(".dep4 > li.active > a").parents("ul").show();
-
             // Add 'on' class when 'dep4' link is clicked
             $(".dep3 > li > a").on('click', function(e){
                 e.preventDefault();
@@ -319,3 +363,46 @@ $(document).ready(function() {
         lnbUI.click('.layout-nav li' , 300);
     });
 }(jQuery));
+
+
+/*      Battery       */
+document.addEventListener('DOMContentLoaded', function() {
+    const batteryItems = document.querySelectorAll('.battery-wrap');
+
+    batteryItems.forEach(item => {
+        const batteryLevelElement = item.querySelector('.battery-level');
+        const chargingIndicatorElement = item.querySelector('.charging-indicator');
+        const batteryNumElement = item.querySelector('.battery-num');
+        const batteryLevel = parseInt(batteryNumElement.textContent, 10);
+
+        function updateBatteryLevel(level, isCharging) {
+            batteryLevelElement.style.width = level + '%';
+            batteryNumElement.textContent = level + '%'; // 배터리 잔량 숫자로 표기
+
+            // 충전 중일 때 배터리 컬러 변경
+            if (chargingIndicatorElement.classList.contains('charging')) {
+                batteryLevelElement.style.backgroundColor = '#19D7B4';
+            } else {
+                // 배터리 상태에 따라 색상을 변경
+                if (level > 50) {
+                    batteryLevelElement.style.backgroundColor = '#000'; // 녹색
+                } else if (level > 20) {
+                    batteryLevelElement.style.backgroundColor = '#000'; // 노란색
+                } else {
+                    batteryLevelElement.style.backgroundColor = '#f44336'; // 빨간색
+                }
+            }
+
+            // 충전 중일 때 애니메이션 표시
+            if (isCharging) {
+                chargingIndicatorElement.classList.add('charging');
+            } else {
+                chargingIndicatorElement.classList.remove('charging');
+            }
+        }
+
+        // 초기 배터리 레벨 설정 (예: 첫 번째와 세 번째 항목은 충전 중)
+        updateBatteryLevel(batteryLevel, chargingIndicatorElement.classList.contains('charging'));
+
+    });
+});

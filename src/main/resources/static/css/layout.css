@@ -51,8 +51,24 @@ header .right .weather .wt-graphic .celsius {font-size: 13px; font-weight: 400; 
 header .right .weather .wt-detail {margin-right: 10px;}
 header .right .weather .wt-detail ul {display: flex; align-items: center; font-size: 16px; font-weight: 500; color: #767676; gap: 20px}
 header .right .weather .wt-detail ul li img {margin-right: 6px;}
-header .right .user {display: flex; align-items: center; padding: 0 30px 0 20px; font-size: 16px; font-weight: 700; color: #A0A0A0; gap: 10px;}
-header .right .user .user-name {color: #333; font-size: 20px;}
+
+header .right .alarm {display: flex; align-items: center; padding: 0 0 0 15px; font-size: 16px; font-weight: 700; color: #333; gap: 8px;}
+header .right .alarm::after {content: ''; width: 14px; height: 30px; display: inline-flex; align-items: center; background: url('../images/icon/ico-userdetail.svg')no-repeat;}
+header .right .alarm-box {display: none; position: absolute; top:60px; right: 80px; max-width: 400px; padding: 8px; background-color: #fff; box-shadow: 0px 0px 10px rgba(0,2,6,0.08); border-radius: 3px;}
+header .right .alarm-box a.btn-gray {display: block; min-width: 120px; padding: 9px 16px; background-color: #EDEFF5; border-radius: 3px; color: #333333; font-weight: 700; text-align: center;}
+header .right .alarm-box .alarm-tab-links {display: flex; margin-left: 1px; margin-bottom: -1px; overflow: hidden; border-bottom: 1px solid #EBEBEB; margin-bottom: 8px;}
+.alarm-tab-links li {position: relative;}
+.alarm-tab-links li a {display: inline-flex; justify-content: center; min-width: 90px; padding: 8px 32px 8px 32px; background-color: #3069B3; color: #fff; font-size: 17px; font-weight: 700; text-align: center; transition: all .3s;}
+header .right .alarm-box .alarm-tab-links a {background-color: #fff; padding: 8px 20px; font-size: 14px; color: #333; border-bottom: 2px solid #fff;}
+header .right .alarm-box .alarm-tab-item {display: none; max-height: 180px; overflow: auto; margin-bottom: 8px; transition: all .3s;}
+header .right .alarm-box .alarm-tab-item.active {display: block;}
+header .right .alarm-box table {border-top:none; font-size: 14px;}
+header .right .alarm-box .alarm-tab-links .active a {color: #3069B3; border-bottom: 2px solid #3069B3;}
+.num {display: inline-flex; justify-content: center; text-align: center; padding: 2px 8px; background-color: #2EC9D6; border-radius: 15px; font-size: 14px; color: #fff;}
+
+header .right .user {display: flex; align-items: center; padding: 0 30px 0 15px; font-size: 14px; font-weight: 400; color: #A0A0A0; gap: 8px;}
+header .right .user img {width: 18px;}
+header .right .user .user-name {color: #333; font-size: 16px; font-weight: 700;}
 header .right .user::after {content: ''; width: 14px; height: 30px; display: inline-flex; align-items: center; background: url('../images/icon/ico-userdetail.svg')no-repeat;}
 header .right .user-box {display: none; position: absolute; top:60px; right: 30px;}
 header .right .user-box ul { display: flex; justify-content: center; flex-flow: column wrap; background-color: #fff; border: 1px solid #E6E6E6; border-radius: 3px; box-shadow: 0px 0px 10px rgba(0,2,6,0.08); padding: 8px;}
@@ -64,7 +80,7 @@ footer {display: flex; justify-content: center; align-items: center; width: 100%
 /*=================================================================================
  * (Layout) Nav style
 =================================================================================*/
-.dashboard-layout-sidebar {height: 100%; background-color: #000; overflow:auto;}
+.dashboard-layout-sidebar {height: 100%; background-color: #031B4B; overflow:auto;}
 .layout-sidebar-tab {display: flex; justify-content: space-between; align-items: center;}
 .layout-sidebar-tab li {position: relative; width: 50%; border-right: 1px solid #616161; border-bottom: 1px solid #616161;}
 .layout-sidebar-tab li:last-child {border-right:none;}
@@ -104,14 +120,14 @@ footer {display: flex; justify-content: center; align-items: center; width: 100%
 .layout-nav .dep1 > li.active .ico-lnb03::before {background: url('../images/icon/ico-lnb03-n.svg')no-repeat center;}
 .layout-nav .dep1 > li.active .ico-lnb04::before {background: url('../images/icon/ico-lnb04-n.svg')no-repeat center;}
 .layout-nav .dep1 > li.active .ico-lnb05::before {background: url('../images/icon/ico-lnb05-n.svg')no-repeat center;}
-.layout-nav .dep2 {display: none; padding: 15px 10px 15px 26px; background-color: #191919; border-radius: 0 0 15px 15px;}
-.layout-nav .dep2 > li {position: relative; padding-left: 16px; border-left: 2px solid #3F3F3F;}
+.layout-nav .dep2 {display: none; padding: 15px 10px 15px 26px; background-color: #0D2960; border-radius: 0 0 15px 15px;}
+.layout-nav .dep2 > li {position: relative; padding-left: 16px; border-left: 2px solid #2E436C;}
 .layout-nav .dep2 > li.on,
 .layout-nav .dep2 > li.active .dep3 {display: block;}
 .layout-nav .dep2 > li.active >  a {color: #5DDFDE;}
 .layout-nav .dep2 > li.active > a::before {content: ''; position: absolute; top: 0; left: -2px; display: block; width: 2px; height: 32px; background-color: #5DDFDE;}
 .layout-nav .dep2 > li > a {display: block; padding: 8px 0; font-size: 16px; font-weight: 500; color: #fff;}
-.layout-nav .dep2 > li > a::before {content: ''; position: absolute; top: 0; left: -2px; display: block; width: 2px; height: 34px; background-color: #7d7d7d;}
+.layout-nav .dep2 > li > a::before {content: ''; position: absolute; top: 0; left: -2px; display: block; width: 2px; height: 34px; background-color: #62708C;}
 .layout-nav .dep2 > li.on > a {font-weight: 700; color: #5DDFDE;}
 .layout-nav .dep2 > li.on > a::before {content: ''; position: absolute; top: 0; left: -2px; display: block; width: 2px; height: 32px; background-color: #5DDFDE;}
 .layout-nav .dep3 {display: none; margin-left: 12px;}
@@ -158,6 +174,7 @@ footer {display: flex; justify-content: center; align-items: center; width: 100%
 .title-wrap {display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;}
 .title-wrap h3 {font-size: 20px; font-weight: 700; color: #292929;}
 .title-wrap ul {display: flex; align-items: center;}
+.title-wrap > div {display: flex; align-items: center;}
 .tit-desc {display: flex; align-items: center; color: #F95053; line-height: 1;}
 .tit-desc img {margin-right: 8px;}
 
@@ -257,8 +274,8 @@ section .section-top {display: flex; flex-flow: row wrap; justify-content: space
  .write-table td {padding: 5px 12px; border-bottom:1px solid #e8e8e8; text-align: left;}
  
  .view-table thead tr th {border-right: 0;}
- .view-table th {border-right: 1px solid #D4D5D7; border-bottom: 1px solid #D4D5D7;}
- .view-table td {text-align: right;}
+ .view-table th {border-right: 1px solid #D4D5D7; border-bottom: 1px solid #D4D5D7; text-align: left;}
+ .view-table td {text-align: left;}
 
  .list-table tbody tr:hover, 
  .list-table tr:hover td {background-color: #E5F9F9;}
@@ -288,7 +305,7 @@ section .section-top {display: flex; flex-flow: row wrap; justify-content: space
 .card-wrap section .title h3 {font-size: 16px;}
 .card-wrap section dl {display: flex; justify-content: space-between; align-items: center;}
 .card-wrap section dl dt {font-size: 17px;}
-.card-wrap section dl dd {display: flex; align-items: center; font-size: 32px; font-weight: 500;}
+.card-wrap section dl dd {display: flex; align-items: center; font-size: 30px; font-weight: 500;}
 .card-wrap section dl:nth-child(2) {margin-bottom: 6px;}
 .card-wrap section dl:nth-child(2) dt {font-weight: 600;}
 .card-wrap section dl:last-child dd {font-size: 24px;}
