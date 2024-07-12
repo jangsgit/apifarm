@@ -369,6 +369,7 @@
                 itemsSource: data1,
                 allowAddNew: true,
                 allowDelete: true,
+                newRowAtTop: false, // 처음에는 false로 설정
                 columns: [
                     {binding: 'checkseq', header: 'NO.', width: 80, align: 'center'},
                     {binding: 'checkobj', header: '점검대상', width: 210, align: 'center'},
@@ -387,6 +388,13 @@
                     newItem.checkseq = sender.sourceCollection.length; // set new id to the number of items in the source
                 }
             });
+
+            // 새로운 행 표시기를 커스터마이징
+            var style = document.createElement('style');
+            style.innerHTML = `
+
+            `;
+            document.head.appendChild(style);
         }
 
         document.addEventListener('DOMContentLoaded', inputData);
@@ -447,9 +455,9 @@
             })
             // select 아이디에 따라 히든 input 설정
             const selects = [
-                { selectId: 'spworkcd', hiddenInputId: 'spworknm' },
-                { selectId: 'spcompcd', hiddenInputId: 'spcompnm' },
-                { selectId: 'spplancd', hiddenInputId: 'spplannm' }
+                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
             ];
             selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 
