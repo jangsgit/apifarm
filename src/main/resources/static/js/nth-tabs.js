@@ -114,7 +114,19 @@
                     tabContent.push('<iframe src="' + options.url + '" frameborder="0" name="iframe-' + frameName + '" class="nth-tabs-frame"></iframe>');
                     frameName++;
                 } else {
-                    tabContent.push('<div class="nth-tabs-content">' + options.content + "</div>");
+                    // 원본
+                    // tabContent.push('<div class="nth-tabs-content">' + options.content + "</div>");
+                    // 임시 개발중 tab
+                    tabContent.push(`
+                        <div class="nth-tabs-content" style="position: relative; width: 100%; height: 100%; background-color: #f0f1f2; color: black;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                                <img src="../img/error_404.png" alt="개발중" style="width: 200px; height: auto;">
+                                <h1 style="font-size: 50px; margin: 20px 0;">개발중</h1>
+                                <p style="font-size: 18px;">이 페이지는 현재 개발 중입니다. 조금만 기다려 주세요.</p>
+                            </div>
+                        </div>
+                    `);
+
                 }
                 tabContent.push('</div>');
                 nthTabs.find(".tab-content").append(tabContent.join(''));
