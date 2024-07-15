@@ -130,20 +130,24 @@ public class InspecService {
     }
 
 
-    public List<Map<String, Object>> getInspecList(String searchusr) {
+    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
 
         dicParam.addValue("paramusr", "%" +searchusr+ "%");
+        dicParam.addValue("searchfrdate", searchfrdate.replaceAll("-", ""));
+        dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
+
 
         String sql = """
-                select 
+                select
                 ROW_NUMBER() OVER (ORDER BY indatem DESC) AS rownum,
                 *, "checkstdt" || '~' || "checkendt" AS checktmdt 
                 from tb_rp710 sb
                 where 1 = 1
                and "checkusr" like :paramusr
+               and "checkdt" between :searchfrdate and :searchtodate
                 order by indatem desc
                 """;
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);

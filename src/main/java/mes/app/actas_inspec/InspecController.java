@@ -56,14 +56,26 @@ public class InspecController {
 
 
     @GetMapping("/read")
-    public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr){
+    public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr,
+                              @RequestParam(value = "searchfrdate", required = false) String searchfrdate,
+                              @RequestParam(value = "searchtodate", required = false) String searchtodate
+
+                              ){
         List<Map<String, Object>> items = new ArrayList<>();
 
-        if(searchusr == null){
-            searchusr = "";
+        searchusr = Optional.ofNullable(searchusr).orElse("");
+        searchfrdate = Optional.ofNullable(searchfrdate).orElse("20000101");
+        searchtodate = Optional.ofNullable(searchtodate).orElse("29991231");
+
+        if(searchfrdate.isEmpty()){
+            searchfrdate = "20000101";
+        }
+        if(searchtodate.isEmpty()){
+            searchtodate = "29991231";
         }
 
-        items = this.inspecService.getInspecList(searchusr);
+
+        items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
@@ -85,7 +97,7 @@ public class InspecController {
             @RequestParam(value = "checkitem", required = false) String checkitem,
             @RequestParam(value = "checkplan", required = false) String checkplan,
             @RequestParam(value = "randomuuid", required = false) String randomuuid,
-            @RequestParam("filelist") MultipartFile[] files
+            @RequestParam(value = "filelist", required = false) MultipartFile[] files
             //@RequestParam Map<String, String> params
             /*@RequestParam(value = "fileNamelist", required = false) List<String> fileNamelist,
             @RequestParam(value = "fileExtList", required = false) List<String> fileExtList,
@@ -195,6 +207,19 @@ public class InspecController {
         return result;
     }
 
+
+    @PostMapping("/filesave")
+    public AjaxResult fileupload(
+            @RequestParam("file") MultipartFile[] file){
+        AjaxResult result = new AjaxResult();
+
+
+
+        result.success = true;
+
+
+        return result;
+    }
 
     @PostMapping("/upload")
     public Object upload(
@@ -408,6 +433,7 @@ public class InspecController {
         for(String param : paramList){
             System.out.println(param);
             //TODO: 이거 자식테이블먼저 삭제해야한다.
+            tb_rp715Repository.deleteBySpuncodeId(param);
             tb_rp710Repository.deleteBySpuncode(param);
         }
 

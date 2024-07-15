@@ -136,7 +136,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="width: 1527px"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
@@ -273,14 +273,14 @@
                                             <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
                                             <p>Maximun upload file size <span>1GiB</span></p>
                                         </div>
-                                        <div class="upload-filelist" id="upload-filelist">
+                                        <div class="upload-filelist">
                                             <div class="title">
                                                 <h5>Files (0)</h5>
                                                 <a title="Delete all" class="btn-file-deleteall">Delete all</a>
                                             </div>
                                             <ul class="filelist">
                                             </ul>
-                                            <div id="file-list"></div>
+
                                         </div>
                                     </div>
                                 </td>
@@ -353,7 +353,7 @@
                                     <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <input type="file" id="fileInput2" class="fileInput">
                                         <p>Maximun upload file size <span>1GiB</span></p>
                                     </div>
                                     <div class="upload-filelist">
@@ -373,7 +373,7 @@
             </div>
             <div class="popup-button">
                 <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
             </div>
 
         </div>
@@ -400,6 +400,36 @@
         let SelectItem;
 
 
+
+        /**점검일지 업로드(파일만 전송)**/
+        function saveFile(){
+            let file = document.getElementById('fileInput2');
+            let formData = new FormData();
+
+            console.log('file2', file.files);
+
+            formData.append('file', file.files[0]);
+            formData.append('_csrf', $('[name=_csrf]').val());
+
+            $.ajax({
+                url: '/api/inspec_report/filesave',
+                type: 'POST',
+                data: formData,
+                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
+                }
+            });
+        }
+
+
+
         function test(files){
             console.log('파일테스트', files);
             const fileList = document.getElementById('upload-filelist');
@@ -408,24 +438,6 @@
             }
         }
 
-        function getTextValue(e) {
-            // 기본 동작 (예: 링크 이동)을 막습니다.
-            e.preventDefault();
-
-            // e.currentTarget은 클릭된 btn-file-delete 요소를 가리킵니다.
-            const button = e.currentTarget;
-            // 부모 li 요소를 찾습니다.
-            const liElement = button.closest('li');
-            // li 요소 내의 p 태그를 찾습니다.
-            const pElement = liElement.querySelector('p');
-            // p 태그의 텍스트 내용을 가져옵니다.
-            const textValue = pElement.textContent;
-
-            // 텍스트 값을 콘솔에 출력합니다.
-            console.log(textValue);
-
-            // 필요에 따라 다른 작업을 수행할 수 있습니다.
-        }
 
         function submitTextarea(event){
             let key = event.key || event.keyCode;
@@ -469,7 +481,8 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : searchusr
+                    'searchusr' : searchusr,
+
                 },
                 async: false,
                 success: function(data){
@@ -484,7 +497,6 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'spuncode', header: '고유명', width: 140, align: 'center' },
                     { binding: 'spworknm', header: '지역명', width: 140, align: 'center' },
                     { binding: 'spcompnm', header: '산단명', width: 140, align: 'center' },
                     { binding: 'spplannm', header: '발전소명', width: 140, align: 'center' },
@@ -494,18 +506,26 @@
                     { binding: 'checktmdt', header: '점검시간', width: 260, align: 'center' },
                     {
                         header: '점검일지 다운로드', binding: 'downloads', width: 160, align: 'center', cssClass: 'filedown',
-                        cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>'
+                        cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>',
+
                     },
                     {
-                        header: '점검일지 업로드', binding: 'downloads', width: 170, align: 'center', cssClass: 'downloads',
-                        cellTemplate: '<a title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
-                            '                                                        업로드\n' +
-                            '                                                    </a>'
+                        header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
+                        cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
+                                      wijmo.grid.cellmaker.CellMaker.makeButton({
+                                          text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
+                                          cssClass: 'fileuploaders',
+                                          click: (e, ctx) => {
+                                                showPopup();
+                                          }
+                                      })
+
+
                     }
 
 
                 ],  //홀짝 로우 음영주기
-                loadedRows: function (s, e) {
+                /*loadedRows: function (s, e) {
 
                     console.log(s.cells);
 
@@ -525,9 +545,12 @@
                         var item = row.dataItem;
 
                     }
-                },
+                },*/
                 itemsSource: viewdata
             });
+
+            console.log('grid', theGrid.columns)
+
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
                      SelectItem = theGrid.rows.filter(r => r.isSelected);
@@ -536,6 +559,8 @@
                      console.log(SelectItem);
                 }
             })
+
+
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -592,6 +617,11 @@
 
         }
 
+
+        function inform(e, ctx){
+            alert(e);
+        }
+
         let page = null;
 
         //검색
@@ -616,6 +646,7 @@
             var cnt = 1;
             for (var i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
+                    spuncode: inspecDto[i]["spuncode"],
                     rownum: inspecDto[i]["rownum"],
                     spworknm: inspecDto[i]["spworknm"],
                     spcompnm: inspecDto[i]["spcompnm"],
@@ -636,7 +667,7 @@
             var cols = new wijmo.grid.Column();
 
 
-            cols = new wijmo.grid.Column();
+            /*cols = new wijmo.grid.Column();
             cols.binding = 'spworknm';
             cols.header = '지역명';
             cols.align = "center";
@@ -699,11 +730,14 @@
             cols.align = "center";
             cols.width = 170;
             cols.cssClass = "downloads"
-            cols.cellTemplate = '<a title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
-                '                                                        업로드\n' +
-                '                                                    </a>'
-            theGrid.columns.push(cols);
-
+            cols.cellTemplate = wijmo.grid.cellmaker.CellMaker.makeButton({
+                text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
+                cssClass: 'fileuploaders',
+                click: (e, ctx) => {
+                    showPopup();
+                }
+            })
+            theGrid.columns.push(cols);*/
             var columns = [
                 { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
                 { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
@@ -713,15 +747,25 @@
                 { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
                 { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
                 { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
-                { binding: 'downloads', header: '업로드', align: 'center', width: 170, cssClass: 'downloads', cellTemplate: '<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>' }
+                {
+                    header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
+                    cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
+                        wijmo.grid.cellmaker.CellMaker.makeButton({
+                            text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
+                            cssClass: 'fileuploaders',
+                            click: (e, ctx) => {
+                                showPopup();
+                            }
+                        })
+
+
+                }
             ];
 
             for (var i = 0; i < columns.length; i++) {
                 var col = new wijmo.grid.Column(columns[i]);
                 theGrid.columns.push(col);
             }
-
-
 
 
         }
@@ -818,6 +862,7 @@
                     let fnSuccess = function (res){
                         if(res.success){
                             Alert.alert('', '삭제되었습니다.');
+                            searchData();
                         }
                     }
 
