@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Entity
@@ -68,6 +70,10 @@ public class TB_RP750 {
     @Column(name="\"registdt\"")
     String registdt;    // 등록일자
 
+    @Column(name="\"docselect\"")
+    String docselect;    // 등록일자
+
     @Column(name="\"inspecresult\"")
     String inspecresult;    // 점검결과
+
 }

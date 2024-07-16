@@ -16,7 +16,7 @@
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>종합관제</li>
+                <li>운영관리</li>
                 <li>티켓등록</li>
             </ul>
         </div>
@@ -81,16 +81,15 @@
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="searchusr">
+                                    <label for="searchtketnm">
                                         Ticket명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="searchusr" class="input-srch"
+                                        <input type="text" id="searchtketnm" name="searchtketnm" class="input-srch"
                                                placeholder="Ticket명 검색">
-                                        <a class="btn-srch" title="검색" onclick="searchData()"
-                                           onkeyup="searchData()"></a>
+                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -300,14 +299,14 @@
                                         <div id="uploadComponent1" class="upload-component">
                                             <div class="upload-filebox">
                                                 <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a href="#" class="btn" title="파일업로드">파일업로드</a>
+                                                <a class="btn" title="파일업로드">파일업로드</a>
                                                 <input type="file" id="fileInput1" class="fileInput" multiple>
                                                 <p>Maximun upload file size <span>1GiB</span></p>
                                             </div>
                                             <div class="upload-filelist">
                                                 <div class="title">
                                                     <h5>Files (0)</h5>
-                                                    <a href="#" title="Delete all" class="btn-file-deleteall">Delete
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete
                                                         all</a>
                                                 </div>
                                                 <ul class="filelist" id="filelist">
@@ -390,6 +389,29 @@
             }
         }
 
+        // 검색
+        function searchData() {
+            let data = {
+                'startDate': $('#startDate').val(),
+                'endDate': $('#endDate').val(),
+                'searchtketnm': $('#searchtketnm').val()
+            }
+            let data2 = [];
+            $.ajax({
+                url: '/api/ticket/ticket/read',
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    data2 = data.data;
+                    viewdata = new wijmo.collections.CollectionView(data2);
+                    theGrid.itemsSource = viewdata;
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request error:', error);
+                }
+            });
+        }
+
         $(document).ready(function (e) {
 
             $('#btnSave').click(function (e) {
@@ -420,9 +442,12 @@
                     formData.append('tketrusernm', $('#tketrusernm').val());
                     formData.append('tketactrem', $('#tketactrem').val());
                     formData.append('remark', $('#remark').val());
-                    formData.append('filelist', $('#filelist').val());
                     formData.append('_csrf', $('[name=_csrf]').val());
 
+                    // 파일 목록을 FormData에 추가합니다.(ui.js)
+                    uploadedFiles.forEach((file, index) => {
+                        formData.append('filelist', file);
+                    });
 
                     $.ajax({
                         url: '/api/ticket/ticket/save',

@@ -132,6 +132,7 @@ $(document).ready(function () {
     });
 });
 
+// 파일업로드 변수설정
 let uploadedFiles = [];
 /* 파일업로드 */
 $(document).ready(function () {

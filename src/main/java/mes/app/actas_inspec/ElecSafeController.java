@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/inspec/elec_safe")
@@ -30,11 +27,10 @@ public class ElecSafeController {
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "startDate", required = false) String startDate,
                               @RequestParam(value = "endDate", required = false) String endDate,
-                              @RequestParam(value = "searchusr", required = false) String searchusr){
-        List<Map<String, Object>> items = new ArrayList<>();
+                              @RequestParam(value = "searchtitle", required = false) String searchTitle) {
 
-        if (searchusr == null) {
-            searchusr = "";
+        if (searchTitle == null) {
+            searchTitle = "";
         }
 
         if (startDate == null) {
@@ -45,7 +41,10 @@ public class ElecSafeController {
             endDate = "";
         }
 
-        items = this.elecSafeService.getInspecList(searchusr, startDate, endDate);
+        String c_startDate = startDate.replaceAll("-", "");
+        String c_endDate = endDate.replaceAll("-", "");
+
+        List<Map<String, Object>> items = this.elecSafeService.getList(searchTitle, c_startDate, c_endDate);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
@@ -54,19 +53,8 @@ public class ElecSafeController {
     }
 
     @PostMapping("/save")
-    public AjaxResult saveElecSafe(@RequestParam(value = "spworkcd", required=false) String spworkcd,
-                                   @RequestParam(value = "spcompcd", required=false) String spcompcd,
-                                   @RequestParam(value = "spplancd", required=false) String spplancd,
-                                   @RequestParam(value = "checksdt", required=false) String checksdt,
-                                   @RequestParam(value = "checkedt", required=false) String checkedt,
-                                   @RequestParam(value = "title", required=false) String title,
-                                   @RequestParam(value = "resistdt", required=false) String resistdt,
-                                   @RequestParam(value = "inspec_date1", required=false) String inspec_date,
-                                   @RequestParam(value = "inspec_result", required=false) String inspec_result,
-                                   @RequestParam(value = "inspec_loc", required=false) String inspec_loc,
-                                   @RequestParam(value = "endresult", required=false) String endresult,
-                                   @RequestParam(value = "inusernm", required=false) String inusernm,
-                                   @RequestParam(value = "filelist", required=false) MultipartFile[] files,
+    public AjaxResult saveElecSafe(@RequestParam Map<String, String> params,
+                                   @RequestParam(value = "filelist", required = false) MultipartFile[] files,
                                    Authentication auth) {
 
         Random random = new Random();
@@ -77,31 +65,38 @@ public class ElecSafeController {
         // 3자리 문자열로 포맷 (001, 002, ..., 999)
         String formattedValue = String.format("%03d", randomValue);
 
-
         User user = (User) auth.getPrincipal();
         Timestamp now = new Timestamp(System.currentTimeMillis());
         TB_RP750_PK pk = new TB_RP750_PK();
-        pk.setSpworkcd(formattedValue);
-        pk.setSpcompcd("002");
-        pk.setSpplancd("002");
-        pk.setChecksdt("20240701");
-        pk.setCheckedt("20240703");
+        pk.setSpworkcd(params.get("spworkcd"));
+        pk.setSpcompcd(params.get("spcompcd"));
+        pk.setSpplancd(params.get("spplancd"));
 
-        String c_inspec_date = inspec_date.replaceAll("-","");
-        String c_regist_date = resistdt.replaceAll("-","");
+        // 임시로 pk
+        if (params.get("checksdt") == null && params.get("checksdt") == null) {
+            pk.setChecksdt(formattedValue);
+            pk.setCheckedt(formattedValue);
+        } else{
+            pk.setChecksdt(params.get("checksdt"));
+            pk.setCheckedt(params.get("checkedt"));
+        }
+
+        String c_inspec_date = params.get("inspecdt").replaceAll("-", "");
+        String c_regist_date = params.get("registdt").replaceAll("-", "");
+
         TB_RP750 TBRP750 = new TB_RP750();
         TBRP750.setId(pk);
-        TBRP750.setSpworknm("대구");
-        TBRP750.setSpcompnm("성서산단");
-        TBRP750.setSpplannm("발전소명");
-        TBRP750.setTitle(title);
+        TBRP750.setSpworknm(params.get("spworknm"));
+        TBRP750.setSpcompnm(params.get("spcompnm"));
+        TBRP750.setSpplannm(params.get("spplannm"));
+        TBRP750.setTitle(params.get("title"));
         TBRP750.setRegistdt(c_regist_date);
         TBRP750.setInspecdt(c_inspec_date);
-        TBRP750.setInspecresult(inspec_result);
-        TBRP750.setInspecloc(inspec_loc);
-        TBRP750.setEndresult(endresult);
+        TBRP750.setInspecresult(params.get("inspecresult"));
+        TBRP750.setInspecloc(params.get("inspecloc"));
+        TBRP750.setDocselect(params.get("docselect"));
+        TBRP750.setEndresult(params.get("endresult"));
         TBRP750.setIndatem(now);
-        TBRP750.setInusernm(inusernm);
         TBRP750.setInusernm(user.getUsername());
         TBRP750.setInuserid(String.valueOf(user.getId()));
 
@@ -120,7 +115,36 @@ public class ElecSafeController {
 
         return result;
 
+    }
 
+    @DeleteMapping("/delete")
+    public AjaxResult deleteElecSafe(@RequestBody List<TB_RP750_PK> pkList) {
+        AjaxResult result = new AjaxResult();
+
+        for (TB_RP750_PK pk : pkList) {
+            TB_RP750 TBRP750 = new TB_RP750();
+            TBRP750.setId(pk);
+
+            boolean successcode = elecSafeService.delete(TBRP750);
+            if (!successcode) {
+                result.success = false;
+                result.message = "삭제에 실패하였습니다.";
+                return result;
+            }
+        }
+
+        result.success = true;
+        result.message = "삭제하였습니다.";
+        return result;
+    }
+
+    @PostMapping("/modfind")
+    public AjaxResult getById(@RequestBody List<TB_RP750_PK> pkList) {
+        AjaxResult result = new AjaxResult();
+
+        Optional<TB_RP750> item = elecSafeService.findById(pkList.get(0));
+        result.data = item;
+        return result;
     }
 
 }

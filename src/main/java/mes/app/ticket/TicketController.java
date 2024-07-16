@@ -37,11 +37,10 @@ public class TicketController {
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "startDate", required = false) String startDate,
                               @RequestParam(value = "endDate", required = false) String endDate,
-                              @RequestParam(value = "searchusr", required = false) String searchusr) {
-        List<Map<String, Object>> items = new ArrayList<>();
+                              @RequestParam(value = "searchtketnm", required = false) String searchtketnm) {
 
-        if (searchusr == null) {
-            searchusr = "";
+        if (searchtketnm == null) {
+            searchtketnm = "";
         }
 
         if (startDate == null) {
@@ -52,7 +51,10 @@ public class TicketController {
             endDate = "";
         }
 
-        items = this.ticketService.getInspecList(searchusr, startDate, endDate);
+        String c_startDate = startDate.replaceAll("-", "");
+        String c_endDate = endDate.replaceAll("-", "");
+
+        List<Map<String, Object>> items = this.ticketService.getInspecList(searchtketnm, c_startDate, c_endDate);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
@@ -62,7 +64,7 @@ public class TicketController {
 
     @PostMapping("/save")
     public AjaxResult saveTicket(@RequestParam Map<String, String> params,
-                                 @RequestParam(value = "filelist", required = false) MultipartFile files,
+                                 @RequestParam(value = "filelist", required = false) MultipartFile[] files,
                                  Authentication auth) throws IOException {
 
         User user = (User) auth.getPrincipal();
@@ -96,36 +98,36 @@ public class TicketController {
 
             String path = settings.getProperty("file_upload_path") + "티켓";
 
-            float fileSize = (float) files.getSize();
-
-            if(fileSize > 52428800){
-                result.message = "파일의 크기가 초과하였습니다.";
-                return result;
-            }
-
-            String fileName = files.getOriginalFilename();
-            String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-            String file_uuid_name = UUID.randomUUID().toString() + "." + ext;
-            String saveFilePath = path;
-            File saveDir = new File(saveFilePath);
-            MultipartFile mFile = null;
-
-            mFile = files;
+//            float fileSize = (float) files.getSize();
+//
+//            if(fileSize > 52428800){
+//                result.message = "파일의 크기가 초과하였습니다.";
+//                return result;
+//            }
+//
+//            String fileName = files.getOriginalFilename();
+//            String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+//            String file_uuid_name = UUID.randomUUID().toString() + "." + ext;
+//            String saveFilePath = path;
+//            File saveDir = new File(saveFilePath);
+//            MultipartFile mFile = null;
+//
+//            mFile = files;
 
             //디렉토리 없으면 생성
-            if(!saveDir.isDirectory()){
-                saveDir.mkdirs();
-            }
-
-            File saveFile = new File(path + File.separator + file_uuid_name);
-            mFile.transferTo(saveFile);
-
-            tbRp820.setFilepath(saveFilePath);
-            tbRp820.setFilesvnm(file_uuid_name);
-            tbRp820.setFileornm(fileName);
-            tbRp820.setFilesize(fileSize);
-//            tbRp820.setFileextns(params.get("fileextns"));
-//            tbRp820.setFilerem();
+//            if(!saveDir.isDirectory()){
+//                saveDir.mkdirs();
+//            }
+//
+//            File saveFile = new File(path + File.separator + file_uuid_name);
+//            mFile.transferTo(saveFile);
+//
+//            tbRp820.setFilepath(saveFilePath);
+//            tbRp820.setFilesvnm(file_uuid_name);
+//            tbRp820.setFileornm(fileName);
+//            tbRp820.setFilesize(fileSize);
+////            tbRp820.setFileextns(params.get("fileextns"));
+////            tbRp820.setFilerem();
         }
 
         String c_tketcrdtm = params.get("tketcrdtm").replaceAll("-","");

@@ -37,21 +37,54 @@ public class TicketService {
         }
     }
 
-    public List<Map<String, Object>> getInspecList(String searchusr, String startDate, String endDate) {
+    public List<Map<String, Object>> getInspecList(String searchtketnm, String startDate, String endDate) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
-        dicParam.addValue("paramusr", "%" +searchusr+ "%");
+        StringBuilder sql = new StringBuilder();
+        dicParam.addValue("searchtketnm", "%" +searchtketnm+ "%");
+        dicParam.addValue("startDate", startDate);
+        dicParam.addValue("endDate", endDate);
 
-        String sql = """
+        sql.append("""
                 select 
-                ROW_NUMBER() OVER (ORDER BY indatem DESC) AS rownum,
+                ROW_NUMBER() OVER (ORDER BY tketcrdtm DESC) AS rownum,
                 *
                 from tb_rp820
-                order by indatem desc
-                """;
+                """);
 
-        List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
+        // 조건 추가
+        boolean hasWhereClause = false;
+
+        if (searchtketnm != null && !searchtketnm.isEmpty()) {
+            sql.append(" where \"tketnm\" like :searchtketnm");
+            hasWhereClause = true;
+        }
+
+        if (startDate != null && !startDate.isEmpty()) {
+            if (!hasWhereClause) {
+                sql.append(" where ");
+                hasWhereClause = true;
+            } else {
+                sql.append(" and ");
+            }
+            sql.append(" \"tketcrdtm\" >= :startDate");
+        }
+
+        if (endDate != null && !endDate.isEmpty()) {
+            if (!hasWhereClause) {
+                sql.append(" where ");
+                hasWhereClause = true;
+            } else {
+                sql.append(" and ");
+            }
+            sql.append(" \"tketcrdtm\" <= :endDate");
+        }
+
+        // 마지막으로 order by 절 추가
+        sql.append(" order by tketcrdtm desc");
+
+        List<Map<String, Object>> items = this.sqlRunner.getRows(sql.toString(), dicParam);
 
         // tketflag 값 변환을 위한 맵핑
         Map<String, String> tketflagMapping = new HashMap<>();
