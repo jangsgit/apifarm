@@ -1,29 +1,29 @@
 $(document).ready(function () {
-        
-}); 
+
+});
 
 /*=================================================================================
  * 공통제이쿼리
 =================================================================================*/
 /*     toggle     */
-$(document).on("click",".toggle",function(){
+$(document).on("click", ".toggle", function () {
     $(this).toggleClass("on");
 });
 
 /*     toggle-group     */
-$(document).on("click",".toggle-group li",function(){
+$(document).on("click", ".toggle-group li", function () {
     $(this).closest(".toggle-group").find("li").removeClass("on");
     $(this).addClass("on");
 });
 
 /*     toggles-group     */
-$(document).on("click",".toggles-group li",function(){
+$(document).on("click", ".toggles-group li", function () {
     $(this).toggleClass("on");
 });
 
 /*        Acodion        */
-$(document).ready(function(){
-    $('.aco-hd').click(function(){
+$(document).ready(function () {
+    $('.aco-hd').click(function () {
         // 클릭된 아코디언 항목의 컨텐츠 토글
         $(this).next('.aco-cont').slideToggle();
         // 다른 아코디언 항목의 컨텐츠는 접히도록 함
@@ -35,9 +35,9 @@ $(document).ready(function(){
 });
 
 /*         TAB          */
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $(".tab-links a").click(function(event) {
+    $(".tab-links a").click(function (event) {
         event.preventDefault();
 
         // 클릭된 탭 링크의 href 속성 값을 가져옴
@@ -55,18 +55,18 @@ $(document).ready(function() {
     // 초기에 첫 번째 탭을 활성화
     $(".tab-item:first").show();
     $(".tab-links li:first").addClass("active");
-    
+
 });
 
 /*         Popup          */
-$(document).ready(function() {
-    $('.btn-popup-open').on('click', function() {
+$(document).ready(function () {
+    $('.btn-popup-open').on('click', function () {
         var popupId = $(this).data('popup');
         $('.popup-overlay').fadeIn(200);
         $('#' + popupId).fadeIn(200);
     });
 
-    $('.btn-popup-close').on('click', function() {
+    $('.btn-popup-close').on('click', function () {
         $('.popup-overlay').fadeOut(200);
         $('.popup-wrapper').fadeOut(200);
     });
@@ -77,9 +77,9 @@ $(document).ready(function() {
  * UI 공통
 =================================================================================*/
 /*        Hader : ALram TAB          */
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $(".alarm-tab-links a").click(function(event) {
+    $(".alarm-tab-links a").click(function (event) {
         event.preventDefault();
 
         // 클릭된 탭 링크의 href 속성 값을 가져옴
@@ -97,19 +97,19 @@ $(document).ready(function() {
     // 초기에 첫 번째 탭을 활성화
     $(".alarm-tab-item:first").show();
     $(".alarm-tab-links li:first").addClass("active");
-    
+
 });
 
 
 /*  Input Text delete  */
-$(document).ready(function() {
-    $('input[type="text"]').each(function() {
+$(document).ready(function () {
+    $('input[type="text"]').each(function () {
         var $inputWrapper = $(this).wrap('<div class="input-clear"></div>').parent();
         var $clearBtn = $('<span class="btn-clear">&times;</span>');
 
         $inputWrapper.append($clearBtn);
 
-        $(this).on('input', function() {
+        $(this).on('input', function () {
             if ($(this).val().length > 0) {
                 $clearBtn.show();
             } else {
@@ -117,7 +117,7 @@ $(document).ready(function() {
             }
         });
 
-        $clearBtn.on('click', function() {
+        $clearBtn.on('click', function () {
             var $input = $(this).siblings('input[type="text"]');
             $input.val('');
             $(this).hide();
@@ -125,84 +125,98 @@ $(document).ready(function() {
     });
 });
 /*  Textarea  */
-$(document).ready(function() {
-    $('textarea').on('input', function() {
+$(document).ready(function () {
+    $('textarea').on('input', function () {
         const textLength = $(this).val().length;
         $(this).next('.text-count').text(`${textLength}/100`);
     });
 });
 
+let uploadedFiles = [];
 /* 파일업로드 */
-$(document).ready(function() {
+$(document).ready(function () {
+
     function initializeUploadComponent(component) {
-        let uploadedFiles = [];
+
         const $fileInput = $(component).find('.fileInput');
         const $fileList = $(component).find('.filelist');
         const $fileCountTitle = $(component).find('.upload-filelist .title h5');
 
-        $fileInput.on('change', function(event) {
+        $fileInput.on('change', function (event) {
             handleFileSelect(event.target.files);
+            // 파일 선택 후 파일 입력 요소 초기화
+            resetFileInput($fileInput);
         });
 
-        $(component).find('.upload-filebox').on('dragover', function(event) {
+        $(component).find('.upload-filebox').on('dragover', function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(this).addClass('dragging');
         });
 
-        $(component).find('.upload-filebox').on('dragleave', function(event) {
+        $(component).find('.upload-filebox').on('dragleave', function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(this).removeClass('dragging');
         });
 
-        $(component).find('.upload-filebox').on('drop', function(event) {
+        $(component).find('.upload-filebox').on('drop', function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(this).removeClass('dragging');
             handleFileSelect(event.originalEvent.dataTransfer.files);
+            // 드래그 앤 드롭 후 파일 입력 요소 초기화
+            resetFileInput($fileInput);
         });
 
         function handleFileSelect(files) {
-            $.each(files, function(index, file) {
+            $.each(files, function (index, file) {
                 if (!uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
                     uploadedFiles.push(file);
                     const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
                     const li = $('<li>').html(`
-                        <p>${file.name} <span>(${fileSize})</span></p>
-                        <a href="#" title="삭제" class="btn-file-delete">
-                            <img src="../assets/images/icon/ico-filedelete.svg" alt="삭제아이콘">
-                        </a>
-                    `);
+                    <p>${file.name} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
                     $fileList.append(li);
                 }
             });
             updateFileCount();
+            console.log('추가', uploadedFiles);
         }
 
-        $(component).on('click', '.btn-file-delete', function(event) {
+        $(component).on('click', '.btn-file-delete', function (event) {
             event.preventDefault();
             const li = $(this).closest('li');
             const fileName = li.find('p').text().split(' (')[0];
             uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
             li.remove();
             updateFileCount();
+            console.log('삭제', uploadedFiles);
         });
 
-        $(component).find('.btn-file-deleteall').on('click', function(event) {
+        $(component).find('.btn-file-deleteall').on('click', function (event) {
             event.preventDefault();
             $fileList.empty();
             uploadedFiles = [];
             updateFileCount();
+            resetFileInput($fileInput);
+            console.log('deleteall', uploadedFiles);
         });
 
         function updateFileCount() {
             const fileCount = uploadedFiles.length;
             $fileCountTitle.text(`Files (${fileCount})`);
         }
+
+        function resetFileInput($input) {
+            $input.val('');
+        }
     }
 
-    $('.upload-component').each(function() {
+    $('.upload-component').each(function () {
         initializeUploadComponent(this);
     });
 });
@@ -221,7 +235,7 @@ $(document).ready(function () {
         placeholder: 'ui-state-highlight',
         helper: 'clone', // Using a clone of the dragged element for better performance
         tolerance: 'pointer', // Improves the drop detection accuracy
-        start: function(event, ui) {
+        start: function (event, ui) {
             $(".gesture-box").hide();
         },
         stop: function (event, ui) {
@@ -243,34 +257,34 @@ $(document).ready(function () {
  * Layout 공통
 =================================================================================*/
 /*        Header - Alram        */
-$(document).ready(function() {
-    $('.alarm').on('click', function(event) {
+$(document).ready(function () {
+    $('.alarm').on('click', function (event) {
         event.preventDefault(); // 기본 동작을 막음 (필요에 따라 사용)
         $('.alarm-box').slideToggle('fast'); // 서서히 펼쳐지거나 접히게 함
     });
 
     // 클릭 시 .user-box가 외부 클릭으로 닫히게 하려면
-    $(document).on('click', function(event) {
+    $(document).on('click', function (event) {
         if (!$(event.target).closest('.alarm, .alarm-box').length) {
             $('.alarm-box').slideUp('fast');
         }
     });
 
-    $('.btn-gray').on('click', function(event) {
+    $('.btn-gray').on('click', function (event) {
         event.preventDefault(); // 기본 동작을 막음 (필요에 따라 사용)
         $('.alarm-box').slideUp('fast'); // 서서히 접히게 함
     });
 });
 
 /*        Header - User        */
-$(document).ready(function() {
-    $('.user').on('click', function(event) {
+$(document).ready(function () {
+    $('.user').on('click', function (event) {
         event.preventDefault(); // 기본 동작을 막음 (필요에 따라 사용)
         $('.user-box').slideToggle('fast'); // 서서히 펼쳐지거나 접히게 함
     });
 
     // 클릭 시 .user-box가 외부 클릭으로 닫히게 하려면
-    $(document).on('click', function(event) {
+    $(document).on('click', function (event) {
         if (!$(event.target).closest('.user, .user-box').length) {
             $('.user-box').slideUp('fast');
         }
@@ -278,9 +292,9 @@ $(document).ready(function() {
 });
 
 /*       Sidebar - TAB MENU        */
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $(".layout-sidebar-tab a").click(function(event) {
+    $(".layout-sidebar-tab a").click(function (event) {
         event.preventDefault();
 
         // 클릭된 탭 링크의 href 속성 값을 가져옴
@@ -298,28 +312,28 @@ $(document).ready(function() {
     // 초기에 첫 번째 탭을 활성화
     $(".sidebar-tabcont:first").show();
     $(".layout-sidebar-tab li:first").addClass("active");
-    
+
 });
 
 /*      Sidebar - LNB        */
-(function($){
+(function ($) {
     var lnbUI = {
-        click : function(target, speed) {
+        click: function (target, speed) {
             var _self = this,
                 $target = $(target);
             _self.speed = speed || 300;
             //alert(_self);
-            $target.each(function(){
-                if(findChildren($(this))){
+            $target.each(function () {
+                if (findChildren($(this))) {
                     return;
                 }
             });
 
-            function findChildren(obj){
+            function findChildren(obj) {
                 return obj.find('> ul').length > 0;
             }
 
-            $target.on('click','a', function(e){
+            $target.on('click', 'a', function (e) {
                 e.stopPropagation();
                 var $this = $(this),
                     $depthTarget = $this.next(),
@@ -329,7 +343,7 @@ $(document).ready(function() {
                 $siblings.removeClass('active');
                 $siblings.find('ul').slideUp(250);
 
-                if($depthTarget.css('display') == 'none'){
+                if ($depthTarget.css('display') == 'none') {
                     _self.activeOn($this);
                     $depthTarget.slideDown(_self.speed);
                 } else {
@@ -344,7 +358,7 @@ $(document).ready(function() {
             $(".dep3 > li.active > a").parents("ul").show();
             $(".dep4 > li.active > a").parents("ul").show();
             // Add 'on' class when 'dep4' link is clicked
-            $(".dep3 > li > a").on('click', function(e){
+            $(".dep3 > li > a").on('click', function (e) {
                 e.preventDefault();
                 var $parentLi = $(this).parent('li');
                 $(".dep3 > li").removeClass('on');
@@ -352,21 +366,21 @@ $(document).ready(function() {
             });
 
         },
-        activeOff : function($target){
-            $target.parent().removeClass('active');	
+        activeOff: function ($target) {
+            $target.parent().removeClass('active');
         },
-        activeOn : function($target){
+        activeOn: function ($target) {
             $target.parent().addClass('active');
         }
     }
-    $(function(){
-        lnbUI.click('.layout-nav li' , 300);
+    $(function () {
+        lnbUI.click('.layout-nav li', 300);
     });
 }(jQuery));
 
 
 /*      Battery       */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const batteryItems = document.querySelectorAll('.battery-wrap');
 
     batteryItems.forEach(item => {
