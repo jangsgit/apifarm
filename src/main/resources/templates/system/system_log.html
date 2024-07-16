@@ -136,10 +136,17 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid">
+                    <div class="container-fluid" id="theGridContainer">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="height: 400px"></div>
+
+                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
+                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;   ">조회된 데이터가 없습니다</div>
                     </div>
+
+
+
+
                     <div class="btn-wrap">
                     </div>
                 </section>
@@ -278,14 +285,20 @@
                 }
             });
 
-            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            if (data2.length === 0) {
-                let emptyRowsCount = 8;  // 원하는 빈 행의 수
-                for (let i = 0; i < emptyRowsCount; i++) {
-                    data2.push({});
-                }
-                console.log('Grid initialized with empty data.');
-            }
+            // // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            // if (data2.length === 0) {
+            //     let emptyRowsCount = 8;  // 원하는 빈 행의 수
+            //     for (let i = 0; i < emptyRowsCount; i++) {
+            //         data2.push({});
+            //     }
+            //     console.log('Grid initialized with empty data.');
+            // }
+
+            let gridContainer = $('#theGridContainer');
+            let emptyMessage = $('#emptyMessage');
+            $('#theGrid').remove();  // 기존 그리드를 제거합니다.
+            gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
+
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -298,7 +311,7 @@
                     { binding: 'source', header: '에러위치', width: 220, align: 'center' },
                     { binding: 'message', header: '설명', width: 300, align: 'center' },
                     { binding: 'created', header: '생성일', width: 260, align: 'center' },
-                    { binding: '', header: '', width: 480, align: 'center' },
+                    { binding: '', header: '', width: "*", align: 'center' },
 
                 ],
 
@@ -318,6 +331,15 @@
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+
+            // 데이터 배열이 비어있을 경우 메시지 표시
+            if (data2.length === 0) {
+                emptyMessage.show();
+                console.log('Grid initialized with empty data.');
+            } else {
+                emptyMessage.hide();
+            }
 
 
         }

@@ -129,7 +129,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="height: 400px;"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
@@ -223,7 +223,7 @@
                     </div>
                     <div class="container-fluid">
                         <p id="selectedItem1"></p>
-                        <div id="theGrid2"></div>
+                        <div id="theGrid2" style="height: 400px;"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
@@ -244,27 +244,6 @@
 
         var theGrid;
         var viewdata;
-        let selectedFiles = [];
-
-
-        function getTextValue(e) {
-            // 기본 동작 (예: 링크 이동)을 막습니다.
-            e.preventDefault();
-
-            // e.currentTarget은 클릭된 btn-file-delete 요소를 가리킵니다.
-            const button = e.currentTarget;
-            // 부모 li 요소를 찾습니다.
-            const liElement = button.closest('li');
-            // li 요소 내의 p 태그를 찾습니다.
-            const pElement = liElement.querySelector('p');
-            // p 태그의 텍스트 내용을 가져옵니다.
-            const textValue = pElement.textContent;
-
-            // 텍스트 값을 콘솔에 출력합니다.
-            console.log(textValue);
-
-            // 필요에 따라 다른 작업을 수행할 수 있습니다.
-        }
 
 
         document.readyState === 'complete' ? init() : window.onload = init;
@@ -335,7 +314,7 @@
                     { binding: 'folder_name', header: '메뉴폴더', width: 200, align: 'center' },
                     { binding: 'menu_name', header: '메뉴', width: 200, align: 'center' },
                     { binding: 'use_count', header: '사용횟수', width: 200, align: 'center', format: 'n0' },
-                    {binding: '', header: '', width: 950, align: 'center'},
+                    {binding: '', header: '', width: "*", align: 'center'},
                 ],
 
                 itemsSource: viewdata
@@ -351,7 +330,7 @@
                     {binding: 'username', header: '아이디', width: 160, align: 'center'},
                     {binding: 'user_name', header: '이름', width: 160, align: 'center'},
                     {binding: 'click_date', header: '일시', width: 260, align: 'center'},
-                    {binding: '', header: '', width: 400, align: 'center'},
+                    {binding: '', header: '', width: "*", align: 'center'},
 
                 ],
 

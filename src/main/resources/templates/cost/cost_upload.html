@@ -60,44 +60,19 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="month" id="date1" name="">
-                                            <label for="month1" class="hide">시작일</label>
+                                            <input type="month" id="data1" name="startDt">
+                                            <label for="data1" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="month" id="date2" name="">
-                                            <label for="month2" class="hide">종료일</label>
+                                            <input type="month" id="data2" name="endDt">
+                                            <label for="data2" class="hide">종료일</label>
                                         </li>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                        <a class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
                                     </ul>
 
                                 </dd>
                             </dl>
-<!--                            <dl>-->
-<!--                                <dt>-->
-<!--                                    <label for="text1">-->
-<!--                                        점검자<span class="eq">*</span>-->
-<!--                                    </label>-->
-<!--                                </dt>-->
-<!--                                <dd>-->
-<!--                                    <div class="srch-box">-->
-<!--                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="점검자명 검색">-->
-<!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>-->
-<!--                                    </div>-->
-<!--                                </dd>-->
-<!--                            </dl>-->
-<!--                            <dl>-->
-<!--                                <dt>-->
-<!--                                    <label for="select1">-->
-<!--                                        점검여부<span class="eq">*</span></dt>-->
-<!--                                </label>-->
-<!--                                <dd>-->
-<!--                                    <select id="select1" class="w120">-->
-<!--                                        <option>전체</option>-->
-<!--                                        <option>완료</option>-->
-<!--                                        <option>미완료</option>-->
-<!--                                    </select>-->
-<!--                                </dd>-->
-<!--                            </dl>-->
+
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -433,6 +408,29 @@
 
         var theGrid;
         var viewdata;
+
+        // 현재 연도를 구함
+        const currentYear = new Date().getFullYear();
+        // 현재 연도의 1월을 설정
+        const defaultMonth = `${currentYear}-01`;
+
+        // input 요소를 선택하고 기본값 설정
+        document.getElementById('data1').value = defaultMonth;
+
+
+        // 현재 날짜를 구함
+        const today = new Date();
+        const currentYear2 = today.getFullYear();
+        const currentMonth2 = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요, 두 자리수로 맞춤
+
+        // 현재 연도와 월을 설정
+        const defaultMonth2 = `${currentYear2}-${currentMonth2}`;
+
+        // input 요소를 선택하고 기본값 설정
+        document.getElementById('data2').value = defaultMonth2;
+
+
+
 
 
         function closePopup(){

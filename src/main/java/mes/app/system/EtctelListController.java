@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/system/tel_List")
@@ -133,7 +130,14 @@ public class EtctelListController {
 //         현재 사용자 정보 가져오기
         User user = (User) auth.getPrincipal();
         Timestamp now = new Timestamp(System.currentTimeMillis());
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(now.getTime());
 
+
+        // 기본 키 값 생성
+        if (emcontno == null || emcontno.isEmpty()) {
+            emcontno = generateEmcontno();
+        }
 
         // DTO 생성 및 값 설정
         TB_RP980Dto tbRp980Dto = new TB_RP980Dto();
@@ -143,6 +147,7 @@ public class EtctelListController {
         tbRp980Dto.setTel(tel);
         tbRp980Dto.setIndatem(now);
         tbRp980Dto.setInuserid(String.valueOf(user.getId()));
+//        tbRp980Dto.setInuserid(String.valueOf(cal.get(Calendar.YEAR))+String.valueOf(cal.get(Calendar.MONTH)+1)+String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
         tbRp980Dto.setInusernm(user.getUsername());
         tbRp980Dto.setEmail(emconemail);
         tbRp980Dto.setWorkcd("001"); //관할지역코드
@@ -156,11 +161,15 @@ public class EtctelListController {
 
         // 여기서 추가된 비상연락망 정보를 처리하거나 결과에 따른 처리를 할 수 있음
         // 예를 들어, AjaxResult에 추가 정보를 설정할 수 있음
-//        result.setData(items);
-//        result.setSuccess(true); // 성공 여부 설정
+
         result.data = items;
 
         return result;
+    }
+
+    private String generateEmcontno() {
+        // 기본 키 값 생성 로직 (예: UUID, 시퀀스, 특정 패턴 등)
+        return UUID.randomUUID().toString().substring(0, 3);
     }
 
     @PostMapping("/delete")

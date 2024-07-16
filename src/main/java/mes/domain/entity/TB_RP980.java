@@ -20,9 +20,8 @@ import java.util.Date;
 public class TB_RP980 {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EMCONTNO",length = 3, nullable = false)  // 기본키
-    private String id;
+    private String emcontno;
 
     @Column(name = "EMCONCOMP") // 업체명
     private String emconcomp;
@@ -66,7 +65,7 @@ public class TB_RP980 {
 
     public static TB_RP980 toSaveEntity(TB_RP980Dto dto) {
         TB_RP980 entity = new TB_RP980();
-        entity.setId(dto.getEmcontno());
+        entity.setEmcontno(dto.getEmcontno());
         entity.setEmconcomp(dto.getComp());
         entity.setEmconper(dto.getPer());
         entity.setEmcontel(dto.getTel());

@@ -1,4 +1,4 @@
-package mes.app.definition;
+package mes.app.system;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import mes.app.definition.service.UserCodeService;
+import mes.app.system.service.UserCodeService;
 import mes.domain.entity.User;
 import mes.domain.entity.UserCode;
 import mes.domain.model.AjaxResult;
@@ -21,7 +21,7 @@ import mes.domain.repository.UserCodeRepository;
 
 
 @RestController
-@RequestMapping("/api/definition/code")
+@RequestMapping("/api/system/code")
 public class UserCodeController {
 	
 	

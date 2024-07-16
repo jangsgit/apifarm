@@ -69,26 +69,26 @@
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="emconper">
+                                    <label for="text1">
                                         성명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="emconper" name="emconper" class="input-srch">
+                                        <input type="text" id="checkusr" name="checkusr" class="input-srch">
                                         <!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>-->
                                     </div>
                                 </dd>
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="emconmno">
+                                    <label for="text2">
                                         모바일<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="emconmno" name="emconmno" class="input-srch">
+                                        <input type="text" id="checkph" name="checkph" class="input-srch">
                                         <a class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
                                            onkeyup="searchData()"></a>
                                     </div>
@@ -126,7 +126,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 600px"></div>
+                        <div id="theGrid" style="height: 400px"></div>
                     </div>
                 </section>
 
@@ -459,8 +459,11 @@
                 success: function (data) {
                     console.log('wijmo', data.data);
                     data2 = data.data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
                 }
-            })
+            });
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -480,30 +483,18 @@
                     {binding: 'emconmno', header: '모바일', width: 160, align: 'center'},
                     {binding: 'emconemail', header: '이메일', width: 160, align: 'center'},
 
-                ],  //홀짝 로우 음영주기
-                loadedRows: function (s, e) {
+                ],
 
-                    console.log(s.cells);
-
-                    for (var i = 0; i < s.rows.length; i++) {
-                        var row = s.rows[i];
-                        if (i % 2 === 0) {
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                    for (var i = 0; i < s.cells.length; i++) {
-                        var row = s.rows[i];
-                        if (i % 2 === 0) {
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                },
                 itemsSource: viewdata
             });
+
+            // theGrid.setCellData(0,'workcd','대구');
+            // theGrid.setCellData(0,'compcd','성서산단');
+            // theGrid.setCellData(0,'emconcomp','레플러스');
+            // theGrid.setCellData(0,'divinm','유지보수');
+            // theGrid.setCellData(0,'taskwork','유지보수');
+
+
 
 
             // 선택이 변경될 때, 현재 항목 업데이트
@@ -513,45 +504,7 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        // <!-- 점검자 추가 버튼 이벤트-->
-        // function addInputField(button) {
-        //     // 새로운 td 요소를 생성합니다.
-        //     var newTd = document.createElement('div');
-        //     newTd.className = 'input-btnbox';
-        //
-        //     // 새로운 input 요소를 생성합니다.
-        //     var newInput = document.createElement('input');
-        //     newInput.type = 'text';
-        //     newInput.className = 'wp100';
-        //     newInput.placeholder = '점검자';
-        //     newInput.name = 'checkusr'
-        //     newInput.maxLength = 5;
-        //
-        //     // 삭제 버튼을 생성합니다.
-        //     var deleteButton = document.createElement('button');
-        //     deleteButton.textContent = '점검자 삭제';
-        //     deleteButton.onclick = function() {
-        //         deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-        //     };
-        //     deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-        //     deleteButton.style.color = 'red';
-        //     deleteButton.style.marginTop = '5px';
-        //     // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-        //     newTd.appendChild(newInput);
-        //     newTd.appendChild(deleteButton);
-        //
-        //     // 클릭된 버튼의 부모 td 요소를 찾습니다.
-        //     var parentTd = button.parentElement;
-        //
-        //     // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-        //     parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        // }
-        //
-        // function deleteInputField(inputField) {
-        //     // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-        //     var tdToDelete = inputField.parentElement;
-        //     tdToDelete.parentElement.removeChild(tdToDelete);
-        // }
+
 
         <!-- 점검자 추가 버튼 이벤트 끝-->
 
@@ -591,12 +544,33 @@
                 if (res.success) {
                     Notify.success("등록되었습니다.");
 
+                    location.reload();
                 } else if (!res.success) {
                     Alert.alert('', res.message);
-                    _this.searchDataBind();
                 }
             };
             AjaxUtil.postAsyncData(_this.base_url + '/save', data, fnSuccess);
+        }
+
+
+        function delTel(){
+            let _this = this;
+
+            let data = {
+
+            }
+            let fnSuccess = function (res){
+
+                if(res.success){
+                    Notify.syccess("삭제되었습니다.");
+
+                    location.reload();
+                }else if(!res.success){
+                    Alert.alert('',res.message);
+                }
+            };
+            AjaxUtil.postAsyncData(_this.base_url+'/delete', data, fnSuccess);
+
         }
 
         function grid_binding(data){
@@ -790,13 +764,27 @@
             // })
 
             $('#btnSave').click(function (e) {
-                console.log('22');
                 Alert.confirm('',
                     '등록하시겠습니까?',
                     function () {
                         saveTel("S")
                     },
                     function () {
+                    // 취소 버튼을 눌렀을 때 처리
+                    }
+                );
+            });
+
+
+            $('#btnDelete').click(function(e){
+                console.log('삭제버튼클릭');
+                Alert.confirm('',
+                '삭제하시겠습니까?',
+                function() {
+                    delTel()
+                },
+                    function(){
+                    // 취소 버튼을 눌렀을 때 수행 하는 곳
                     }
                 );
             });

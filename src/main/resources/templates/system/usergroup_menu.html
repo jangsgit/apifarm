@@ -89,23 +89,28 @@
                                 <dd>
                                     <div class="srch-box">
 <!--                                        <input type="text" id="searchusr" name="searchusr" class="input-srch">-->
-                                        <a class="btn-srch" id="input-srch" title="조회" ></a>
+                                        <a class="btn-srch" id="btnSearch" title="조회" ></a>
+                                    </div>
+                                </dd>
+                            </dl>
+
+
+                            <dl>
+
+                                <dd>
+                                    <div class="srch-box" style="margin-top: 20px">
+                                    읽기<input type="checkbox" id="AllcheckRead">
                                     </div>
                                 </dd>
                             </dl>
 
                             <dl>
-                                <!--                                <dt>-->
-                                <!--                                    <label for="text1">-->
-                                <!--                                        사용자 그룹<span class="eq">*</span>-->
-                                <!--                                    </label>-->
-                                <!--                                </dt>-->
-                                <!--                                <dd>-->
-                                <!--                                    <div class="srch-box">-->
-                                <!--                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="점검자명 검색">-->
-                                <!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>-->
-                                <!--                                    </div>-->
-                                <!--                                </dd>-->
+
+                                <dd>
+                                    <div class="srch-box" style="margin-top: 20px;">
+                                    쓰기<input type="checkbox" id="AllcheckWrite" >
+                                    </div>
+                                </dd>
                             </dl>
 
                         </div>
@@ -130,7 +135,7 @@
                                 <!--                                    </a>-->
                                 <!--                                </li>-->
                                 <li>
-                                    <a class="btn btn-edit" title="수정">
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         저장
                                     </a>
@@ -148,7 +153,7 @@
                     <!--                    grid 영역-->
                     <div class="container-fluid">
 <!--                        <p id="selectedItem"></p>-->
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="height: 600px;"></div>
                     </div>
                     <div class="btn-wrap">
 
@@ -176,12 +181,19 @@
         var viewdata;
 
         document.readyState === 'complete' ? init() : window.onload = init;
+
         function init() {
+
+            // _this를 사용하지 않고 this를 통해 데이터 바인딩
+            let _this = {
+                grid: null
+            };
+
+
+
             let data2 = [];
             let group_id = $('#cboUserGroup').val();
             let folder_id = $('#cboMenuFolder').val();
-            let folderNames = {};  // 폴더 ID와 이름을 저장할 객체
-            let menuFolderName = '폴더명';  // 기본 폴더명, AJAX 응답 후 업데이트
 
 
             $.ajax({
@@ -193,23 +205,27 @@
                 },
                 async: false,
                 success: function (data) {
-                    console.log('wijmo', data.data);
                     data2 = data.data;
-
-                    folderNames = data.FolderName || [];
-                    // folder_id에 해당하는 폴더명을 찾아서 menuFolderName에 할당
-                    const folder = folderNames.find(f => f.key == folder_id);
-                    if (folder) {
-                        menuFolderName = folder.value;
-                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching log_list data:', textStatus, errorThrown);
                 }
             });
 
+            let menuGroupName = new wijmo.collections.PropertyGroupDescription('메뉴명', function (item, proName) {
+                return item.gpname;
+            })
 
-            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // viewdata = new wijmo.collections.CollectionView(data2);
+
+            // CollectionView 설정 및 데이터 소스 바인딩
+            viewdata = new wijmo.collections.CollectionView(data2, {
+                groupDescriptions: [
+                    menuGroupName
+                ]
+            });
+
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
@@ -228,8 +244,6 @@
                         align: 'center',
                         dataType: wijmo.DataType.Boolean,
                         isReadOnly: false,
-                        isContentHtml: true, // HTML 내용 사용 설정
-
                     },
                     {
                         binding: 'w',
@@ -239,42 +253,232 @@
                         dataType: wijmo.DataType.Boolean,
                         isReadOnly: false,
                     },
-                    {binding: '', header: '', width: 900, align: 'center'},
-                    {
-                        header: menuFolderName,
-                        align: 'center',
-                        width: 250,
-                        binding: 'pid',  // pid 값을 폴더명으로 바인딩
-                        dataMap: new wijmo.grid.DataMap(folderNames, 'key', 'value')  // 폴더 ID와 폴더명을 매핑하여 표시
-                    },
+                    {binding: '', header: '', width: "*", align: 'center'},
+
                 ],
                 itemsSource: viewdata
             });
+
 
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: () => {
 
                 }
+
             })
             // 선택이 변경될 때, 현재 항목 업데이트
 
-
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
-            theGrid.collectionView.groupDescriptions.push(new wijmo.collections.PropertyGroupDescription('pid'));
+
+            // "읽기" 체크박스 클릭 이벤트 핸들러
+            document.getElementById('AllcheckRead').addEventListener('change', function () {
+                var checked = this.checked;
+                for (var i = 0; i < theGrid.rows.length; i++) {
+                    theGrid.setCellData(i, 'r', checked);
+                }
+            });
 
 
+            // "쓰기" 체크박스 클릭 이벤트 핸들러
+            document.getElementById('AllcheckWrite').addEventListener('change', function () {
+                var checked = this.checked;
+                for (var i = 0; i < theGrid.rows.length; i++) {
+                    theGrid.setCellData(i, 'w', checked);
+                }
+            });
 
+            // theGrid를 _this.grid로 설정
+            _this.grid = theGrid;
 
         }
 
 
         let page = null;
 
+
+
         // 초기 콤보박스 채우기
         AjaxUtil.fillSelectOptions($('#cboUserGroup'), 'user_group', '', '');
         AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
+
+
+        function saveUserGroupMenu()
+        {
+            let _this = this;
+            let url = 'api/system/usergroupmenu/save';
+
+            // _this.grid가 정의되었는지 확인
+            if (!_this.grid || !_this.grid.itemsSource) {
+                console.error("grid or grid.itemsSource is undefined.");
+                return;
+            }
+
+
+            let group_id = $('#cboUserGroup').val();
+            let data = {group_id: group_id, Q: ''};
+
+
+            let items = [];
+
+            $.each(_this.grid.list, function (idx, item) {
+                let menu_code = item.menu_code;
+                if (menu_code != "") {
+
+                    if (item.r == 'false') item.r = false;
+                    if (item.w == 'false') item.w = false;
+
+                    items.push({
+                        menu_code: item.menu_code,
+                        r: item.r,
+                        w: item.w,
+                        ugm_id: item.ugm_id
+                    });
+                }
+            });
+
+            data.Q = JSON.stringify(items);
+
+            // 데이터 입력 체크 루틴 누락
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+                let fnSuccess = function (result) {
+                    if (result.success) {
+                        Notify.success('저장되었습니다');
+                        location.reload();
+                    }
+                };
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            }, function () {
+            });
+
+        }
+
+
+
+        //검색
+        function searchData() {
+            let group_id = $('#cboUserGroup').val();
+            let folder_id = $('#cboMenuFolder').val();
+
+
+            $.ajax({
+                url: '/api/system/usergroupmenu/read',
+                type: 'GET',
+                data: {
+                    'group_id': group_id,
+                    'folder_id': folder_id
+                },
+                async: false,
+                success: function (data) {
+                    console.log("서버 응답 데이터:", data); //서버에서 반환된 데이터 로그 출력
+
+                    if(data && data.success&& Array.isArray(data.data) && data.data.length > 0){
+                        let filteredData = filterDataByFolder(data.data, data.folder_id);
+                        grid_binding(filteredData);    // 서버에서 반환된 데이터
+                    } else{
+                        console.warn('서버에서 반환된 데이터가 없습니다.');
+                        console.log("응답 데이터 형식 확인:", data);
+
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        function filterDataByFolder(data, folderId) {
+            // folderId에 해당하는 데이터만 필터링
+            return data.filter(item => item.folder_id == folderId);
+        }
+
+
+        let menuGroupName = new wijmo.collections.PropertyGroupDescription('메뉴명', function (item) {
+            return item.gpname;
+        })
+
+
+
+
+
+        function grid_binding(data){
+            console.log("바인딩 데이터:",data);
+
+            let UserMenuData = data.map(item=>({
+                name: item.name,
+                r: item.r,
+                w: item.w,
+                gpname: item.gpname  // 그룹화를 위한 속성 추가
+            }));
+
+            console.log("UserMenuData:",UserMenuData);
+
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+
+            var columns = [
+                    {binding: 'name',header: '코드명',width: 250,align: 'center',},
+                    {binding: 'r',header: '읽기',width: 200,align: 'center',dataType: wijmo.DataType.Boolean,isReadOnly: false,},
+                    {binding: 'w',header: '쓰기',width: 200,align: 'center',dataType: wijmo.DataType.Boolean,isReadOnly: false,},
+                    {binding: '', header: '', width: "*", align: 'center'},
+                ];
+
+
+            columns.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid.columns.push(col);
+            });
+
+
+            // CollectionView를 생성하여 그리드에 설정
+            viewdata = new wijmo.collections.CollectionView(UserMenuData);
+
+            // 그룹화 설정 추가
+            viewdata.groupDescriptions.push(menuGroupName);
+
+            // 그리드에 바인딩
+            theGrid.itemsSource = viewdata;
+
+        }
+
+
+
+
+        $(document).ready(function (e){
+
+
+
+            $('#btnSave').click(function (e) {
+                console.log("그룹권한 저장 이벤트 클릭 이벤트");
+
+                Alert.confirm('', '저장하시겠습니까?', function () {
+                        saveUserGroupMenu()
+                    },
+                    function () {
+
+                    }
+                );
+            });
+
+            $('#btnSearch').click(function (e) {
+                console.log("그룹권한 검색 이벤트 클릭 이벤트");
+                Alert.confirm('', '', function () {
+                        searchData();
+
+                        $('#cboUserGroup,#cboMenuFolder').change(function (ex) {
+
+                        });
+                    },
+                    function () {
+                    }
+                );
+            });
+
+        });
 
     </script>
 </th:block>

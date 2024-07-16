@@ -58,14 +58,31 @@ public class EtctelListService {
         params.addValue("emconemail", dto.getEmail());
         params.addValue("emconmno", dto.getMno());
 
+
+
+        if(dto.getEmcontno() == null || dto.getEmcontno().isEmpty()){
+            throw new IllegalArgumentException("기본 키 값이 설정되지 않았습니다.");
+        }
+
         String sql = """
         INSERT INTO TB_RP980 (EMCONTNO, EMCONCOMP, EMCONPER, EMCONTEL, USEYN, INDATEM, INUSERID, INUSERNM, 
-                              SPWORKCD, TASKWORK,  SPCOMPCD, EMCONEMAIL, EMCONMNO)
+                              SPWORKCD, TASKWORK, SPCOMPCD, EMCONEMAIL, EMCONMNO)
         VALUES (:emcontno, :emconcomp, :emconper, :emcontel, :useyn, :indatem, :inuserid, :inusernm, 
                 :spworkcd, :taskwork, :spcompcd, :emconemail, :emconmno)
-    """;
+        """;
 
 //divinm 컬럼이 db에 저장되어있지않아서 나중에 추가 해야한다고 말해야함.
+
+        // 데이터 삽입
+        try {
+            this.sqlRunner.getRow(sql, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Sql 실행오류: " + e.getMessage());
+        }
+
+
+
 
         // 조회 쿼리 생성
         String fetchSql = """
@@ -74,11 +91,11 @@ public class EtctelListService {
             WHERE 1=1
         """;
 
-        if (dto.getEmcontno() != null && !dto.getEmcontno().isEmpty())
-            fetchSql += " AND EMCONTNO = :emcontno";
-
 //        if (dto.getComp() != null && !dto.getComp().isEmpty())
 //            fetchSql += " AND EMCONCOMP = :emconcomp";
+
+        if (dto.getEmcontno() != null && !dto.getEmcontno().isEmpty())
+            fetchSql += " AND EMCONTNO = :emcontno";
 
         if (dto.getPer() != null && !dto.getPer().isEmpty())
             fetchSql += " AND EMCONPER = :emconper";

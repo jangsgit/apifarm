@@ -127,6 +127,7 @@ public class SystemService {
                 select a.id
                     , a."Parent_id" as pid
                     , '' as menu_code
+                    , a."FolderName" as gpname
                     , a."FolderName" as name
                     , 1 as depth
                     , array[a.id] as path
@@ -145,9 +146,10 @@ public class SystemService {
         sql += """
         union all
                 select null as id
-                      , mi."MenuFolder_id" as pid              
+                      , mi."MenuFolder_id" as pid
                       , mi."MenuCode"::text as menu_code
-                      , mi."MenuName"  as name          
+                      , tree."gpname" as gpname
+                      , mi."MenuName"  as name
                       , tree.depth+1
                       , array_append(tree.path, mi."MenuFolder_id") as path
                       , mi."MenuFolder_id" = any(tree.path) as cycle
@@ -155,13 +157,14 @@ public class SystemService {
                       ,'menu' as data_div
                       , mi."MenuFolder_id" as folder_id
                       , false as is_folder
-                from menu_item mi 
-                inner join tree on mi."MenuFolder_id" = tree.id  
+                from menu_item mi
+                inner join tree on mi."MenuFolder_id" = tree.id
                 where mi."MenuCode" not in ('wm_user_group', 'wm_user', 'wm_user_group_menu')
           )
           select tree.pid
               , tree.id
               , tree.menu_code
+              , tree.gpname
               , tree.name
               , tree.depth
               , tree.ord
