@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import mes.app.definition.service.UserCodeService;
+import mes.app.system.service.UserCodeService;
 import mes.domain.entity.RelationData;
 import mes.domain.entity.User;
 import mes.domain.entity.UserCode;
