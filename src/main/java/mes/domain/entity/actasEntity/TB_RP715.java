@@ -32,16 +32,6 @@ public class TB_RP715 extends BaseEntity{
     private String spuncode_id;
 
 
-
-    @Column(name = "spworknm")
-    private String spworknm;
-
-    @Column(name = "spcompnm")
-    private String spcompnm;
-
-    @Column(name = "spplannm")
-    private String spplannm;
-
     @Column(name = "filepath")
     private String filepath;
 

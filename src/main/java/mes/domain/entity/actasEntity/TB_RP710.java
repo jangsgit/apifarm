@@ -41,14 +41,6 @@ public class TB_RP710 extends BaseEntity{
     @Id @Column(name = "spuncode", length = 40, nullable = false)
     private String spuncode;
 
-    @Column(name = "spworknm")
-    private String spworknm;
-
-    @Column(name = "spcompnm")
-    private String spcompnm;
-
-    @Column(name = "spplannm")
-    private String spplannm;
 
     @Column(name = "checkusr")
     private String checkusr;
@@ -77,15 +69,4 @@ public class TB_RP710 extends BaseEntity{
     @Column(name = "checkendt")
     private String checkendt;
 
-
-
-    /*public void addTbRp715(TB_RP715 tbRp715) {
-        tbRp715List.add(tbRp715);
-        tbRp715.setTbRp710(this);
-    }
-
-    public void removeTbRp715(TB_RP715 tbRp715) {
-        tbRp715List.remove(tbRp715);
-        tbRp715.setTbRp710(null);
-    }*/
 }

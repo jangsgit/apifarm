@@ -2,8 +2,10 @@ package mes.app.actas_inspec.service;
 
 
 import mes.config.Settings;
+import mes.domain.entity.actasEntity.TB_INSPEC;
 import mes.domain.entity.actasEntity.TB_RP710;
 import mes.domain.entity.actasEntity.TB_RP715;
+import mes.domain.repository.actasRepository.TB_INSPECRepository;
 import mes.domain.repository.actasRepository.TB_RP710Repository;
 import mes.domain.repository.actasRepository.TB_RP715Repository;
 import mes.domain.services.SqlRunner;
@@ -13,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -35,9 +34,13 @@ public class InspecService {
     @Autowired
     Settings settings;
 
+    @Autowired
+    TB_INSPECRepository tb_inspecRepository;
+
+
 
     @Transactional
-    public Boolean save(TB_RP710 tbRp710, MultipartFile[] files){
+    public Boolean save(TB_RP710 tbRp710, MultipartFile[] files, List<String> doc_list){
 
         try {
 
@@ -45,6 +48,55 @@ public class InspecService {
 
             String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
+            List<String> divisionList = new ArrayList<>();
+            List<String> contList = new ArrayList<>();
+            List<String> resultList = new ArrayList<>();
+            List<String> reformList = new ArrayList<>();
+            List<Integer> NumList = new ArrayList<>();
+
+            int num = 0;
+            for(String doc : doc_list){
+                String[] parts = doc.split("@", -1);
+
+                if(parts.length >= 4){
+
+                    ++num;
+                    divisionList.add(parts[0].trim());
+                    contList.add(parts[1].trim());
+                    resultList.add(parts[2].trim());
+                    reformList.add(parts[3].trim());
+                    NumList.add(num);
+                }
+
+            }
+
+
+
+            for(int i=0; i < doc_list.size(); i++){
+                TB_INSPEC tb_inspec = new TB_INSPEC();
+
+                int MaxSeq;
+                Optional<Integer> SeqValue = tb_inspecRepository.findTopByOrderBySeqDesc();
+                MaxSeq = SeqValue.orElse(1);
+
+                tb_inspec.setSeq(MaxSeq + 1);
+                tb_inspec.setSpworkcd("001");
+                tb_inspec.setSpworknm("대구");
+                tb_inspec.setSpcompcd("001");
+                tb_inspec.setSpcompnm("대구성서공단");
+                tb_inspec.setSpplancd("001");
+                tb_inspec.setSpplannm("KT대구물류센터 연료전지발전소");
+                tb_inspec.setTabletype("TB_RP710");
+                tb_inspec.setSpuncode_id(tbRp710.getSpuncode());
+                tb_inspec.setInspecnum(NumList.get(i));
+                tb_inspec.setInspecdivision(divisionList.get(i));
+                tb_inspec.setInspeccont(contList.get(i));
+                tb_inspec.setInspecresult(resultList.get(i));
+                tb_inspec.setInspecreform(reformList.get(i));
+                tb_inspecRepository.save(tb_inspec);
+
+
+            }
 
             if(files != null){
                 for (MultipartFile filelist: files){

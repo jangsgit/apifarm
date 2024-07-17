@@ -95,19 +95,41 @@
         color: black;
     }
 
-    /*모달 팝업 영역 스타일링*/
+    /* 모달 팝업 영역 스타일링 시작*/
     .modal {
-        /*팝업 배경*/
-        display: none; /*평소에는 보이지 않도록*/
-        position: absolute;
-        top:0;
+        display: none; /* 평소에는 보이지 않도록 */
+        position: fixed; /* fixed로 변경하여 화면 전체를 덮도록 */
+        top: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
-        overflow: hidden;
+        height: 100%;
         background: rgba(0,0,0,0.5);
         z-index: 999;
+        opacity: 0; /* 애니메이션을 위한 초기 투명도 */
+        transition: opacity 0.3s ease; /* 투명도 변경에 대한 애니메이션 */
     }
+
+    .modal.show {
+        display: block;
+        opacity: 1; /* 보여질 때의 투명도 */
+    }
+
+    .popup-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.7); /* 화면 중앙으로 이동 및 초기 크기 설정 */
+        width: 70%;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        transition: transform 0.3s ease; /* 크기 변경에 대한 애니메이션 */
+    }
+
+    .popup-wrapper.show {
+        transform: translate(-50%, -50%) scale(1); /* 보여질 때의 크기 */
+    }
+    /*모달 팝업 끝**/
 
     /*  점검관리/전기안전관리/문서관리현황 전용  */
     .filename{
@@ -118,6 +140,26 @@
     /*삭제ㄴㄴ, 나중에 css 파일로 따로 빼겠음 순회점검 점검일지 업로드, 버튼*/
     .fileuploaders { border: none }
 
+
+    /**순회점검일지 추가*/
+    .doc-table td{
+        border-right: 1px solid #e8e8e8;
+        text-align: center;
+    }
+    .doc-table tr th{
+        text-align: center;
+    }
+
+    .checkbox-cell{
+        cursor: pointer;
+    }
+
+    .checkbox-cell:hover{
+        box-shadow: inset 0px 0px 1px 1px #0581f2;
+        background: #e3f1ff;
+    }
+
+    /**순회점검일지 끝**/
 
 
 </style>
