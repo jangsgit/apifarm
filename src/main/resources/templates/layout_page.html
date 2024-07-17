@@ -230,14 +230,24 @@
 
     // 셀 클릭 이벤트 처리
     $(document).on('click', '.wj-flexgrid .wj-cell', function() {
+
         var $grid = $(this).closest('.wj-flexgrid');
-        // 그리드 내에 체크박스가 있는지 확인
+        var $row = $(this).closest('.wj-row'); // 클릭된 행
+
+        // 그리드 내에 체크박스가 없고, 헤더 셀이 아닐 경우에만 로직 수행
         if ($grid.find('input[type="checkbox"]').length === 0 && !$(this).hasClass('wj-header')) {
-            // 모든 행에서 .selected-row 클래스 제거
-            $grid.find('.wj-row').removeClass('selected-row');
-            // 클릭된 행에만 .selected-row 클래스 추가
-            var $row = $(this).closest('.wj-row');
-            $row.addClass('selected-row');
+
+            // 이미 선택된 행이면 선택 해제
+            if ($row.hasClass('selected-row')) {
+                // 해당 행에서만 .selected-row 클래스 제거
+                $row.removeClass('selected-row');
+            } else {
+                // 다른 행들의 선택 상태를 유지하면서 현재 행만 선택
+                $grid.find('.wj-row').removeClass('selected-row');
+
+                // 현재 행에만 .selected-row 클래스 추가
+                $row.addClass('selected-row');
+            }
         }
     });
 
