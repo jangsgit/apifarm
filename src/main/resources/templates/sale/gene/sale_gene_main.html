@@ -15,7 +15,8 @@
         }
 
         .container-fluid {
-            overflow-x: scroll;
+            overflow-x: auto;
+            max-width: 100%;
         }
 
         /* 토글 클릭시 애니메이션 효과*/
@@ -199,7 +200,7 @@
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem1"></p>
-                        <div id="theGrid" style="max-height: 600px;" ></div>
+                        <div id="theGrid" style="max-height: 530px;" ></div>
                     </div>
                 </section>
 
@@ -251,7 +252,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem2"></p>
-                        <div id="theGrid2" style="max-height: 600px;"></div>
+                        <div id="theGrid2" style="max-height: 530px;"></div>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
@@ -259,6 +260,7 @@
     </div> <!--//layout-contents end -->
 
     <!-- 팝업 -->
+    <!-- 필요 시 : style="z-index: 4" -->
     <div class="modal">
 
         <div class="popup-wrapper w700" id="popup1">
@@ -319,7 +321,7 @@
                     </div>
                     <div class="popup-button">
                         <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                        <button onclick="uploadExcelAndLoadData()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                        <button type="button" onclick="uploadExcelAndLoadData()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
                     </div>
                 </form>
             </div>
@@ -434,49 +436,49 @@
             function initializeGrid(data) {
                 // try catch문 나중에 삭제
                 try {
-                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                    autoGenerateColumns: false,
-                    showMarquee: true,
-                    isReadOnly: true,
-                    columns: [
-                        //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
-                        { binding: 'rownum', header: 'NO', width: 60, align: 'center' },
-                        { binding: 'standdt', header: '일자', width: 115, align: 'center' },
-                        { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
-                        { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
-                        { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
-                        { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
-                        { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
-                        { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
-                        { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                        { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
-                    ],
-                    itemsSource: data
-                });
+                    theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                        autoGenerateColumns: false,
+                        showMarquee: true,
+                        isReadOnly: true,
+                        columns: [
+                            //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
+                            { binding: 'rownum', header: 'NO', width: 60, align: 'center' },
+                            { binding: 'standdt', header: '일자', width: 115, align: 'center' },
+                            { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
+                            { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
+                            { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
+                            { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'toggle', header: '...', width: "*", align: 'right', format: 'n0', allowSorting: false },
+                            { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
+                            { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
+                            { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
+                            { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
+                        ],
+                        itemsSource: data
+                    });
 
                     theGrid.rowHeaders.columns.splice(0, 1);  // 맨 앞에 헤더부분 없애기
 
@@ -510,48 +512,48 @@
             function initializeGrid2(data) {
                 // try catch 나중에 삭제
                 try{
-                theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
-                    autoGenerateColumns: false,
-                    showMarquee: true,
-                    isReadOnly: false, // 수정 가능하게 설정
-                    columns: [
-                        { binding: 'rownum', header: 'NO', width: 60, align: 'center' },
-                        { binding: 'standdt', header: '일자', width: 115, align: 'center' },
-                        { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
-                        { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
-                        { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
-                        { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
-                        { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
-                        { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
-                        { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
-                        { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
-                        { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
-                    ],
-                    itemsSource: data
-                });
+                    theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                        autoGenerateColumns: false,
+                        showMarquee: true,
+                        isReadOnly: false, // 수정 가능하게 설정
+                        columns: [
+                            { binding: 'rownum', header: 'NO', width: 60, align: 'center' },
+                            { binding: 'standdt', header: '일자', width: 115, align: 'center' },
+                            { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
+                            { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
+                            { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
+                            { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'toggle', header: '...', width: "*", align: 'right', format: 'n0', allowSorting: false },
+                            { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' },
+                            { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
+                            { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
+                            { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
+                            { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
+                        ],
+                        itemsSource: data
+                    });
 
                     theGrid2.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
 
@@ -573,54 +575,10 @@
                         }
                     });
 
-            } catch (error) {
-                console.error('Failed to initialize grid:', error);
+                } catch (error) {
+                    console.error('Failed to initialize grid:', error);
+                }
             }
-            }
-
-            // // 초기 컬럼 숨기기 설정
-            // function toggleColumns(grid, show) {
-            //     for (let i = 4; i <= 22; i++) {
-            //         let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
-            //         if (column) column.visible = show;
-            //     }
-            // }
-            //
-            // // 초기에 04시~22시 컬럼을 숨김
-            // function initializeColumnToggle(grid) {
-            //     toggleColumns(grid, false);
-            //
-            //     grid.formatItem.addHandler(function(sender, e) {
-            //         if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
-            //             if (e.cell.textContent === '...') {
-            //                 e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
-            //                 e.cell.onclick = function() {
-            //                     toggleColumns(grid, true); // 컬럼을 펼치고
-            //                     grid.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
-            //                 };
-            //             }
-            //         }
-            //     });
-            //
-            //     document.addEventListener('click', function(event) {
-            //         // '...' 컬럼 외의 다른 헤더를 클릭했을 때
-            //         if (!event.target.matches('.wj-colheaders .wj-cell')) return;
-            //         var headerText = event.target.textContent;
-            //         if (headerText !== '...' && grid.columns.getColumn('toggle').visible === false) {
-            //             toggleColumns(grid, false); // 컬럼을 다시 접음
-            //             grid.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
-            //         }
-            //     });
-            // }
-            //
-            // 초기화 함수 호출
-            // initializeColumnToggle(theGrid);
-            // initializeColumnToggle(theGrid2);
-
-
-
-
-
 
             init(); // 초기화 함수 호출
 
@@ -670,7 +628,8 @@
 
 
         // 엑셀파일 업로드 / 조회
-        function uploadExcelAndLoadData() {
+        function uploadExcelAndLoadData(event) {
+
             let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID
             let fileInput = document.getElementById('fileInput2'); // 파일 입력 필드의 ID
             let files = fileInput.files;
@@ -679,7 +638,9 @@
                 formData.append('upload_file', files[0]); // 'upload_file'이 서버에서 요구하는 파트 이름
             } else {
                 Alert.alert('', '파일을 첨부해 주세요.');
-                return; // 파일이 없으면 여기서 함수 종료
+                // return; // 파일이 없으면 여기서 함수 종료
+                // return false; // 파일이 없을 때 추가적인 서버 요청을 방지
+                event.preventDefault();  // 폼의 자동 제출 방지
             }
 
             // formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
@@ -693,19 +654,19 @@
                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
                 success: function(response) {
                     if (response.success) {
-                        // Alert.alert('', '파일이 성공적으로 업로드되었습니다.');
-                        // Alert.alert('', response.message);
-                        alert('파일이 성공적으로 업로드되었습니다.');
+                        Alert.alert('', '파일이 성공적으로 업로드되었습니다.', function() {
+                            location.reload();  // 사용자가 확인 버튼을 누르면 페이지 새로 고침
+                        });
                         // updateGrid(response.data); // 응답에서 데이터를 받아 그리드 업데이트
+
                     } else {
                         // Alert.alert('', '업로드 실패: ' + response.message);
-                        alert('업로드 실패: ' + response.message);
+                        Alert.alert('업로드 실패: ' + response.message);
                     }
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    // Alert.alert('', '에러가발생하였습니다.');
-                    alert('업로드 중 에러가 발생했습니다.');
+                    Alert.alert('', '에러가 발생하였습니다.');
                 }
             });
         }
