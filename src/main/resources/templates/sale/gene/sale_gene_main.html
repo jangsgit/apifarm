@@ -102,9 +102,9 @@
                                 </label>
                                 <dd>
                                     <select id="select1" class="w120">
-                                        <option>전체</option>
-                                        <option>option1</option>
-                                        <option>option2</option>
+<!--                                        <option>전체</option>-->
+<!--                                        <option>option1</option>-->
+<!--                                        <option>option2</option>-->
                                     </select>
                                 </dd>
                             </dl>
@@ -260,7 +260,6 @@
     </div> <!--//layout-contents end -->
 
     <!-- 팝업 -->
-    <!-- 필요 시 : style="z-index: 4" -->
     <div class="modal">
 
         <div class="popup-wrapper w700" id="popup1">
@@ -344,21 +343,42 @@
     <script type="text/javascript">
 
         function showPopup(){
-            const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'block';
-            modalOpen.style.display = 'block';
-            /*var popup = document.getElementById('popup1');
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
 
 
-            popup.style.display = 'block';*/
+
         }
 
+
         function closePopup(){
-            const modal2 = document.querySelector('.modal');
+            /*const modal2 = document.querySelector('.modal');
             const modalOpen = document.querySelector('.popup-wrapper');
             modal2.style.display = 'none';
-            modalOpen.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
         var theGrid;
@@ -368,8 +388,8 @@
         var viewdata2;
 
 
-
         document.addEventListener('DOMContentLoaded', function() {
+
             // 페이지 초기화
             function init() {
                 loadData(); // 데이터 로드 함수 호출
@@ -591,7 +611,8 @@
                     type: 'GET',
                     success: function(response) {
                         // 서버 응답 로깅으로 실제 데이터 구조 파악
-                        console.log("Full server response:", JSON.stringify(response, null, 2)); // 전체 응답을 보기 쉽게 출력
+                        // console.log("Full server response:", JSON.stringify(response, null, 2));
+                        // 전체 응답을 보기 쉽게 출력
 
                         // if (response.success) {
                         //     bindGridData(response.data); // 그리드 바인딩
@@ -622,6 +643,89 @@
                 });
             }
 
+            // 발전기코드발전기코드발전기코드발전기코드발전기코드발전기코드발전기코드발전기코드발전기코드
+
+            // 발전기코드 옵션 동적 생성
+            loadPowerIds();
+
+            function loadPowerIds() {
+                fetch('/api/gene/upload/powerids')
+                    .then(response => response.json())
+                    .then(powerIds => {
+                        const selectElement = document.getElementById('select1');
+                        selectElement.innerHTML = ''; // 기존 옵션 삭제
+
+                        // "전체" 옵션 추가
+                        const allOption = document.createElement('option');
+                        allOption.value = "all";
+                        allOption.textContent = "전체";
+                        selectElement.appendChild(allOption);
+
+                        // 데이터베이스에서 읽은 powerid 옵션 추가
+                        powerIds.forEach(id => {
+                            const option = document.createElement('option');
+                            option.value = id;
+                            option.textContent = id;
+                            selectElement.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error loading power IDs:', error));
+            }
+
+            // 시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간시간
+
+            // 시간 선택 옵션 동적으로 업데이트
+            const select2 = document.getElementById('select2');
+            const select3 = document.getElementById('select3');
+
+            // select2의 변경사항을 감지하고 select3의 옵션을 업데이트
+            select2.addEventListener('change', function() {
+                updateSelect3Options(select2.value);
+            });
+
+            // select3의 옵션을 업데이트하는 함수
+            function updateSelect3Options(selectedHour) {
+                // select3의 클릭 가능 여부를 설정
+                handleSelect3Accessibility(selectedHour);
+
+                // select3의 내용을 초기화
+                select3.innerHTML = '';
+
+                if (selectedHour === "전체") {
+                    // "전체" 선택 처리
+                    const allOption = document.createElement('option');
+                    allOption.value = "전체";
+                    allOption.textContent = "전체";
+                    select3.appendChild(allOption);
+                } else {
+                    // 선택된 시간을 정수로 변환
+                    const selectedTime = parseInt(selectedHour, 10);
+
+                    if (selectedTime === 24) {
+                        // 24시 선택 시 처리
+                        select3.disabled = true;
+                        const noMoreOption = document.createElement('option');
+                        noMoreOption.textContent = "24";
+                        select3.appendChild(noMoreOption);
+                    } else {
+                        // 선택된 시간 이후의 시간만 select3에 추가
+                        for (let hour = selectedTime + 1; hour <= 24; hour++) {
+                            const option = document.createElement('option');
+                            option.value = hour < 10 ? '0' + hour : hour.toString();
+                            option.textContent = option.value;
+                            select3.appendChild(option);
+                        }
+                    }
+                }
+            }
+
+            // select3의 클릭 가능 여부를 처리하는 함수
+            function handleSelect3Accessibility(selectedHour) {
+                select3.disabled = selectedHour === "전체";
+            }
+
+            // 페이지 로드 시 select2의 초기 상태에 따라 select3를 업데이트
+            updateSelect3Options(select2.value);
 
         });
 

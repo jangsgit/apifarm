@@ -26,10 +26,10 @@ import java.util.List;
 
 @Service
 public class GeneUploadService {
-
+	
 	@Autowired
 	SqlRunner sqlRunner;
-
+	
 	@Autowired
 	TB_RP320Repository TB_RP320Repository;
 	
@@ -61,7 +61,7 @@ public class GeneUploadService {
 				XSSFCell cell = row.getCell(j);
 				String cellValue = "";
 				
-				System.out.println("Cell[" + i + ", " + j + "]: Type=" + cell.getCellType());
+//				System.out.println("Cell[" + i + ", " + j + "]: Type=" + cell.getCellType());
 				
 				if (cell != null) {
 					if (cell.getCellType() == CellType.NUMERIC) {
@@ -86,7 +86,7 @@ public class GeneUploadService {
 			
 		}
 		
-		System.out.println("all_rows" + all_rows);
+//		System.out.println("all_rows" + all_rows);
 		
 		
 		wb.close();

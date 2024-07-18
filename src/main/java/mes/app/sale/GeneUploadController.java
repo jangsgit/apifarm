@@ -2,7 +2,7 @@ package mes.app.sale;
 
 import mes.app.sale.service.GeneUploadService;
 import mes.config.Settings;
-import mes.domain.entity.TB_RP320;
+import mes.domain.entity.actasEntity.TB_RP320;
 import mes.domain.model.AjaxResult;
 import mes.domain.repository.TB_RP320Repository;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/gene/upload")
@@ -47,7 +48,6 @@ public class GeneUploadController {
 		// Step 1: 기존 데이터 삭제
 		TB_RP320Repository.deleteAll();
 		
-		
 		// Step 2: 엑셀 파일 저장 및 읽기
 		String uploadFilename = geneUploadService.saveUploadedFile(upload_file);
 		List<List<String>> dataRows = geneUploadService.excel_read(uploadFilename);
@@ -65,7 +65,7 @@ public class GeneUploadController {
 						.invoke(entity, new BigDecimal(row.get(MEVALUE_LIST.get(i))));
 			}
 			entity.setMevaluet(new BigDecimal(row.get(MEVALUET_COL)));
-			
+
 //			pk들 임의의 값 설정
 			entity.setSpworkcd("def");
 			entity.setSpcompcd("def");
@@ -81,6 +81,17 @@ public class GeneUploadController {
 	public ResponseEntity<List<TB_RP320>> getAllData() {
 		List<TB_RP320> data = TB_RP320Repository.findAll();
 		return ResponseEntity.ok(data);
+	}
+	
+	// 발전기코드 옵션 동적 생성
+	@GetMapping("/powerids")
+	public ResponseEntity<List<String>> getPowerIds() {
+		List<TB_RP320> data = TB_RP320Repository.findAll();
+		List<String> powerIds = data.stream()
+				.map(TB_RP320::getPowerid)
+				.distinct()
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(powerIds);
 	}
 	
 }

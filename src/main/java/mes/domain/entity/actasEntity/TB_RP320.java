@@ -1,12 +1,9 @@
-package mes.domain.entity;
+package mes.domain.entity.actasEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -14,7 +11,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "TB_RP320")
+@IdClass(TB_RP320_Id.class)
 public class TB_RP320 {
+	
+	// BaseEntity 참고하기!!!
 	
 	@Column(name = "spworkcd")
 	private String spworkcd;
@@ -38,6 +38,7 @@ public class TB_RP320 {
 	@Column(name = "standdt")
 	private String standdt;
 	
+	@Id
 	@Column(name = "powerid")
 	private String powerid;
 	
