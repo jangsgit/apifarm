@@ -3,11 +3,10 @@ package mes.app.actas_inspec;
 
 import mes.app.actas_inspec.service.DocService;
 import mes.config.Settings;
-import mes.domain.entity.actasEntity.TB_RP760;
+import mes.domain.entity.actasEntity.TB_RP770;
 import mes.domain.model.AjaxResult;
-import mes.domain.repository.TB_RP760Repository;
+import mes.domain.repository.TB_RP770Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +20,7 @@ import java.util.*;
 public class DocInputController {
 
     @Autowired
-    TB_RP760Repository tb_rp760Repository;
+    TB_RP770Repository tb_rp770Repository;
 
     @Autowired
     Settings settings;
@@ -33,21 +32,21 @@ public class DocInputController {
     }
 
 
-    @GetMapping("/read")
-    public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr){
-        List<Map<String, Object>> items = new ArrayList<>();
-
-        if(searchusr == null){
-            searchusr = "";
-        }
-
-        items = this.docService.getInspecList(searchusr);
-
-        AjaxResult result = new AjaxResult();
-        result.data = items;
-
-        return result;
-    }
+//    @GetMapping("/read")
+//    public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr){
+//        List<Map<String, Object>> items = new ArrayList<>();
+//
+//        if(searchusr == null){
+//            searchusr = "";
+//        }
+//
+//        items = this.docService.getInspecList(searchusr);
+//
+//        AjaxResult result = new AjaxResult();
+//        result.data = items;
+//
+//        return result;
+//    }
 
     @PostMapping("/save")
     @Transactional
@@ -61,7 +60,7 @@ public class DocInputController {
 
         AjaxResult result = new AjaxResult();
 
-        TB_RP760 tbRp760dto = new TB_RP760();
+        TB_RP770 tbRp760dto = new TB_RP770();
 
 
 
@@ -108,7 +107,7 @@ public class DocInputController {
         String checkdtconvertvalue = standdt.replaceAll("-","");
 
         String formattedValue;
-        Optional<String> checknovalue = tb_rp760Repository.findMaxChecknoByCheckdt(checkdtconvertvalue);
+        Optional<String> checknovalue = tb_rp770Repository.findMaxChecknoByCheckdt(checkdtconvertvalue);
         if(checknovalue.isPresent()){
 
             Integer checknointvalue = Integer.parseInt(checknovalue.get()) + 1;

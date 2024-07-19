@@ -97,12 +97,6 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="btn btn-delete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
@@ -119,7 +113,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 600px"></div>
+                        <div id="theGrid" style="max-height: 490px"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -383,6 +377,8 @@
                 });
                 // 선택이 변경될 때, 현재 항목 업데이트
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '티켓현황';
             } else {
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;

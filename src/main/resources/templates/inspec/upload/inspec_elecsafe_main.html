@@ -92,12 +92,6 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="btn btn-delete" title="삭제" onclick="deleteData()">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
@@ -114,7 +108,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 600px"></div>
+                        <div id="theGrid" style="max-height: 490px"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -126,7 +120,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="신규등록">
+                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
@@ -149,8 +143,6 @@
                     <div class="table-wrap">
                         <table class="write-table">
                             <form id="customForm">
-                                <input type="hidden" id="checksdt" name="checksdt">
-                                <input type="hidden" id="checkedt" name="checkedt">
                                 <caption>점검등록 테이블</caption>
                                 <colgroup>
                                     <col class="wp12">
@@ -161,12 +153,12 @@
                                 <tbody>
                                 <tr>
                                     <th>
-                                        <label for="title">
+                                        <label for="checktitle">
                                             점검명
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="title" class="wp100" placeholder="점검명">
+                                        <input type="text" id="checktitle" class="wp100" placeholder="점검명">
                                     </td>
                                     <th>
                                         <label for="registdt">
@@ -179,59 +171,60 @@
                                 </tr>
                                 <tr>
                                     <th>
-                                        <label for="inspecdt">
+                                        <label for="checkdt">
                                             점검일자
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="date" id="inspecdt">
+                                        <input type="date" id="checkdt">
                                     </td>
                                     <th>
-                                        <label for="docselect">
+                                        <label for="docdv">
                                             문서구분
                                         </label>
                                     </th>
                                     <td>
-                                        <select id="docselect" name="docselect">
+                                        <select id="docdv" name="docselect">
                                             <option value="">문서를 선택하세요</option>
-                                            <option value="전기설비점검결과표">전기설비점검결과표</option>
+                                            <option value="0">전기설비점검결과표</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        <label for="inspecloc">
+                                        <label for="checkarea">
                                             점검장소
                                         </label>
                                     </th>
                                     <td>
-                                        <select type="text" id="inspecloc" class="wp100" placeholder="점검장소">
+                                        <select type="text" id="checkarea" class="wp100" placeholder="점검장소">
                                             <option VALUE="">점검장소를 선택하세요</option>
                                             <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지발전소</option>
                                         </select>
                                     </td>
                                     <th>
-                                        <label for="inspecresult">
+                                        <label for="endresult">
                                             점검결과
                                         </label>
                                     </th>
                                     <td>
-                                        <select id="inspecresult" placeholder="점검결과">
-                                            <option VALUE="양호">양호</option>
-                                            <option VALUE="좋음">좋음</option>
-                                            <option VALUE="나쁨">나쁨</option>
+                                        <select id="endresult" placeholder="점검결과">
+                                            <option VALUE="">점검결과를 선택하세요</option>
+                                            <option VALUE="0">양호</option>
+                                            <option VALUE="1">좋음</option>
+                                            <option VALUE="2">나쁨</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
-                                        <label for="endresult">
+                                        <label for="bfconsres">
                                             점검사항
                                         </label>
                                     </th>
                                     <td colspan="3">
                                         <div class="textarea-box">
-                                            <textarea id="endresult" placeholder="점검사항"></textarea>
+                                            <textarea id="bfconsres" placeholder="점검사항"></textarea>
                                             <p class="text-count" id="text-count1">0/100</p>
                                         </div>
                                     </td>
@@ -311,34 +304,111 @@
                 theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                     autoGenerateColumns: false,
                     showMarquee: true,
+                    allowSorting: 'MultiColumn',
                     selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
                     columns: [
                         {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
                         {binding: 'registdt', header: '등록일자', width: 160, align: 'center', isReadOnly: true},
                         {binding: 'spworknm', header: '산단지역본부', width: 160, align: 'center', isReadOnly: true},
                         {binding: 'spcompnm', header: '산단명', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'spplannm', header: '발전소명', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'title', header: '점검명', width: 260, align: 'center', isReadOnly: true},
-                        {binding: 'inspecresult', header: '점검결과', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'inspecdt', header: '점검일자', width: 160, align: 'center', isReadOnly: true},
-                        {
-                            header: '첨부파일',
-                            binding: 'downloads',
-                            width: '*',
-                            align: 'center',
-                            cssClass: 'filedown',
-                            isReadOnly: true
-                        }
+                        {binding: 'spplannm', header: '발전소명', width: 200, align: 'center', isReadOnly: true},
+                        {binding: 'checktitle', header: '점검명', width: 260, align: 'center', isReadOnly: true},
+                        {binding: 'endresult', header: '점검결과', width: 160, align: 'center', isReadOnly: true,},
+                        {binding: 'checkdt', header: '점검일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'downloads', header: '다운로드', width: 160, align: 'center', cssClass: 'filedown'},
 
                     ],
-                    itemsSource: viewdata
+                    itemsSource: viewdata,
+                    itemFormatter: function (panel, r, c, cell) {
+                        if (panel.cellType === wijmo.grid.CellType.Cell) {
+                            var item = panel.rows[r].dataItem; // 현재 행의 데이터 항목
+                            if (panel.columns[c].binding === 'downloads') {
+                                cell.innerHTML = ''; // 셀 내용 초기화
+                                if (item.isdownload) {
+                                    cell.innerHTML = '<a title="다운로드" class="btn-filedown" onclick="downloadFile()">다운로드</a>';
+                                }
+                            }
+                        }
+                    }
                 });
+
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '전기안전점검';
+
             } else {
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;
             }
         }
+
+
+        function downloadFile() {
+
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    checkdt: item.checkdt,
+                    checkseq: item.checkseq
+                });
+            });
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/inspec/elec_safe/downloader', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('[name=_csrf]').value);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // 파일 다운로드 처리
+                    let blob = xhr.response;
+                    let link = document.createElement('a');
+                    let url = window.URL.createObjectURL(blob); // Blob으로부터 URL 생성
+                    let contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                    let fileName = 'downloadedFile';
+
+                    // Content-Disposition 헤더에서 파일 이름 추출
+                    if (contentDisposition) {
+                        let fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = fileNameRegex.exec(contentDisposition);
+                        if (matches != null && matches[1]) {
+                            fileName = decodeURIComponent(matches[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+
+                        // 추가: filename* 속성에서 파일 이름 추출
+                        let fileNameStarRegex = /filename\*\=([^;]*)/;
+                        let matchesStar = fileNameStarRegex.exec(contentDisposition);
+                        if (matchesStar != null && matchesStar[1]) {
+                            fileName = decodeURIComponent(matchesStar[1].split("''")[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+                    }
+
+                    link.href = url;
+                    link.download = fileName; // 다운로드 파일 이름 설정
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                } else {
+                    console.error('Download failed:', xhr.statusText);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error('Network error');
+            };
+
+            xhr.send(JSON.stringify(downloadList));
+        }
+
 
         // 검색
         function searchData() {
@@ -366,51 +436,78 @@
         // 수정하기
         function modifyData() {
 
-            let modList = [];
-            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
 
-            for (let i = 0; i < selectedItems.length; i++) {
-                modList.push({
-                    spworkcd: selectedItems[i].spworkcd,
-                    spcompcd: selectedItems[i].spcompcd,
-                    spplancd: selectedItems[i].spplancd,
-                    checksdt: selectedItems[i].checksdt,
-                    checkedt: selectedItems[i].checkedt
-                });
-            }
+            let data = {
+                spworkcd: selectedItem.spworkcd,
+                spcompcd: selectedItem.spcompcd,
+                spplancd: selectedItem.spplancd,
+                checkdt: selectedItem.checkdt,
+                checkseq: selectedItem.checkseq
+            };
 
-            if (modList.length === 0) {
-                Alert.alert('', '삭제할 항목을 선택하세요.');
+            if (!selectedItem) {
+                Alert.alert('', '수정할 항목을 선택하세요.');
                 return;
             }
-            let data2 = [];
+
             Alert.confirm('', '수정하시겠습니까?', function () {
                 $.ajax({
                     url: "/api/inspec/elec_safe/modfind",
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify(modList),
+                    data: JSON.stringify(data),
                     headers: {
                         'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
                     },
                     async: false,
                     success: function (data) {
                         if (data.success) {
-                            data2 = data.data;
+                            let data2 = data.data;
                             console.log(data2);
                             $('#inputTabLink').click();
-                            document.getElementById('spworkcd').value = data2.id.spworkcd;
-                            document.getElementById('spcompcd').value = data2.id.spcompcd;
-                            document.getElementById('spplancd').value = data2.id.spplancd;
-                            document.getElementById('checksdt').value = data2.id.checksdt;
-                            document.getElementById('checkedt').value = data2.id.checkedt;
-                            document.getElementById('title').value = data2.title;
+                            document.getElementById('spworkcd').value = data2.spworkcd;
+                            document.getElementById('spcompcd').value = data2.spcompcd;
+                            document.getElementById('spplancd').value = data2.spplancd;
+                            document.getElementById('checktitle').value = data2.checktitle;
                             document.getElementById('registdt').value = formatDate(data2.registdt);
-                            document.getElementById('inspecdt').value = formatDate(data2.inspecdt);
-                            document.getElementById('docselect').value = data2.docselect;
-                            document.getElementById('inspecloc').value = data2.inspecloc;
-                            document.getElementById('inspecresult').value = data2.inspecresult;
+                            document.getElementById('checkdt').value = formatDate(data2.checkdt);
                             document.getElementById('endresult').value = data2.endresult;
+                            document.getElementById('docdv').value = data2.docdv;
+                            document.getElementById('checkarea').value = data2.checkarea;
+                            document.getElementById('bfconsres').value = data2.bfconsres;
+                            // filelist 처리
+                            let filelist = data2.filelist;
+                            let filelistElement = document.getElementById('filelist');
+                            filelistElement.innerHTML = ''; // 기존 내용을 지웁니다.
+                            uploadedFiles = []; // 기존 업로드된 파일 리스트 초기화
+
+                            filelist.forEach(file => {
+                                let li = document.createElement('li');
+                                li.classList.add('file-item');
+
+                                let fileInfo = document.createElement('p');
+                                fileInfo.innerHTML = `${file.fileornm} <span>(${(file.filesize / 1024).toFixed(2)} KiB)</span>`;
+
+                                let deleteButton = document.createElement('a');
+                                deleteButton.classList.add('btn-file-delete');
+                                deleteButton.href = '#';
+                                deleteButton.title = '삭제';
+                                deleteButton.innerHTML = '<img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">';
+                                deleteButton.onclick = function (event) {
+                                    event.preventDefault();
+                                    li.remove();
+                                };
+
+                                li.appendChild(fileInfo);
+                                li.appendChild(deleteButton);
+                                filelistElement.appendChild(li);
+
+                                uploadedFiles.push(file);
+                            });
+
+                            // 업데이트된 파일 수 표시
+                            document.querySelector('.upload-filelist .title h5').textContent = `Files (${filelist.length})`;
 
                         } else {
                             Alert.alert('', '불러오기에 실패했습니다. ');
@@ -435,8 +532,8 @@
                     spworkcd: selectedItems[i].spworkcd,
                     spcompcd: selectedItems[i].spcompcd,
                     spplancd: selectedItems[i].spplancd,
-                    checksdt: selectedItems[i].checksdt,
-                    checkedt: selectedItems[i].checkedt
+                    checkdt: selectedItems[i].checkdt,
+                    checkseq: selectedItems[i].checkseq
                 });
             }
 
@@ -473,6 +570,25 @@
             return dateString;
         }
 
+        // 파일 개수 업데이트 함수
+        function updateFileCount() {
+            const fileCount = uploadedFiles.length;
+            $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+        }
+
+        // 신규등록 버튼 클릭
+        function clearForm() {
+            ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            $('.filelist').empty(); // 파일 리스트 초기화
+            uploadedFiles = []; // 업로드된 파일 리스트 초기화
+            $('.fileInput').val(''); // 파일 입력 요소 초기화
+
+            // 초기화된 파일 개수 업데이트
+            updateFileCount();
+        }
+
         $(document).ready(function (e) {
 
             // 정보 저장
@@ -480,11 +596,6 @@
                 Alert.confirm('', '저장하시겠습니까?', function () {
 
                     let formData = new FormData($('#customForm')[0]);
-                    // let filesList = $('#uploadComponent1')[0].uploadedFiles;
-                    //
-                    // for (var i = 0; i < filesList.length; i++) {
-                    //     formData.append('filelist', filesList[i]);
-                    // }
 
                     formData.append('spworkcd', $('#spworkcd').val());
                     formData.append('spworknm', $('#spworknm').val());
@@ -492,13 +603,16 @@
                     formData.append('spcompnm', $('#spcompnm').val());
                     formData.append('spplancd', $('#spplancd').val());
                     formData.append('spplannm', $('#spplannm').val());
-                    formData.append('title', $('#title').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checktitle', $('#checktitle').val());
                     formData.append('registdt', $('#registdt').val());
-                    formData.append('inspecdt', $('#inspecdt').val());
-                    formData.append('inspecloc', $('#inspecloc').val());
-                    formData.append('inspecresult', $('#inspecresult').val());
-                    formData.append('docselect', $('#docselect').val());
+                    formData.append('checkarea', $('#checkarea').val());
+                    formData.append('bfconsres', $('#bfconsres').val());
+                    formData.append('docdv', $('#docdv').val());
                     formData.append('endresult', $('#endresult').val());
+                    uploadedFiles.forEach((file, index) => {
+                        formData.append('filelist', file);
+                    })
 
                     $.ajax({
                         url: "/api/inspec/elec_safe/save",
@@ -514,9 +628,14 @@
                                 Alert.alert('', response.message, function () {
                                     $('#listTabLink').click();
                                     fetchListData();
-                                    ['checksdt', 'checkedt', 'title', 'registdt', 'inspecdt', 'inspecloc', 'endresult'].forEach(id => {
+                                    ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult'].forEach(id => {
                                         document.getElementById(id).value = '';
                                     });
+                                    $('.filelist').empty(); // 파일 리스트 초기화
+                                    uploadedFiles = []; // 업로드된 파일 리스트 초기화
+                                    $('.fileInput').val(''); // 파일 입력 요소 초기화
+                                    // 초기화된 파일 개수 업데이트
+                                    updateFileCount();
                                 });
 
                             } else {

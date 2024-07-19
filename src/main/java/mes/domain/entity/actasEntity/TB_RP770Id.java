@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TB_RP760Id implements Serializable{
+public class TB_RP770Id implements Serializable{
     private String spworkcd;
     private String spcompcd;
     private String spplancd;

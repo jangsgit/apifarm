@@ -98,12 +98,6 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="btn btn-delete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
@@ -120,7 +114,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 600px"></div>
+                        <div id="theGrid" style="max-height: 490px"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -263,7 +257,7 @@
         <div class="popup-wrapper" id="popup1">
             <div class="popup-title">
                 <h3>상세조치등록</h3>
-                <a href="#" title="팝업닫기" class="btn-popup-close">
+                <a title="팝업닫기" class="btn-popup-close">
                     <img src="/images/icon/btn-popup-close.svg" alt="닫기">
                 </a>
             </div>
@@ -358,13 +352,20 @@
             viewdata = new wijmo.collections.CollectionView(data2);
 
             // 임시 데이터 배열 정의
-            var tempData = [
-                { checkno: 1, inpledt:'2024-07-12', checkdt: '2024-07-12 12:00',
-                  spworknm: '2024-07-13 12:00', spcompnm: 'KT 대덕2연구센터 연료전지',
-                  spplannm: '최소출력(0.855mw) 운전', checkusr: '', checkresult: '중지',
-                  checkrem: '관리자', checkrem: '2024-07-12' }
-            ];
-
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    inpledt: '',
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
 
             if (!theGrid) {
                 // 데이터 그리드에 바인딩
@@ -387,6 +388,8 @@
                     itemsSource: tempData
                 });
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '제어이행현황';
             } else {
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;

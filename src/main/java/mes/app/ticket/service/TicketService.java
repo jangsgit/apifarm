@@ -37,7 +37,7 @@ public class TicketService {
         }
     }
 
-    public List<Map<String, Object>> getInspecList(String searchtketnm, String startDate, String endDate) {
+    public List<Map<String, Object>> getList(String searchtketnm, String startDate, String endDate) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 

@@ -31,23 +31,20 @@ public class TB_RP750 {
     @Column(name="\"spplannm\"")
     String spplannm;    // 발전소명
 
-    @Column(name="\"bfconscomp\"")
-    String bfconscomp;  // 사전컨설팅업체
-
-    @Column(name="\"bfconssdt\"")
-    String bfconssdt;   // 사전컨설팅시작일자
-
-    @Column(name="\"bfconsedt\"")
-    String bfconsedt;   // 사전컨설팅종료일자
-
-    @Column(name="\"bfconsres\"")
-    String bfconsres;   // 사전컨설팅결과
+    @Column(name="\"checktitle\"")
+    String checktitle;  // 제목
 
     @Column(name="\"checkusr\"")
-    String checkusr;    // 전기안전관리담당자
+    String checkusr;   // 점검자
+
+    @Column(name="\"checkarea\"")
+    String checkarea;   // 점검장소
+
+    @Column(name="\"bfconsres\"")
+    String bfconsres;   // 점검사항
 
     @Column(name="\"endresult\"")
-    String endresult;   // 최종결과
+    String endresult;    // 점검결과 - 공통코드
 
     @Column(name="\"indatem\"")
     Date indatem;   // 입력일시
@@ -58,22 +55,10 @@ public class TB_RP750 {
     @Column(name="\"inusernm\"")
     String inusernm;    // 입력자명
 
-    @Column(name="\"title\"")
-    String title;       // 제목
-
-    @Column(name="\"inspecloc\"")
-    String inspecloc;   // 점검장소
-
-    @Column(name="\"inspecdt\"")
-    String inspecdt;    // 점검일자
-
     @Column(name="\"registdt\"")
     String registdt;    // 등록일자
 
-    @Column(name="\"docselect\"")
-    String docselect;    // 등록일자
-
-    @Column(name="\"inspecresult\"")
-    String inspecresult;    // 점검결과
-
+    @Column(name="\"docdv\"")
+    String docdv;    // 문서구분
+    
 }

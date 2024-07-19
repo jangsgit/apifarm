@@ -9,7 +9,7 @@
                 <!-- Page Title -->
                 <div class="page-title-wrap">
                     <div class="left">
-                        <h2>발전소등록</h2>
+                        <h2>연료전지발전소등록</h2>
                         <a href="#" title="북마크" class="bookmark toggle">
                             내메뉴
                         </a>
@@ -17,7 +17,7 @@
                     <ul class="page-navi">
                         <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                         <li>발전소관리</li>
-                        <li>발전소등록</li>
+                        <li>연료전지발전소등록</li>
                     </ul>
                 </div>
                 <!-- Select -->
@@ -84,12 +84,6 @@
                                 <div class="button-wrap">
                                     <ul>
                                         <li>
-                                            <a class="btn btn-excell" title="엑셀다운로드">
-                                                <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                                엑셀다운로드
-                                            </a>
-                                        </li>
-                                        <li>
                                             <a class="btn btn-delete" title="삭제">
                                                 <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                                 삭제
@@ -106,7 +100,7 @@
                             </div> <!--//section-top end -->
                             <div class="container-fluid">
                                 <p id="selectedItem"></p>
-                                <div id="theGrid" style="max-height: 600px"></div>
+                                <div id="theGrid" style="max-height: 490px"></div>
                             </div>
                         </section>
                         <!-- Section -->
@@ -391,6 +385,8 @@
                     itemsSource: viewdata
                 });
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '연료전지발전소';
             } else{
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;

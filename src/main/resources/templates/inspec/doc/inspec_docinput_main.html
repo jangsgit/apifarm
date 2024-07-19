@@ -102,12 +102,6 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="btn btn-delete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
@@ -125,7 +119,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="max-height: 490px"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -388,6 +382,19 @@
             })
 
             viewdata = new wijmo.collections.CollectionView(data2);
+
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    rownum: i + 1,
+                    standdt: '',
+                    inusernm: '',
+                    doctype: '',
+                    title: '',
+                    fileornm: '',
+                    standcontent: '',
+                });
+            }
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
@@ -402,163 +409,14 @@
                     { binding: 'standcontent', header: '비고', width: '*', align: 'center' },
 
                 ],
-                itemsSource: viewdata
+                itemsSource: tempData
             });
-
-
             // 선택이 변경될 때, 현재 항목 업데이트
-
             theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            new FlexGridContextMenu(theGrid);
+            window.downloadFileName = '문서현황';
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-
-        <!-- 점검자 추가 버튼 이벤트-->
-        function addInputField(button) {
-            // 새로운 td 요소를 생성합니다.
-            var newTd = document.createElement('div');
-            newTd.className = 'input-btnbox';
-
-            // 새로운 input 요소를 생성합니다.
-            var newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.className = 'wp100';
-            newInput.placeholder = '점검자';
-            newInput.name = 'checkusr'
-            newInput.maxLength = 5;
-
-            // 삭제 버튼을 생성합니다.
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
-                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            };
-            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-            deleteButton.style.color = 'red';
-            deleteButton.style.marginTop = '5px';
-            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-            newTd.appendChild(newInput);
-            newTd.appendChild(deleteButton);
-
-            // 클릭된 버튼의 부모 td 요소를 찾습니다.
-            var parentTd = button.parentElement;
-
-            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        }
-
-        function deleteInputField(inputField) {
-            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-            var tdToDelete = inputField.parentElement;
-            tdToDelete.parentElement.removeChild(tdToDelete);
-        }
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
-        let filelist = [];
-
-        function filevalueinit (param){
-            filelist = param;
-
-        }
-
-        let page = null;
-
-        //검색
-        function searchData(){
-            let data = {
-                'searchusr' : $('#searchusr').val()
-            }
-
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
-
-            if(result.success){
-                console.log(result.data);
-                grid_binding(result.data);
-            }
-        }
-
-        function grid_binding(data){
-            var inspecDto = data;
-            var inspecData = [];
-
-            for (var i = 0; i < inspecDto.length; i++) {
-                inspecData.push({
-                    rownum: inspecDto[i]["rownum"],
-                    spworknm: inspecDto[i]["spworknm"],
-                    spcompnm: inspecDto[i]["spcompnm"],
-                    spplannm: inspecDto[i]["spplannm"],
-                    checkdt: inspecDto[i]["checkdt"],
-                    checkusr: inspecDto[i]["checkusr"],
-                    checkarea: inspecDto[i]["checkarea"],
-                    checktmdt: inspecDto[i]["checktmdt"],
-
-                });
-
-            }
-
-            theGrid.columns.clear();
-            theGrid.autoGenerateColumns = false;
-            viewdata.sourceCollection = inspecData;
-
-            var cols = new wijmo.grid.Column();
-            cols.binding = 'rownum';
-            cols.header = '순번';
-            cols.align = "center";
-            cols.width = 60;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spworknm';
-            cols.header = '지역명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spcompnm';
-            cols.header = '산단명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'spplannm';
-            cols.header = '발전소명';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkdt';
-            cols.header = '등록일자';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkusr';
-            cols.header = '점검자';
-            cols.align = "center";
-            cols.width = 140;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checkarea';
-            cols.header = '점검장소';
-            cols.align = "center";
-            cols.width = 200;
-            theGrid.columns.push(cols);
-
-            cols = new wijmo.grid.Column();
-            cols.binding = 'checktmdt';
-            cols.header = '점검시간';
-            cols.align = "center";
-            cols.width = 260;
-            theGrid.columns.push(cols);
-
-
-
-        }
 
         $(document).ready(function (e) {
 

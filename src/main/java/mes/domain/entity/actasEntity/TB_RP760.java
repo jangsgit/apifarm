@@ -1,89 +1,66 @@
 package mes.domain.entity.actasEntity;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Date;
 
-@Data
 @Entity
+@Table(name="tb_rp760")
+@Setter
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "tb_rp760")
-@EntityListeners(AuditingEntityListener.class)
-@IdClass(TB_RP760Id.class)
-public class TB_RP760 extends BaseEntity{
+public class TB_RP760 {
 
-    @Id
-    @Column(length = 3, nullable = false)
-    private String spworkcd;
+    @EmbeddedId
+    private TB_RP760_PK id;
 
-    @Id
-    @Column(length = 3, nullable = false)
-    private String spcompcd;
+    @Column(name="\"spworknm\"")
+    String spworknm;    // 관할지역명
 
-    @Id
-    @Column(length = 3, nullable = false)
-    private String spplancd;
+    @Column(name="\"spcompnm\"")
+    String spcompnm;    // 발전산단명
 
-    @Id
-    @Column(length = 8, nullable = false)
-    private String standdt;
+    @Column(name="\"spplannm\"")
+    String spplannm;    // 발전소명
 
-    @Id
-    @Column(length = 1, nullable = false)
-    private String docdv;
+    @Column(name="\"filepath\"")
+    String filepath;  // 파일경로
 
-    @Id
-    @Column(length = 2, nullable = false)
-    private String checkseq;
+    @Column(name="\"filesvnm\"")
+    String filesvnm;   // 저장파일
 
+    @Column(name="\"fileextns\"")
+    String fileextns;   // 파일확장자
 
-    @Column
-    private String spworknm;
+    @Column(name="\"fileurl\"")
+    String fileurl;   // 파일url주소
 
-    @Column
-    private String spcompnm;
+    @Column(name="\"fileornm\"")
+    String fileornm;    // 원본파일명
 
-    @Column
-    private String spplannm;
+    @Column(name="\"filesize\"")
+    float filesize;   // 파일크기
 
-    @Column
-    private String filepath;
+    @Column(name="\"filerem\"")
+    String filerem;   // 파일내용
 
-    @Column
-    private String filesvnm;
+    @Column(name="\"repyn\"")
+    String repyn;   // 대표파일여부
 
-    @Column
-    private String fileextns;
+    @Column(name="\"indatem\"")
+    Date indatem;   // 입력일시
 
-    @Column
-    private String fileurl;
+    @Column(name="\"inuserid\"")
+    String inuserid;    // 입력자ID
 
-    @Column
-    private String fileornm;
-
-    @Column
-    private Float filesize;
-
-    @Column
-    private String filerem;
-
-    @Column
-    private String repyn;
-
-    @Column
-    private String title;
-
-    @Column
-    private String standcontent;
-
-    @Column
-    private String inusernm;
-
+    @Column(name="\"inusernm\"")
+    String inusernm;    // 입력자명
 
 
 }

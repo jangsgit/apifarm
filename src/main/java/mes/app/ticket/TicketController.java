@@ -54,7 +54,7 @@ public class TicketController {
         String c_startDate = startDate.replaceAll("-", "");
         String c_endDate = endDate.replaceAll("-", "");
 
-        List<Map<String, Object>> items = this.ticketService.getInspecList(searchtketnm, c_startDate, c_endDate);
+        List<Map<String, Object>> items = this.ticketService.getList(searchtketnm, c_startDate, c_endDate);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
