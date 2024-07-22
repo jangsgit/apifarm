@@ -256,7 +256,7 @@
                                 <tr>
                                     <td rowspan="4"><span id="inspecdivision1">일반 점검 사항</span></td>
                                     <td>
-                                        <span id="inspeccont1">● 작업환경 일반 사항<br>- 작업장 내부 적절한 조도 확보 여부<br>- 밀폐공간일 경우 유해가스 등 환기 여부</span>
+                                        <span id="inspeccont1">ㅇ 작업환경 일반 사항<br>- 작업장 내부 적절한 조도 확보 여부<br>- 밀폐공간일 경우 유해가스 등 환기 여부</span>
 
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult1">O</span></td>
@@ -269,7 +269,7 @@
 
                                 </tr>
                                 <tr>
-                                    <td><span id="inspeccont2">● 발전소 주변 유해위험 환경요소 점검<br>- 작업 또는 통행에 방해되는 폐기물 또는 적치물 방치 상태, 위험물/인화성물질 방치 상태 등</span>
+                                    <td><span id="inspeccont2">ㅇ 발전소 주변 유해위험 환경요소 점검<br>- 작업 또는 통행에 방해되는 폐기물 또는 적치물 방치 상태, 위험물/인화성물질 방치 상태 등</span>
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult2">O</span></td>
                                     <td>
@@ -281,7 +281,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span id="inspeccont3">● 화재 등 위험상황 대비 관련 사항<br>- 소화기 등 비치 상태<br>- 화재 등 비상상황시 비상문, 비상대피로 확보</span>
+                                        <span id="inspeccont3">ㅇ 화재 등 위험상황 대비 관련 사항<br>- 소화기 등 비치 상태<br>- 화재 등 비상상황시 비상문, 비상대피로 확보</span>
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult3">O</span></td>
                                     <td>
@@ -293,7 +293,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span id="inspeccont4">● 작업 전/후 정리정돈 등 환경정리 상태<br>- 작업전 작업환경 사전점검 실시<br>- 작업후 작업부품 정리, 청소, 정리정돈 실시</span>
+                                        <span id="inspeccont4">ㅇ 작업 전/후 정리정돈 등 환경정리 상태<br>- 작업전 작업환경 사전점검 실시<br>- 작업후 작업부산물 정리, 청소, 정리정돈 실시</span>
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult4">O</span></td>
                                     <td>
@@ -305,9 +305,9 @@
                                 </tr>
 
                                 <tr>
-                                    <td rowspan="1"><span id="inspecdivision2">중점 점검 사항</span></td>
+                                    <td rowspan="2"><span id="inspecdivision2">중점 점검 사항</span></td>
                                     <td>
-                                        <span id="inspeccont5">● 화재 등 위험상황 대비 관련 사항<br>- 소화기 등 비치 상태<br>- 화재 등 비상상황시 비상문, 비상대피로 확보</span>
+                                        <span id="inspeccont5">ㅇ 전기작업 위험요소 점검<br>- 전기기기의 접지 상태 확인<br>- 작업 전 차단기 OFF 조치 등 전원 통전 확인</span>
                                     </td>
 
                                     <td class="checkbox-cell"><span id="inspecresult5">O</span></td>
@@ -318,6 +318,19 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <span id="inspeccont6">ㅇ 고소작업 위험요소 점검<br>- 작업전 사다리 상태 점검<br>- 사다리 활용 작업시 2인 1조 작업 및 최상단  발판 금지</span>
+                                    </td>
+                                    <td class="checkbox-cell"><span id="inspecresult6">O</span></td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="inspecreform6" name="inspecreform4" maxlength="100" style="height: 60px;"></textarea>
+                                            <p class="text-count" name="inspecreform4">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
                                 </tbody>
                             </table>
                             <!--<tr>
@@ -477,6 +490,7 @@
         var viewdata;
         let selectedFiles = [];
         let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
             { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
@@ -517,7 +531,8 @@
             }
 
             formData.append('file', file.files[0]);
-            formData.append('_csrf', $('[name=_csrf]').val());
+            //formData.append('_csrf', $('[name=_csrf]').val());
+            formData.append('_csrf', csrfToken);
             formData.append('spuncode', $('#popup-spuncode').val());
 
             $.ajax({
@@ -718,7 +733,6 @@
             for (var i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
                     spuncode: inspecDto[i]["spuncode"],
-                    rownum: inspecDto[i]["rownum"],
                     spworknm: inspecDto[i]["spworknm"],
                     spcompnm: inspecDto[i]["spcompnm"],
                     spplannm: inspecDto[i]["spplannm"],
@@ -742,22 +756,51 @@
 
 
         }
+        function SelectItemPush(){
 
-        function DownloadDoc(){
-            fetch('/api/inspec_report/download-doc')
-                .then(response => response.blob())
+            let selectedList = [];
+            for(let i = 0; i < SelectItem.length; i++){
+                selectedList.push(SelectItem[i]._data.spuncode);
+            }
+            return selectedList;
+        }
+
+        function DownloadDoc() {
+
+            let selectedList = SelectItemPush();
+
+
+            console.log('selected', selectedList);
+
+            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
+            fetch('/api/inspec_report/download-docs', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
                 .then(blob => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
-                    a.style.display = 'none';
                     a.href = url;
-                    a.download = '순회점검일지양식.docx';
+                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
                     document.body.appendChild(a);
                     a.click();
-                    window.URL.revokeObjectURL(url);
-
+                    a.remove();
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
                 })
-                .catch(error => console.log('error: ', error));
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert("File download failed!");
+                });
         }
 
         $(document).ready(function (e) {
@@ -835,7 +878,8 @@
                         formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
                         formData.append('checkarea', $('#checkarea').val());
                         formData.append('randomuuid', randomString);
-                        formData.append('_csrf', $('[name=_csrf]').val());
+                        //formData.append('_csrf', $('[name=_csrf]').val());
+                        formData.append('_csrf', csrfToken);
                         formData.append('ReformList', $('#inspecreform1').val());
                         formData.append('ReformList', $('#inspecreform2').val());
                         formData.append('ReformList', $('#inspecreform3').val());
@@ -872,19 +916,14 @@
 
                 let delList = [];
 
-                console.log('길이', SelectItem.length);
-
-
-                for (let i = 0; i < SelectItem.length; i++) {
-                    delList.push(SelectItem[i]._data.spuncode);
-                }
+                delList = SelectItemPush();
 
                 console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function () {
 
                     let data = {
                         'spuncode': JSON.stringify(delList),
-                        '_csrf': $('[name=_csrf]').val()
+                        '_csrf': csrfToken
                     }
 
                     let fnSuccess = function (res) {

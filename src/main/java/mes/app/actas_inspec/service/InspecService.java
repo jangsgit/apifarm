@@ -12,6 +12,7 @@ import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -181,27 +182,72 @@ public class InspecService {
 
     }
 
+    public List<Map<String, Object>> getFileList(String SpunCode){
 
-    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate) {
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+        dicParam.addValue("spuncode", SpunCode);
+
+        String sql = """
+                    select filepath, filesvnm
+                    from tb_rp715
+                    where "spuncode_id" = :spuncode
+                    order by checkseq
+                """;
+        return this.sqlRunner.getRows(sql, dicParam);
+    }
+
+    public List<Map<String, Object>> getInspecDocList(String spuncode){
+
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+        dicParam.addValue("spuncode", spuncode);
+
+        String sql = """
+                    select inspecdivision, inspeccont, inspecresult, inspecreform
+                    from tb_inspec
+                    where "spuncode_id" = :spuncode
+                    and "tabletype" = 'TB_RP710'
+                    order by inspecnum
+                """;
+        return this.sqlRunner.getRows(sql, dicParam);
+    }
+
+    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate, String spuncode) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
 
-        dicParam.addValue("paramusr", "%" +searchusr+ "%");
-        dicParam.addValue("searchfrdate", searchfrdate.replaceAll("-", ""));
-        dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
 
 
-        String sql = """
+
+        String sql;
+        if(!spuncode.isEmpty()){
+
+            dicParam.addValue("spuncode", spuncode);
+
+
+            sql = """
                 select
-                ROW_NUMBER() OVER (ORDER BY indatem DESC) AS rownum,
-                *, "checkstdt" || '~' || "checkendt" AS checktmdt 
-                from tb_rp710 sb
+                supplier, checkdt, checkusr, checkarea
+                from tb_rp710
                 where 1 = 1
-               and "checkusr" like :paramusr
-               and "checkdt" between :searchfrdate and :searchtodate
-                order by indatem desc
-                """;
+               and "spuncode" like :spuncode
+               """;
+        }else {
+            dicParam.addValue("paramusr", "%" +searchusr+ "%");
+            dicParam.addValue("searchfrdate", searchfrdate.replaceAll("-", ""));
+            dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
+             sql = """
+                     select
+                     *, "checkstdt" || '~' || "checkendt" AS checktmdt 
+                     from tb_rp710 sb
+                     where 1 = 1
+                    and "checkusr" like :paramusr
+                    and "checkdt" between :searchfrdate and :searchtodate
+                     order by indatem desc
+                     """;
+        }
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
     }
