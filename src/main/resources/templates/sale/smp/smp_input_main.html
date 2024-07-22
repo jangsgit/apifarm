@@ -1,127 +1,181 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="content">
-    <div class="content_wrap">
 
-        <section class="section">
-
-            <div class="title_box ">
-                <div class="left_align">
-                    <h3 data-labelCd="SMP관리">SMP관리</h3>
-                </div>
-
-                <button type="button" class="btn-default pull-right " id="btnHedaerFilter" title="필터 보이기/감추기"><i class="fas fa-filter"></i></button>
-                <button type="button" class="btn-default pull-right mr-1" id="btnHeaderCompress" title="화면 확대/축소"><i class="fas fa-compress" id="iCompress"></i></button>
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>SMP 등록</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
             </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
+                <li>SMP 등록</li>
+            </ul>
+        </div>
 
-            <div class="table_box search">
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
 
-                <div class="row">
+        <div class="row">
+            <div class="col col-1 wp70 mg-r20">
+                <section>
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회년월<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
 
-                    <div class="col-6 col-md-6 col-lg-5" style="max-width: 12%">
-                        <div class="input-group" style="width: 110%">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text fit_box_sm" data-labelCd="일자">일자</span>
-                            </div>
-                            <div data-ax5picker="multi" id="srchDt">
-                                <div class="input-group-append">
-                                    <input class="tac " type="text" id="date_from" name="date_from" data-picker-date="month" />
-                                    <span class="input-group-text fs-xl">
-                                    <i class="fas fa-calendar-alt calendar_color" ></i>
-                                </span>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
 
-                                </div>
-                            </div>
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 270px"></div>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="section-top" >
+                        <div class="title-wrap">
+                            <h3>SMP 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" id="btnDelete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="저장" id="btnSave">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                                <li>
+                                    <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
+                                    <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
+                                        <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
-
-                    <div class="col-1" >
-                        <button type="button" class="btn-default" id="btnSearch" title="조회"><i class="fas fa-search"></i></button>
-                    </div>
-                    <div class="col-5" style="
-    width: 131%;
-">
-
-                    </div>
-                    <div class="col">
-                        <a href="https://www.kpx.or.kr/smpInland.es?mid=a10606080100&device=pc" target="_blank" style="line-height: 2; font-size: 16px; font-family: inherit; float: right;">KPX 전력거래소 바로가기</a>
-                    </div>
-
-                </div>
+                    <form action="/api/sales/upload" id="saleForm" method="post">
+                        <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
+                        <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spworknm" name="spworknm" value="def"/>
+                        <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
+                        <input type="hidden" id="spplannm" name="spplannm" value="def"/>
+                        <div class="table-wrap">
+                            <table class="write-table">
+                                <caption>SMP등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="date3">
+                                            적용년월
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <!-- 나중에 required 빼도 되나 고려해봐 -->
+                                        <input type="month" id="date3" name="" class="wp100" readonly="">
+                                        <!--                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="222">
+                                            SMP 단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <!-- 나중에 required 빼도 되나 고려해봐 -->
+                                        <input type="text" id="222" name="222" class="wp100" readonly="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <!-- 매출계산할때 체크된 단가를 적용해서 계산하겠다는 의미 -->
+                                        <label for="333">
+                                            단가적용
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="checkbox" id="333" name="333" class="wp100" style="outline: none;">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </section>
             </div>
-
-
-        </section>
-
-
-        <section class="section ">
-            <div class="grid_box">
-                <div class="title_box">
-                    <div >
-                        <span class="right_align rpt" data-labelCd="발전량내역">발전량내역</span>
-                        <button type="button" class="btn-danger y_write_auth" id="btnDelete" ><i class="fas fa-trash"></i></button>
-                        <button type="button" class="btn-default" id="btnDownloadTemplate"><span data-labelCd="양식 다운로드">양식 다운로드</span></button>
-                        <button type="button" class="btn-default" id="btnExcel" title="엑셀 다운로드"><i class="fas fa-file-excel"></i></button>
-                    </div>
-                </div>
-                <div class="h-650" data-ax5grid="sujuGrid" ></div>
-            </div>
-        </section>
-
-        <section>
-            <div class="title_box">
-                <span class="right_align rpt" data-labelCd="상세정보">상세정보</span>
-                <button type="button" class="btn-default" id="btnNew"><i class="fas fa-plus"></i></button>
-                <button type="button" class="btn-cancel" id="btnDel"><i class="fas fa-trash"></i></button>
-                <button type="button" class="btn-default" id="btnSave" ><i class="fas fa-save"></i></button>
-            </div>
-            <form id="usergroupForm">
-                <div class="table_box sub">
-                    <div class="row">
-                        <input type="hidden" id="id" name="id" value="" />
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="적용년월">적용년월</span>
-                                </div>
-                                <input type="text" class="form-control2" id="code" name="code" disabled required/>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="SMP단가">SMP단가</span>
-                                </div>
-                                <input type="text" class="form-control2" id="name" name="name" disabled required/>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-3 col-lg-3" >
-                            <div class="input-group" >
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7" data-labelCd="단가적용">단가적용</span>
-                                </div>
-                                <input type="text" class="form-control2" id="name" name="name" disabled required/>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fit_box_t7_area" data-labelCd="비고">비고</span>
-                                </div>
-                                <textarea class="form-control2" id="description" name="description" disabled></textarea>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </form>
-        </section>
-
+        </div>
 
     </div>
 
@@ -129,174 +183,153 @@
 </th:block>
 
 <th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
     <script type="text/javascript">
-        class SujuUploadPage {
-            constructor() {
-                this.grid = null;
-                this.baseUrl = '/api/sale/upload/sale_upload_main';
-                this.init();
-            }
 
-            init() {
-                let _this = this;
-                let config = {
-                    target: $('[data-ax5grid="sujuGrid"]'),
-                    frozenColumnIndex: 0, // 열 고정
-                    frozenRowIndex: 0,    // 행 고정
-                    showLineNumber: false, // 열의 번호 보이기 여부
-                    showRowSelector: true,  // checkbox(선택) 보이기 여부
-                    multipleSelect: true, // 여러행 선택 가능 여부 (false시 단독 선택)
-                    sortable: true, // 모든 컬럼에 정렬 아이콘 표시 (columns에서 컬럼별 소팅여부 재설정 가능)
-                    multiSort: true, // 다중 정렬 여부
-                    header: {
-                        align: 'center',  // 헤더의 기본 정렬
-                        columnHeight: 35  // 헤더 높이
-                    },
-                    body: {
-                        columnHeight: 25, // body의 기본 높이
-                        onClick: function (e) {
-                            this.self.select(this.dindex);
-                            console.log(this.item.__index);
+        var theGrid;
+        var viewdata;
+        let SelectItem;
 
-                        }
-                    },
-                    page: {
-                        display: true,  // 페이징 보이기 여부
-                        statusDisplay: true,
-                    },
-                    columns: [
-                        { key: 'number', label: 'No.', width: 0, align: 'center' },
-                        { key: 'number2', label: '적용일자', width: 200, align: 'center' },
-                        { key: 'number3', label: '단가', width: 200, align: 'center' },
-                        { key: 'number4', label: '적용', width: 200, align: 'center' },
-
-                    ],
-
-                };
-                this.grid = new ax5.ui.grid(config);
-
-                let nowDate = CommonUtil.getYYYYMMDD();
-                let dueDate = CommonUtil.getYYYYMMDD(10);
-
-                // 엔터키 검색
-                $('#keyword').on('keypress', function (e) {
-                    if (event.keyCode == 13) {
-                        _this.searchDataBind();
-                    }
-                });
-            }
+        var columns = [
+            { binding: 'rownum', header: 'No', align: 'center', width: 140 },
+            { binding: 'standdt', header: '적용년월', align: 'center', width: 140 },
+            { binding: 'smpcost', header: '단가', align: 'center', width: 140 },
+            { binding: 'check', header: '적용', align: 'center', width: 140, dataType: wijmo.DataType.Boolean },
+        ];
 
 
+        document.readyState === 'complete' ? init() : window.onload = init;
 
 
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+
+            // 하드코딩 시작
+            // 여기서부터 지워
+            // 하드코딩된 데이터 예제
+            console.log("Initializing the grid..."); // 지워
+            var data = [
+                // 필요시 check: false나 true 넣기
+                { rownum: '1', standdt: '2024-01', smpcost: '172.10', check: false},
+                { rownum: '2', standdt: '2024-02', smpcost: '172.20', check: false},
+                { rownum: '3', standdt: '2024-03', smpcost: '172.30', check: false},
+                { rownum: '4', standdt: '2024-04', smpcost: '172.40', check: false},
+                { rownum: '5', standdt: '2024-05', smpcost: '172.50', check: false},
+                { rownum: '6', standdt: '2024-06', smpcost: '172.60', check: false},
+                { rownum: '7', standdt: '2024-07', smpcost: '172.70', check: false},
+                { rownum: '8', standdt: '2024-08', smpcost: '172.80', check: false}
+            ];
+
+            viewdata = new wijmo.collections.CollectionView(data);
+            console.log("Data loaded:", data); // 지워
+
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
 
 
-            searchDataBind(){
-                let _this = this;
-
-                let start = $('#date_from').val();
-                let end = $('#date_to').val();
-
-                let data = {
-                    'start' : start + '-01-01',
-                    'end'   : end + '12-31',
-                    'flag'  : 'list'
-                };
-
-
-                let fnseccess = function (result) {
-                    if(result.data != null) {
-                        let recordsTotal = result.data.length;
-                        _this.grid.setData({
-                            list: result.data,
-                            page: {
-                                display: true,
-                                totalElements: recordsTotal,
-                            }
-                        });
-                    }
-                };
-                AjaxUtil.getAsyncData(_this.baseUrl + '/read',data, fnseccess);
-
-            }
-
-            //삭제
-            deleteSujuBulkData(items) {
-                let _this = this;
-                /*
-                let data = {
-                    'list_data': items,
-                }
-                let Q = {
-                    value :JSON.stringify(data)
-                }
-                */
-                let data = {
-                    Q: JSON.stringify(items)
-                }
-
-                let fnSuccess = function (res) {
-                    if (res.success) {
-                        Notify.success('삭제되었습니다');
-                        _this.searchDataBind();
+            // 그리드 내부에 있는 체크박스 클릭시
+            theGrid.cellEditEnding.addHandler(function(s, e) {
+                // 체크박스의 열 인덱스가 3인 경우 실행
+                if (e.col === 3) {
+                    if (e.panel.grid.activeEditor.checked) {
+                        // 체크박스가 체크된 경우, 현재 체크된 행의 데이터를 입력 필드에 반영
+                        document.getElementById('date3').value = s.rows[e.row].dataItem.standdt;
+                        document.getElementById('222').value = s.rows[e.row].dataItem.smpcost;
                     } else {
-                        Alert.alert('', res.message);
+                        // 체크박스가 해제된 경우, 입력 필드 초기화
+                        document.getElementById('date3').value = '';
+                        document.getElementById('222').value = '';
                     }
-                };
 
-                AjaxUtil.postAsyncData(_this.baseUrl + '/delete', data, fnSuccess);
-            }
+                    // 모든 행에 대해 체크박스 상태 업데이트
+                    s.rows.forEach(function(row, index) {
+                        if (index !== e.row) {
+                            row.dataItem.check = false;  // 다른 모든 행의 체크 해제
+                        }
+                    });
 
+                    // 데이터 변경 후에 CollectionView를 새로고침
+                    viewdata.refresh();
+                }
+            });
+
+
+            console.log("Grid initialized:", theGrid); // 지워
+            // 하드코딩 끝 여기까지 지워
+
+
+            // 위에 하드코딩 된거 지우고 이거 복구시켜
+            /*let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr,
+
+                },
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
+
+
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: (e, ctx) => {
+                    SelectItem = theGrid.rows.filter(r => r.isSelected);
+
+                }
+            })*/
+
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
 
         }
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        let page = null;
-        var picker = new ax5.ui.picker();
+        // 기능 inspec_month_main.html 참고
 
-        $(document).ready(function (e) {
-            page = new SujuUploadPage();
-
-            picker.bind({
-                target: $('[data-picker-date="month"]'),
-                content: {
-                    type: 'date',
-                    config: {
-                        mode: "month", selectMode: "month"
-                    },
-                    formatter: {
-                        pattern: 'date(month)'
-                    }
-                }
-            });
+        // backup 코드도 참고해
 
 
 
 
 
-            $('#date_from').val(CommonUtil.getYYYYMMDD().substring(0,7));
-            //검색
-            $('#btnSearch').click(function (e){
-                page.searchDataBind();
-            });
 
-            // 삭제 버튼
-            $('#btnDelete').click(function (e) {
-                let items = page.grid.getList('selected');
-                if (items.length > 0) {
-                    Alert.confirm('', '삭제하시겠습니까?',
-                        function () {
-                            page.deleteSujuBulkData(items);
-                        },
-                        function () { }
-                    );
-                } else {
-                    Alert.alert('', '삭제할 항목을 선택해주세요.', function () {
-                        $(this).focus();
-                    });
-                }
-            });
 
-        })
+
+
+
+
+
+
+
+
+
+
     </script>
 </th:block>
 </html>
