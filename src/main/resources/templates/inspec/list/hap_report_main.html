@@ -16,7 +16,7 @@
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>점검관리</li>
+                <li>점검 관리</li>
                 <li>합동 안전점검</li>
             </ul>
         </div>
@@ -36,12 +36,7 @@
                     </select>
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
-                    </select>
-                </li>
-                <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
                         <option value="001">시설명</option>
                         <input type="hidden" id="spplannm" name="spplannm">
                     </select>
@@ -413,7 +408,7 @@
             let data2 = [];
 
             $.ajax({
-                url: '/api/inspec/hap/read',
+                url: '',
                 type: 'GET',
                 async: false,
                 success: function (data) {
@@ -422,6 +417,21 @@
             })
 
             viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 임시 데이터 배열 정의
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
 
             if (!theGrid) {
                 // 데이터 그리드에 바인딩
@@ -447,7 +457,7 @@
                         {binding: 'checkrem', header: '점검의견', width: 160, align: 'center', isReadOnly: true},
 
                     ],
-                    itemsSource: viewdata
+                    itemsSource: tempData
                 });
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
                 new FlexGridContextMenu(theGrid);

@@ -34,7 +34,6 @@ public class PowerController {
     public AjaxResult getList(@RequestParam(value = "startDate", required = false) String startDate,
                               @RequestParam(value = "endDate", required = false) String endDate,
                               @RequestParam(value = "searchusr", required = false) String searchusr) {
-        List<Map<String, Object>> items = new ArrayList<>();
 
         if (searchusr == null) {
             searchusr = "";
@@ -48,7 +47,24 @@ public class PowerController {
             endDate = "";
         }
 
-        items = this.powerService.getInspecList(searchusr, startDate, endDate);
+        List<Map<String, Object>> items = this.powerService.getInspecList(searchusr, startDate, endDate);
+
+        // 각 항목의 endresult 값을 변환
+        for (Map<String, Object> item : items) {
+            if (item.containsKey("workyn")) {
+                Object workyn = item.get("workyn");
+                if (workyn instanceof String value) {
+                    switch (value) {
+                        case "1":
+                            item.put("workyn", "가동");
+                            break;
+                        case "2":
+                            item.put("workyn", "비가동");
+                            break;
+                    }
+                }
+            }
+        }
 
         AjaxResult result = new AjaxResult();
         result.data = items;

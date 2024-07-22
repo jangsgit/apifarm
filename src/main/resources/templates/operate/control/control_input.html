@@ -9,15 +9,15 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>제어이행등록</h2>
+                <h2>제어이행 등록</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>제어이행관리</li>
-                <li>제어이행등록</li>
+                <li>제어이행 관리</li>
+                <li>제어이행 등록</li>
             </ul>
         </div>
         <!-- Select -->
@@ -36,12 +36,7 @@
                     </select>
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
-                    </select>
-                </li>
-                <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
                         <option value="001">시설명</option>
                         <input type="hidden" id="spplannm" name="spplannm">
                     </select>
@@ -76,22 +71,12 @@
                                             <input type="date" id="endDate" name="endDate">
                                             <label for="endDate" class="hide">종료일</label>
                                         </li>
+                                        <li>
+                                            <div style="margin-left: 20px" class="srch-box">
+                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                            </div>
+                                        </li>
                                     </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="searchcom">
-                                        Ticket 명<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <input type="text" id="searchcom" class="input-srch"
-                                               placeholder="Ticket명 검색">
-                                        <a class="btn-srch" title="검색" onclick="searchData()"
-                                           onkeyup="searchData()"></a>
-                                    </div>
                                 </dd>
                             </dl>
                         </div>
@@ -152,7 +137,7 @@
                                 <caption>제어이행등록 테이블</caption>
                                 <colgroup>
                                     <col class="wp12">
-                                    <col class="wp20">
+                                    <col class="wp40">
                                     <col class="wp12">
                                     <col class="wp40">
                                 </colgroup>
@@ -181,7 +166,7 @@
                                             제어일자
                                         </label>
                                     </th>
-                                    <td>
+                                    <td colspan="3">
                                         <input type="date" id="checkdt">
                                     </td>
                                 </tr>
@@ -229,10 +214,12 @@
                                             조치
                                         </label>
                                     </th>
-                                    <td style="display: flex">
-                                        <input type="text" id="implement" value="0.5">
-                                        <div class="btn-wrap">
-                                            <a title="더보기" class="btn-plus btn-popup-open" data-popup="popup1"></a>
+                                    <td colspan="3">
+                                        <div style="display: flex">
+                                            <input type="text" id="implement" placeholder="0.5">
+                                            <a class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">
+                                                <img src="/images/icon/ico-plus.svg" style="margin: 0">
+                                            </a>
                                         </div>
                                     </td>
 
@@ -252,12 +239,11 @@
 
     </div> <!-- //dashboard-layout-contents end-->
     <!-- [대시보드] 팝업  -->
-    <div class="dashboard-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup1">
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
             <div class="popup-title">
                 <h3>상세조치등록</h3>
-                <a title="팝업닫기" class="btn-popup-close">
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
                     <img src="/images/icon/btn-popup-close.svg" alt="닫기">
                 </a>
             </div>
@@ -311,7 +297,7 @@
                 </div>
             </div>
             <div class="popup-button">
-                <button class="btn-popup-close">취소</button>
+                <button onclick="closePopup()" class="btn-popup-close">취소</button>
                 <button class="btn-navy">저장</button>
             </div>
         </div>
@@ -374,13 +360,12 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'inpledt', header: '제어일시', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '시작시간', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '종료시간', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'spcompnm', header: '대상', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'spplannm', header: '이행방법', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'checkusr', header: '발전출력', width: 260, align: 'center', isReadOnly: true},
-                        {binding: 'checkresult', header: '상태', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'inpledt', header: '제어일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '시행일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '종료일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '대상', width: 250, align: 'center', isReadOnly: true},
+                        {binding: 'spplannm', header: '이행방법', width: 250, align: 'center', isReadOnly: true},
+                        {binding: 'checkresult', header: '조치', width: 160, align: 'center', isReadOnly: true},
                         {binding: 'checkrem', header: '작성자', width: 160, align: 'center', isReadOnly: true},
                         {binding: 'checkrem', header: '작성일자', width: 160, align: 'center', isReadOnly: true},
 
@@ -394,6 +379,41 @@
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;
             }
+        }
+
+        function closePopup(){
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup(){
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
         }
 
         $(document).ready(function (e) {

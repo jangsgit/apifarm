@@ -206,8 +206,6 @@ public class ElecSafeController {
 
                 File saveFile = new File(path + File.separator + file_uuid_name);
                 mFile.transferTo(saveFile);
-                saveFile.setWritable(true); //쓰기가능설정
-                saveFile.setReadable(true);    //읽기가능설정
 
                 TBRP760.setFilepath(saveFilePath);
                 TBRP760.setFilesvnm(file_uuid_name);
@@ -245,7 +243,6 @@ public class ElecSafeController {
 
         for (TB_RP750_PK pk : pkList) {
 
-            // 삭제 서비스 호출
             boolean success = elecSafeService.delete(pk);
 
             if (success) {

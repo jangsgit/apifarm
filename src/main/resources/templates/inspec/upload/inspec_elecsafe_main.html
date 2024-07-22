@@ -9,15 +9,15 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>전기안전관리등록</h2>
+                <h2>전기안전 점검 등록</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>점검관리</li>
-                <li>전기안전관리등록</li>
+                <li>점검 관리</li>
+                <li>전기안전 점검 등록</li>
             </ul>
         </div>
         <!-- Select -->
@@ -36,8 +36,8 @@
                     </select>
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
-                        <option value="001">KT대구물류센터 연료전지발전소</option>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
+                        <option value="001">KT 대구물류센터 연료전지 발전소</option>
                         <input type="hidden" id="spplannm" name="spplannm">
                     </select>
                 </li>
@@ -115,7 +115,7 @@
                 <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="title-wrap">
-                            <h3>전기안전점검 등록</h3>
+                            <h3>전기안전 점검 등록</h3>
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -199,7 +199,7 @@
                                     <td>
                                         <select type="text" id="checkarea" class="wp100" placeholder="점검장소">
                                             <option VALUE="">점검장소를 선택하세요</option>
-                                            <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지발전소</option>
+                                            <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지 발전소</option>
                                         </select>
                                     </td>
                                     <th>
@@ -315,7 +315,7 @@
                         {binding: 'checktitle', header: '점검명', width: 260, align: 'center', isReadOnly: true},
                         {binding: 'endresult', header: '점검결과', width: 160, align: 'center', isReadOnly: true,},
                         {binding: 'checkdt', header: '점검일자', width: 160, align: 'center', isReadOnly: true},
-                        {binding: 'downloads', header: '다운로드', width: 160, align: 'center', cssClass: 'filedown'},
+                        {binding: 'downloads', header: '다운로드', width: 160, align: 'center'},
 
                     ],
                     itemsSource: viewdata,
@@ -660,8 +660,7 @@
         //  select 바뀌면 hidden input 변경
         function updateSelect(selectId, hiddenInputId) {
             var selectElement = document.getElementById(selectId);
-            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
-            document.getElementById(hiddenInputId).value = selectedOptionText;
+            document.getElementById(hiddenInputId).value = selectElement.options[selectElement.selectedIndex].text;
         }
 
 
