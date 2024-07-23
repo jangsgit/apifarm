@@ -21,6 +21,11 @@ import mes.domain.repository.actasRepository.TB_RP715Repository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
+import org.docx4j.Docx4J;
+import org.docx4j.convert.out.FOSettings;
+import org.docx4j.convert.out.pdf.PdfConversion;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -80,7 +85,7 @@ public class InspecController {
                               @RequestParam(value = "searchfrdate", required = false) String searchfrdate,
                               @RequestParam(value = "searchtodate", required = false) String searchtodate
 
-                              ){
+    ){
         List<Map<String, Object>> items = new ArrayList<>();
 
         searchusr = Optional.ofNullable(searchusr).orElse("");
@@ -118,7 +123,7 @@ public class InspecController {
             @RequestParam(value = "doc-list", required = false) List<String> doc_list,
             @RequestParam(value = "filelist", required = false) MultipartFile[] files
             //@RequestParam Map<String, String> params
-            ){
+    ){
 
         AjaxResult result = new AjaxResult();
 
@@ -166,19 +171,19 @@ public class InspecController {
         tbRp710dto.setSupplier(supplier);
         tbRp710dto.setSpuncode(randomuuid);
 
-            String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
+        String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
-            List<TB_RP715> fileEntities = new ArrayList<>();
+        List<TB_RP715> fileEntities = new ArrayList<>();
 
 
         boolean successcode = inspecService.save(tbRp710dto, files, doc_list);
-            if (successcode) {
-                result.success = true;
-                result.message = "저장하였습니다.";
-            } else {
-                result.success = false;
-                result.message = "저장에 실패하였습니다.";
-            }
+        if (successcode) {
+            result.success = true;
+            result.message = "저장하였습니다.";
+        } else {
+            result.success = false;
+            result.message = "저장에 실패하였습니다.";
+        }
 
 
         return result;
@@ -230,7 +235,7 @@ public class InspecController {
     }
 
     @PostMapping("/download-docs")
-    public void downloadDocs(HttpServletResponse response, @RequestBody List<String> selectedList) throws IOException {
+    public void downloadDocs(HttpServletResponse response, @RequestBody List<String> selectedList) throws IOException, Docx4JException {
         String path = settings.getProperty("file_upload_path") + "순회점검일지양식.docx";
 
         ByteArrayOutputStream zipOutputStream = new ByteArrayOutputStream();
@@ -272,20 +277,20 @@ public class InspecController {
                 //3번째 테이블 작성
                 int itemValueIndex = 0;
                 for(int k = 2; k < tables.get(2).getRows().size(); k++){
-                        if(itemValueIndex >= items.size()) break;
-                        XWPFTableRow row = tables.get(2).getRow(k);
-                        XWPFTableCell cell = row.getCell(1);
-                        System.out.println(k + "," + 1);
-                        System.out.println(itemValueIndex);
+                    if(itemValueIndex >= items.size()) break;
+                    XWPFTableRow row = tables.get(2).getRow(k);
+                    XWPFTableCell cell = row.getCell(1);
+                    System.out.println(k + "," + 1);
+                    System.out.println(itemValueIndex);
                     Object insepcContValue = items.get(itemValueIndex).get("inspeccont");
-                        String inspecContText = (insepcContValue != null) ? insepcContValue.toString() : "";
+                    String inspecContText = (insepcContValue != null) ? insepcContValue.toString() : "";
 
-                        clearCellText(cell);
-                        clearAndSetCellText(cell, inspecContText);
+                    clearCellText(cell);
+                    clearAndSetCellText(cell, inspecContText);
 
-                        String cellText = cell.getText();
-                        System.out.println("cellText :: " + cellText);
-                        itemValueIndex++;
+                    String cellText = cell.getText();
+                    System.out.println("cellText :: " + cellText);
+                    itemValueIndex++;
                 }
 
                 //개선사항 작성
@@ -321,7 +326,7 @@ public class InspecController {
                     if(inspecContText != null){
                         switch (inspecContText){
                             case "O": InsPecResultText = "O";
-                            break;
+                                break;
                             case "X": InsPecResultText = "";
                         }
                     }
@@ -365,40 +370,40 @@ public class InspecController {
 
 
             }
-
+            //사진칸 작성
             if(!FileItems.isEmpty()){
-            for(int j=0; j < 2; j++){
-                int index = 0;
-                if(j==1) index=3;
-                if(j+1 > FileItems.size()) break;
-                String imagePath = settings.getProperty("file_upload_path") + "순회점검일지첨부파일/" + FileItems.get(j).get("filesvnm");
+                for(int j=0; j < 2; j++){
+                    int index = 0;
+                    if(j==1) index=3;
+                    if(j+1 > FileItems.size()) break;
+                    String imagePath = settings.getProperty("file_upload_path") + "순회점검일지첨부파일/" + FileItems.get(j).get("filesvnm");
 
 
-                XWPFTableRow firstRow = tables.get(3).getRow(index);
-                XWPFTableCell firstCell = firstRow.getCell(0);
+                    XWPFTableRow firstRow = tables.get(3).getRow(index);
+                    XWPFTableCell firstCell = firstRow.getCell(0);
 
-                XWPFTableRow SecondRow = tables.get(3).getRow(index+2);
-                XWPFTableCell SecondCell = SecondRow.getCell(1);
+                    XWPFTableRow SecondRow = tables.get(3).getRow(index+2);
+                    XWPFTableCell SecondCell = SecondRow.getCell(1);
 
-                clearAndSetCellText(SecondCell, rp710items.get(0).get("checkarea").toString());
+                    XWPFTableRow ThirdRow = tables.get(3).getRow(index+2);
+                    XWPFTableCell ThirdCell = ThirdRow.getCell(3);
 
 
-                clearCellText(firstCell);
+                    clearAndSetCellText(SecondCell, rp710items.get(0).get("checkarea").toString());
+                    clearAndSetCellText(ThirdCell, rp710items.get(0).get("checkdt").toString());
 
-                try(FileInputStream is = new FileInputStream(imagePath)){
-                    XWPFParagraph paragraph = firstCell.addParagraph();
-                    XWPFRun run = paragraph.createRun();
-                    run.addPicture(is, Document.PICTURE_TYPE_PNG, imagePath, Units.toEMU(500), Units.toEMU(300)); // 이미지 크기 설정 (100x100 EMU)
-                } catch (InvalidFormatException e) {
-                    throw new RuntimeException(e);
+                    clearCellText(firstCell);
+
+                    try(FileInputStream is = new FileInputStream(imagePath)){
+                        XWPFParagraph paragraph = firstCell.addParagraph();
+                        XWPFRun run = paragraph.createRun();
+                        run.addPicture(is, Document.PICTURE_TYPE_PNG, imagePath, Units.toEMU(500), Units.toEMU(300)); // 이미지 크기 설정 (100x100 EMU)
+                    } catch (InvalidFormatException e) {
+                        throw new RuntimeException(e);
+                    }
+
+
                 }
-
-
-            }
-
-
-
-
             }
 
             ByteArrayOutputStream documentOutputStream = new ByteArrayOutputStream();
@@ -407,10 +412,20 @@ public class InspecController {
             fis.close();
 
             byte[] documentBytes = documentOutputStream.toByteArray();
-            String documentName = "modified_document_" + (i + 1) + ".docx";
+            ByteArrayInputStream docInputStream = new ByteArrayInputStream(documentBytes);
 
-            zos.putNextEntry(new ZipEntry(documentName));
-            zos.write(documentBytes);
+            // DOCX 파일을 PDF로 변환
+            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docInputStream);
+            FOSettings foSettings = Docx4J.createFOSettings();
+            foSettings.setWmlPackage(wordMLPackage);
+            ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+            Docx4J.toFO(foSettings, pdfOutputStream, Docx4J.FLAG_EXPORT_PREFER_XSL);
+
+            byte[] pdfBytes = pdfOutputStream.toByteArray();
+            String pdfName = "modified_document_" + (i + 1) + ".pdf";
+
+            zos.putNextEntry(new ZipEntry(pdfName));
+            zos.write(pdfBytes);
             zos.closeEntry();
         }
 
@@ -423,6 +438,7 @@ public class InspecController {
             zipOutputStream.writeTo(outputStream);
         }
     }
+
 
 
     //셀 지우고 줄바꿈
