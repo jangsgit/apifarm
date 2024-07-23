@@ -1,0 +1,228 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>CCTV 모니터링</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>모니터링</li>
+                <li>CCTV 모니터링</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="row row-2">
+            <section class="wp48" style="height: 640px">
+                <div class="title-wrap">
+                    <h3>연료전지 실시간 CCTV</h3>
+                </div>
+                <div class="cctv-wrap" style="height: 500px">
+                    <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp100">
+                </div>
+            </section>
+            <div class="col wp48" style="height: 640px">
+                <section>
+                    <div class="title-wrap">
+                        <h3>이벤트 발생 현황</h3>
+                    </div>
+                    <div class="tab-contents">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <input type="date" id="eventStartDate" name="eventStartDate">
+                                                <label for="eventStartDate" class="hide">시작일</label>
+                                            </li>
+                                            <li>
+                                                <input type="date" id="eventEndDate" name="eventEndDate">
+                                                <label for="eventEndDate" class="hide">종료일</label>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select title="점검상태" id="eventState">
+                                                    <option value="0">전체</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <div style="margin-left: -20px" class="srch-box">
+                                                    <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+                        <div class="container-fluid">
+                            <div id="theGridEvent" style="max-height: 170px"></div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="title-wrap">
+                        <h3>적외선 감지 현황</h3>
+                    </div>
+                    <div class="tab-contents">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <input type="date" id="detectStartDate" name="detectStartDate">
+                                                <label for="detectStartDate" class="hide">시작일</label>
+                                            </li>
+                                            <li>
+                                                <input type="date" id="detectEndDate" name="detectEndDate">
+                                                <label for="detectEndDate" class="hide">종료일</label>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select title="점검상태" id="detectSearch">
+                                                    <option value="0">전체</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <div style="margin-left: -20px" class="srch-box">
+                                                    <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+                        <div class="container-fluid">
+                            <div id="theGridDetect" style="max-height: 170px"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    </div> <!-- //dashboard-layout-right end-->
+
+    </div> <!-- //dashboard-layout-contents end-->
+
+
+    <script>
+
+        var theGrid;    // 이벤트 발생 현황
+        var theGrid1;   // 적외선 감지 현황
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            fetchListData();
+        }
+
+        function fetchListData() {
+
+            // 임시 데이터 배열 정의
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    inpledt: '',
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGridEvent', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {binding: 'inpledt', header: '발생시간', width: 230, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '발전설비', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: 'Event', width: '*', align: 'center', isReadOnly: true},
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '이벤트 발생 현황';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+
+            if (!theGrid1) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGridDetect', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {binding: 'inpledt', header: '발생시간', width: 230, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '발전설비', width: 160, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: 'Event', width: '*', align: 'center', isReadOnly: true},
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '적외선 감지 현황';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+    </script>
+    <!--</body>-->
+</th:block>
+</html>

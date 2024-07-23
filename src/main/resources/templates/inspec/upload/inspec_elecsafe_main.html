@@ -45,11 +45,13 @@
         </div>
         <div class="tab-wrap">
             <ul class="tab-links">
+                <input type="hidden" id="checkseq" name="checkseq" />
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
+
                 </li>
             </ul>
             <div class="tab-contents">
@@ -92,7 +94,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-delete" title="삭제" onclick="deleteData()">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
@@ -126,7 +128,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-delete" title="삭제">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm()">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
@@ -433,6 +435,25 @@
             });
         }
 
+        // 탭 수정/등록으로 업데이트
+        function updateTabLink() {
+            const checkseq = document.getElementById('checkseq').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            console.log('checkseq', checkseq);
+
+            if (checkseq) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+            } else {
+                inputTabLink.textContent = '등록';
+                inputTabLink.title = '등록';
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            updateTabLink();
+        });
+
         // 수정하기
         function modifyData() {
 
@@ -476,38 +497,21 @@
                             document.getElementById('docdv').value = data2.docdv;
                             document.getElementById('checkarea').value = data2.checkarea;
                             document.getElementById('bfconsres').value = data2.bfconsres;
+                            document.getElementById('checkseq').value = data2.checkseq;
+
+                            // 탭 수정으로 업데이트
+                            updateTabLink();
+
                             // filelist 처리
-                            let filelist = data2.filelist;
-                            let filelistElement = document.getElementById('filelist');
-                            filelistElement.innerHTML = ''; // 기존 내용을 지웁니다.
+                            let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
                             uploadedFiles = []; // 기존 업로드된 파일 리스트 초기화
 
-                            filelist.forEach(file => {
-                                let li = document.createElement('li');
-                                li.classList.add('file-item');
-
-                                let fileInfo = document.createElement('p');
-                                fileInfo.innerHTML = `${file.fileornm} <span>(${(file.filesize / 1024).toFixed(2)} KiB)</span>`;
-
-                                let deleteButton = document.createElement('a');
-                                deleteButton.classList.add('btn-file-delete');
-                                deleteButton.href = '#';
-                                deleteButton.title = '삭제';
-                                deleteButton.innerHTML = '<img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">';
-                                deleteButton.onclick = function (event) {
-                                    event.preventDefault();
-                                    li.remove();
-                                };
-
-                                li.appendChild(fileInfo);
-                                li.appendChild(deleteButton);
-                                filelistElement.appendChild(li);
-
-                                uploadedFiles.push(file);
+                            fileList.forEach(file => {
+                                uploadedFiles.push(file); // 파일 리스트에 추가
                             });
 
-                            // 업데이트된 파일 수 표시
-                            document.querySelector('.upload-filelist .title h5').textContent = `Files (${filelist.length})`;
+                            updateFileListUI();
+                            updateFileCount();
 
                         } else {
                             Alert.alert('', '불러오기에 실패했습니다. ');
@@ -518,11 +522,39 @@
                     }
                 });
             })
-
         }
 
-        // 삭제
-        function deleteData() {
+        // 파일 리스트 UI 업데이트 함수
+        function updateFileListUI() {
+            const $fileList = $('#filelist');
+            $fileList.empty(); // 기존 내용을 지웁니다.
+
+            uploadedFiles.forEach(file => {
+                const fileSize = (file.filesize / 1024).toFixed(2) + ' KiB';
+                const li = $('<li>').html(`
+                    <p>${file.fileornm} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
+                $fileList.append(li);
+            });
+        }
+
+        // 파일 삭제 이벤트 핸들러
+        $(document).on('click', '.btn-file-delete', function (event) {
+            event.preventDefault();
+            const li = $(this).closest('li');
+            const fileName = li.find('p').text().split(' (')[0];
+            uploadedFiles = uploadedFiles.filter(file => file.fileornm !== fileName);
+            li.remove();
+            updateFileCount();
+            console.log('삭제', uploadedFiles);
+
+        });
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid() {
 
             let delList = [];
             let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
@@ -562,6 +594,41 @@
             });
         }
 
+        // 수정에서 삭제 버튼
+        function deleteForm() {
+
+            let data = [{
+                'spworkcd': $('#spworkcd').val(),
+                'spcompcd': $('#spcompcd').val(),
+                'spplancd': $('#spplancd').val(),
+                'checkdt': $('#checkdt').val(),
+                'checkseq': $('#checkseq').val()
+            }];
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/inspec/elec_safe/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            $('#listTabLink').click();
+                            fetchListData();
+                            clearForm();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '삭제에 실패했습니다.');
+                    }
+                });
+            });
+        }
+
         // 날짜 형식을 변환하는 함수
         function formatDate(dateString) {
             if (dateString && dateString.length === 8) {
@@ -578,13 +645,15 @@
 
         // 신규등록 버튼 클릭
         function clearForm() {
-            ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult'].forEach(id => {
+            ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult', 'checkseq'].forEach(id => {
                 document.getElementById(id).value = '';
             });
             $('.filelist').empty(); // 파일 리스트 초기화
             uploadedFiles = []; // 업로드된 파일 리스트 초기화
             $('.fileInput').val(''); // 파일 입력 요소 초기화
 
+            // 탭 수정/등록 변경
+            updateTabLink();
             // 초기화된 파일 개수 업데이트
             updateFileCount();
         }
@@ -598,12 +667,14 @@
                     let formData = new FormData($('#customForm')[0]);
 
                     formData.append('spworkcd', $('#spworkcd').val());
-                    formData.append('spworknm', $('#spworknm').val());
                     formData.append('spcompcd', $('#spcompcd').val());
-                    formData.append('spcompnm', $('#spcompnm').val());
                     formData.append('spplancd', $('#spplancd').val());
-                    formData.append('spplannm', $('#spplannm').val());
                     formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checkseq', $('#checkseq').val());
+
+                    formData.append('spworknm', $('#spworknm').val());
+                    formData.append('spcompnm', $('#spcompnm').val());
+                    formData.append('spplannm', $('#spplannm').val());
                     formData.append('checktitle', $('#checktitle').val());
                     formData.append('registdt', $('#registdt').val());
                     formData.append('checkarea', $('#checkarea').val());
@@ -628,14 +699,7 @@
                                 Alert.alert('', response.message, function () {
                                     $('#listTabLink').click();
                                     fetchListData();
-                                    ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult'].forEach(id => {
-                                        document.getElementById(id).value = '';
-                                    });
-                                    $('.filelist').empty(); // 파일 리스트 초기화
-                                    uploadedFiles = []; // 업로드된 파일 리스트 초기화
-                                    $('.fileInput').val(''); // 파일 입력 요소 초기화
-                                    // 초기화된 파일 개수 업데이트
-                                    updateFileCount();
+                                    clearForm();
                                 });
 
                             } else {
@@ -662,6 +726,17 @@
             var selectElement = document.getElementById(selectId);
             document.getElementById(hiddenInputId).value = selectElement.options[selectElement.selectedIndex].text;
         }
+
+        // checkseq 값 있으면 수정 탭으로 변경
+        document.addEventListener("DOMContentLoaded", function() {
+            const checkseq = document.getElementById('checkseq').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            if (checkseq) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+            }
+        });
 
 
     </script>
