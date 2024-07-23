@@ -56,7 +56,7 @@
                      <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="width: 457px"></div>
+                        <div id="theGrid" style=" height: 500px"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
@@ -321,43 +321,22 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'code', header: '코드', width: 140, align: 'center' },
-                    { binding: 'name', header: '그룹명', width: 140, align: 'center' },
-                    { binding: 'description', header: '설명', width: 140, align: 'center' },
+                    { binding: 'code', header: '코드', width: '*', align: 'center' },
+                    { binding: 'name', header: '그룹명', width: '*', align: 'center' },
+                    { binding: 'description', header: '설명', width: '*', align: 'center' },
 
                 ],  //홀짝 로우 음영주기
-                loadedRows: function (s, e) {
-
-                    console.log(s.cells);
-
-                    for (var i = 0; i < s.rows.length; i++) {
-                        var row = s.rows[i];
-                        if(i % 2 === 0){
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                    for (var i = 0; i < s.cells.length; i++) {
-                        var row = s.rows[i];
-                        if(i % 2 === 0){
-                            row.cssClass = 'high-value';
-                        }
-                        var item = row.dataItem;
-
-                    }
-                },
                 itemsSource: viewdata
             });
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
+            /*let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: () => {
 
                 }
-            })
+            })*/
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
