@@ -1,0 +1,935 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 60px; /* 충분한 공간을 확보 */
+        }
+
+        .input-wrapper .unit {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            bottom: 0;
+            height: 20px;
+            line-height: 20px; /* input 높이에 맞게 조절 */
+            margin: auto;
+            font-size: 12px;
+            color: #999;
+            pointer-events: none; /* 텍스트가 클릭 이벤트를 받지 않도록 설정 */
+        }
+
+        .wj-header {
+            text-align: center !important;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>손익 분석</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스 분석</li>
+                <li>손익 분석</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-wrap">
+
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="총매출액">매출 정보</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="영업이익">비용 정보</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="사업경비">손익 관리</a>
+                </li>
+            </ul>
+
+
+            <div class="tab-contents" style="margin-bottom: 70px">
+
+                <!-- Section 1-->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+<!--                        <div class="button-wrap">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
+<!--                                        엑셀다운로드-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                    </div> <!--//section-top end -->
+
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 530px"></div>
+                    </div>
+                </section>
+
+                <!-- Section 2-->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+<!--                        <div class="button-wrap">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
+<!--                                        엑셀다운로드-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                    </div> <!--//section-top end -->
+
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 530px"></div>
+                    </div>
+                </section>
+
+                <!-- Section 3-->
+                <section class="tab-item" id="tab3">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+<!--                        <div class="button-wrap">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
+<!--                                        엑셀다운로드-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                    </div> <!--//section-top end -->
+
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 530px"></div>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+
+    </div> <!--//layout-contents end -->
+    </section>
+    </div>
+
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            // let data2 = [];
+            // 하드코딩된 데이터 (지워)
+            let data2 = [
+                {
+                    galoym: '1',
+                    energyqty: '발전량(kWh)',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2',
+                    energyqty: 'REC 수량',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '3',
+                    energyqty: 'SMP 단가(원/kWh)',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '4',
+                    energyqty: 'REC 단가(원/REC)',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '5',
+                    energyqty: 'SMP 매출(백만원)',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '6',
+                    energyqty: 'REC 매출(백만원)',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '7',
+                    energyqty: '총 발전 매출',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                }
+            ];
+
+            // $.ajax({
+            //     url: '/api/sales/fetch',
+            //     type: 'GET',
+            //     async: false,
+            //     success: function(data){
+            //         console.log('wijmo', data);
+            //         data2 = data;
+            //     }
+            // })
+
+            // viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'galoym', header: 'No', width: 140, align: 'center'},
+                    {binding: 'energyqty', header: '구분', width: 180, align: 'center'},
+                    {binding: '', header: '', width: 180, align: 'right'},
+                    {binding: 'recamt', header: '금액', width: 180, align: 'right'},
+                    {binding: 'stotamt', header: '비고', width: "*", align: 'right'}
+
+                ],
+                // itemsSource: viewdata,
+
+                // 하드코딩해서 임시로 data2
+                itemsSource: data2,
+                isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
+            });
+
+            // Footer 행 추가
+            // theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            // theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
+            // theGrid.columnFooters.setCellData(0, 0, '계');
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            // // cellClicked 이벤트 핸들러 추가
+            // theGrid.cellClicked.addHandler(function(s, e) {
+            //     var item = s.collectionView.items[e.row];
+            //     $('#date3').val(item.salesym);
+            //     $('#test1').val(item.energyQty);
+            //     $('#test2').val(item.smpAmt);
+            //     $('#test3').val(item.smpCost);
+            //     $('#test4').val(item.recQty);
+            //     $('#test5').val(item.recCost);
+            //     $('#test6').val(item.recAverageCost);
+            //     $('#test7').val(item.recAmt);
+            //     $('#test').val(item.stotAmt);
+            //
+            //     $('#btnSave').hide();
+            //     $('#btnEdit').show();
+            //     switchTab('#tab2');
+            // });
+        }
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        // 초기 그리드 설정
+        init();
+
+        // 매출 데이터 검색 및 그리드 업데이트
+        function fetchSalesData(startDate, endDate) {
+            $.ajax({
+                url: '/api/sales/fetch',
+                type: 'GET',
+                data: {startDate: startDate, endDate: endDate},
+                success: function (response) {
+                    viewdata.sourceCollection = response;
+                },
+                error: function () {
+                    alert('데이터를 불러오는 데 실패했습니다.');
+                }
+            });
+        }
+
+        // 매출 데이터 저장
+        function saveSalesInfo(formData) {
+            $.ajax({
+                url: '/api/sales/upload',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    alert('저장되었습니다.');
+                    fetchSalesData(); // 전체 데이터를 다시 로드
+                },
+                error: function () {
+                    alert('저장에 실패했습니다.');
+                }
+            });
+        }
+
+        // 저장 버튼 이벤트
+        $('#btnSave').click(function () {
+            var formData = {
+                salesym: $('#date3').val(),
+                spworkcd: $('#spworkcd').val(),
+                spcompcd: $('#spcompcd').val(),
+                spplancd: $('#spplancd').val(),
+                spworknm: $('#spworknm').val(),
+                spcompnm: $('#spcompnm').val(),
+                spplannm: $('#spplannm').val(),
+                energyQty: $('#test1').val().replace(/,/g, ''),
+                smpCost: $('#test3').val().replace(/,/g, ''),
+                smpAmt: $('#test2').val().replace(/,/g, ''), // 쉼표 제거
+                recCost: $('#test5').val().replace(/,/g, ''),
+                recQty: $('#test4').val().replace(/,/g, ''),
+                recAmt: $('#test7').val().replace(/,/g, ''),
+                stotAmt: $('#test').val().replace(/,/g, '')
+            };
+            saveSalesInfo(formData);
+        });
+
+        // 검색 버튼 이벤트
+        $('#btn-srch').click(function () {
+            var startDate = $('#date1').val();
+            var endDate = $('#date2').val();
+            fetchSalesData(startDate, endDate);
+        });
+
+
+        // 검색
+        function searchData() {
+            let data = {
+                'searchusr': $('#searchusr').val(),
+                'searchfrdate': $('#searchfrdate').val(),
+                'searchtodate': $('#searchtodate').val()
+            }
+
+            let result = AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            if (result.success) {
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        // function grid_binding(data){
+        //     var uploadDto = data;
+        //     var uploadData = [];
+        //     var cnt = 1;
+        //     for (var i = 0; i < uploadDto.length; i++) {
+        //         uploadData.push({
+        //             rownum: uploadDto[i]["rownum"],
+        //             spworknm: uploadDto[i]["spworknm"],
+        //             spcompnm: uploadDto[i]["spcompnm"],
+        //             spplannm: uploadDto[i]["spplannm"],
+        //             checkdt: uploadDto[i]["checkdt"],
+        //             checkusr: uploadDto[i]["checkusr"],
+        //             checkarea: uploadDto[i]["checkarea"],
+        //             checktmdt: uploadDto[i]["checktmdt"],
+        //
+        //         });
+        //         cnt++;
+        //     }
+        //
+        //     theGrid.columns.clear();
+        //     theGrid.autoGenerateColumns = false;
+        //     viewdata.sourceCollection = uploadData;
+        //
+        //     var cols = new wijmo.grid.Column();
+        //     cols.binding = 'rownum';
+        //     cols.header = '순번';
+        //     cols.align = "center";
+        //     cols.width = 60;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spworknm';
+        //     cols.header = '지역명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spcompnm';
+        //     cols.header = '산단명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'spplannm';
+        //     cols.header = '발전소명';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkdt';
+        //     cols.header = '등록일자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkusr';
+        //     cols.header = '점검자';
+        //     cols.align = "center";
+        //     cols.width = 140;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checkarea';
+        //     cols.header = '점검장소';
+        //     cols.align = "center";
+        //     cols.width = 200;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'checktmdt';
+        //     cols.header = '점검시간';
+        //     cols.align = "center";
+        //     cols.width = 260;
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'downloads';
+        //     cols.header = '다운로드';
+        //     cols.align = "center";
+        //     cols.width = 160;
+        //     cols.cellTemplate = '<a href="#" title="다운로드" class="btn-filedown">다운로드</a>'
+        //     theGrid.columns.push(cols);
+        //
+        //     cols = new wijmo.grid.Column();
+        //     cols.binding = 'downloads';
+        //     cols.header = '업로드';
+        //     cols.align = "center";
+        //     cols.width = 170;
+        //     cols.cssClass = "downloads"
+        //     cols.cellTemplate = '<a href="#" title="업로드" onclick="showPopup()" class="btn btn-popup-open"  data-popup="popup1">\n' +
+        //         '                                                        업로드\n' +
+        //         '                                                    </a>'
+        //     theGrid.columns.push(cols);
+        //
+        //
+        //
+        //
+        //
+        //
+        // }
+
+        $(document).ready(function (e) {
+
+
+            // $('#btnSave').click(function (e){
+            //
+            //
+            //     Alert.confirm('', '저장하시겠습니까?', function() {
+            //
+            //             let fileInput = document.getElementById('fileInput1');
+            //             let files = fileInput.files;
+            //             let formData = new FormData();
+            //
+            //             for (var i = 0; i < files.length; i++) {
+            //                 formData.append('filelist', files[i]);
+            //             }
+            //
+            //             const randomString = generateRandomStringWithDate();
+            //
+            //             var inputs = document.querySelectorAll('input[name="checkusr"]');
+            //             var values = [];
+            //
+            //             inputs.forEach(function(input){
+            //                 values.push(input.value);
+            //
+            //             })
+            //
+            //             var checkusrString = values.join(',');
+            //
+            //
+            //
+            //             // 다른 데이터를 FormData에 추가합니다.
+            //             formData.append('supplier', $('#supplier').val());
+            //             formData.append('checkdt', $('#checkdt').val());
+            //             formData.append('checkstdt', $('#checkstdt').val());
+            //             formData.append('checkendt', $('#checkendt').val());
+            //             formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+            //             formData.append('checkarea', $('#checkarea').val());
+            //             formData.append('checkitem', $('#checkitem').val());
+            //             formData.append('checkplan', $('#checkplan').val());
+            //             formData.append('randomuuid', randomString);
+            //             formData.append('_csrf', $('[name=_csrf]').val());
+            //
+            //
+            //             $.ajax({
+            //                 url: '/api/inspec_report/save',
+            //                 type: 'POST',
+            //                 data: formData,
+            //                 processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+            //                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+            //                 success: function (response) {
+            //                     if(response.success){
+            //                         Alert.alert('', response.message);
+            //                     }
+            //                 },
+            //                 error: function (jqXHR, textStatus, errorThrown) {
+            //                     Alert.alert('', '에러가발생하였습니다.');
+            //                 }
+            //             });
+            //
+            //
+            //         },
+            //         function () {}
+            //
+            //
+            //     )
+            // })
+
+
+        });
+
+
+        // 기존
+
+        $(document).ready(function () {
+
+            // 전역 변수로 선택된 매출 ID를 저장
+            let selectedSalesId = null;
+
+            // 검색
+            $('#btn-srch').click(function () {
+                var startDate = $('#date1').val();
+                var endDate = $('#date2').val();
+                fetchSalesData(startDate, endDate); // 데이터 가져오는 함수에 시작일과 종료일 인자 추가
+            });
+
+
+            $('#btnSave').click(function () {
+                if (validateForm()) {
+                    saveSalesInfo();
+                }
+            });
+
+            function validateForm() {
+                var isValid = true;
+                var salesym = $('#date3').val().trim(); // 매출년월 필드 값 가져오기
+
+                if (!salesym) { // 매출년월이 비어있는지 확인
+                    alert('매출년월을 입력해주세요.');
+                    $('#date3').focus(); // 매출년월 필드에 포커스 주기
+                    isValid = false;
+                }
+
+                $('#saleForm').find('input[required], select[required]').each(function () {
+                    if (!$(this).val()) {
+                        // alert('모든 필수 항목을 입력해주세요.');
+                        $(this).focus();
+                        isValid = false;
+                        return false; // break loop
+                    }
+                });
+                return isValid;
+            }
+
+            // 저장
+            function saveSalesInfo() {
+
+                var formData = {
+                    spworkcd: $('#spworkcd').val(),
+                    spcompcd: $('#spcompcd').val(),
+                    spplancd: $('#spplancd').val(),
+                    spworknm: $('#spworknm').val(),
+                    spcompnm: $('#spcompnm').val(),
+                    spplannm: $('#spplannm').val(),
+                    salesym: $('#date3').val(),
+                    energyQty: $('#test1').val(),
+                    smpAmt: $('#test2').val(),
+                    smpCost: $('#test3').val(),
+                    recQty: $('#test4').val(),
+                    recCost: $('#test5').val(),
+                    recAverageCost: $('#test6').val(),
+                    recAmt: $('#test7').val(),
+                    stotAmt: $('#test').val()
+                };
+                $.ajax({
+                    url: 'http://localhost:8060/api/sales/upload',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('저장되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                        } else {
+                            alert('오류: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        // alert('서버와의 통신 중 오류가 발생했습니다.');
+                        // console.log($('#test2').val()); // 쉼표 포함된 원래 값
+                        // console.log($('#test2').val().replace(/,/g, '')); // 쉼표 제거된 값
+                    }
+                });
+            }
+
+            // 매출 데이터 불러오기
+            // function fetchSalesData() {
+            //     var startDate = $('#date1').val();
+            //     var endDate = $('#date2').val();
+            //     var url = '/api/sales/fetch';
+            //
+            //     // 날짜가 설정되었으면 URL에 쿼리 파라미터 추가
+            //     if (startDate && endDate) {
+            //         url += '?startDate=' + startDate + '&endDate=' + endDate;
+            //     }
+
+            function fetchSalesData(startDate, endDate) {
+                var url = '/api/sales/fetch';
+                if (startDate && endDate) {
+                    url += '?startDate=' + startDate + '&endDate=' + endDate;
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        var rows = '';
+                        var totals = {
+                            energyQty: 0,
+                            smpCost: 0,
+                            smpAmt: 0,
+                            recCost: 0,
+                            recQty: 0,
+                            recAmt: 0,
+                            stotAmt: 0
+                        };
+
+                        response.forEach(function (sale) {
+                            rows += '<tr>' +
+                                '<td>' + sale.salesym + '</td>' +
+                                '<td>' + sale.energyQty + '</td>' +
+                                '<td>' + sale.smpCost + '</td>' +
+                                '<td>' + sale.smpAmt + '</td>' +
+                                '<td>' + sale.recCost + '</td>' +
+                                '<td>' + sale.recQty + '</td>' +
+                                '<td>' + sale.recAmt + '</td>' +
+                                '<td>' + sale.stotAmt + '</td>' +
+                                '</tr>';
+
+                            // 합계 계산
+                            totals.energyQty += sale.energyQty;
+                            totals.smpCost += sale.smpCost;
+                            totals.smpAmt += sale.smpAmt;
+                            totals.recCost += sale.recCost;
+                            totals.recQty += sale.recQty;
+                            totals.recAmt += sale.recAmt;
+                            totals.stotAmt += sale.stotAmt;
+                        });
+
+
+                        $('#salesData').html(rows);
+                        $('#sum-energyQty').text(totals.energyQty);
+                        $('#sum-smpCost').text(totals.smpCost);
+                        $('#sum-smpAmt').text(totals.smpAmt);
+                        $('#sum-recCost').text(totals.recCost);
+                        $('#sum-recQty').text(totals.recQty);
+                        $('#sum-recAmt').text(totals.recAmt);
+                        $('#sum-stotAmt').text(totals.stotAmt);
+                    },
+                    error: function (error) {
+                        console.error('데이터 로드 실패:', error);
+                        alert('데이터를 불러오는 데 실패했습니다.');
+                    }
+                });
+            }
+
+            // // 매출 데이터를 클릭했을 때 이벤트 핸들러
+            // $(document).on('click', '.list-table tbody tr', function () {
+            //     // 각 행에서 데이터 가져오기
+            //     var salesym = $(this).find('td').eq(0).text(); // 매출년월
+            //     var energyQty = $(this).find('td').eq(1).text(); // 발전량
+            //     var smpCost = $(this).find('td').eq(2).text(); // SMP 단가
+            //     var smpAmt = $(this).find('td').eq(3).text(); // SMP 매출
+            //     var recCost = $(this).find('td').eq(4).text(); // REC 단가
+            //     var recQty = $(this).find('td').eq(5).text(); // REC 수량
+            //     var recAmt = $(this).find('td').eq(6).text(); // REC 매출
+            //     var stotAmt = $(this).find('td').eq(7).text(); // 총 매출
+            //
+            //     // 폼 필드에 데이터 채우기
+            //     $('#date3').val(salesym);
+            //     $('#test1').val(energyQty);
+            //     $('#test3').val(smpCost);
+            //     $('#test2').val(smpAmt);
+            //     $('#test5').val(recCost);
+            //     $('#test4').val(recQty);
+            //     $('#test7').val(recAmt);
+            //     $('#test').val(stotAmt);
+            //
+            //     // 버튼 상태 전환
+            //     $('#btnSave').hide(); // 저장 버튼 숨기기
+            //     $('#btnEdit').show(); // 수정 버튼 표시
+            //
+            //     // 탭 전환
+            //     switchTab('#tab2');
+            // });
+
+            // 수정
+            $('#btnEdit').click(function () {
+                var formData = {
+                    salesym: $('#date3').val(),
+                    energyQty: $('#test1').val(),
+                    smpAmt: $('#test2').val(),
+                    smpCost: $('#test3').val(),
+                    recQty: $('#test4').val(),
+                    recCost: $('#test5').val(),
+                    recAverageCost: $('#test6').val(),
+                    recAmt: $('#test7').val(),
+                    stotAmt: $('#test').val(),
+
+                    spworkcd: $('#spworkcd').val(),
+                    spcompcd: $('#spcompcd').val(),
+                    spplancd: $('#spplancd').val(),
+                    spworknm: $('#spworknm').val(),
+                    spcompnm: $('#spcompnm').val(),
+                    spplannm: $('#spplannm').val()
+                };
+
+                $.ajax({
+                    url: '/api/sales/update/' + formData.salesym,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('수정되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                            $('#btnEdit').hide(); // 수정 버튼 숨기기
+                            $('#btnSave').show(); // 저장 버튼 표시
+                        } else {
+                            alert('오류: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
+                    }
+                });
+            });
+
+            // 삭제 버튼 클릭 이벤트
+            $('#btnDelete').click(function () {
+                if (!confirm('정말로 삭제하시겠습니까?')) {
+                    return;
+                }
+
+                var salesym = $('#date3').val();
+
+                $.ajax({
+                    url: 'http://localhost:8060/api/sales/delete/' + salesym,
+                    type: 'DELETE',
+                    success: function (response) {
+                        if (response.success) {
+                            alert('삭제되었습니다.');
+                            fetchSalesData(); // 데이터 재로드
+                            switchTab('#tab1'); // 목록 탭으로 전환
+                        } else {
+                            alert('오류: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('서버와의 통신 중 오류가 발생했습니다.');
+                    }
+                });
+            });
+
+            // 신규등록 버튼 클릭 이벤트
+            $('.btn-excell').click(function (event) {
+                // 기본 동작 방지 (페이지 새로고침 방지)
+                event.preventDefault();
+
+                // 입력 폼의 모든 입력 필드 초기화
+                $('#saleForm input[type="text"], #saleForm input[type="month"]').val('');
+
+                // 다른 필요한 UI 조정 또는 호출
+                $('#btnEdit').hide(); // 수정 버튼 숨기기
+                $('#btnSave').show(); // 저장 버튼 표시
+
+            });
+
+
+            // 데이터 초기 로드
+            fetchSalesData();
+
+            // 탭 전환 함수
+            function switchTab(tabId) {
+                $('.tab-links a[href="' + tabId + '"]').click();
+            }
+        });
+
+    </script>
+</th:block>
+</html>

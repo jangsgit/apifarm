@@ -1,0 +1,656 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+  <style>
+
+    #theGrid1.wj-flexgrid .wj-cell,
+    #theGrid2.wj-flexgrid .wj-cell,
+    #theGrid3.wj-flexgrid .wj-cell,
+    #theGrid4.wj-flexgrid .wj-cell {
+      padding: 12px;
+
+    }
+
+    #theGrid1.wj-flexgrid .downloads,
+    #theGrid2.wj-flexgrid .downloads,
+    #theGrid3.wj-flexgrid .downloads,
+    #theGrid4.wj-flexgrid .downloads {
+      padding-top: 0px;
+    }
+
+  </style>
+</head>
+
+<th:block layout:fragment="content">
+
+
+  <div class="layout-contents">
+    <!-- Page Title -->
+    <div class="page-title-wrap">
+      <div class="left">
+        <h2>매출 조회</h2>
+        <a title="북마크" class="bookmark toggle">
+          내메뉴
+        </a>
+      </div>
+      <ul class="page-navi">
+        <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+        <li>서비스 분석</li>
+        <li>매출 조회</li>
+      </ul>
+    </div>
+    <!-- Select -->
+    <div class="search-wrap">
+      <ul>
+        <li>
+          <select title="지역">
+            <option>대구</option>
+          </select>
+        </li>
+        <li>
+          <select title="구">
+            <option>성서산단</option>
+          </select>
+        </li>
+        <li>
+          <select title="동">
+            <option>성서</option>
+          </select>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-wrap">
+
+      <ul class="tab-links">
+        <li>
+          <a href="#tab1" title="총매출액">총매출액</a>
+        </li>
+        <li>
+          <a href="#tab2" title="영업이익">영업이익</a>
+        </li>
+        <li>
+          <a href="#tab3" title="사업경비">사업경비</a>
+        </li>
+        <li>
+          <a href="#tab4" title="원가율">원가율</a>
+        </li>
+      </ul>
+
+
+
+
+
+      <div class="tab-contents" style="margin-bottom: 70px">
+
+        <!-- Section 1-->
+        <section class="tab-item" id="tab1">
+          <div class="section-top">
+            <div class="search-wrap">
+              <dl>
+                <dt>
+                  조회기간<span class="eq">*</span>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <input type="month" id="startDate" name="startDate">
+                      <label for="startDate" class="hide">시작일</label>
+                    </li>
+                    <li>
+                      <input type="month" id="endDate" name="endDate">
+                      <label for="endDate" class="hide">종료일</label>
+                    </li>
+
+
+                  </ul>
+                </dd>
+              </dl>
+              <dl>
+                <dt>
+                  <label for="ticketcategory">
+                    구분<span class="eq">*</span>
+                  </label>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">기간별</option>
+                        <option value="비용">증감율</option>
+                        <option value="수익">YOY 기간</option>
+                        <option value="수익">YOY 증감율</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">월별</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <a class="btn btn-delete" title="검색" id="btn-srch">
+                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                        검색
+                      </a>
+                    </li>
+                  </ul>
+                </dd>
+              </dl>
+
+
+            </div>
+
+            <div class="button-wrap">
+              <ul>
+                <li>
+                  <a class="btn btn-excell" title="엑셀다운로드">
+                    <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                    엑셀다운로드
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div> <!--//section-top end -->
+
+          <!--                <div style="width: auto; height: 290px;">-->
+          <div>
+            <img src="/images/rMate_imsi_4.png" alt="그래프_삭제예정" style="height: 345px; margin-bottom: 15px;">
+          </div>
+
+          <div class="container-fluid">
+            <p id="selectedItem"></p>
+            <div id="theGrid1" style="max-height: 165px"></div>
+          </div>
+        </section>
+        <!-- Section -->
+
+        <!-- Section 2-->
+        <section class="tab-item" id="tab2">
+          <div class="section-top">
+            <div class="search-wrap">
+              <dl>
+                <dt>
+                  조회기간<span class="eq">*</span>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <input type="month" id="startDate" name="startDate">
+                      <label for="startDate" class="hide">시작일</label>
+                    </li>
+                    <li>
+                      <input type="month" id="endDate" name="endDate">
+                      <label for="endDate" class="hide">종료일</label>
+                    </li>
+
+
+                  </ul>
+                </dd>
+              </dl>
+              <dl>
+                <dt>
+                  <label for="ticketcategory">
+                    구분<span class="eq">*</span>
+                  </label>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">기간별</option>
+                        <option value="비용">증감율</option>
+                        <option value="수익">YOY 기간</option>
+                        <option value="수익">YOY 증감율</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">월별</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <a class="btn btn-delete" title="검색" id="btn-srch">
+                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                        검색
+                      </a>
+                    </li>
+                  </ul>
+                </dd>
+              </dl>
+
+
+            </div>
+
+            <div class="button-wrap">
+              <ul>
+                <li>
+                  <a class="btn btn-excell" title="엑셀다운로드">
+                    <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                    엑셀다운로드
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div> <!--//section-top end -->
+
+          <!--                <div style="width: auto; height: 290px;">-->
+          <div>
+            <img src="/images/rMate_imsi_4.png" alt="그래프_삭제예정" style="height: 345px; margin-bottom: 15px;">
+          </div>
+
+          <div class="container-fluid">
+            <p id="selectedItem"></p>
+            <div id="theGrid2" style="max-height: 165px"></div>
+          </div>
+        </section>
+        <!-- Section -->
+
+        <!-- Section 3-->
+        <section class="tab-item" id="tab3">
+          <div class="section-top">
+            <div class="search-wrap">
+              <dl>
+                <dt>
+                  조회기간<span class="eq">*</span>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <input type="month" id="startDate" name="startDate">
+                      <label for="startDate" class="hide">시작일</label>
+                    </li>
+                    <li>
+                      <input type="month" id="endDate" name="endDate">
+                      <label for="endDate" class="hide">종료일</label>
+                    </li>
+
+
+                  </ul>
+                </dd>
+              </dl>
+              <dl>
+                <dt>
+                  <label for="ticketcategory">
+                    구분<span class="eq">*</span>
+                  </label>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">기간별</option>
+                        <option value="비용">증감율</option>
+                        <option value="수익">YOY 기간</option>
+                        <option value="수익">YOY 증감율</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">월별</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <a class="btn btn-delete" title="검색" id="btn-srch">
+                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                        검색
+                      </a>
+                    </li>
+                  </ul>
+                </dd>
+              </dl>
+
+
+            </div>
+
+            <div class="button-wrap">
+              <ul>
+                <li>
+                  <a class="btn btn-excell" title="엑셀다운로드">
+                    <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                    엑셀다운로드
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div> <!--//section-top end -->
+
+          <!--                <div style="width: auto; height: 290px;">-->
+          <div>
+            <img src="/images/rMate_imsi_4.png" alt="그래프_삭제예정" style="height: 345px; margin-bottom: 15px;">
+          </div>
+
+          <div class="container-fluid">
+            <p id="selectedItem"></p>
+            <div id="theGrid3" style="max-height: 165px"></div>
+          </div>
+        </section>
+        <!-- Section -->
+
+        <!-- Section 4-->
+        <section class="tab-item" id="tab4">
+          <div class="section-top">
+            <div class="search-wrap">
+              <dl>
+                <dt>
+                  조회기간<span class="eq">*</span>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <input type="month" id="startDate" name="startDate">
+                      <label for="startDate" class="hide">시작일</label>
+                    </li>
+                    <li>
+                      <input type="month" id="endDate" name="endDate">
+                      <label for="endDate" class="hide">종료일</label>
+                    </li>
+
+
+                  </ul>
+                </dd>
+              </dl>
+              <dl>
+                <dt>
+                  <label for="ticketcategory">
+                    구분<span class="eq">*</span>
+                  </label>
+                </dt>
+                <dd>
+                  <ul class="date-box">
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">기간별</option>
+                        <option value="비용">증감율</option>
+                        <option value="수익">YOY 기간</option>
+                        <option value="수익">YOY 증감율</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <select id="ticketcategory" name="ticketcategory">
+                        <option value="매출">월별</option>
+
+                      </select>
+                    </li>
+
+                    <li>
+                      <a class="btn btn-delete" title="검색" id="btn-srch">
+                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                        검색
+                      </a>
+                    </li>
+                  </ul>
+                </dd>
+              </dl>
+
+
+            </div>
+
+            <div class="button-wrap">
+              <ul>
+                <li>
+                  <a class="btn btn-excell" title="엑셀다운로드">
+                    <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                    엑셀다운로드
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div> <!--//section-top end -->
+
+          <!--                <div style="width: auto; height: 290px;">-->
+          <div>
+            <img src="/images/rMate_imsi_4.png" alt="그래프_삭제예정" style="height: 345px; margin-bottom: 15px;">
+          </div>
+
+          <div class="container-fluid">
+            <p id="selectedItem"></p>
+            <div id="theGrid4" style="max-height: 165px"></div>
+          </div>
+        </section>
+        <!-- Section -->
+
+
+
+      </div> <!--//tab-contens end-->
+    </div> <!--//tab-wrap end-->
+  </div> <!--//layout-contents end -->
+
+  <!-- 팝업 -->
+  <div class="modal">
+    <div class="popup-wrapper w700" id="popup1">
+      <div class="popup-title">
+        <h3>점검일지 업로드</h3>
+        <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+          <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+        </a>
+      </div>
+      <div class="popup-contents">
+        <div class="table-wrap">
+          <table class="write-table">
+            <caption>점검등록 테이블</caption>
+            <colgroup>
+              <col class="wp20">
+              <col class="wp80">
+            </colgroup>
+            <input type="hidden" id="popup-spuncode">
+            <tbody>
+            <tr>
+              <th>
+                <label for="date6">등록일자</label>
+              </th>
+              <td>
+                <div class="input-clear">
+                  <input type="text" id="popup-date" readonly>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label for="popup-checkusr">점검자</label>
+              </th>
+              <td>
+                <div class="input-clear">
+                  <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
+                  <span class="btn-clear">×</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label for="popuptext2">점검장소</label>
+              </th>
+              <td>
+                <div class="input-clear">
+                  <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
+                  <span class="btn-clear">×</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>첨부파일</th>
+              <td>
+                <div id="uploadComponent2" class="upload-component">
+                  <div class="upload-filebox">
+                    <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                    <a class="btn" title="파일업로드">파일업로드</a>
+                    <input type="file" id="fileInput2" name="filelist2" class="fileInput">
+                    <p>Maximun upload file size <span>1GiB</span></p>
+                  </div>
+                  <div class="upload-filelist">
+                    <div class="title">
+                      <h5>Files (0)</h5>
+                      <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                    </div>
+                    <ul class="filelist">
+                    </ul>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="popup-button">
+        <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+        <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+</th:block>
+
+
+<th:block layout:fragment="scripts">
+  <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+  <script type="text/javascript">
+
+    // var theGrid;    // 목록에 뿌림
+    // var theGrid1;   // 등록에서 insert
+    // var viewdata;
+    // var data1 = [];
+
+    document.readyState === 'complete' ? init() : window.onload = init;
+
+    <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+    function init() {
+      fetchListData1();
+      fetchListData2();
+      fetchListData3();
+      fetchListData4();
+      inputData();
+    }
+
+    function initializeGrid(gridId, data) {
+      var grid = new wijmo.grid.FlexGrid(gridId, {
+        autoGenerateColumns: false,
+        columns: [
+          { binding: 'No', header: 'NO', width: 50, align: 'center' },
+          { binding: 'Period', header: '기간', width: 140, align: 'center' },
+          { binding: 'Amount', header: '금액', width: 140, align: 'center' },
+          { binding: 'Remark', header: '비고', width: '*', align: 'center' }
+        ],
+        itemsSource: data
+      });
+
+      // 맨 앞에 헤더부분 없애기
+      grid.rowHeaders.columns.splice(0, 1);
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var exampleData = [
+        { No: 1, Period: "2024-01", Amount: "100", Remark: "" },
+        { No: 2, Period: "2024-02", Amount: "200", Remark: "" },
+        { No: 3, Period: "2024-03", Amount: "300", Remark: "" },
+        { No: 4, Period: "2024-04", Amount: "400", Remark: "" },
+        { No: 5, Period: "2024-05", Amount: "350", Remark: "" }
+      ];
+
+      initializeGrid('#theGrid1', exampleData);
+      initializeGrid('#theGrid2', exampleData);
+      initializeGrid('#theGrid3', exampleData);
+      initializeGrid('#theGrid4', exampleData);
+    });
+
+
+
+
+    $(document).ready(function (e) {
+
+      // 정보 저장
+      $('#btnSave').click(function (e) {
+        Alert.confirm('', '저장하시겠습니까?', function () {
+
+          // theGrid1의 데이터를 data1 배열에 업데이트
+          var updatedData1 = theGrid1.collectionView.items;
+
+          // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+          console.log("Updated data1:", updatedData1);
+
+          let formData = new FormData();
+
+          formData.append('spworkcd', $('#spworkcd').val());
+          formData.append('spworknm', $('#spworknm').val());
+          formData.append('spcompcd', $('#spcompcd').val());
+          formData.append('spcompnm', $('#spcompnm').val());
+          formData.append('spplancd', $('#spplancd').val());
+          formData.append('spplannm', $('#spplannm').val());
+          formData.append('checkdt', $('#checkdt').val());
+          formData.append('checknm', $('#checknm').val());
+          formData.append('checkusr', $('#checkusr').val());
+          formData.append('checkresult', $('#checkresult').val());
+          formData.append('checkrem', $('#checkrem').val());
+          formData.append('filelist', $('#filelist').val());
+          formData.append('_csrf', $('[name=_csrf]').val());
+          // 점검리스트 데이터 추가
+          formData.append('inspectlist', JSON.stringify(updatedData1));
+
+          // $.ajax({
+          //     url: "/api/inspec/hap/save",
+          //     type: 'POST',
+          //     data: formData,
+          //     processData: false,
+          //     contentType: false,
+          //     success: function (response) {
+          //         if (response.success) {
+          //             Alert.alert('', response.message, function () {
+          //                 $('#listTabLink').click();
+          //                 fetchListData();
+          //
+          //             });
+          //
+          //         } else {
+          //             Alert.alert('', '저장에 실패했습니다. ');
+          //         }
+          //     },
+          //     error: function (jqXHR, textStatus, errorThrown) {
+          //         Alert.alert('', '에러가 발생하였습니다.');
+          //     }
+          // });
+        })
+      })
+      // select 아이디에 따라 히든 input 설정
+      const selects = [
+        {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+        {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+        {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+      ];
+      selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+
+    });
+
+    //  select 바뀌면 hidden input 변경
+    function updateSelect(selectId, hiddenInputId) {
+      var selectElement = document.getElementById(selectId);
+      var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+      document.getElementById(hiddenInputId).value = selectedOptionText;
+    }
+
+  </script>
+
+</th:block>
+
+</html>
