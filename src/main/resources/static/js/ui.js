@@ -146,7 +146,7 @@ $(document).ready(function () {
         $fileInput.on('change', function (event) {
             handleFileSelect(event.target.files);
             // 파일 선택 후 파일 입력 요소 초기화
-            // resetFileInput($fileInput);
+            resetFileInput($fileInput);
         });
 
         $(component).find('.upload-filebox').on('dragover', function (event) {
@@ -167,7 +167,7 @@ $(document).ready(function () {
             $(this).removeClass('dragging');
             handleFileSelect(event.originalEvent.dataTransfer.files);
             // 드래그 앤 드롭 후 파일 입력 요소 초기화
-            // resetFileInput($fileInput);
+            resetFileInput($fileInput);
         });
 
         function handleFileSelect(files) {
