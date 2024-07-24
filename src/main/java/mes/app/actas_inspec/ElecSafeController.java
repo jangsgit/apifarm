@@ -1,5 +1,6 @@
 package mes.app.actas_inspec;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import mes.app.actas_inspec.service.ElecSafeService;
 import mes.config.Settings;
 import mes.domain.entity.actasEntity.TB_RP750;
@@ -121,6 +122,7 @@ public class ElecSafeController {
     @PostMapping("/save")
     public AjaxResult saveElecSafe(@RequestParam Map<String, String> params,
                                    @RequestParam(value = "filelist", required = false) MultipartFile[] files,
+                                   @RequestPart(value = "deletedFiles", required = false) MultipartFile[] deletedFiles,
                                    Authentication auth) throws IOException {
 
         User user = (User) auth.getPrincipal();
@@ -130,16 +132,25 @@ public class ElecSafeController {
         String nspcompcd = params.get("spcompcd");
         String nspplancd = params.get("spplancd");
         String ncheckdt = params.get("checkdt").replaceAll("-", "");
-        // 점검 순번 유지 또는 생성 로직
-        Optional<String> checkseqvalue = TBRP750Repository.findMaxCheckseq(nspworkcd, nspcompcd, nspplancd, ncheckdt);
-        String newSeq = checkseqvalue.map(s -> String.valueOf(Integer.parseInt(s) + 1)).orElse("1");
+        String ncheckseq = params.get("checkseq");
 
         TB_RP750_PK pk = new TB_RP750_PK();
         pk.setSpworkcd(nspworkcd);
         pk.setSpcompcd(nspcompcd);
         pk.setSpplancd(nspplancd);
         pk.setCheckdt(ncheckdt);
-        pk.setCheckseq(newSeq);
+
+        String finalCheckseq;
+        if (ncheckseq != null && !ncheckseq.isEmpty()) {
+            pk.setCheckseq(ncheckseq);
+            finalCheckseq = ncheckseq;
+        } else {
+            // 점검 순번 유지 또는 생성 로직
+            Optional<String> checkseqvalue = TBRP750Repository.findMaxCheckseq(nspworkcd, nspcompcd, nspplancd, ncheckdt);
+            String newSeq = checkseqvalue.map(s -> String.valueOf(Integer.parseInt(s) + 1)).orElse("1");
+            pk.setCheckseq(newSeq);
+            finalCheckseq = newSeq;
+        }
 
         String nregistdt = params.get("registdt").replaceAll("-", "");
 
@@ -164,25 +175,47 @@ public class ElecSafeController {
         boolean success = elecSafeService.save(TBRP750);
         boolean success2 = true;
 
+        // 삭제된 파일 처리
+        if (deletedFiles != null && deletedFiles.length > 0) {
+            List<TB_RP760> tbRp760List = new ArrayList<>();
+            for (MultipartFile deletedFile : deletedFiles) {
+                String content = new String(deletedFile.getBytes(), StandardCharsets.UTF_8);
+                Map<String, String> deletedFileMap = new ObjectMapper().readValue(content, Map.class);
+
+                String spworkcd = deletedFileMap.get("spworkcd");
+                String spcompcd = deletedFileMap.get("spcompcd");
+                String spplancd = deletedFileMap.get("spplancd");
+                String checkdt = deletedFileMap.get("checkdt");
+                String checkseq = deletedFileMap.get("checkseq");
+                String fileseq = deletedFileMap.get("fileseq");
+
+                TB_RP760_PK pk2 = new TB_RP760_PK(spworkcd, spcompcd, spplancd, checkdt, checkseq, fileseq);
+                TB_RP760 tbRp760 = TBRP760Repository.findById(pk2).orElse(null);
+                if (tbRp760 != null) {
+                    // 파일 삭제
+                    String filePath = tbRp760.getFilepath();
+                    String fileName = tbRp760.getFilesvnm();
+                    File file = new File(filePath, fileName);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                    tbRp760List.add(tbRp760);
+                }
+            }
+            TBRP760Repository.deleteAll(tbRp760List);
+        }
+
         if (files != null) {
             for (MultipartFile multipartFile : files) {
 
-                // 파일 시퀀스 유지 또는 생성 로직
-                Optional<String> maxFileseqValue = TBRP760Repository.findMaxFileseq(nspworkcd, nspcompcd, nspplancd, ncheckdt, newSeq);
+                // 파일 시퀀스 생성 로직
+                Optional<String> maxFileseqValue = TBRP760Repository.findMaxFileseq(nspworkcd, nspcompcd, nspplancd, ncheckdt, finalCheckseq);
                 String newFileSeq = maxFileseqValue.map(s -> String.valueOf(Integer.parseInt(s) + 1)).orElse("1");
 
-                TB_RP760_PK pk2 = new TB_RP760_PK(nspworkcd, nspcompcd, nspplancd, ncheckdt, newSeq, newFileSeq);
+                TB_RP760_PK pk2 = new TB_RP760_PK(nspworkcd, nspcompcd, nspplancd, ncheckdt, finalCheckseq, newFileSeq);
 
-                Optional<TB_RP760> existingFileOptional = TBRP760Repository.findById(pk2);
-                TB_RP760 TBRP760;
-
-                if (existingFileOptional.isPresent()) {
-                    TBRP760 = existingFileOptional.get();
-                } else {
-                    TBRP760 = new TB_RP760();
-                    TBRP760.setId(pk2);
-                }
-
+                TB_RP760 TBRP760 = new TB_RP760();
+                TBRP760.setId(pk2);
                 TBRP760.setSpworknm(params.get("spworknm"));
                 TBRP760.setSpcompnm(params.get("spcompnm"));
                 TBRP760.setSpplannm(params.get("spplannm"));
@@ -242,6 +275,10 @@ public class ElecSafeController {
         AjaxResult result = new AjaxResult();
 
         for (TB_RP750_PK pk : pkList) {
+
+            if (pk.getCheckdt() != null) {
+                pk.setCheckdt(pk.getCheckdt().replaceAll("-", ""));
+            }
 
             boolean success = elecSafeService.delete(pk);
 

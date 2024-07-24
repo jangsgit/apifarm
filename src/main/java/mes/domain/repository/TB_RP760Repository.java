@@ -24,4 +24,8 @@ public interface TB_RP760Repository extends JpaRepository<TB_RP760, TB_RP760_PK>
 
     List<TB_RP760> findAllByIdSpworkcdAndIdSpcompcdAndIdSpplancdAndIdCheckdtAndIdCheckseq(
             String spworkcd, String spcompcd, String spplancd, String checkdt, String checkseq);
+
+    List<TB_RP760> findByFileornmAndIdSpworkcdAndIdSpcompcdAndIdSpplancdAndIdCheckdtAndIdCheckseq(
+            String fileornm, String spworkcd, String spcompcd, String spplancd, String checkdt, String checkseq);
+
 }

@@ -134,6 +134,8 @@ $(document).ready(function () {
 
 // 파일업로드 변수설정
 let uploadedFiles = [];
+// 삭제할 파일 목록
+let deletedFiles = [];
 /* 파일업로드 */
 $(document).ready(function () {
 
@@ -146,7 +148,7 @@ $(document).ready(function () {
         $fileInput.on('change', function (event) {
             handleFileSelect(event.target.files);
             // 파일 선택 후 파일 입력 요소 초기화
-            resetFileInput($fileInput);
+            // resetFileInput($fileInput);
         });
 
         $(component).find('.upload-filebox').on('dragover', function (event) {
@@ -167,7 +169,7 @@ $(document).ready(function () {
             $(this).removeClass('dragging');
             handleFileSelect(event.originalEvent.dataTransfer.files);
             // 드래그 앤 드롭 후 파일 입력 요소 초기화
-            resetFileInput($fileInput);
+            // resetFileInput($fileInput);
         });
 
         function handleFileSelect(files) {
@@ -192,12 +194,23 @@ $(document).ready(function () {
             event.preventDefault();
             const li = $(this).closest('li');
             const fileName = li.find('p').text().split(' (')[0];
+            console.log('fileName', fileName);
+
+            // 파일 이름과 일치하지 않는 파일들로 필터링하여 uploadedFiles 업데이트
+            const removedFile = uploadedFiles.find(file => file.name === fileName);
             uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+
+            // 삭제된 파일을 deletedFiles에 추가
+            if (removedFile) {
+                deletedFiles.push(removedFile);
+            }
+
             li.remove();
             updateFileCount();
-            console.log('삭제', uploadedFiles);
+            console.log('삭제 - uploadedFiles', uploadedFiles);
+            console.log('삭제 - deletedFiles', deletedFiles);
 
-            // 파일 선택 후 파일 입력 요소 초기화를 여기로 이동
+            // 파일 선택 후 파일 입력 요소 초기화
             resetFileInput($fileInput);
         });
 

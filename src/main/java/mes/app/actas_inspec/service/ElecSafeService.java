@@ -187,7 +187,7 @@ public class ElecSafeService {
                     t2.inuserid,
                     t2.inusernm
                 from tb_rp750 t1
-                join tb_rp760 t2
+                left join tb_rp760 t2
                 on 
                     t1.spworkcd = t2.spworkcd 
                     AND t1.spcompcd = t2.spcompcd 
@@ -195,11 +195,11 @@ public class ElecSafeService {
                     AND t1.checkdt = t2.checkdt 
                     AND t1.checkseq = t2.checkseq
                 where 
-                    t2.spworkcd like :spworkcd
-                    and t2.spcompcd like :spcompcd
-                    and t2.spplancd like :spplancd
-                    and t2.checkdt like :checkdt
-                    and t2.checkseq like :checkseq
+                    t1.spworkcd like :spworkcd
+                    and t1.spcompcd like :spcompcd
+                    and t1.spplancd like :spplancd
+                    and t1.checkdt like :checkdt
+                    and t1.checkseq like :checkseq
                 """);
         List<Map<String, Object>> rows = this.sqlRunner.getRows(sql.toString(), dicParam);
 
@@ -211,25 +211,27 @@ public class ElecSafeService {
         List<Map<String, Object>> filelist = new ArrayList<>();
 
         for (Map<String, Object> row : rows) {
-            Map<String, Object> fileData = new HashMap<>();
-            fileData.put("spworkcd", row.get("t2_spworkcd"));
-            fileData.put("spcompcd", row.get("t2_spcompcd"));
-            fileData.put("spplancd", row.get("t2_spplancd"));
-            fileData.put("checkdt", row.get("t2_checkdt"));
-            fileData.put("checkseq", row.get("t2_checkseq"));
-            fileData.put("fileseq", row.get("t2_fileseq"));
-            fileData.put("filepath", row.get("filepath"));
-            fileData.put("filesvnm", row.get("filesvnm"));
-            fileData.put("fileextns", row.get("fileextns"));
-            fileData.put("fileurl", row.get("fileurl"));
-            fileData.put("fileornm", row.get("fileornm"));
-            fileData.put("filesize", row.get("filesize"));
-            fileData.put("filerem", row.get("filerem"));
-            fileData.put("repyn", row.get("repyn"));
-            fileData.put("indatem", row.get("indatem"));
-            fileData.put("inuserid", row.get("inuserid"));
-            fileData.put("inusernm", row.get("inusernm"));
-            filelist.add(fileData);
+            if (row.get("t2_spworkcd") != null) {
+                Map<String, Object> fileData = new HashMap<>();
+                fileData.put("spworkcd", row.get("t2_spworkcd"));
+                fileData.put("spcompcd", row.get("t2_spcompcd"));
+                fileData.put("spplancd", row.get("t2_spplancd"));
+                fileData.put("checkdt", row.get("t2_checkdt"));
+                fileData.put("checkseq", row.get("t2_checkseq"));
+                fileData.put("fileseq", row.get("t2_fileseq"));
+                fileData.put("filepath", row.get("filepath"));
+                fileData.put("filesvnm", row.get("filesvnm"));
+                fileData.put("fileextns", row.get("fileextns"));
+                fileData.put("fileurl", row.get("fileurl"));
+                fileData.put("fileornm", row.get("fileornm"));
+                fileData.put("filesize", row.get("filesize"));
+                fileData.put("filerem", row.get("filerem"));
+                fileData.put("repyn", row.get("repyn"));
+                fileData.put("indatem", row.get("indatem"));
+                fileData.put("inuserid", row.get("inuserid"));
+                fileData.put("inusernm", row.get("inusernm"));
+                filelist.add(fileData);
+            }
         }
 
         result.put("filelist", filelist);

@@ -240,7 +240,7 @@
                                             <div class="upload-filebox">
                                                 <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                                 <a class="btn" title="파일업로드">파일업로드</a>
-                                                <input type="file" id="fileInput1" class="fileInput" multiple>
+                                                <input type="file" id="fileInput" class="fileInput" multiple>
                                                 <p>Maximun upload file size <span>1GiB</span></p>
                                             </div>
                                             <div class="upload-filelist">
@@ -440,8 +440,6 @@
             const checkseq = document.getElementById('checkseq').value;
             const inputTabLink = document.getElementById('inputTabLink');
 
-            console.log('checkseq', checkseq);
-
             if (checkseq) {
                 inputTabLink.textContent = '수정';
                 inputTabLink.title = '수정';
@@ -485,7 +483,7 @@
                     success: function (data) {
                         if (data.success) {
                             let data2 = data.data;
-                            console.log(data2);
+                            console.log('data2', data2);
                             $('#inputTabLink').click();
                             document.getElementById('spworkcd').value = data2.spworkcd;
                             document.getElementById('spcompcd').value = data2.spcompcd;
@@ -504,12 +502,28 @@
 
                             // filelist 처리
                             let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
-                            uploadedFiles = []; // 기존 업로드된 파일 리스트 초기화
+                            console.log()
+                            deletedFiles = [];
+                            uploadedFiles = [];
+                            $('.filelist').empty(); // 파일 리스트 초기화
 
                             fileList.forEach(file => {
-                                uploadedFiles.push(file); // 파일 리스트에 추가
-                            });
+                                let newFile = {
+                                    name: file.fileornm,
+                                    size: file.filesize,
+                                    type: file.fileextns,
+                                    lastModified: new Date().getTime(),
+                                    spcompcd: file.spcompcd,
+                                    spplancd: file.spplancd,
+                                    spworkcd: file.spworkcd,
+                                    checkdt: file.checkdt,
+                                    checkseq: file.checkseq,
+                                    fileseq: file.fileseq,
 
+                                };
+                                uploadedFiles.push(newFile); // 파일 리스트에 추가
+                            });
+                            console.log('수정 파일 목록', uploadedFiles);
                             updateFileListUI();
                             updateFileCount();
 
@@ -527,12 +541,11 @@
         // 파일 리스트 UI 업데이트 함수
         function updateFileListUI() {
             const $fileList = $('#filelist');
-            $fileList.empty(); // 기존 내용을 지웁니다.
 
             uploadedFiles.forEach(file => {
-                const fileSize = (file.filesize / 1024).toFixed(2) + ' KiB';
+                const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
                 const li = $('<li>').html(`
-                    <p>${file.fileornm} <span>(${fileSize})</span></p>
+                    <p>${file.name} <span>(${fileSize})</span></p>
                     <a href="#" title="삭제" class="btn-file-delete">
                         <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
                     </a>
@@ -540,18 +553,6 @@
                 $fileList.append(li);
             });
         }
-
-        // 파일 삭제 이벤트 핸들러
-        $(document).on('click', '.btn-file-delete', function (event) {
-            event.preventDefault();
-            const li = $(this).closest('li');
-            const fileName = li.find('p').text().split(' (')[0];
-            uploadedFiles = uploadedFiles.filter(file => file.fileornm !== fileName);
-            li.remove();
-            updateFileCount();
-            console.log('삭제', uploadedFiles);
-
-        });
 
         // 그리드에서 삭제 버튼
         function deleteGrid() {
@@ -650,12 +651,17 @@
             });
             $('.filelist').empty(); // 파일 리스트 초기화
             uploadedFiles = []; // 업로드된 파일 리스트 초기화
-            $('.fileInput').val(''); // 파일 입력 요소 초기화
-
+            deletedFiles = [];
             // 탭 수정/등록 변경
             updateTabLink();
             // 초기화된 파일 개수 업데이트
             updateFileCount();
+            resetFileInput($('.fileInput'));
+        }
+
+        // 파일 인풋 초기화
+        function resetFileInput($input) {
+            $input.val('');
         }
 
         $(document).ready(function (e) {
@@ -681,9 +687,16 @@
                     formData.append('bfconsres', $('#bfconsres').val());
                     formData.append('docdv', $('#docdv').val());
                     formData.append('endresult', $('#endresult').val());
+
+                    // 새로 추가된 파일만 폼 데이터에 추가
                     uploadedFiles.forEach((file, index) => {
                         formData.append('filelist', file);
-                    })
+                    });
+
+                    // 삭제된 파일 목록 추가
+                    deletedFiles.forEach((file, index) => {
+                        formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                    });
 
                     $.ajax({
                         url: "/api/inspec/elec_safe/save",
