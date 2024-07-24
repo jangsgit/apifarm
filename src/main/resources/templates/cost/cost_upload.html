@@ -60,12 +60,12 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="month" id="data1" name="startDt">
-                                            <label for="data1" class="hide">시작일</label>
+                                            <input type="month" id="startDt" name="startDt">
+                                            <label for="startDt" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="month" id="data2" name="endDt">
-                                            <label for="data2" class="hide">종료일</label>
+                                            <input type="month" id="endDt" name="endDt">
+                                            <label for="endDt" class="hide">종료일</label>
                                         </li>
                                         <a class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
                                     </ul>
@@ -105,7 +105,10 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 600px"></div>
+                        <div id="theGrid"></div>
+
+                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
+                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold; ">조회된 데이터가 없습니다</div>
                     </div>
 
                 </section>
@@ -139,8 +142,17 @@
                         </div>
                     </div>
                     <div class="table-wrap">
+                        <form id ="cost_form">
                         <table class="write-table">
-                            <caption>점검등록 테이블</caption>
+                            <input type="hidden" id="inuserid" name="inuserid">
+                            <input type="hidden" id="inusernm" name="inusernm">
+                            <input type="hidden" id="spworkcd" name="spworkcd" value="001"/>
+                            <input type="hidden" id="spworknm" name="spworknm" value="대구"/>
+                            <input type="hidden" id="spcompcd" name="spcompcd" value="001"/>
+                            <input type="hidden" id="spcompnm" name="spcompnm" value="성서산단"/>
+                            <input type="hidden" id="spplancd" name="spplancd" value="001"/>
+                            <input type="hidden" id="spplannm" name="spplannm" value="대구물류센터"/>
+                            <caption>비용등록 테이블</caption>
                             <colgroup>
                                 <col class="wp12">
                                 <col class="wp40">
@@ -150,156 +162,120 @@
                             <tbody>
                             <tr>
                                 <th>
-                                    <label for="supplier">
+                                    <label for="expesym">
                                         매출년월
                                     </label>
                                 </th>
                                 <td colspan="3">
-                                    <input type="month" id="supplier" name="supplier" class="wp45" >
+                                    <input type="month" id="expesym" maxlength="7" name="expesym" class="wp15" >
                                 </td>
-<!--                                <th>-->
-<!--                                    <label for="checkdt">-->
-<!--                                        등록일자-->
-<!--                                    </label>-->
-<!--                                </th>-->
-<!--                                <td>-->
-<!--                                    <input type="date" id=checkdt name="checkdt" autocomplete="off">-->
-<!--                                </td>-->
+
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="checkstdt">
+                                    <label for="fueamt">
                                        연료비 <span class="req">*</span>
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                    <input type="text" id="fueamt" name="fueamt" maxlength="100" class="wp100" placeholder="10">
                                 </td>
                                 <th>
-                                    <label for="checkendt">
+                                    <label for="depramt">
                                         감가상각비 <span class="req">*</span>
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                    <input type="text" id="depramt" name="depramt" maxlength="100" class="wp100" placeholder="10">
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="checkstdt">
+                                    <label for="psqcamt">
                                         전기안전검사
                                     </label>
                                 </th>
                                 <td>
                                     <div class="checkstdt">
-                                        <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                        <input type="text" id="psqcamt" name="psqcamt" maxlength="100" class="wp100" placeholder="10">
 <!--                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="5">-->
 <!--                                        <button onclick="addInputField(this)" class="mg-l8">점검자 추가</button>-->
                                     </div>
                                 </td>
                                 <th>
-                                    <label for="checkarea">
+                                    <label for="ltsaamt">
                                         LTSA <span class="req">*</span>
                                     </label>
                                 </th>
                                 <td>
 <!--                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="점검장소">-->
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                    <input type="text" id="ltsaamt" name="ltsaamt" maxlength="100" class="wp100" placeholder="10">
                                 </td>
                             </tr>
                             <tr>
+
                                 <th>
-                                    <label for="checkstdt">
-                                      전기안전검사
-                                    </label>
-                                </th>
-                                <td>
-<!--                                    <div class="textarea-box">-->
-                                        <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
-<!--                                        <textarea id="checkitem" name="checkitem" maxlength="200" placeholder="점검사항"></textarea>-->
-<!--                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>-->
-<!--                                    </div>-->
-                                </td>
-                                <th>
-                                    <label for="checkplan">
+                                    <label for="reccamt">
                                         REC 수수료
                                     </label>
                                 </th>
                                 <td>
 <!--                                    <div class="textarea-box">-->
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                    <input type="text" id="reccamt" name="reccamt" maxlength="100" class="wp100" placeholder="10">
 <!--                                        <textarea id="checkplan" name="checkplan" maxlength="200" placeholder="개선방향"></textarea>-->
 <!--                                        <p class="text-count" id="text-count2" name="checkplan">0/200</p>-->
 <!--                                    </div>-->
                                 </td>
-                            </tr>
-<!--                            <tr>-->
-<!--                                <th>-->
-<!--                                    첨부파일-->
-<!--                                </th>-->
-<!--                                <td colspan="3">-->
-<!--                                    <div id="uploadComponent1" class="upload-component">-->
-<!--                                        <div class="upload-filebox">-->
-<!--                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">-->
-<!--                                            <a href="#" class="btn" title="파일업로드">파일업로드</a>-->
-<!--                                            <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>-->
-<!--                                            <p>Maximun upload file size <span>1GiB</span></p>-->
-<!--                                        </div>-->
-<!--                                        <div class="upload-filelist">-->
-<!--                                            <div class="title">-->
-<!--                                                <h5>Files (0)</h5>-->
-<!--                                                <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>-->
-<!--                                            </div>-->
-<!--                                            <ul class="filelist">-->
-<!--                                            </ul>-->
-<!--                                            <div id="file-list"></div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-                            <tr>
+
                                 <th>
-                                    <label for="checkstdt">
+                                    <label for="iotlamt">
                                         IoT회선료 <span class="req">*</span>
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
-<!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
-                                </td>
-                                <th>
-                                    <label for="checkendt">
-                                        GIGAeyes <span class="req">*</span>
-                                    </label>
-                                </th>
-                                <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
-<!--                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">-->
+                                    <input type="text" id="iotlamt" name="iotlamt" maxlength="100" class="wp100" placeholder="10">
+                                    <!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
                                 </td>
                             </tr>
 
                             <tr>
+
+                                <th>
+                                    <label for="gigaamt">
+                                        GIGAeyes <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="gigaamt" name="gigaamt" maxlength="100" class="wp100" placeholder="10">
+<!--                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">-->
+                                </td>
                                 <th>
                                     <label for="checkstdt">
                                         IT비용 <span class="req">*</span>
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
-<!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
+                                    <input type="text" id="" name="" maxlength="100" class="wp100" placeholder="10">
+                                    <!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
                                 </td>
+
+                            </tr>
+
+                            <tr>
+
                                 <th>
-                                    <label for="checkendt">
+                                    <label for="otheamt">
                                         기타 <span class="req">*</span>
                                     </label>
                                 </th>
-                                <td>
-                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="10">
+                                <td colspan="3">
+                                    <input type="text" id="otheamt" name="otheamt" maxlength="100" class="wp100" placeholder="10">
 <!--                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">-->
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+                        </form>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
@@ -401,55 +377,14 @@
 </th:block>
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
     <script type="text/javascript">
 
         var theGrid;
         var viewdata;
 
-        // 현재 연도를 구함
-        const currentYear = new Date().getFullYear();
-        // 현재 연도의 1월을 설정
-        const defaultMonth = `${currentYear}-01`;
-
-        // input 요소를 선택하고 기본값 설정
-        document.getElementById('data1').value = defaultMonth;
-
-
-        // 현재 날짜를 구함
-        const today = new Date();
-        const currentYear2 = today.getFullYear();
-        const currentMonth2 = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요, 두 자리수로 맞춤
-
-        // 현재 연도와 월을 설정
-        const defaultMonth2 = `${currentYear2}-${currentMonth2}`;
-
-        // input 요소를 선택하고 기본값 설정
-        document.getElementById('data2').value = defaultMonth2;
-
-
-
-
-
-        function closePopup(){
-            const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';
-        }
-
-        function showPopup(){
-
-            const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'block';
-            modalOpen.style.display = 'block';
-            /*var popup = document.getElementById('popup1');
-
-            popup.style.display = 'block';*/
-        }
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -457,108 +392,79 @@
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             let data2 = [];
+
             let searchusr = $('#searchusr').val();
 
             $.ajax({
-                url: '/api/inspec_report/read',
+                url: '/api/gas/gas_belement/read',
                 type: 'GET',
-                data: {
-                    'searchusr' : searchusr
-                },
+                // data: {
+                //     'searchusr': searchusr
+                // },
                 async: false,
-                success: function(data){
+                success: function (data) {
                     console.log('wijmo', data.data);
                     data2 = data.data;
                 }
             })
 
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 6;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+
+
             viewdata = new wijmo.collections.CollectionView(data2);
-            // 데이터 그리드에 바인딩
+            //데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'ym', header: '비용연월', width: 140 ,align: 'center'},
-                    { binding: '', header: '연료비', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: '감가상각비', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: 'LTSA', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: '전기안전검사', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: 'REC수수료', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: 'IoT회선료', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: 'GIGAeyes', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: '', header: 'IT비용', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: 'etc', header: '기타', width: 140, align: 'center', aggregate: 'Sum'  },
-                    { binding: 'total', header: '총계', width: 140, align: 'center', aggregate: 'Sum'  },
+                    {binding: 'expesym', header: '비용연월', width: 140, align: 'center'},
+                    {binding: 'fueamt', header: '연료비', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'depramt', header: '감가상각비', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'ltsaamt', header: 'LTSA', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'psqcamt', header: '전기안전검사', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'reccamt', header: 'REC수수료', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'iotlamt', header: 'IoT회선료', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'gigaamt', header: 'GIGAeyes', width: 140, align: 'center', aggregate: 'Sum'},
+                    // {binding: '', header: 'IT비용', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'otheamt', header: '기타', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'etotamt', header: '총계', width: "*", align: 'center', aggregate: 'Sum'},
                 ],
-                //홀짝 로우 음영주기
-
                 itemsSource: viewdata
-
             });
-            theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
-            theGrid.bottomLeftCells.setCellData(0,0,'계');
 
-
-            theGrid.setCellData(0,'ym','2024-01');
-            theGrid.setCellData(1,'ym','2024-02');
-            theGrid.setCellData(2,'ym','2024-03');
-            theGrid.setCellData(3,'ym','2024-04');
-            theGrid.setCellData(4,'ym','2024-05');
-
-
+            // theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            // theGrid.bottomLeftCells.setCellData(0,0,'Σ');
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+
+            theGrid.setCellData(0, 'expesym', '2024-01');
+            theGrid.setCellData(1, 'expesym', '2024-02');
+            theGrid.setCellData(2, 'expesym', '2024-03');
+            theGrid.setCellData(3, 'expesym', '2024-04');
+            theGrid.setCellData(4, 'expesym', '2024-05');
+            theGrid.setCellData(5, 'expesym', '계');
+
+
 
 
         }<!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        <!-- 점검자 추가 버튼 이벤트-->
-        // function addInputField(button) {
-        //     // 새로운 td 요소를 생성합니다.
-        //     var newTd = document.createElement('div');
-        //     newTd.className = 'input-btnbox';
-        //
-        //     // 새로운 input 요소를 생성합니다.
-        //     var newInput = document.createElement('input');
-        //     newInput.type = 'text';
-        //     newInput.className = 'wp100';
-        //     newInput.placeholder = '점검자';
-        //     newInput.name = 'checkusr'
-        //     newInput.maxLength = 5;
-        //
-        //     // 삭제 버튼을 생성합니다.
-        //     var deleteButton = document.createElement('button');
-        //     deleteButton.textContent = '점검자 삭제';
-        //     deleteButton.onclick = function() {
-        //         deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-        //     };
-        //     deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-        //     deleteButton.style.color = 'red';
-        //     deleteButton.style.marginTop = '5px';
-        //     // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-        //     newTd.appendChild(newInput);
-        //     newTd.appendChild(deleteButton);
-        //
-        //     // 클릭된 버튼의 부모 td 요소를 찾습니다.
-        //     var parentTd = button.parentElement;
-        //
-        //     // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-        //     parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        // }
 
-        // function deleteInputField(inputField) {
-        //     // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-        //     var tdToDelete = inputField.parentElement;
-        //     tdToDelete.parentElement.removeChild(tdToDelete);
-        // }
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
 
         let filelist = [];
 
-        function filevalueinit (param){
+        function filevalueinit(param) {
             filelist = param;
 
         }
@@ -566,101 +472,19 @@
         let page = null;
 
         //검색
-        function searchData(){
+        function searchData() {
             let data = {
-                'searchusr' : $('#searchusr').val()
+                'searchusr': $('#searchusr').val()
             }
 
-            let result =  AjaxUtil.getSyncData('/api/cost_upload/read', data);
+            let result = AjaxUtil.getSyncData('/api/cost_upload/read', data);
 
-            if(result.success){
+            if (result.success) {
                 console.log(result.data);
                 grid_binding(result.data);
             }
         }
 
-        // function grid_binding(data){
-        //     var inspecDto = data;
-        //     var inspecData = [];
-        //
-        //     for (var i = 0; i < inspecDto.length; i++) {
-        //         inspecData.push({
-        //             rownum: inspecDto[i]["rownum"],
-        //             spworknm: inspecDto[i]["spworknm"],
-        //             spcompnm: inspecDto[i]["spcompnm"],
-        //             spplannm: inspecDto[i]["spplannm"],
-        //             checkdt: inspecDto[i]["checkdt"],
-        //             checkusr: inspecDto[i]["checkusr"],
-        //             checkarea: inspecDto[i]["checkarea"],
-        //             checktmdt: inspecDto[i]["checktmdt"],
-        //
-        //         });
-        //
-        //     }
-        //
-        //     theGrid.columns.clear();
-        //     theGrid.autoGenerateColumns = false;
-        //     viewdata.sourceCollection = inspecData;
-        //
-        //     var cols = new wijmo.grid.Column();
-        //     cols.binding = 'rownum';
-        //     cols.header = '순번';
-        //     cols.align = "center";
-        //     cols.width = 60;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spworknm';
-        //     cols.header = '지역명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spcompnm';
-        //     cols.header = '산단명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spplannm';
-        //     cols.header = '발전소명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkdt';
-        //     cols.header = '등록일자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkusr';
-        //     cols.header = '점검자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkarea';
-        //     cols.header = '점검장소';
-        //     cols.align = "center";
-        //     cols.width = 200;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checktmdt';
-        //     cols.header = '점검시간';
-        //     cols.align = "center";
-        //     cols.width = 260;
-        //     theGrid.columns.push(cols);
-        //
-        //
-        //
-        // }
 
         $(document).ready(function (e) {
 
@@ -668,13 +492,10 @@
             page = new CheckResultDiaryPage();
 
 
+            $('#btnSave').click(function (e) {
 
 
-
-            $('#btnSave').click(function (e){
-
-
-                Alert.confirm('', '저장하시겠습니까?', function() {
+                Alert.confirm('', '저장하시겠습니까?', function () {
 
                         let fileInput = document.getElementById('fileInput1');
                         let files = fileInput.files;
@@ -689,13 +510,12 @@
                         var inputs = document.querySelectorAll('input[name="checkusr"]');
                         var values = [];
 
-                        inputs.forEach(function(input){
+                        inputs.forEach(function (input) {
                             values.push(input.value);
 
                         })
 
                         var checkusrString = values.join(',');
-
 
 
                         // 다른 데이터를 FormData에 추가합니다.
@@ -718,7 +538,7 @@
                             processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
                             contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
                             success: function (response) {
-                                if(response.success){
+                                if (response.success) {
                                     Alert.alert('', response.message);
                                 }
                             },
@@ -729,9 +549,8 @@
 
 
                     },
-                    function () {}
-
-
+                    function () {
+                    }
                 )
             })
 
