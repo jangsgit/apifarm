@@ -28,6 +28,21 @@
         .wj-header {
             text-align: center !important;
         }
+
+        #theGrid1.wj-flexgrid .wj-cell,
+        #theGrid2.wj-flexgrid .wj-cell,
+        #theGrid3.wj-flexgrid .wj-cell,
+        #theGrid4.wj-flexgrid .wj-cell {
+            padding: 12px;
+
+        }
+
+        #theGrid1.wj-flexgrid .downloads,
+        #theGrid2.wj-flexgrid .downloads,
+        #theGrid3.wj-flexgrid .downloads,
+        #theGrid4.wj-flexgrid .downloads {
+            padding-top: 0px;
+        }
     </style>
 </head>
 <th:block layout:fragment="content">
@@ -177,7 +192,7 @@
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 530px"></div>
+                        <div id="theGrid2" style="max-height: 530px"></div>
                     </div>
                 </section>
 
@@ -192,12 +207,10 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="month" id="date1" name="startDate">
-                                            <label for="date1" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="month" id="date2" name="endDate">
-                                            <label for="date2" class="hide">종료일</label>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <!--                                                어떤 연도가 들어올지 모르니까 이건 동적으로 만들기-->
+                                                <option value="뭐야이거지워도되나">2024</option>
+                                            </select>
                                         </li>
                                         <li>
                                             <a class="btn btn-delete" title="검색" id="btn-srch">
@@ -211,21 +224,21 @@
                             </dl>
 
                         </div>
-<!--                        <div class="button-wrap">-->
-<!--                            <ul>-->
-<!--                                <li>-->
-<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
-<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
-<!--                                        엑셀다운로드-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-print" title="보고서 출력" onclick="DownloadDoc()">
+                                        <img src="/images/icon/ico-print.svg" alt="출력 아이콘">
+                                        보고서 출력
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div> <!--//section-top end -->
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 530px"></div>
+                        <div id="theGrid3" style="max-height: 530px"></div>
                     </div>
                 </section>
             </div>
@@ -257,9 +270,9 @@
                 {
                     galoym: '1',
                     energyqty: '발전량(kWh)',
-                    smpamt: '',
+                    imsi: '(A)',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '한전전력판매대금 KPX e-Power Market 통계 데이터',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -268,9 +281,9 @@
                 {
                     galoym: '2',
                     energyqty: 'REC 수량',
-                    smpamt: '',
+                    imsi: '(B)',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '수기 입력',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -278,10 +291,10 @@
                 },
                 {
                     galoym: '3',
-                    energyqty: 'SMP 단가(원/kWh)',
-                    smpamt: '',
+                    energyqty: 'SMP 단가 (원/kWh)',
+                    imsi: 'ⓒ = E / A',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '통계 계산',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -289,10 +302,10 @@
                 },
                 {
                     galoym: '4',
-                    energyqty: 'REC 단가(원/REC)',
-                    smpamt: '',
+                    energyqty: 'REC 단가 (원/REC)',
+                    imsi: '(D) = F / B',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '통계 계산',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -300,10 +313,10 @@
                 },
                 {
                     galoym: '5',
-                    energyqty: 'SMP 매출(백만원)',
-                    smpamt: '',
+                    energyqty: 'SMP 매출 (백만원)',
+                    imsi: '€',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '수기 입력',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -311,10 +324,10 @@
                 },
                 {
                     galoym: '6',
-                    energyqty: 'REC 매출(백만원)',
-                    smpamt: '',
+                    energyqty: 'REC 매출 백만원)',
+                    imsi: '(F)',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '수기 입력',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -323,9 +336,9 @@
                 {
                     galoym: '7',
                     energyqty: '총 발전 매출',
-                    smpamt: '',
+                    imsi: '(G) = E + F',
                     recamt: '',
-                    stotamt: '',
+                    stotamt: '통계 계산',
                     etotamt: '',
                     gainamt: '',
                     ebitaamt: '',
@@ -352,9 +365,9 @@
                 columns: [
                     {binding: 'galoym', header: 'No', width: 140, align: 'center'},
                     {binding: 'energyqty', header: '구분', width: 180, align: 'center'},
-                    {binding: '', header: '', width: 180, align: 'right'},
+                    {binding: 'imsi', header: '', width: 250, align: 'center'},
                     {binding: 'recamt', header: '금액', width: 180, align: 'right'},
-                    {binding: 'stotamt', header: '비고', width: "*", align: 'right'}
+                    {binding: 'stotamt', header: '비고', width: "*", align: 'left'}
 
                 ],
                 // itemsSource: viewdata,
@@ -364,15 +377,313 @@
                 isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
             });
 
-            // Footer 행 추가
-            // theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
-            // theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
-            // theGrid.columnFooters.setCellData(0, 0, '계');
+            // theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2theGrid2
+            // let data2 = [];
+            // 하드코딩된 데이터 (지워)
+            let data3 = [
+                {
+                    galoym: '1',
+                    energyqty: '운영비용',
+                    imsi: 'H = I + J + K + L + M + N + O',
+                    recamt: '',
+                    stotamt: '통계 계산',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2',
+                    energyqty: '연료비',
+                    imsi: 'I',
+                    recamt: '',
+                    stotamt: '도시가스 가스청구서(PDF) 데이터 자동인식',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '3',
+                    energyqty: '감가상각비',
+                    imsi: 'J',
+                    recamt: '',
+                    stotamt: '고정상수',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '4',
+                    energyqty: 'LTSA',
+                    imsi: 'K',
+                    recamt: '',
+                    stotamt: '수기 입력',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '5',
+                    energyqty: '전기안전검사',
+                    imsi: 'L',
+                    recamt: '',
+                    stotamt: '수기 입력',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '6',
+                    energyqty: 'REC 수수료',
+                    imsi: 'M',
+                    recamt: '',
+                    stotamt: '수기 입력',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '7',
+                    energyqty: 'IoT 회선료',
+                    imsi: 'N',
+                    recamt: '',
+                    stotamt: '고정 상수',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '8',
+                    energyqty: 'GIGAeyes',
+                    imsi: 'O',
+                    recamt: '',
+                    stotamt: '고정 상수',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '9',
+                    energyqty: '기타',
+                    imsi: 'P',
+                    recamt: '',
+                    stotamt: '수기 입력',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '10',
+                    energyqty: '영업이익',
+                    imsi: 'Q = G - H',
+                    recamt: '',
+                    stotamt: '통계 계산',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '11',
+                    energyqty: 'EBITDA',
+                    imsi: 'R = Q + J',
+                    recamt: '',
+                    stotamt: '통계 계산',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '12',
+                    energyqty: 'EBITDA Margin',
+                    imsi: 'S = R/G * 100',
+                    recamt: '',
+                    stotamt: '통계 계산',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                }
+            ];
 
+            // $.ajax({
+            //     url: '/api/sales/fetch',
+            //     type: 'GET',
+            //     async: false,
+            //     success: function(data){
+            //         console.log('wijmo', data);
+            //         data2 = data;
+            //     }
+            // })
+
+            // viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 데이터 그리드에 바인딩
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'galoym', header: 'No', width: 140, align: 'center'},
+                    {binding: 'energyqty', header: '구분', width: 180, align: 'center'},
+                    {binding: 'imsi', header: '', width: 250, align: 'center'},
+                    {binding: 'recamt', header: '금액', width: 180, align: 'right'},
+                    {binding: 'stotamt', header: '비고', width: "*", align: 'left'}
+
+                ],
+                // itemsSource: viewdata,
+
+                // 하드코딩해서 임시로 data3
+                itemsSource: data3,
+                isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
+            });
+
+            // theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3theGrid3
+            // let data2 = [];
+            // 하드코딩된 데이터 (지워)
+            let data4 = [
+                {
+                    galoym: '발전량(kWh)',
+                },
+                {
+                    galoym: 'REC 수량',
+                },
+                {
+                    galoym: 'SMP 단가 (원/kWh)',
+                    
+                },
+                {
+                    galoym: 'REC 단가 (원/REC)',
+                    
+                },
+                {
+                    galoym: 'SMP 매출 (백만원)',
+                    
+                },
+                {
+                    galoym: 'REC 매출 (백만원)',
+                    
+                },
+                {
+                    galoym: '총 발전 매출',
+                    
+                },
+                {
+                    galoym: '운영비용',
+                    
+                },
+                {
+                    galoym: '연료비',
+                    
+                },
+                {
+                    galoym: '감가상각비',
+                    
+                },
+                {
+                    galoym: 'LTSA',
+                    
+                },
+                {
+                    galoym: '전기안전검사',
+                    
+                },
+                {
+                    galoym: 'REC 수수료',
+                    
+                },
+                {
+                    galoym: 'IoT 회선료',
+                    
+                },
+                {
+                    galoym: 'GIGAeyes',
+                    
+                },
+                {
+                    galoym: '기타',
+                    
+                },
+                {
+                    galoym: '영업이익',
+                    
+                },
+                {
+                    galoym: 'EBITDA',
+                    
+                },
+                {
+                    galoym: 'EBITDA Margin',
+                    
+                }
+            ];
+
+            // $.ajax({
+            //     url: '/api/sales/fetch',
+            //     type: 'GET',
+            //     async: false,
+            //     success: function(data){
+            //         console.log('wijmo', data);
+            //         data2 = data;
+            //     }
+            // })
+
+            // viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 데이터 그리드에 바인딩
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'galoym', header: '구분', width: 180, align: 'center'},
+                    {binding: 'Jan', header: '1월', width: 100, align: 'center'},
+                    {binding: 'Feb', header: '2월', width: 100, align: 'center'},
+                    {binding: 'Mar', header: '3월', width: 100, align: 'center'},
+                    {binding: 'Apr', header: '4월', width: 100, align: 'center'},
+                    {binding: 'May', header: '5월', width: 100, align: 'center'},
+                    {binding: 'Jun', header: '6월', width: 100, align: 'center'},
+                    {binding: 'Jul', header: '7월', width: 100, align: 'center'},
+                    {binding: 'Aug', header: '8월', width: 100, align: 'center'},
+                    {binding: 'Sep', header: '9월', width: 100, align: 'center'},
+                    {binding: 'Oct', header: '10월', width: 100, align: 'center'},
+                    {binding: 'Nov', header: '11월', width: 100,align: 'center'},
+                    {binding: 'Dec', header: '12월', width: 100, align: 'center'},
+                    {binding: 'Total', header: '계', width: "*", align: 'center'}
+
+                ],
+                // itemsSource: viewdata,
+
+                // 하드코딩해서 임시로 data3
+                itemsSource: data4,
+                isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
+            });
+
+            // theGrid3의 총 발전매출과 EBITA에 색상 고정해놓기
+            theGrid3.formatItem.addHandler(function (s, e) {
+                if (e.panel.cellType == wijmo.grid.CellType.Cell) {
+                    var item = s.rows[e.row].dataItem;
+                    // 특정 행에 색상 적용
+                    if (item.galoym === '총 발전 매출' || item.galoym === 'EBITDA') {
+                        e.cell.style.backgroundColor = '#F5F6FA';  // 연한 파랑색 배경 설정
+                    } else {
+                        e.cell.style.backgroundColor = '';  // 다른 행은 배경색을 흰색(또는 기본값)으로 설정
+                    }
+                }
+            });
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            theGrid3.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
             // // cellClicked 이벤트 핸들러 추가
             // theGrid.cellClicked.addHandler(function(s, e) {
