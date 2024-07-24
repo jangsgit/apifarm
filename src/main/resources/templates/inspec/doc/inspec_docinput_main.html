@@ -87,8 +87,9 @@
                             <dl>
                                 <dt>
                                     <label for="select1">
-                                        문서구분<span class="eq">*</span></dt>
-                                </label>
+                                        문서구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
@@ -408,13 +409,13 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'rownum', header: '순번', width: '*' ,align: 'center'},
-                    { binding: 'standdt', header: '등록일자', width: '*', align: 'center' },
-                    { binding: 'inusernm', header: '등록자', width: '*', align: 'center' },
-                    { binding: 'doctype', header: '문서구분', width: '*', align: 'center' },
-                    { binding: 'title', header: '제목', width: '*', align: 'center' },
-                    { binding: 'fileornm', header: '첨부파일', width: '*', align: 'center', cssClass: 'filename' },
-                    { binding: 'standcontent', header: '비고', width: '*', align: 'center' },
+                    { binding: 'rownum', header: '순번', width: 80,align: 'center'},
+                    { binding: 'standdt', header: '등록일자', width: '*', minWidth: 100, align: 'center' },
+                    { binding: 'inusernm', header: '등록자', width: '*', minWidth: 100, align: 'center' },
+                    { binding: 'doctype', header: '문서구분', width: '*', minWidth: 100, align: 'center' },
+                    { binding: 'title', header: '제목', width: '*', minWidth: 100, align: 'center' },
+                    { binding: 'fileornm', header: '첨부파일', width: '*', minWidth: 100, align: 'center', cssClass: 'filename' },
+                    { binding: 'standcontent', header: '비고', width: '*', minWidth: 100, align: 'center' },
 
                 ],
                 itemsSource: tempData
@@ -430,49 +431,49 @@
 
 
 
-            $('#btnSave').click(function (e){
-
-
-                Alert.confirm('', '저장하시겠습니까?', function() {
-
-                        let fileInput = document.getElementById('fileInput1');
-                        let files = fileInput.files;
-                        let formData = new FormData();
-
-                        for (var i = 0; i < files.length; i++) {
-                            formData.append('filelist', files[i]);
-                        }
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('title', $('#title').val());
-                        formData.append('standdt', $('#standdt').val());
-                        formData.append('docdv', $('#docdv').val());
-                        formData.append('standcontent', $('#standcontent').val());
-                       formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_doc/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if(response.success){
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {}
-
-                )
-            })
+            // $('#btnSave').click(function (e){
+            //
+            //
+            //     Alert.confirm('', '저장하시겠습니까?', function() {
+            //
+            //             let fileInput = document.getElementById('fileInput1');
+            //             let files = fileInput.files;
+            //             let formData = new FormData();
+            //
+            //             for (var i = 0; i < files.length; i++) {
+            //                 formData.append('filelist', files[i]);
+            //             }
+            //
+            //             // 다른 데이터를 FormData에 추가합니다.
+            //             formData.append('title', $('#title').val());
+            //             formData.append('standdt', $('#standdt').val());
+            //             formData.append('docdv', $('#docdv').val());
+            //             formData.append('standcontent', $('#standcontent').val());
+            //            formData.append('_csrf', $('[name=_csrf]').val());
+            //
+            //
+            //             $.ajax({
+            //                 url: '/api/inspec_doc/save',
+            //                 type: 'POST',
+            //                 data: formData,
+            //                 processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+            //                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+            //                 success: function (response) {
+            //                     if(response.success){
+            //                         Alert.alert('', response.message);
+            //                     }
+            //                 },
+            //                 error: function (jqXHR, textStatus, errorThrown) {
+            //                     Alert.alert('', '에러가발생하였습니다.');
+            //                 }
+            //             });
+            //
+            //
+            //         },
+            //         function () {}
+            //
+            //     )
+            // })
 
         });
     </script>

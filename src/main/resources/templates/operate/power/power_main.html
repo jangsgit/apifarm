@@ -372,18 +372,18 @@
                     autoGenerateColumns: false,
                     showMarquee: true,
                     columns: [
-                        {binding: 'rownum', header: '순번', width: 60, align: 'center'},
-                        {binding: 'spworknm', header: '관할산단공', width: 120, align: 'center'},
-                        {binding: 'spcompnm', header: '산단명', width: 140, align: 'center'},
-                        {binding: 'spplannm', header: '발전소', width: 150, align: 'center'},
-                        {binding: 'spwtynm', header: '발전유형', width: 150, align: 'center'},
-                        {binding: 'makernm', header: '제조사', width: 150, align: 'center'},
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center'},
+                        {binding: 'spworknm', header: '관할산단공', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'spcompnm', header: '산단명', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'spplannm', header: '발전소', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'spwtynm', header: '발전유형', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'makernm', header: '제조사', width: '*', minWidth: 100, align: 'center'},
                         {binding: 'workyn', header: '가동유무', width: 120, align: 'center'},
-                        {binding: 'setupdt', header: '설립년월일', width: 120, align: 'center'},
-                        {binding: 'pwcapa', header: '발전용량', width: 140, align: 'center'},
-                        {binding: 'mcltusrnm', header: '관리자', width: 120, align: 'center'},
-                        {binding: 'mcltnm', header: '유지보수사', width: 120, align: 'center'},
-                        {binding: 'remark', header: '비고', width: 250, align: 'center'}
+                        {binding: 'setupdt', header: '설립년월일', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'pwcapa', header: '발전용량', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'mcltusrnm', header: '관리자', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'mcltnm', header: '유지보수사', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'remark', header: '비고', width: '*', minWidth: 100, align: 'center'}
 
                     ],
                     itemsSource: viewdata
@@ -399,79 +399,79 @@
 
         $(document).ready(function (e) {
 
-            $('#btnSave').click(function (e){
-                Alert.confirm('', '저장하시겠습니까?', function() {
-
-                        let formData = new FormData();
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('spworkcd', $('#spworkcd').val());
-                        formData.append('spcompcd', $('#spcompcd').val());
-                        formData.append('spworknm', $('#spworknm').val());
-                        formData.append('spcompnm', $('#spcompnm').val());
-                        formData.append('spplannm', $('#spplannm').val());
-                        formData.append('spwtycd', $('#spwtycd').val());
-                        formData.append('spwtynm', $('#spwtynm').val());
-                        formData.append('makercd', $('#makercd').val());
-                        formData.append('makernm', $('#makernm').val());
-                        formData.append('setupdt', $('#setupdt').val());
-                        formData.append('pwcapa', $('#pwcapa').val());
-                        formData.append('postno', $('#postno').val());
-                        formData.append('address1', $('#address1').val());
-                        formData.append('address2', $('#address2').val());
-                        formData.append('workyn', $('#workyn').val());
-                        formData.append('mcltcd', $('#mcltcd').val());
-                        formData.append('mcltnm', $('#mcltnm').val());
-                        formData.append('mcltusrnm', $('#mcltusrnm').val());
-                        formData.append('mcltusrhp', $('#mcltusrhp').val());
-                        formData.append('remark', $('#remark').val());
-                        formData.append('filelist', $('#filelist').val());
-                        formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/operate/power/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if(response.success){
-                                    Alert.alert('', response.message, function (){
-                                        $('#listTabLink').click();
-                                        fetchListData();
-                                        document.getElementById('spworkcd').value = '';     // 관할산단공 select 초기화
-                                        document.getElementById('spworknm').value = '';     // 관할산단공 hidden input 초기화
-                                        document.getElementById('spcompcd').value = '';     // 산단명 select 초기화
-                                        document.getElementById('spcompnm').value = '';     // 산단명 hidden input 초기화
-                                        document.getElementById('spplannm').value = '';     // 발전소명 초기화
-                                        document.getElementById('spwtycd').value = '';      // 발전유형 select 초기화
-                                        document.getElementById('spwtynm').value = '';      // 발전유형 hidden input 초기화
-                                        document.getElementById('makercd').value = '';      // 제조사 select 초기화
-                                        document.getElementById('makernm').value = '';      // 제조사 hidden input 초기화
-                                        document.getElementById('setupdt').value = '';      // 설립년월일 초기화
-                                        document.getElementById('pwcapa').value = '';       // 발전용량 초기화
-                                        document.getElementById('postno').value = '';       // 주소 우편번호 초기화
-                                        document.getElementById('address1').value = '';     // 주소 시 초기화
-                                        document.getElementById('address2').value = '';     // 주소 구 초기화
-                                        document.getElementById('workyn').value = '';       // 가동유무 초기화
-                                        document.getElementById('mcltcd').value = '';       // 유지보수사 select 초기화
-                                        document.getElementById('mcltnm').value = '';       // 유지보수사 hidden input 초기화
-                                        document.getElementById('mcltusrnm').value = '';    // 관리자 이름 초기화
-                                        document.getElementById('mcltusrhp').value = '';    // 관리자 연락처 초기화
-                                        document.getElementById('remark').value = '';       // 비고 초기화
-                                    });
-                                }else {
-                                    Alert.alert('', '저장에 실패했습니다. ');
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-                    }
-                )
-            })
+            // $('#btnSave').click(function (e){
+            //     Alert.confirm('', '저장하시겠습니까?', function() {
+            //
+            //             let formData = new FormData();
+            //
+            //             // 다른 데이터를 FormData에 추가합니다.
+            //             formData.append('spworkcd', $('#spworkcd').val());
+            //             formData.append('spcompcd', $('#spcompcd').val());
+            //             formData.append('spworknm', $('#spworknm').val());
+            //             formData.append('spcompnm', $('#spcompnm').val());
+            //             formData.append('spplannm', $('#spplannm').val());
+            //             formData.append('spwtycd', $('#spwtycd').val());
+            //             formData.append('spwtynm', $('#spwtynm').val());
+            //             formData.append('makercd', $('#makercd').val());
+            //             formData.append('makernm', $('#makernm').val());
+            //             formData.append('setupdt', $('#setupdt').val());
+            //             formData.append('pwcapa', $('#pwcapa').val());
+            //             formData.append('postno', $('#postno').val());
+            //             formData.append('address1', $('#address1').val());
+            //             formData.append('address2', $('#address2').val());
+            //             formData.append('workyn', $('#workyn').val());
+            //             formData.append('mcltcd', $('#mcltcd').val());
+            //             formData.append('mcltnm', $('#mcltnm').val());
+            //             formData.append('mcltusrnm', $('#mcltusrnm').val());
+            //             formData.append('mcltusrhp', $('#mcltusrhp').val());
+            //             formData.append('remark', $('#remark').val());
+            //             formData.append('filelist', $('#filelist').val());
+            //             formData.append('_csrf', $('[name=_csrf]').val());
+            //
+            //
+            //             $.ajax({
+            //                 url: '/api/operate/power/save',
+            //                 type: 'POST',
+            //                 data: formData,
+            //                 processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+            //                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+            //                 success: function (response) {
+            //                     if(response.success){
+            //                         Alert.alert('', response.message, function (){
+            //                             $('#listTabLink').click();
+            //                             fetchListData();
+            //                             document.getElementById('spworkcd').value = '';     // 관할산단공 select 초기화
+            //                             document.getElementById('spworknm').value = '';     // 관할산단공 hidden input 초기화
+            //                             document.getElementById('spcompcd').value = '';     // 산단명 select 초기화
+            //                             document.getElementById('spcompnm').value = '';     // 산단명 hidden input 초기화
+            //                             document.getElementById('spplannm').value = '';     // 발전소명 초기화
+            //                             document.getElementById('spwtycd').value = '';      // 발전유형 select 초기화
+            //                             document.getElementById('spwtynm').value = '';      // 발전유형 hidden input 초기화
+            //                             document.getElementById('makercd').value = '';      // 제조사 select 초기화
+            //                             document.getElementById('makernm').value = '';      // 제조사 hidden input 초기화
+            //                             document.getElementById('setupdt').value = '';      // 설립년월일 초기화
+            //                             document.getElementById('pwcapa').value = '';       // 발전용량 초기화
+            //                             document.getElementById('postno').value = '';       // 주소 우편번호 초기화
+            //                             document.getElementById('address1').value = '';     // 주소 시 초기화
+            //                             document.getElementById('address2').value = '';     // 주소 구 초기화
+            //                             document.getElementById('workyn').value = '';       // 가동유무 초기화
+            //                             document.getElementById('mcltcd').value = '';       // 유지보수사 select 초기화
+            //                             document.getElementById('mcltnm').value = '';       // 유지보수사 hidden input 초기화
+            //                             document.getElementById('mcltusrnm').value = '';    // 관리자 이름 초기화
+            //                             document.getElementById('mcltusrhp').value = '';    // 관리자 연락처 초기화
+            //                             document.getElementById('remark').value = '';       // 비고 초기화
+            //                         });
+            //                     }else {
+            //                         Alert.alert('', '저장에 실패했습니다. ');
+            //                     }
+            //                 },
+            //                 error: function (jqXHR, textStatus, errorThrown) {
+            //                     Alert.alert('', '에러가발생하였습니다.');
+            //                 }
+            //             });
+            //         }
+            //     )
+            // })
             // 셀렉트값에 따라 id 히든으로 넘기기
             const selects = [
                 { selectId: 'spworkcd', hiddenInputId: 'spworknm' },
