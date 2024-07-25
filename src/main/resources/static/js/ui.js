@@ -136,6 +136,7 @@ $(document).ready(function () {
 let uploadedFiles = [];
 // 삭제할 파일 목록
 let deletedFiles = [];
+const MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 /* 파일업로드 */
 $(document).ready(function () {
 
@@ -174,7 +175,10 @@ $(document).ready(function () {
 
         function handleFileSelect(files) {
             $.each(files, function (index, file) {
-                if (!uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                if (file.size > MAX_FILE_SIZE) {
+                    Alert.alert('', '파일 크기는 1GB를 초과할 수 없습니다.');
+                    resetFileInput($fileInput);
+                } else if(!uploadedFiles.some(f => f.name === file.name && f.size === file.size)) {
                     uploadedFiles.push(file);
                     const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
                     const li = $('<li>').html(`
@@ -187,14 +191,12 @@ $(document).ready(function () {
                 }
             });
             updateFileCount();
-            console.log('추가', uploadedFiles);
         }
 
         $(component).on('click', '.btn-file-delete', function (event) {
             event.preventDefault();
             const li = $(this).closest('li');
             const fileName = li.find('p').text().split(' (')[0];
-            console.log('fileName', fileName);
 
             // 파일 이름과 일치하지 않는 파일들로 필터링하여 uploadedFiles 업데이트
             const removedFile = uploadedFiles.find(file => file.name === fileName);
@@ -207,8 +209,6 @@ $(document).ready(function () {
 
             li.remove();
             updateFileCount();
-            console.log('삭제 - uploadedFiles', uploadedFiles);
-            console.log('삭제 - deletedFiles', deletedFiles);
 
             // 파일 선택 후 파일 입력 요소 초기화
             resetFileInput($fileInput);
@@ -220,7 +220,6 @@ $(document).ready(function () {
             uploadedFiles = [];
             updateFileCount();
             resetFileInput($fileInput);
-            console.log('deleteall', uploadedFiles);
         });
 
         function updateFileCount() {
