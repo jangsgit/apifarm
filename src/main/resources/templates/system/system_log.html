@@ -136,17 +136,13 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid" id="theGridContainer">
+                    <div class="container-fluid" >
+<!--                        id="theGridContainer"-->
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="height: 400px"></div>
-
-                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
-                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;   ">조회된 데이터가 없습니다</div>
+                        <div id="theGrid"></div>
+<!--                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);-->
+<!--                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;   ">조회된 데이터가 없습니다</div>-->
                     </div>
-
-
-
-
                     <div class="btn-wrap">
                     </div>
                 </section>
@@ -196,7 +192,7 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 w150" type="text" id="type" name="type" data-labelCd="LABEL.L0538" data-ori="환경설정 코드"  disabled readonly required  />
+                                    <input class="form-control2 wp100" type="text" id="type" name="type" data-labelCd="LABEL.L0538" data-ori="환경설정 코드"  disabled readonly required  />
                                 </td>
                                 <th>
                                     <label for="checkdt">
@@ -204,7 +200,7 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 w150" type="text" id="source" name="source" data-labelCd="LABEL.L0522" data-ori="코드명" disabled required/>
+                                    <input class="form-control2 wp100" type="text" id="source" name="source" data-labelCd="LABEL.L0522" data-ori="코드명" disabled required/>
                                 </td>
 
                                 <th>
@@ -213,7 +209,7 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 w150" type="text" id="created" name="created" disabled />
+                                    <input class="form-control2 wp100" type="text" id="created" name="created" disabled />
                                 </td>
                             </tr>
                             <tr>
@@ -285,20 +281,29 @@
                 }
             });
 
-            // // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            // if (data2.length === 0) {
-            //     let emptyRowsCount = 8;  // 원하는 빈 행의 수
-            //     for (let i = 0; i < emptyRowsCount; i++) {
-            //         data2.push({});
-            //     }
-            //     console.log('Grid initialized with empty data.');
-            // }
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
 
-            let gridContainer = $('#theGridContainer');
-            let emptyMessage = $('#emptyMessage');
-            $('#theGrid').remove();  // 기존 그리드를 제거합니다.
-            gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
+            // let gridContainer = $('#theGridContainer');
+            // let emptyMessage = $('#emptyMessage');
+            // $('#theGrid').remove();  // 기존 그리드를 제거합니다.
+            // gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
 
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -334,56 +339,20 @@
 
 
             // 데이터 배열이 비어있을 경우 메시지 표시
-            if (data2.length === 0) {
-                emptyMessage.show();
-                console.log('Grid initialized with empty data.');
-            } else {
-                emptyMessage.hide();
-            }
+            // if (data2.length === 0) {
+            //     emptyMessage.show();
+            //     console.log('Grid initialized with empty data.');
+            // } else {
+            //     emptyMessage.hide();
+            // }
 
 
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        <!-- 점검자 추가 버튼 이벤트-->
-        function addInputField(button) {
-            // 새로운 td 요소를 생성합니다.
-            var newTd = document.createElement('div');
-            newTd.className = 'input-btnbox';
 
-            // 새로운 input 요소를 생성합니다.
-            var newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.className = 'wp100';
-            newInput.placeholder = '점검자';
-            newInput.name = 'checkusr'
-            newInput.maxLength = 5;
 
-            // 삭제 버튼을 생성합니다.
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
-                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            };
-            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-            deleteButton.style.color = 'red';
-            deleteButton.style.marginTop = '5px';
-            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-            newTd.appendChild(newInput);
-            newTd.appendChild(deleteButton);
 
-            // 클릭된 버튼의 부모 td 요소를 찾습니다.
-            var parentTd = button.parentElement;
-
-            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        }
-
-        function deleteInputField(inputField) {
-            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-            var tdToDelete = inputField.parentElement;
-            tdToDelete.parentElement.removeChild(tdToDelete);
-        }
 
         <!-- 점검자 추가 버튼 이벤트 끝-->
 

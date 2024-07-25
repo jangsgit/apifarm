@@ -94,6 +94,23 @@
                                     </div>
                                 </dd>
                             </dl>
+<!--                            <dl>-->
+<!--                                <dt>-->
+<!--                                    <label>-->
+<!--                                        확인용-->
+<!--                                    </label>-->
+<!--                                </dt>-->
+<!--                                <dd>-->
+<!--                                    <div>-->
+<!--                                        <input type="hidden" id="emcontno">-->
+<!--                                        <button id="deleteButton">Delete</button>-->
+<!--                                    </div>-->
+<!--                                </dd>-->
+<!--                            </dl>-->
+
+
+
+
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -104,7 +121,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-delete" title="삭제">
+                                    <a  class="btn btn-delete" id="btnDelete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
@@ -126,7 +143,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="height: 400px"></div>
+                        <div id="theGrid"></div>
                     </div>
                 </section>
 
@@ -135,7 +152,7 @@
                 <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="title-wrap">
-                            <h3>비상연락망등록</h3>
+                            <h3>비상연락망 등록</h3>
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -162,7 +179,7 @@
                     </div>
                     <div class="table-wrap">
                         <form id="980_form">
-                            <input type="hidden" id="emcontno" name="emcontno">
+<!--                            <input type="hidden" id="emcontno" name="emcontno">-->
                             <input type="hidden" id="inuserid" name="inuserid">
                             <input type="hidden" id="inusernm" name="inusernm">
                             <table class="write-table">
@@ -195,7 +212,7 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="divinm" name="divinm" class="wp100" maxlength="50">
+                                        <input type="text" id="divinm" name="divinm" class="wp100" maxlength="50" placeholder="유지보수" >
                                     </td>
                                 </tr>
 
@@ -206,7 +223,7 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="emconper" name="emconper" class="wp100" maxlength="50">
+                                        <input type="text" id="emconper" name="emconper" class="wp100" maxlength="50" placeholder="홍길동">
                                     </td>
                                     <th>
                                         <label for="emconmno">
@@ -214,7 +231,7 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="emconmno" name="emconmno" class="wp100" maxlength="50">
+                                        <input type="text" id="emconmno" name="emconmno" class="wp100" maxlength="50" placeholder="010-0000-0000">
                                     </td>
                                 </tr>
 
@@ -227,7 +244,7 @@
                                     </th>
                                     <td>
                                         <input type="text" id="emconemail" name="emconemail" class="wp100"
-                                               maxlength="50">
+                                               maxlength="50" placeholder="admin@naver.com">
                                     </td>
                                     <th>
                                         <label for="emcontel">
@@ -235,7 +252,7 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="emcontel" name="emcontel" class="wp100" maxlength="50">
+                                        <input type="text" id="emcontel" name="emcontel" class="wp100" maxlength="50" placeholder="02-000-0000">
                                     </td>
                                 </tr>
 
@@ -277,15 +294,15 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="taskwork" name="taskwork" class="wp100" maxlength="50">
+                                        <input type="text" id="taskwork" name="taskwork" class="wp100" maxlength="50" placeholder="유지보수">
                                     </td>
                                     <th>
-                                        <label for="indatem">
+                                        <label for="nowDate">
                                             생성일시
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="" name="" autocomplete="off" readonly value="2024.07.04">
+                                        <input type="text" id="nowDate" name="nowDate" autocomplete="off" readonly >
                                     </td>
                                 </tr>
 
@@ -437,24 +454,49 @@
         searchusrval.addEventListener('keyup', event => submitTextarea(event))
         searchusrval2.addEventListener('keyup', event => submitTextarea(event))
 
+        var input = document.getElementById('nowDate');
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        var day = String(today.getDate()).padStart(2, '0');
+        var formattedDate = year + '-' + month + '-' + day;
+        input.value = formattedDate;
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+
             let data2 = [];
             let emconper = $('#emconper').val();
             let emconmno = $('#emconmno').val();
             this.base_url = '/api/system/tel_List';
 
+            // $.ajax({
+            //     url: '/api/system/tel_List/read',
+            //     type: 'GET',
+            //     data: {
+            //         'emconper': emconper,
+            //         'emconmno': emconmno
+            //     },
+            //     async: false,
+            //     success: function (data) {
+            //         console.log('wijmo', data.data);
+            //         data2 = data.data;
+            //     },
+            //     error: function (jqXHR, textStatus, errorThrown) {
+            //         console.error('Error fetching log_list data:', textStatus, errorThrown);
+            //     }
+            // });
+
             $.ajax({
-                url: '/api/system/tel_List/read',
+                url: '/api/system/List/read',
                 type: 'GET',
-                data: {
-                    'emconper': emconper,
-                    'emconmno': emconmno
-                },
+                // data: {
+                //     'emconper': emconper,
+                //     'emconmno': emconmno
+                // },
                 async: false,
                 success: function (data) {
                     console.log('wijmo', data.data);
@@ -464,6 +506,16 @@
                     console.error('Error fetching log_list data:', textStatus, errorThrown);
                 }
             });
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -481,7 +533,7 @@
                     {binding: 'taskwork', header: '담당업무', width: 160, align: 'center'},
                     {binding: 'emcontel', header: '사무실전화', width: 140, align: 'center'},
                     {binding: 'emconmno', header: '모바일', width: 160, align: 'center'},
-                    {binding: 'emconemail', header: '이메일', width: 160, align: 'center'},
+                    {binding: 'emconemail', header: '이메일', width: "*", align: 'center'},
 
                 ],
 
@@ -500,6 +552,36 @@
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+
+            theGrid.setCellData(0,'rownum','1');
+            theGrid.setCellData(0,'workcd','대구');
+            theGrid.setCellData(0,'compcd','성서산단');
+            theGrid.setCellData(0,'emconcomp','성서발전소');
+            theGrid.setCellData(0,'indatem','2024-07-24');
+            theGrid.setCellData(0,'divinm', '유지보수');
+            theGrid.setCellData(0,'emconper','홍길동');
+            theGrid.setCellData(0,'taskwork','유지보수');
+            theGrid.setCellData(0,'emcontel','02-451-3321');
+            theGrid.setCellData(0,'emconmno','010-3256-3241');
+            theGrid.setCellData(0,'emconemail','admin@naver.com');
+
+            theGrid.setCellData(1,'rownum','2');
+            theGrid.setCellData(1,'workcd','대구');
+            theGrid.setCellData(1,'compcd','성서산단');
+            theGrid.setCellData(1,'emconcomp','성서발전소');
+            theGrid.setCellData(1,'indatem','2024-07-25');
+            theGrid.setCellData(1,'divinm', '점검관리');
+            theGrid.setCellData(1,'emconper','홍동');
+            theGrid.setCellData(1,'taskwork','점검관리');
+            theGrid.setCellData(1,'emcontel','02-325-7840');
+            theGrid.setCellData(1,'emconmno','010-3125-7241');
+            theGrid.setCellData(1,'emconemail','admin1@naver.com');
+
+
+
+
+
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -553,25 +635,33 @@
         }
 
 
-        function delTel(){
-            let _this = this;
-
-            let data = {
-
-            }
-            let fnSuccess = function (res){
-
-                if(res.success){
-                    Notify.syccess("삭제되었습니다.");
-
-                    location.reload();
-                }else if(!res.success){
-                    Alert.alert('',res.message);
-                }
-            };
-            AjaxUtil.postAsyncData(_this.base_url+'/delete', data, fnSuccess);
-
-        }
+        // function delTel(){
+        //     let _this = this;
+        //
+        //     let id = $('#emcontno').val();
+        //     console.log("emcontno:", id); // 콘솔에 id 값을 출력
+        //
+        //
+        //     if (!id) {
+        //         console.error("ID is undefined or empty");
+        //         return;
+        //     }
+        //
+        //     let data = { emcontno: id };
+        //
+        //     let fnSuccess = function (res){
+        //
+        //         if(res.success){
+        //             Notify.success("삭제되었습니다.");
+        //
+        //             location.reload();
+        //         }else if(!res.success){
+        //             Alert.alert('',res.message);
+        //         }
+        //     };
+        //     AjaxUtil.postAsyncData(_this.base_url+'/delete', data, fnSuccess);
+        //
+        // }
 
         function grid_binding(data){
             var tb_rp980Dto = data;
@@ -788,6 +878,31 @@
                     }
                 );
             });
+
+            function delTel() {
+                let id = $('#emcontno').val();
+                console.log("emcontno:", id); // 콘솔에 id 값을 출력
+
+                if (!id) {
+                    console.error("ID is undefined or empty");
+                    return;
+                }
+
+                let data = { emcontno: id };
+
+                let fnSuccess = function (res) {
+                    if (res.success) {
+                        Notify.success("삭제되었습니다.");
+                        location.reload();
+                    } else if (!res.success) {
+                        Alert.alert('', res.message);
+                    }
+                };
+
+                AjaxUtil.postAsyncData(this.base_url + '/delete', data, fnSuccess);
+            }
+
+            $('#deleteButton').on('click', delTel);
 
 
             // page.setUploader();

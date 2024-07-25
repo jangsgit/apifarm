@@ -55,7 +55,7 @@
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <form id="searchForm" autocomplete="off">
-                            <div class="search-wrap" style="padding: 0 15px;">
+                            <div class="search-wrap">
                                 <dl>
                                     <dt>
                                         발생일<span class="eq">*</span>
@@ -102,10 +102,10 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid" id="theGridContainer">
                             <p id="selectedItem"></p>
-                            <div id="theGrid" style="height: 400px"></div>
+                            <div id="theGrid"></div>
 
-                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
-                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;">조회된 데이터가 없습니다</div>
+<!--                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);-->
+<!--                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;">조회된 데이터가 없습니다</div>-->
                     </div>
 
 
@@ -162,11 +162,20 @@
                 }
             });
 
-            let gridContainer = $('#theGridContainer');
-            let emptyMessage = $('#emptyMessage');
-            $('#theGrid').remove();  // 기존 그리드를 제거합니다.
-            gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
+            // let gridContainer = $('#theGridContainer');
+            // let emptyMessage = $('#emptyMessage');
+            // $('#theGrid').remove();  // 기존 그리드를 제거합니다.
+            // gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
 
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
 
                 viewdata = new wijmo.collections.CollectionView(data2);
                 // 데이터 그리드에 바인딩
@@ -196,13 +205,13 @@
 
                 theGrid.refresh();
 
-            // 데이터 배열이 비어있을 경우 메시지 표시
-            if (data2.length === 0) {
-                emptyMessage.show();
-                console.log('Grid initialized with empty data.');
-            } else {
-                emptyMessage.hide();
-            }
+            // // 데이터 배열이 비어있을 경우 메시지 표시
+            // if (data2.length === 0) {
+            //     emptyMessage.show();
+            //     console.log('Grid initialized with empty data.');
+            // } else {
+            //     emptyMessage.hide();
+            // }
 
 
         }
