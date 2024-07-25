@@ -88,7 +88,7 @@
                                     </select>
                                 </dd>
                             </dl>
-                            <dl style="margin-left: 40px;">
+                            <dl>
                                 <dt>
                                     <label for="text1">
                                     </label>
@@ -101,31 +101,95 @@
                                 </dd>
                             </dl>
                         </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-save" title="저장">
-                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                        저장
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-
-                        </div>
-                        <div class="col wp40">
-                            <div class="section">
-                                <div class="table-wrap">
-
+                        <div class="wp60 mg-r20" style="width: 60% !important;">
+                            <div class="table-wrap" style="overflow: hidden">
+                                <div style="margin-bottom: 10px">
+                                    <img src="/images/장비이력조회.png" style="width: 100%"/>
+                                </div>
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="theGrid"></div>
                                 </div>
                             </div>
-
-
+                        </div>
+                        <div class="col wp40" style=" width: 40% !important;">
+                            <div style="display: flex">
+                            <div id="box">
+                                <img class="img" src="./img.jpg" alt="">
+                                <h1 class="heading">총운전시간(H)</h1>
+                                <div class="data">
+                                    <span class="user-id">700</span>
+                                </div>
+                                <p class="texts">
+                                    전일대비 1.5% 감소
+                                </p>
+                            </div>
+                            <div id="box">
+                                <img class="img" src="./img.jpg" alt="">
+                                <h1 class="heading">LNG소비비용(천원)</h1>
+                                <div class="data">
+                                    <span class="user-id">1,000</span>
+                                </div>
+                                <p class="texts">
+                                    전일대비 1.5% 감소
+                                </p>
+                            </div>
+                            </div>
+                            <div style="display: flex">
+                                <div id="box">
+                                    <img class="img" src="./img.jpg" alt="">
+                                    <h1 class="heading">발전수익(천원)</h1>
+                                    <div class="data">
+                                        <span class="user-id">1,000</span>
+                                    </div>
+                                    <p class="texts">
+                                        전일대비 1.5% 감소
+                                    </p>
+                                </div>
+                                <div id="box">
+                                    <img class="img" src="./img.jpg" alt="">
+                                    <h1 class="heading">열수익(원)</h1>
+                                    <div class="data">
+                                        <span class="user-id">1,000</span>
+                                    </div>
+                                    <p class="texts">
+                                        전일대비 1.5% 감소
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex">
+                                <div id="box">
+                                    <img class="img" src="./img.jpg" alt="">
+                                    <h1 class="heading">탄소배출권수익(천원)</h1>
+                                    <div class="data">
+                                        <span class="user-id">1,000</span>
+                                    </div>
+                                    <p class="texts">
+                                        전일대비 1.5% 감소
+                                    </p>
+                                </div>
+                                <div id="box">
+                                    <img class="img" src="./img.jpg" alt="">
+                                    <h1 class="heading">예상실수익(원)</h1>
+                                    <div class="data">
+                                        <span class="user-id">1,000</span>
+                                    </div>
+                                    <p class="texts">
+                                        전일대비 1.5% 감소
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!--<div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="width: 1527px"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>-->
                 </section>
                 <!-- Section -->
                 <section class="tab-item" id="tab2">
@@ -215,27 +279,12 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
-            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
-            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
-            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
-            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
-            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
-            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
-            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
-            {
-                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
-                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
-                    wijmo.grid.cellmaker.CellMaker.makeButton({
-                        text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
-                        cssClass: 'fileuploaders',
-                        click: (e, ctx) => {
-                            showPopup(ctx);
-                        }
-                    })
+            { binding: '', header: '발전수익', align: 'center', width: '*' },
+            { binding: '', header: '일수익', align: 'center', width: '*' },
+            { binding: '', header: '탄소배출권수익', align: 'center', width: '*' },
+            { binding: '', header: '전월비교', align: 'center', width: '*' },
+            { binding: '', header: '비고', align: 'center', width: '*' },
 
-
-            }
         ];
 
 
@@ -285,52 +334,6 @@
             }
         }
 
-        let searchusrval = document.getElementById('searchusr');
-        searchusrval.addEventListener('keyup', event => submitTextarea(event))
-
-
-        function closePopup(){
-            /*const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';*/
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
-
-            // 애니메이션을 위한 클래스 제거
-            modal.classList.remove('show');
-            modalContent.classList.remove('show');
-
-            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modalContent.style.display = 'none';
-            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
-        }
-
-        function showPopup(ctx){
-
-            $('#popup-date').val(ctx.item.checkdt);
-            $('#popup-checkusr').val(ctx.item.checkusr);
-            $('#popup-checkarea').val(ctx.item.checkarea);
-            $('#popup-spuncode').val(ctx.item.spuncode);
-
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
-
-            // 모달과 콘텐츠를 표시
-            modal.style.display = 'block';
-            modalContent.style.display = 'block';
-
-            // 애니메이션을 위한 클래스 추가
-            requestAnimationFrame(() => {
-                modal.classList.add('show');
-                modalContent.classList.add('show');
-            });
-
-
-
-        }
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -349,7 +352,13 @@
                 },
                 async: false,
                 success: function(data){
-                    console.log('wijmo', data.data);
+                    console.log('check1',data.data);
+                    let count = 10 - data.data.length
+                    if(data.data.length < 10){
+                        for(let i=0; i < count; i++ ){
+                            data.data.push('example');
+                        }
+                    }
                     data2 = data.data;
                 }
             })
@@ -362,20 +371,7 @@
                 columns: columns,
                 itemsSource: viewdata
             });
-
-
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
-
-                }
-            })
-
-
-
-            // 선택이 변경될 때, 현재 항목 업데이트
-
-            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
@@ -533,29 +529,7 @@
                     fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
                 }
             }
-            fileInput.addEventListener('change', updateFileName);
 
-            // 드래그 앤 드롭 이벤트 핸들러
-            dropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-
-            dropZone.addEventListener('dragleave', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-            });
-
-            dropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-
-                const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput.files = files; // 파일 입력 요소에 파일 설정
-                    updateFileName(); // 파일명 업데이트
-                }
-            });
 
 
             //점검결과 클릭시 텍스트 순환

@@ -1,0 +1,556 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+
+<th:block layout:fragment="content">
+
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>연료전지 운영관리</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>LTSA 보고서</li>
+                <li>연료전지 운영관리</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap" style="margin-bottom: 80px">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="실시간가스 공급유량">실시간가스 공급유량</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="누적 발전량">누적 발전량</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="누적가스 소모량">누적가스 소모량</a>
+                </li>
+                <li>
+                    <a href="#tab9" title="도시가스 공급열량 실적">도시가스 공급열량 실적</a>
+                </li>
+
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide"></label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                    </div> <!--//section-top end -->
+                    <div class="row">
+                        <div class="wp60 mg-r20">
+                            <img src="/images/연료전지.png" style="width: 100%"/>
+                        </div>
+                        <div class="col wp40">
+                            <div class="section">
+                                <div class="table-wrap">
+                                    <div class="container-fluid">
+                                        <p id="selectedItem"></p>
+                                        <div id="theGrid" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide"></label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="row">
+                            <div class="wp60 mg-r20" style="width: 70% !important;">
+                                <img src="/images/연료전지2.png" style="width: 100%"/>
+                            </div>
+                            <div class="col wp40" style="width: 30% !important;">
+                                <div class="section">
+                                    <div class="table-wrap">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid2" ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab3">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide"></label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="row">
+                            <div class="wp60 mg-r20" style="width: 70% !important;">
+                                <img src="/images/연료전지3.png" style="width: 100%"/>
+                                <img src="/images/연료전지4.png" style="width: 100%"/>
+                            </div>
+                            <div class="col wp40" style="width: 30% !important;">
+                                <div class="section">
+                                    <div class="table-wrap">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid3" ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tab-item" id="tab9">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide"></label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="row">
+                            <div class="wp60 mg-r20" style="width: 70% !important;">
+                                <img src="/images/연료전지5.png" style="width: 100%"/>
+
+                            </div>
+                            <div class="col wp40" style="width: 30% !important;">
+                                <div class="section">
+                                    <div class="table-wrap">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid4" class="animated"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;
+        var theGrid2;
+        var theGrid3;
+        var theGrid4;
+
+
+        var viewdata;
+        let selectedFiles = [];
+        let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
+
+        var columns = [
+            { binding: '', header: '일자', align: 'center', width: '*' },
+            { binding: '', header: '시간', align: 'center', width: '*' },
+            { binding: '', header: 'FC #1', align: 'center', width: '*' },
+            { binding: '', header: 'FC #1', align: 'center', width: '*' },
+            { binding: '', header: 'FC #1', align: 'center', width: '*' },
+            { binding: '', header: '계', align: 'center', width: '*' },
+        ];
+
+        var columns2 = [
+            { binding: '', header: '일자', align: 'center', width: '*' },
+            { binding: '', header: '발전량', align: 'center', width: '*' },
+        ];
+        var columns3 = [
+            { binding: '', header: '일자', align: 'center', width: 120 },
+            { binding: '', header: '발전량', align: 'center', width: 120 },
+            { binding: '', header: '블룸검침량', align: 'center', width: '*', minWidth: 120 },
+            { binding: '', header: '청구서', align: 'center', width: '*', minWidth: 120 },
+            { binding: '', header: 'PLC', align: 'center', width: '*', minWidth: 120 },
+        ];
+        var columns4 = [
+            { binding: '월', header: '월', align: 'center', width: 120, allowMerging: true },
+            { binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true  },
+            { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
+            { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
+            /*{ binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
+            { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },*/
+
+        ];
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr,
+
+                },
+                async: false,
+                success: function(data){
+
+                    let DataLength = 10 - data.data.length;
+
+                    if(data.data.length < 10){
+                        console.log('길이2: ', data.data.length)
+                        for(let i=0; i < DataLength; i++){
+                            data.data.push('empty');
+                        }
+                    }
+                    data2 = data.data;
+                    console.log('길이: ', data2.length);
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
+            theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
+            theGrid.columnFooters.setCellData(0, 0, '계');
+            theGrid.rowHeaders.columns.splice(0, 1);
+
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns2,
+                itemsSource: viewdata
+            });
+            theGrid2.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            theGrid2.bottomLeftCells.setCellData(0, 0, 'Σ');
+            theGrid2.columnFooters.setCellData(0, 0, '계');
+            theGrid2.rowHeaders.columns.splice(0, 1);
+
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                itemsSource: viewdata
+            });
+            theGrid3.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            theGrid3.bottomLeftCells.setCellData(0, 0, 'Σ');
+            theGrid3.columnFooters.setCellData(0, 0, '계');
+            theGrid3.rowHeaders.columns.splice(0, 1);
+
+            // 병합된 머리글을 가진 그리드
+                theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                allowMerging: 'ColumnHeaders',
+                alternatingRowStep: 0,
+                autoGenerateColumns: false,
+                columns: [
+                    { binding: '월', header: '월', align: 'center', width: 120, allowMerging: true },
+                    { binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true  },
+                    { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
+                    { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
+                    { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
+                    { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
+
+
+
+                ],
+                itemsSource: getData()
+            });
+            theGrid4.rowHeaders.columns.splice(0, 1);
+            //
+            //여분의 헤더 행 생성
+            var extraRow = new wijmo.grid.Row();
+            extraRow.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel = theGrid4.columnHeaders;
+            panel.rows.splice(0, 0, extraRow);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 2; colIndex <= 3; colIndex++) {
+                panel.setCellData(0, colIndex, 'Amounts');
+            }
+            //
+            // "Country" 및 "Active" 헤더를 수직으로 병합
+            ['월', '도시가스'].forEach(function (binding) {
+                let col = theGrid4.getColumn(binding);
+                col.allowMerging = true;
+                panel.setCellData(0, col.index, col.header);
+            });
+            //
+            // 병합된 헤더 셀의 중심 정렬
+            theGrid4.formatItem.addHandler(function (s, e) {
+                if (e.panel == s.columnHeaders && e.range.rowSpan > 1) {
+                    var html = e.cell.innerHTML;
+                    e.cell.innerHTML = '<div class="v-center">' + html + '</div>';
+                }
+            });
+
+
+
+            //여분의 헤더 행 생성
+            var extraRow2 = new wijmo.grid.Row();
+            extraRow2.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel2 = theGrid4.columnHeaders;
+            panel2.rows.splice(1, 1, extraRow2);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 4; colIndex <= 5; colIndex++) {
+                panel2.setCellData(0, colIndex, '저위발열량');
+            }
+            //
+
+        }
+
+        function getData() {
+            var countries = 'US,Germany,UK,Japan'.split(',');
+            var data = [];
+            for (var i = 0; i < 10; i++) {
+                data.push({
+                    id: i,
+                    country: countries[i % countries.length],
+                    active: i % 5 != 0,
+                    downloads: Math.round(Math.random() * 200000),
+                    sales: Math.random() * 100000,
+                    expenses: Math.random() * 50000
+                });
+            }
+            return data;
+        }
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchusr' : $('#searchusr').val(),
+                'searchfrdate': $('#searchfrdate').val(),
+                'searchtodate': $('#searchtodate').val()
+            }
+
+            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            if(result.success){
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+            var cnt = 1;
+            for (var i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    spuncode: inspecDto[i]["spuncode"],
+                    spworknm: inspecDto[i]["spworknm"],
+                    spcompnm: inspecDto[i]["spcompnm"],
+                    spplannm: inspecDto[i]["spplannm"],
+                    checkdt: inspecDto[i]["checkdt"],
+                    checkusr: inspecDto[i]["checkusr"],
+                    checkarea: inspecDto[i]["checkarea"],
+                    checktmdt: inspecDto[i]["checktmdt"],
+
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+            for (var i = 0; i < columns.length; i++) {
+                var col = new wijmo.grid.Column(columns[i]);
+                theGrid.columns.push(col);
+            }
+
+
+        }
+        function SelectItemPush(){
+
+            let selectedList = [];
+            for(let i = 0; i < SelectItem.length; i++){
+                selectedList.push(SelectItem[i]._data.spuncode);
+            }
+            return selectedList;
+        }
+
+
+
+        $(document).ready(function (e) {
+
+
+        });
+    </script>
+</th:block>
+
+</html>
