@@ -42,19 +42,21 @@
                 </li>
             </ul>
         </div>
-        <div class="tab-wrap">
+        <div class="tab-wrap" id="jqueryTabs">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">리스트</a>
+                    <a href="#tab1" title="목록" class="tab-button">리스트</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">통계</a>
+                    <a href="#tab2" title="등록" id="runrmate" class="tab-button">통계</a>
                 </li>
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
                 <!-- Section -->
 
-                <section class="tab-item" id="tab1">
+
+
+                <section class="tab-item tab-content" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -80,7 +82,7 @@
                                         구분<span class="eq">*</span></label></dt>
 
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="select1323" class="w120">
                                         <option>Fault</option>
                                         <option>Alarm</option>
                                         <option>통신이상</option>
@@ -97,7 +99,7 @@
                                         검색조건<span class="eq">*</span></label></dt>
 
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="select111" class="w120">
                                         <option>일</option>
                                         <option>주</option>
                                         <option>월</option>
@@ -111,7 +113,7 @@
                                         확인여부</label></dt>
 
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="select134" class="w120">
                                         <option>전체</option>
                                         <option>확인</option>
                                         <option>미확인</option>
@@ -120,8 +122,7 @@
                             </dl>
                             <dl style="margin-left: 40px;">
                                 <dt>
-                                    <label for="text1">
-                                    </label>
+
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
@@ -137,11 +138,12 @@
                         <p id="selectedItem"></p>
                         <div id="theGrid"></div>
                     </div>
+
                     <div class="btn-wrap">
                     </div>
                 </section>
 
-                <section class="tab-item" id="tab2">
+                <section class="tab-item tab-content" id="tab2">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -151,11 +153,11 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <input type="date" id="searchfrdate2" name="searchfrdate">
                                             <label for="searchfrdate" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <input type="date" id="searchtodate12" name="searchtodate">
                                             <label for="searchtodate" class="hide">종료일</label>
                                         </li>
                                     </ul>
@@ -167,7 +169,7 @@
                                         구분<span class="eq">*</span></label></dt>
 
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="select13" class="w120">
                                         <option>Fault</option>
                                         <option>Alarm</option>
                                         <option>통신이상</option>
@@ -184,7 +186,7 @@
                                         검색조건<span class="eq">*</span></label></dt>
 
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="select12" class="w120">
                                         <option>일</option>
                                         <option>주</option>
                                         <option>월</option>
@@ -195,28 +197,32 @@
 
                             <dl style="margin-left: 40px;">
                                 <dt>
-                                    <label for="text1">
-                                    </label>
+
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
                                         <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                        <a href="#a" class="btn-srch" id="runf"  title="검색" style="border-radius: 7px;"></a>
                                     </div>
+                                    <!--<div class="button button_top"><a id="test">Column Chart</a></div>-->
                                 </dd>
                             </dl>
                         </div>
 
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20"  style="text-align: center">
-                            <h4>유형별</h4>
-                            <img src="/images/알림이력.png"/>
-                        </div>
-                        <div class="col wp40" style="text-align: center">
-                            <h4>발생빈도별</h4>
-                            <img src="/images/알림이력2.png"/>
-                        </div>
+
+                    <div class="row row-2" style="width: 100%">
+                        <section class="wp48" style="height: 530px">
+                            <!-- 그래프 -->
+                            <div id="chartHolder1" style="width:600px; height:400px;">
+                            </div>
+                        </section>
+                        <section class="wp48" style="height: 530px">
+                            <!--<img src="/images/알림이력2.png" style="width: 100%"/>-->
+                            <div id="chartHolder2" style="width:600px; height:400px;">
+                        </section>
+                    </div>
                     </div>
                 </section>
 
@@ -227,88 +233,7 @@
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
-    <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <table class="write-table">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <input type="hidden" id="popup-spuncode">
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">등록일자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-date" readonly>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popup-checkusr">점검자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">점검장소</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>첨부파일</th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
-                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
-            </div>
-        </div>
-    </div>
+
 
 
 
@@ -322,7 +247,10 @@
     <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
+
     <script type="text/javascript">
+
+
 
         var theGrid;
         var viewdata;
@@ -341,15 +269,6 @@
         ];
 
 
-
-
-        function submitTextarea(event){
-            let key = event.key || event.keyCode;
-
-            if(key === 'Enter' || key == 13){
-                searchData();
-            }
-        }
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -388,243 +307,192 @@
                 itemsSource: viewdata
             });
 
-
-            /*let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
-
-                }
-            })*/
-
-
-
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        <!-- 점검자 추가 버튼 이벤트-->
-        function addInputField(button) {
-            // 새로운 td 요소를 생성합니다.
-            var newTd = document.createElement('div');
-            newTd.className = 'input-btnbox';
-
-            // 새로운 input 요소를 생성합니다.
-            var newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.className = 'wp100';
-            newInput.placeholder = '점검자';
-            newInput.name = 'checkusr'
-            newInput.maxLength = 5;
-
-            // 삭제 버튼을 생성합니다.
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
-                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            };
-            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-            deleteButton.style.color = 'red';
-            deleteButton.style.marginTop = '5px';
-            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-            newTd.appendChild(newInput);
-            newTd.appendChild(deleteButton);
-
-            // 클릭된 버튼의 부모 td 요소를 찾습니다.
-            var parentTd = button.parentElement;
-
-            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        }
-
-        function deleteInputField(inputField) {
-            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-            var tdToDelete = inputField.parentElement;
-            tdToDelete.parentElement.removeChild(tdToDelete);
-        }
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
-        let filelist = [];
 
 
-        //검색
-        function searchData(){
-            let data = {
-                'searchusr' : $('#searchusr').val(),
-                'searchfrdate': $('#searchfrdate').val(),
-                'searchtodate': $('#searchtodate').val()
-            }
 
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+        $(document).ready(function() {
 
-            if(result.success){
-                console.log(result.data);
-                grid_binding(result.data);
-            }
-        }
+                let LoadingCheck = false;
+            $('#runrmate').click(function() {
 
-        function grid_binding(data){
-            var inspecDto = data;
-            var inspecData = [];
-            var cnt = 1;
-            for (let i = 0; i < inspecDto.length; i++) {
-                inspecData.push({
-                    spuncode: inspecDto[i]["spuncode"],
-                    spworknm: inspecDto[i]["spworknm"],
-                    spcompnm: inspecDto[i]["spcompnm"],
-                    spplannm: inspecDto[i]["spplannm"],
-                    checkdt: inspecDto[i]["checkdt"],
-                    checkusr: inspecDto[i]["checkusr"],
-                    checkarea: inspecDto[i]["checkarea"],
-                    checktmdt: inspecDto[i]["checktmdt"],
+                if(LoadingCheck === false){
+                setTimeout(function() {
+                    //$('#runf').trigger('click');
+                    let con = "chart1"
+                    rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con2 = "chart2"
+                    rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars2, "120%", "120%");
 
-                });
-                cnt++;
-            }
+                    LoadingCheck = true;
+                }, 100); // 3000ms = 3초
+                }
+            });
 
-            theGrid.columns.clear();
-            theGrid.autoGenerateColumns = false;
-            viewdata.sourceCollection = inspecData;
-
-            for (var i = 0; i < columns.length; i++) {
-                var col = new wijmo.grid.Column(columns[i]);
-                theGrid.columns.push(col);
-            }
+            // Show the first tab by default
 
 
-        }
-
-
-        $(document).ready(function (e) {
-
-
-            // 저장 시작
-            $('#btnSave').click(function (e) {
-
-
-                Alert.confirm('', '저장하시겠습니까?', function () {
-
-                        let formData = new FormData();
-
-                        // 점검항목 값 가져오기
-                        const table = document.querySelector('table.doc-table');
-                        const rows = table.querySelectorAll('tbody tr');
-                        let results = [];
-                        let currentDivision = '';
-
-                        rows.forEach(row => {
-                            let cells = row.querySelectorAll('td');
-
-                            // Check if the first cell has rowspan attribute, indicating a new division
-                            if (cells[0].hasAttribute('rowspan')) {
-                                currentDivision = cells[0].innerText.trim();
-                            } else {
-                                cells = Array.from(cells);
-                                cells.unshift(document.createElement('td')); // Insert a placeholder cell
-                            }
-
-                            const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
-                            const inspectionResult = cells[2].innerText.trim();
-                            const improvement = cells[3].querySelector('textarea').value.trim();
-
-                            const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
-
-                            formData.append('doc-list', combinedText);
-
-                            results.push(combinedText);
-                        });
-                        // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
-
-                        for (let i = 0; i < uploadedFiles.length; i++) {
-                            formData.append('filelist', uploadedFiles[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('randomuuid', randomString);
-                        //formData.append('_csrf', $('[name=_csrf]').val());
-                        formData.append('_csrf', csrfToken);
-                        formData.append('ReformList', $('#inspecreform1').val());
-                        formData.append('ReformList', $('#inspecreform2').val());
-                        formData.append('ReformList', $('#inspecreform3').val());
-                        formData.append('ReformList', $('#inspecreform4').val());
-                        formData.append('ReformList', $('#inspecreform5').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
-                    }
-                )
+            $("#test").click(function(event){
+                let con = "chart2"
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "120%", "120%");
             })
-
-
-            //삭제
-            $('#btnDelete').click(function (e) {
-
-                let delList = [];
-
-                delList = SelectItemPush();
-
-
-                Alert.confirm('', '삭제하시겠습니까?', function () {
-
-                    let data = {
-                        'spuncode': JSON.stringify(delList),
-                        '_csrf': csrfToken
-                    }
-
-                    let fnSuccess = function (res) {
-                        if (res.success) {
-                            Alert.alert('', '삭제되었습니다.');
-                            searchData();
-                        }
-                    }
-
-                    AjaxUtil.postAsyncData('/api/inspec_report/delete', data, fnSuccess);
-
-
-                })
-            })
-
-
         });
+
+
+        let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+        let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler2";
+
+        function chartReadyHandler2(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData2);
+
+            //document.getElementById(id).resize();
+        }
+        function chartReadyHandler(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData);
+
+            document.getElementById(id).resize();
+        }
+
+
+        var layoutStr1 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="유형별"/>'
+            +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<Column2DChart seriesMouseOverAction="series" showDataTips="true" columnWidthRatio="0.4" paddingBottom="25">'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis maximum="100" interval="10"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            /*
+            type 속성을 stacked로 변경
+            type속성으로는
+            clustered : 일반적인 다중데이터(차트의 멀티시리즈)방식으로 데이터를 표현합니다.(Default)
+            stacked : 데이터를 위에 쌓아 올린 방식으로 표현 합니다.
+            overlaid : 수치 데이터 값을 겹쳐서 표현 합니다. 주로 목표 위치와 현재 위치를 나타낼 때 많이 쓰입니다.
+            100% : 차트의 수치 데이터를 퍼센티지로 계산 후 값을 퍼센티지로 나타냅니다.
+            */
+            +'<Column2DSet type="stacked" showTotalLabel="true" totalLabelJsFunction="totalFunc" paddingBottom="9" labelYOffset="-5">'
+            +'<series>'
+            +'<Column2DSeries yField="tv" displayName="TV" lineToEachItems="true" showLinkLabels="true">'
+            /* lineToEachItems : True로 설정 하면 Series간에 선을 이어준다 */
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="tablet" displayName="Tablet" lineToEachItems="true" showLinkLabels="true" fill="#01dbab">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="phone" displayName="Cell Phone" lineToEachItems="true" showLinkLabels="true" fill="#7d88ff">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'</series>'
+            +'</Column2DSet>'
+            +'</series>'
+            +'</Column2DChart>'
+            +'</rMateChart>';
+
+
+        var layoutStr2 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" paddingBottom="20">'
+            +'<Options>'
+            +'<Caption text="발생빈도별"/>'
+            +'<SubCaption text="August 2018" paddingBottom="90"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<CurrencyFormatter id="numFmt" currencySymbol="%" alignSymbol="right"/>'
+            /*
+            Pie3D 차트 생성시에 필요한 Pie3DChart 정의합니다
+            showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다.
+            */
+            +'<Pie3DChart showDataTips="true" depth="50" elevation="50" paddingBottom="35">'
+            +'<series>'
+            +'<Pie3DSeries nameField="browser" field="share" labelPosition="inside" color="#ffffff" startAngle="240" itemRollOverEmphasize="true">'
+            /* Pie3DChart 정의 후 Pie3DSeries labelPosition="inside"정의합니다 */
+            +'<showDataEffect>'
+            /* 차트 생성시에 Effect를 주고 싶을 때 shoDataEffect정의합니다 */
+            +'<SeriesInterpolate duration="1000"/>'
+            /*
+            SeriesInterpolate 효과는 시리즈 데이터가 데이터로 표시될 때 데이터의 변화된 내용을 가지고 효과를 적용합니다
+            - 공통 -
+            elementOffset : effect를 지연시키는 시간을 지정합니다 default:20
+            minimumElementDuration : 각 엘리먼트의 최소 지속 시간을 설정합니다 default:0
+                         이 값보다 짧은 시간에 effect가 실행되지 않습니다
+            offset : effect개시의 지연시간을 설정합니다 default:0
+            perElementOffset : 각 엘리먼트의 개시 지연시간을 설정합니다
+            */
+            +'</showDataEffect>'
+            +'</Pie3DSeries>'
+            +'</series>'
+            +'</Pie3DChart>'
+            +'</rMateChart>';
+
+        var layoutStr3 =
+            '<rMateChart backgroundColor="#FFFFFF"  borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="Rainfall" />'
+            +'<SubCaption text="( mm )" textAlign="right" />'
+            +'</Options>'
+            +'<Pie2DChart showDataTips="true" padding="20">'
+            +'<series>'
+            +'<Pie2DSeries field="Vancouver" nameField="Month" labelPosition="inside" color="#FFFFFF">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Pie2DSeries>'
+            +'</series>'
+            +'</Pie2DChart>'
+            +'</rMateChart>';
+
+        var chartData =
+            [{"Month":"Jan", "phone":12, "tv":11, "tablet":12},
+                {"Month":"Feb", "phone":14, "tv":19, "tablet":17},
+                {"Month":"Mar", "phone":23, "tv":25, "tablet":20},
+                {"Month":"Apr", "phone":20, "tv":20, "tablet":18},
+                {"Month":"May", "phone":35, "tv":25, "tablet":25},
+                {"Month":"Jun", "phone":20, "tv":22, "tablet":23},
+                {"Month":"Jul", "phone":17, "tv":20, "tablet":17},
+                {"Month":"Aug", "phone":23, "tv":21, "tablet":21},
+                {"Month":"Sep", "phone":18, "tv":17, "tablet":10}];
+
+        var chartData2 =
+            [{"browser":"Chrome", "share":68},
+                {"browser":"Internet Explorer", "share":12},
+                {"browser":"Firefox", "share":11},
+                {"browser":"Safari", "share":6},
+                {"browser":"Opera", "share":3}];
+
+        function totalFunc(index, data, value){
+            if(index == 4)
+                return insertComma(value);
+            return "";
+        }
+
+        //숫자에 천단위 콤마 찍어 반환하는 함수.
+        function insertComma(n) {
+            var reg = /(^[+-]?\d+)(\d{3})/; // 정규식
+            n += "";
+            while (reg.test(n))
+                n = n.replace(reg, '$1' + "," + '$2');
+            return n;
+        }
+
     </script>
 </th:block>
 
