@@ -9,7 +9,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>티켓 등록</h2>
+                <h2>티켓 현황</h2>
                 <a href="#" title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -17,7 +17,7 @@
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>운영 관리</li>
-                <li>티켓 등록</li>
+                <li>티켓 현황</li>
             </ul>
         </div>
         <!-- Select -->
@@ -44,14 +44,6 @@
             </ul>
         </div>
         <div class="tab-wrap">
-            <ul class="tab-links">
-                <li>
-                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
-                </li>
-                <li>
-                    <a href="#tab2" title="등록">등록</a>
-                </li>
-            </ul>
             <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
@@ -59,7 +51,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    등록일자<span class="eq">*</span>
+                                    발행일시<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -108,216 +100,12 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
-                    </div>
-                </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
-                    <div class="section-top">
-                        <div class="title-wrap">
-                            <h3>티켓 등록</h3>
-                        </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="신규등록">
-                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                        신규등록
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-delete" title="삭제">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                        삭제
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-edit" id="btnSave" title="저장">
-                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                        저장
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="table-wrap">
-                        <table class="write-table">
-                            <form id="customForm">
-                                <caption>티켓 테이블</caption>
-                                <colgroup>
-                                    <col class="wp12">
-                                    <col class="wp25">
-                                    <col class="wp12">
-                                    <col class="wp55">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th>
-                                        <label for="requester">
-                                            Requester
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="requester" name="requester">
-                                    </td>
-                                    <th>
-                                        <label for="tketnm">
-                                            티켓명
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketnm" name="tketnm" style="width: 100%">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tketcrdtm">
-                                            발생일자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="date" id="tketcrdtm" name="tketcrdtm">
-                                    </td>
-                                    <th>
-                                        <label for="tketflag">
-                                            상태
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <select id="tketflag" name="tketflag">
-                                            <option value="1">오류</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th style="margin-bottom: 20px;">
-                                        <label for="requesterhp">
-                                            연락처
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="requesterhp" name="requesterhp">
-                                    </td>
-                                    <th rowspan="5">
-                                        <label for="tketrem">
-                                            내용
-                                        </label>
-                                    </th>
-                                    <td rowspan="5">
-                                        <div class="textarea-box">
-                                            <textarea id="tketrem" placeholder="내용" style="height: 220px"></textarea>
-                                            <p class="text-count" id="text-count">0/100</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="empty-cell" colspan="2" style="height: 30px"></td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="inusernm">
-                                            담당자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="inusernm" name="inusernm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tkettypenm">
-                                            요청유형
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tkettypenm" name="tkettypenm">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tketrcpnm">
-                                            수신회사
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketrcpnm" name="tketrcpnm">
-                                        <input type="hidden" id="tketrcpcd" name="tketrcpcd">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="tketrusernm">
-                                            수신자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="tketrusernm" name="tketrusernm">
-                                        <input type="hidden" id="tketruserid" name="tketruserid">
-                                    </td>
-                                    <th rowspan="2">
-                                        <label for="tketactrem">
-                                            조치
-                                        </label>
-                                    </th>
-                                    <td rowspan="2">
-                                        <div class="textarea-box">
-                                            <textarea id="tketactrem" placeholder="조치내용"
-                                                      style="height: 170px"></textarea>
-                                            <p class="text-count" id="text-count1">0/100</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="remark">
-                                            비고
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <div class="textarea-box">
-                                            <textarea id="remark"></textarea>
-                                            <p class="text-count" id="text-count2">0/100</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        첨부파일
-                                    </th>
-                                    <td colspan="3">
-                                        <div id="uploadComponent1" class="upload-component">
-                                            <div class="upload-filebox">
-                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a class="btn" title="파일업로드">파일업로드</a>
-                                                <input type="file" id="fileInput1" class="fileInput" multiple>
-                                                <p>Maximun upload file size <span>1GiB</span></p>
-                                            </div>
-                                            <div class="upload-filelist">
-                                                <div class="title">
-                                                    <h5>Files (0)</h5>
-                                                    <a title="Delete all" class="btn-file-deleteall">Delete
-                                                        all</a>
-                                                </div>
-                                                <ul class="filelist" id="filelist">
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </form>
-                        </table>
+                        <div id="theGrid" style="max-height:530px"></div>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-    <footer>
-        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
-    </footer>
-    </div> <!-- //dashboard-layout-right end-->
-
-    </div> <!-- //dashboard-layout-contents end-->
 
 </th:block>
 
@@ -373,15 +161,14 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'rownum', header: '순번', width: 80, align: 'center'},
-                        {binding: 'tketcrdtm', header: '발생일자', width: '*', minWidth: 100, align: 'center'},
-                        {binding: 'tketnm', header: 'Ticket명', width: '*', minWidth: 100, align: 'center'},
-                        {binding: 'tkettypenm', header: '유형', width: '*', minWidth: 100, align: 'center'},
-                        {binding: 'tketrusernm', header: '수신자명', width: '*', minWidth: 100, align: 'center'},
-                        {binding: 'tketflag', header: '상태', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketcrdtm', header: '발행일시', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketnm', header: '행위', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tkettypenm', header: '행위자', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketrusernm', header: '소속팀', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketflag', header: '수신회사', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketactrem', header: '수신자', width: '*', minWidth: 100, align: 'center'},
                         {binding: 'tketactrem', header: '조치', width: '*', minWidth: 100, align: 'center'},
-                        {
-                            header: '파일', binding: 'downloads', width: '*', minWidth: 100, align: 'center', cssClass: 'filedown',
-                        },
+                        {binding: 'tketactrem', header: '상태', width: '*', minWidth: 100, align: 'center'},
                         {binding: 'remark', header: '비고', width: '*', minWidth: 100, align: 'center'}
                     ],
                     itemsSource: tempData

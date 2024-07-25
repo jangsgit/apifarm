@@ -9,7 +9,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>티켓 통계</h2>
+                <h2>티켓 이력</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -17,7 +17,7 @@
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>티켓 관리</li>
-                <li>티켓 통계</li>
+                <li>티켓 이력</li>
             </ul>
         </div>
         <!-- Select -->
@@ -91,36 +91,42 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketstate" name="ticketstate">
+                                            <select id="ticketstate" name="ticketcategory">
                                                 <option value="전체">전체</option>
                                             </select>
-                                        </li>
-                                        <li>
-                                            <div style="margin-left: -20px" class="srch-box">
-                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
-                                            </div>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchrequester">
+                                        요청자<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchrequester" name="searchrequester"
+                                               class="input-srch">
+                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                    </div>
+                                </dd>
+                            </dl>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="row row-2">
-                        <section class="wp48" style="height: 530px">
-                            <!-- 그래프 -->
-                            <div id="chartHolder" style="width:600px; height:400px;">
+                    <div class="container-fluid" >
+                        <div>
+                            <div id="chartHolder" style="width:600px; height:400px; margin-left: 20px">
                             </div>
-                        </section>
-                        <section class="wp48" style="height: 530px">
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid" style="max-height: 485px"></div>
-                            </div>
-                        </section>
+                        </div>
+                        <div>
+                            <p id="selectedItem"></p>
+                            <div id="theGrid" style="max-height:300px"></div>
+                        </div>
                     </div>
-                </section>
-            </div> <!--//tab-contens end-->
-        </div> <!--//tab-wrap end-->
+            </section>
+        </div> <!--//tab-contens end-->
+    </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
     <footer>
         <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
@@ -137,49 +143,92 @@
     <script type="text/javascript">
 
         // -----------------------차트 설정 시작-----------------------
-        rMateChartH5.create("chart1", "chartHolder", "", "120%", "120%");
+
+        // rMateChart 를 생성합니다.
+        // 파라메터 (순서대로)
+        //  1. 차트의 id ( 임의로 지정하십시오. )
+        //  2. 차트가 위치할 div 의 id (즉, 차트의 부모 div 의 id 입니다.)
+        //  3. 차트 생성 시 필요한 환경 변수들의 묶음인 chartVars
+        //  4. 차트의 가로 사이즈 (생략 가능, 생략 시 100%)
+        //  5. 차트의 세로 사이즈 (생략 가능, 생략 시 100%)
+        rMateChartH5.create("chart1", "chartHolder", "", "250%", "100%");
+
+        var today = "2032/2/16";
 
         // 스트링 형식으로 레이아웃 정의.
         var layoutStr =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" paddingBottom="20">'
-            +'<Options>'
-            +'<SubCaption paddingBottom="60"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            +'</Options>'
-            +'<CurrencyFormatter id="numFmt" currencySymbol="%" alignSymbol="right"/>'
-            /*
-            Pie3D 차트 생성시에 필요한 Pie3DChart 정의합니다
-            showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다.
-            */
-            +'<Pie3DChart showDataTips="true" depth="50" elevation="50" paddingBottom="35">'
-            +'<series>'
-            +'<Pie3DSeries nameField="browser" field="share" labelPosition="inside" color="#ffffff" startAngle="240" itemRollOverEmphasize="true">'
-            /* Pie3DChart 정의 후 Pie3DSeries labelPosition="inside"정의합니다 */
-            +'<showDataEffect>'
-            /* 차트 생성시에 Effect를 주고 싶을 때 shoDataEffect정의합니다 */
-            +'<SeriesInterpolate duration="1000"/>'
-            /*
-            SeriesInterpolate 효과는 시리즈 데이터가 데이터로 표시될 때 데이터의 변화된 내용을 가지고 효과를 적용합니다
-            - 공통 -
-            elementOffset : effect를 지연시키는 시간을 지정합니다 default:20
-            minimumElementDuration : 각 엘리먼트의 최소 지속 시간을 설정합니다 default:0
-                         이 값보다 짧은 시간에 effect가 실행되지 않습니다
-            offset : effect개시의 지연시간을 설정합니다 default:0
-            perElementOffset : 각 엘리먼트의 개시 지연시간을 설정합니다
-            */
-            +'</showDataEffect>'
-            +'</Pie3DSeries>'
-            +'</series>'
-            +'</Pie3DChart>'
-            +'</rMateChart>';
+            '<rMateChart >'
+            + '<DateFormatter id="dateFmt" formatString="M월"/>'
+            + '<Bar3DChart showDataTips="true">'
+            + '<verticalAxis>'
+            + '<CategoryAxis id="vAxis" categoryField="cat"/>'
+            + '</verticalAxis>'
+            + '<horizontalAxis>'
+            + '<DateTimeAxis displayLocalTime="true" id="hAxis" labelUnits="months" minimum="2032/01/01" maximum="2032/12/31"/>'
+            + '</horizontalAxis>'
+            + '<series>'
+            + '<Bar3DSeries minField="date1" xField="date2" labelPosition="inside" insideLabelField="cat" color="#ffffff" insideLabelYOffset="-2">'
+            + '<showDataEffect>'
+            + '<SeriesSlide direction="right" duration="1000"/>'
+            + '</showDataEffect>'
+            + '</Bar3DSeries>'
+            + '</series>'
+            + '<verticalAxisRenderers>'
+            + '<Axis3DEdgeRenderer axis="{vAxis}" showOuterStroke="false">'
+            + '<axisStroke>'
+            + '<Stroke color="#bbbbbbb"/>'
+            + '</axisStroke>'
+            + '</Axis3DEdgeRenderer>'
+            + '</verticalAxisRenderers>'
+            + '<horizontalAxisRenderers>'
+            + '<Axis3DEdgeRenderer axis="{hAxis}" showOuterStroke="false" formatter="{dateFmt}">'
+            + '<axisStroke>'
+            + '<Stroke color="#bbbbbbb"/>'
+            + '</axisStroke>'
+            + '</Axis3DEdgeRenderer>'
+            + '</horizontalAxisRenderers>'
+            + '<backgroundElements>'
+            + '<GridLines direction="vertical" showBorderStroke="false"/>'
+            + '</backgroundElements>'
+            + '</Bar3DChart>'
+            + '</rMateChart>';
 
         // 차트 데이터
-        var chartData =
-            [{"browser":"Chrome", "share":68},
-                {"browser":"Internet Explorer", "share":12},
-                {"browser":"Firefox", "share":11},
-                {"browser":"Safari", "share":6},
-                {"browser":"Opera", "share":3}];
+        var chartData = [
+            {
+                "cat": "A 티켓",
+                "date1": "2032/01/21",
+                "date2": "2032/03/15"
+            }, {
+                "cat": "B 티켓",
+                "date1": "2032/01/01",
+                "date2": "2032/02/15"
+            }, {
+                "cat": "C 티켓",
+                "date1": "2032/04/01",
+                "date2": "2032/06/30"
+            }, {
+                "cat": "D 티켓",
+                "date1": "2032/02/01",
+                "date2": "2032/04/30"
+            }, {
+                "cat": "E 티켓",
+                "date1": "2032/06/01",
+                "date2": "2032/09/30"
+            }, {
+                "cat": "F 티켓",
+                "date1": "2032/02/01",
+                "date2": "2032/07/15"
+            }, {
+                "cat": "G 티켓",
+                "date1": "2032/09/01",
+                "date2": "2032/10/30"
+            }, {
+                "cat": "H 티켓",
+                "date1": "2032/10/15",
+                "date2": "2032/11/30"
+            }
+        ];
 
         // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
         //
@@ -190,8 +239,8 @@
         // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
         // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
         rMateChartH5.calls("chart1", {
-            "setLayout" : layoutStr,
-            "setData" : chartData
+            "setLayout": layoutStr,
+            "setData": chartData
         });
 
         /**
@@ -223,7 +272,7 @@
          *
          * default : 테마를 적용하기 전 기본 형태를 출력합니다.
          */
-        function rMateChartH5ChangeTheme(theme){
+        function rMateChartH5ChangeTheme(theme) {
             document.getElementById("chart1").setTheme(theme);
         }
 
@@ -280,9 +329,12 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'inpledt', header: '발생일자',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '유형', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '상태',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'tketcrdtm', header: '발생일자', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketnm', header: '티켓유형', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tkettypenm', header: '제목', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketrusernm', header: '요청자', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketflag', header: '내용', width: '*', minWidth: 100, align: 'center'},
+                        {binding: 'tketactrem', header: '비고', width: '*', minWidth: 100, align: 'center'},
                     ],
                     itemsSource: tempData
                 });

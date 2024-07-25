@@ -246,7 +246,6 @@ public class ElecSafeController {
                 TBRP760.setFileurl(saveFilePath);
                 TBRP760.setFileornm(fileName);
                 TBRP760.setFilesize(fileSize);
-                TBRP760.setFilerem("N");
                 TBRP760.setIndatem(now);
                 TBRP760.setInusernm(user.getUsername());
                 TBRP760.setInuserid(String.valueOf(user.getId()));
