@@ -10,7 +10,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>순회 점검 통계</h2>
+                <h2>순회점검 통계</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -45,7 +45,7 @@
         <div class="tab-wrap" style="margin-bottom: 80px">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="예상총수익">예상총수익</a>
+                    <a href="#tab1" title="순회점검 통계">순회점검 통계</a>
                 </li>
 
             </ul>
@@ -87,7 +87,7 @@
                                     </select>
                                 </dd>
                             </dl>
-                            <dl style="margin-left: 40px;">
+                            <dl>
                                 <dt>
                                     <label for="text1">
                                     </label>
@@ -100,7 +100,7 @@
                                 </dd>
                             </dl>
                         </div>
-                        <div class="button-wrap">
+                        <!--<div class="button-wrap">
                             <ul>
                                 <li>
                                     <a class="btn btn-save" title="저장">
@@ -109,20 +109,21 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-
+                        <div class="wp60 mg-r20" style="border: 1px solid black; width: 80% !important; height: 523px;">
+                            <img src="/images/순회점검통계그래프2.png"/>
                         </div>
-                        <div class="col wp40">
+                        <div class="col wp40" style="width: 20% !important;">
                             <div class="section">
                                 <div class="table-wrap">
-
+                                    <div class="container-fluid">
+                                        <p id="selectedItem"></p>
+                                        <div id="theGrid" style="height: 523px"></div>
+                                    </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </section>
@@ -153,27 +154,9 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
-            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
-            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
-            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
-            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
-            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
-            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
-            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
-            {
-                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
-                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
-                    wijmo.grid.cellmaker.CellMaker.makeButton({
-                        text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
-                        cssClass: 'fileuploaders',
-                        click: (e, ctx) => {
-                            showPopup(ctx);
-                        }
-                    })
+            { binding: 'date', header: '일자', width: '*', minWidth: 140 },
+            { binding: 'baljun', header: '2024', width: '*', minWidth: 140 },
 
-
-            }
         ];
 
 
@@ -223,8 +206,7 @@
             }
         }
 
-        let searchusrval = document.getElementById('searchusr');
-        searchusrval.addEventListener('keyup', event => submitTextarea(event))
+
 
 
         function closePopup(){
@@ -278,19 +260,49 @@
             let data2 = [];
             let searchusr = $('#searchusr').val();
 
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : searchusr,
-
-                },
-                async: false,
-                success: function(data){
-                    console.log('wijmo', data.data);
-                    data2 = data.data;
-                }
+            data2.push({
+                date: '24.01',
+                baljun: '661'
             })
+
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+            data2.push({
+                date: '24.01',
+                baljun: '661'
+            })
+
+
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -301,13 +313,12 @@
                 itemsSource: viewdata
             });
 
+            theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
+            theGrid.columnFooters.setCellData(0, 0, '계');
+            theGrid.rowHeaders.columns.splice(0, 1);
 
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
 
-                }
-            })
 
 
 
@@ -462,38 +473,6 @@
             const fileInput = document.getElementById('fileInput2');
             const fileNameDisplay = document.getElementById('fileNameDisplay');
             const dropZone = document.getElementById('dropZone');
-
-            function updateFileName(){
-                const files = fileInput.files;
-                if(files.length > 0){
-                    fileNameDisplay.textContent = files[0].name;
-                }else {
-                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
-                }
-            }
-            fileInput.addEventListener('change', updateFileName);
-
-            // 드래그 앤 드롭 이벤트 핸들러
-            dropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-
-            dropZone.addEventListener('dragleave', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-            });
-
-            dropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-
-                const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput.files = files; // 파일 입력 요소에 파일 설정
-                    updateFileName(); // 파일명 업데이트
-                }
-            });
 
 
             //점검결과 클릭시 텍스트 순환
