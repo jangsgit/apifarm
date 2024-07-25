@@ -4,6 +4,7 @@ package mes.app.actas_inspec;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.util.StringUtils;
+import mes.app.actas_inspec.service.FileUploaderService;
 import mes.app.actas_inspec.service.InspecService;
 import mes.app.common.service.FileService;
 import mes.config.Settings;
@@ -23,32 +24,23 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
 import org.docx4j.Docx4J;
 import org.docx4j.convert.out.FOSettings;
-import org.docx4j.convert.out.pdf.PdfConversion;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -65,10 +57,16 @@ public class InspecController {
     @Autowired
     AttachFileRepository attachFileRepository;
 
+    @Autowired
+    FileUploaderService FileService;
+
+
     private final InspecService inspecService;
     private final Settings settings;
     private final TB_RP710Repository tb_rp710Repository;
     private final TB_INSPECRepository tB_INSPECRepository;
+    @Autowired
+    private FileUploaderService fileUploaderService;
 
 
     public InspecController(InspecService inspecService, TB_RP710Repository tb_rp710Repository, Settings settings,
@@ -193,17 +191,41 @@ public class InspecController {
     @PostMapping("/filesave")
     public AjaxResult fileupload(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("spuncode") String spuncode){
+            @RequestParam("spuncode") String spuncode) throws IOException {
+
         AjaxResult result = new AjaxResult();
 
+        String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
+
+        Map<String, Object> fileinform = FileService.saveFiles(file, path);
+
+        inspecService.TB_RP715_Save(spuncode, fileinform, "Y");
 
         result.success = true;
-
+        result.message = "저장하였습니다.";
 
         return result;
     }
 
+    @PostMapping("/FileDownload")
+    public ResponseEntity<Resource> downloadFile(@RequestBody Map<String, String> request){
+
+        String spuncode = request.get("spuncode");
+
+
+        Optional<String> tb_rp715 = tb_rp715Repository.findByFilesvnm(spuncode);
+
+        if(!tb_rp715.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
+
+        String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일/";
+        String fileName = tb_rp715.get();
+
+        return fileUploaderService.downloadFile(fileName, path);
+    }
 
     @PostMapping("/delete")
     @Transactional
@@ -407,26 +429,57 @@ public class InspecController {
             }
 
             ByteArrayOutputStream documentOutputStream = new ByteArrayOutputStream();
-            document.write(documentOutputStream);
-            document.close();
-            fis.close();
+            //DOCX 파일의 내용을 메모리에 저장하기 위해 사용되는 출력 스트림
 
-            byte[] documentBytes = documentOutputStream.toByteArray();
+            document.write(documentOutputStream); //객체(docx)를 documentOutputStream에 씁니다., XWPFDocument 객체의 내용을 ByteArrayOutputStream에 저장합니다.
+            document.close(); //XWPFDocument 객체를 닫습니다.
+            fis.close();  //FileInputStream 객체를 닫습니다. 이는 파일 입력 스트림을 닫아 리소스를 해제합니다.
+
+            byte[] documentBytes = documentOutputStream.toByteArray(); //documentOutputStream에 저장된 데이터를 바이트 배열로 변환합니다. 이제 DOCX 파일의 내용이 바이트 배열 documentBytes에 저장됩니다.
+
+            //documentBytes를 입력 스트림으로 변환하여 docInputStream을 생성합니다. 이를 통해 메모리에 저장된 DOCX 파일을 다시 읽을 수 있습니다.
             ByteArrayInputStream docInputStream = new ByteArrayInputStream(documentBytes);
 
-            // DOCX 파일을 PDF로 변환
+
+            //docInputStream을 사용하여 WordprocessingMLPackage 객체를 로드합니다. WordprocessingMLPackage는 docx4j 라이브러리의 주요 객체로, DOCX 파일을 나타냅니다.
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(docInputStream);
+
+            //FOSettings 객체를 생성합니다. 이는 PDF 변환 설정을 구성하는 데 사용됩니다.
             FOSettings foSettings = Docx4J.createFOSettings();
+
+            //FOSettings 객체에 WordprocessingMLPackage 객체를 설정합니다. 이를 통해 변환할 DOCX 파일을 지정합니다.
             foSettings.setWmlPackage(wordMLPackage);
+
+            //PDF 데이터를 저장하기 위해 pdfOutputStream을 생성합니다.
             ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
+
+            //Docx4J를 사용하여 DOCX 파일을 PDF로 변환, 변환된 PDF 데이터는 pdfOutputStream에 저장
+            //FOSettings 객체와 출력 스트림을 인자로 받아 변환을 수행
+            //Docx4J.FLAG_EXPORT_PREFER_XSL 플래그는 XSLT 기반의 변환 방식을 사용하도록 지정
             Docx4J.toFO(foSettings, pdfOutputStream, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
+
+            //pdfOutputStream에 저장된 데이터를 바이트 배열로 변환합니다. 이제 PDF 파일의 내용이 바이트 배열 pdfBytes에 저장
             byte[] pdfBytes = pdfOutputStream.toByteArray();
             String pdfName = "modified_document_" + (i + 1) + ".pdf";
 
             zos.putNextEntry(new ZipEntry(pdfName));
             zos.write(pdfBytes);
             zos.closeEntry();
+
+
+            /*이거는 pdf로 변환안하고 docx로 내보냄
+            ByteArrayOutputStream documentOutputStream = new ByteArrayOutputStream();
+            document.write(documentOutputStream);
+            document.close();
+            fis.close();
+
+            byte[] documentBytes = documentOutputStream.toByteArray();
+            String documentName = "modified_document_" + (i + 1) + ".docx";
+
+            zos.putNextEntry(new ZipEntry(documentName));
+            zos.write(documentBytes);
+            zos.closeEntry();*/
         }
 
         zos.close();

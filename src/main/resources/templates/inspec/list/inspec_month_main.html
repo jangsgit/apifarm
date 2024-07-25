@@ -136,7 +136,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="width: 1527px"></div>
+                        <div id="theGrid"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
@@ -366,17 +366,17 @@
                                         <div class="upload-filebox">
                                             <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                             <a class="btn" title="파일업로드">파일업로드</a>
-                                            <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
+                                            <input type="file" id="fileInput1" class="fileInput" multiple>
                                             <p>Maximun upload file size <span>1GiB</span></p>
                                         </div>
                                         <div class="upload-filelist">
                                             <div class="title">
                                                 <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete
+                                                    all</a>
                                             </div>
-                                            <ul class="filelist">
+                                            <ul class="filelist" id="filelist">
                                             </ul>
-
                                         </div>
                                     </div>
                                 </td>
@@ -444,19 +444,11 @@
                             <th>첨부파일</th>
                             <td>
                                 <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
+                                    <div class="upload-filebox" id="dropZone">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
+                                        <input type="file" id="fileInput2" name="filelist2"  class="fileInput2">
+                                        <p id="fileNameDisplay">Maximun upload file size 1GiB</p>
                                     </div>
                                 </div>
                             </td>
@@ -493,17 +485,30 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
-            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
-            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
-            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
-            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
-            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
-            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
-            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
-            {
-                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
-                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
+            { binding: 'spworknm', header: '지역명', align: 'center', width: '0.5*', minWidth: 140 },
+            { binding: 'spcompnm', header: '산단명', align: 'center', width: '0.5*', minWidth: 140 },
+            { binding: 'spplannm', header: '발전소명', align: 'center', width: '*', minWidth: 140 },
+            { binding: 'checkdt', header: '등록일자', align: 'center', width: '*', minWidth: 130 },
+            { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 130 },
+            { binding: 'checkarea', header: '점검장소', align: 'center', width: '*', minWidth: 200 },
+            { binding: 'checktmdt', header: '점검시간', align: 'center', width: '*', minWidth: 250 },
+            { binding: 'downloads', header: '다운로드', align: 'center', width: '*', minWidth: 200 },
+            { binding: 'upload', header: '점검일지 업로드', align: 'center', width: '*', minWidth: 140 },
+            { binding: 'filesvnm', header: '대표파일명', align: 'center', width: '*', minWidth: 140 },
+            /*{ binding: 'downloads', header: '다운로드', align: 'center', width: '*', minWidth: 200,
+                cellTemplate: /!*'<a title="다운로드" class="btn-filedown">다운로드</a>'*!/
+                    wijmo.grid.cellmaker.CellMaker.makeButton({
+                        text: '<a title="다운로드" class="btn-filedown">다운로드</a>',
+                        cssClass: 'fileuploaders',
+                        click: (e, ctx) => {
+
+                            FileDownload(ctx);
+                        },
+                    })
+            },*/
+            /*{
+                header: '점검일지 업로드', binding: 'upload', width: '*', minWidth: 140, align: 'center',
+                cellTemplate: /!*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*!/
                     wijmo.grid.cellmaker.CellMaker.makeButton({
                         text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
                         cssClass: 'fileuploaders',
@@ -513,7 +518,7 @@
                     })
 
 
-            }
+            }*/
         ];
 
 
@@ -523,7 +528,7 @@
             let file = document.getElementById('fileInput2');
             let formData = new FormData();
 
-            console.log('file2', file.files);
+            console.log('file123', file.files);
 
             if(file.files.length === 0){
                 Alert.alert('', '파일을 첨부해주세요.');
@@ -553,14 +558,6 @@
         }
 
 
-
-        function test(files){
-            console.log('파일테스트', files);
-            const fileList = document.getElementById('upload-filelist');
-            for(let i=0; i < files.length; i++){
-                selectedFiles.push(files[i]);
-            }
-        }
 
 
         function submitTextarea(event){
@@ -594,12 +591,20 @@
             }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
-        function showPopup(ctx){
+        function showPopup(rowIndex){
 
-            $('#popup-date').val(ctx.item.checkdt);
-            $('#popup-checkusr').val(ctx.item.checkusr);
-            $('#popup-checkarea').val(ctx.item.checkarea);
-            $('#popup-spuncode').val(ctx.item.spuncode);
+            let item = theGrid.rows[rowIndex].dataItem;
+            let fileNameDisplay = document.getElementById('fileNameDisplay');
+
+
+
+
+            $('#popup-date').val(item.checkdt);
+            $('#popup-checkusr').val(item.checkusr);
+            $('#popup-checkarea').val(item.checkarea);
+            $('#popup-spuncode').val(item.spuncode);
+
+
 
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');
@@ -616,6 +621,49 @@
 
 
 
+        }
+
+        function FileDownload(rowIndex){
+            //let spuncode = { spuncode: ctx.item.spuncode };
+
+            var item = theGrid.rows[rowIndex].dataItem;
+            // 다운로드 로직 처리
+            console.log("Downloading file for item: ", item.spuncode);
+
+            let spuncode = { spuncode: item.spuncode }
+
+            fetch('/api/inspec_report/FileDownload', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(spuncode)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if(response.status === 404){
+                            throw new Error('첨부된 파일이 없습니다.');
+                        }else {
+                            throw new Error('Network Error.');
+                        }
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'modified_documents.pdf'; // 다운로드 받을 zip 파일 이름
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert(error.message);
+                });
         }
 
         document.readyState === 'complete' ? init() : window.onload = init;
@@ -635,8 +683,17 @@
                 },
                 async: false,
                 success: function(data){
-                    console.log('wijmo', data.data);
+
+                    let DataLength = 10 - data.data.length;
+
+                    if(data.data.length < 10){
+                        console.log('길이2: ', data.data.length)
+                        for(let i=0; i < DataLength; i++){
+                            data.data.push('empty');
+                        }
+                    }
                     data2 = data.data;
+                    console.log('길이: ', data2.length);
                 }
             })
 
@@ -646,9 +703,33 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
-                itemsSource: viewdata
+                itemsSource: viewdata,
+                formatItem: function(s, e) {
+                    if (e.panel.cellType === wijmo.grid.CellType.Cell) {
+                        var col = s.columns[e.col];
+                        var item = s.rows[e.row].dataItem;
+                        if (col.binding === 'downloads') {
+                            if (item && item.downloads) {
+                                e.cell.innerHTML = '<a class="btn-filedown" onclick="FileDownload(' + e.row + ')">다운로드</a>';
+                            } else {
+                                e.cell.innerHTML = ''; // 다운로드 버튼이 표시되지 않도록 빈 문자열 설정
+                            }
+                        }else if(col.binding === 'upload') {
+                            if (item && item.upload) {
+                                e.cell.innerHTML = '<button type="button" class="wj-cell-maker fileuploaders"><a title="업로드" class="btn btn-popup-open" onclick="showPopup(' + e.row + ')" data-popup="popup1">업로드</a></button>';
+                            } else {
+                                e.cell.innerHTML = ''; // 다운로드 버튼이 표시되지 않도록 빈 문자열 설정
+                            }
+                        }
+                    }
+                }
             });
 
+            /*theGrid.formatItem.addHandler(function (s, e) {
+                console.log("s: ", s)
+
+                /!*if(s._rows)*!/
+            })*/
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
@@ -710,6 +791,7 @@
         let filelist = [];
 
 
+
         //검색
         function searchData(){
             let data = {
@@ -730,7 +812,7 @@
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
-            for (var i = 0; i < inspecDto.length; i++) {
+            for (let i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
                     spuncode: inspecDto[i]["spuncode"],
                     spworknm: inspecDto[i]["spworknm"],
@@ -740,6 +822,9 @@
                     checkusr: inspecDto[i]["checkusr"],
                     checkarea: inspecDto[i]["checkarea"],
                     checktmdt: inspecDto[i]["checktmdt"],
+                    downloads: inspecDto[i]["downloads"],
+                    upload:    inspecDto[i]["upload"],
+                    filesvnm:  inspecDto[i]["filesvnm"]
 
                 });
                 cnt++;
@@ -748,6 +833,7 @@
             theGrid.columns.clear();
             theGrid.autoGenerateColumns = false;
             viewdata.sourceCollection = inspecData;
+
 
             for (var i = 0; i < columns.length; i++) {
                 var col = new wijmo.grid.Column(columns[i]);
@@ -803,7 +889,46 @@
                 });
         }
 
+
         $(document).ready(function (e) {
+
+            const fileInput = document.getElementById('fileInput2');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const dropZone = document.getElementById('dropZone');
+
+            function updateFileName(){
+                const files = fileInput.files;
+                if(files.length > 0){
+                    fileNameDisplay.textContent = files[0].name;
+                }else {
+                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
+
+                }
+            }
+            fileInput.addEventListener('change', updateFileName);
+
+            // 드래그 앤 드롭 이벤트 핸들러
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files; // 파일 입력 요소에 파일 설정
+                    updateFileName(); // 파일명 업데이트
+                }
+            });
+
 
             //점검결과 클릭시 텍스트 순환
             $('.checkbox-cell').click(function() {
@@ -814,6 +939,7 @@
                     span.text('X');
                 }
             });
+
 
 
             // 저장 시작

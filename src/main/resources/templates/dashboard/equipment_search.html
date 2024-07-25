@@ -10,7 +10,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>알림이력</h2>
+                <h2>장비이력조회</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -19,7 +19,7 @@
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>모니터링</li>
                 <li>종합관제</li>
-                <li>장비알림이력</li>
+                <li>장비이력조회</li>
             </ul>
         </div>
         <!-- Select -->
@@ -45,11 +45,18 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">리스트</a>
+                    <a href="#tab1" title="목록">가스소비량</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">통계</a>
+                    <a href="#tab2" title="등록">전기생산량</a>
                 </li>
+                <li>
+                    <a href="#tab2" title="등록">열공급량</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">효율</a>
+                </li>
+
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
                 <!-- Section -->
@@ -124,12 +131,28 @@
                         </div>
 
                     </div> <!--//section-top end -->
-                    <div class="container-fluid">
+                    <div class="row">
+                        <div class="wp60 mg-r20" style="width: 80% !important;">
+                            <div class="table-wrap">
+                                <div style="border: 1px solid black; text-align: center">
+                                        그래프영역
+                                </div>
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="theGrid"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col wp40" style="border: 1px solid black; text-align: center">
+                                카드 영역
+                        </div>
+                    </div>
+                    <!--<div class="container-fluid">
                         <p id="selectedItem"></p>
                         <div id="theGrid" style="width: 1527px"></div>
                     </div>
                     <div class="btn-wrap">
-                    </div>
+                    </div>-->
                 </section>
                 <!-- Section -->
                 <section class="tab-item" id="tab2">
@@ -155,17 +178,11 @@
                             <dl>
                                 <dt>
                                     <label for="select1">
-                                        구분<span class="eq">*</span></label></dt>
+                                        단위<span class="eq">*</span></label></dt>
 
                                 <dd>
                                     <select id="select1" class="w120">
-                                        <option>Fault</option>
-                                        <option>Alarm</option>
-                                        <option>통신이상</option>
-                                        <option>가스누출</option>
-                                        <option>연료전지 고온</option>
-                                        <option>계통연계</option>
-
+                                        <option>Nm3</option>
                                     </select>
                                 </dd>
                             </dl>
@@ -183,7 +200,163 @@
                                     </select>
                                 </dd>
                             </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        표출조건</label></dt>
 
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>5분</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl style="margin-left: 40px;">
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div> <!-- section-top end -->
+                    <div style="background: red"></div>
+                </section>
+
+                <section class="tab-item" id="tab3">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        단위<span class="eq">*</span></label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>Nm3</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        검색조건<span class="eq">*</span></label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>일</option>
+                                        <option>주</option>
+                                        <option>월</option>
+                                        <option>년</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        표출조건</label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>5분</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl style="margin-left: 40px;">
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div> <!-- section-top end -->
+                    <div style="background: red"></div>
+                </section>
+
+                <section class="tab-item" id="tab4">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        단위<span class="eq">*</span></label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>Nm3</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        검색조건<span class="eq">*</span></label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>일</option>
+                                        <option>주</option>
+                                        <option>월</option>
+                                        <option>년</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        표출조건</label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>5분</option>
+                                    </select>
+                                </dd>
+                            </dl>
                             <dl style="margin-left: 40px;">
                                 <dt>
                                     <label for="text1">
@@ -204,88 +377,7 @@
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
-    <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <table class="write-table">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <input type="hidden" id="popup-spuncode">
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">등록일자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-date" readonly>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popup-checkusr">점검자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">점검장소</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>첨부파일</th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
-                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
-            </div>
-        </div>
-    </div>
+
 
 
 
@@ -308,13 +400,11 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '발생일시', align: 'center', width: 220 },
-            { binding: '', header: '장비', align: 'center', width: 210 },
-            { binding: '', header: '이벤트내용', align: 'center', width: 320 },
-            { binding: '', header: '조치일시', align: 'center', width: 210 },
-            { binding: '', header: '조치자', align: 'center', width: 210 },
-            { binding: '', header: '조치내용', align: 'center', width: 210 },
-            { binding: '', header: '확인', align: 'center', width: 95 },
+            { binding: '', header: '기간', align: 'center', width: '*' },
+            { binding: '', header: '가스소비량', align: 'center', width: '*' },
+            { binding: '', header: '가스사용비', align: 'center', width: '*' },
+            { binding: '', header: '외기온도', align: 'center', width: '*' },
+
         ];
 
 

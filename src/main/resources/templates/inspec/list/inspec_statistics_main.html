@@ -10,16 +10,16 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>알림이력</h2>
+                <h2>순회 점검 통계</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>모니터링</li>
-                <li>종합관제</li>
-                <li>장비알림이력</li>
+                <li>점검관리</li>
+                <li>순회점검 관리</li>
+                <li>순회점검 통계</li>
             </ul>
         </div>
         <!-- Select -->
@@ -42,34 +42,33 @@
                 </li>
             </ul>
         </div>
-        <div class="tab-wrap">
+        <div class="tab-wrap" style="margin-bottom: 80px">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">리스트</a>
+                    <a href="#tab1" title="예상총수익">예상총수익</a>
                 </li>
-                <li>
-                    <a href="#tab2" title="등록">통계</a>
-                </li>
-            </ul>
-            <div class="tab-contents" style="margin-bottom: 70px">
-                <!-- Section -->
 
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    조회기간<span class="eq">*</span>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
-                                        <li>
+                                        <li style="cursor: default; list-style-image: none;">
                                             <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
+                                            <label for="searchfrdate" class="hide"></label>
                                         </li>
-                                        <li>
+                                        <li style="cursor: default; list-style-image: none;">
                                             <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
+                                            <label for="searchtodate" class="hide"></label>
                                         </li>
                                     </ul>
                                 </dd>
@@ -77,44 +76,14 @@
                             <dl>
                                 <dt>
                                     <label for="select1">
-                                        구분<span class="eq">*</span></label></dt>
+                                        기간<span class="eq">*</span></label></dt>
 
                                 <dd>
                                     <select id="select1" class="w120">
-                                        <option>Fault</option>
-                                        <option>Alarm</option>
-                                        <option>통신이상</option>
-                                        <option>가스누출</option>
-                                        <option>연료전지 고온</option>
-                                        <option>계통연계</option>
-
-                                    </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select1" class="w120">
-                                        <option>일</option>
-                                        <option>주</option>
-                                        <option>월</option>
-                                        <option>년</option>
-                                    </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        확인여부</label></dt>
-
-                                <dd>
-                                    <select id="select1" class="w120">
-                                        <option>전체</option>
-                                        <option>확인</option>
-                                        <option>미확인</option>
+                                        <option>월별</option>
+                                        <option>분기별</option>
+                                        <option>일별</option>
+                                        <option>년별</option>
                                     </select>
                                 </dd>
                             </dl>
@@ -131,179 +100,42 @@
                                 </dd>
                             </dl>
                         </div>
-
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-save" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="width: 1527px"></div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
+                    <div class="row">
+                        <div class="wp60 mg-r20">
 
-                <section class="tab-item" id="tab2">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select1" class="w120">
-                                        <option>Fault</option>
-                                        <option>Alarm</option>
-                                        <option>통신이상</option>
-                                        <option>가스누출</option>
-                                        <option>연료전지 고온</option>
-                                        <option>계통연계</option>
-
-                                    </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select1" class="w120">
-                                        <option>일</option>
-                                        <option>주</option>
-                                        <option>월</option>
-                                        <option>년</option>
-                                    </select>
-                                </dd>
-                            </dl>
-
-                            <dl style="margin-left: 40px;">
-                                <dt>
-                                    <label for="text1">
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
                         </div>
-                    </div> <!-- section-top end -->
-                    <div style="background: red"></div>
-                </section>
+                        <div class="col wp40">
+                            <div class="section">
+                                <div class="table-wrap">
 
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
 
                 <!-- Section -->
+
 
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
     <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <table class="write-table">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <input type="hidden" id="popup-spuncode">
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">등록일자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-date" readonly>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popup-checkusr">점검자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">점검장소</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>첨부파일</th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
-                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -321,14 +153,64 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '발생일시', align: 'center', width: 220 },
-            { binding: '', header: '장비', align: 'center', width: 210 },
-            { binding: '', header: '이벤트내용', align: 'center', width: 320 },
-            { binding: '', header: '조치일시', align: 'center', width: 210 },
-            { binding: '', header: '조치자', align: 'center', width: 210 },
-            { binding: '', header: '조치내용', align: 'center', width: 210 },
-            { binding: '', header: '확인', align: 'center', width: 150 },
+            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
+            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
+            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
+            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
+            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
+            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
+            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
+            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
+            {
+                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
+                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
+                    wijmo.grid.cellmaker.CellMaker.makeButton({
+                        text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
+                        cssClass: 'fileuploaders',
+                        click: (e, ctx) => {
+                            showPopup(ctx);
+                        }
+                    })
+
+
+            }
         ];
+
+
+
+        /**점검일지 업로드(파일만 전송)**/
+        function saveFile(){
+            let file = document.getElementById('fileInput2');
+            let formData = new FormData();
+
+            console.log('file123', file.files);
+
+            if(file.files.length === 0){
+                Alert.alert('', '파일을 첨부해주세요.');
+                return false;
+            }
+
+            formData.append('file', file.files[0]);
+            //formData.append('_csrf', $('[name=_csrf]').val());
+            formData.append('_csrf', csrfToken);
+            formData.append('spuncode', $('#popup-spuncode').val());
+
+            $.ajax({
+                url: '/api/inspec_report/filesave',
+                type: 'POST',
+                data: formData,
+                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
+                }
+            });
+        }
 
 
 
@@ -339,6 +221,53 @@
             if(key === 'Enter' || key == 13){
                 searchData();
             }
+        }
+
+        let searchusrval = document.getElementById('searchusr');
+        searchusrval.addEventListener('keyup', event => submitTextarea(event))
+
+
+        function closePopup(){
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup(ctx){
+
+            $('#popup-date').val(ctx.item.checkdt);
+            $('#popup-checkusr').val(ctx.item.checkusr);
+            $('#popup-checkarea').val(ctx.item.checkarea);
+            $('#popup-spuncode').val(ctx.item.spuncode);
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+
+
         }
 
         document.readyState === 'complete' ? init() : window.onload = init;
@@ -353,18 +282,12 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : 'infinited',
+                    'searchusr' : searchusr,
 
                 },
                 async: false,
                 success: function(data){
-                    console.log('check1',data.data);
-                    if(data.data.length === 0){
-                        for(let i=0; i < 10; i++ ){
-                            data.data.push('example');
-                        }
-                    }
-                    console.log(data.data);
+                    console.log('wijmo', data.data);
                     data2 = data.data;
                 }
             })
@@ -379,18 +302,18 @@
             });
 
 
-            /*let selector = new wijmo.grid.selector.Selector(theGrid, {
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
                     SelectItem = theGrid.rows.filter(r => r.isSelected);
 
                 }
-            })*/
+            })
 
 
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
@@ -439,6 +362,7 @@
         let filelist = [];
 
 
+
         //검색
         function searchData(){
             let data = {
@@ -459,7 +383,7 @@
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
-            for (let i = 0; i < inspecDto.length; i++) {
+            for (var i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
                     spuncode: inspecDto[i]["spuncode"],
                     spworknm: inspecDto[i]["spworknm"],
@@ -485,16 +409,110 @@
 
 
         }
+        function SelectItemPush(){
+
+            let selectedList = [];
+            for(let i = 0; i < SelectItem.length; i++){
+                selectedList.push(SelectItem[i]._data.spuncode);
+            }
+            return selectedList;
+        }
+
+        function DownloadDoc() {
+
+            let selectedList = SelectItemPush();
+
+
+            console.log('selected', selectedList);
+
+            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
+            fetch('/api/inspec_report/download-docs', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert("File download failed!");
+                });
+        }
 
 
         $(document).ready(function (e) {
 
+            const fileInput = document.getElementById('fileInput2');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const dropZone = document.getElementById('dropZone');
+
+            function updateFileName(){
+                const files = fileInput.files;
+                if(files.length > 0){
+                    fileNameDisplay.textContent = files[0].name;
+                }else {
+                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
+                }
+            }
+            fileInput.addEventListener('change', updateFileName);
+
+            // 드래그 앤 드롭 이벤트 핸들러
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files; // 파일 입력 요소에 파일 설정
+                    updateFileName(); // 파일명 업데이트
+                }
+            });
+
+
+            //점검결과 클릭시 텍스트 순환
+            $('.checkbox-cell').click(function() {
+                const span = $(this).find('span');
+                if (span.text() === 'X') {
+                    span.text('O');
+                } else if (span.text() === 'O') {
+                    span.text('X');
+                }
+            });
+
+
 
             // 저장 시작
-            $('#btnSave').click(function (e) {
+            $('#btnSave').click(function (e){
 
 
-                Alert.confirm('', '저장하시겠습니까?', function () {
+                Alert.confirm('', '저장하시겠습니까?', function() {
 
                         let formData = new FormData();
 
@@ -520,7 +538,7 @@
                             const improvement = cells[3].querySelector('textarea').value.trim();
 
                             const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
-
+                            console.log('combinedText: ', combinedText);
                             formData.append('doc-list', combinedText);
 
                             results.push(combinedText);
@@ -592,7 +610,7 @@
 
                 delList = SelectItemPush();
 
-
+                console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function () {
 
                     let data = {

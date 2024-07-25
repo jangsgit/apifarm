@@ -10,16 +10,15 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>사용자 권한 신청 조회</h2>
+                <h2>예상 수익 분석</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>시스템설정</li>
-                <li>사용자정보</li>
-                <li>사용자 권한 신청 조회</li>
+                <li>LTSA 보고서</li>
+                <li>LTSA 보고서 등록</li>
             </ul>
         </div>
         <!-- Select -->
@@ -42,33 +41,35 @@
                 </li>
             </ul>
         </div>
-        <div class="tab-wrap">
+        <div class="tab-wrap" style="margin-bottom: 80px">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">목록</a>
+                    <a href="#tab1" title="예상총수익">예상총수익</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">승인</a>
+                    <a href="#tab2" title="예상실수익">예상실수익</a>
                 </li>
             </ul>
-            <div class="tab-contents" style="margin-bottom: 70px">
+            <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    신청기간<span class="eq">*</span>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
-                                        <li>
+                                        <li style="cursor: default; list-style-image: none;">
                                             <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
+                                            <label for="searchfrdate" class="hide"></label>
                                         </li>
-                                        <li>
+                                        <li style="cursor: default; list-style-image: none;">
                                             <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
+                                            <label for="searchtodate" class="hide"></label>
                                         </li>
                                     </ul>
                                 </dd>
@@ -76,31 +77,15 @@
                             <dl>
                                 <dt>
                                     <label for="select1">
-                                        승인여부</label></dt>
+                                        검색조건<span class="eq">*</span></label></dt>
 
                                 <dd>
                                     <select id="select1" class="w120">
-                                        <option>전체</option>
-                                        <option>승인</option>
-                                        <option>미승인</option>
+                                        <option>일</option>
+                                        <option>주</option>
+                                        <option>월</option>
+                                        <option>년</option>
                                     </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        사용자명</label></dt>
-
-                                <dd>
-                                    <div class="input-clear"><input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder=""></div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        ID</label></dt>
-                                <dd>
-                                    <div class="input-clear"><input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder=""></div>
                                 </dd>
                             </dl>
                             <dl style="margin-left: 40px;">
@@ -116,149 +101,103 @@
                                 </dd>
                             </dl>
                         </div>
-
-                    </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="width: 1527px"></div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
-                    <div class="section-top">
-                        <div class="title-wrap">
-                            <h3>사용자 권한 승인</h3>
-                        </div>
                         <div class="button-wrap">
                             <ul>
-                                <li style="cursor: default; list-style-image: none;">
-                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                <li>
+                                    <a class="btn btn-save" title="저장">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="table-wrap">
-                        <table class="write-table">
-                            <caption>점검등록 테이블</caption>
-                            <colgroup>
-                                <col class="wp12">
-                                <col class="wp40">
-                                <col class="wp12">
-                                <col class="wp40">
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <th>
-                                    <label for="supplier">
-                                        소속사
-                                    </label>
-                                </th>
-                                <td>
-                                    <select id="docdv" name="docselect">
-                                        <option value="0">블룸에너지</option>
-                                    </select>
-                                </td>
-                                <th>
-                                    <label for="supplier2">
-                                        소속부서
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="input-clear"><input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="소속부서"></div>
-                                </td>
+                    </div> <!--//section-top end -->
+                    <div class="row">
+                        <div class="wp60 mg-r20">
 
-                            </tr>
-                            <tr>
-                                <th>
-                                    직급
-                                </th>
-                                <td>
-                                    <div class="input-clear"><input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="직급"></div>
-                                </td>
-                                <th>
-                                    모바일
-                                </th>
-                                <td>
-                                    <div class="input-clear"><input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="모바일"></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    이메일
-                                </th>
-                                <td>
-                                    <div class="input-clear"><input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="이메일"><span class="btn-clear">×</span></div>
-                                </td>
-                                <th>
+                        </div>
+                        <div class="col wp40">
+                            <div class="section">
+                                <div class="table-wrap">
 
-                                </th>
-                                <td>
+                                </div>
+                            </div>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    권한그룹
-                                </th>
-                                <td>
-                                    <select id="docdv" name="docselect">
-                                        <option value="0">유지보수협력사</option>
-                                    </select>
-                                </td>
-                                <th>
-                                    권한상세
-                                </th>
-                                <td>
-                                    <select id="docdv" name="docselect">
-                                        <option value="0">협력사</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    신청사유
-                                </th>
-                                <td colspan="3">
-                                    <div class="input-clear"><input type="text" id="description" name="description" maxlength="100" class="wp100" placeholder="유지보수"></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    승인
-                                </th>
-                                <td>
-                                    <select id="docdv" name="docselect">
-                                        <option value="0">승인</option>
-                                        <option value="0">미승인</option>
-                                    </select>
-                                </td>
-                                <th>
-                                    승인일시
-                                </th>
-                                <td>
-                                    <input type="text" value="2024.07.22" class="wp100" readonly>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                        </div>
                     </div>
                 </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide"></label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        검색조건<span class="eq">*</span></label></dt>
+
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>일</option>
+                                        <option>주</option>
+                                        <option>월</option>
+                                        <option>년</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl style="margin-left: 40px;">
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a href="#" class="btn btn-save" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+
+                </section>
+                <!-- Section -->
+
+
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
     <!-- 팝업 -->
-
-
-
-
-
-
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -276,14 +215,122 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '회사', align: 'center', width: '*' },
-            { binding: '', header: '부서', align: 'center', width: '*' },
-            { binding: '', header: '직급', align: 'center', width: '*' },
-            { binding: '', header: '성명', align: 'center', width: '*' },
-            { binding: '', header: '신청일자', align: 'center', width: '*' },
-            { binding: '', header: '승인일자', align: 'center', width: '*' },
+            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
+            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
+            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
+            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
+            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
+            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
+            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
+            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
+            {
+                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
+                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
+                    wijmo.grid.cellmaker.CellMaker.makeButton({
+                        text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
+                        cssClass: 'fileuploaders',
+                        click: (e, ctx) => {
+                            showPopup(ctx);
+                        }
+                    })
 
+
+            }
         ];
+
+
+
+        /**점검일지 업로드(파일만 전송)**/
+        function saveFile(){
+            let file = document.getElementById('fileInput2');
+            let formData = new FormData();
+
+            console.log('file123', file.files);
+
+            if(file.files.length === 0){
+                Alert.alert('', '파일을 첨부해주세요.');
+                return false;
+            }
+
+            formData.append('file', file.files[0]);
+            //formData.append('_csrf', $('[name=_csrf]').val());
+            formData.append('_csrf', csrfToken);
+            formData.append('spuncode', $('#popup-spuncode').val());
+
+            $.ajax({
+                url: '/api/inspec_report/filesave',
+                type: 'POST',
+                data: formData,
+                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
+                }
+            });
+        }
+
+
+
+
+        function submitTextarea(event){
+            let key = event.key || event.keyCode;
+
+            if(key === 'Enter' || key == 13){
+                searchData();
+            }
+        }
+
+        let searchusrval = document.getElementById('searchusr');
+        searchusrval.addEventListener('keyup', event => submitTextarea(event))
+
+
+        function closePopup(){
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup(ctx){
+
+            $('#popup-date').val(ctx.item.checkdt);
+            $('#popup-checkusr').val(ctx.item.checkusr);
+            $('#popup-checkarea').val(ctx.item.checkarea);
+            $('#popup-spuncode').val(ctx.item.spuncode);
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+
+
+        }
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -297,18 +344,12 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : 'infinited',
+                    'searchusr' : searchusr,
 
                 },
                 async: false,
                 success: function(data){
-                    console.log('check1',data.data);
-                    if(data.data.length === 0){
-                        for(let i=0; i < 10; i++ ){
-                            data.data.push('example');
-                        }
-                    }
-                    console.log(data.data);
+                    console.log('wijmo', data.data);
                     data2 = data.data;
                 }
             })
@@ -383,6 +424,7 @@
         let filelist = [];
 
 
+
         //검색
         function searchData(){
             let data = {
@@ -403,7 +445,7 @@
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
-            for (let i = 0; i < inspecDto.length; i++) {
+            for (var i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
                     spuncode: inspecDto[i]["spuncode"],
                     spworknm: inspecDto[i]["spworknm"],
@@ -429,16 +471,110 @@
 
 
         }
+        function SelectItemPush(){
+
+            let selectedList = [];
+            for(let i = 0; i < SelectItem.length; i++){
+                selectedList.push(SelectItem[i]._data.spuncode);
+            }
+            return selectedList;
+        }
+
+        function DownloadDoc() {
+
+            let selectedList = SelectItemPush();
+
+
+            console.log('selected', selectedList);
+
+            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
+            fetch('/api/inspec_report/download-docs', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert("File download failed!");
+                });
+        }
 
 
         $(document).ready(function (e) {
 
+            const fileInput = document.getElementById('fileInput2');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const dropZone = document.getElementById('dropZone');
+
+            function updateFileName(){
+                const files = fileInput.files;
+                if(files.length > 0){
+                    fileNameDisplay.textContent = files[0].name;
+                }else {
+                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
+                }
+            }
+            fileInput.addEventListener('change', updateFileName);
+
+            // 드래그 앤 드롭 이벤트 핸들러
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files; // 파일 입력 요소에 파일 설정
+                    updateFileName(); // 파일명 업데이트
+                }
+            });
+
+
+            //점검결과 클릭시 텍스트 순환
+            $('.checkbox-cell').click(function() {
+                const span = $(this).find('span');
+                if (span.text() === 'X') {
+                    span.text('O');
+                } else if (span.text() === 'O') {
+                    span.text('X');
+                }
+            });
+
+
 
             // 저장 시작
-            $('#btnSave').click(function (e) {
+            $('#btnSave').click(function (e){
 
 
-                Alert.confirm('', '저장하시겠습니까?', function () {
+                Alert.confirm('', '저장하시겠습니까?', function() {
 
                         let formData = new FormData();
 
@@ -464,7 +600,7 @@
                             const improvement = cells[3].querySelector('textarea').value.trim();
 
                             const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
-
+                            console.log('combinedText: ', combinedText);
                             formData.append('doc-list', combinedText);
 
                             results.push(combinedText);
@@ -536,7 +672,7 @@
 
                 delList = SelectItemPush();
 
-
+                console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function () {
 
                     let data = {

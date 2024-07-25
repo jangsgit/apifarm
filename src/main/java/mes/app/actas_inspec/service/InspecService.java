@@ -1,6 +1,7 @@
 package mes.app.actas_inspec.service;
 
 
+import mes.app.actas_inspec.FileController;
 import mes.config.Settings;
 import mes.domain.entity.actasEntity.TB_INSPEC;
 import mes.domain.entity.actasEntity.TB_RP710;
@@ -12,10 +13,8 @@ import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.*;
 
 import javax.transaction.Transactional;
@@ -37,6 +36,12 @@ public class InspecService {
 
     @Autowired
     TB_INSPECRepository tb_inspecRepository;
+
+    @Autowired
+    FileUploaderService fileService;
+
+    @Autowired
+    FileController fileController;
 
 
 
@@ -71,8 +76,6 @@ public class InspecService {
 
             }
 
-
-
             for(int i=0; i < doc_list.size(); i++){
                 TB_INSPEC tb_inspec = new TB_INSPEC();
 
@@ -102,83 +105,55 @@ public class InspecService {
             if(files != null){
                 for (MultipartFile filelist: files){
 
-                    String fileName = filelist.getOriginalFilename();
+                    Map<String, Object> fileinform =  fileService.saveFiles(filelist, path); //DISK 저장
 
-                    String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-
-                    String file_uuid_name = UUID.randomUUID().toString() + "." + ext;
-                    String saveFilePath = path;
-                    File saveDir = new File(saveFilePath);
-                    MultipartFile mFile = null;
-
-                    mFile = filelist;
-
-                    //디렉토리 없으면 생성
-                    if(!saveDir.isDirectory()){
-                        saveDir.mkdirs();
-                    }
-
-                    File saveFile = new File(path + File.separator + file_uuid_name);
-                    mFile.transferTo(saveFile);
-
-                    Float fileSize = (float) filelist.getSize();
-
-                    TB_RP715 attachedFile = new TB_RP715();
-
-                    String formattedFileValue;
-                    Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(tbRp710.getSpuncode());
-                    if(checkseqvalue.isPresent()){
-                        Integer checknointvalue = Integer.parseInt(checkseqvalue.get()) + 1;
-                        formattedFileValue = String.format("%02d", checknointvalue);
-                    } else {
-                        formattedFileValue = "01";
-                    }
-
-                    attachedFile.setSpworkcd("001");
-                    attachedFile.setSpcompcd("001");
-                    attachedFile.setSpplancd("001");
-                    attachedFile.setSpuncode_id(tbRp710.getSpuncode());
-                    attachedFile.setSpworknm("관할지역명");
-                    attachedFile.setSpcompnm("발전산단명");
-                    attachedFile.setSpplannm("발전소명");
-                    attachedFile.setCheckseq(formattedFileValue);
-                    attachedFile.setFilepath(saveFilePath);
-                    attachedFile.setFilesvnm(file_uuid_name);
-                    attachedFile.setFileextns(ext);
-                    attachedFile.setFileornm(fileName);
-                    attachedFile.setFilesize(fileSize);
-                    attachedFile.setRepyn("N");
-                    attachedFile.setInuserid("홍길동");
-                    attachedFile.setInusernm("홍길동");
-
-                    tb_rp715Repository.save(attachedFile);
+                    TB_RP715_Save(tbRp710.getSpuncode(), fileinform, "N");  //DB 저장
                 }
 
 
             }
 
-            /*for (TB_RP715 fileEntity : fileEntities) {
-                String formattedFileValue;
-                Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(fileEntity.getSpuncode_id());
-
-                if (checkseqvalue.isPresent()) {
-                    Integer checknointvalue = Integer.parseInt(checkseqvalue.get()) + 1;
-                    formattedFileValue = String.format("%02d", checknointvalue);
-                } else {
-                    formattedFileValue = "01";
-                }
-
-                // Set the checkseq value for the current file entity
-                fileEntity.setCheckseq(formattedFileValue);
-
-                // Save the file entity
-                tb_rp715Repository.save(fileEntity);
-            }*/
             return true;
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
+
+    }
+
+    public void TB_RP715_Save(String spuncode, Map<String, Object> fileinform, String repyn){
+
+
+            TB_RP715 attachedFile = new TB_RP715();
+
+            String formattedFileValue;
+            Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(spuncode);
+            if(checkseqvalue.isPresent()){
+                Integer checknointvalue = Integer.parseInt(checkseqvalue.get()) + 1;
+                formattedFileValue = String.format("%02d", checknointvalue);
+            } else {
+                formattedFileValue = "01";
+            }
+
+            attachedFile.setSpworkcd("001");
+            attachedFile.setSpcompcd("001");
+            attachedFile.setSpplancd("001");
+            attachedFile.setSpuncode_id(spuncode);
+            attachedFile.setSpworknm("관할지역명");
+            attachedFile.setSpcompnm("발전산단명");
+            attachedFile.setSpplannm("발전소명");
+            attachedFile.setCheckseq(formattedFileValue);
+            attachedFile.setFilepath(fileinform.get("saveFilePath").toString());
+            attachedFile.setFilesvnm(fileinform.get("file_uuid_name").toString());
+            attachedFile.setFileextns(fileinform.get("ext").toString());
+            attachedFile.setFileornm(fileinform.get("fileName").toString());
+            attachedFile.setFilesize((Float) fileinform.get("fileSize"));
+            attachedFile.setRepyn(repyn);
+            attachedFile.setInuserid("홍길동");
+            attachedFile.setInusernm("홍길동");
+
+            tb_rp715Repository.save(attachedFile);
+
 
     }
 
@@ -217,10 +192,6 @@ public class InspecService {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
-
-
-
-
         String sql;
         if(!spuncode.isEmpty()){
 
@@ -229,7 +200,7 @@ public class InspecService {
 
             sql = """
                 select
-                supplier, checkdt, checkusr, checkarea
+                supplier, checkdt, checkusr, checkarea, 'Y' as downloads, 'Y' upload 
                 from tb_rp710
                 where 1 = 1
                and "spuncode" like :spuncode
@@ -240,12 +211,20 @@ public class InspecService {
             dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
              sql = """
                      select
-                     *, "checkstdt" || '~' || "checkendt" AS checktmdt 
-                     from tb_rp710 sb
-                     where 1 = 1
-                    and "checkusr" like :paramusr
-                    and "checkdt" between :searchfrdate and :searchtodate
-                     order by indatem desc
+                      sb.*,
+                      "checkstdt" || '~' || "checkendt" as checktmdt,
+                      'Y' as downloads,
+                      'Y' as upload,
+                      coalesce(
+                      	(select sa.filesvnm from tb_rp715 sa where sa.spuncode_id = sb.spuncode and sa.repyn = 'Y'
+                      	order by sa.indatem desc limit 1), '') as filesvnm
+                      from
+                      tb_rp710 sb
+                      WHERE 1 = 1
+                          AND "checkusr" LIKE :paramusr
+                          AND "checkdt" BETWEEN :searchfrdate AND :searchtodate
+                      ORDER BY
+                          sb.indatem DESC;
                      """;
         }
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
