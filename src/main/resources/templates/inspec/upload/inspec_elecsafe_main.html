@@ -599,6 +599,12 @@
                 'checkseq': $('#checkseq').val()
             }];
             Alert.confirm('', '삭제하시겠습니까?', function () {
+
+                if($('#checkseq').val() ===''){
+                    Alert.alert('', '삭제할 내용이 없습니다.');
+                    return;
+                }
+
                 $.ajax({
                     url: '/api/inspec/elec_safe/delete',
                     type: 'DELETE',
@@ -659,8 +665,35 @@
 
         $(document).ready(function (e) {
 
+            $('#bfconsres').on('input', function () {
+                let value = $(this).val();
+                if (value.length > 100) {
+                    $(this).val(value.substring(0, 100));  // 초과된 글자 제거
+                }
+            });
+
             // 정보 저장
             $('#btnSave').click(function (e) {
+
+                // 필수 입력 필드 검사
+                let requiredFields = [
+                    { id: '#checktitle', label: '제목을 입력해주세요' },
+                    { id: '#registdt', label: '등록일자를 입력해주세요' },
+                    { id: '#checkdt', label: '점검일자를 입력해주세요' },
+                    { id: '#docdv', label: '문서구분을 선택해주세요' },
+                    { id: '#checkarea', label: '점검장소를 선택해주세요' },
+                    { id: '#endresult', label: '점검결과를 선택해주세요' },
+                    { id: '#bfconsres', label: '점검사항을 입력해주세요' }
+                ];
+
+                for (let i = 0; i < requiredFields.length; i++) {
+                    let field = requiredFields[i];
+                    if ($(field.id).val().trim() === '') {
+                        Alert.alert('', field.label);
+                        return;
+                    }
+                }
+
                 Alert.confirm('', '저장하시겠습니까?', function () {
 
                     let formData = new FormData($('#customForm')[0]);
