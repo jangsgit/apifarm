@@ -36,15 +36,15 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>기간별 손익 조회</h2>
+                <h2>매출등록</h2>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                <li>서비스 분석</li>
-                <li>기간별 손익 조회</li>
+                <li>서비스분석</li>
+                <li>매출등록</li>
             </ul>
         </div>
         <!-- Select -->
@@ -67,9 +67,18 @@
                 </li>
             </ul>
         </div>
-
-
-                <section>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -79,11 +88,11 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="month" id="date1" name="startDate">
+                                            <input type="month" id="date1" name="startDate" value="2023-01">
                                             <label for="date1" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="month" id="date2" name="endDate">
+                                            <input type="month" id="date2" name="endDate" value="2024-07">
                                             <label for="date2" class="hide">종료일</label>
                                         </li>
                                         <li>
@@ -106,17 +115,236 @@
                                         엑셀다운로드
                                     </a>
                                 </li>
+                                <!--                                <li>-->
+                                <!--                                    <a class="btn btn-print" title="매출등록 출력">-->
+                                <!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
+                                <!--                                        매출등록 출력-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 530px"></div>
+                        <div id="theGrid" style="max-height: 493px;"></div>
                     </div>
+
+<!--                    <div class="table-wrap">-->
+<!--                        <table class="list-table">-->
+<!--                            <caption>매출등록 테이블</caption>-->
+<!--                            <colgroup>-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wp10">-->
+<!--                                <col class="wauto">-->
+<!--                            </colgroup>-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>매출년월</th>-->
+<!--                                <th>발전량</th>-->
+<!--                                <th>SMP단가</th>-->
+<!--                                <th>SMP매출</th>-->
+<!--                                <th>REC단가</th>-->
+<!--                                <th>REC수량</th>-->
+<!--                                <th>REC매출</th>-->
+<!--                                <th>총매출</th>-->
+
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody id="salesData">-->
+<!--                            &lt;!&ndash; Data will be filled by JavaScript &ndash;&gt;-->
+<!--                            </tbody>-->
+<!--                            <tfoot>-->
+<!--                            <tr>-->
+<!--                                <th>계</th>-->
+<!--                                <td id="sum-energyQty"></td>-->
+<!--                                <td id="sum-smpCost"></td>-->
+<!--                                <td id="sum-smpAmt"></td>-->
+<!--                                <td id="sum-recCost"></td>-->
+<!--                                <td id="sum-recQty"></td>-->
+<!--                                <td id="sum-recAmt"></td>-->
+<!--                                <td id="sum-stotAmt"></td>-->
+<!--                            </tr>-->
+<!--                            </tfoot>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                    <div class="btn-wrap">-->
+<!--                        <div class="center">-->
+<!--                            <ul class="paging-wrap">-->
+<!--                                <li><a title="처음" class="btn-first"></a></li>-->
+<!--                                <li><a title="이전" class="btn-prev"></a></li>-->
+<!--                                <li class="on"><a title="1">1</a></li>-->
+<!--                                <li><a title="2">2</a></li>-->
+<!--                                <li><a title="3">3</a></li>-->
+<!--                                <li><a title="4">4</a></li>-->
+<!--                                <li><a title="5" class="disable">5</a></li>-->
+<!--                                <li><a title="다음" class="btn-next"></a></li>-->
+<!--                                <li><a title="마지막" class="btn-last"></a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </section>
 
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>매출 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" id="btnDelete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="저장" id="btnSave">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                                <li>
+                                    <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
+                                    <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
+                                        <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
+                    <form action="/api/sales/upload" id="saleForm" method="post">
+                        <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
+                        <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
+                        <input type="hidden" id="spworknm" name="spworknm" value="def"/>
+                        <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
+                        <input type="hidden" id="spplannm" name="spplannm" value="def"/>
+                        <div class="table-wrap">
+                            <table class="write-table">
+                                <caption>매출등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="date3">
+                                            매출년월
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="month" id="date3" name="salesym" maxlength="7" required value="2024-07"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            발전량
+                                        </label>
+                                    </th>
+                                    <td class="input-wrapper">
+                                        <input type="text" id="test1" class="wp100" name="energyQty"/>
+                                        <span class="unit">kWh</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            SMP 매출
+                                        </label>
+                                    </th>
+                                    <td class="input-wrapper">
+                                        <input type="text" id="test2" class="wp100" name="smpAmt"/>
+                                        <span class="unit">백만원</span>
+                                    </td>
+                                    <th>
+                                        <label for="test">
+                                            SMP 단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test3" class="wp100" name="smpCost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            REC 수량
+                                        </label>
+                                    </th>
+                                    <td class="input-wrapper">
+                                        <input type="text" id="test4" class="wp100" name="recQty"/>
+                                        <span class="unit">백만원</span>
+                                    </td>
+                                    <th>
+                                        <label for="test">
+                                            REC 실단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test5" class="wp100" name="recCost"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td></td>
+                                    <th>
+                                        <label for="test">
+                                            REC 평균단가
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="test6" class="wp100" name="recAverageCost"  value="0.18" disabled/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test">
+                                            REC 매출
+                                        </label>
+                                    </th>
+                                    <td class="input-wrapper">
+                                        <input type="text" id="test7" class="wp100" name="recAmt"/>
+                                        <span class="unit">백만원</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="test" class="input-wrapper">
+                                            총 발전 매출
+                                        </label>
+                                    </th>
+                                    <td class="input-wrapper">
+<!--                                         value="20,599.5" 수정-->
+                                        <input type="text" id="test" class="wp100" name="stotAmt"  value="20,599.5" disabled/>
+                                        <span class="unit">백만원</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
     </section>
     </div>
@@ -136,55 +364,36 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
-            // let data2 = [];
-            // 하드코딩된 데이터 (지워)
-            let data2 = [
-                { galoym: '2024-01', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-02', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-03', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-04', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-05', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-06', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-07', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-08', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-09', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-10', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-11', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-12', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-            ];
+            let data2 = [];
 
-            // $.ajax({
-            //     url: '/api/sales/fetch',
-            //     type: 'GET',
-            //     async: false,
-            //     success: function(data){
-            //         console.log('wijmo', data);
-            //         data2 = data;
-            //     }
-            // })
+            $.ajax({
+                url: '/api/sales/fetch',
+                type: 'GET',
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data);
+                    data2 = data;
+                }
+            })
 
-            // viewdata = new wijmo.collections.CollectionView(data2);
-
+            viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'galoym', header: '손익연월', width: "*", align: 'center'},
-                    { binding: 'energyqty', header: '발전량', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'smpamt', header: 'SMP 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'recamt', header: 'REC 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'stotamt', header: '총 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'etotamt', header: '총 운용비', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'gainamt', header: '영업이익', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'ebitaamt', header: 'EBITA', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'ebitamamt', header: 'EBITA 마진', width: 180, align: 'right', aggregate: 'Sum' }
+                    { binding: 'salesym', header: '매출년월', width: 90, align: 'center'},
+                    { binding: 'energyQty', header: '발전량', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'smpCost', header: 'SMP 단가', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'smpAmt', header: 'SMP 매출', width: 140, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recCost', header: 'REC 단가', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recQty', header: 'REC 수량', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'recAmt', header: 'REC 매출', width: 100, align: 'right', aggregate: 'Sum' },
+                    { binding: 'stotAmt', header: '총 매출', width: 140, align: 'right', aggregate: 'Sum' },
+                    { binding: 'description', header: '비고', width: '*', align: 'center' } // 컬럼 추가? 아니면 추후 삭제?
 
                 ],
-                // itemsSource: viewdata,
-
-                // 하드코딩해서 임시로 data2
-                itemsSource: data2,
+                itemsSource: viewdata,
                 isReadOnly: true // tab1의 그리드 읽기 전용으로 설정
             });
 

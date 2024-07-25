@@ -1,0 +1,500 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<head>
+    <style>
+        #theGrid2.wj-flexgrid .wj-cell {
+            padding: 12px;
+        }
+        #theGrid2.wj-flexgrid .downloads {
+            padding-top: 0px;
+        }
+
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>기간별 발전량 조회</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스 분석</li>
+                <li>기간별 발전량 조회</li>
+            </ul>
+        </div>
+
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
+                        <option value="001">대구</option>
+                        <input type="hidden" id="spworknm" name="spworknm">
+                    </select>
+                </li>
+                <li>
+                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
+                        <option value="001">성서산단</option>
+                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    </select>
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
+                        <option value="001">대구물류센터</option>
+                        <input type="hidden" id="spplannm" name="spplannm">
+                    </select>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="기간별조회">기간별 조회</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="기간별대비">기간별 대비</a>
+                </li>
+            </ul>
+
+
+            <div class="tab-contents">
+                <!-- tab1 -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="endDate" name="endDate" value="2024-12">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        발전기명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <!-- 옵션 이게 맞아?-->
+                                                <option value="매출">전체</option>
+                                                <option value="비용">KT물류센터</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <option value="일간">월별</option>
+                                                <option value="년간">일별</option>
+                                                <option value="월간">분기별</option>
+                                                <option value="년간">년별</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        차트타입(임시라벨)<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <option value="일간">Pie 3D</option>
+                                            </select>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                차트설정 초기화
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+
+                        </div>
+
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+
+                    <!--                <div style="width: auto; height: 290px;">-->
+                    <div style="display: flex; align-items: center;">
+                        <div>
+                            <img src="/images/rMate_imsi_2.png" alt="그래프_삭제예정" style="height: 500px;">
+                        </div>
+
+                        <div class="container-fluid" style="margin: 0 150px;">
+                            <p id="selectedItem"></p>
+                            <div id="theGrid" style="max-height: 500px"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- tab2 -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+<!--                                                어떤 연도가 들어올지 모르니까 이건 동적으로 만들기-->
+                                                <option value="뭐야이거지워도되나">2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        발전기명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <option value="일간">전체</option>
+                                                <option value="월간">AJ380</option>
+                                                <option value="년간">AJ390</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <!-- 옵션 이게 맞아?-->
+                                                <option value="전년대비증감율">YoY</option>
+                                                <option value="전분기대비증감율">QoQ</option>
+                                                <option value="전월대비증감율">MoM</option>
+                                                <option value="연초대비증감율">YTD</option>
+                                                <option value="뭐야이거지워도되나">YoY YTD</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="ticketcategory">
+                                        차트타입(임시라벨)<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="ticketcategory" name="ticketcategory">
+                                                <option value="일간">Line ItemRenderer</option>
+                                            </select>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                차트설정 초기화
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+
+                        </div>
+
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+
+                    <!--                <div style="width: auto; height: 290px;">-->
+                    <div style="display: flex; align-items: center;">
+                        <div>
+                            <img src="/images/rMate_imsi_3.png" alt="그래프_삭제예정" style="height: 500px;">
+                        </div>
+
+                        <div class="container-fluid" style="margin: 0 150px;">
+                            <p id="selectedItem"></p>
+                            <div id="theGrid2" style="max-height: 500px"></div>
+                        </div>
+                    </div>
+
+                </section>
+            </div><!--//tab-contents end -->
+        </div>
+    </div> <!--//layout-contents end -->
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;    // 목록에 뿌림
+        var theGrid1;   // 등록에서 insert
+        var viewdata;
+        var data1 = [];
+
+        var theGrid2;
+
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            fetchListData();
+            fetchListData2(); // tab2에 대한 데이터 로딩 함수
+            inputData();
+        }
+
+        // tab1
+        function fetchListData() {
+            var tempData = [
+                {month: '24.01', year2023: 200, year2024: 300},
+                {month: '24.02', year2023: 400, year2024: 500},
+                {month: '24.03', year2023: 500, year2024: 400},
+                {month: '24.04', year2023: 300, year2024: 300},
+                {month: '24.05', year2023: 700, year2024: 700},
+                {month: '24.06', year2023: 900, year2024: 600},
+                {month: '24.07', year2023: 400, year2024: 500},
+                {month: '24.08', year2023: 500, year2024: 400},
+                {month: '24.09', year2023: 600, year2024: 300},
+                {month: '24.10', year2023: 400, year2024: 700},
+                {month: '24.11', year2023: 200, year2024: 500},
+                {month: '24.12', year2023: 300, year2024: 400},
+            ];
+
+            // 그리드 설정
+            if (!theGrid) {
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    columns: [
+                        {binding: 'month', header: '일자', width: 120, align: 'center', isReadOnly: true},
+                        {binding: 'year2023', header: 'AJ38', width: 120, align: 'center', isReadOnly: true},
+                        {binding: 'year2024', header: 'AJ39', width: 120, align: 'center', isReadOnly: true}
+                    ],
+                    itemsSource: tempData
+                });
+
+                // Footer 행 추가
+                theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+                theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
+                theGrid.columnFooters.setCellData(0, 0, '계');
+
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            } else {
+                theGrid.itemsSource = new wijmo.collections.CollectionView(tempData);
+            }
+        }
+
+        //tab2
+        function fetchListData2() {
+            var tempData2 = [
+                {month: '01', year2023: 200, year2024: 300},
+                {month: '02', year2023: 400, year2024: 500},
+                {month: '03', year2023: 500, year2024: 400},
+                {month: '04', year2023: 300, year2024: 300},
+                {month: '05', year2023: 700, year2024: 700},
+                {month: '06', year2023: 900, year2024: 600},
+                {month: '07', year2023: 400, year2024: 500},
+                {month: '08', year2023: 500, year2024: 400},
+                {month: '09', year2023: 600, year2024: 300},
+                {month: '10', year2023: 400, year2024: 700},
+                {month: '11', year2023: 200, year2024: 500},
+                {month: '12', year2023: 300, year2024: 400},
+            ];
+
+            // 그리드 설정
+            if (!theGrid2) {
+                theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                    autoGenerateColumns: false,
+                    columns: [
+                        {binding: 'month', header: '월', width: 120, align: 'center', isReadOnly: true},
+                        {binding: 'year2023', header: '2023', width: 120, align: 'center', isReadOnly: true},
+                        {binding: 'year2024', header: '2024', width: 120, align: 'center', isReadOnly: true}
+                    ],
+                    itemsSource: tempData2
+                });
+
+                // Footer 행 추가
+                theGrid2.columnFooters.rows.push(new wijmo.grid.GroupRow());
+                theGrid2.bottomLeftCells.setCellData(0, 0, 'Σ');
+                theGrid2.columnFooters.setCellData(0, 0, '계');
+
+                theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            } else {
+                theGrid2.itemsSource = new wijmo.collections.CollectionView(tempData2);
+            }
+        }
+
+
+
+
+        $(document).ready(function (e) {
+
+            // 정보 저장
+            $('#btnSave').click(function (e) {
+                Alert.confirm('', '저장하시겠습니까?', function () {
+
+                    // theGrid1의 데이터를 data1 배열에 업데이트
+                    var updatedData1 = theGrid1.collectionView.items;
+
+                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+                    console.log("Updated data1:", updatedData1);
+
+                    let formData = new FormData();
+
+                    formData.append('spworkcd', $('#spworkcd').val());
+                    formData.append('spworknm', $('#spworknm').val());
+                    formData.append('spcompcd', $('#spcompcd').val());
+                    formData.append('spcompnm', $('#spcompnm').val());
+                    formData.append('spplancd', $('#spplancd').val());
+                    formData.append('spplannm', $('#spplannm').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checknm', $('#checknm').val());
+                    formData.append('checkusr', $('#checkusr').val());
+                    formData.append('checkresult', $('#checkresult').val());
+                    formData.append('checkrem', $('#checkrem').val());
+                    formData.append('filelist', $('#filelist').val());
+                    formData.append('_csrf', $('[name=_csrf]').val());
+                    // 점검리스트 데이터 추가
+                    formData.append('inspectlist', JSON.stringify(updatedData1));
+
+                    // $.ajax({
+                    //     url: "/api/inspec/hap/save",
+                    //     type: 'POST',
+                    //     data: formData,
+                    //     processData: false,
+                    //     contentType: false,
+                    //     success: function (response) {
+                    //         if (response.success) {
+                    //             Alert.alert('', response.message, function () {
+                    //                 $('#listTabLink').click();
+                    //                 fetchListData();
+                    //
+                    //             });
+                    //
+                    //         } else {
+                    //             Alert.alert('', '저장에 실패했습니다. ');
+                    //         }
+                    //     },
+                    //     error: function (jqXHR, textStatus, errorThrown) {
+                    //         Alert.alert('', '에러가 발생하였습니다.');
+                    //     }
+                    // });
+                })
+            })
+            // select 아이디에 따라 히든 input 설정
+            const selects = [
+                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+            ];
+            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+
+        });
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+    </script>
+
+</th:block>
+</html>
+
