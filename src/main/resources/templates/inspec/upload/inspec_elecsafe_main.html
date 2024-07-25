@@ -61,7 +61,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    등록일자<span class="eq">*</span>
+                                    등록 일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -84,8 +84,7 @@
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="searchtitle" name="searchtitle" class="input-srch"
-                                               placeholder="점검명 검색">
+                                        <input type="text" id="searchtitle" name="searchtitle" class="input-srch">
                                         <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
                                     </div>
                                 </dd>
@@ -160,11 +159,11 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="checktitle" class="wp100" placeholder="점검명">
+                                        <input type="text" id="checktitle" class="wp100">
                                     </td>
                                     <th>
                                         <label for="registdt">
-                                            등록일자
+                                            등록 일자
                                         </label>
                                     </th>
                                     <td>
@@ -174,7 +173,7 @@
                                 <tr>
                                     <th>
                                         <label for="checkdt">
-                                            점검일자
+                                            점검 일자
                                         </label>
                                     </th>
                                     <td>
@@ -182,36 +181,36 @@
                                     </td>
                                     <th>
                                         <label for="docdv">
-                                            문서구분
+                                            문서 구분
                                         </label>
                                     </th>
                                     <td>
                                         <select id="docdv" name="docselect">
                                             <option value="">문서를 선택하세요</option>
-                                            <option value="0">전기설비점검결과표</option>
+                                            <option value="0">전기 설비점검결과표</option>
                                         </select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>
                                         <label for="checkarea">
-                                            점검장소
+                                            점검 장소
                                         </label>
                                     </th>
                                     <td>
-                                        <select type="text" id="checkarea" class="wp100" placeholder="점검장소">
-                                            <option VALUE="">점검장소를 선택하세요</option>
-                                            <option VALUE="KT대구물류센터 연료전지발전소">KT대구물류센터 연료전지 발전소</option>
+                                        <select type="text" id="checkarea" class="wp100">
+                                            <option VALUE="">점검 장소를 선택하세요</option>
+                                            <option VALUE="KT대구물류센터 연료전지발전소">KT 대구물류센터 연료전지 발전소</option>
                                         </select>
                                     </td>
                                     <th>
                                         <label for="endresult">
-                                            점검결과
+                                            점검 결과
                                         </label>
                                     </th>
                                     <td>
-                                        <select id="endresult" placeholder="점검결과">
-                                            <option VALUE="">점검결과를 선택하세요</option>
+                                        <select id="endresult">
+                                            <option VALUE="">점검 결과를 선택하세요</option>
                                             <option VALUE="0">양호</option>
                                             <option VALUE="1">좋음</option>
                                             <option VALUE="2">나쁨</option>
@@ -221,12 +220,12 @@
                                 <tr>
                                     <th>
                                         <label for="bfconsres">
-                                            점검사항
+                                            점검 사항
                                         </label>
                                     </th>
                                     <td colspan="3">
                                         <div class="textarea-box">
-                                            <textarea id="bfconsres" placeholder="점검사항"></textarea>
+                                            <textarea id="bfconsres"></textarea>
                                             <p class="text-count" id="text-count1">0/100</p>
                                         </div>
                                     </td>
@@ -239,7 +238,7 @@
                                         <div id="uploadComponent1" class="upload-component">
                                             <div class="upload-filebox">
                                                 <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <a class="btn" title="파일업로드">파일 업로드</a>
                                                 <input type="file" id="fileInput" class="fileInput" multiple>
                                                 <p>Maximun upload file size <span>1GiB</span></p>
                                             </div>
@@ -272,7 +271,6 @@
     <script type="text/javascript">
 
         var theGrid;
-        var viewdata;
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -303,7 +301,7 @@
                     allowSorting: 'MultiColumn',
                     selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
                     columns: [
-                        {binding: 'rownum', header: '순번', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
                         {binding: 'registdt', header: '등록일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
                         {binding: 'spworknm', header: '산단지역본부', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
                         {binding: 'spcompnm', header: '산단명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
@@ -677,13 +675,13 @@
 
                 // 필수 입력 필드 검사
                 let requiredFields = [
-                    { id: '#checktitle', label: '제목을 입력해주세요' },
-                    { id: '#registdt', label: '등록일자를 입력해주세요' },
-                    { id: '#checkdt', label: '점검일자를 입력해주세요' },
-                    { id: '#docdv', label: '문서구분을 선택해주세요' },
-                    { id: '#checkarea', label: '점검장소를 선택해주세요' },
-                    { id: '#endresult', label: '점검결과를 선택해주세요' },
-                    { id: '#bfconsres', label: '점검사항을 입력해주세요' }
+                    { id: '#checktitle', label: '점검명을 입력해주세요' },
+                    { id: '#registdt', label: '등록 일자를 입력해주세요' },
+                    { id: '#checkdt', label: '점검 일자를 입력해주세요' },
+                    { id: '#docdv', label: '문서 구분을 선택해주세요' },
+                    { id: '#checkarea', label: '점검 장소를 선택해주세요' },
+                    { id: '#endresult', label: '점검 결과를 선택해주세요' },
+                    { id: '#bfconsres', label: '점검 사항을 입력해주세요' }
                 ];
 
                 for (let i = 0; i < requiredFields.length; i++) {
