@@ -36,7 +36,8 @@ public class HomeController {
         SecurityContext sc = SecurityContextHolder.getContext();
         Authentication auth = sc.getAuthentication();         
         User user = (User)auth.getPrincipal();
-        String username = user.getUserProfile().getName();
+		String userid = user.getUsername();
+        String username = user.getUserProfile().getName();;
                 
         SystemOption sysOpt= this.systemOptionRepository.getByCode("LOGO_TITLE");
         String logoTitle = sysOpt.getValue();
@@ -44,11 +45,12 @@ public class HomeController {
         //q = this.systemOptionRepository.getByCode("main_menu");        
         
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("userid", userid);
 		mv.addObject("username", username);
 		mv.addObject("userinfo", user);
 		mv.addObject("system_title", logoTitle);
 		mv.addObject("default_menu_code", "wm_dashboard_summary");
-		
+
 		
 		String mqtt_host = settings.getProperty("mqtt_host");
 		String mqtt_web_port = settings.getProperty("mqtt_web_port");

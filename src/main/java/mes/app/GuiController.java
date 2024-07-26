@@ -40,6 +40,7 @@ public class GuiController {
 		ModelAndView mv = new ModelAndView();                                  //ModelAndView 객체 생성
         GUIData guiData= GUIConfiguration.getGUIInfo(gui);					   //
         if (guiData!=null) {
+			String userid = user.getUsername();
         	String username = user.getUserProfile().getName();
         	
         	for(String k : allRequestParams.keySet()){
@@ -51,7 +52,8 @@ public class GuiController {
         	
         	String templatePath = guiData.templates.get(templateName); //GuiData에서 templateName이 가지는 실제 값에 해당하는 value를 가져옴
         	mv.setViewName(templatePath); //가져온 templatePath를 ModelAndView객체에 넣어준다. 여기서 templatePath는 사용자에게 보여줄 html화면 위치를 반환하여 해당 html을 보여준다.
-        	
+
+			mv.addObject("userid", userid);
     		mv.addObject("username", username);  //ModelAndView객체에 여러가지의 오브젝트값을 키, 밸류 형태로 넣어준다.
     		mv.addObject("userinfo", user);    		
     		mv.addObject("gui_code", gui);

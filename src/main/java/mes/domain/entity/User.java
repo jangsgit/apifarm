@@ -37,7 +37,7 @@ public class User implements Serializable {
 	
 	String password;
 	
-	@JsonIgnore
+//	@JsonIgnore : 제이슨으로 해당 값을 못가져오게함
 	String username;
 	
 	String email;
