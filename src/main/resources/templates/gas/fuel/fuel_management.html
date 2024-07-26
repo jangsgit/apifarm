@@ -47,13 +47,13 @@
                     <a href="#tab1" title="실시간가스 공급유량">실시간가스 공급유량</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="누적 발전량">누적 발전량</a>
+                    <a href="#tab2" title="누적 발전량" id="runrmate2">누적 발전량</a>
                 </li>
                 <li>
-                    <a href="#tab3" title="누적가스 소모량">누적가스 소모량</a>
+                    <a href="#tab3" title="누적가스 소모량" id="runrmate">누적가스 소모량</a>
                 </li>
                 <li>
-                    <a href="#tab9" title="도시가스 공급열량 실적">도시가스 공급열량 실적</a>
+                    <a href="#tab9" title="도시가스 공급열량 실적" id="runrmate3">도시가스 공급열량 실적</a>
                 </li>
 
             </ul>
@@ -96,7 +96,7 @@
                         </div>
 
                     </div> <!--//section-top end -->
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="wp60 mg-r20">
                             <img src="/images/연료전지.png" style="width: 100%"/>
                         </div>
@@ -110,6 +110,19 @@
                                 </div>
                             </div>
                         </div>
+                    </div>-->
+                    <div class="row row-2">
+                        <section class="wp48" style="height: 530px">
+                            <!-- 그래프 -->
+                            <div id="chartHolder" style="width:600px; height:400px;">
+                            </div>
+                        </section>
+                        <section class="wp48" style="height: 530px">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid" ></div>
+                            </div>
+                        </section>
                     </div>
                 </section>
                 <!-- Section -->
@@ -149,11 +162,11 @@
                             </dl>
                         </div>
 
-                        <div class="row">
-                            <div class="wp60 mg-r20" style="width: 70% !important;">
+                        <!--<div class="row">
+                            <div class="wp60 mg-r20" style="width: 55% !important;">
                                 <img src="/images/연료전지2.png" style="width: 100%"/>
                             </div>
-                            <div class="col wp40" style="width: 30% !important;">
+                            <div class="col wp40" style="width: 45% !important;">
                                 <div class="section">
                                     <div class="table-wrap">
                                         <div class="container-fluid">
@@ -163,6 +176,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>-->
+                        <div class="row row-2" style="width: 100%">
+                            <section class="wp48" style="height: 530px">
+                                <!-- 그래프 -->
+                                <div id="chartHolder2" style="width:600px; height:400px;">
+                                </div>
+                            </section>
+                            <section class="wp48" style="height: 530px">
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="theGrid2" ></div>
+                                </div>
+                            </section>
                         </div>
                         </div>
                 </section>
@@ -203,12 +229,12 @@
                             </dl>
                         </div>
 
-                        <div class="row">
-                            <div class="wp60 mg-r20" style="width: 70% !important;">
+                        <!--<div class="row">
+                            <div class="wp60 mg-r20" style="width: 55% !important;">
                                 <img src="/images/연료전지3.png" style="width: 100%"/>
                                 <img src="/images/연료전지4.png" style="width: 100%"/>
                             </div>
-                            <div class="col wp40" style="width: 30% !important;">
+                            <div class="col wp40" style="width: 45% !important;">
                                 <div class="section">
                                     <div class="table-wrap">
                                         <div class="container-fluid">
@@ -218,6 +244,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>-->
+                        <div class="row row-2" style="width: 100%">
+                            <section class="wp48" style="height: 530px">
+                                <!-- 그래프 -->
+                                <div id="chartHolder1" style="width:600px; height:400px;"></div>
+                                <div id="chartHolder3" style="width:600px; height:400px;"></div>
+                            </section>
+                            <section class="wp48" style="height: 530px">
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="theGrid3" ></div>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </section>
@@ -258,7 +297,7 @@
                             </dl>
                         </div>
 
-                        <div class="row">
+                        <!--<div class="row">
                             <div class="wp60 mg-r20" style="width: 70% !important;">
                                 <img src="/images/연료전지5.png" style="width: 100%"/>
 
@@ -273,6 +312,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>-->
+                        <div class="row row-2" style="width: 100%">
+                            <section class="wp48" style="height: 530px">
+                                <!-- 그래프 -->
+                                <div id="chartHolder4" style="width:600px; height:400px;">
+                                </div>
+                            </section>
+                            <section class="wp48" style="height: 530px">
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="theGrid4" class="animated"></div>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </section>
@@ -291,6 +343,113 @@
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
+
+        rMateChartH5.create("chart", "chartHolder", "", "100%", "100%");
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="실시간 유량"/>'
+            +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true" />'
+            +'</Options>'
+            +'<NumberFormatter id="numfmt" useThousandsSeparator="true"/>'
+            +'<Combination2DChart seriesMouseOverAction="series" showDataTips="true" paddingBottom="25">'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis formatter="{numfmt}"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Area2DSeries yField="phone" displayName="Cell Phone">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Area2DSeries>'
+            +'<Area2DSeries yField="tv" displayName="TV">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Area2DSeries>'
+            +'<Area2DSeries yField="tablet" displayName="Tablet">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Area2DSeries>'
+            +'<Line2DSeries yField="total" displayName="Total">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'</Combination2DChart>'
+            +'</rMateChart>';
+
+        // 차트 데이터
+        var chartData =
+            [{"Month":"Jan","phone":510,"tv":320,"tablet":180,"total":1010},
+                {"Month":"Feb","phone":440,"tv":600,"tablet":240,"total":1280},
+                {"Month":"Mar","phone":110,"tv":430,"tablet":180,"total":720},
+                {"Month":"Apr","phone":190,"tv":330,"tablet":260,"total":780},
+                {"Month":"May","phone":140,"tv":500,"tablet":220,"total":860},
+                {"Month":"Jun","phone":200,"tv":580,"tablet":340,"total":1120},
+                {"Month":"Jul","phone":260,"tv":510,"tablet":330,"total":1100},
+                {"Month":"Aug","phone":190,"tv":660,"tablet":500,"total":1350},
+                {"Month":"Sep","phone":250,"tv":580,"tablet":440,"total":1270},
+                {"Month":"Oct","phone":190,"tv":500,"tablet":380,"total":1070},
+                {"Month":"Nov","phone":320,"tv":590,"tablet":440,"total":1350},
+                {"Month":"Dec","phone":400,"tv":680,"tablet":360,"total":1440}];
+
+        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
+        //
+        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
+        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
+        //
+        // 아래 내용은
+        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
+        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
+        rMateChartH5.calls("chart", {
+            "setLayout" : layoutStr,
+            "setData" : chartData
+        });
+
+        /**
+         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
+         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
+         *
+         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * -------------------------------------------------
+         *
+         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
+         */
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        /**
+         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
+         * 접근하는 차트 객체의 테마를 변경합니다.
+         * 파라메터로 넘어오는 값
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * - default
+         *
+         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
+         */
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart").setTheme(theme);
+        }
+
+        // -----------------------차트 설정 끝 -----------------------
+
 
         var theGrid;
         var theGrid2;
@@ -328,8 +487,7 @@
             { binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true  },
             { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
             { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
-            /*{ binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
-            { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },*/
+
 
         ];
 
@@ -548,8 +706,321 @@
 
         $(document).ready(function (e) {
 
+            let LoadingCheck = false;
+            let LoadingCheck2 = false;
+            let LoadingCheck3 = false;
 
+            $('#runrmate').click(function() {
+
+                if(LoadingCheck === false){
+                    setTimeout(function() {
+                        //$('#runf').trigger('click');
+                        let con = "chart1"
+                        rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "120%", "120%");
+                        let con3 = "chart3"
+                        rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars3, "120%", "120%");
+
+                        LoadingCheck = true;
+                    }, 100); // 3000ms = 3초
+                }
+            });
+
+            $('#runrmate2').click(function() {
+
+                if(LoadingCheck2 === false){
+                    setTimeout(function() {
+                        //$('#runf').trigger('click');
+                        let con = "chart2"
+                        rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "120%", "120%");
+                        LoadingCheck2 = true;
+                    }, 100); // 3000ms = 3초
+                }
+            });
+
+            $('#runrmate3').click(function() {
+
+                if(LoadingCheck3 === false){
+                    setTimeout(function() {
+                        //$('#runf').trigger('click');
+                        let con = "chart4"
+                        rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars4, "120%", "120%");
+                        LoadingCheck3 = true;
+                    }, 100); // 3000ms = 3초
+                }
+            });
         });
+
+        let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+        let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler2";
+        let chartVars3 = "rMateOnLoadCallFunction=chartReadyHandler3";
+        let chartVars4 = "rMateOnLoadCallFunction=chartReadyHandler4";
+
+        function chartReadyHandler(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData);
+
+            document.getElementById(id).resize();
+        }
+
+        function chartReadyHandler2(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData2);
+
+            document.getElementById(id).resize();
+        }
+
+        function chartReadyHandler3(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData3);
+
+            document.getElementById(id).resize();
+        }
+
+        function chartReadyHandler4(id) {
+            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setData(chartData4);
+
+            document.getElementById(id).resize();
+        }
+
+
+        var layoutStr1 = '<rMateChart  backgroundColor="#ffffff" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="누적가스소모량"/>'
+            +'<SubCaption text="World Bank Commodity Price Data in 2024" textAlign="center" />'
+            +'<Legend/>'
+            +'</Options>'
+            +'<NumberFormatter id="numFmt" precision="0"/>'
+            +'<Line2DChart showDataTips="true" dataTipDisplayMode="axis" >'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month" padding="0.2"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis maximum="100"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Line2DSeries yField="Sheep" radius="5" displayName="Sheep" itemRenderer="RectangleItemRenderer">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries yField="Beef" radius="5" displayName="Beef" itemRenderer="CircleItemRenderer">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries yField="Chicken" radius="6" displayName="Chicken" itemRenderer="TriangleItemRenderer">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'</Line2DChart>'
+            +'</rMateChart>';
+
+        var layoutStr2 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="누적발전량" />'
+            +'<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
+            +'</Options>'
+            +'<Column3DChart showDataTips="true" columnWidthRatio="0.4">'
+            +'<horizontalAxis>'
+            +'<CategoryAxis id="hAxis" categoryField="Country"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis id="vAxis" maximum="100" interval="10"/>'
+            +'</verticalAxis>'
+            +'<horizontalAxisRenderers>'
+            +'<Axis3DEdgeRenderer axis="{hAxis}" showOuterStroke="false">'
+            +'<axisStroke>'
+            +'<Stroke color="#bbbbbbb"/>'
+            +'</axisStroke>'
+            +'</Axis3DEdgeRenderer>'
+            +'</horizontalAxisRenderers>'
+            +'<verticalAxisRenderers>'
+            +'<Axis3DEdgeRenderer axis="{vAxis}" showOuterStroke="false">'
+            +'<axisStroke>'
+            +'<Stroke color="#bbbbbbb"/>'
+            +'</axisStroke>'
+            +'</Axis3DEdgeRenderer>'
+            +'</verticalAxisRenderers>'
+            +'<series>'
+            +'<Column3DSeries labelPosition="outside" yField="GDP" displayName="Debt (% of GDP)" outsideLabelYOffset="-14" outsideLabelXOffset="7" showValueLabels="[4,5]">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Column3DSeries>'
+            +'</series>'
+            +'<backgroundElements>'
+            +'<GridLines showBorderStroke="false"/>'
+            +'</backgroundElements>'
+            +'</Column3DChart>'
+            +'</rMateChart>'
+
+
+        var layoutStr3 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="누적가스 소모량" paddingBottom="45"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
+            +'<CurrencyFormatter id="numFmt" precision="0" currencySymbol="%" alignSymbol="right"/>'
+            +'<Combination3DChart seriesMouseOverAction="series" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
+            /*
+            Combination3D 차트 생성시에 필요한 Combination3DChart 정의합니다
+            showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다
+            */
+            +'<verticalAxis>'
+            +'<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
+            +'</verticalAxis>'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
+            +'</horizontalAxis>'
+            +'<series>'
+            +'<Column3DSeries selectable="true" yField="sales" displayName="Sales">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Column3DSeries>'
+            +'<Line2DSeries itemRenderer="CircleItemRenderer" radius="6" labelPosition="up" selectable="true" yField="roi" displayName="ROI" styleName="lineSeriesLabel" showValueLabels="[10]">'
+            +'<lineStroke>'
+            +'<Stroke color="#01dbab" weight="4"/>'
+            +'</lineStroke>'
+            +'<verticalAxis>'
+            +'<LinearAxis id="vAxis2" formatter="{numFmt}"/>'
+            +'</verticalAxis>'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'<verticalAxisRenderers>'
+            +'<Axis3DRenderer axis="{vAxis1}" showLine="true"/>'
+            +'<Axis3DRenderer axis="{vAxis2}" showLine="true"/>'
+            +'</verticalAxisRenderers>'
+            +'</Combination3DChart>'
+            +'<Style>'
+            +'.lineSeriesLabel{'
+            +'color:#777777;'
+            +'fontWeight:normal;'
+            +'}'
+            +'</Style>'
+            +'</rMateChart>';
+
+
+        var layoutStr4 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="도시가스 공급열량실적" paddingBottom="45"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
+            +'<CurrencyFormatter id="numFmt2" precision="0" currencySymbol="%" alignSymbol="right"/>'
+            +'<Combination2DChart seriesMouseOverAction="none" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
+            /*
+            Combination2D 차트 생성시에 필요한 Combination2DChart 정의합니다
+            showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다
+             */
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Column2DSet type="clustered">'
+            /*
+           Combination 차트에서는 Column차트와 Bar차트를 사용할때 Column2DSet(Colum2DSet),Bar2DSet(Bar2DSet)을 사용합니다
+           예제로 Column2DSeries를 사용하려 할 때는 Column2DSet을 정의 후 +'<series>'와+'<Column2DSet>'을 정의합니다
+           Column2DSet(Colum2DSet),Bar2DSet(Bar2DSet)의 Type은 일반 Type과 동일 합니다
+           그러나 기본 Type은 overlaid입니다
+             */
+            +'<series>'
+            +'<Column2DSeries yField="sales" displayName="Sales" labelPosition="outside" showValueLabels="[2]">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="cost" displayName="Cost" labelPosition="outside" showValueLabels="[2]">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="profit" displayName="Profit" labelPosition="outside" showValueLabels="[2]">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'</series>'
+            +'</Column2DSet>'
+            +'<Line2DSeries selectable="true" yField="roi" displayName="ROI" radius="4.5" form="curve" itemRenderer="CircleItemRenderer">'
+            +'<verticalAxis>'
+            +'<LinearAxis id="vAxis2" formatter="{numFmt2}"/>'
+            +'</verticalAxis>'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'<verticalAxisRenderers>'
+            +'<Axis2DRenderer axis="{vAxis1}" showLine="false"/>'
+            +'<Axis2DRenderer axis="{vAxis2}" showLine="false"/>'
+            +'</verticalAxisRenderers>'
+            +'</Combination2DChart>'
+            +'</rMateChart>';
+
+
+
+        var chartData = [{"Month":"Jan", "Beef":38.5, "Chicken":20, "Sheep":50},
+            {"Month":"Feb", "Beef":56.57, "Chicken":27.52, "Sheep":42},
+            {"Month":"Mar", "Beef":58.57, "Chicken":23.65, "Sheep":40},
+            {"Month":"Apr", "Beef":41.13, "Chicken":29.54, "Sheep":60},
+            {"Month":"May", "Beef":40.58, "Chicken":24.21, "Sheep":50},
+            {"Month":"Jun", "Beef":60.79, "Chicken":39.12, "Sheep":52.5},
+            {"Month":"Jul", "Beef":49.14, "Chicken":32.56, "Sheep":70.64},
+            {"Month":"Aug", "Beef":89.35, "Chicken":39.24, "Sheep":68.57},
+            {"Month":"Sep", "Beef":65.21, "Chicken":32.12, "Sheep":54.14},
+            {"Month":"Oct", "Beef":75.15, "Chicken":42.12, "Sheep":57.58},
+            {"Month":"Nov", "Beef":69.12, "Chicken":35.54, "Sheep":54.47},
+            {"Month":"Dec", "Beef":73.24, "Chicken":40.45, "Sheep":62.47}];
+
+        // 차트 데이터
+        var chartData2 = [{"Country":"SouthSudan", "GDP":20},
+            {"Country":"Libya", "GDP":30},
+            {"Country":"SierraLeone", "GDP":51.2},
+            {"Country":"Mongolia", "GDP":44.5},
+            {"Country":"Paraguay", "GDP":62.35},
+            {"Country":"TimorLeste", "GDP":84.46},
+            {"Country":"Iraq", "GDP":48.9},
+            {"Country":"Panama", "GDP":38},
+            {"Country":"Gambia", "GDP":60.5},
+            {"Country":"Mozam-bique", "GDP":40.1}];
+
+        // 차트 데이터
+        var chartData3 =
+            [{"Month":"Jan","sales":200,"roi":61},
+                {"Month":"Feb","sales":300,"roi":35},
+                {"Month":"Mar","sales":420,"roi":30},
+                {"Month":"Apr","sales":550,"roi":32},
+                {"Month":"May","sales":620,"roi":29},
+                {"Month":"Jun","sales":720,"roi":22},
+                {"Month":"Jul","sales":880,"roi":20},
+                {"Month":"Aug","sales":990,"roi":25},
+                {"Month":"Sep","sales":1000,"roi":19},
+                {"Month":"Oct","sales":1100,"roi":18},
+                {"Month":"Nov","sales":1220,"roi":16},
+                {"Month":"Dec","sales":1440,"roi":15}];
+
+
+        var chartData4 =
+            [{"Month":"Jan","sales":2000, "cost":1300, "profit":700, "roi":20},
+                {"Month":"Feb","sales":3000, "cost":1800, "profit":1200, "roi":45},
+                {"Month":"Mar","sales":4200, "cost":2500, "profit":1700, "roi":83},
+                {"Month":"Apr","sales":5500, "cost":3500, "profit":2000, "roi":45},
+                {"Month":"May","sales":6200, "cost":4000, "profit":2200, "roi":20},
+                {"Month":"Jun","sales":7200, "cost":4500, "profit":2700, "roi":10}];
     </script>
 </th:block>
 
