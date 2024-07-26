@@ -159,16 +159,18 @@
                     </div> <!--//section-top end -->
 
                     <!--                <div style="width: auto; height: 290px;">-->
-                    <div class="imsi" style="display: flex; align-items: center;">
-                        <div class="graph-container" style="flex: 1;">
-                            <img src="/images/rMate_imsi_6.png" alt="그래프_삭제예정">
-                        </div>
-
-                        <div class="grid-container" style="flex: 1; min-width: 300px;">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid"></div>
-                        </div>
-
+                    <div class="row row-2">
+                        <section class="wp50" style="height: 530px; border-radius: 15px;" >
+                            <!-- 그래프 -->
+                            <div id="chartHolder1" style="width:600px; height:400px;">
+                            </div>
+                        </section>
+                        <section class="wp50" style="height: 530px">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid" style="max-height: 485px"></div>
+                            </div>
+                        </section>
                     </div>
                 </section>
 
@@ -281,16 +283,20 @@
                     </div> <!--//section-top end -->
 
                     <!--                <div style="width: auto; height: 290px;">-->
-                    <div class="imsi" style="display: flex; align-items: center;">
-                        <div class="graph-container" style="flex: 1;">
-                            <img src="/images/rMate_imsi_7.png" alt="그래프_삭제예정">
-                        </div>
-
-                        <div class="container-fluid" style="margin: 0 150px;">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid2" style="max-height: 500px"></div>
-                        </div>
-
+                    <div class="row row-2">
+                        <section class="wp50" style="height: 530px; border-radius: 15px;" >
+                            <!-- 그래프 -->
+<!--                            <div id="chartHolder2" style="width:600px; height:400px;"></div>-->
+                            <div>
+                                <img src="/images/rMate_imsi_7.png" alt="그래프_삭제예정" style="width: 727px;">
+                            </div>
+                        </section>
+                        <section class="wp50" style="height: 530px">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid2" style="max-height: 485px"></div>
+                            </div>
+                        </section>
                     </div>
                 </section>
 
@@ -304,6 +310,126 @@
     <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
 
     <script type="text/javascript">
+
+        // -----------------------차트 설정 시작-----------------------
+
+        // rMateChart 를 생성합니다.
+        // 파라메터 (순서대로)
+        //  1. 차트의 id ( 임의로 지정하십시오. )
+        //  2. 차트가 위치할 div 의 id (즉, 차트의 부모 div 의 id 입니다.)
+        //  3. 차트 생성 시 필요한 환경 변수들의 묶음인 chartVars
+        //  4. 차트의 가로 사이즈 (생략 가능, 생략 시 100%)
+        //  5. 차트의 세로 사이즈 (생략 가능, 생략 시 100%)
+        rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr =
+            '<rMateChart  backgroundColor="#ffffff" borderStyle="none">'
+            +'<Options>'
+            // +'<Caption text="Price Indices of Meats ($ Per Kilogram)"/>'
+            // +'<SubCaption text="World Bank Commodity Price Data in 2024" textAlign="center" paddingBottom="35"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<Line2DChart showDataTips="true" dataTipDisplayMode="axis" paddingBottom="25">'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month" padding="0.2"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis maximum="100"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            /*
+            itemRenderer는 Tip이 보여지는 영역차트 부분에 ItemRenderer에서 제공하는 모양을 그려줍니다
+            이 예제에서는 Diamond입니다
+            사용할 수 있는 도형을 모두 표현한 예제는 Chart Samples 의 범례 예제를 참고하십시오.
+            */
+            +'<Line2DSeries yField="Sheep" fill="#ffffff" radius="5" displayName="매출" itemRenderer="RectangleItemRenderer">'
+            +'<showDataEffect>'
+            +'<SeriesXYTransition offset="500"/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries labelPosition="up" yField="Beef" fill="#ffffff" radius="5" displayName="비용" showValueLabels="[5]" itemRenderer="CircleItemRenderer">'
+            /* itemRenderer는 Circle입니다 */
+            +'<showDataEffect>'
+            +'<SeriesXYTransition offset="1000"/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries yField="Chicken" fill="#ffffff" radius="6" displayName="수익" itemRenderer="TriangleItemRenderer">'
+            /* itemRenderer는 Triangle입니다 */
+            +'<showDataEffect>'
+            +'<SeriesXYTransition offset="1500"/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'<annotationElements>'
+            +'<CrossRangeZoomer zoomType="horizontal" fontSize="11" color="#FFFFFF" verticalLabelPlacement="bottom" horizontalLabelPlacement="left" enableZooming="false" enableCrossHair="true">'
+            +'</CrossRangeZoomer>'
+            +'</annotationElements>'
+            +'</Line2DChart>'
+            +'</rMateChart>';
+
+        // 차트 데이터
+        var chartData = [
+            {"Month":"1월", "Beef":38.5, "Chicken":20, "Sheep":50},
+            {"Month":"2월", "Beef":56.57, "Chicken":27.52, "Sheep":42},
+            {"Month":"3월", "Beef":58.57, "Chicken":23.65, "Sheep":40},
+            {"Month":"4월", "Beef":41.13, "Chicken":29.54, "Sheep":60},
+            {"Month":"5월", "Beef":40.58, "Chicken":24.21, "Sheep":50},
+            {"Month":"6월", "Beef":60.79, "Chicken":39.12, "Sheep":52.5},
+            {"Month":"7월", "Beef":49.14, "Chicken":32.56, "Sheep":70.64},
+            {"Month":"8월", "Beef":89.35, "Chicken":39.24, "Sheep":68.57},
+            {"Month":"9월", "Beef":65.21, "Chicken":32.12, "Sheep":54.14},
+            {"Month":"10월", "Beef":75.15, "Chicken":42.12, "Sheep":57.58},
+            {"Month":"11월", "Beef":69.12, "Chicken":35.54, "Sheep":54.47},
+            {"Month":"12월", "Beef":73.24, "Chicken":40.45, "Sheep":62.47}];
+
+        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
+        //
+        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
+        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
+        //
+        // 아래 내용은
+        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
+        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
+        rMateChartH5.calls("chart1", {
+            "setLayout" : layoutStr,
+            "setData" : chartData
+        });
+
+        /**
+         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
+         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
+         *
+         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * -------------------------------------------------
+         *
+         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
+         */
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        /**
+         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
+         * 접근하는 차트 객체의 테마를 변경합니다.
+         * 파라메터로 넘어오는 값
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * - default
+         *
+         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
+         */
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart1").setTheme(theme);
+        }
+
+        // -----------------------차트 설정 끝 -----------------------
 
         var theGrid;
         var theGrid2
@@ -358,18 +484,18 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'checkno', header: ' ', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'inpledt', header: '24.01', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '24.02', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.03', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.04', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.05', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.06', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.07', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.08', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.09', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.10', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.11', width: 90, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '24.12', width: 90, align: 'center', isReadOnly: true},
+                        {binding: 'inpledt', header: '24.01', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '24.02', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.03', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.04', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.05', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.06', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.07', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.08', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.09', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.10', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.11', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '24.12', width: '*', minWidth: 90, align: 'center', isReadOnly: true},
                     ],
                     itemsSource: tempData
                 });
@@ -420,8 +546,8 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'month', header: '월', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2023', header: '2023', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2024', header: '2024', width: 120, align: 'center', isReadOnly: true}
+                        {binding: 'year2023', header: '2023', width: '*', align: 'center', isReadOnly: true},
+                        {binding: 'year2024', header: '2024', width: '*', align: 'center', isReadOnly: true}
                     ],
                     itemsSource: tempData
                 });

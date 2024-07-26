@@ -5,6 +5,7 @@
         #theGrid2.wj-flexgrid .wj-cell {
             padding: 12px;
         }
+
         #theGrid2.wj-flexgrid .downloads {
             padding-top: 0px;
         }
@@ -176,15 +177,18 @@
                     </div> <!--//section-top end -->
 
                     <!--                <div style="width: auto; height: 290px;">-->
-                    <div style="display: flex; align-items: center;">
-                        <div>
-                            <img src="/images/rMate_imsi_2.png" alt="그래프_삭제예정" style="height: 500px;">
-                        </div>
-
-                        <div class="container-fluid" style="margin: 0 150px;">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid" style="max-height: 500px"></div>
-                        </div>
+                    <div class="row row-2">
+                        <section class="wp50" style="height: 530px; border-radius: 15px;">
+                            <!-- 그래프 -->
+                            <div id="chartHolder1" style="width:600px; height:400px;">
+                            </div>
+                        </section>
+                        <section class="wp50" style="height: 530px">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid" style="max-height: 485px"></div>
+                            </div>
+                        </section>
                     </div>
                 </section>
 
@@ -200,7 +204,7 @@
                                     <ul class="date-box">
                                         <li>
                                             <select id="ticketcategory" name="ticketcategory">
-<!--                                                어떤 연도가 들어올지 모르니까 이건 동적으로 만들기-->
+                                                <!--                                                어떤 연도가 들어올지 모르니까 이건 동적으로 만들기-->
                                                 <option value="뭐야이거지워도되나">2024</option>
                                             </select>
                                         </li>
@@ -297,15 +301,20 @@
                     </div> <!--//section-top end -->
 
                     <!--                <div style="width: auto; height: 290px;">-->
-                    <div style="display: flex; align-items: center;">
-                        <div>
-                            <img src="/images/rMate_imsi_3.png" alt="그래프_삭제예정" style="height: 500px;">
-                        </div>
-
-                        <div class="container-fluid" style="margin: 0 150px;">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid2" style="max-height: 500px"></div>
-                        </div>
+                    <div class="row row-2">
+                        <section class="wp50" style="height: 530px; border-radius: 15px;" >
+                            <!-- 그래프 -->
+                            <!--                            <div id="chartHolder2" style="width:600px; height:400px;"></div>-->
+                            <div>
+                                <img src="/images/rMate_imsi_3.png" alt="그래프_삭제예정" style="width: 727px;">
+                            </div>
+                        </section>
+                        <section class="wp50" style="height: 530px">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid2" style="max-height: 485px"></div>
+                            </div>
+                        </section>
                     </div>
 
                 </section>
@@ -319,6 +328,117 @@
     <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
 
     <script type="text/javascript">
+
+        // -----------------------차트 설정 시작-----------------------
+
+        // rMateChart 를 생성합니다.
+        // 파라메터 (순서대로)
+        //  1. 차트의 id ( 임의로 지정하십시오. )
+        //  2. 차트가 위치할 div 의 id (즉, 차트의 부모 div 의 id 입니다.)
+        //  3. 차트 생성 시 필요한 환경 변수들의 묶음인 chartVars
+        //  4. 차트의 가로 사이즈 (생략 가능, 생략 시 100%)
+        //  5. 차트의 세로 사이즈 (생략 가능, 생략 시 100%)
+        rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+
+        function changeColor(){
+            document.getElementById("chart1").setLayout(layout(document.getElementById("color").value));
+        }
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">' +
+            '<Options>' +
+            '<Caption text="기간별 발전현황" />' +
+            '<SubCaption text="From 01 To 12" textAlign="center" paddingBottom="35"/>' +
+            '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>' +
+            '</Options>' +
+            '<Column3DChart seriesMouseOverAction="none" showDataTips="true" columnWidthRatio="0.6" paddingBottom="25">' +
+            '<horizontalAxis>' +
+            '<CategoryAxis categoryField="Month"/>' +
+            '</horizontalAxis>' +
+            '<verticalAxis>' +
+            '<LinearAxis minimum="0" maximum="1000"/>' + // 변경된 최대 축 값
+            '</verticalAxis>' +
+            '<series>' +
+            '<Column3DSeries labelPosition="outside" yField="AJ38" displayName="AJ38" showValueLabels="[3]" outsideLabelXOffset="7">' +
+            '<showDataEffect>' +
+            '<SeriesInterpolate duration="1000"/>' + // 애니메이션 효과 적용
+            '</showDataEffect>' +
+            '</Column3DSeries>' +
+            '<Column3DSeries labelPosition="outside" yField="AJ39" displayName="AJ39" showValueLabels="[3]" outsideLabelXOffset="7">' +
+            '<showDataEffect>' +
+            '<SeriesInterpolate duration="1000"/>' + // 애니메이션 효과 적용
+            '</showDataEffect>' +
+            '</Column3DSeries>' +
+            '</series>' +
+            '</Column3DChart>' +
+            '</rMateChart>';
+
+
+        // 차트 데이터
+        var chartData = [
+            {"Month": "Jan", "AJ38": 350, "AJ39": 200},
+            {"Month": "Feb", "AJ38": 550, "AJ39": 200},
+            {"Month": "Mar", "AJ38": 550, "AJ39": 300},
+            {"Month": "Apr", "AJ38": 400, "AJ39": 500},
+            {"Month": "May", "AJ38": 400, "AJ39": 200},
+            {"Month": "Jun", "AJ38": 650, "AJ39": 300},
+            {"Month": "Jul", "AJ38": 400, "AJ39": 300},
+            {"Month": "Aug", "AJ38": 450, "AJ39": 950},
+            {"Month": "Sep", "AJ38": 550, "AJ39": 350},
+            {"Month": "Oct", "AJ38": 650, "AJ39": 450},
+            {"Month": "Nov", "AJ38": 550, "AJ39": 550},
+            {"Month": "Dec", "AJ38": 650, "AJ39": 450}
+        ];
+
+        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
+        //
+        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
+        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
+        //
+        // 아래 내용은
+        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
+        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
+        rMateChartH5.calls("chart1", {
+            "setLayout": layoutStr,
+            "setData": chartData
+        });
+
+        /**
+         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
+         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
+         *
+         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * -------------------------------------------------
+         *
+         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
+         */
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        /**
+         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
+         * 접근하는 차트 객체의 테마를 변경합니다.
+         * 파라메터로 넘어오는 값
+         * - simple
+         * - cyber
+         * - modern
+         * - lovely
+         * - pastel
+         * - default
+         *
+         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
+         */
+        function rMateChartH5ChangeTheme(theme) {
+            document.getElementById("chart1").setTheme(theme);
+        }
+
+        // -----------------------차트 설정 끝 -----------------------
+
 
         var theGrid;    // 목록에 뿌림
         var theGrid1;   // 등록에서 insert
@@ -360,8 +480,8 @@
                     autoGenerateColumns: false,
                     columns: [
                         {binding: 'month', header: '일자', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2023', header: 'AJ38', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2024', header: 'AJ39', width: 120, align: 'center', isReadOnly: true}
+                        {binding: 'year2023', header: 'AJ38', width: '*', align: 'center', isReadOnly: true},
+                        {binding: 'year2024', header: 'AJ39', width: '*', align: 'center', isReadOnly: true}
                     ],
                     itemsSource: tempData
                 });
@@ -401,8 +521,8 @@
                     autoGenerateColumns: false,
                     columns: [
                         {binding: 'month', header: '월', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2023', header: '2023', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2024', header: '2024', width: 120, align: 'center', isReadOnly: true}
+                        {binding: 'year2023', header: '2023', width: '*', align: 'center', isReadOnly: true},
+                        {binding: 'year2024', header: '2024', width: '*', align: 'center', isReadOnly: true}
                     ],
                     itemsSource: tempData2
                 });
@@ -418,8 +538,6 @@
                 theGrid2.itemsSource = new wijmo.collections.CollectionView(tempData2);
             }
         }
-
-
 
 
         $(document).ready(function (e) {
