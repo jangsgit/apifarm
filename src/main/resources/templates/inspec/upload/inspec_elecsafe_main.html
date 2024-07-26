@@ -456,12 +456,19 @@
                 checkseq: selectedItem.checkseq
             };
 
-            if (!selectedItem) {
+            if (selectedItem.length === 0) {
                 Alert.alert('', '수정할 항목을 선택하세요.');
                 return;
             }
 
             Alert.confirm('', '수정하시겠습니까?', function () {
+                if (!selectedItem.checkseq) {
+                    Alert.alert('', '수정할 게시물이 없습니다.', function () {
+                        fetchListData();
+                    });
+                    return;
+                }
+
                 $.ajax({
                     url: "/api/inspec/elec_safe/modfind",
                     type: 'POST',
