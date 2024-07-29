@@ -1,0 +1,690 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+
+        #theGrid2{
+            max-height: 270px;
+        }
+
+        #theGrid3{
+            max-height: 225px;
+        }
+
+        #theGrid4{
+            max-height: 540px;
+        }
+
+        #theGrid2.wj-flexgrid .wj-cell {
+            padding: 12px;
+        }
+
+        #theGrid3.wj-flexgrid .wj-cell {
+            padding: 12px;
+        }
+
+        #theGrid4.wj-flexgrid .wj-cell {
+            padding: 12px;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>로봇 통계 현황</h2>
+                <a href="#" title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검 관리</li>
+                <li>로봇 통계 현황</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>대구물류센터</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="이벤트통계">이벤트통계</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="기간별대비">기간별대비</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="센서정보">센서정보</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        로봇ID<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w140">
+                                        <option>전체</option>
+                                        <option>RC001</option>
+                                        <option>RC002</option>
+                                        <option>RC003</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        기간<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w140">
+                                        <option>월별</option>
+                                        <option>분기별</option>
+                                        <option>일별</option>
+                                        <option>년월</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        차트종류<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select id="select3" class="w200">
+                                            <option>PIE 3D</option>
+                                        </select>
+                                        <a href="#a" class="btn-srch" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn" title="차트설정초기화">
+                                        차트설정초기화
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn" title="차트설정">
+                                        차트설정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="row">
+                        <div class="section wp50">
+                            <div class="chart-wrap">
+                                <img src="/images/sample/sample-chart3.png" alt="샘플">
+                            </div>
+                        </div>
+                        <div class="section wp50">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid" style="max-height: 270px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        로봇ID<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w140">
+                                        <option>전체</option>
+                                        <option>RC001</option>
+                                        <option>RC002</option>
+                                        <option>RC003</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        기간<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w140">
+                                        <option>월별</option>
+                                        <option>분기별</option>
+                                        <option>일별</option>
+                                        <option>년월</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        차트종류<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select id="select3" class="w200">
+                                            <option>Stacked 3D</option>
+                                        </select>
+                                        <a href="#a" class="btn-srch" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn" title="차트설정초기화">
+                                        차트설정초기화
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn" title="차트설정">
+                                        차트설정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="row">
+                        <div class="section wp50">
+                            <div class="chart-wrap">
+                                <img src="/images/sample/sample-chart4.png" alt="샘플">
+                            </div>
+                        </div>
+                        <div class="section wp50">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid2"></div>
+                                <div id="theGrid3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab3">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        로봇ID<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w140">
+                                        <option>전체</option>
+                                        <option>RC001</option>
+                                        <option>RC002</option>
+                                        <option>RC003</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        기간<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w100">
+                                        <option>월별</option>
+                                        <option>분기별</option>
+                                        <option>일별</option>
+                                        <option>년월</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select2">
+                                        항목<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select2" class="w120">
+                                        <option>습도</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select3">
+                                        차트종류<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select id="select3" class="w200">
+                                            <option>Dashed Line Step</option>
+                                        </select>
+                                        <a href="#a" class="btn-srch" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn" title="차트설정초기화">
+                                        차트설정초기화
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn" title="차트설정">
+                                        차트설정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="row">
+                        <div class="section wp60">
+                            <div class="chart-wrap">
+                                <img src="/images/sample/sample-chart5.png" alt="샘플">
+                            </div>
+                        </div>
+                        <div class="section wp40">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    </div> <!-- //dashboard-layout-right end-->
+
+    </div> <!-- //dashboard-layout-contents end-->
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;
+        var theGrid2;
+        var theGrid3;
+        var theGrid4;
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            fetchListData();
+            fetchListData2();
+            fetchListData3();
+            inputData();
+        }
+
+        function fetchListData() {
+            let data2 = [];
+
+            $.ajax({
+                url: '',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 임시 데이터 배열 정의
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    inpledt: '',
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'inpledt', header: '발생일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '발생시간',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '이벤트', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '로봇ID', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                theGrid.selection = new wijmo.grid.CellRange(-1, -1, -1, -1);
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '로봇이벤트통계';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+        function fetchListData2() {
+            let data2 = [];
+
+            $.ajax({
+                url: '',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 임시 데이터 배열 정의
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    inpledt: '',
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
+
+            if (!theGrid2) {
+                // 데이터 그리드에 바인딩
+                theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'inpledt', header: '기간', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '이벤트',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '건수', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '발생율', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid2.columnFooters.rows.push(new wijmo.grid.GroupRow());
+                theGrid2.columnFooters.setCellData(0, 0, '계');
+                theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                theGrid2.selection = new wijmo.grid.CellRange(-1, -1, -1, -1);
+                new FlexGridContextMenu(theGrid2);
+                window.downloadFileName = '로봇기간별대비';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid2.itemsSource = viewdata;
+            }
+
+            if (!theGrid3) {
+                // 데이터 그리드에 바인딩
+                theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    headersVisibility: wijmo.grid.HeadersVisibility.None,
+                    columns: [
+                        {binding: 'inpledt', header: '기간', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: 'RC001',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: 'RC002', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: 'RC003', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid3.columnFooters.rows.push(new wijmo.grid.GroupRow());
+                theGrid3.columnFooters.setCellData(0, 0, '계');
+                theGrid3.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                theGrid3.selection = new wijmo.grid.CellRange(-1, -1, -1, -1);
+                new FlexGridContextMenu(theGrid3);
+                window.downloadFileName = '로봇기간별대비';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid3.itemsSource = viewdata;
+            }
+        }
+
+        function fetchListData3() {
+            let data2 = [];
+
+            $.ajax({
+                url: '',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 임시 데이터 배열 정의
+            var tempData = [];
+            for (var i = 0; i < 20; i++) {
+                tempData.push({
+                    checkno: i + 1,
+                    inpledt: '',
+                    checkdt: '',
+                    spworknm: '',
+                    spcompnm: '',
+                    spplannm: '',
+                    checkusr: '',
+                    checkresult: '',
+                    checkrem: ''
+                });
+            }
+
+            if (!theGrid4) {
+                // 데이터 그리드에 바인딩
+                theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'inpledt', header: '발생일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'checkdt', header: '발생시간',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spworknm', header: '이벤트', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {binding: 'spcompnm', header: '로봇ID', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+
+                    ],
+                    itemsSource: tempData
+                });
+                theGrid4.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                theGrid4.selection = new wijmo.grid.CellRange(-1, -1, -1, -1);
+                new FlexGridContextMenu(theGrid4);
+                window.downloadFileName = '센서정보';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid4.itemsSource = viewdata;
+            }
+        }
+
+        $(document).ready(function (e) {
+
+            // 정보 저장
+            // $('#btnSave').click(function (e) {
+            //     Alert.confirm('', '저장하시겠습니까?', function () {
+            //
+            //         // theGrid1의 데이터를 data1 배열에 업데이트
+            //         var updatedData1 = theGrid1.collectionView.items;
+            //
+            //         // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+            //         console.log("Updated data1:", updatedData1);
+            //
+            //         let formData = new FormData();
+            //
+            //         formData.append('spworkcd', $('#spworkcd').val());
+            //         formData.append('spworknm', $('#spworknm').val());
+            //         formData.append('spcompcd', $('#spcompcd').val());
+            //         formData.append('spcompnm', $('#spcompnm').val());
+            //         formData.append('spplancd', $('#spplancd').val());
+            //         formData.append('spplannm', $('#spplannm').val());
+            //         formData.append('checkdt', $('#checkdt').val());
+            //         formData.append('checknm', $('#checknm').val());
+            //         formData.append('checkusr', $('#checkusr').val());
+            //         formData.append('checkresult', $('#checkresult').val());
+            //         formData.append('checkrem', $('#checkrem').val());
+            //         formData.append('filelist', $('#filelist').val());
+            //         formData.append('_csrf', $('[name=_csrf]').val());
+            //         // 점검리스트 데이터 추가
+            //         formData.append('inspectlist', JSON.stringify(updatedData1));
+            //
+            //         $.ajax({
+            //             url: "/api/inspec/hap/save",
+            //             type: 'POST',
+            //             data: formData,
+            //             processData: false,
+            //             contentType: false,
+            //             success: function (response) {
+            //                 if (response.success) {
+            //                     Alert.alert('', response.message, function () {
+            //                         $('#listTabLink').click();
+            //                         fetchListData();
+            //
+            //                     });
+            //
+            //                 } else {
+            //                     Alert.alert('', '저장에 실패했습니다. ');
+            //                 }
+            //             },
+            //             error: function (jqXHR, textStatus, errorThrown) {
+            //                 Alert.alert('', '에러가 발생하였습니다.');
+            //             }
+            //         });
+            //     })
+            // })
+            // select 아이디에 따라 히든 input 설정
+            const selects = [
+                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+            ];
+            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+
+        });
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+    </script>
+
+</th:block>
+</html>
+
