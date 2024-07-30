@@ -1,4 +1,4 @@
-let csrfToken = $('[name=_csrf]').val();
+
 
 let AjaxFunction = {
     sendAjaxRequest: function(url, type, contentType, processData, successCallback, errorCallback){
