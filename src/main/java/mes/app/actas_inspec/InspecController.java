@@ -22,6 +22,7 @@ import mes.domain.repository.actasRepository.TB_RP715Repository;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xpath.objects.XObject;
 import org.docx4j.Docx4J;
 import org.docx4j.convert.out.FOSettings;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -29,6 +30,8 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +42,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -119,38 +125,55 @@ public class InspecController {
             @RequestParam(value = "checkarea", required = false) String checkarea,
             @RequestParam(value = "randomuuid", required = false) String randomuuid,
             @RequestParam(value = "doc-list", required = false) List<String> doc_list,
-            @RequestParam(value = "filelist", required = false) MultipartFile[] files
+            @RequestParam(value = "filelist", required = false) MultipartFile[] files,
+            @RequestPart(value = "deletedFiles", required = false) MultipartFile[] deletedFiles
             //@RequestParam Map<String, String> params
-    ){
+    ) throws IOException {
 
+        /*1.점검자 여러명 추가해서 수정해보기
+        2.일반수정
+        3.파일하나 삭제해보고 수정
+        4.파일하나 추가해보고 수정
+        5.파일 안건드리고 수정*/
         AjaxResult result = new AjaxResult();
 
-
-
-        if(files != null){
-            for(MultipartFile filelist : files){
-                if(filelist.getSize() > 52428800){
-                    result.success = false;
-                    result.message = "파일사이즈가 초과하였습니다.";
-                    return result;
-                }
-            }
-        }
 
         TB_RP710 tbRp710dto = new TB_RP710();
 
         String checkdtconvertvalue = checkdt.replaceAll("-","");
 
+        List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", randomuuid);
+
         String formattedValue;
-        Optional<String> checknovalue = tb_rp710Repository.findMaxChecknoByCheckdt(checkdtconvertvalue);
-        if(checknovalue.isPresent()){
 
-            Integer checknointvalue = Integer.parseInt(checknovalue.get()) + 1;
 
-            formattedValue = String.format("%02d", checknointvalue);
+        //수정
+        if(!rp710items.isEmpty()){
 
-        }else{
-            formattedValue = "01";
+            tbRp710dto.setSpuncode(rp710items.get(0).get("spuncode").toString());
+            tbRp710dto.setCheckdt(rp710items.get(0).get("checkdt").toString());
+            tbRp710dto.setCheckno(rp710items.get(0).get("checkno").toString());
+
+
+        } //저장
+        else
+        {
+            Optional<String> checknovalue = tb_rp710Repository.findMaxChecknoByCheckdt(checkdtconvertvalue);
+
+            if(checknovalue.isPresent()){
+
+                Integer checknointvalue = Integer.parseInt(checknovalue.get()) + 1;
+
+                formattedValue = String.format("%02d", checknointvalue);
+
+            }else{
+                formattedValue = "01";
+            }
+
+            tbRp710dto.setCheckno(formattedValue);
+            tbRp710dto.setSpuncode(randomuuid);
+            tbRp710dto.setCheckdt(checkdtconvertvalue);
+
         }
 
         tbRp710dto.setSpworkcd("001");
@@ -159,19 +182,38 @@ public class InspecController {
         tbRp710dto.setSpcompnm("대구성서공단");
         tbRp710dto.setSpplancd("001");
         tbRp710dto.setSpplannm("KT대구물류센터 연료전지발전소");
-        tbRp710dto.setCheckdt(checkdtconvertvalue);
-        tbRp710dto.setCheckno(formattedValue);
+
+
         tbRp710dto.setCheckstdt(checkstdt);
         tbRp710dto.setCheckendt(checkendt);
-        tbRp710dto.setCheckusr(checkusr);
+        tbRp710dto.setCheckusr(checkusr);  //TODO: 수정로직이랑 좀 고려를 해보자.
         tbRp710dto.setCheckarea(checkarea);
 
         tbRp710dto.setSupplier(supplier);
-        tbRp710dto.setSpuncode(randomuuid);
 
-        String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
+        /*String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
-        List<TB_RP715> fileEntities = new ArrayList<>();
+        List<TB_RP715> fileEntities = new ArrayList<>();*/
+
+        if (deletedFiles != null && deletedFiles.length > 0){
+
+            for(MultipartFile deletedFile : deletedFiles){
+                String content = new String(deletedFile.getBytes(), StandardCharsets.UTF_8);
+                Map<String, String> deleteFileMap = new ObjectMapper().readValue(content, Map.class);
+
+                String checkseq = deleteFileMap.get("checkseq");
+                String spuncode_id = deleteFileMap.get("spuncode_id");
+                String filepath = deleteFileMap.get("filepath");
+                String filesvnm = deleteFileMap.get("filesvnm");
+
+                deleteFileFromDisk(filepath, filesvnm);
+
+                tb_rp715Repository.deleteBySpuncodeIdAAndCheckseq(spuncode_id, checkseq);
+
+
+
+            }
+        }
 
 
         boolean successcode = inspecService.save(tbRp710dto, files, doc_list);
@@ -187,6 +229,21 @@ public class InspecController {
         return result;
     }
 
+    private void deleteFileFromDisk(String filepath, String filesvnm){
+
+        if(filepath == null || filesvnm == null ){
+            return;
+        }
+
+        String fullPath = Paths.get(filepath, filesvnm).toString();
+        File file = new File(fullPath);
+
+        if(file.exists()){
+            file.delete();
+        } else {
+            System.out.println("파일이 존쟇지 않음");
+        }
+    }
 
     @PostMapping("/filesave")
     public AjaxResult fileupload(
@@ -213,18 +270,34 @@ public class InspecController {
 
         String spuncode = request.get("spuncode");
 
+        Pageable pageable = (Pageable) PageRequest.of(0,1);
+        List<String> tb_rp715 = tb_rp715Repository.findByFilesvnm(spuncode, pageable);
 
-        Optional<String> tb_rp715 = tb_rp715Repository.findByFilesvnm(spuncode);
-
-        if(!tb_rp715.isPresent()){
+        if(tb_rp715.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(null);
         }
 
         String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일/";
-        String fileName = tb_rp715.get();
+        String fileName = tb_rp715.get(0);
 
         return fileUploaderService.downloadFile(fileName, path);
+    }
+
+    @PostMapping("/modfind")
+    public AjaxResult getById(@RequestBody String spuncode){
+        AjaxResult result = new AjaxResult();
+
+        String SpunCodeValue = spuncode.replaceAll("[\"']", "");
+
+        Map<String, Object> item = inspecService.findById(SpunCodeValue);
+        List<Map<String, Object>> inspecitem = inspecService.getInspecDocList(SpunCodeValue);
+
+        item.put("inspecitem", inspecitem);
+
+
+        result.data = item;
+        return result;
     }
 
     @PostMapping("/delete")

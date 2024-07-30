@@ -52,55 +52,12 @@ public class InspecService {
 
             tb_rp710Repository.save(tbRp710);
 
+            TB_INSPEC_SAVE(doc_list, tbRp710.getSpuncode());
+
+
             String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
-            List<String> divisionList = new ArrayList<>();
-            List<String> contList = new ArrayList<>();
-            List<String> resultList = new ArrayList<>();
-            List<String> reformList = new ArrayList<>();
-            List<Integer> NumList = new ArrayList<>();
 
-            int num = 0;
-            for(String doc : doc_list){
-                String[] parts = doc.split("@", -1);
-
-                if(parts.length >= 4){
-
-                    ++num;
-                    divisionList.add(parts[0].trim());
-                    contList.add(parts[1].trim());
-                    resultList.add(parts[2].trim());
-                    reformList.add(parts[3].trim());
-                    NumList.add(num);
-                }
-
-            }
-
-            for(int i=0; i < doc_list.size(); i++){
-                TB_INSPEC tb_inspec = new TB_INSPEC();
-
-                int MaxSeq;
-                Optional<Integer> SeqValue = tb_inspecRepository.findTopByOrderBySeqDesc();
-                MaxSeq = SeqValue.orElse(1);
-
-                tb_inspec.setSeq(MaxSeq + 1);
-                tb_inspec.setSpworkcd("001");
-                tb_inspec.setSpworknm("대구");
-                tb_inspec.setSpcompcd("001");
-                tb_inspec.setSpcompnm("대구성서공단");
-                tb_inspec.setSpplancd("001");
-                tb_inspec.setSpplannm("KT대구물류센터 연료전지발전소");
-                tb_inspec.setTabletype("TB_RP710");
-                tb_inspec.setSpuncode_id(tbRp710.getSpuncode());
-                tb_inspec.setInspecnum(NumList.get(i));
-                tb_inspec.setInspecdivision(divisionList.get(i));
-                tb_inspec.setInspeccont(contList.get(i));
-                tb_inspec.setInspecresult(resultList.get(i));
-                tb_inspec.setInspecreform(reformList.get(i));
-                tb_inspecRepository.save(tb_inspec);
-
-
-            }
 
             if(files != null){
                 for (MultipartFile filelist: files){
@@ -121,10 +78,107 @@ public class InspecService {
 
     }
 
+    public void TB_INSPEC_SAVE(List<String> doc_list, String spuncode_id){
+
+        List<String> divisionList = new ArrayList<>();
+        List<String> contList = new ArrayList<>();
+        List<String> resultList = new ArrayList<>();
+        List<String> reformList = new ArrayList<>();
+        List<Integer> NumList = new ArrayList<>();
+        List<Integer> seqList = new ArrayList<>();
+
+
+        int num = 0;
+        for(String doc : doc_list){
+            String[] parts = doc.split("@", -1);
+
+            if(parts.length >= 4){
+
+                ++num;
+                divisionList.add(parts[0].trim());
+                contList.add(parts[1].trim());
+                resultList.add(parts[2].trim());
+                reformList.add(parts[3].trim());
+                NumList.add(num);
+                if(!parts[4].trim().isEmpty()){
+                    seqList.add(Integer.valueOf(parts[4].trim()));
+                }
+            }
+
+        }
+
+        List<Map<String, Object>> getInspecDocList = getInspecDocList(spuncode_id);
+
+        //수정
+        if(!getInspecDocList.isEmpty()){
+            for(int i = 0; i < doc_list.size(); i++){
+                TB_INSPEC tb_inspec = new TB_INSPEC();
+
+                tb_inspec.setSpuncode_id(getInspecDocList.get(i).get("spuncode_id").toString());
+                tb_inspec.setSeq((Integer) getInspecDocList.get(i).get("seq"));
+                tb_inspec.setSpworkcd("001");
+                tb_inspec.setSpworknm("대구");
+                tb_inspec.setSpcompcd("001");
+                tb_inspec.setSpcompnm("대구성서공단");
+                tb_inspec.setSpplancd("001");
+                tb_inspec.setSpplannm("KT대구물류센터 연료전지발전소");
+                tb_inspec.setTabletype("TB_RP710");
+
+                tb_inspec.setInspecnum(NumList.get(i));
+                tb_inspec.setInspecdivision(divisionList.get(i));
+                tb_inspec.setInspeccont(contList.get(i));
+                tb_inspec.setInspecresult(resultList.get(i));
+                tb_inspec.setInspecreform(reformList.get(i));
+                tb_inspecRepository.save(tb_inspec);
+            }
+        }
+        else {
+
+            for (int i = 0; i < doc_list.size(); i++) {
+                TB_INSPEC tb_inspec = new TB_INSPEC();
+
+                int MaxSeq;
+                Optional<Integer> SeqValue = tb_inspecRepository.findTopByOrderBySeqDesc();
+                MaxSeq = SeqValue.orElse(1);
+                tb_inspec.setSpuncode_id(spuncode_id);
+
+                tb_inspec.setSeq(MaxSeq + 1);
+                tb_inspec.setSpworkcd("001");
+                tb_inspec.setSpworknm("대구");
+                tb_inspec.setSpcompcd("001");
+                tb_inspec.setSpcompnm("대구성서공단");
+                tb_inspec.setSpplancd("001");
+                tb_inspec.setSpplannm("KT대구물류센터 연료전지발전소");
+                tb_inspec.setTabletype("TB_RP710");
+
+                tb_inspec.setInspecnum(NumList.get(i));
+                tb_inspec.setInspecdivision(divisionList.get(i));
+                tb_inspec.setInspeccont(contList.get(i));
+                tb_inspec.setInspecresult(resultList.get(i));
+                tb_inspec.setInspecreform(reformList.get(i));
+                tb_inspecRepository.save(tb_inspec);
+
+
+            }
+        }
+    }
+
     public void TB_RP715_Save(String spuncode, Map<String, Object> fileinform, String repyn){
 
 
             TB_RP715 attachedFile = new TB_RP715();
+
+            List<Map<String, Object>> fileItem = getFileList(spuncode);
+
+            String fileName = (String) fileinform.get("fileName");
+
+            for(Map<String, Object> item : fileItem){
+                String fileOrNm = (String) item.get("fileornm");
+                if(fileName.equals(fileOrNm)){
+                    return;
+                }
+            }
+
 
             String formattedFileValue;
             Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(spuncode);
@@ -179,7 +233,7 @@ public class InspecService {
         dicParam.addValue("spuncode", spuncode);
 
         String sql = """
-                    select inspecdivision, inspeccont, inspecresult, inspecreform
+                    select inspecdivision, inspeccont, inspecresult, inspecreform, seq, spuncode_id
                     from tb_inspec
                     where "spuncode_id" = :spuncode
                     and "tabletype" = 'TB_RP710'
@@ -200,7 +254,7 @@ public class InspecService {
 
             sql = """
                 select
-                supplier, checkdt, checkusr, checkarea, 'Y' as downloads, 'Y' upload 
+                supplier, checkdt, checkusr, checkarea, 'Y' as downloads, 'Y' upload, spuncode, checkno 
                 from tb_rp710
                 where 1 = 1
                and "spuncode" like :spuncode
@@ -216,8 +270,8 @@ public class InspecService {
                       'Y' as downloads,
                       'Y' as upload,
                       coalesce(
-                      	(select sa.filesvnm from tb_rp715 sa where sa.spuncode_id = sb.spuncode and sa.repyn = 'Y'
-                      	order by sa.indatem desc limit 1), '') as filesvnm
+                      	(select sa.fileornm from tb_rp715 sa where sa.spuncode_id = sb.spuncode and sa.repyn = 'Y'
+                      	order by sa.indatem desc limit 1), '') as fileornm
                       from
                       tb_rp710 sb
                       WHERE 1 = 1
@@ -232,4 +286,59 @@ public class InspecService {
     }
 
 
+    public Map<String, Object> findById(String spuncode) {
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+        StringBuilder sql = new StringBuilder();
+        dicParam.addValue("spuncode", spuncode);
+
+        sql.append("""
+                select 
+                    a.*,
+                    b.filepath as filepath,
+                    b.filesvnm as filesvnm,
+                    b.fileextns as fileextns,
+                    b.fileornm as fileornm,
+                    b.filesize as filesize,
+                    b.spuncode_id as spuncode_id,
+                    b.indatem as indatem,
+                    b.checkseq as checkseq
+                from tb_rp710 a  
+                left join tb_rp715 b
+                on 
+                    a.spuncode = b.spuncode_id
+                    and b.repyn <> 'Y'
+                where
+                    spuncode like :spuncode
+                    
+                    
+                """);
+        List<Map<String, Object>> rows = this.sqlRunner.getRows(sql.toString(), dicParam);
+
+        if(rows.isEmpty()){
+            return Collections.emptyMap();
+        }
+
+        Map<String, Object> result = new HashMap<>(rows.get(0));
+        List<Map<String, Object>> filelist = new ArrayList<>();
+
+        for(Map<String, Object> row : rows){
+            if(row.get("spuncode_id") != null){
+                Map<String, Object> fileData = new HashMap<>();
+                fileData.put("filepath", row.get("filepath"));
+                fileData.put("filesvnm", row.get("filesvnm"));
+                fileData.put("fileextns", row.get("fileextns"));
+                fileData.put("fileornm", row.get("fileornm"));
+                fileData.put("filesize", row.get("filesize"));
+                fileData.put("spuncode_id", row.get("spuncode_id"));
+                fileData.put("checkseq", row.get("checkseq"));
+                fileData.put("indatem", row.get("indatem"));
+                filelist.add(fileData);
+
+            }
+        }
+        result.put("filelist", filelist);
+        return result;
+
+    }
 }

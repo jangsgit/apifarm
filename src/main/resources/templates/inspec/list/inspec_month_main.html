@@ -43,11 +43,14 @@
         </div>
         <div class="tab-wrap">
             <ul class="tab-links">
+                <input type="hidden" id="spuncode" name="spuncode" />
+
+
                 <li>
-                    <a href="#tab1" title="목록">목록</a>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">등록</a>
+                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
                 </li>
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
@@ -108,19 +111,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                                <li>
                                     <a  class="btn btn-delete" title="삭제" id="btnDelete">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-edit" title="수정">
+                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
                                     </a>
@@ -131,6 +128,10 @@
                                         순회점검일지 출력
                                     </a>
                                 </li>
+                                <!-- 로딩 바 요소 -->
+                                <div id="loadingBar">
+                                    <div class="spinner"></div>
+                                </div>
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
@@ -150,7 +151,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
@@ -224,7 +225,7 @@
                                 </th>
                                 <td>
                                     <div class="input-btnbox">
-                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="5">
+                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="40">
                                         <button onclick="addInputField(this)" class="mg-l8">점검자 추가</button>
                                     </div>
                                 </td>
@@ -257,7 +258,7 @@
                                     <td rowspan="4"><span id="inspecdivision1">일반 점검 사항</span></td>
                                     <td>
                                         <span id="inspeccont1">ㅇ 작업환경 일반 사항<br>- 작업장 내부 적절한 조도 확보 여부<br>- 밀폐공간일 경우 유해가스 등 환기 여부</span>
-
+                                        <input type="hidden" id="seq1" name="seq1" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult1">O</span></td>
                                     <td>
@@ -270,6 +271,7 @@
                                 </tr>
                                 <tr>
                                     <td><span id="inspeccont2">ㅇ 발전소 주변 유해위험 환경요소 점검<br>- 작업 또는 통행에 방해되는 폐기물 또는 적치물 방치 상태, 위험물/인화성물질 방치 상태 등</span>
+                                        <input type="hidden" id="seq2" name="seq2" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult2">O</span></td>
                                     <td>
@@ -282,6 +284,7 @@
                                 <tr>
                                     <td>
                                         <span id="inspeccont3">ㅇ 화재 등 위험상황 대비 관련 사항<br>- 소화기 등 비치 상태<br>- 화재 등 비상상황시 비상문, 비상대피로 확보</span>
+                                        <input type="hidden" id="seq3" name="seq3" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult3">O</span></td>
                                     <td>
@@ -294,6 +297,7 @@
                                 <tr>
                                     <td>
                                         <span id="inspeccont4">ㅇ 작업 전/후 정리정돈 등 환경정리 상태<br>- 작업전 작업환경 사전점검 실시<br>- 작업후 작업부산물 정리, 청소, 정리정돈 실시</span>
+                                        <input type="hidden" id="seq4" name="seq4" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult4">O</span></td>
                                     <td>
@@ -308,6 +312,7 @@
                                     <td rowspan="2"><span id="inspecdivision2">중점 점검 사항</span></td>
                                     <td>
                                         <span id="inspeccont5">ㅇ 전기작업 위험요소 점검<br>- 전기기기의 접지 상태 확인<br>- 작업 전 차단기 OFF 조치 등 전원 통전 확인</span>
+                                        <input type="hidden" id="seq5" name="seq5" />
                                     </td>
 
                                     <td class="checkbox-cell"><span id="inspecresult5">O</span></td>
@@ -321,6 +326,7 @@
                                 <tr>
                                     <td>
                                         <span id="inspeccont6">ㅇ 고소작업 위험요소 점검<br>- 작업전 사다리 상태 점검<br>- 사다리 활용 작업시 2인 1조 작업 및 최상단  발판 금지</span>
+                                        <input type="hidden" id="seq6" name="seq6" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult6">O</span></td>
                                     <td>
@@ -494,7 +500,7 @@
             { binding: 'checktmdt', header: '점검시간', align: 'center', width: '*', minWidth: 250 },
             { binding: 'downloads', header: '다운로드', align: 'center', width: '*', minWidth: 200 },
             { binding: 'upload', header: '점검일지 업로드', align: 'center', width: '*', minWidth: 140 },
-            { binding: 'filesvnm', header: '대표파일명', align: 'center', width: '*', minWidth: 140 },
+            { binding: 'fileornm', header: '대표파일명', align: 'center', width: 0, minWidth: 0 },
             /*{ binding: 'downloads', header: '다운로드', align: 'center', width: '*', minWidth: 200,
                 cellTemplate: /!*'<a title="다운로드" class="btn-filedown">다운로드</a>'*!/
                     wijmo.grid.cellmaker.CellMaker.makeButton({
@@ -549,6 +555,7 @@
                 success: function (response) {
                     if (response.success) {
                         Alert.alert('', response.message);
+                        searchData();
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -557,6 +564,25 @@
             });
         }
 
+        function clearForm(){
+            ['supplier', 'checkdt', 'checkstdt', 'checkendt', 'checkusr', 'checkusr', 'checkarea',
+            'inspecreform1', 'inspecreform2', 'inspecreform3', 'inspecreform4', 'inspecreform5', 'inspecreform6'
+            ].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            $('#spuncode').val('');
+            $('.filelist').empty();
+            uploadedFiles = [];
+            deletedFiles = [];
+            updateTabLink();
+            updateFileCount();
+            resetFileInput($('.fileInput'));
+
+        }
+        // 파일 인풋 초기화
+        function resetFileInput($input) {
+            $input.val('');
+        }
 
 
 
@@ -598,11 +624,16 @@
 
 
 
-
             $('#popup-date').val(item.checkdt);
             $('#popup-checkusr').val(item.checkusr);
             $('#popup-checkarea').val(item.checkarea);
             $('#popup-spuncode').val(item.spuncode);
+
+            if(item.fileornm){
+                fileNameDisplay.textContent = item.fileornm;
+            }else{
+                fileNameDisplay.textContent = 'Maxium upload file size 1GiB';
+            }
 
 
 
@@ -703,6 +734,8 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
+                allowSorting: 'MultiColumn',
+                selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
                 itemsSource: viewdata,
                 formatItem: function(s, e) {
                     if (e.panel.cellType === wijmo.grid.CellType.Cell) {
@@ -751,13 +784,15 @@
             // 새로운 td 요소를 생성합니다.
             var newTd = document.createElement('div');
             newTd.className = 'input-btnbox';
+            newTd.name = 'newusrbox';
 
             // 새로운 input 요소를 생성합니다.
             var newInput = document.createElement('input');
             newInput.type = 'text';
-            newInput.className = 'wp100';
+            newInput.className = 'wp100 addusr';
             newInput.placeholder = '점검자';
-            newInput.name = 'checkusr'
+            newInput.name = 'checkusr';
+
             newInput.maxLength = 5;
 
             // 삭제 버튼을 생성합니다.
@@ -769,6 +804,7 @@
             deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
             deleteButton.style.color = 'red';
             deleteButton.style.marginTop = '5px';
+
             // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
             newTd.appendChild(newInput);
             newTd.appendChild(deleteButton);
@@ -780,11 +816,16 @@
             parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
         }
 
+
+        //하나씩만 삭제
         function deleteInputField(inputField) {
             // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
             var tdToDelete = inputField.parentElement;
             tdToDelete.parentElement.removeChild(tdToDelete);
         }
+
+
+
 
         <!-- 점검자 추가 버튼 이벤트 끝-->
 
@@ -824,7 +865,7 @@
                     checktmdt: inspecDto[i]["checktmdt"],
                     downloads: inspecDto[i]["downloads"],
                     upload:    inspecDto[i]["upload"],
-                    filesvnm:  inspecDto[i]["filesvnm"]
+                    fileornm:  inspecDto[i]["fileornm"]
 
                 });
                 cnt++;
@@ -850,9 +891,19 @@
             }
             return selectedList;
         }
+        // 로딩 바를 보여주는 함수
+        function showLoadingBar() {
+            document.getElementById('loadingBar').style.display = 'block';
+        }
+
+        // 로딩 바를 숨기는 함수
+        function hideLoadingBar() {
+            document.getElementById('loadingBar').style.display = 'none';
+        }
 
         function DownloadDoc() {
-
+            // 로딩 바 표시
+            showLoadingBar();
             let selectedList = SelectItemPush();
 
 
@@ -882,12 +933,172 @@
                     a.click();
                     a.remove();
                     window.URL.revokeObjectURL(url); // URL 객체 해제
+
+                    // 로딩 바 숨김
+                    hideLoadingBar();
                 })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                     alert("File download failed!");
                 });
         }
+
+
+        //리팩터링 코드
+        function updateElementText(elementIdPrefix, index, textContent) {
+            let elementId = elementIdPrefix + (index + 1);
+            let element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = textContent;
+            } else {
+                console.log('Element with id ' + elementId + ' not found.');
+            }
+        }
+
+
+        function modifyData(){
+
+
+            if(SelectItem === undefined){
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }else if(SelectItem.length > 1){
+                Alert.alert('', '하나의 항목만 선택해주세요');
+                return;
+            }
+
+            let selectedItem = SelectItem[0];
+
+
+            console.log('확인', selectedItem._data.spuncode);
+
+            let spuncode = selectedItem._data.spuncode;
+
+            Alert.confirm('', '수정하시겠습니까?', function(){
+                if(!selectedItem._data.spuncode){
+                    Alert.alert('', '수정할 게시물이 없습니다.', function () {
+
+                    });
+                    return false;
+                }
+
+                $.ajax({
+                    url: "/api/inspec_report/modfind",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(spuncode),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val()
+                    },
+                    async: false,
+                    success: function (data){
+                        let data2 = data.data;
+                        console.log('data2', data2);
+                        $('#inputTabLink').click();
+
+                        let str = data2.checkdt;
+                        let year = str.substring(0, 4);
+                        let month = str.substring(4, 6);
+                        let day = str.substring(6, 8);
+
+                        let formattedDate = `${year}-${month}-${day}`;
+
+                        document.getElementById('spuncode').value = data2.spuncode;
+                        document.getElementById('supplier').value = data2.supplier;
+                        document.getElementById('checkdt').value = formattedDate;
+                        document.getElementById('checkstdt').value = data2.checkstdt;
+                        document.getElementById('checkendt').value = data2.checkendt;
+                        document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkarea').value = data2.checkarea;
+                        document.getElementById('checkarea').value = data2.checkarea;
+                        document.getElementById('checkarea').value = data2.checkarea;
+                        document.getElementById('checkarea').value = data2.checkarea;
+                        document.getElementById('checkarea').value = data2.checkarea;
+
+                        for (let i = 0; i < data2.inspecitem.length; i++) {
+                            updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
+                            updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
+
+                            let str = "seq" + (i+1);
+                            document.getElementById(str).value = data2.inspecitem[i].seq;
+
+                        }
+
+
+                        //탭 수정으로 업더이트
+                        updateTabLink();
+
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                        deletedFiles = [];
+                        uploadedFiles = [];
+                        $('.filelist').empty(); // 파일 리스트 초기화
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                spuncode_id: file.spuncode_id,
+                                checkseq: file.checkseq,
+                                filepath: file.filepath,
+                                filesvnm: file.filesvnm
+
+                            };
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
+                        console.log('파일목록확인', uploadedFiles)
+                        updateFileListUI();
+                        updateFileCount();
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                })
+            })
+        }
+
+        // 파일 리스트 UI 업데이트 함수
+        function updateFileListUI() {
+            const $fileList = $('#filelist');
+
+            uploadedFiles.forEach(file => {
+                const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
+                const li = $('<li>').html(`
+                    <p>${file.name} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
+                $fileList.append(li);
+            });
+        }
+
+
+        function updateTabLink(){
+            const spuncode = document.getElementById('spuncode').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            if(spuncode){
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정'
+            }else {
+                inputTabLink.textContent = '등록';
+                inputTabLink.title = '등록';
+            }
+        }
+
+        //이거는 따로 못뺀다.
+        function updateFileCount() {
+            const fileCount = uploadedFiles.length;
+            $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateTabLink();
+        });
 
 
         $(document).ready(function (e) {
@@ -956,7 +1167,7 @@
                         let results = [];
                         let currentDivision = '';
 
-                        rows.forEach(row => {
+                        rows.forEach((row, index)=> {
                             let cells = row.querySelectorAll('td');
 
                             // Check if the first cell has rowspan attribute, indicating a new division
@@ -971,19 +1182,37 @@
                             const inspectionResult = cells[2].innerText.trim();
                             const improvement = cells[3].querySelector('textarea').value.trim();
 
-                            const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
+                            const seqId = `seq${index + 1}`;
+                            const seqElement = document.getElementById(seqId);
+                            let seqValue = '';
+
+                            if(seqElement){
+                                seqValue = seqElement.value.trim();
+                            }
+
+                            const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}@ ${seqValue}`;
                             console.log('combinedText: ', combinedText);
                             formData.append('doc-list', combinedText);
+
+
 
                             results.push(combinedText);
                         });
                         // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
-
+                        console.log('파일확인2', uploadedFiles)
                         for (let i = 0; i < uploadedFiles.length; i++) {
                             formData.append('filelist', uploadedFiles[i]);
                         }
 
-                        const randomString = generateRandomStringWithDate();
+                        let SpunCodeValue = $('#spuncode').val();
+                        let randomString;
+
+                        if(SpunCodeValue === ""){
+                            randomString = generateRandomStringWithDate();
+                        }else{
+                            randomString = SpunCodeValue;
+                        }
+
 
                         var inputs = document.querySelectorAll('input[name="checkusr"]');
                         var values = [];
@@ -1012,6 +1241,12 @@
                         formData.append('ReformList', $('#inspecreform4').val());
                         formData.append('ReformList', $('#inspecreform5').val());
 
+                        // 삭제된 파일 목록 추가
+                        deletedFiles.forEach((file, index) => {
+                            formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                        });
+
+
 
                         $.ajax({
                             url: '/api/inspec_report/save',
@@ -1021,7 +1256,17 @@
                             contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
                             success: function (response) {
                                 if (response.success) {
-                                    Alert.alert('', response.message);
+                                    Alert.alert('', response.message, function(){
+                                        $('#listTabLink').click();
+                                        searchData();
+                                        clearForm();
+
+                                        var inputField = document.querySelector('.addusr');
+                                        if (inputField) {
+                                            deleteInputField(inputField);
+                                        }
+                                    });
+
                                 }
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
@@ -1029,10 +1274,13 @@
                             }
                         });
 
+                        /*AjaxFunction.sendAjaxRequest()*/
+
+
+
 
                     },
-                    function () {
-                    }
+
                 )
             })
 
@@ -1066,7 +1314,11 @@
             })
 
 
+
+
         });
+
+
     </script>
 </th:block>
 
