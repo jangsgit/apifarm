@@ -259,6 +259,16 @@ public class InspecController {
 
         String path = settings.getProperty("file_upload_path") + "순회점검일지첨부파일";
 
+        Pageable pageable = (Pageable) PageRequest.of(0, 1);
+
+        List<String> tb_rp715 =  tb_rp715Repository.findByFilesvnm(spuncode, pageable);
+
+        tb_rp715Repository.deleteBySpuncodeIdAAndRepyn(spuncode);
+
+        if(!tb_rp715.isEmpty()){
+            deleteFileFromDisk(path, tb_rp715.get(0));
+        }
+
 
         Map<String, Object> fileinform = FileService.saveFiles(file, path);
 
@@ -320,13 +330,25 @@ public class InspecController {
 
         List<String> paramList = List.of(tokens);
 
+
         for(String param : paramList){
+
+            List<Map<String, Object>> FileItems = inspecService.getFileList(param);
+
+            if(!FileItems.isEmpty()){
+                for (Map<String, Object> fileItem : FileItems) {
+                    deleteFileFromDisk(fileItem.get("filepath").toString(), fileItem.get("filesvnm").toString());
+                }
+            }
+
             System.out.println(param);
             //TODO: 이거 자식테이블먼저 삭제해야한다.
             tb_rp715Repository.deleteBySpuncodeId(param);
             tB_INSPECRepository.deleteBySpuncodeId(param);
             tb_rp710Repository.deleteBySpuncode(param);
         }
+
+
 
 
         result.success = true;

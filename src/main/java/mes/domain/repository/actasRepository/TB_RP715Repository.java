@@ -26,6 +26,11 @@ public interface TB_RP715Repository extends JpaRepository<TB_RP715, TB_RP715Id> 
     @Query(value = "DELETE FROM TB_RP715 WHERE spuncode_id = :spuncodeId", nativeQuery = true)
     void deleteBySpuncodeId(@Param("spuncodeId") String spuncodeId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM TB_RP715 WHERE spuncode_id = :spuncodeId AND repyn = 'Y'", nativeQuery = true)
+    void deleteBySpuncodeIdAAndRepyn(@Param("spuncodeId") String spuncodeId);
+
 
     @Modifying
     @Transactional
@@ -35,4 +40,6 @@ public interface TB_RP715Repository extends JpaRepository<TB_RP715, TB_RP715Id> 
 
     @Query("SELECT f.filesvnm FROM TB_RP715 f WHERE f.spuncode_id = :spuncode AND f.repyn = 'Y' ORDER BY f.INDATEM desc")
     List<String> findByFilesvnm(@Param("spuncode") String spuncode, Pageable pageable);
+
+
 }
