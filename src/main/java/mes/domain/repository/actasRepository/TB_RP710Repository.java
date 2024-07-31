@@ -3,6 +3,7 @@ package mes.domain.repository.actasRepository;
 import mes.domain.entity.actasEntity.TB_RP710;
 import mes.domain.entity.actasEntity.TB_RP710Id;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,7 @@ public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> 
 
   void deleteBySpuncode(String spuncode);
 
-
+  @Modifying
+  @Query("UPDATE TB_RP710 t SET t.flag = 'Y' WHERE t.spuncode = :spuncode")
+  void updateFlagToYBySpuncode(@Param("spuncode") String spuncode);
 }

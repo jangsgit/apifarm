@@ -87,7 +87,8 @@ public class InspecController {
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr,
                               @RequestParam(value = "searchfrdate", required = false) String searchfrdate,
-                              @RequestParam(value = "searchtodate", required = false) String searchtodate
+                              @RequestParam(value = "searchtodate", required = false) String searchtodate,
+                              @RequestParam(value = "searchflag", required = false) String flag
 
     ){
         List<Map<String, Object>> items = new ArrayList<>();
@@ -95,6 +96,8 @@ public class InspecController {
         searchusr = Optional.ofNullable(searchusr).orElse("");
         searchfrdate = Optional.ofNullable(searchfrdate).orElse("20000101");
         searchtodate = Optional.ofNullable(searchtodate).orElse("29991231");
+
+
 
         if(searchfrdate.isEmpty()){
             searchfrdate = "20000101";
@@ -104,7 +107,7 @@ public class InspecController {
         }
 
 
-        items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate, "");
+        items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate, "", flag);
 
         AjaxResult result = new AjaxResult();
         result.data = items;
@@ -142,7 +145,7 @@ public class InspecController {
 
         String checkdtconvertvalue = checkdt.replaceAll("-","");
 
-        List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", randomuuid);
+        List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", randomuuid, "");
 
         String formattedValue;
 
@@ -182,6 +185,7 @@ public class InspecController {
         tbRp710dto.setSpcompnm("대구성서공단");
         tbRp710dto.setSpplancd("001");
         tbRp710dto.setSpplannm("KT대구물류센터 연료전지발전소");
+        tbRp710dto.setFlag("N");
 
 
         tbRp710dto.setCheckstdt(checkstdt);
@@ -244,6 +248,7 @@ public class InspecController {
             System.out.println("파일이 존쟇지 않음");
         }
     }
+
 
     @PostMapping("/filesave")
     public AjaxResult fileupload(
@@ -329,6 +334,33 @@ public class InspecController {
         return result;
     }
 
+    @PostMapping("/approve")
+    @Transactional
+    public AjaxResult approve(
+            @RequestParam(value = "spuncode") String spuncode
+    ){
+
+        AjaxResult result = new AjaxResult();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
+        String[] tokens = cleanJson.split(",");
+
+        List<String> paramList = List.of(tokens);
+
+        for(String param : paramList){
+            System.out.println(param);
+            //TODO: 이거 자식테이블먼저 삭제해야한다.
+            tb_rp710Repository.updateFlagToYBySpuncode(param);
+        }
+
+
+        result.success = true;
+        result.message = "성공";
+        return result;
+    }
+
     @PostMapping("/download-docs")
     public void downloadDocs(HttpServletResponse response, @RequestBody List<String> selectedList) throws IOException, Docx4JException {
         String path = settings.getProperty("file_upload_path") + "순회점검일지양식.docx";
@@ -341,7 +373,7 @@ public class InspecController {
             XWPFDocument document = new XWPFDocument(fis);
             List<XWPFTable> tables = document.getTables();
 
-            List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", selectedList.get(i));
+            List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", selectedList.get(i), "");
             List<Map<String, Object>> items = this.inspecService.getInspecDocList(selectedList.get(i));
             List<Map<String, Object>> FileItems = this.inspecService.getFileList(selectedList.get(i));
 

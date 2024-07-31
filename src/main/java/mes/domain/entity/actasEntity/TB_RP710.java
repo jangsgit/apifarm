@@ -69,4 +69,8 @@ public class TB_RP710 extends BaseEntity{
     @Column(name = "checkendt")
     private String checkendt;
 
+    @Column(name = "flag")
+    private String flag;
+
+
 }

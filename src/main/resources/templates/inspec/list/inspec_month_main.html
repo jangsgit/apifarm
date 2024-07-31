@@ -90,14 +90,14 @@
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="select1">
+                                    <label for="flag">
                                         점검여부<span class="eq">*</span></dt>
                                 </label>
                                 <dd>
-                                    <select id="select1" class="w120">
+                                    <select id="flag" class="w120">
                                         <option>전체</option>
-                                        <option>완료</option>
-                                        <option>미완료</option>
+                                        <option value="Y">완료</option>
+                                        <option value="N">미완료</option>
                                     </select>
                                 </dd>
                             </dl>
@@ -105,9 +105,14 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="일괄다운로드">
-                                        <img src="/images/icon/ico-down-blue.svg" alt="엑셀 아이콘">
-                                        일괄다운로드
+                                    <a class="btn modal_btn" title="How to Use">
+                                        How to Use
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="승인" id="btnAppr">
+                                        <img src="/images/icon/ico-save.svg" alt="엑셀 아이콘">
+                                        승인
                                     </a>
                                 </li>
                                 <li>
@@ -156,12 +161,12 @@
                                         신규등록
                                     </a>
                                 </li>
-                                <li>
+                                <!--<li>
                                     <a  class="btn btn-delete" title="삭제">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
-                                </li>
+                                </li>-->
                                 <li>
                                     <a class="btn btn-edit" id="btnSave" title="저장">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
@@ -339,30 +344,6 @@
 
                                 </tbody>
                             </table>
-                            <!--<tr>
-                                <th>
-                                    <label for="checkitem">
-                                        점검사항
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="textarea-box">
-                                        <textarea id="checkitem" name="checkitem" maxlength="200" placeholder="점검사항"></textarea>
-                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>
-                                    </div>
-                                </td>
-                                <th>
-                                    <label for="checkplan">
-                                        개선방향
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="textarea-box">
-                                        <textarea id="checkplan" name="checkplan" maxlength="200" placeholder="개선방향"></textarea>
-                                        <p class="text-count" id="text-count2" name="checkplan">0/200</p>
-                                    </div>
-                                </td>
-                            </tr>-->
                             <tr>
                                 <th>
                                     첨부파일
@@ -471,9 +452,38 @@
     </div>
 
 
+    <!-- 사용법 팝업 -->
+    <div class="modal2">
+        <div class="modal_popup">
+            <h3 style="text-align: center; margin-bottom: 20px">화면 설명서(목록탭)</h3>
+            <img src="/images/순회점검%20(2).png" style="margin-bottom: 20px" />
+            <p style="margin-bottom: 8px">1. 등록 일자, 점검자, 점검 여부 등의 조건을 통해 검색하여 조회할 수 있습니다.</p>
+            <p style="margin-bottom: 8px">2. 그리드 좌측에 선택기를 통하여 하나 혹은 여러 개를 선택하여 삭제할 수 있습니다.</p>
+            <p style="margin-bottom: 8px">3. 그리드 좌측에 선택기를 통하여 하나를 선택하여 수정할 수 있습니다. 등록탭이 수정탭으로 변경하며 이동됩니다.</p>
+            <p style="margin-bottom: 8px">4. 그리드 좌측에 선택기를 통하여 하나 혹은 여러 개를 선택하여 출력할 수 있습니다. 등록할 때의 정보와 이미지 파일을 바탕으로 PDF 파일로 변환되어 압축파일로 다운로드 됩니다.</p>
+            <p style="margin-bottom: 8px">5. 그리드의 칼럼은 일자순 혹은 숫자 순 혹은 글자 순으로 정렬할 수 있습니다.</p>
+            <p style="margin-bottom: 8px">6. 버튼 클릭시 모달창이 나오며 하나의 PDF파일을 등록할 수 있습니다. (그 외 정보는 변경불가능)</p>
+            <p style="margin-bottom: 8px">7. 버튼 클릭시 등록한 pdf파일을 다운로드 받을 수 있습니다.</p>
 
+            <h3 style="text-align: center; margin: 20px auto">화면 설명서(등록탭)</h3>
+            <img src="/images/순회점검_등록%20(1).png" style="margin-bottom: 20px" />
+            <p style="margin-bottom: 8px">1. 수급사명, 점검장소는 입력칸입니다. 등록일자, 점검시작일자, 점검종료일자는 달력 아이콘을 누르면 달력이 나와 날짜 선택이 가능합니다. 점검자는 우측에 점검자 추가 버튼을 통해 추가 가능합니다.</p>
+            <p style="margin-bottom: 8px">2. 점검결과부분은 클릭하면 O 혹은 X로 변경됩니다. 개선사항은 입력칸입니다.</p>
+            <p style="margin-bottom: 8px">3. 파일업로드를 클릭하여 여러개의 파일을 업로드 가능합니다. (Drag&Drop 지원) 하단의 내가 올린 파일목록을 볼 수 있습니다.</p>
+            <p style="margin-bottom: 8px">4. 정보입력이 완료되었다면 저장버튼을 클릭하여 저장됩니다.</p>
 
+            <h3 style="text-align: center; margin: 20px auto">화면 설명서(수정탭)</h3>
+            <img src="/images/순회점검_수정%20(1).png" style="margin-bottom: 20px" />
+            <p style="margin-bottom: 8px">1. 목록탭에서 하나의 게시물을 선택하여 수정버튼을 클릭시 기존에 등록이었던 텍스트가 수정으로 변경됩니다.</p>
+            <p style="margin-bottom: 8px">2. 저장시에 입력했던 입력 사항이 나오며 수정을 원할 경우 변경하면 됩니다.</p>
+            <p style="margin-bottom: 8px">3. 저장시에 입력했던 입력 사항이 나오며 수정을 원할 경우 변경하면 됩니다.</p>
+            <p style="margin-bottom: 8px">4. 저장시에 저장했던 파일목록들이 나오며 수정을 원할 경우 추가 및 삭제를 통해 첨부된 파일을 수정 할 수 있습니다.</p>
+            <p style="margin-bottom: 8px">5. 정보들을 모두 입력완료되었다면 저장 버튼을 클릭할시 변경된 사항이 저장됩니다.</p>
+            <p style="margin-bottom: 8px">6. 신규등록 버튼을 클릭시 등록탭으로 변경되며 수정에서 등록기능으로 변경됩니다.</p>
 
+            <button style="border: 1px solid #03428E !important; font-size: 15px !important; position: absolute; top: 10px; right: 10px" class="close_btn">닫기</button>
+        </div>
+    </div>
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -483,6 +493,22 @@
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
+
+        const modal2 = document.querySelector('.modal2');
+        const modalOpen = document.querySelector('.modal_btn');
+        const modalClose = document.querySelector('.close_btn');
+
+        //열기 버튼을 눌렀을 때 모달팝업이 열림
+        modalOpen.addEventListener('click',function(){
+            //display 속성을 block로 변경
+            modal2.style.display = 'block';
+        });
+        //닫기 버튼을 눌렀을 때 모달팝업이 닫힘
+        modalClose.addEventListener('click',function(){
+            //display 속성을 none으로 변경
+            modal2.style.display = 'none';
+        });
+
 
         var theGrid;
         var viewdata;
@@ -534,34 +560,24 @@
             let file = document.getElementById('fileInput2');
             let formData = new FormData();
 
-            console.log('file123', file.files);
-
             if(file.files.length === 0){
                 Alert.alert('', '파일을 첨부해주세요.');
                 return false;
             }
 
             formData.append('file', file.files[0]);
-            //formData.append('_csrf', $('[name=_csrf]').val());
             formData.append('_csrf', csrfToken);
             formData.append('spuncode', $('#popup-spuncode').val());
 
-            $.ajax({
-                url: '/api/inspec_report/filesave',
-                type: 'POST',
-                data: formData,
-                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                success: function (response) {
-                    if (response.success) {
-                        Alert.alert('', response.message);
-                        searchData();
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    Alert.alert('', '에러가발생하였습니다.');
-                }
-            });
+            AjaxFunction.PostAjaxRequest(
+                '/api/inspec_report/filesave',
+                true, // async
+                false, // contentType
+                false, // processData
+                formData,
+                fnSuccess2,
+                fnFailure
+            );
         }
 
         function clearForm(){
@@ -584,8 +600,6 @@
             $input.val('');
         }
 
-
-
         function submitTextarea(event){
             let key = event.key || event.keyCode;
 
@@ -599,10 +613,7 @@
 
 
         function closePopup(){
-            /*const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';*/
+
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');
 
@@ -622,8 +633,6 @@
             let item = theGrid.rows[rowIndex].dataItem;
             let fileNameDisplay = document.getElementById('fileNameDisplay');
 
-
-
             $('#popup-date').val(item.checkdt);
             $('#popup-checkusr').val(item.checkusr);
             $('#popup-checkarea').val(item.checkarea);
@@ -634,9 +643,6 @@
             }else{
                 fileNameDisplay.textContent = 'Maxium upload file size 1GiB';
             }
-
-
-
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');
 
@@ -649,52 +655,31 @@
                 modal.classList.add('show');
                 modalContent.classList.add('show');
             });
-
-
-
         }
+
 
         function FileDownload(rowIndex){
             //let spuncode = { spuncode: ctx.item.spuncode };
 
             var item = theGrid.rows[rowIndex].dataItem;
             // 다운로드 로직 처리
-            console.log("Downloading file for item: ", item.spuncode);
+
 
             let spuncode = { spuncode: item.spuncode }
 
-            fetch('/api/inspec_report/FileDownload', {
-                method: 'POST',
-                headers: {
-                    "Content-Type" : "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify(spuncode)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        if(response.status === 404){
-                            throw new Error('첨부된 파일이 없습니다.');
-                        }else {
-                            throw new Error('Network Error.');
-                        }
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'modified_documents.pdf'; // 다운로드 받을 zip 파일 이름
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url); // URL 객체 해제
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                    alert(error.message);
-                });
+            postFetchRequest('/api/inspec_report/FileDownload', spuncode, function(blob) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'modified_documents.pdf'; // 다운로드 받을 zip 파일 이름
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url); // URL 객체 해제
+            }, function(error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert(error.message);
+            });
         }
 
         document.readyState === 'complete' ? init() : window.onload = init;
@@ -718,13 +703,13 @@
                     let DataLength = 10 - data.data.length;
 
                     if(data.data.length < 10){
-                        console.log('길이2: ', data.data.length)
+
                         for(let i=0; i < DataLength; i++){
                             data.data.push('empty');
                         }
                     }
                     data2 = data.data;
-                    console.log('길이: ', data2.length);
+
                 }
             })
 
@@ -779,56 +764,6 @@
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        <!-- 점검자 추가 버튼 이벤트-->
-        function addInputField(button) {
-            // 새로운 td 요소를 생성합니다.
-            var newTd = document.createElement('div');
-            newTd.className = 'input-btnbox';
-            newTd.name = 'newusrbox';
-
-            // 새로운 input 요소를 생성합니다.
-            var newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.className = 'wp100 addusr';
-            newInput.placeholder = '점검자';
-            newInput.name = 'checkusr';
-
-            newInput.maxLength = 5;
-
-            // 삭제 버튼을 생성합니다.
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
-                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            };
-            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-            deleteButton.style.color = 'red';
-            deleteButton.style.marginTop = '5px';
-
-            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-            newTd.appendChild(newInput);
-            newTd.appendChild(deleteButton);
-
-            // 클릭된 버튼의 부모 td 요소를 찾습니다.
-            var parentTd = button.parentElement;
-
-            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        }
-
-
-        //하나씩만 삭제
-        function deleteInputField(inputField) {
-            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-            var tdToDelete = inputField.parentElement;
-            tdToDelete.parentElement.removeChild(tdToDelete);
-        }
-
-
-
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
         let filelist = [];
 
 
@@ -838,13 +773,14 @@
             let data = {
                 'searchusr' : $('#searchusr').val(),
                 'searchfrdate': $('#searchfrdate').val(),
-                'searchtodate': $('#searchtodate').val()
+                'searchtodate': $('#searchtodate').val(),
+                'searchflag' : $('#flag').val()
             }
 
             let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
 
             if(result.success){
-                console.log(result.data);
+
                 grid_binding(result.data);
             }
         }
@@ -891,56 +827,41 @@
             }
             return selectedList;
         }
-        // 로딩 바를 보여주는 함수
-        function showLoadingBar() {
-            document.getElementById('loadingBar').style.display = 'block';
-        }
 
-        // 로딩 바를 숨기는 함수
-        function hideLoadingBar() {
-            document.getElementById('loadingBar').style.display = 'none';
-        }
+
 
         function DownloadDoc() {
+
+            if(SelectItem === undefined || SelectItem.length === 0){
+                Alert.alert('', '출력할 항목을 선택하세요.');
+                return;
+            }
+
             // 로딩 바 표시
             showLoadingBar();
             let selectedList = SelectItemPush();
 
+            postFetchRequest('/api/inspec_report/download-docs', selectedList, function(blob) {
 
-            console.log('selected', selectedList);
 
-            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
-            fetch('/api/inspec_report/download-docs', {
-                method: 'POST',
-                headers: {
-                    "Content-Type" : "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url); // URL 객체 해제
 
-                    // 로딩 바 숨김
-                    hideLoadingBar();
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                    alert("File download failed!");
-                });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url); // URL 객체 해제
+
+
+            }, function(error) {
+                console.error('There was a problem with the fetch operation:', error);
+                alert("File download failed!");
+
+            });
+
+
         }
 
 
@@ -948,31 +869,37 @@
         function updateElementText(elementIdPrefix, index, textContent) {
             let elementId = elementIdPrefix + (index + 1);
             let element = document.getElementById(elementId);
+            console.log('element: ', element);
+            console.log('textContent: ', textContent);
+
             if (element) {
-                element.textContent = textContent;
+                if (element.tagName.toLowerCase() === 'input' || element.tagName.toLowerCase() === 'textarea') {
+                    element.value = textContent;
+                } else {
+                    element.textContent = textContent;
+                }
             } else {
-                console.log('Element with id ' + elementId + ' not found.');
+                console.warn(`Element with id ${elementId} not found.`);
             }
         }
 
 
         function modifyData(){
 
-
-            if(SelectItem === undefined){
+            if(SelectItem === undefined || SelectItem.length === 0){
                 Alert.alert('', '수정할 항목을 선택하세요.');
                 return;
             }else if(SelectItem.length > 1){
                 Alert.alert('', '하나의 항목만 선택해주세요');
                 return;
             }
-
             let selectedItem = SelectItem[0];
 
-
-            console.log('확인', selectedItem._data.spuncode);
+            console.log('현재', selectedItem);
+            console.log('현재2', SelectItem);
 
             let spuncode = selectedItem._data.spuncode;
+
 
             Alert.confirm('', '수정하시겠습니까?', function(){
                 if(!selectedItem._data.spuncode){
@@ -981,112 +908,71 @@
                     });
                     return false;
                 }
+                let jsonSpunCode = JSON.stringify(spuncode);
+                AjaxFunction.PostAjaxRequest('/api/inspec_report/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
+                    let data2 = data.data;
+                    console.log('data2', data2);
+                    $('#inputTabLink').click();
 
-                $.ajax({
-                    url: "/api/inspec_report/modfind",
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(spuncode),
-                    headers: {
-                        'X-CSRF-Token': $('[name=_csrf]').val()
-                    },
-                    async: false,
-                    success: function (data){
-                        let data2 = data.data;
-                        console.log('data2', data2);
-                        $('#inputTabLink').click();
+                    let str = data2.checkdt;
+                    let year = str.substring(0, 4);
+                    let month = str.substring(4, 6);
+                    let day = str.substring(6, 8);
 
-                        let str = data2.checkdt;
-                        let year = str.substring(0, 4);
-                        let month = str.substring(4, 6);
-                        let day = str.substring(6, 8);
+                    let formattedDate = `${year}-${month}-${day}`;
 
-                        let formattedDate = `${year}-${month}-${day}`;
-
-                        document.getElementById('spuncode').value = data2.spuncode;
-                        document.getElementById('supplier').value = data2.supplier;
-                        document.getElementById('checkdt').value = formattedDate;
-                        document.getElementById('checkstdt').value = data2.checkstdt;
-                        document.getElementById('checkendt').value = data2.checkendt;
-                        document.getElementById('checkusr').value = data2.checkusr;
-                        document.getElementById('checkusr').value = data2.checkusr;
-                        document.getElementById('checkarea').value = data2.checkarea;
-                        document.getElementById('checkarea').value = data2.checkarea;
-                        document.getElementById('checkarea').value = data2.checkarea;
-                        document.getElementById('checkarea').value = data2.checkarea;
-                        document.getElementById('checkarea').value = data2.checkarea;
-
-                        for (let i = 0; i < data2.inspecitem.length; i++) {
-                            updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
-                            updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
-
-                            let str = "seq" + (i+1);
-                            document.getElementById(str).value = data2.inspecitem[i].seq;
-
-                        }
+                    document.getElementById('spuncode').value = data2.spuncode;
+                    document.getElementById('supplier').value = data2.supplier;
+                    document.getElementById('checkdt').value = formattedDate;
+                    document.getElementById('checkstdt').value = data2.checkstdt;
+                    document.getElementById('checkendt').value = data2.checkendt;
+                    document.getElementById('checkusr').value = data2.checkusr;
+                    document.getElementById('checkusr').value = data2.checkusr;
+                    document.getElementById('checkarea').value = data2.checkarea;
+                    document.getElementById('checkarea').value = data2.checkarea;
+                    document.getElementById('checkarea').value = data2.checkarea;
+                    document.getElementById('checkarea').value = data2.checkarea;
+                    document.getElementById('checkarea').value = data2.checkarea;
 
 
-                        //탭 수정으로 업더이트
-                        updateTabLink();
+                    console.log()
+                    for (let i = 0; i < data2.inspecitem.length; i++) {
+                        updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
+                        updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
 
-                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
-                        deletedFiles = [];
-                        uploadedFiles = [];
-                        $('.filelist').empty(); // 파일 리스트 초기화
+                        let str = "seq" + (i+1);
+                        document.getElementById(str).value = data2.inspecitem[i].seq;
 
-                        fileList.forEach(file => {
-                            let newFile = {
-                                name: file.fileornm,
-                                size: file.filesize,
-                                type: file.fileextns,
-                                spuncode_id: file.spuncode_id,
-                                checkseq: file.checkseq,
-                                filepath: file.filepath,
-                                filesvnm: file.filesvnm
-
-                            };
-                            uploadedFiles.push(newFile); // 파일 리스트에 추가
-                        });
-                        console.log('파일목록확인', uploadedFiles)
-                        updateFileListUI();
-                        updateFileCount();
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Alert.alert('', '에러가 발생하였습니다.');
                     }
-                })
+
+
+                    //탭 수정으로 업더이트
+                    updateTabLink();
+
+                    let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                    deletedFiles = [];
+                    uploadedFiles = [];
+                    $('.filelist').empty(); // 파일 리스트 초기화
+
+                    fileList.forEach(file => {
+                        let newFile = {
+                            name: file.fileornm,
+                            size: file.filesize,
+                            type: file.fileextns,
+                            spuncode_id: file.spuncode_id,
+                            checkseq: file.checkseq,
+                            filepath: file.filepath,
+                            filesvnm: file.filesvnm
+
+                        };
+                        uploadedFiles.push(newFile); // 파일 리스트에 추가
+                    });
+                    console.log('파일목록확인', uploadedFiles)
+                    updateFileListUI();
+                    updateFileCount();
+
+                }, fnFailure)
             })
-        }
-
-        // 파일 리스트 UI 업데이트 함수
-        function updateFileListUI() {
-            const $fileList = $('#filelist');
-
-            uploadedFiles.forEach(file => {
-                const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
-                const li = $('<li>').html(`
-                    <p>${file.name} <span>(${fileSize})</span></p>
-                    <a href="#" title="삭제" class="btn-file-delete">
-                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
-                    </a>
-                `);
-                $fileList.append(li);
-            });
-        }
-
-
-        function updateTabLink(){
-            const spuncode = document.getElementById('spuncode').value;
-            const inputTabLink = document.getElementById('inputTabLink');
-
-            if(spuncode){
-                inputTabLink.textContent = '수정';
-                inputTabLink.title = '수정'
-            }else {
-                inputTabLink.textContent = '등록';
-                inputTabLink.title = '등록';
-            }
         }
 
         //이거는 따로 못뺀다.
@@ -1100,59 +986,29 @@
             updateTabLink();
         });
 
+        let fnSuccess = function (res){
+            Alert.alert('', res.message, function(){
+                $('#listTabLink').click();
+                searchData();
+                clearForm();
+
+                let inputField = document.querySelector('.addusr');
+                if (inputField) {
+                    deleteInputField(inputField);
+                }
+            });
+        }
+
+        let fnSuccess2 = function (res){
+            Alert.alert('', res.message);
+            searchData();
+        }
+
+        let fnFailure = function(){
+            Alert.alert('', '에러가발생하였습니다.');
+        }
 
         $(document).ready(function (e) {
-
-            const fileInput = document.getElementById('fileInput2');
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            const dropZone = document.getElementById('dropZone');
-
-            function updateFileName(){
-                const files = fileInput.files;
-                if(files.length > 0){
-                    fileNameDisplay.textContent = files[0].name;
-                }else {
-                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
-
-                }
-            }
-            fileInput.addEventListener('change', updateFileName);
-
-            // 드래그 앤 드롭 이벤트 핸들러
-            dropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-
-            dropZone.addEventListener('dragleave', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-            });
-
-            dropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-
-                const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput.files = files; // 파일 입력 요소에 파일 설정
-                    updateFileName(); // 파일명 업데이트
-                }
-            });
-
-
-            //점검결과 클릭시 텍스트 순환
-            $('.checkbox-cell').click(function() {
-                const span = $(this).find('span');
-                if (span.text() === 'X') {
-                    span.text('O');
-                } else if (span.text() === 'O') {
-                    span.text('X');
-                }
-            });
-
-
-
             // 저장 시작
             $('#btnSave').click(function (e){
 
@@ -1180,7 +1036,7 @@
 
                             const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
                             const inspectionResult = cells[2].innerText.trim();
-                            const improvement = cells[3].querySelector('textarea').value.trim();
+                            const improvement = cells[3].querySelector('textarea').value;
 
                             const seqId = `seq${index + 1}`;
                             const seqElement = document.getElementById(seqId);
@@ -1241,52 +1097,54 @@
                         formData.append('ReformList', $('#inspecreform4').val());
                         formData.append('ReformList', $('#inspecreform5').val());
 
+
                         // 삭제된 파일 목록 추가
                         deletedFiles.forEach((file, index) => {
                             formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
                         });
 
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message, function(){
-                                        $('#listTabLink').click();
-                                        searchData();
-                                        clearForm();
-
-                                        var inputField = document.querySelector('.addusr');
-                                        if (inputField) {
-                                            deleteInputField(inputField);
-                                        }
-                                    });
-
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-                        /*AjaxFunction.sendAjaxRequest()*/
-
-
-
+                        AjaxFunction.PostAjaxRequest('/api/inspec_report/save', true, false, false, formData, fnSuccess, fnFailure)
 
                     },
 
                 )
             })
 
+            //승인
+            $('#btnAppr').click(function (e){
+                if(SelectItem === undefined || SelectItem.length === 0){
+                    Alert.alert('', '승인할 항목을 선택하세요.');
+                    return;
+                }
+
+                let apprList = [];
+
+                apprList = SelectItemPush();
+
+
+                Alert.confirm('', '승인하시겠습니까?', function () {
+                    let data = {
+                        'spuncode': JSON.stringify(apprList),
+                        '_csrf': csrfToken
+                    }
+                    let fnSuccess = function (res) {
+                        if (res.success) {
+                            Alert.alert('', '처리되었습니다.');
+                            searchData();
+                        }
+                    }
+                    AjaxUtil.postAsyncData('/api/inspec_report/approve', data, fnSuccess);
+                })
+            })
 
             //삭제
             $('#btnDelete').click(function (e) {
+
+                if(SelectItem === undefined || SelectItem.length === 0){
+                    Alert.alert('', '삭제할 항목을 선택하세요.');
+                    return;
+                }
+
 
                 let delList = [];
 
@@ -1294,32 +1152,20 @@
 
                 console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function () {
-
                     let data = {
                         'spuncode': JSON.stringify(delList),
                         '_csrf': csrfToken
                     }
-
                     let fnSuccess = function (res) {
                         if (res.success) {
                             Alert.alert('', '삭제되었습니다.');
                             searchData();
                         }
                     }
-
                     AjaxUtil.postAsyncData('/api/inspec_report/delete', data, fnSuccess);
-
-
                 })
             })
-
-
-
-
         });
-
-
     </script>
 </th:block>
-
 </html>

@@ -98,7 +98,7 @@ public class InspecService {
                 divisionList.add(parts[0].trim());
                 contList.add(parts[1].trim());
                 resultList.add(parts[2].trim());
-                reformList.add(parts[3].trim());
+                reformList.add(parts[3]);
                 NumList.add(num);
                 if(!parts[4].trim().isEmpty()){
                     seqList.add(Integer.valueOf(parts[4].trim()));
@@ -242,7 +242,7 @@ public class InspecService {
         return this.sqlRunner.getRows(sql, dicParam);
     }
 
-    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate, String spuncode) {
+    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate, String spuncode, String searchflag) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
@@ -260,10 +260,15 @@ public class InspecService {
                and "spuncode" like :spuncode
                """;
         }else {
+            if(searchflag == null){
+                searchflag = "";
+            }
             dicParam.addValue("paramusr", "%" +searchusr+ "%");
             dicParam.addValue("searchfrdate", searchfrdate.replaceAll("-", ""));
             dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
-             sql = """
+            dicParam.addValue("searchflag", "%" +searchflag+ "%");
+
+            sql = """
                      select
                       sb.*,
                       "checkstdt" || '~' || "checkendt" as checktmdt,
@@ -277,6 +282,7 @@ public class InspecService {
                       WHERE 1 = 1
                           AND "checkusr" LIKE :paramusr
                           AND "checkdt" BETWEEN :searchfrdate AND :searchtodate
+                          AND "flag" LIKE :searchflag
                       ORDER BY
                           sb.indatem DESC;
                      """;
