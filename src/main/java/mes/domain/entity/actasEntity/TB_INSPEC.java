@@ -51,8 +51,12 @@ public class TB_INSPEC extends BaseEntity {
     @Column(name = "inspecresult")
     private String inspecresult;
 
-
     @Column(name = "inspecreform")
     private String inspecreform;
 
+    @Column(name = "checkdt")
+    private String checkdt;
+
+    @Column(name = "checkno")
+    private String checkno;
 }

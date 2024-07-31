@@ -37,7 +37,7 @@
                 </li>
                 <li>
                     <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">시설명</option>
+                        <option value="001">KT 대구물류센터 연료전지 발전소</option>
                         <input type="hidden" id="spplannm" name="spplannm">
                     </select>
                 </li>
@@ -45,11 +45,12 @@
         </div>
         <div class="tab-wrap">
             <ul class="tab-links">
+                <input type="hidden" id="checkno" name="checkno" />
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">등록</a>
+                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
                 </li>
             </ul>
             <div class="tab-contents">
@@ -106,18 +107,28 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-delete" title="삭제">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-edit" title="수정">
+                                    <a class="btn btn-edit" title="수정" onclick="modifyData()">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="btn btn-print" title="점검일지 출력" onclick="DownloadDoc()">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        점검일지 출력
+                                    </a>
+                                </li>
                             </ul>
+                            <!-- 로딩 바 요소 -->
+                            <div id="loadingBar">
+                                <div class="spinner"></div>
+                            </div>
                         </div>
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
@@ -134,13 +145,13 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="신규등록">
+                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-delete" title="삭제">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm()">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
@@ -231,20 +242,21 @@
                                     <span id="inspecdivision1">안전보건 일반사항</span>
                                 </td>
                                 <td>
-                                    <span id="inspeccont1_1">● 작업장 출입/이동경로 상태 : 출입문 및 이동통로 주변 통행방해 적치 여부<br></span>
-                                    <span id="inspeccont1_2">● 기타 출입 및 이동 방해 요소</span>
+                                    <span id="inspeccont1_1">ㅇ 작업장 출입/이동경로 상태 : 출입문 및 이동통로 주변 통행방해 적치 여부<br></span>
+                                    <span id="inspeccont1_2">ㅇ 기타 출입 및 이동 방해 요소</span>
                                 </td>
                                 <td class="checkbox-cell"><span id="inspecresult1">O</span></td>
                                 <td>
                                     <div class="textarea-box">
                                         <textarea id="inspecreform1" name="inspecreform1" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="checkplan">0/100</p>
+                                        <input type="hidden" id="seq1" name="seq1">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span id="inspeccont2">● 작업장 실내 유해가스 등 환기 상태<br>● 자재 적재, 작업개소 등에 대한 구획정리를 통한 안전 이동통로 확보</span>
+                                    <span id="inspeccont2">ㅇ 작업장 실내 유해가스 등 환기 상태<br>ㅇ 자재 적재, 작업개소 등에 대한 구획정리를 통한 안전 이동통로 확보</span>
                                 </td>
                                 <td class="checkbox-cell">
                                     <span id="inspecresult2">O</span>
@@ -253,6 +265,7 @@
                                     <div class="textarea-box">
                                         <textarea id="inspecreform2" name="inspecreform2" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="inspecreform2">0/100</p>
+                                        <input type="hidden" id="seq2" name="seq2">
                                     </div>
                                 </td>
                             </tr>
@@ -261,7 +274,7 @@
                                     <span id="inspecdivision2">비상상황</span>
                                 </td>
                                 <td>
-                                    <span id="inspeccont3">● 화재 대비 소화기 등 비치 상태<br>● 비상상황시 비상문, 비상대피로 확보<br>● 비상시 연락체계 등 관리체계 공지 및 교육 상태</span>
+                                    <span id="inspeccont3">ㅇ 화재 대비 소화기 등 비치 상태<br>ㅇ 비상상황시 비상문, 비상대피로 확보<br>ㅇ 비상시 연락체계 등 관리체계 공지 및 교육 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
                                     <span id="inspecresult3">O</span>
@@ -270,12 +283,13 @@
                                     <div class="textarea-box">
                                         <textarea id="inspecreform3" name="inspecreform3" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="inspecreform3">0/100</p>
+                                        <input type="hidden" id="seq3" name="seq3">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span id="inspeccont4">● 비상상황 발생시 대응방안 관련<br>- 비상상황시 연락체계, 역할, 대피로 등 관리체계 수립 및 게시<br>- 업무 참여자 공지 및 교육 상태</span>
+                                    <span id="inspeccont4">ㅇ 비상상황 발생시 대응방안 관련<br>- 비상상황시 연락체계, 역할, 대피로 등 관리체계 수립 및 게시<br>- 업무 참여자 공지 및 교육 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
                                     <span id="inspecresult4">O</span>
@@ -284,13 +298,14 @@
                                     <div class="textarea-box">
                                         <textarea id="inspecreform4" name="inspecreform4" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="inspecreform4">0/100</p>
+                                        <input type="hidden" id="seq4" name="seq4">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td rowspan="2"><span id="inspecdivision3">기타사항</span></td>
                                 <td>
-                                    <span id="inspeccont5">● 위험물 또는 인화성 물질 관리상태 및 존치 여부</span>
+                                    <span id="inspeccont5">ㅇ 위험물 또는 인화성 물질 관리상태 및 존치 여부</span>
                                 </td>
                                 <td class="checkbox-cell">
                                     <span id="inspecresult5">O</span>
@@ -299,12 +314,13 @@
                                     <div class="textarea-box">
                                         <textarea id="inspecreform5" name="inspecreform5" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="checkplan">0/100</p>
+                                        <input type="hidden" id="seq5" name="seq5">
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span id="inspeccont6">● 작업부산물, 폐기물 처리 상태 등 작업장 및 그 주변 정리정돈 상태</span>
+                                    <span id="inspeccont6">ㅇ 작업부산물, 폐기물 처리 상태 등 작업장 및 그 주변 정리정돈 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
                                     <span id="inspecresult6">O</span>
@@ -313,17 +329,12 @@
                                     <div class="textarea-box">
                                         <textarea id="inspecreform6" name="inspecreform6" maxlength="100" style="height: 60px;"></textarea>
                                         <p class="text-count" name="inspecreform6">0/100</p>
+                                        <input type="hidden" id="seq6" name="seq6">
                                     </div>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <!--                                <tr class="container-fluid">-->
-                        <!--                                    <td colspan="4">-->
-                        <!--                                        <p style="font-weight: bold" id="newRowAtTop">점검리스트</p>-->
-                        <!--                                        <div id="theGrid1" style="max-height: 600px; width: 500px"></div>-->
-                        <!--                                    </td>-->
-                        <!--                                </tr>-->
                         <table class="write-table">
                             <caption>점검등록 테이블</caption>
                             <colgroup>
@@ -392,23 +403,19 @@
     <script type="text/javascript">
 
         var theGrid;    // 목록에 뿌림
-        var theGrid1;   // 등록에서 insert
-        var viewdata;
-        var data1 = [];
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             fetchListData();
-            inputData();
         }
 
         function fetchListData() {
             let data2 = [];
 
             $.ajax({
-                url: '',
+                url: '/api/inspec/hap/read',
                 type: 'GET',
                 async: false,
                 success: function (data) {
@@ -418,28 +425,13 @@
 
             viewdata = new wijmo.collections.CollectionView(data2);
 
-            // 임시 데이터 배열 정의
-            var tempData = [];
-            for (var i = 0; i < 20; i++) {
-                tempData.push({
-                    checkno: i + 1,
-                    checkdt: '',
-                    spworknm: '',
-                    spcompnm: '',
-                    spplannm: '',
-                    checkusr: '',
-                    checkresult: '',
-                    checkrem: ''
-                });
-            }
-
             if (!theGrid) {
                 // 데이터 그리드에 바인딩
                 theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                     autoGenerateColumns: false,
                     showMarquee: true,
                     columns: [
-                        {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
                         {binding: 'checkdt', header: '점검일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
                         {binding: 'spworknm', header: '산단지역본부', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
                         {binding: 'spcompnm', header: '산단명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
@@ -457,7 +449,7 @@
                         {binding: 'checkrem', header: '점검의견', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
 
                     ],
-                    itemsSource: tempData
+                    itemsSource: viewdata,
                 });
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
                 new FlexGridContextMenu(theGrid);
@@ -468,116 +460,475 @@
             }
         }
 
-        // 점검리스트 input 박스
-        function inputData() {
-
-            var checkobj = "", checkitem = "", data1 = [];
-            for (var i = 0; i < 1; i++) {
-                data1.push({
-                    checkseq: i + 1,
-                    checkobj: checkobj,
-                    checkitem: checkitem
-                });
+        // 날짜 형식을 변환하는 함수
+        function formatDate(dateString) {
+            if (dateString && dateString.length === 8) {
+                return dateString.substring(0, 4) + '-' + dateString.substring(4, 6) + '-' + dateString.substring(6, 8);
             }
-            // 그리드
-            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
-                itemsSource: data1,
-                allowAddNew: true,
-                allowDelete: true,
-                newRowAtTop: false, // 처음에는 false로 설정
-                columns: [
-                    {binding: 'checkseq', header: 'NO.', width: 80, align: 'center'},
-                    {binding: 'checkobj', header: '점검대상', width: 210, align: 'center'},
-                    {binding: 'checkitem', header: '점검항목', width: 210, align: 'center'},
-                ],
-            });
-            // 새 열 추가
-            document.getElementById('newRowAtTop').addEventListener('click', function (e) {
-                theGrid1.newRowAtTop = e.target.checked;
-            });
-
-            // 넘버 자동 생성
-            theGrid1.collectionView.collectionChanged.addHandler(function (sender, e) {
-                if (e.action === wijmo.collections.NotifyCollectionChangedAction.Add) {
-                    var newItem = e.item;
-                    newItem.checkseq = sender.sourceCollection.length; // set new id to the number of items in the source
-                }
-            });
-
-            // 새로운 행 표시기를 커스터마이징
-            var style = document.createElement('style');
-            style.innerHTML = `
-
-            `;
-            document.head.appendChild(style);
+            return dateString;
         }
 
-        document.addEventListener('DOMContentLoaded', inputData);
+        // 파일 개수 업데이트 함수
+        function updateFileCount() {
+            const fileCount = uploadedFiles.length;
+            $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+        }
+
+        // 신규등록 버튼 클릭
+        function clearForm() {
+            ['checkdt', 'checkno', 'checknm', 'checkrem','checkarea'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('checkusr').value = userinfo.username;
+            $('.filelist').empty(); // 파일 리스트 초기화
+            uploadedFiles = []; // 업로드된 파일 리스트 초기화
+            deletedFiles = [];
+            // 탭 수정/등록 변경
+            updateTabLink();
+            // 초기화된 파일 개수 업데이트
+            updateFileCount();
+            resetFileInput($('.fileInput'));
+
+            // 점검 항목 테이블 초기화
+            clearInspectionTable();
+        }
+
+        // 점검 항목 테이블 초기화
+        function clearInspectionTable() {
+            // 점검 항목 필드 초기화
+            for (let i = 1; i <= 6; i++) {
+                const seqInput = document.getElementById(`input[name="seq${i}"]`);
+                if (seqInput) {
+                    seqInput.value = '';
+                }
+                const resultSpan = document.getElementById(`inspecresult${i}`);
+                if (resultSpan) {
+                    resultSpan.textContent = 'O';
+                }
+                const reformTextarea = document.getElementById(`inspecreform${i}`);
+                if (reformTextarea) {
+                    reformTextarea.value = '';
+                }
+            }
+        }
+
+
+        // 파일 인풋 초기화
+        function resetFileInput($input) {
+            $input.val('');
+        }
+
+        // 탭 수정/등록으로 업데이트
+        function updateTabLink() {
+            const checkno = document.getElementById('checkno').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            if (checkno) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+            } else {
+                inputTabLink.textContent = '등록';
+                inputTabLink.title = '등록';
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            updateTabLink();
+        });
+
+        // 수정하기
+        function modifyData() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+
+            let data = {
+                spworkcd: selectedItem.spworkcd,
+                spcompcd: selectedItem.spcompcd,
+                spplancd: selectedItem.spplancd,
+                checkdt: selectedItem.checkdt,
+                checkno: selectedItem.checkno
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '수정하시겠습니까?', function () {
+                if (!selectedItem.checkno) {
+                    Alert.alert('', '수정할 게시물이 없습니다.', function () {
+                        fetchListData();
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "/api/inspec/hap/modfind",
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            let data2 = data.data;
+
+                            $('#inputTabLink').click();
+                            document.getElementById('spworkcd').value = data2.spworkcd;
+                            document.getElementById('spcompcd').value = data2.spcompcd;
+                            document.getElementById('spplancd').value = data2.spplancd;
+                            document.getElementById('checkdt').value = formatDate(data2.checkdt);
+                            document.getElementById('checkno').value = data2.checkno;
+                            document.getElementById('checknm').value = data2.checknm;
+                            document.getElementById('checkusr').value = data2.checkusr;
+                            document.getElementById('checkrem').value = data2.checkrem;
+                            document.getElementById('checkarea').value = data2.checkarea;
+
+                            // 테이블의 점검 항목 업데이트
+                            updateInspectionTable(data2.inspectionItems);
+
+                            // 탭 수정으로 업데이트
+                            updateTabLink();
+
+                            // filelist 처리
+                            let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+
+                            deletedFiles = [];
+                            uploadedFiles = [];
+                            $('.filelist').empty(); // 파일 리스트 초기화
+
+                            fileList.forEach(file => {
+                                let newFile = {
+                                    name: file.fileornm,
+                                    size: file.filesize,
+                                    type: file.fileextns,
+                                    lastModified: new Date().getTime(),
+                                    spcompcd: file.spcompcd,
+                                    spplancd: file.spplancd,
+                                    spworkcd: file.spworkcd,
+                                    checkdt: file.checkdt,
+                                    checkseq: file.checkseq,
+                                    fileseq: file.fileseq,
+
+                                };
+                                uploadedFiles.push(newFile); // 파일 리스트에 추가
+                            });
+
+                            updateFileListUI();
+                            updateFileCount();
+
+                        } else {
+                            Alert.alert('', '불러오기에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        // 수정하기 > 점검항목 업데이트
+        function updateInspectionTable(inspectionItems) {
+            inspectionItems.forEach(item => {
+                const inspecnum = item.inspecnum;
+
+                // 점검 결과 업데이트
+                const resultSpan = document.getElementById(`inspecresult${inspecnum}`);
+                if (resultSpan) {
+                    resultSpan.textContent = item.inspecresult;
+                }
+
+                // 시정 조치 사항 업데이트
+                const reformTextarea = document.getElementById(`inspecreform${inspecnum}`);
+                if (reformTextarea) {
+                    reformTextarea.value = item.inspecreform;
+                }
+
+                // seq 값 업데이트
+                const seqInput = document.getElementById(`seq${inspecnum}`);
+                if (seqInput) {
+                    seqInput.value = item.seq;
+                }
+            });
+        }
+
+        // 파일 리스트 UI 업데이트 함수
+        function updateFileListUI() {
+            const $fileList = $('#filelist');
+
+            uploadedFiles.forEach(file => {
+                const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
+                const li = $('<li>').html(`
+                    <p>${file.name} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
+                $fileList.append(li);
+            });
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid() {
+
+            let delList = [];
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                delList.push({
+                    spworkcd: selectedItems[i].spworkcd,
+                    spcompcd: selectedItems[i].spcompcd,
+                    spplancd: selectedItems[i].spplancd,
+                    checkdt: selectedItems[i].checkdt,
+                    checkno: selectedItems[i].checkno
+                });
+            }
+
+            if (delList.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/inspec/hap/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(delList),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData();
+                            clearForm();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 점검일지 출력
+        function DownloadDoc() {
+            // 로딩 바 표시
+            showLoadingBar();
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    checkdt: item.checkdt,
+                    checkno: item.checkno
+                });
+            });
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/inspec/hap/download-docs', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('[name=_csrf]').value);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // 파일 다운로드 처리
+                    let blob = xhr.response;
+                    let link = document.createElement('a');
+                    let url = window.URL.createObjectURL(blob); // Blob으로부터 URL 생성
+                    let contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                    let fileName = 'downloadedFile';
+
+                    // Content-Disposition 헤더에서 파일 이름 추출
+                    if (contentDisposition) {
+                        let fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = fileNameRegex.exec(contentDisposition);
+                        if (matches != null && matches[1]) {
+                            fileName = decodeURIComponent(matches[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+
+                        // 추가: filename* 속성에서 파일 이름 추출
+                        let fileNameStarRegex = /filename\*\=([^;]*)/;
+                        let matchesStar = fileNameStarRegex.exec(contentDisposition);
+                        if (matchesStar != null && matchesStar[1]) {
+                            fileName = decodeURIComponent(matchesStar[1].split("''")[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+                    }
+
+                    link.href = url;
+                    link.download = fileName; // 다운로드 파일 이름 설정
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                } else {
+                    console.error('Download failed:', xhr.statusText);
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error('Network error');
+            };
+            // 로딩 바 숨김
+            hideLoadingBar();
+            xhr.send(JSON.stringify(downloadList));
+        }
+
+        // 로딩 바를 보여주는 함수
+        function showLoadingBar() {
+            document.getElementById('loadingBar').style.display = 'block';
+        }
+
+        // 로딩 바를 숨기는 함수
+        function hideLoadingBar() {
+            document.getElementById('loadingBar').style.display = 'none';
+        }
+
+        // 수정에서 삭제 버튼
+        function deleteForm() {
+
+            let data = [{
+                'spworkcd': $('#spworkcd').val(),
+                'spcompcd': $('#spcompcd').val(),
+                'spplancd': $('#spplancd').val(),
+                'checkdt': $('#checkdt').val(),
+                'checkno': $('#checkno').val()
+            }];
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+
+                if($('#checkno').val() ===''){
+                    Alert.alert('', '삭제할 내용이 없습니다.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/inspec/hap/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            $('#listTabLink').click();
+                            fetchListData();
+                            clearForm();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '삭제에 실패했습니다.');
+                    }
+                });
+            });
+        }
 
         $(document).ready(function (e) {
 
             //점검결과 클릭시 텍스트 순환
-            // $('.checkbox-cell').click(function () {
-            //     const span = $(this).find('span');
-            //     if (span.text() === 'X') {
-            //         span.text('O');
-            //     } else if (span.text() === 'O') {
-            //         span.text('X');
-            //     }
-            // });
-            //
-            // // 정보 저장
-            // $('#btnSave').click(function (e) {
-            //     Alert.confirm('', '저장하시겠습니까?', function () {
-            //
-            //         // theGrid1의 데이터를 data1 배열에 업데이트
-            //         var updatedData1 = theGrid1.collectionView.items;
-            //
-            //         // data1이 제대로 업데이트되었는지 확인하는 로그 추가
-            //         console.log("Updated data1:", updatedData1);
-            //
-            //         let formData = new FormData();
-            //
-            //         formData.append('spworkcd', $('#spworkcd').val());
-            //         formData.append('spworknm', $('#spworknm').val());
-            //         formData.append('spcompcd', $('#spcompcd').val());
-            //         formData.append('spcompnm', $('#spcompnm').val());
-            //         formData.append('spplancd', $('#spplancd').val());
-            //         formData.append('spplannm', $('#spplannm').val());
-            //         formData.append('checkdt', $('#checkdt').val());
-            //         formData.append('checknm', $('#checknm').val());
-            //         formData.append('checkusr', $('#checkusr').val());
-            //         formData.append('checkresult', $('#checkresult').val());
-            //         formData.append('checkrem', $('#checkrem').val());
-            //         formData.append('filelist', $('#filelist').val());
-            //         formData.append('_csrf', $('[name=_csrf]').val());
-            //         // 점검리스트 데이터 추가
-            //         formData.append('inspectlist', JSON.stringify(updatedData1));
-            //
-            //         $.ajax({
-            //             url: "/api/inspec/hap/save",
-            //             type: 'POST',
-            //             data: formData,
-            //             processData: false,
-            //             contentType: false,
-            //             success: function (response) {
-            //                 if (response.success) {
-            //                     Alert.alert('', response.message, function () {
-            //                         $('#listTabLink').click();
-            //                         fetchListData();
-            //
-            //                     });
-            //
-            //                 } else {
-            //                     Alert.alert('', '저장에 실패했습니다. ');
-            //                 }
-            //             },
-            //             error: function (jqXHR, textStatus, errorThrown) {
-            //                 Alert.alert('', '에러가 발생하였습니다.');
-            //             }
-            //         });
-            //     })
-            // })
+            $('.checkbox-cell').click(function () {
+                const span = $(this).find('span');
+                if (span.text() === 'X') {
+                    span.text('O');
+                } else if (span.text() === 'O') {
+                    span.text('X');
+                }
+            });
+
+            // 정보 저장
+            $('#btnSave').click(function (e) {
+                Alert.confirm('', '저장하시겠습니까?', function () {
+
+                    let formData = new FormData();
+
+                    // 점검항목 값 가져오기
+                    const table = document.querySelector('table.doc-table');
+                    const rows = table.querySelectorAll('tbody tr');
+                    let results = [];
+                    let currentDivision = '';
+
+                    rows.forEach(row => {
+                        let cells = row.querySelectorAll('td');
+
+                        if (cells[0].hasAttribute('rowspan')) {
+                            currentDivision = cells[0].innerText.trim();
+                        } else {
+                            cells = Array.from(cells);
+                            cells.unshift(document.createElement('td'));
+                        }
+
+                        const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
+                        const inspectionResult = cells[2].innerText.trim();
+                        const improvement = cells[3].querySelector('textarea').value.trim();
+                        const seqElement = cells[3].querySelector('input[type="hidden"]');
+                        const seq = seqElement ? seqElement.value.trim() : '';
+
+                        const combinedText = `${seq}@ ${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
+                        formData.append('doc-list', combinedText);
+
+                        results.push(combinedText);
+                    });
+                    // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
+
+                    formData.append('spworkcd', $('#spworkcd').val());
+                    formData.append('spcompcd', $('#spcompcd').val());
+                    formData.append('spplancd', $('#spplancd').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checkno', $('#checkno').val());
+
+                    formData.append('spworknm', $('#spworknm').val());
+                    formData.append('spcompnm', $('#spcompnm').val());
+                    formData.append('spplannm', $('#spplannm').val());
+                    formData.append('checknm', $('#checknm').val());
+                    formData.append('checkusr', $('#checkusr').val());
+                    formData.append('checkresult', $('#checkresult').val());
+                    formData.append('checkarea', $('#checkarea').val());
+                    formData.append('checkrem', $('#checkrem').val());
+                    formData.append('filelist', $('#filelist').val());
+
+                    formData.append('ReformList', $('#inspecreform1').val());
+                    formData.append('ReformList', $('#inspecreform2').val());
+                    formData.append('ReformList', $('#inspecreform3').val());
+                    formData.append('ReformList', $('#inspecreform4').val());
+                    formData.append('ReformList', $('#inspecreform5').val());
+                    formData.append('ReformList', $('#inspecreform6').val());
+
+                    $.ajax({
+                        url: "/api/inspec/hap/save",
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                Alert.alert('', response.message, function () {
+                                    $('#listTabLink').click();
+                                    fetchListData();
+                                    clearForm();
+                                });
+
+                            } else {
+                                Alert.alert('', '저장에 실패했습니다. ');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Alert.alert('', '에러가 발생하였습니다.');
+                        }
+                    });
+                })
+            })
             // select 아이디에 따라 히든 input 설정
             const selects = [
                 {selectId: 'spworkcd', hiddenInputId: 'spworknm'},

@@ -1,8 +1,7 @@
 package mes.app.actas_inspec.service;
 
 
-import mes.domain.entity.actasEntity.TB_RP770;
-import mes.domain.repository.TB_RP770Repository;
+
 import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,26 +14,25 @@ import java.util.Map;
 @Service
 public class DocService {
 
-    @Autowired
-    TB_RP770Repository tb_rp770Repository;
 
     @Autowired
     SqlRunner sqlRunner;
 
 
-    @Transactional
-    public Boolean save(TB_RP770 tbRp760){
-
-        try{
-            tb_rp770Repository.save(tbRp760);
-
-            return true;
-
-        }catch (Exception e){
-            System.out.println(e + ": 에러발생");
-            return false;
-        }
-    }
+//    @Transactional
+//    public Boolean save(TB_RP770 tbRp760){
+//
+//        try{
+//            tb_rp770Repository.save(tbRp76
+//            0);
+//
+//            return true;
+//
+//        }catch (Exception e){
+//            System.out.println(e + ": 에러발생");
+//            return false;
+//        }
+//    }
 
     public List<Map<String, Object>> getInspecList(String searchusr) {
 

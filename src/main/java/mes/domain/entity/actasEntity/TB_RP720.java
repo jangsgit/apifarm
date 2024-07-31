@@ -41,6 +41,9 @@ public class TB_RP720 {
     @Column(name="\"checkrem\"")
     String checkrem;   // 점검의견
 
+    @Column(name="\"checkarea\"")
+    String checkarea;   // 점검의견
+
     @Column(name="\"filepath\"")
     String filepath;    // 파일경로
 
