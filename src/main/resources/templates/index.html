@@ -37,14 +37,12 @@
                         <dt>REC 정보</dt>
                         <dd>
                             <span style="margin-right: 5px;">평균</span>
-                            <p>74,949</p>
+                            <p id="recValue">로딩중</p>
                         </dd>
                     </dl>
                     <dl style="width:120px;">
                         <dt>SMP 정보</dt>
-                        <dd>
-                            135.69
-                        </dd>
+                        <dd id="smpValue">로딩중</dd>
                     </dl>
                 </div>
                 <div class="weather">
@@ -1198,6 +1196,69 @@ Quality is planned, designed, and built in-not inspected in.`;
         });
 
         // 오픈소스 사용공지 필요
+
+
+
+
+        // Rec 정보
+        fetchRecData();
+
+        function fetchRecData() {
+            fetch('/rec/recAverage')
+                .then(response => response.text()) // 응답을 텍스트로 변환
+                .then(data => {
+                    $('#recValue').text(data);
+                })
+                .catch(error => console.error('Error fetching REC data:', error)); // 오류 처리
+        }
+
+        // SMP 정보
+        fetchSmpData();
+
+        /*function fetchSmpData() {
+            fetch('/smp/smpCurrent') // SMP 데이터를 가져오는 GET 요청
+                .then(response => response.text()) // 응답을 텍스트(XML)로 변환
+                .then(data => {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, "application/xml");
+                    const smpValues = xmlDoc.getElementsByTagName("smp");
+                    if (smpValues.length > 0) {
+                        document.getElementById('smpValue').textContent = smpValues[0].textContent;
+                    } else {
+                        document.getElementById('smpValue').textContent = '데이터 없음';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching SMP data:', error);
+                    document.getElementById('smpValue').textContent = '데이터 로드 실패';
+                }); // 오류 처리
+        }*/
+
+        function fetchSmpData() {
+            fetch('/smp/smpCurrent') // SMP 데이터를 가져오는 GET 요청
+                .then(response => response.text()) // 응답을 텍스트(XML)로 변환
+                .then(data => {
+                    console.log("서버 응답 로그 출력" + data); // 서버 응답 로그 출력
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, "application/xml");
+                    console.log(" 파싱된 XML 로그 출력" + xmlDoc); // 파싱된 XML 로그 출력
+                    const smpValues = xmlDoc.getElementsByTagName("smp");
+                    console.log("추출된 smp 태그들의 로그 출력" + smpValues); // 추출된 smp 태그들의 로그 출력
+                    if (smpValues.length > 0) {
+                        document.getElementById('smpValue').textContent = smpValues[0].textContent;
+                    } else {
+                        document.getElementById('smpValue').textContent = '데이터 없음';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching SMP data:', error);
+                    document.getElementById('smpValue').textContent = '데이터 로드 실패';
+                }); // 오류 처리
+        }
+
+
+
+
     });
 
 </script>
