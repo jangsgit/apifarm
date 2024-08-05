@@ -59,7 +59,7 @@ public class HomeController {
 		mv.addObject("mqtt_web_port", mqtt_web_port);
 		mv.addObject("hmi_topic", hmi_topic);
 		
-		mv.setViewName("index");		
+		mv.setViewName("index");
 		
 		return mv;
 	}

@@ -65,7 +65,7 @@
                     </div>
                     <div class="section-cont">
                         <ul class="robot-operation toggle-group">
-                            <li>
+                            <li data-robot-id="nc0001">
                                 <div class="top">
                                     <div class="left">
                                         <p class="robot-on">ON</p>
@@ -75,18 +75,18 @@
                                         <div class="battery">
                                             <div class="battery-level">
                                                 <!-- 충전중 :  charging class 추가 -->
-                                                <div class="charging-indicator charging"></div>
+                                                <div class="charging-indicator"></div>
                                             </div>
                                             <div class="battery-cap"></div>
                                         </div>
-                                        <p class="battery-num">64</p>
+                                        <p class="battery-num"></p>
                                     </div>
                                 </div>
                                 <div class="bottom">
                                     <img src="/images/icon/robot.svg" alt="로봇 이미지">
                                 </div>
                             </li>
-                            <li class="on">
+                            <li class="on" data-robot-id="nc0002">
                                 <div class="top">
                                     <div class="left">
                                         <p class="robot-on">ON</p>
@@ -102,14 +102,14 @@
                                             </div>
                                             <div class="battery-cap"></div>
                                         </div>
-                                        <p class="battery-num">50</p>
+                                        <p class="battery-num"></p>
                                     </div>
                                 </div>
                                 <div class="bottom">
                                     <img src="/images/icon/robot.svg" alt="로봇 이미지">
                                 </div>
                             </li>
-                            <li>
+                            <li data-robot-id="nc0003">
                                 <div class="top">
                                     <div class="left">
                                         <p class="robot-off">OFF</p>
@@ -122,7 +122,7 @@
                                             </div>
                                             <div class="battery-cap"></div>
                                         </div>
-                                        <p class="battery-num">10</p>
+                                        <p class="battery-num"></p>
                                     </div>
                                 </div>
                                 <div class="bottom">
@@ -327,18 +327,76 @@
 
 
     <script>
-        var swiper = new Swiper(".card-swiper", {
-            slidesPerView: 5,
-            spaceBetween: 20,
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const batteryItems = document.querySelectorAll('.battery-wrap');
+
+            batteryItems.forEach(item => {
+                const batteryLevelElement = item.querySelector('.battery-level');
+                const chargingIndicatorElement = item.querySelector('.charging-indicator');
+                const batteryNumElement = item.querySelector('.battery-num');
+                const batteryLevel = parseInt(batteryNumElement.textContent, 10);
+
+                updateBatteryLevel(batteryLevelElement, chargingIndicatorElement, batteryNumElement, batteryLevel, chargingIndicatorElement.classList.contains('charging'));
+            });
+
+            var ws = new WebSocket('ws://localhost:8060/websocket');
+            ws.onmessage = function(event) {
+                var data = JSON.parse(event.data);
+                console.log("Received data:", data);
+
+                var robotElement = document.querySelector(`li[data-robot-id='${data.robotId}']`);
+                if (robotElement) {
+                    var batteryStatus = parseInt(data.batteryStatus, 10);
+                    if (isNaN(batteryStatus)) {
+                        batteryStatus = 0; // 기본값을 0으로 설정 또는 원하는 기본값으로 설정
+                    }
+                    var isCharging = data.chargingIndicator === "charging";
+                    const batteryLevelElement = robotElement.querySelector('.battery-level');
+                    const chargingIndicatorElement = robotElement.querySelector('.charging-indicator');
+                    const batteryNumElement = robotElement.querySelector('.battery-num');
+
+                    // updateBatteryLevel 함수를 호출하여 배터리 레벨과 충전 상태를 업데이트합니다.
+                    updateBatteryLevel(batteryLevelElement, chargingIndicatorElement, batteryNumElement, batteryStatus, isCharging);
+                }
+            };
+
+            ws.onopen = function() {
+                console.log('WebSocket connection opened');
+            };
+
+            ws.onclose = function() {
+                console.log('WebSocket connection closed');
+            };
+
+            ws.onerror = function(error) {
+                console.log('WebSocket error: ' + error);
+            };
+
+            // updateBatteryLevel 함수 정의 (ui.js 파일에 정의된 함수와 동일하게)
+            function updateBatteryLevel(batteryLevelElement, chargingIndicatorElement, batteryNumElement, level, isCharging) {
+                batteryLevelElement.style.width = level + '%';
+                batteryNumElement.textContent = level + '%'; // 배터리 잔량 숫자로 표기
+
+                // 충전 중일 때 배터리 컬러 변경
+                if (isCharging) {
+                    batteryLevelElement.style.backgroundColor = '#19D7B4';
+                    chargingIndicatorElement.classList.add('charging');
+                } else {
+                    chargingIndicatorElement.classList.remove('charging');
+                    // 배터리 상태에 따라 색상을 변경
+                    if (level > 50) {
+                        batteryLevelElement.style.backgroundColor = '#00FF00'; // 녹색
+                    } else if (level > 20) {
+                        batteryLevelElement.style.backgroundColor = '#FFFF00'; // 노란색
+                    } else {
+                        batteryLevelElement.style.backgroundColor = '#FF0000'; // 빨간색
+                    }
+                }
+            }
         });
+
+
     </script>
 
 </th:block>
