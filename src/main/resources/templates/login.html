@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> <!-- Slide css -->
     <link rel="stylesheet" href="/css/import.css"/>
     <link rel="stylesheet" href="/css/login_mes.css" />
+    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css" />
 
 
     <title>SMART FOMS</title>
@@ -37,9 +38,9 @@
                             <input type="text" id="loginId" name="username" required autofocus title="아이디 입력" placeholder="아이디를 입력해주세요">
                         </dd>
                         <!-- 에러메시지 출력 -->
-                        <dd class="hint-red">
+                        <dd class="hint-red" id="hint-red" style="display: none">
                             <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">
-                            에러메세지 출력
+                            계정이 맞지 않습니다.
                         </dd>
                     </dl>
                     <dl>
@@ -47,10 +48,10 @@
                         <dd>
                             <input type="password" id="loginPwd" name="password" placeholder="비밀번호를 입력해주세요" required title="패스워드 입력" autocomplete="off">
                         </dd>
-                        <dd class="hint">
+                        <!--<dd class="hint">
                             <img src="/images/icon/ico-info.svg" alt="힌트메세지">
                             힌트메세지
-                        </dd>
+                        </dd>-->
                     </dl>
                     <div class="check-save">
                         <input type="checkbox" id="login_chk">
@@ -59,7 +60,7 @@
                     <button type="submit" class="btn-login" id="login">로그인</button>
                     <ul class="btn-login-etc">
                         <li>
-                            <a href="#" class="btn btn-popup-open" data-popup="popup1" title="사용자신청">사용자신청</a>
+                            <a class="btn btn-popup-open" data-popup="popup1" title="사용자신청" onclick="RegisterUser()">사용자신청</a>
                         </li>
                         <li>
                             <a href="#" class="btn" title="아이디 찾기">아이디 찾기</a>
@@ -76,11 +77,11 @@
     </div>
     <!-- [사용자권한] 팝업  -->
     <div class="dashboard-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup1">
+        <div class="popup-overlay"  id="popup1"></div>
+        <div class="popup-wrapper" id="wrapper1">
             <div class="popup-title">
                 <h3>사용자권한신청</h3>
-                <a href="#" title="팝업닫기" class="btn-popup-close">
+                <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
                     <img src="/images/icon/btn-popup-close.svg" alt="닫기">
                 </a>
             </div>
@@ -103,7 +104,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="agency" name="agency">
                                 </div>
                             </td>
                             <th>
@@ -113,7 +114,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="agencyDepartment" name="agencyDepartment">
                                 </div>
                             </td>
                         </tr>
@@ -125,7 +126,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="level" name="level">
                                 </div>
                             </td>
                             <th>
@@ -135,7 +136,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="name" name="name">
                                 </div>
                             </td>
                         </tr>
@@ -147,7 +148,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="tel" name="tel">
                                 </div>
                             </td>
                             <th>
@@ -157,7 +158,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="" name="">
+                                    <input type="text" id="email" name="email">
                                 </div>
                             </td>
                         </tr>
@@ -169,27 +170,46 @@
                             </th>
                             <td colspan="3">
                                 <div class="input-clear">
-                                    <input type="text" id="" name="" class="wp50">
+                                    <input type="text" id="id" name="id" class="wp50">
                                 </div>
-                                <a href="#" class="btn">중복확인</a>
+                                <a href="#" class="btn" id="btnDuplicate">중복확인</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="password">
+                                    비밀번호
+                                </label>
+                            </th>
+                            <td>
+                                <input type="password" id="password" name="password">
+                            </td>
+                            <th>
+                                <label for="passwordchk">
+                                    비밀번호확인
+                                </label>
+                            </th>
+                            <td>
+                                <input type="password" id="passwordchk" name="passwordchk">
                             </td>
                         </tr>
                         <tr>
                             <th>
                                 <label for="">
-                                    비밀번호
+                                    권한그룹
                                 </label>
                             </th>
-                            <td>
-                                <input type="password" id="" name="">
-                            </td>
-                            <th>
-                                <label for="">
-                                    비밀번호확인
-                                </label>
-                            </th>
-                            <td>
-                                <input type="password" id="" name="">
+                            <td colspan="3">
+                                <div class="input-clear">
+                                    <select class="wp100 mg-r5" id="authType" name="authType">
+                                        <option value='bloomuser'>BloomEnergy담당자</option>
+                                        <option value='esguser'>ESG담당자</option>
+                                        <option value='admin'>관리자</option>
+                                        <option value='User'>사용자</option>
+                                        <option value='Master'>시스템마스터</option>
+                                        <option value='elecuser'>전기안전관리자</option>
+                                    </select>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -200,16 +220,19 @@
                             </th>
                             <td colspan="3">
                                 <div class="fl-ac">
-                                    <select class="wp50 mg-r5">
+                                    <select class="wp30 mg-r5" id="firstSelect">
                                         <option></option>
                                     </select>
-                                    <select class="wp50">
+                                    <select class="wp30 mg-r5" id="secondSelect">
+                                        <option></option>
+                                    </select>
+                                    <select class="wp30 mg-r5" id="thirdSelect">
                                         <option></option>
                                     </select>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <th>
                                 권한그룹
                             </th>
@@ -239,7 +262,7 @@
                                     <label for="">울산</label>
                                 </div>
                             </td>
-                        </tr>
+                        </tr>-->
                         <tr>
                             <th>
                                 <label for="">
@@ -248,7 +271,7 @@
                             </th>
                             <td colspan="3">
                                 <div class="input-clear">
-                                    <input type="text" id="" name="" class="wp100">
+                                    <input type="text" id="reason" name="reason" class="wp100">
                                 </div>
                             </td>
                         </tr>
@@ -257,8 +280,8 @@
                 </div>
             </div>
             <div class="popup-button">
-                <button class="btn-popup-close">취소</button>
-                <button class="btn-navy">권한신청</button>
+                <button class="btn-popup-close" onclick="RegisterUserClose()">취소</button>
+                <button class="btn-navy" id="btnSaveAuth">권한신청</button>
             </div>
         </div>
     </div> <!-- //dashboard-layout-popup end -->
@@ -274,12 +297,51 @@
 <script type="text/javascript" src="/resource/JavaScript-Templates/tmpl.js"></script>
 
 
+
+
 <script type="text/javascript" src="/js/ax5commUtil.js?v=1050"></script>
 
 
 
 
 <script type="text/javascript">
+
+
+    function initializeFirstSelect(){
+        $.get('/user-codes/parent', { parentId: 110 }, function(data){
+            let firstSelect = $('#firstSelect');
+            firstSelect.empty();
+            firstSelect.append('<option value="">Select an option</option>');
+            data.forEach(function(item) {
+                firstSelect.append('<option value ="' + item.code + '">' + item.value + '</option>');
+            });
+        });
+    }
+
+    function updateSecondSelect(code, value){
+        $.get('/user-codes/code', { code: code, value: value}, function(data){
+            let secondSelect = $('#secondSelect');
+            secondSelect.empty();
+            secondSelect.append('<option value="">Select an option</option>');
+            data.forEach(function(item) {
+                secondSelect.append('<option value="' + item.code + '">' + item.value + '</option>');
+            });
+
+        });
+    }
+
+    $('#firstSelect').change(function(){
+        let selectedCode = $(this).val();
+        let selectedValue = $(this).textContent;
+
+        if(selectedCode){
+            updateSecondSelect(selectedCode, selectedValue);
+        } else {
+            $('#secondSelect').empty();
+            $('#secondSelect').append('<option value="">Select an option</option>');
+        }
+
+    });
 
 
     const requiredFields = ['agency', 'agencyDepartment', 'name', 'id', 'password', 'passwordchk', 'authType'];
@@ -296,6 +358,22 @@
 
         }
         return true;
+    }
+
+    function RegisterUser(){
+        let popup = document.getElementById('popup1');
+        let wrapper = document.getElementById('wrapper1');
+
+        popup.style.display = 'block';
+        wrapper.style.display = 'block';
+    }
+
+    function RegisterUserClose(){
+        let popup = document.getElementById('popup1');
+        let wrapper = document.getElementById('wrapper1');
+
+        popup.style.display = 'none';
+        wrapper.style.display = 'none';
     }
 
     class LoginBoard {
@@ -542,7 +620,7 @@
 
 
 
-
+        initializeFirstSelect();
 
 
 
@@ -620,7 +698,18 @@
             $.post('/login', submitData, function (result) {
                 let code = result.data.code;
                 var resultmsg = result.message;
+                if (code == 'NOUSER') {
+
+                    //alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+
+
+                    Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.');
+                    return false;
+                }
                 if (code == 'NOID') {
+
+                    let redtext = document.getElementById('hint-red');
+                    redtext.style.display = 'block';
                     Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.', clearFields);
                 }
                 else if (code == 'NOPW') {

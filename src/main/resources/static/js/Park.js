@@ -160,42 +160,7 @@ $(document).ready(function (e) {
         }
     });
 
-    const fileInput = document.getElementById('fileInput2');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    const dropZone = document.getElementById('dropZone');
 
-    function updateFileName() {
-        const files = fileInput.files;
-        if (files.length > 0) {
-            fileNameDisplay.textContent = files[0].name;
-        } else {
-            fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
-        }
-    }
-
-    fileInput.addEventListener('change', updateFileName);
-
-    // 드래그 앤 드롭 이벤트 핸들러
-    dropZone.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        dropZone.classList.add('dragover');
-    });
-
-    dropZone.addEventListener('dragleave', (event) => {
-        event.preventDefault();
-        dropZone.classList.remove('dragover');
-    });
-
-    dropZone.addEventListener('drop', (event) => {
-        event.preventDefault();
-        dropZone.classList.remove('dragover');
-
-        const files = event.dataTransfer.files;
-        if (files.length > 0) {
-            fileInput.files = files; // 파일 입력 요소에 파일 설정
-            updateFileName(); // 파일명 업데이트
-        }
-    });
 })
 
 
