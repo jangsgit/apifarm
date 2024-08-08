@@ -16,6 +16,10 @@ public interface UserCodeRepository extends JpaRepository<UserCode, Integer>{
 	
 	List<UserCode> findByCode (String code);
 	
-		
+	List<UserCode> findByParentId(Integer parentId);
+
+	List<UserCode> findByCodeAndValue (String code, String value);
+
+
 
 }

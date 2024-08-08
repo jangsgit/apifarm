@@ -73,10 +73,6 @@ public class TB_RP940{
     @Column(name = "\"appreason\"")
     private String appreason;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "userid")  //얘가 연관관계 주인임.
-    private TB_RP945 tb_rp945;
-
 
     public static TB_RP940 toSaveEntity(TB_RP940Dto DTO){
         TB_RP940 tbRp940 = new TB_RP940();

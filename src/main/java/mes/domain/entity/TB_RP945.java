@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "TB_RP945")  //TODO: 유저권한 상세테이블
+@IdClass(TB_RP945Id.class)
 public class TB_RP945 {
 
 
@@ -19,6 +20,7 @@ public class TB_RP945 {
     @Column(name = "\"userid\"")
     private String userid;
 
+    @Id
     @Column(name = "\"askseq\"")
     private String askseq;
 
@@ -34,8 +36,14 @@ public class TB_RP945 {
     @Column(name = "\"spcompnm\"")
     private String spcompnm;
 
-    @OneToOne(mappedBy = "tb_rp945")  //얘는 연관관계의 주인이 아니다.
-    private TB_RP940 tb_rp940;
+    @Column(name = "\"spplancd\"")
+    private String spplancd;
+
+    @Column(name = "\"spplannm\"")
+    private String spplannm;
+
+
+
 
     public static TB_RP945 toSaveEntity(TB_RP945Dto DTO){
         TB_RP945 tbRp945Dto = new TB_RP945();
@@ -45,6 +53,8 @@ public class TB_RP945 {
         tbRp945Dto.setSpworknm(DTO.getSpworknm());
         tbRp945Dto.setSpworkcd(DTO.getSpworkcd());
         tbRp945Dto.setSpcompnm(DTO.getSpcompnm());
+        tbRp945Dto.setSpplancd(DTO.getSpplancd());
+        tbRp945Dto.setSpplannm(DTO.getSpplannm());
         return tbRp945Dto;
     }
 

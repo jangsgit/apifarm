@@ -10,12 +10,16 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.Option;
 
 import mes.app.account.service.TB_RP940_Service;
 import mes.domain.DTO.TB_RP940Dto;
 import mes.domain.DTO.TB_RP945Dto;
+import mes.domain.entity.UserCode;
 import mes.domain.repository.TB_RP940Repository;
 import mes.domain.repository.TB_RP945Repository;
+import mes.domain.repository.UserCodeRepository;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import mes.domain.entity.TB_RP940;
@@ -51,6 +55,9 @@ public class AccountController {
 		
     @Autowired
     UserRepository userRepository;
+
+	@Autowired
+	UserCodeRepository userCodeRepository;
 	
 	@Autowired
 	SqlRunner sqlRunner;
@@ -78,8 +85,10 @@ public class AccountController {
 		
 		Map<String, Object> userInfo = new HashMap<String, Object>(); 
 		Map<String, Object> gui = new HashMap<String, Object>();
+
 		
 		mv.addObject("userinfo", userInfo);
+
 		mv.addObject("gui", gui);
 		if(auth!=null) {
 			SecurityContextLogoutHandler handler =  new SecurityContextLogoutHandler();
@@ -110,11 +119,9 @@ public class AccountController {
     		final HttpServletRequest request) {
     	// 여기로 들어오지 않음.
 
-		List<TB_RP940> list = tb_rp940Repository.findAll();
+		//List<TB_RP940> list = tb_rp940Repository.findAll();
 
-		System.out.print(list);
-
-
+		//System.out.print(list);
 
 
     	AjaxResult result = new AjaxResult();
@@ -123,8 +130,15 @@ public class AccountController {
     	result.data = data;
     	
         UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
-        CustomAuthenticationToken auth = (CustomAuthenticationToken)authManager.authenticate(authReq);
-        
+		CustomAuthenticationToken auth = null;
+		try{
+			auth = (CustomAuthenticationToken)authManager.authenticate(authReq);
+		}catch (AuthenticationException e){
+			//e.printStackTrace();
+			data.put("code", "NOUSER");
+			return result;
+		}
+
         if(auth!=null) {
         	User user = (User)auth.getPrincipal();
         	user.getActive();        	
@@ -209,8 +223,17 @@ public class AccountController {
 
 
 		Optional<TB_RP940> rp940 =  tb_rp940Repository.findByUserid(userid);
+		Optional<User> user = userRepository.findByUsername(userid);
 
-		if(!rp940.isPresent()){
+
+
+		if(rp940.isPresent()){
+			result.success = false;
+			result.message = "이미 신청 완료하였습니다.";
+			return result;
+
+		}
+		if(!user.isPresent()){
 
 			result.success = true;
 			result.message = "사용할 수 있는 계정입니다.";
@@ -238,15 +261,17 @@ public class AccountController {
 			@RequestParam(value = "password") String password,
 			@RequestParam(value = "passwordchk") String passwordchk,
 			@RequestParam(value = "authType") String authType,
-			@RequestParam(value = "val") String val,
-			@RequestParam(value = "reason") String reason, Authentication auth){
+			@RequestParam(value = "spworkcd") String spworkcd,
+			@RequestParam(value = "spcompcd") String spcompcd,
+			@RequestParam(value = "spplancd") String spplancd,
+			@RequestParam(value = "reason") String reason,
+			@RequestParam(value = "firstText") String firstText,
+			@RequestParam(value = "secondText") String secondText,
+			@RequestParam(value = "thirdText") String thirdText,
+			Authentication auth){
 
 			AjaxResult result = new AjaxResult();
- 			//StringUtils.hasText: 파라미터문자가 공백을 제외하고 길이가 1이상인 경우인지 따진다. null 받지 않는다.
 
-
-			//dto에 담는다 . TODO: 근데 컬럼명하고 파라미터명을 다르게 한 것은 보안때문에 작명을 다르게 함. 그리고 controller에서 entity 매핑보다는 dto가 더 안전하다
-			// TODO: 로그인할때만 이런식으로 할것.
 			try {
 					TB_RP940Dto dto = TB_RP940Dto.builder()
 						.agency(agency)
@@ -255,36 +280,18 @@ public class AccountController {
 						.email(email)
 						.id(id)
 						.level(level)
-						.tel(tel)
+						.tel(tel.replaceAll("-",""))
 						.name(name)
 						.password(Pbkdf2Sha256.encode(password))
 						.reason(reason)
 						.build();
 
-				String spcompnm = "";
-				String spworknm = "";
-				String spwordcd = "";
 
-				switch (val) {
-					case "dgsan01":
-						spwordcd = "dg";
-						spcompnm = "성서산단";
-						spworknm = "대구";
-						break;
-					case "dlsan01":
-						spwordcd = "dl";
-						spcompnm = "대관령산단";
-						spworknm = "대관령";
-						break;
-					case "dksan01":
-						spwordcd = "dk";
-						spcompnm = "대덕산단";
-						spworknm = "대관령";
-						break;
-				}
 
 				//신청순번의 최대값을 구한후 +1을 하고 문자열로 바꿔줌
 				String RawAskSeq = tb_rp945Repository.findMaxAskSeq();
+				RawAskSeq = (RawAskSeq != null) ? RawAskSeq : "0";
+
 				int AskSeqInt = Integer.parseInt(RawAskSeq) + 1;
 				String askseq = String.format("%03d", AskSeqInt);
 
@@ -292,10 +299,12 @@ public class AccountController {
 				TB_RP945Dto dto2 = TB_RP945Dto.builder()
 						.userid(id)
 						.askseq(askseq)
-						.spworkcd(spwordcd)
-						.spcompcd(val)
-						.spworknm(spworknm)
-						.spcompnm(spcompnm)
+						.spworkcd(spworkcd)
+						.spcompcd(spcompcd)
+						.spplancd(spplancd)
+						.spworknm(firstText)
+						.spcompnm(secondText)
+						.spplannm(thirdText)
 						.build();
 
 				tbRp940Service.save(dto, dto2);
@@ -313,5 +322,20 @@ public class AccountController {
 			}
 
 	}
+
+	@GetMapping("/user-codes/parent")
+	public List<UserCode> getUserCodeByParentId(@RequestParam Integer parentId){
+		return userCodeRepository.findByParentId(parentId);
+	}
+
+	@GetMapping("/user-codes/code")
+	public List<UserCode> getUserCodesByCode(@RequestParam String code, @RequestParam String value) {
+
+		List<UserCode> list = userCodeRepository.findByCodeAndValue(code, value);  //TODO: 이거 PK도 아닌데 여러개의 값이 나온다면 어떡하지? 근데 웬만해서는 단일값만 나올것이지만 에러처리는 해야할듯?
+
+
+		return userCodeRepository.findByParentId(list.get(0).getId());
+	}
+
     
 }
