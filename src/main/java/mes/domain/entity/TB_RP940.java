@@ -8,6 +8,8 @@ import org.apache.commons.math3.analysis.function.Log10;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,8 +58,8 @@ public class TB_RP940{
     @Column(name = "\"askreason\"")
     private String askreason;
 
-
-    @Column(name = "\"askdatem\"")
+    @CreatedDate
+    @Column(name = "\"askdatem\"", updatable = false)
     private LocalDateTime askdatem;
 
     @Column(name = "\"appflag\"")
@@ -66,9 +68,9 @@ public class TB_RP940{
     @Column(name = "\"appuser\"")
     private String appuser;
 
-    @CreatedDate
-    @Column(name = "\"appdatem\"", updatable = false)
-    private LocalDateTime appdatem;
+
+    @Column(name = "\"appdatem\"")
+    private OffsetDateTime appdatem;
 
     @Column(name = "\"appreason\"")
     private String appreason;
@@ -85,11 +87,12 @@ public class TB_RP940{
         tbRp940.setUsermail(DTO.getEmail());
         tbRp940.setLoginpw(DTO.getPassword());
         tbRp940.setAuthgrpcd(DTO.getAuthType());
-        tbRp940.setAuthgrpnm(DTO.getAuthType());
+        tbRp940.setAuthgrpnm(DTO.getAuthgrpnm());
         tbRp940.setAskreason(DTO.getReason());
-        tbRp940.setAppflag("N");
+        tbRp940.setAppflag(DTO.getAppflag());
         tbRp940.setAppuser("");
         tbRp940.setAppreason("");
+        tbRp940.setAppdatem(DTO.getAppdatem());
         return tbRp940;
 
     }

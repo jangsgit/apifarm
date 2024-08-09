@@ -259,7 +259,6 @@ public class AccountController {
 			@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "id") String id,
 			@RequestParam(value = "password") String password,
-			@RequestParam(value = "passwordchk") String passwordchk,
 			@RequestParam(value = "authType") String authType,
 			@RequestParam(value = "spworkcd") String spworkcd,
 			@RequestParam(value = "spcompcd") String spcompcd,
@@ -268,6 +267,7 @@ public class AccountController {
 			@RequestParam(value = "firstText") String firstText,
 			@RequestParam(value = "secondText") String secondText,
 			@RequestParam(value = "thirdText") String thirdText,
+			@RequestParam(value = "authTypeText") String authTypeText,
 			Authentication auth){
 
 			AjaxResult result = new AjaxResult();
@@ -277,6 +277,8 @@ public class AccountController {
 						.agency(agency)
 						.agencyDepartment(agencyDepartment)
 						.authType(authType)
+							.authgrpnm(authTypeText)
+							.appflag("N")
 						.email(email)
 						.id(id)
 						.level(level)

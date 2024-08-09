@@ -3,6 +3,9 @@ package mes.domain.DTO;
 
 import lombok.*;
 
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -20,7 +23,14 @@ public class TB_RP940Dto {
     private String password; // 로그인 패스워드
 
     private String authType; //권한그룹
+    private String authgrpnm;
+
     private String reason; //신청사유
+    private String appflag;
+
+    private OffsetDateTime appdatem;
+
+
 
 }
 

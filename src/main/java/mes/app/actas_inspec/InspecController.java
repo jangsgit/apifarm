@@ -133,11 +133,7 @@ public class InspecController {
             //@RequestParam Map<String, String> params
     ) throws IOException {
 
-        /*1.점검자 여러명 추가해서 수정해보기
-        2.일반수정
-        3.파일하나 삭제해보고 수정
-        4.파일하나 추가해보고 수정
-        5.파일 안건드리고 수정*/
+
         AjaxResult result = new AjaxResult();
 
 
@@ -323,8 +319,6 @@ public class InspecController {
 
         AjaxResult result = new AjaxResult();
 
-        ObjectMapper mapper = new ObjectMapper();
-
         String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
         String[] tokens = cleanJson.split(",");
 
@@ -363,8 +357,6 @@ public class InspecController {
     ){
 
         AjaxResult result = new AjaxResult();
-
-        ObjectMapper mapper = new ObjectMapper();
 
         String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
         String[] tokens = cleanJson.split(",");

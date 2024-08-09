@@ -188,4 +188,9 @@ public class GuiController {
 		return mv;
 		
 	}
+
+	@GetMapping("/test")
+	public String testPage(){
+		return "/test";
+	}
 }

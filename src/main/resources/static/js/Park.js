@@ -146,7 +146,12 @@ function postFetchRequest(url, data, successCallback, errorCallback) {
         })
 }
 
+function ElementBinding(element, paramvalue){
+    if(paramvalue !== null){
+        document.getElementById(element).value = paramvalue;
+    }
 
+}
 
 
 $(document).ready(function (e) {
