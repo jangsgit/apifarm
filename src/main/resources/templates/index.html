@@ -37,39 +37,35 @@
                         <dt>REC 정보</dt>
                         <dd>
                             <span style="margin-right: 5px;">평균</span>
-                            <p>74,949</p>
+                            <p id="recValue">로딩중</p>
                         </dd>
                     </dl>
                     <dl style="width:120px;">
                         <dt>SMP 정보</dt>
-                        <dd>
-                            135.69
-                        </dd>
+                        <dd id="smpValue">로딩중</dd>
                     </dl>
                 </div>
                 <div class="weather">
                     <div class="wt-main">
                         <p class="area">연료전지 발전소 대구</p>
                         <div class="wt-graphic">
-                            <img src="/images/icon/weather/ico-wt1.svg" alt="맑음">
-                            <p>
-                                26<span class="celsius">℃</span>
-                            </p>
+                            <img id="weatherIcon" src="" alt="">
+                            <p id="temperature"></p> <!-- 기존의 <span> 태그를 제거 -->
                         </div>
                     </div>
                     <div class="wt-detail">
                         <ul>
                             <li>
                                 <img src="/images/icon/ico-umbrella.svg" alt="강수">
-                                20%
+                                <p id="precipitationProbability"></p>
                             </li>
                             <li>
                                 <img src="/images/icon/ico-water.svg" alt="습도">
-                                25%
+                                <p id="humidity"></p>
                             </li>
                             <li>
                                 <img src="/images/icon/ico-wind.svg" alt="풍속">
-                                16m/s
+                                <p id="windSpeed"></p>
                             </li>
                         </ul>
                     </div>
@@ -719,9 +715,10 @@
 
         function fetchRecData() {
             fetch('/rec/recAverage')
-                .then(response => response.text()) // 응답을 텍스트로 변환
+                .then(response => response.json()) // JSON 형식의 응답을 파싱
                 .then(data => {
-                    $('#recValue').text(data);
+                    // $('#recValue').text(data);
+                    $('#recValue').text(data.landAvgPrc); // data 객체에서 landAvgPrc 필드의 값을 사용
                 })
                 .catch(error => console.error('Error fetching REC data:', error)); // 오류 처리
         }
@@ -769,6 +766,71 @@
                     document.getElementById('smpValue').textContent = '데이터 로드 실패';
                 }); // 오류 처리
         }
+
+        // 날씨 정보
+        fetchWeatherData();
+
+        // 날씨 정보를 서버에서 가져오는 함수
+        function fetchWeatherData() {
+            fetch('/weather/current')
+                .then(response => response.json()) // JSON 형식으로 데이터를 파싱
+                .then(data => {
+                    console.log("날씨 data:", JSON.stringify(data, null, 2));
+
+                    // JSON 데이터 구조를 이용하여 각 항목에 대한 값을 추출
+                    document.getElementById('temperature').innerHTML = `${data.T1H}<span class="celsius">℃</span>`;
+                    document.getElementById('precipitationProbability').innerHTML = data.POP ? `${data.POP}%` : '0%'; // 강수확률이 없는 경우 '0%'로 표시
+                    document.getElementById('humidity').innerHTML = `${data.REH}%`; // 습도를 표시할 때 '%'를 추가
+                    document.getElementById('windSpeed').innerHTML = `${data.WSD}m/s`; // 풍속을 표시할 때 'm/s'를 추가
+
+                    // 날씨 아이콘 업데이트
+                    updateWeatherIcon(data.SKY, data.PTY);
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                });
+        }
+
+        // 날씨 아이콘 업데이트 함수
+        function updateWeatherIcon(skyValue, ptyValue) {
+            console.log("PTY Value:", ptyValue);
+            console.log("SKY Value:", skyValue);
+
+            let iconPath = '/images/icon/weather/';
+            let altText = '날씨 아이콘';
+
+            // PTY 값에 따라 먼저 판단 (강수 형태 우선)
+            if (ptyValue == '1') {
+                iconPath += 'ico-wt4.svg'; // 비
+                altText = '비';
+            } else if (ptyValue == '3') {
+                iconPath += 'ico-wt5.svg'; // 눈
+                altText = '눈';
+            } else if (ptyValue == '4') {
+                iconPath += 'ico-wt7.svg'; // 소나기
+                altText = '소나기';
+            } else {
+                // PTY 값이 0이거나 비어 있을 때는 SKY 값으로 판단
+                if (skyValue == '1') {
+                    iconPath += 'ico-wt1.svg'; // 맑음
+                    altText = '맑음';
+                } else if (skyValue == '2') {
+                    iconPath += 'ico-wt2.svg'; // 구름 조금
+                    altText = '구름 조금';
+                } else if (skyValue == '3' || skyValue == '4') {
+                    iconPath += 'ico-wt3.svg'; // 구름 많음 또는 흐림
+                    altText = '구름 많음 또는 흐림';
+                }
+            }
+
+            // 아이콘 업데이트
+            const weatherIcon = document.getElementById('weatherIcon');
+            weatherIcon.src = iconPath;
+            weatherIcon.alt = altText;
+
+            console.log("Weather icon path:", iconPath);
+        }
+
     });
 
 </script>
