@@ -1,11 +1,15 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
+
 <head>
     <style>
         #theGrid2.wj-flexgrid .wj-cell {
             padding: 12px;
 
         }
+
         #theGrid2.wj-flexgrid .downloads {
 
             padding-top: 0px;
@@ -63,9 +67,9 @@
                 <li>
                     <a href="#tab1" title="목록">목록</a>
                 </li>
-<!--                <li>-->
-<!--                    <a href="#tab2" title="등록">등록</a>-->
-<!--                </li>-->
+                <!--                <li>-->
+                <!--                    <a href="#tab2" title="등록">등록</a>-->
+                <!--                </li>-->
             </ul>
 
 
@@ -76,14 +80,14 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="text1">
+                                    <label for="txtCode">
                                         코드명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="txtCode" name="txtCode" class="input-srch">
-                                        <a class="btn-srch" title="검색"></a>
+                                        <a class="btn-srch" id="btnSearch" title="검색"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -91,7 +95,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="엑셀다운로드" id="NewbtnSave">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
@@ -103,13 +107,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
+                                    <a class="btn btn-delete" title="삭제" id="btnDelete">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-edit" title="수정">
+                                    <a class="btn btn-edit" title="수정" id="btnEdit">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
                                     </a>
@@ -126,65 +130,44 @@
                         </div>
                         <div class="col wp40">
                             <div class="section">
-                                <div class="table-wrap">
-                                    <table class="view-table">
-                                        <caption>보고분기 상세 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp20">
-                                            <col class="wauto">
-                                        </colgroup>
-                                        <tbody>
-<!--                                        <tr>-->
-<!--                                            <th><label for="">보고분기</label></th>-->
-<!--                                            <td>-->
-<!--                                                <select>-->
-<!--                                                    <option>2024</option>-->
-<!--                                                </select>-->
-<!--                                                <a href="#" title="수정" class="btn">수정</a>-->
-<!--                                            </td>-->
-<!--                                        </tr>-->
-<!--                                        <tr>-->
-<!--                                            <th><label for="">실적기간</label></th>-->
-<!--                                            <td>-->
-<!--                                                <ul class="date-box">-->
-<!--                                                    <li class="mg-r10">-->
-<!--                                                        <input type="date" id="date1" name="">-->
-<!--                                                        <label for="date1" class="hide">시작일</label>-->
-<!--                                                    </li>-->
-<!--                                                    <li>-->
-<!--                                                        <input type="date" id="date2" name="">-->
-<!--                                                        <label for="date2" class="hide">종료일</label>-->
-<!--                                                    </li>-->
-<!--                                                </ul>-->
-<!--                                            </td>-->
-<!--                                        </tr>-->
-                                        <tr>
-                                            <th><label for="">상위코드</label></th>
-                                            <td>
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">코드</label></th>
-                                            <td>
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">코드명</label></th>
-                                            <td>
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">설명</label></th>
-                                            <td>
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <form id="codeForm">
+                                    <!--                                    <input type="hidden" id="parent_id" name="parent_id" value=""/>-->
+                                    <div class="table-wrap">
+                                        <table class="view-table">
+                                            <caption>보고분기 상세 테이블</caption>
+                                            <colgroup>
+                                                <col class="wp20">
+                                                <col class="wauto">
+                                            </colgroup>
+                                            <tbody>
+                                            <tr>
+                                                <th><label for="groupcd">상위코드</label></th>
+                                                <td>
+                                                    <input type="text" id="groupcd" name="groupcd" class="wp100">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><label for="itemnm">코드명</label></th>
+                                                <td>
+                                                    <input type="text" id="itemnm" name="itemnm" class="wp100">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><label for="itemcd">코드</label></th>
+                                                <td>
+                                                    <input type="text" id="itemcd" name="itemcd" class="wp100" required>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><label for="itemrm">설명</label></th>
+                                                <td>
+                                                    <input type="text" id="itemrm" name="itemrm" class="wp100">
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -206,14 +189,14 @@
 
         var theGrid;
         var viewdata;
-        var data1 = [];
         var theGrid2;
+        let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            {binding: 'name', header: '코드명', align: 'center', width: 200},
-            {binding: 'code', header: '코드', align: 'center', width: 200},
-            {binding: 'description', header: '설명', align: 'center', width: "*"}
-            ];
+            {binding: 'itemnm', header: '코드명', align: 'center', width: 200},
+            {binding: 'itemcd', header: '코드', align: 'center', width: 200},
+            {binding: 'itemrm', header: '설명', align: 'center', width: "*"}
+        ];
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -222,19 +205,13 @@
 
         function init() {
             let data2 = [];
-            // let searchusr = $('#searchusr').val();
             let txtCode = $('#txtCode').val();
-            let parent_id = $('#parent_id').val();
-            let id = $('#id').val();
-
 
             $.ajax({
-                url: '/api/system/code/read',
+                url: '/api/system/tbrp910/read',
                 type: 'GET',
                 data: {
-                    'txtCode' : txtCode,
-                    'parent_id' : parent_id,
-                    'id' : id,
+                    'txtCode': txtCode,
                 },
                 async: false,
                 success: function (data) {
@@ -243,9 +220,9 @@
                 }
             })
 
-            let menuGroupName = new wijmo.collections.PropertyGroupDescription('코드명', function (item, proName) {
-                return item.parent_id;
-            })
+            let menuGroupName = new wijmo.collections.PropertyGroupDescription('itemnm', function (item, proName) {
+                return item.groupnm;
+            });
 
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
@@ -257,15 +234,11 @@
                 console.log('Grid initialized with empty data.');
             }
 
+            viewdata = new wijmo.collections.CollectionView(data2);
+            viewdata.groupDescriptions.push(menuGroupName);
+
 
             // viewdata = new wijmo.collections.CollectionView(data2);
-            viewdata = new wijmo.collections.CollectionView(data2, {
-                groupDescriptions: [
-                    menuGroupName
-                ]
-            });
-
-
 
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
@@ -275,6 +248,12 @@
                 itemsSource: viewdata
             });
 
+            // 행 선택 이벤트 핸들러 (Optional)
+            theGrid.selectionChanged.addHandler(function (s, e) {
+                var selectedRow = s.selection.row;
+                var selectedItem = s.rows[selectedRow].dataItem;
+                console.log('Selected row ID:', selectedItem.id);
+            });
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
@@ -287,17 +266,201 @@
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            //저장
+            $('#NewbtnSave').click(saveCode); // 신규등록 버튼 클릭 이벤트 핸들러 등록
+            // $('#btnSave').click(updateCode);   // 등록 버튼 클릭 이벤트 핸들러 등록
+
+            // $('#btnDelete').click(deleteCode);
+
+            $('#btnSearch').click(searchDataBind); // 검색 버튼 클릭 이벤트 핸들러 등록
+
+            $('#btnEdit').click(editCode); // 수정 버튼 클릭 이벤트 핸들러 등록
+
+        }
+
+
+        function saveCode() {
+
+            let url = '/api/system/tbrp910/save';
+
+            //let data = $('#codeForm').serialize();
+            let data = {
+                groupcd: $('#groupcd').val(),
+                itemcd: $('#itemcd').val(),
+                itemnm: $('#itemnm').val(),
+                itemrm: $('#itemrm').val()
+            };
+
+            // if (!data.itemcd || !data.itemnm) {
+            //     Alert.alert('', '필수항목을 입력해주세요');
+            //     return;
+            // }
+
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    Notify.success(res.message || '저장되었습니다'); // 수정된 메시지 표시
+                    searchDataBind(); // 저장 후 데이터 새로 고침
+                    location.reload();
+                } else {
+                    Alert.alert('', res.message);
+                }
+            };
+
+            // Ajax 요청 보내기
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
         }
 
 
 
 
+        function searchDataBind() {
+            console.log("searchDataBind called");
+
+            let data = { 'txtCode': $('#txtCode').val() };
+
+            console.log("Data to send:", data);
+
+            $.ajax({
+                url: '/api/system/tbrp910/read',
+                type: 'GET',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
 
 
-        $(document).ready(function (e) {
-
-
+        let menuGroupName = new wijmo.collections.PropertyGroupDescription('itemnm', function (item, proName) {
+            return item.groupcd;
         });
+
+
+        function grid_binding(data) {
+
+            let formattedData = data.map(item => ({
+                itemnm: item.itemnm,
+                itemcd: item.itemcd,
+                itemrm: item.itemrm,
+            }));
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+
+            columns.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid.columns.push(col);
+            });
+
+            viewdata = new wijmo.collections.CollectionView(formattedData);
+            viewdata.groupDescriptions.push(menuGroupName);
+
+            theGrid.itemsSource = viewdata;
+            theGrid.refresh();
+
+        }
+
+        function editCode() {
+            var selectedRow = theGrid.selection.row;
+            if (selectedRow === null || selectedRow < 0) {
+                Alert.alert('', '수정할 행을 선택해주세요');
+                return;
+            }
+
+            var selectedItem = theGrid.rows[selectedRow].dataItem;
+
+            // Update form fields with selected item data
+            $('#groupcd').val(selectedItem.groupcd || '');
+            $('#itemcd').val(selectedItem.itemcd || '');
+            $('#itemnm').val(selectedItem.itemnm || '');
+            $('#itemrm').val(selectedItem.itemrm || '');
+        }
+
+        // function deleteCode() {
+        //     let selectedRow = theGrid.selection.row;
+        //     if (selectedRow === null || selectedRow < 0) {
+        //         Alert.alert('', '삭제할 행을 선택해주세요');
+        //         return;
+        //     }
+        //
+        //     let selectedItem = theGrid.rows[selectedRow].dataItem;
+        //     let itemId = selectedItem.itemcd; // Assuming itemcd is a unique identifier
+        //
+        //     let url = '/api/system/tbrp910/delete';
+        //     let data = { itemcd: itemId };
+        //
+        //     $.ajax({
+        //         url: url,
+        //         type: 'POST',
+        //         data: data,
+        //         success: function (result) {
+        //             if (result.success) {
+        //                 Notify.success('삭제되었습니다');
+        //                 searchDataBind(); // Refresh data
+        //             } else {
+        //                 Alert.alert('', result.message);
+        //             }
+        //         },
+        //         error: function (jqXHR, textStatus, errorThrown) {
+        //             console.error('Error deleting data:', textStatus, errorThrown);
+        //         }
+        //     });
+        // }
+
+        $(document).ready(function() {
+            var csrfToken = $('meta[name="_csrf"]').attr('content');
+            var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+            function deleteCode() {
+                let selectedRow = theGrid.selection.row;
+                if (selectedRow === null || selectedRow < 0) {
+                    Alert.alert('', '삭제할 행을 선택해주세요');
+                    return;
+                }
+
+                let selectedItem = theGrid.rows[selectedRow].dataItem;
+                let itemId = selectedItem.itemcd;
+
+                let url = '/api/system/tbrp910/delete';
+                let data = { itemcds: [itemId] };
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    success: function(result) {
+                        if (result.success) {
+                            Notify.success('삭제되었습니다');
+                            searchDataBind();
+                        } else {
+                            Alert.alert('', result.message);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error deleting data:', textStatus, errorThrown);
+                    }
+                });
+            }
+
+            $('#btnDelete').click(deleteCode);
+        });
+
+
+
+
 
 
     </script>

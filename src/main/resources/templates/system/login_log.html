@@ -63,7 +63,8 @@
                                     <dd>
                                         <ul class="date-box">
                                             <li>
-                                                <input class="tac w150 " type="text" id="srchStartDt" name="srchStartDt" />
+                                                <input class="tac w150 " type="text" id="srchStartDt"
+                                                       name="srchStartDt"/>
                                                 <label for="srchStartDt" class="hide">시작일</label>
                                             </li>
                                             <li>
@@ -101,11 +102,11 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="container-fluid" id="theGridContainer">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid"></div>
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
 
-<!--                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);-->
-<!--                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;">조회된 데이터가 없습니다</div>-->
+                        <!--                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);-->
+                        <!--                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;">조회된 데이터가 없습니다</div>-->
                     </div>
 
 
@@ -132,6 +133,16 @@
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
+        var columns = [
+            {binding: 'id', header: 'No', width: 150, align: 'center'},
+            {binding: 'type', header: '구분', width: 160, align: 'center'},
+            {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
+            {binding: 'login_id', header: '사번', width: 160, align: 'center'},
+            {binding: 'name', header: '이름', width: 160, align: 'center'},
+            {binding: 'created', header: '일시', width: 260, align: 'center'},
+            {binding: '', header: '', width: "*", align: 'center'},
+
+        ];
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
@@ -143,14 +154,15 @@
 
 
 
+
             $.ajax({
                 url: '/api/system/loginlog/read',
                 type: 'GET',
                 data: {
                     'param': param,
-                    'srchStartDt':srchStartDt,
-                    'srchEndDt':srchEndDt,
-                    'keyword':keyword,
+                    'srchStartDt': srchStartDt,
+                    'srchEndDt': srchEndDt,
+                    'keyword': keyword,
                 },
                 async: false,
                 success: function (data) {
@@ -162,11 +174,6 @@
                 }
             });
 
-            // let gridContainer = $('#theGridContainer');
-            // let emptyMessage = $('#emptyMessage');
-            // $('#theGrid').remove();  // 기존 그리드를 제거합니다.
-            // gridContainer.prepend('<div id="theGrid"></div>');  // 새로운 그리드 요소를 추가합니다.
-
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
             if (data2.length === 0) {
@@ -177,47 +184,93 @@
                 console.log('Grid initialized with empty data.');
             }
 
-                viewdata = new wijmo.collections.CollectionView(data2);
-                // 데이터 그리드에 바인딩
-                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                    autoGenerateColumns: false,
-                    showMarquee: true,
-                    columns: [
-                        {binding: 'id', header: 'No', width: 150, align: 'center'},
-                        {binding: 'type', header: '구분', width: 160, align: 'center'},
-                        {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
-                        {binding: 'login_id', header: '사번', width: 160, align: 'center'},
-                        {binding: 'name', header: '이름', width: 160, align: 'center'},
-                        {binding: 'created', header: '일시', width: 260, align: 'center'},
-                        {binding: '', header: '', width: "*", align: 'center'},
-                    ],
-                    itemsSource: viewdata
-                });
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
 
-                let selector = new wijmo.grid.selector.Selector(theGrid, {
-                    itemChecked: () => {
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: () => {
 
-                    }
-                })
-                // 선택이 변경될 때, 현재 항목 업데이트
+                }
+            })
+            // 선택이 변경될 때, 현재 항목 업데이트
 
-                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
-                theGrid.refresh();
+            theGrid.refresh();
 
-            // // 데이터 배열이 비어있을 경우 메시지 표시
-            // if (data2.length === 0) {
-            //     emptyMessage.show();
-            //     console.log('Grid initialized with empty data.');
-            // } else {
-            //     emptyMessage.hide();
-            // }
 
+            // 검색
+            $('#btnSearch').click(searchDataBind);
 
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
+        function searchDataBind() {
+            console.log("searchDataBind called");
+
+            let data = {
+                'keyword' : $('#keyword').val(),
+                'srchStartDt': $('#srchStartDt').val(),
+                'srchEndDt': $('#srchEndDt').val()
+            }
+
+            console.log("Data to send:", data);
+
+            $.ajax({
+                url: '/api/system/loginlog/read',
+                type: 'GET',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
+        //     검색 함수
+
+        function grid_binding(data) {
+            var loginlogDto = data;
+            var loginlogData = [];
+            var cnt = 1;
+            for (let i = 0; i < loginlogDto.length; i++) {
+                loginlogData.push({
+                    id: loginlogDto[i]["id"],
+                    type: loginlogDto[i]["type"],
+                    addr: loginlogDto[i]["addr"],
+                    login_id: loginlogDto[i]["login_id"],
+                    name: loginlogDto[i]["name"],
+                    created: loginlogDto[i]["created"],
+
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = loginlogData;
+
+
+            for (var i = 0; i < columns.length; i++) {
+                var col = new wijmo.grid.Column(columns[i]);
+                theGrid.columns.push(col);
+            }
+
+            theGrid.refresh();
+        }
 
         let filelist = [];
 
@@ -229,74 +282,7 @@
         $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
 
 
-
-
-
         $(document).ready(function (e) {
-
-
-            $('#btnSave').click(function (e) {
-
-                console.log('selectedFiles: ', selectedFiles);
-
-                Alert.confirm('', '저장하시겠습니까?', function () {
-
-                        let fileInput = document.getElementById('fileInput1');
-                        let files = fileInput.files;
-                        let formData = new FormData();
-
-                        for (var i = 0; i < files.length; i++) {
-                            formData.append('filelist', files[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('checkitem', $('#checkitem').val());
-                        formData.append('checkplan', $('#checkplan').val());
-                        formData.append('randomuuid', randomString);
-                        formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
-                    }
-                )
-            })
 
 
         });

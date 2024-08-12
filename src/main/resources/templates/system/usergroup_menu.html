@@ -54,69 +54,53 @@
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
-                        <div class="search-wrap">
+                        <form id="searchForm" autocomplete="off">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="cboUserGroup">
+                                            사용자그룹<span class="eq"></span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <select class="form-control2" id="cboUserGroup" name="cboUserGroup"></select>
+                                    </dd>
+                                </dl>
 
-                            <dl>
-                                <dt>
-                                    <label for="input-group-text fit_box_md">
-                                        사용자그룹<span class="eq"></span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <select class="form-control2" id="cboUserGroup" name="cboUserGroup"></select>
-                                </dd>
-                            </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="cboMenuFolder">
+                                            메뉴폴더<span class="eq"></span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="srch-box">
+                                        <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder">
+                                        </select>
+                                            <a class="btn-srch" id="btnSearch" title="검색"></a>
+                                        </div>
+                                    </dd>
+                                </dl>
 
-                            <dl>
-                                <dt>
-                                    <label for="text1">
-                                        메뉴폴더<span class="eq"></span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                    <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder"></select>
-                                        <a class="btn-srch" id="btnSearch" title="조회" ></a>
-                                    </div>
-                                </dd>
-                            </dl>
+                                </br>
 
-                            </br>
+                                <dl>
 
-<!--                            <dl>-->
-<!--                                <dt>-->
-<!--                                    <label for="text1">-->
-<!--                                        <span class="eq"></span>-->
-<!--                                    </label>-->
-<!--                                </dt>-->
-<!--                                <dd>-->
-<!--                                    <div class="srch-box">-->
-<!--&lt;!&ndash;                                        <input type="text" id="searchusr" name="searchusr" class="input-srch">&ndash;&gt;-->
-<!--                                        <a class="btn-srch" id="btnSearch" title="조회" ></a>-->
-<!--                                    </div>-->
-<!--                                </dd>-->
-<!--                            </dl>-->
-
-
-                            <dl>
-
-                                <dd>
-                                    <div class="srch-box" style="margin-top: 20px">
-                                    읽기<input type="checkbox" id="AllcheckRead">
-                                    </div>
-                                </dd>
-                            </dl>
-
-                            <dl>
-
-                                <dd>
-                                    <div class="srch-box" style="margin-top: 20px;">
-                                    쓰기<input type="checkbox" id="AllcheckWrite" >
-                                    </div>
-                                </dd>
-                            </dl>
-
-                        </div>
+                                    <dd>
+                                        <div class="srch-box" style="margin-top: 20px">
+                                        읽기<input type="checkbox" id="AllcheckRead">
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dd>
+                                        <div class="srch-box" style="margin-top: 20px;">
+                                        쓰기<input type="checkbox" id="AllcheckWrite" >
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </form>
                         <div class="button-wrap">
                             <ul>
                                 <li>
@@ -125,24 +109,18 @@
                                         저장
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
-                    </div> <!--//section-top end -->
+                    </div>
+                    <!--//section-top end -->
 
-                    <!--                    grid 영역-->
+                    <!--grid 영역-->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
                         <div id="theGrid"></div>
                     </div>
-                    <div class="btn-wrap">
-
-                    </div>
+                    <div class="btn-wrap"></div>
                 </section>
-
-
-                <!-- Section -->
-
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
@@ -163,13 +141,7 @@
         document.readyState === 'complete' ? init() : window.onload = init;
 
         function init() {
-
-            // _this를 사용하지 않고 this를 통해 데이터 바인딩
-            let _this = {
-                grid: null
-            };
-
-
+            let _this = this;
 
             let data2 = [];
             let group_id = $('#cboUserGroup').val();
@@ -185,6 +157,7 @@
                 },
                 async: false,
                 success: function (data) {
+                    console.log('wijmo', data.data);
                     data2 = data.data;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -272,6 +245,10 @@
             // theGrid를 _this.grid로 설정
             _this.grid = theGrid;
 
+            $('#btnSearch').click(searchData);
+            $('#btnSave').click(saveUserGroupMenu);
+
+
         }
 
 
@@ -284,64 +261,27 @@
         AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
 
 
-        function saveUserGroupMenu()
-        {
-            let _this = this;
-            let url = 'api/system/usergroupmenu/save';
-
-            // _this.grid가 정의되었는지 확인
-            if (!_this.grid || !_this.grid.itemsSource) {
-                console.error("grid or grid.itemsSource is undefined.");
-                return;
-            }
-
-
-            let group_id = $('#cboUserGroup').val();
-            let data = {group_id: group_id, Q: ''};
-
-
-            let items = [];
-
-            $.each(_this.grid.list, function (idx, item) {
-                let menu_code = item.menu_code;
-                if (menu_code != "") {
-
-                    if (item.r == 'false') item.r = false;
-                    if (item.w == 'false') item.w = false;
-
-                    items.push({
-                        menu_code: item.menu_code,
-                        r: item.r,
-                        w: item.w,
-                        ugm_id: item.ugm_id
-                    });
-                }
-            });
-
-            data.Q = JSON.stringify(items);
-
-            // 데이터 입력 체크 루틴 누락
-
-            Alert.confirm('', '저장하시겠습니까?', function () {
-                let fnSuccess = function (result) {
-                    if (result.success) {
-                        Notify.success('저장되었습니다');
-                        location.reload();
-                    }
-                };
-                AjaxUtil.postAsyncData(url, data, fnSuccess);
-            }, function () {
-            });
-
-        }
-
+        // _this.grid 와 _this.grid.itemSource의 Object의 데이터를 출력하는 코드
+        // // _this.grid의 속성을 개별적으로 출력
+        // for (let prop in _this.grid) {
+        //     if (_this.grid.hasOwnProperty(prop)) {
+        //         console.log(`this.grid[${prop}]:`, _this.grid[prop]);
+        //     }
+        // }
+        //
+        // // _this.grid.itemsSource의 속성을 개별적으로 출력
+        // for (let prop in _this.grid.itemsSource) {
+        //     if (_this.grid.itemsSource.hasOwnProperty(prop)) {
+        //         console.log(`this.grid.itemsSource[${prop}]:`, _this.grid.itemsSource[prop]);
+        //     }
+        // }
 
 
         //검색
         function searchData() {
             let group_id = $('#cboUserGroup').val();
             let folder_id = $('#cboMenuFolder').val();
-
+            console.log(group_id+" 선택된 값들 "+folder_id);
 
             $.ajax({
                 url: '/api/system/usergroupmenu/read',
@@ -372,16 +312,13 @@
 
         function filterDataByFolder(data, folderId) {
             // folderId에 해당하는 데이터만 필터링
-            return data.filter(item => item.folder_id == folderId);
+            return data.filter(item => item.folder_id === folderId);
         }
 
 
         let menuGroupName = new wijmo.collections.PropertyGroupDescription('메뉴명', function (item) {
             return item.gpname;
         })
-
-
-
 
 
         function grid_binding(data){
@@ -391,10 +328,13 @@
                 name: item.name,
                 r: item.r,
                 w: item.w,
-                gpname: item.gpname  // 그룹화를 위한 속성 추가
+                gpname: item.gpname,  // 그룹화를 위한 속성 추가
+                menu_code: item.menu_code, // 추가: menu_code 필드 포함
+                ugm_id: item.ugm_id // 추가: ugm_id 필드 포함
             }));
 
             console.log("UserMenuData:",UserMenuData);
+            console.log("바인딩 이후 데이터");
 
 
             theGrid.columns.clear();
@@ -425,38 +365,67 @@
 
         }
 
+        function saveUserGroupMenu() {
+            let _this = this;
+            let url = '/api/system/usergroupmenu/save';
+            let group_id = $('#cboUserGroup').val();
+            let data = {group_id: group_id, Q : ''};
+
+            let items = [];
+
+
+            // itemsSource의 sourceCollection을 사용하여 데이터 순회
+            let sourceCollection = theGrid.itemsSource.sourceCollection || [];
+            console.log("Source Collection Length:", sourceCollection.length);
+            console.log("Source Collection:", JSON.stringify(sourceCollection, null, 2));
+
+
+
+            sourceCollection.forEach(item => {
+                let menu_code = item.menu_code;
+                let ugm_id = item.ugm_id; // 추가
+                if (menu_code) {
+                    items.push({
+                        menu_code: menu_code,
+                        r: item.r === true ? true : false,  // Boolean 값으로 변환
+                        w: item.w === true ? true : false,  // Boolean 값으로 변환
+                        ugm_id: ugm_id, // 추가
+                    });
+                }
+            });
+
+
+            // 데이터 확인을 위한 콘솔 출력
+            console.log("Items to be sent:", JSON.stringify(items, null, 2)); // 전송할 데이터 출력
+
+
+            data.Q = JSON.stringify(items);
+            console.log("Final data object:", JSON.stringify(data, null, 2)); // 최종 데이터 객체 출력
+            //데이터입력체크루틴 누락
+            //_this.grid.sel
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+                let fnSuccess = function (result) {
+                    if(result.success){
+                        Notify.success('저장되었습니다'); // Notification
+                        // searchData(); // 저장 후 새 데이터로 그리드 갱신
+                        location.reload();
+
+                    }else {
+                        console.error('저장 실패:', result.message);  // 실패 시 에러 로그
+                    }
+                };
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            }, function () { });
+
+        }
+
+
 
 
 
         $(document).ready(function (e){
 
-
-
-            $('#btnSave').click(function (e) {
-                console.log("그룹권한 저장 이벤트 클릭 이벤트");
-
-                Alert.confirm('', '저장하시겠습니까?', function () {
-                        saveUserGroupMenu()
-                    },
-                    function () {
-
-                    }
-                );
-            });
-
-            $('#btnSearch').click(function (e) {
-                console.log("그룹권한 검색 이벤트 클릭 이벤트");
-                Alert.confirm('', '검색하시겠습니까?', function () {
-                        searchData();
-
-                        $('#cboUserGroup,#cboMenuFolder').change(function (ex) {
-
-                        });
-                    },
-                    function () {
-                    }
-                );
-            });
 
         });
 
