@@ -1,6 +1,6 @@
-package mes.app.rec;
+package mes.app.smp;
 
-import mes.app.rec.service.RecService;
+import mes.app.smp.service.SmpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/rec")
-public class RecController {
-	
+@RequestMapping("/smp")
+public class SmpController {
+
 	@Autowired
-	private RecService recService;
+	private SmpService smpService;
 	
-	@GetMapping("/recAverage")
-	public ResponseEntity<?> getRecInfo() {
-		return recService.getRecData();
+	@GetMapping("/smpCurrent")
+	public ResponseEntity<String> getCurrentSmp() {
+		return smpService.getCurrentSmp();
 	}
 }

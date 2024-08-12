@@ -1,8 +1,12 @@
 package mes.app.rec.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,81 +29,18 @@ public class RecService {
 	// RestTemplate 을 사용하여 API 호출을 수행하고 응답받기
 	private final RestTemplate restTemplate;
 	
+	private final ObjectMapper objectMapper = new ObjectMapper();
+	
 	@Autowired
 	public RecService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 	
-	/*public String getRecData() {
-		
-		String encodedApiKey = apiKey;
-		
-		// URL 인코딩
-*//*		String encodedApiKey = null;
-
-		try {
-			encodedApiKey = URLEncoder.encode(apiKey, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to encode API key");
-		}*//*
-		
-		// 매주 화, 목요일 10:00 ~ 16:00 개장
-		// 7일 조회
-		LocalDate today = LocalDate.now();
-		LocalDate startDay = today.minusDays(7);
-		String avgPrice = null;
-		
-		for (LocalDate date = today; !date.isBefore(startDay); date = date.minusDays(1)) {
-			String formattedDate = date.format(DateTimeFormatter.BASIC_ISO_DATE);
-			
-			// URI 생성
-			URI uri = null;
-			try {
-				uri = new URI(apiEndpoint + "/getRecMarketInfo2" +
-						"?serviceKey=" + encodedApiKey +
-						"&pageNo=1" +
-						"&numOfRows=1" +
-						"&dataType=json" +
-						"&bzDd=" + formattedDate); // 날짜 추가
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-				continue; // 날짜가 유효하지 않은 경우, 다음 날짜로 넘어감
-			}
-			
-			String response = restTemplate.getForObject(uri, String.class);
-			
-			try {
-				// JSON 파싱
-				int index = response.indexOf("landAvgPrc"); // 육지 평균값
-				if (index != -1) {
-					int start = response.indexOf(":", index) + 1;
-					int end = response.indexOf(",", start);
-					avgPrice = response.substring(start, end).trim();
-					
-					// 숫자 포맷팅
-					double avgPriceDouble = Double.parseDouble(avgPrice);
-					NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-					avgPrice = numberFormat.format(avgPriceDouble);
-					
-					System.out.println("최종 사용된 uri : " + uri );
-					System.out.println("최종 사용된 날짜: " + formattedDate);
-					break; // 유효한 데이터를 찾으면 루프 중단
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				continue; // JSON 파싱 실패 시, 다음 날짜로 넘어감
-			}
-			
-			System.out.println("조회 시도된 uri : " + uri);
-			System.out.println("조회 시도된 날짜 : " + formattedDate);
-		}
-		
-		return avgPrice; // 가장 최신의 유효한 평균가격을 반환
-	}*/
 	
+	/*
+	* 다중 인스턴스 환경: 애플리케이션이 여러 인스턴스에서 동작하고 있고, 각 인스턴스가 독립적으로 API를 호출하고 있다면, 전체적으로 보았을 때 API 호출 제한을 초과할 수 있습니다. 이 경우 중앙 집중식 캐시 솔루션(예: Redis)을 사용하여 모든 인스턴스 간에 캐시를 공유할 수 있습니다. -> 나중에 활용*/
 	@Cacheable(value = "recCache", key = "#root.method.name")
-	public String getRecData() {
+	public ResponseEntity<?> getRecData() {
 		LocalDate today = LocalDate.now();
 		LocalDate startDay = today.minusDays(7);
 		String avgPrice = null;
@@ -118,7 +59,12 @@ public class RecService {
 				continue;  // URI 생성 실패 시, 다음 날짜로 넘어감
 			}
 		}
-		return avgPrice;
+		
+		if (avgPrice != null) {
+			return ResponseEntity.ok().body("{\"landAvgPrc\": \"" + avgPrice + "\"}"); // JSON 형태로 응답
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"No data found\"}");
+		}
 	}
 	
 	private String fetchFromAPI(String formattedDate) throws URISyntaxException {
@@ -128,19 +74,25 @@ public class RecService {
 				+ "&numOfRows=1"
 				+ "&dataType=json"
 				+ "&bzDd=" + formattedDate);
+		System.out.println("조회 시도된 uri : " + uri);
 		return restTemplate.getForObject(uri, String.class);
 	}
 	
 	private String parseResponse(String response) {
-		int index = response.indexOf("landAvgPrc");
-		if (index != -1) {
-			int start = response.indexOf(":", index) + 1;
-			int end = response.indexOf(",", start);
-			String avgPrice = response.substring(start, end).trim();
-			double avgPriceDouble = Double.parseDouble(avgPrice);
-			NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-			return numberFormat.format(avgPriceDouble);
+		try {
+			JsonNode rootNode = objectMapper.readTree(response);
+			JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
+			if (itemsNode.isArray() && itemsNode.size() > 0) {  // 배열이면서, 항목이 적어도 하나 이상 있는지 확인
+				JsonNode landAvgPrcNode = itemsNode.get(0).path("landAvgPrc");
+				if (!landAvgPrcNode.isMissingNode()) {
+					double avgPriceDouble = landAvgPrcNode.asDouble();
+					NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
+					return numberFormat.format(avgPriceDouble);
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to parse JSON response: " + e.getMessage());
 		}
-		return null;
+		return null;  // 유효한 데이터가 없거나 파싱에 실패한 경우
 	}
 }

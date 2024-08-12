@@ -11,7 +11,9 @@ public class RestTemplateConfig {
 	@Bean
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
+		
 		restTemplate.getMessageConverters().add(new MappingJackson2XmlHttpMessageConverter());
+		
 		return restTemplate;
 	}
 }
