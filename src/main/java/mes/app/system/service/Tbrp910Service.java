@@ -28,6 +28,7 @@ public class Tbrp910Service {
                        A.itemrm
                 from TB_RP910 A
                 LEFT OUTER JOIN TB_RP910 B on B.itemcd = A.groupcd
+                where A."itemnm" like concat('%',:txtCode,'%')
                 """;
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
