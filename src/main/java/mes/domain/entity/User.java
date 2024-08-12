@@ -62,7 +62,18 @@ public class User implements Serializable {
 	
 	@Column(name = "date_joined")
 	Timestamp date_joined;
-	
+
+
+	@Column(name = "tel")
+	String tel;
+
+	@Column(name = "agencycd")
+	String agencycd;
+
+	@Column(name = "divinm")
+	String divinm;
+
+
 	@JsonManagedReference
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private UserProfile userProfile;

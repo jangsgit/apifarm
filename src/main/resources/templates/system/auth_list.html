@@ -26,7 +26,7 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">목록</a>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
                     <a href="#tab2" title="승인" id="inputTabLink">승인</a>
@@ -164,7 +164,9 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="agency" name="agency" class="wp100" readonly>
+                                    <select id="agency" disabled name="agency">
+
+                                    </select>
                                     <input type="hidden" id="userid" name="userid" readonly>
 
                                 </td>
@@ -229,13 +231,8 @@
                                 <td>
                                     <ul>
                                         <li>
-                                            <select id="authType" readonly="">
-                                                <option value='bloomuser'>BloomEnergy담당자</option>
-                                                <option value='esguser'>ESG담당자</option>
-                                                <option value='admin'>관리자</option>
-                                                <option value='User'>사용자</option>
-                                                <option value='Master'>시스템마스터</option>
-                                                <option value='elecuser'>전기안전관리자</option>
+                                            <select id="authType" disabled name="authType">
+
                                             </select>
                                         </li>
                                     </ul>
@@ -246,11 +243,11 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <ul>
+                                    <ul id="dataList">
                                         <li>
-                                            <input type="text" id="spworknm" name="spworknm" class="w150" readonly>
+                                            <!--<input type="text" id="spworknm" name="spworknm" class="w150" readonly>
                                             <input type="text" id="spcompnm" name="spcompnm" class="w150" readonly>
-                                            <input type="text" id="spplannm" name="spplannm" class="w150" readonly>
+                                            <input type="text" id="spplannm" name="spplannm" class="w150" readonly>-->
                                         </li>
                                     </ul>
                                 </td>
@@ -337,15 +334,7 @@
             { binding: 'spworknm', header: '관리대상발전시설명', align: 'center', width: "*", visible: false },
             { binding: 'spcompnm', header: '관리대상발전산단명', align: 'center', width: "*", visible: false },
             { binding: 'spplannm', header: '관리대상발전소명', align: 'center', width: "*", visible: false },
-
-
-
-
-
-
-
-
-        ]
+       ]
 
 
         function submitTextarea(event){
@@ -367,12 +356,16 @@
         function init() {
             let data2 = [];
             let searchusr = $('#searchusr').val();
+            let searchfrdate = $('#searchfrdate').val();
+            let searchtodate = $('#searchtodate').val();
 
             $.ajax({
                 url: '/api/system/auth_list/read',
                 type: 'GET',
                 data: {
                     'searchusr' : searchusr,
+                    'searchfrdate' : searchfrdate,
+                    'searchtodate' : searchtodate
                 },
                 async: false,
                 success: function(data){
@@ -429,6 +422,15 @@
 
             if(result.success){
                 console.log(result.data);
+
+                let DataLength = 10 - result.data.length;
+
+                if(result.data.length < 10){
+                    for(let i=0; i < DataLength; i++){
+                        result.data.push('empty');
+                    }
+                }
+
                 grid_binding(result.data);
             }
         }
@@ -473,34 +475,45 @@
 
         }
 
-        function SelectItemPush(){
-            let selectedList = [];
-            for(let i = 0; i < SelectItem.length; i++){
-                selectedList.push(SelectItem[i]._data.userid);
-            }
-            return selectedList;
-        }
+
 
         $(document).ready(function (e) {
 
-            let bindingList = [ 'agency', 'divinm', 'rank', 'tel', 'email', 'usernm', 'reason', 'authType', 'appflag', 'spworknm', 'spcompnm', 'spplannm', 'userid'];
 
 
-            const date = new Date();
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2,'0');
+            initializeSelect({
+                url: '/user-auth/type',
+                params: {},
+                elementId: 'authType',
+                valueField: "code",
+                textField: 'name'
+            })
 
-            let today = `${year}-${month}-${day}`;
+            initializeSelect({
+                url: '/user-codes/parent',
+                params: { parentId: 154 },
+                elementId: 'agency'
+            })
+
+            let bindingList = [ 'agency', 'divinm', 'rank', 'tel', 'email', 'usernm', 'reason', 'authType', 'appflag', 'userid'];
+
+
+
+
+            let today = getDateYYYYMMDD();
+            let MonthLastDay = getLastDayOfCurrentMonth();
+
 
             let appdatem = document.getElementById('appdatem');
             appdatem.value = today;
 
 
+            $('#searchfrdate').val(today);
+            $('#searchtodate').val(MonthLastDay);
+
+
             // 저장 시작
             $('#btnSave').click(function (e){
-
-
                 Alert.confirm('', '저장하시겠습니까?', function() {
 
                         let formData = new FormData();
@@ -509,47 +522,38 @@
                         formData.append('userid', $('#userid').val());
                         formData.append('appflag', $('#appflag').val());
                         formData.append('_csrf', $('[name=_csrf]').val());
-                        formData.append('agency', $('#agency').val());
-                        formData.append('divinm', $('#divinm').val());
-                        formData.append('rank', $('#rank').val());
-                        formData.append('tel', $('#tel').val());
-                        formData.append('email', $('#email').val());
-                        formData.append('usernm', $('#usernm').val());
-                        formData.append('authType', $('#authType').val());
-                        formData.append('usernm', $('#usernm').val());
-                        formData.append('usernm', $('#usernm').val());
-                        formData.append('usernm', $('#reason').val());
 
 
-
-
-                        $.ajax({
-                            url: '/api/system/auth_list/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-
-                                    for(let i=0; i < bindingList.length; i++){
-                                        ElementBinding(bindingList[i], '')
-                                    }
+                        AjaxFunction.PostAjaxRequest('/api/system/auth_list/save', true, false, false, formData, function(response){
+                            if (response.success) {
+                                Alert.alert('', response.message, function(){
+                                    $('#listTabLink').click();
 
                                     searchData();
+                                });
 
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
+                                   for(let i=0; i < bindingList.length; i++){
+                                       ElementBinding(bindingList[i], '')
+                                   }
+
+                                    $('#dataList').empty();
+
+
                             }
-                        });
-                },
+                        }, function (){Alert.alert('', '에러가발생하였습니다.');})
+                })
 
-                )
             })
 
+            function checkAppflag() {
+                for (let i = 0; i < SelectItem.length; i++) {
+                    if (SelectItem[i]._data.appflag === 'Y') {
+
+                        return false; // Y 값을 찾으면 false 반환
+                    }
+                }
+                return true; // Y 값을 찾지 못하면 true 반환
+            }
 
             //삭제
             $('#btnDelete').click(function(e){
@@ -558,11 +562,16 @@
                     Alert.alert('', '삭제할 항목을 선택하세요.');
                     return;
                 }
+                console.log('Select1_del: ', SelectItem);
 
+                if(!checkAppflag()){
+                   Alert.alert('','승인된 값이 존재합니다.');
+                   return false;
+                }
 
                 let delList = [];
 
-                delList = SelectItemPush();
+                delList = SelectItemPush(SelectItem, '_data.userid');
 
                 console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function(){
@@ -585,67 +594,143 @@
                 })
             })
 
-            $('#btnAppr').click(function (e){
-                if(SelectItem === undefined || SelectItem.length === 0){
-                    Alert.alert('', '승인할 항목을 선택하세요.');
-                    return;
-                }else if(SelectItem.length > 1){
-                    Alert.alert('', '하나의 항목만 선택해주세요');
-                    return;
+            $('#inputTabLink').click(function(e){
+
+                $('#dataList').empty();
+
+                if(SelectItem === undefined){
+
+                    Alert.alert('', '항목을 선택해주세요', function(){
+                        $('#listTabLink').click();
+                    });
+
+                    return false;
                 }
+
+                if(SelectItem.length > 1){
+
+                    Alert.alert('', '하나의 항목만 선택해주세요', function(){
+                        $('#listTabLink').click();
+                    });
+
+                    return false;
+                }
+
+
                 let selectedItem = SelectItem[0];
 
+                if(selectedItem === undefined){
+                    Alert.alert('', '항목을 선택해주세요', function(){
+                        $('#listTabLink').click();
+                    });
 
-
-                if(!selectedItem._data.userid){
-                        Alert.alert('', '승인할 항목이 없습니다.', function () {
-
-                        });
-                        return false;
+                    return false;
                 }
 
                 let valueList = [ selectedItem._data.agencycd, selectedItem._data.divinm, selectedItem._data.ranknm ,selectedItem._data.userhp,
                     selectedItem._data.usermail, selectedItem._data.usernm, selectedItem._data.askreason, selectedItem._data.authgrpcd, selectedItem._data.appflag,
-                    selectedItem._data.spworknm, selectedItem._data.spcompnm, selectedItem._data.spplannm, selectedItem._data.userid
+                    selectedItem._data.userid
                 ]
+
+                console.log("12")
 
                 for(let i=0; i < bindingList.length; i++){
                     console.log(bindingList[i], valueList[i]);
                     ElementBinding(bindingList[i], valueList[i]);
                 }
+                console.log("1")
+
+                $.ajax({
+                    url: '/api/system/auth_list/tb_rp945List',
+                    type: 'GET',
+                    data: {
+                        'userid' : $('#userid').val()
+                    },
+                    success: function(data) {
+                        console.log(data);
+
+                        const listLen = data.data.length;
 
 
+                        const paraent = $('#dataList');
 
-                $('#inputTabLink').click();
+                        for(let i=0; i < listLen; i++){
+                            const newLi = $('<li>');
 
+                            const firstInput = $('<input>', {
+                                type: 'text',
+                                id: 'spworknm' + (i + 1),
+                                name: 'spworknm' + (i + 1),
+                                class: 'w150',
+                                style: 'margin: 3px 5px',
+                                readOnly: '',
+                                value: data.data[i].spworknm
+                            });
 
+                            const secondInput = $('<input>', {
+                                type: 'text',
+                                id: 'spcompnm' + (i + 1),
+                                name: 'spcompnm' + (i + 1),
+                                class: 'w150',
+                                style: 'margin: 3px 5px',
+                                readonly: '',
+                                value: data.data[i].spcompnm
+                            });
+
+                            const thirdInput = $('<input>', {
+                                type: 'text',
+                                id: 'spplannm' + (i + 1),
+                                name: 'spplannm' + (i + 1),
+                                class: 'w150',
+                                style: 'margin: 3px 5px',
+                                readonly: '',
+                                value: data.data[i].spplannm
+                            });
+
+                            newLi.append(firstInput).append(secondInput).append(thirdInput);
+                            paraent.append(newLi);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('error');
+                    }
+                });
 
             })
 
-            /*//승인
             $('#btnAppr').click(function (e){
+
                 if(SelectItem === undefined || SelectItem.length === 0){
                     Alert.alert('', '승인할 항목을 선택하세요.');
-                    return;
+                    return false;
+                }
+
+                if(!checkAppflag()){
+                    Alert.alert('','승인된 값이 존재합니다.');
+                    return false;
                 }
 
                 let apprList = [];
-                apprList = SelectItemPush();
 
-                Alert.confirm('', '승인하시겠습니까?', function () {
+                apprList = SelectItemPush(SelectItem, '_data.userid');
+
+
+                Alert.confirm('', '승인하시겠습니까?', function(){
                     let data = {
-                        'userid': JSON.stringify(apprList),
-                        '_csrf': csrfToken
+                        'userid' : JSON.stringify(apprList),
+                        '_csrf' : csrfToken,
+                        'appflag' : 'Y'
                     }
-                    let fnSuccess = function (res) {
-                        if (res.success) {
-                            Alert.alert('', '처리되었습니다.');
+
+                    let fnSuccess = function (res){
+                        if(res.success){
+                            Alert.alert('', '승인되었습니다.');
                             searchData();
                         }
                     }
-                    AjaxUtil.postAsyncData('/api/system/auth_list/approve', data, fnSuccess);
+                    AjaxUtil.postAsyncData('/api/system/auth_list/approve', data, fnSuccess)
                 })
-            })*/
+            })
 
 
         });

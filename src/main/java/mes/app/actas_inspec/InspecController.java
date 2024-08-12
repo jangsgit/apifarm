@@ -4,6 +4,7 @@ package mes.app.actas_inspec;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.util.StringUtils;
+import mes.app.UtilClass;
 import mes.app.actas_inspec.service.FileUploaderService;
 import mes.app.actas_inspec.service.InspecService;
 import mes.app.common.service.FileService;
@@ -319,10 +320,7 @@ public class InspecController {
 
         AjaxResult result = new AjaxResult();
 
-        String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
-        String[] tokens = cleanJson.split(",");
-
-        List<String> paramList = List.of(tokens);
+        List<String> paramList = new UtilClass().parseUserIds(spuncode);
 
 
         for(String param : paramList){
@@ -358,10 +356,7 @@ public class InspecController {
 
         AjaxResult result = new AjaxResult();
 
-        String cleanJson = spuncode.replaceAll("[\\[\\]\"]", "");
-        String[] tokens = cleanJson.split(",");
-
-        List<String> paramList = List.of(tokens);
+        List<String> paramList = new UtilClass().parseUserIds(spuncode);
 
         for(String param : paramList){
             System.out.println(param);

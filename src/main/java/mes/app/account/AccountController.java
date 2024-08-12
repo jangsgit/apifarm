@@ -1,24 +1,22 @@
 package mes.app.account;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 
 import mes.app.account.service.TB_RP940_Service;
+import mes.app.account.service.TB_RP945_Service;
 import mes.domain.DTO.TB_RP940Dto;
 import mes.domain.DTO.TB_RP945Dto;
 import mes.domain.entity.UserCode;
-import mes.domain.repository.TB_RP940Repository;
-import mes.domain.repository.TB_RP945Repository;
-import mes.domain.repository.UserCodeRepository;
+import mes.domain.entity.UserGroup;
+import mes.domain.repository.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,7 +38,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import mes.domain.entity.User;
 import mes.domain.model.AjaxResult;
-import mes.domain.repository.UserRepository;
 import mes.domain.security.CustomAuthenticationToken;
 import mes.domain.security.Pbkdf2Sha256;
 import mes.domain.services.AccountService;
@@ -66,6 +63,10 @@ public class AccountController {
 	TB_RP940_Service tbRp940Service;
 
 	@Autowired
+	TB_RP945_Service tbRp945Service;
+
+
+	@Autowired
 	TB_RP940Repository tb_rp940Repository;
 
 	@Autowired
@@ -74,7 +75,9 @@ public class AccountController {
 
 	@Resource(name="authenticationManager")
     private AuthenticationManager authManager;
-	
+    @Autowired
+    private UserGroupRepository userGroupRepository;
+
 	@GetMapping("/login")
     public ModelAndView loginPage(
     		HttpServletRequest request,
@@ -86,7 +89,6 @@ public class AccountController {
 		Map<String, Object> userInfo = new HashMap<String, Object>(); 
 		Map<String, Object> gui = new HashMap<String, Object>();
 
-		
 		mv.addObject("userinfo", userInfo);
 
 		mv.addObject("gui", gui);
@@ -250,6 +252,7 @@ public class AccountController {
 
 	/**권한신청**/
 	@PostMapping("/Register/save")
+	@Transactional
 	public AjaxResult RegisterUser(
 			@RequestParam(value = "agency") String agency,
 			@RequestParam(value = "agencyDepartment") String agencyDepartment,
@@ -267,12 +270,22 @@ public class AccountController {
 			@RequestParam(value = "firstText") String firstText,
 			@RequestParam(value = "secondText") String secondText,
 			@RequestParam(value = "thirdText") String thirdText,
-			@RequestParam(value = "authTypeText") String authTypeText,
-			Authentication auth){
+			@RequestParam(value = "authTypeText") String authTypeText
+			){
 
 			AjaxResult result = new AjaxResult();
 
 			try {
+					//클라에서 동적으로 값이 넘어와서 몇개인지 모름, 그래서 쉼표구분자로 리스트형태로 분개해서 서버에서 노가다 뛰어여한다.
+					List<String> spworkList = Arrays.asList(spworkcd.split(","));
+					List<String> spcompList = Arrays.asList(spcompcd.split(","));
+					List<String> spplanList = Arrays.asList(spplancd.split(","));
+
+					List<String> firstTextList = Arrays.asList(firstText.split(","));
+					List<String> secondTextList = Arrays.asList(secondText.split(","));
+					List<String> thirdTextList = Arrays.asList(thirdText.split(","));
+
+
 					TB_RP940Dto dto = TB_RP940Dto.builder()
 						.agency(agency)
 						.agencyDepartment(agencyDepartment)
@@ -288,28 +301,36 @@ public class AccountController {
 						.reason(reason)
 						.build();
 
-
+				tbRp940Service.save(dto);
 
 				//신청순번의 최대값을 구한후 +1을 하고 문자열로 바꿔줌
+				//이거 반복문 안에 넣으면 db호출이 너무 많다.
 				String RawAskSeq = tb_rp945Repository.findMaxAskSeq();
 				RawAskSeq = (RawAskSeq != null) ? RawAskSeq : "0";
 
 				int AskSeqInt = Integer.parseInt(RawAskSeq) + 1;
-				String askseq = String.format("%03d", AskSeqInt);
 
 
-				TB_RP945Dto dto2 = TB_RP945Dto.builder()
-						.userid(id)
-						.askseq(askseq)
-						.spworkcd(spworkcd)
-						.spcompcd(spcompcd)
-						.spplancd(spplancd)
-						.spworknm(firstText)
-						.spcompnm(secondText)
-						.spplannm(thirdText)
-						.build();
+				for(int i=0; i<spworkList.size(); i++){
 
-				tbRp940Service.save(dto, dto2);
+
+					String askseq = String.format("%03d", AskSeqInt);
+
+					TB_RP945Dto dto2 = TB_RP945Dto.builder()
+							.userid(id)
+							.askseq(askseq)
+							.spworkcd(spworkList.get(i))
+							.spcompcd(spcompList.get(i))
+							.spplancd(spplanList.get(i))
+							.spworknm(firstTextList.get(i))
+							.spcompnm(secondTextList.get(i))
+							.spplannm(thirdTextList.get(i))
+							.build();
+
+					tbRp945Service.save(dto2);
+
+					AskSeqInt++;
+				}
 
 				result.success = true;
 				result.message = "신청이 완료되었습니다.";
@@ -330,6 +351,12 @@ public class AccountController {
 		return userCodeRepository.findByParentId(parentId);
 	}
 
+	@GetMapping("/user-auth/type")
+	public List<UserGroup> getUserAuthTypeAll(){
+		return userGroupRepository.findAll();
+
+	}
+
 	@GetMapping("/user-codes/code")
 	public List<UserCode> getUserCodesByCode(@RequestParam String code, @RequestParam String value) {
 
@@ -338,6 +365,7 @@ public class AccountController {
 
 		return userCodeRepository.findByParentId(list.get(0).getId());
 	}
+
 
     
 }

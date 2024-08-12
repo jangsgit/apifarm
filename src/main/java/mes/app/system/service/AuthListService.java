@@ -37,16 +37,38 @@ public class AuthListService {
 
 
         sql = """
-                select a.*, b.*
-                from TB_RP940 a 
-                left join TB_RP945 b
-                on a.userid = b.userid
+                select *
+                from TB_RP940  
                 where 1=1
                 AND "usernm" LIKE :paramusr
-                AND a.askdatem BETWEEN :searchfrdate AND :searchtodate
-                AND a.appflag LIKE :searchflag
-                AND a.userid LIKE :searchuserid
-                order by a.askdatem desc;
+                AND "askdatem" BETWEEN :searchfrdate AND :searchtodate
+                AND "appflag" LIKE :searchflag
+                AND "userid" LIKE :searchuserid
+                order by askdatem desc;
+                """;
+
+        List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
+        return items;
+    }
+
+
+
+    public List<Map<String, Object>> getAuthspList(String userid){
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+        String sql;
+
+
+        dicParam.addValue("paramusr", userid);
+
+
+
+        sql = """
+                select *
+                from TB_RP945  
+                where 1=1
+                AND "userid" = :paramusr
+                order by askseq;
                 """;
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);

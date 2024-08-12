@@ -106,7 +106,14 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="text" id="agency" name="agency">
+                                    <!--<select class="mg-r5" id="agency" name="agency" style="width: 100%">
+                                        <option value='CO_ID'>에너지발전소관련업체</option>
+                                        <option value='C001'>블룸에너지</option>
+                                        <option value='C002'>ESG Corp</option>
+                                    </select>-->
+                                    <select class="mg-r5" id="agency" name="agency" style="width: 100%">
+                                        <option></option>
+                                    </select>
                                 </div>
                             </td>
                             <th>
@@ -203,13 +210,16 @@
                             </th>
                             <td colspan="3">
                                 <div class="input-clear">
-                                    <select class="wp100 mg-r5" id="authType" name="authType">
+                                    <!--<select class="wp100 mg-r5" id="authType" name="authType">
                                         <option value='bloomuser'>BloomEnergy담당자</option>
                                         <option value='esguser'>ESG담당자</option>
                                         <option value='admin'>관리자</option>
                                         <option value='User'>사용자</option>
                                         <option value='Master'>시스템마스터</option>
                                         <option value='elecuser'>전기안전관리자</option>
+                                    </select>-->
+                                    <select class="wp25 mg-r5" id="authType" name="authType" >
+                                        <option></option>
                                     </select>
                                 </div>
                             </td>
@@ -217,20 +227,21 @@
                         <tr>
                             <th>
                                 <label for="">
-                                    권한그룹
+                                    발전시설
                                 </label>
                             </th>
                             <td colspan="3">
                                 <div class="fl-ac">
-                                    <select class="wp30 mg-r5" id="firstSelect" name="spworkcd">
+                                    <select class="wp25 mg-r5" id="firstSelect" name="spworkcd" onchange="updateNextSelect(this)">
                                         <option></option>
                                     </select>
-                                    <select class="wp30 mg-r5" id="secondSelect" name="spcompcd">
+                                    <select class="wp25 mg-r5" id="secondSelect" name="spcompcd" onchange="updateNextSelect(this)">
                                         <option></option>
                                     </select>
-                                    <select class="wp30 mg-r5" id="thirdSelect" name="spplancd">
+                                    <select class="wp25 mg-r5" id="thirdSelect" name="spplancd">
                                         <option></option>
                                     </select>
+                                    <button type="button" onclick="addselectField(this)" class="btn" id="z" style="width: 145px">발전시설 추가</button>
                                 </div>
                             </td>
                         </tr>
@@ -310,92 +321,189 @@
 <script type="text/javascript">
 
 
-    function initializeFirstSelect(){
-        $.get('/user-codes/parent', { parentId: 110 }, function(data){
-            let firstSelect = $('#firstSelect');
-            firstSelect.empty();
-            firstSelect.append('<option value="">선택하세요</option>');
-            data.forEach(function(item) {
-                firstSelect.append('<option value ="' + item.code + '">' + item.value + '</option>');
-            });
-        });
-    }
 
-    function updateSecondSelect(code, value){
-        $.get('/user-codes/code', { code: code, value: value}, function(data){
-            let secondSelect = $('#secondSelect');
-            secondSelect.empty();
-            secondSelect.append('<option value="">선택하세요</option>');
-            data.forEach(function(item) {
-                secondSelect.append('<option value="' + item.code + '">' + item.value + '</option>');
-            });
+    <!-- 점검자 추가 버튼 이벤트-->
+    function addselectField(button) {
+        // 새로운 td 요소를 생성합니다.
+        var newTd = document.createElement('div');
+        newTd.className = 'fl-ac new-fl-ac';
 
-        });
-    }
-
-    function updateThirdSelect(code, value){
-        $.get('/user-codes/code', { code: code, value: value}, function(data){
-            let thirdSelect = $('#thirdSelect');
-            thirdSelect.empty();
-            thirdSelect.append('<option value="">선택하세요</option>');
-            data.forEach(function(item) {
-                thirdSelect.append('<option value="' + item.code + '">' + item.value + '</option>');
-            });
-
-        });
-    }
-
-    $('#firstSelect').change(function(){
-        let selectedCode = $(this).val();
-        let selectedValue = $(this).find('option:selected').text();
-
-        console.log('selectedCode ', selectedCode);
-        console.log('selectedValue  ', selectedValue);
-
-
-
-        if(selectedCode){
-            updateSecondSelect(selectedCode, selectedValue);
+        if(!window.cloneCounter){
+            window.cloneCounter = 1;
         } else {
-            $('#secondSelect').empty();
-            $('#secondSelect').append('<option value="">선택하세요</option>');
+            window.cloneCounter++;
         }
 
-    });
+        // 새로운 input 요소를 생성합니다.
+        var originalSelect1 = document.getElementById('firstSelect');
+        var newInput = originalSelect1.cloneNode(true);
+        newInput.name = 'spworkcd';
+        newInput.id = originalSelect1.id + window.cloneCounter;
+        // newInput.className = 'wp100';
+        newInput.type = 'select';
+        newInput.width = 180;
 
-    $('#secondSelect').change(function(){
-        let selectedCode = $(this).val();
-        let selectedValue = $(this).find('option:selected').text();
+        var originalSelect2 = document.getElementById('secondSelect');
+        var newInput2 = originalSelect2.cloneNode(true);
+        newInput2.name = 'spcompcd';
+        // newInput2.className = 'wp100';
+        newInput2.type = 'select';
+        newInput2.id = originalSelect2.id + window.cloneCounter;
+        newInput2.width = 180;
 
-        console.log('selectedCode ', selectedCode);
-        console.log('selectedValue  ', selectedValue);
+        var originalSelect3 = document.getElementById('thirdSelect');
+        var newInput3 = originalSelect3.cloneNode(true);
+        newInput3.name = 'spplancd';
+        // newInput2.className = 'wp100';
+        newInput3.type = 'select';
+        newInput3.id = originalSelect3.id + window.cloneCounter;
+        newInput3.width = 180;
+
+        // 삭제 버튼을 생성합니다.
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = '발전시설 삭제';
+        deleteButton.onclick = function() {
+            deleteSelectField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+            deleteSelectField(newInput2);
+            deleteSelectField(newInput3);
+        };
+        deleteButton.style.marginLeft = '8px';
+        deleteButton.style.color = 'red';
+        deleteButton.style.marginTop = '5px';
+        // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
+        newTd.appendChild(newInput);
+        newTd.appendChild(newInput2);
+        newTd.appendChild(newInput3);
+        newTd.appendChild(deleteButton);
+
+        // 클릭된 버튼의 부모 td 요소를 찾습니다.
+        var parentTd = button.parentElement;
+
+        // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+        parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+
+
+    }
+
+    function deleteSelectField(inputField) {
+        // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+        var tdToDelete = inputField.parentElement;
+        tdToDelete.parentElement.removeChild(tdToDelete);
+    }
 
 
 
-        if(selectedCode){
-            updateThirdSelect(selectedCode, selectedValue);
+
+
+
+
+    function updateNextSelect(param) {
+        let code = param.value;
+        let value = param.options[param.selectedIndex].text;
+
+        console.log(code);
+        console.log(value);
+
+        // param의 다음 형제 요소를 찾습니다.
+        let nextSelect = $(param).next('select');
+
+        if (nextSelect.length) {
+            let nextSelectId = nextSelect.attr('id');
+
+            $.ajax({
+                url: '/user-codes/code',
+                type: 'GET',
+                data: { code: code, value: value },
+                success: function(data) {
+                    nextSelect.empty();
+                    nextSelect.append('<option value="">선택하세요</option>');
+                    data.forEach(function(item) {
+                        nextSelect.append('<option value="' + item.code + '">' + item.value + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // 통신 실패 시 처리
+
+
+                    // 선택 옵션을 비우거나 기본 옵션을 설정할 수 있습니다.
+                    nextSelect.empty();
+                    nextSelect.append('<option value=""></option>');
+                }
+            });
         } else {
-            $('#thirdSelect').empty();
-            $('#thirdSelect').append('<option value="">선택하세요</option>');
+            console.error('다음 select 요소를 찾을 수 없습니다.');
         }
+    }
 
-    });
 
+    const requiredFields = [
+        { id: 'agency', name: '소속사' },
+        { id: 'agencyDepartment', name: '소속부서' },
+        { id: 'name', name: '성명' },
+        { id: 'id', name: 'ID' },
+        { id: 'password', name: '비밀번호' },
+        { id: 'passwordchk', name: '비밀번호확인' },
+        { id: 'authType', name: '권한그룹' },
+        { id: 'firstSelect', name: '관할지역' },
+        { id: 'secondSelect', name: '발전산단' },
+        { id: 'thirdSelect', name: '발전소' }
+    ];
 
-    const requiredFields = ['agency', 'agencyDepartment', 'name', 'id', 'password', 'passwordchk', 'authType', 'firstSelect', 'secondSelect', 'thirdSelect'];
-    const requiredFields2 = ['소속사', '소속부서', '성명', 'ID', '비밀번호', '비밀번호확인', '권한그룹', '관할지역', '발전산단', '발전소'];
+    // 필드명과 name값으로 유효성 검사할 필드 배열
+    const nameBasedFields = [
+        { name: 'spworkcd', displayName: '관할지역' },
+        { name: 'spcompcd', displayName: '발전산단' },
+        { name: 'spplancd', displayName: '발전소' }
+    ];
+
     const clearFieldList = ['agency', 'agencyDepartment', 'name', 'id', 'password', 'passwordchk', 'authType', 'firstSelect', 'secondSelect', 'thirdSelect', 'tel', 'level', 'email', 'reason']
 
-    // TODO: 유효성검사
-    function ValidateChk(param, paramNm){
-
-        let ParamValue = document.getElementById(param).value.trim();
-
-        if(ParamValue === '' || ParamValue === null){
-            alert(paramNm + '이(가) 입력되지 않았습니다.')
-            return false;
-
+    // 유효성 검사
+    function validateFields() {
+        for (let field of requiredFields) {
+            if (!validateFieldById(field.id, field.name)) {
+                return false;
+            }
         }
+
+        for (let field of nameBasedFields) {
+            if (!validateFieldsByName(field.name, field.displayName)) {
+                return false;
+            }
+        }
+
+        return true;  // 모든 유효성 검사를 통과했을 경우
+    }
+
+    // ID로 유효성 검사 함수
+    function validateFieldById(id, fieldName) {
+        const value = document.getElementById(id)?.value.trim();
+
+        if (!value) {
+            Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+            return false;
+        }
+
+        return true;
+    }
+
+    // name 속성으로 유효성 검사 함수
+    function validateFieldsByName(name, fieldName) {
+        const elements = document.getElementsByName(name);
+
+        if (elements.length === 0) {
+            console.error(`이름이 ${name}인 요소를 찾을 수 없습니다.`);
+            return false;
+        }
+
+        for (let element of elements) {
+            const value = element.value.trim();
+            if (!value) {
+                Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -415,6 +523,24 @@
         wrapper.style.display = 'none';
     }
 
+
+    function initializeSelect({
+                                  url,               // API 엔드포인트 URL
+                                  params = {},       // 요청 매개변수 (기본값은 빈 객체)
+                                  elementId,         // 셀렉트 요소의 ID
+                                  defaultOption = "선택하세요",  // 기본 옵션 텍스트
+                                  valueField = "code",    // 데이터의 값 필드 이름
+                                  textField = "value"     // 데이터의 표시 필드 이름
+                              }) {
+        $.get(url, params, function(data){
+            let selectElement = $(`#${elementId}`);
+            selectElement.empty();
+            selectElement.append(`<option value="">${defaultOption}</option>`);
+            data.forEach(function(item) {
+                selectElement.append(`<option value="${item[valueField]}">${item[textField]}</option>`);
+            });
+        });
+    }
 
 
 
@@ -455,98 +581,6 @@
 </script>
 
 <script type="text/javascript">
-
-    /*
-      Password Validator 0.1
-      (c) 2007 Steven Levithan
-      MIT License
-     */
-    function validatePassword(pw, options) {
-        // default options (allows any password)
-        var o = {
-            lower: 0,
-            upper: 0,
-            alpha: 0, /* lower + upper */
-            numeric: 0,
-            special: 0,
-            length: [0, Infinity],
-            custom: [ /* regexes and/or functions */],
-            badWords: [],
-            badSequenceLength: 0,
-            noQwertySequences: false,
-            noSequential: false
-        };
-
-        for (var property in options)
-            o[property] = options[property];
-
-        var re = {
-                lower: /[a-z]/g,
-                upper: /[A-Z]/g,
-                alpha: /[A-Z]/gi,
-                numeric: /[0-9]/g,
-                special: /[\W_]/g
-            },
-            rule, i;
-
-        // enforce min/max length
-        if (pw.length < o.length[0] || pw.length > o.length[1])
-            return false;
-
-        // enforce lower/upper/alpha/numeric/special rules
-        for (rule in re) {
-            if ((pw.match(re[rule]) || []).length < o[rule])
-                return false;
-        }
-
-        // enforce word ban (case insensitive)
-        for (i = 0; i < o.badWords.length; i++) {
-            if (pw.toLowerCase().indexOf(o.badWords[i].toLowerCase()) > -1)
-                return false;
-        }
-
-        // enforce the no sequential, identical characters rule
-        if (o.noSequential && /([\S\s])\1/.test(pw))
-            return false;
-
-        // enforce alphanumeric/qwerty sequence ban rules
-        if (o.badSequenceLength) {
-            var lower = "abcdefghijklmnopqrstuvwxyz",
-                upper = lower.toUpperCase(),
-                numbers = "0123456789",
-                qwerty = "qwertyuiopasdfghjklzxcvbnm",
-                start = o.badSequenceLength - 1,
-                seq = "_" + pw.slice(0, start);
-            for (i = start; i < pw.length; i++) {
-                seq = seq.slice(1) + pw.charAt(i);
-                if (
-                    lower.indexOf(seq) > -1 ||
-                    upper.indexOf(seq) > -1 ||
-                    numbers.indexOf(seq) > -1 ||
-                    (o.noQwertySequences && qwerty.indexOf(seq) > -1)
-                ) {
-                    return false;
-                }
-            }
-        }
-        // enforce custom regex/function rules
-        for (i = 0; i < o.custom.length; i++) {
-            rule = o.custom[i];
-            if (rule instanceof RegExp) {
-                if (!rule.test(pw))
-                    return false;
-            } else if (rule instanceof Function) {
-                if (!rule(pw))
-                    return false;
-            }
-        }
-
-        // great success!
-        return true;
-    }
-</script>
-
-<script type="text/javascript">
     var isChangeLang = 'N';
 
 
@@ -556,9 +590,25 @@
 
 
 
+        initializeSelect({
+            url: '/user-codes/parent',
+            params: { parentId: 154 },
+            elementId: 'agency'
+        })
 
-        initializeFirstSelect();
+        initializeSelect({
+            url: '/user-codes/parent',
+            params: { parentId: 110 },
+            elementId: 'firstSelect'
+        })
 
+        initializeSelect({
+            url: '/user-auth/type',
+            params: {},
+            elementId: 'authType',
+            valueField: "code",
+            textField: 'name'
+        })
 
 
         let AuthCode = false;
@@ -579,7 +629,7 @@
 
             let userid = document.getElementById('id').value;
             if(userid.trim() === '' || userid === null){
-                alert('빈 값은 불가능합니다.');
+                Alert.alert('', '빈 값은 불가능합니다.');
                 return;
             }
 
@@ -611,28 +661,20 @@
 
         btnRegistersend.click(function (e) {
 
-            let firstSelected = document.getElementById('firstSelect');
-            let secondSelected = document.getElementById('secondSelect');
-            let thirdSelected = document.getElementById('thirdSelect');
             let authType = document.getElementById('authType');
 
 
-            let firstText = firstSelected.options[firstSelected.selectedIndex].text;
-            let secondText = secondSelected.options[secondSelected.selectedIndex].text;
-            let thirdText = thirdSelected.options[thirdSelected.selectedIndex].text;
             let authTypeText = authType.options[authType.selectedIndex].text;
 
 
-            //유효성 검사
-            for (let i = 0; i < requiredFields.length; i++) {
-                if (!ValidateChk(requiredFields[i], requiredFields2[i])) {
-
-                    return;
-                }
+            if (!validateFields()) {
+                return false;
             }
 
+
+
             if(!AuthCode){
-                alert('아이디중복 확인을 하지 않으셨습니다.');
+                Alert.alert('', '아이디중복 확인을 하지 않으셨습니다.');
                 return;
             }
 
@@ -643,7 +685,7 @@
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
             if (!emailPattern.test(emailValue)) {
-                alert('유효한 이메일 주소를 입력하세요.');
+                Alert.alert('', '유효한 이메일 주소를 입력하세요.');
                 return;
             }
 
@@ -655,7 +697,34 @@
                 return;
             }
 
+            function extractSelectValues(selectName) {
+                let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
+                return Array.from(inputs).map(input => input.value).join(',');
+            }
+
+            function extractSelectTexts(selectName) {
+                let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
+                return Array.from(inputs).map(input => input.options[input.selectedIndex].text).join(',');
+            }
+
+            let spworkcdString = extractSelectValues('spworkcd');
+            let spcompcdString = extractSelectValues('spcompcd');
+            let spplancdString = extractSelectValues('spplancd');
+
+
+            let firstText  = extractSelectTexts('spworkcd');
+            let secondText = extractSelectTexts('spcompcd');
+            let thirdText  = extractSelectTexts('spplancd');
+
+
+            console.log('spplancdString', spplancdString)
+
             let data = FormUtil.extractForm($('#bomForm'));
+
+            data.spworkcd = spworkcdString;
+            data.spcompcd = spcompcdString;
+            data.spplancd = spplancdString;
+
             data.firstText = firstText;
             data.secondText = secondText;
             data.thirdText = thirdText;
@@ -674,12 +743,24 @@
                 }
             };
             AjaxUtil.postAsyncData("/Register/save", data, fnSuccess);
+
             AuthCode = false;
             for(let i=0; i < clearFieldList.length; i++){
                 clearForm(clearFieldList[i]);
             }
             let idfield = document.getElementById('id')
             idfield.removeAttribute('readonly')
+
+            //추가된 발전지역 요소들 삭제
+            const elements = document.getElementsByClassName('new-fl-ac');
+            const elementsArray = Array.from(elements);
+
+            elementsArray.forEach(element => {
+                element.remove();
+            });
+            //끝
+
+
             RegisterUserClose();
 
         })
@@ -743,32 +824,10 @@
 
         function submitHandler(form) {
 
-            // 패스워드 룰 관련 적용필요
-            let passOption = {
-                length: [8, 20],
-                lower: 1,
-                upper: 1,
-                numeric: 1,
-                special: 1,
-                badWords: [],
-                badSequenceLength: 4
-            };
-
-            let pwd = $('#loginPwd').val();
-            let validationResult = validatePassword(pwd, passOption);
-            if (!validationResult) {
-                //Alert.alert('', '에러', clearFields);
-                //return;
-            }
-
-            var submitData = $(form).serialize() + '&isChangeLang=' + isChangeLang + '&isMobile=' + isMobile();
+            var submitData = $(form).serialize() + '&isChangeLang=' + isChangeLang;
             $.post('/login', submitData, function (result) {
                 let code = result.data.code;
-                var resultmsg = result.message;
                 if (code == 'NOUSER') {
-
-                    //alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-
 
                     Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.');
                     return false;
@@ -832,49 +891,7 @@
 
         $('#loginFrm').validate({ submitHandler: submitHandler });
 
-
-
-        $('#lang_select').on('click', function () {
-            $('.lang_list').toggleClass('active');
-            $('.lang_list li > label').on('click', function () {
-                $('.lang_list').removeClass('active');
-                $('.lang_list li').removeClass('on');
-                $(this).parent('li').addClass('on');
-                $('#lang_select .txt').text($(this).text());
-
-                var icon = $(this).children('.icon').css('background-image');
-                $('#lang_select i').css({
-                    width: '16px', height: '16px',
-                    background: icon + ' no-repeat',
-                    color: 'transparent'
-                });
-            });
-        });
-
-        $('#lang1').on('click', function () {
-            var langCd = $(this).val();
-            sessionStorage.clear();
-            sessionStorage.setItem('lang_code', langCd);
-        });
-        $('#lang2').on('click', function () {
-            var langCd = $(this).val();
-            sessionStorage.clear();
-            sessionStorage.setItem('lang_code', langCd);
-        });
-
-
-        //$('#memberReg').click(function () { location.href = '/memberreg'; });
-
     });
-
-    function getMobileToken(token) {
-        $('#token').val(token);
-    }
-
-    function isMobile() {
-        return (navigator.userAgent.indexOf('Mobi') > -1) ? 'F' : 'B'; // F: 모바일웹 B:PC웹
-    }
-
 
 </script>
 

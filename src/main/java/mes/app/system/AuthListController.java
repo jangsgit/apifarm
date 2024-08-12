@@ -1,13 +1,20 @@
 package mes.app.system;
 
 
+import mes.app.UtilClass;
 import mes.app.account.service.TB_RP940_Service;
 import mes.app.system.service.AuthListService;
+import mes.app.system.service.UserService;
 import mes.domain.DTO.TB_RP940Dto;
+import mes.domain.entity.TB_RP940;
+import mes.domain.entity.User;
+import mes.domain.entity.UserCode;
 import mes.domain.model.AjaxResult;
 import mes.domain.repository.TB_RP940Repository;
 import mes.domain.repository.TB_RP945Repository;
+import mes.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -35,6 +42,10 @@ public class AuthListController {
 
     @Autowired
     TB_RP940_Service tbRp940Service;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr,
@@ -89,29 +100,80 @@ public class AuthListController {
         return result;
     }
 
+
+    @GetMapping("/tb_rp945List")
+    public AjaxResult getTB_RP945(@RequestParam String userid){
+
+        AjaxResult result = new AjaxResult();
+
+        List<Map<String, Object>> items = authListService.getAuthspList(userid);
+
+        result.data = items;
+
+        return result;
+    }
+
     @PostMapping("/save")
     @Transactional
     public AjaxResult saveFilter(
             @RequestParam(value = "userid") String userid,
-            @RequestParam(value = "appflag") String appflag
-    ){
+            @RequestParam(value = "appflag") String appflag,
+            Authentication auth
+            ){
         AjaxResult result = new AjaxResult();
+
+
 
         // 현재 시간을 Asia/Seoul 시간대로 가져오기
         ZonedDateTime seoulDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         OffsetDateTime offsetDateTime = seoulDateTime.toOffsetDateTime();
 
+
+
+        boolean username_chk = this.userRepository.findByUsername(userid).isEmpty();
+
+
+        Timestamp today = new Timestamp(System.currentTimeMillis());
         try{
            if(appflag.equals("Y")){
+
+               if (username_chk == false) {
+                   result.success = false;
+                   result.message="중복된 사번이 존재합니다.";
+                   return result;
+               }
+
+
+
+                Optional<TB_RP940> TB940list = tb_rp940Repository.findByUserid(userid);
+                if(TB940list.isPresent()){
+                    TB_RP940 tb940 = TB940list.get();
+                    User user = createUserFromTB940(tb940, today);
+
+                    userService.SaveUser(user, auth, tb940.getAuthgrpcd(), tb940.getAuthgrpnm());
+                    tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime);
+
+                }else {
+                    result.success = false;
+                    result.message = "신청목록에 없습니다.";
+                    return result;
+                }
+
+
+
                tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime);
 
            }else{
                tb_rp940Repository.updateApprflagToYByUserid(userid, appflag);
+
+               userRepository.deleteByUsername(userid);
+
            }
 
-            result.success = true;
-            result.message = "승인이 완료되었습니다.";
-            return result;
+           result.success = true;
+           result.message = "저장하였습니다.";
+           return result;
+
         }catch(Exception e){
             System.out.println(e);
 
@@ -138,10 +200,7 @@ public class AuthListController {
     public AjaxResult delete(@RequestParam(value = "userid") String userid){
         AjaxResult result = new AjaxResult();
 
-        String cleanJson = userid.replaceAll("[\\[\\]\"]", "");
-        String[] tokens = cleanJson.split(",");
-
-        List<String> paramList = List.of(tokens);
+        List<String> paramList = new UtilClass().parseUserIds(userid);
 
         for(String param : paramList){
             tb_rp940Repository.deleteByUserid(param);
@@ -156,26 +215,67 @@ public class AuthListController {
 
     @PostMapping("/approve")
     @Transactional
-    public AjaxResult approve(@RequestParam(value = "userid") String userid)
+    public AjaxResult approve(@RequestParam(value = "userid") String userid, Authentication auth)
     {
+
+        List<String> paramList = new UtilClass().parseUserIds(userid);
 
         AjaxResult result = new AjaxResult();
 
-        String cleanJson = userid.replaceAll("[\\[\\]\"]", "");
-        String[] tokens = cleanJson.split(",");
+        ZonedDateTime seoulDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        OffsetDateTime offsetDateTime = seoulDateTime.toOffsetDateTime();
+        Timestamp today = new Timestamp(System.currentTimeMillis());
+        try{
 
-        List<String> paramList = List.of(tokens);
+                for(String param: paramList){
 
-        for(String param : paramList){
-            System.out.println(param);
+                    Optional<TB_RP940> TB940list = tb_rp940Repository.findByUserid(param);
+                    if(TB940list.isPresent()){
+                        TB_RP940 tb940 = TB940list.get();
+                        User user = createUserFromTB940(tb940, today);
 
-            //tb_rp940Repository.updateApprflagToYByUserid(param);
+                        userService.SaveUser(user, auth, tb940.getAuthgrpcd(), tb940.getAuthgrpnm());
+                        tb_rp940Repository.updateApprflagToYByUserid(param, offsetDateTime);
 
+
+                    }else {
+                        result.success = false;
+                        result.message = "신청목록에 없습니다.";
+                        return result;
+                    }
+
+                }
+            result.success = true;
+            result.message = "저장하였습니다.";
+            return result;
+
+        }catch(Exception e){
+            System.out.println(e);
+
+            result.success = false;
+            result.message = "에러가발생하였습니다.";
+            return result;
         }
-
-
-        result.success = true;
-        result.message = "성공";
-        return result;
     }
+
+
+
+    private User createUserFromTB940(TB_RP940 tb940, Timestamp today) {
+        User user = new User();
+        user.setPassword(tb940.getLoginpw());
+        user.setSuperUser(false); // 이 부분은 상황에 따라 다르게 설정할 수 있습니다.
+        user.setUsername(tb940.getUserid());
+        user.setFirst_name(tb940.getUsernm());
+        user.setEmail(tb940.getUsermail());
+        user.setIs_staff(true);
+        user.setActive(true);
+        user.setDate_joined(today);
+        user.setTel(tb940.getUserhp());
+        user.setAgencycd(tb940.getAgencycd());
+        user.setDivinm(tb940.getDivinm());
+        user.setLast_name("");
+        return user;
+    }
+
+
 }

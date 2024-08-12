@@ -52,7 +52,26 @@ public class UserProfile extends AbstractAuditModel implements Serializable{
 	
 	@Column(name = "\"token\"")
 	String Token;
-	
+
+	@Column(name = "spworkcd")
+	String spworkcd;
+
+	@Column(name = "spworknm")
+	String spworknm;
+
+	@Column(name = "spcompcd")
+	String spcompcd;
+
+	@Column(name = "spcompnm")
+	String spcompnm;
+
+	@Column(name = "spplancd")
+	String spplancd;
+
+	@Column(name = "spplannm")
+	String spplannm;
+
+
 	@JsonBackReference
 	@Id
 	@OneToOne

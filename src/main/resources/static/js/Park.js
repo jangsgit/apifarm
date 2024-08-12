@@ -153,6 +153,74 @@ function ElementBinding(element, paramvalue){
 
 }
 
+function SelectItemPush(array, propertyPath){
+
+    console.log('trigger: ');
+    console.log('array: ', array);
+    console.log('propertyPath: ', propertyPath);
+
+
+    return array.map(item => {
+        // Split the property path by dot (.) to support nested properties
+        const properties = propertyPath.split('.');
+        let value = item;
+
+        // Iterate over the properties to access the nested value
+        for (let i = 0; i < properties.length; i++) {
+            if (value == null) {
+                return undefined;
+            }
+            value = value[properties[i]];
+        }
+        return value;
+    });
+}
+//셀렉트 박스 동적 바인딩
+function initializeSelect({
+                              url,               // API 엔드포인트 URL
+                              params = {},       // 요청 매개변수 (기본값은 빈 객체)
+                              elementId,         // 셀렉트 요소의 ID
+                              defaultOption = "선택하세요",  // 기본 옵션 텍스트
+                              valueField = "code",    // 데이터의 값 필드 이름
+                              textField = "value"     // 데이터의 표시 필드 이름
+                          }) {
+    $.get(url, params, function(data){
+        let selectElement = $(`#${elementId}`);
+        selectElement.empty();
+        selectElement.append(`<option value="">${defaultOption}</option>`);
+        data.forEach(function(item) {
+            selectElement.append(`<option value="${item[valueField]}">${item[textField]}</option>`);
+        });
+    });
+}
+
+
+//############################날짜함수
+
+//당일
+function getDateYYYYMMDD(){
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2,'0');
+
+    return `${year}-${month}-${day}`
+}
+
+//당월 마지막일
+function getLastDayOfCurrentMonth() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 현재 달 (0-11이므로 +1)
+
+    // 다음 달의 첫째 날을 계산한 후, 하루를 빼서 당월 마지막 날을 구함
+    const lastDayDate = new Date(year, month, 0);
+    const day = String(lastDayDate.getDate()).padStart(2, '0');
+    const lastMonth = String(lastDayDate.getMonth() + 1).padStart(2, '0');
+
+    return `${year}-${lastMonth}-${day}`;
+}
+
 
 $(document).ready(function (e) {
     //점검결과 클릭시 텍스트 순환
@@ -167,5 +235,6 @@ $(document).ready(function (e) {
 
 
 })
+
 
 

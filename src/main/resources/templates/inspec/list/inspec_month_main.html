@@ -828,14 +828,14 @@
 
 
         }
-        function SelectItemPush(){
+        /*function SelectItemPush(){
 
             let selectedList = [];
             for(let i = 0; i < SelectItem.length; i++){
                 selectedList.push(SelectItem[i]._data.spuncode);
             }
             return selectedList;
-        }
+        }*/
 
 
 
@@ -848,7 +848,7 @@
 
             // 로딩 바 표시
             showLoadingBar();
-            let selectedList = SelectItemPush();
+            let selectedList = SelectItemPush(SelectItem, '_data.spuncode');
 
             postFetchRequest('/api/inspec_report/download-docs', selectedList, function(blob) {
 
@@ -1165,7 +1165,7 @@
 
                 let apprList = [];
 
-                apprList = SelectItemPush();
+                apprList = SelectItemPush(SelectItem, '_data.spuncode');
 
 
                 Alert.confirm('', '승인하시겠습니까?', function () {
@@ -1194,7 +1194,7 @@
 
                 let delList = [];
 
-                delList = SelectItemPush();
+                delList = SelectItemPush(SelectItem, '_data.spuncode');
 
                 console.log('삭제확인', delList);
                 Alert.confirm('', '삭제하시겠습니까?', function () {

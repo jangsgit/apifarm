@@ -22,7 +22,7 @@ public class TB_RP940_Service {
     TB_RP945Repository tb_rp945Repository;
 
     @Transactional
-    public void save(TB_RP940Dto dto, TB_RP945Dto dto2){
+    public void save(TB_RP940Dto dto){
 
         TB_RP940 tbRp940 = TB_RP940.toSaveEntity(dto);
 
@@ -30,8 +30,8 @@ public class TB_RP940_Service {
 
 
 
-        TB_RP945 tbRp945 = TB_RP945.toSaveEntity(dto2);
-        tb_rp945Repository.save(tbRp945);
+        /*TB_RP945 tbRp945 = TB_RP945.toSaveEntity(dto2);
+        tb_rp945Repository.save(tbRp945);*/
 
 
     }

@@ -3,8 +3,13 @@ package mes.app.system.service;
 import java.util.List;
 import java.util.Map;
 
+import mes.domain.entity.User;
+import mes.domain.entity.UserGroup;
+import mes.domain.repository.UserGroupRepository;
+import mes.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -15,7 +20,11 @@ public class UserService {
 	
 	@Autowired
 	SqlRunner sqlRunner;
-	
+	@Autowired
+	private UserRepository userRepository;
+    @Autowired
+    private UserGroupRepository userGroupRepository;
+
 	// 사용자 리스트 조회
 	public List<Map<String, Object>> getUserList(boolean superUser, Integer group, String keyword, String username, Integer departId){
 		
@@ -125,5 +134,44 @@ public class UserService {
         
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
+	}
+
+	public Boolean SaveUser(User user, Authentication auth, String authType, String authCode){
+
+	try {
+		User UserEntity = userRepository.save(user);
+
+		List<UserGroup> AuthGroup = userGroupRepository.findByCodeAndName(authType, authCode);
+
+
+		MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+
+		User loginUser = (User) auth.getPrincipal();
+
+
+		dicParam.addValue("loginUser", loginUser.getId());
+
+		String sql = """
+		        	INSERT INTO user_profile 
+		        	("_created", "_creater_id", "User_id", "lang_code", "Name", "UserGroup_id" ) 
+		        	VALUES (now(), :loginUser, :User_id, :lang_code, :name, :UserGroup_id )
+		        """;
+
+		dicParam.addValue("name", user.getFirst_name());
+		dicParam.addValue("lang_code", "ko-KR");
+		//dicParam.addValue("UserGroup_id", );
+		dicParam.addValue("User_id", UserEntity.getId());
+		dicParam.addValue("lang_code", "ko-KR");
+		dicParam.addValue("UserGroup_id", AuthGroup.get(0).getId());
+
+		this.sqlRunner.execute(sql, dicParam);
+		return true;
+	}catch(Exception e){
+		e.getMessage();
+		return false;
+	}
+
+
 	}
 }
