@@ -118,62 +118,62 @@ var menuLink = function (objid, val, menuurl, manual) {
 }
 
 // 메뉴 조회
-function addMenu(menuData) {
-
-    for (var i = 0; i < menuData.length; i++) {
-        let node = menuData[i];
-
-
-        var strtxt = '';
-        for (var j = 0; j < node.nodes.length; j++) {
-            let subnode = node.nodes[j];
-            var sublitag = '<li>';
-            sublitag += '<a href="#" data-manual="' + subnode.ismanual
-                + '" data-bookmark="' + subnode.isbookmark
-                + '" data-objid="' + subnode.objId
-                + '" menuurl="' + ((subnode.objUrl === '') ? '#' : subnode.objUrl) + '">'
-                + subnode.objNm + '</a>';
-
-            sublitag += '<ul class="dep3"></ul>'; // 하위 메뉴를 위한 ul 추가
-            sublitag += '</li>';
-            strtxt += sublitag;
-        }
-
-    }
-
-    // 하위 메뉴 클릭 시 이벤트
-    $('.dep3').on('click', 'a', function (e) {
-        e.preventDefault();
-        var $li = $(this).parent('li');
-        if (!$li.hasClass('on')) {
-            $li.siblings('li').removeClass('on');
-            $li.addClass('on');
-        }
-
-        var val = $(this).text();
-        var menuurl = $(this).attr('menuurl');
-        var objid = $(this).attr('data-objid');
-        var _bookmark = $(this).attr('data-bookmark');
-        var _manual = $(this).attr('data-manual');
-
-        if (menuurl != '#') {
-            if (nthTabs.isExistsTab('#' + objid)) {
-                nthTabs.toggleTab('#' + objid);
-            } else {
-                nthTabs.addTab({
-                    id: objid,
-                    title: val,
-                    url: menuurl,
-                    active: true,
-                    allowClose: true,
-                    ismanual: _manual
-                });
-            }
-        }
-    });
-
-
-}
+// function addMenu(menuData) {
+//
+//     for (var i = 0; i < menuData.length; i++) {
+//         let node = menuData[i];
+//
+//
+//         var strtxt = '';
+//         for (var j = 0; j < node.nodes.length; j++) {
+//             let subnode = node.nodes[j];
+//             var sublitag = '<li>';
+//             sublitag += '<a href="#" data-manual="' + subnode.ismanual
+//                 + '" data-bookmark="' + subnode.isbookmark
+//                 + '" data-objid="' + subnode.objId
+//                 + '" menuurl="' + ((subnode.objUrl === '') ? '#' : subnode.objUrl) + '">'
+//                 + subnode.objNm + '</a>';
+//
+//             sublitag += '<ul class="dep3"></ul>'; // 하위 메뉴를 위한 ul 추가
+//             sublitag += '</li>';
+//             strtxt += sublitag;
+//         }
+//
+//     }
+//
+//     // 하위 메뉴 클릭 시 이벤트
+//     $('.dep3').on('click', 'a', function (e) {
+//         e.preventDefault();
+//         var $li = $(this).parent('li');
+//         if (!$li.hasClass('on')) {
+//             $li.siblings('li').removeClass('on');
+//             $li.addClass('on');
+//         }
+//
+//         var val = $(this).text();
+//         var menuurl = $(this).attr('menuurl');
+//         var objid = $(this).attr('data-objid');
+//         var _bookmark = $(this).attr('data-bookmark');
+//         var _manual = $(this).attr('data-manual');
+//
+//         if (menuurl != '#') {
+//             if (nthTabs.isExistsTab('#' + objid)) {
+//                 nthTabs.toggleTab('#' + objid);
+//             } else {
+//                 nthTabs.addTab({
+//                     id: objid,
+//                     title: val,
+//                     url: menuurl,
+//                     active: true,
+//                     allowClose: true,
+//                     ismanual: _manual
+//                 });
+//             }
+//         }
+//     });
+//
+//
+// }
 
 $(document).ready(function () {
 

@@ -51,7 +51,8 @@ public class SystemController {
         	Integer pid = (Integer)dicData.get("pid");
         	String name=(String)dicData.get("name");
         	boolean isbookmark = (boolean)dicData.get("isbookmark");
-        	String css = (String)dicData.get("css");
+//        	String css = (String)dicData.get("css");
+			Integer frontfolder_id=(Integer)dicData.get("frontfolder_id");
         	
         	//String log = String.format("id:%s, menu_code:%s, pid:%s, name:%s",id,menu_code, pid, name);
         	//System.out.println(log);
@@ -61,13 +62,14 @@ public class SystemController {
         		List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>();
         		
         		Map<String, Object> folder = new HashMap<>();
-        		folder.put("objId", menu_code);
-        		folder.put("objNm", name);
-        		folder.put("objUrl", "");
-        		folder.put("menuIconCls", css);
+        		folder.put("folder_id", id);
+        		folder.put("folder_name", name);
+				folder.put("frontfolder_id", frontfolder_id);
+//        		folder.put("objUrl", "");
+//        		folder.put("menuIconCls", css);
         		folder.put("nodes", nodes);
         		folder.put("ismanual", false);
-        		folder.put("isbookmark", false);
+//        		folder.put("isbookmark", false);
         		folder.put("menuDepth", 1);
         		
         		menuItems.add(folder);
@@ -81,8 +83,9 @@ public class SystemController {
         		menuItem.put("objId", menu_code);
         		menuItem.put("objNm", name);
         		menuItem.put("objUrl", url);
-        		menuItem.put("menuIconCls", css);
-        		menuItem.put("nodes", new ArrayList<Map<String, Object>>());
+				menuItem.put("pid", pid);
+//        		menuItem.put("menuIconCls", css);
+//        		menuItem.put("nodes", new ArrayList<Map<String, Object>>());
         		menuItem.put("ismanual", false);
         		menuItem.put("isbookmark", isbookmark);
         		menuItem.put("menuDepth", 2);
