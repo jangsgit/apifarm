@@ -109,7 +109,6 @@
                         <!--                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold;">조회된 데이터가 없습니다</div>-->
                     </div>
 
-
                     <div class="btn-wrap">
                     </div>
                 </section>
@@ -134,7 +133,7 @@
         document.readyState === 'complete' ? init() : window.onload = init;
 
         var columns = [
-            {binding: 'id', header: 'No', width: 150, align: 'center'},
+            {binding: 'row_number', header: 'No', width: 150, align: 'center'},
             {binding: 'type', header: '구분', width: 160, align: 'center'},
             {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
             {binding: 'login_id', header: '사번', width: 160, align: 'center'},
@@ -166,8 +165,20 @@
                 },
                 async: false,
                 success: function (data) {
-                    console.log('wijmo', data.data);
+                    console.log('wijmo', data);
+
+
                     data2 = data.data;
+
+                    // `addr` 필드를 변형하여 `value`만 추출
+                    data2.forEach(item => {
+                        if (item.addr && item.addr.value) {
+                            item.addr = item.addr.value;
+                        }
+                    });
+
+                    console.log('First item:', data2[0]);
+                    console.log('Second item:', data2[1]);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching log_list data:', textStatus, errorThrown);
@@ -251,7 +262,7 @@
             var cnt = 1;
             for (let i = 0; i < loginlogDto.length; i++) {
                 loginlogData.push({
-                    id: loginlogDto[i]["id"],
+                    row_number: loginlogDto[i]["row_number"],
                     type: loginlogDto[i]["type"],
                     addr: loginlogDto[i]["addr"],
                     login_id: loginlogDto[i]["login_id"],

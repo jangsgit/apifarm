@@ -1,6 +1,7 @@
 package mes.app.account;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import javax.annotation.Resource;
@@ -116,9 +117,9 @@ public class AccountController {
 
     @PostMapping("/login")
     public AjaxResult postLogin(
-    		@RequestParam("username") final String username, 
+    		@RequestParam("username") final String username,
     		@RequestParam("password") final String password,
-    		final HttpServletRequest request) {
+    		final HttpServletRequest request) throws UnknownHostException {
     	// 여기로 들어오지 않음.
 
 		//List<TB_RP940> list = tb_rp940Repository.findAll();
@@ -127,10 +128,10 @@ public class AccountController {
 
 
     	AjaxResult result = new AjaxResult();
-    	
+
     	HashMap<String, Object> data = new HashMap<String, Object>();
     	result.data = data;
-    	
+
         UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
 		CustomAuthenticationToken auth = null;
 		try{
@@ -143,22 +144,28 @@ public class AccountController {
 
         if(auth!=null) {
         	User user = (User)auth.getPrincipal();
-        	user.getActive();        	
-        	data.put("code", "OK");        	
-        	
+        	user.getActive();
+        	data.put("code", "OK");
+
+			try {
+				this.accountService.saveLoginLog("login", auth);
+			} catch (UnknownHostException e) {
+				// Handle the exception (e.g., log it)
+				e.printStackTrace();
+			}
         } else {
         	result.success=false;
         	data.put("code", "NOID");
         }
-        
+
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(auth);
-        
+
         HttpSession session = request.getSession(true);
         session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
-        
+
         return result;
-    }	
+    }
     
     @GetMapping("/account/myinfo")
     public AjaxResult getUserInfo(Authentication auth){
