@@ -238,6 +238,7 @@ public class SystemService {
                             , true as is_folder
                             from menu_folder a   
                             where a."Parent_id" is null
+                             and a."FrontFolder_id" is not null
                 """;
         if (folderId != null) {
             sql += " and a.id = :folder_id";
