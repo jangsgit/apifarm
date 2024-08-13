@@ -121,7 +121,7 @@
 <!--                                    </a>-->
 <!--                                </li>-->
 <!--                                <li>-->
-<!--                                    <a  class="btn btn-edit" title="수정">-->
+<!--                                    <a  class="btn btn-edit" title="수정" >-->
 <!--                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">-->
 <!--                                        수정-->
 <!--                                    </a>-->
@@ -147,14 +147,14 @@
                 </section>
 
                 <!-- Section -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item SystemLogTab2" id="tab2" >
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>시스템 로그 상세 정보</h3>
                         </div>
                     </div>
                     <div class="table-wrap">
-                        <table class="write-table">
+                        <table class="write-table" id="selectedData">
                             <caption>시스템로그 상세정보 테이블</caption>
                             <colgroup>
                                 <col class="wauto">
@@ -164,34 +164,34 @@
                             <tbody>
                             <tr>
                                 <th>
-                                    <label for="">
+                                    <label for="type">
                                         구분
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 wp100" type="text" id="type" name="type" data-labelCd="LABEL.L0538" data-ori="환경설정 코드"  disabled readonly required  />
+                                    <input class="form-control2 wp100" type="text" id="type" name="type" data-ori="환경설정 코드"  disabled readonly required  />
                                 </td>
                                 <th>
-                                    <label for="checkdt">
+                                    <label for="source">
                                         에러위치
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 wp100" type="text" id="source" name="source" data-labelCd="LABEL.L0522" data-ori="코드명" disabled required/>
+                                    <input class="form-control2 wp100" type="text" id="source" name="source" data-ori="코드명" disabled readonly required/>
                                 </td>
 
                                 <th>
-                                    <label for="">
+                                    <label for="created">
                                         발생일
                                     </label>
                                 </th>
                                 <td>
-                                    <input class="form-control2 wp100" type="text" id="created" name="created" disabled />
+                                    <input class="form-control2 wp100" type="text" id="created" name="created" disabled readonly />
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="checkstdt">
+                                    <label for="message">
                                        설명
                                     </label>
                                 </th>
@@ -314,23 +314,87 @@
 
             theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
 
+            new FlexGridContextMenu(theGrid);
+            window.downloadFileName = '시스템로그';
+
+
+
+            // 더블 클릭 이벤트 핸들러
+            theGrid.hostElement.addEventListener('dblclick', function(e) {
+                // 더블 클릭된 셀의 행 인덱스 가져오기
+                var ht = theGrid.hitTest(e);
+                var row = ht.row;
+
+                if (row >= 0) {
+                    // 해당 행의 데이터 가져오기
+                    var item = theGrid.rows[row].dataItem;
+
+                    // 선택된 데이터를 HTML 테이블에 추가
+                    // var tableBody = document.querySelector("#selectedData tbody");
+                    // var newRow = tableBody.insertRow();
+
+                    // newRow.insertCell(0).textContent = item.type;
+                    // newRow.insertCell(1).textContent = item.source;
+                    // newRow.insertCell(2).textContent = item.created;
+                    // newRow.insertCell(3).textContent = item.message;
+
+
+                    // 선택된 데이터를 HTML 테이블의 input/textarea 태그에 넣기
+                    document.getElementById('type').value = item.type;
+                    document.getElementById('source').value = item.source;
+                    document.getElementById('created').value = item.created;
+                    document.getElementById('message').value = item.message;
+
+                    // tab2로 이동
+                    var tab2 = document.querySelector('.SystemLogTab2');
+                    if (tab2) {
+                        // 모든 tab-item을 숨기기
+                        document.querySelectorAll('.tab-item').forEach(function(tab) {
+                            tab.style.display = 'none';
+                        });
+
+                        // tab2만 보이게 하기
+                        tab2.style.display = 'block';
+
+                        // 'active' 클래스 제거 및 tab2에 추가
+                        var tabs = document.querySelectorAll('.tab-item');
+                        tabs.forEach(function(tab) {
+                            tab.classList.remove('active');
+                        });
+                        tab2.classList.add('active');
+
+                        // li 태그에 필요한 CSS 클래스 추가
+                        var tab2Link = document.querySelector('a[href="#tab2"]');
+                        var tab1Link = document.querySelector('a[href="#tab1"]');
+
+                        if (tab2Link) {
+                            console.log("css진입");
+
+                            var tab2Li = tab2Link.parentElement; // a 태그의 부모인 li 선택
+                            var tab1Li = tab1Link.parentElement;
+                            console.log(tab2Li);
+
+                            // `!important`를 사용하여 스타일 우선순위 설정
+
+                            tab1Li.classList.remove('active');
+
+                            tab2Li.classList.add('active');
+
+
+                            tab2Li.style.setProperty('background-color', '#FFFFFF', 'important'); // 배경색 설정
+                            tab2Li.style.setProperty('color', '#03428E', 'important'); // 글자색 설정
+                        } else {
+                            console.error('Tab2 link element not found');
+                        }
+                    }
+                }
+            });
+
 
             $('#btnSearch').click(searchData);
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-
-
-
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
-        let filelist = [];
-
-        function filevalueinit (param){
-            filelist = param;
-
-        }
 
         let page = null;
 
@@ -395,8 +459,27 @@
 
 
 
-        $('#srchStartDt').val(CommonUtil.getYYYYMMDD(-60));
-        $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+        // $('#srchStartDt').val(CommonUtil.getYYYYMMDD(-60));
+        // $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+        // 현재 연도를 가져옴
+        const currentYear = new Date().getFullYear();
+        // 1월 1일 날짜 문자열 생성
+        const defaultDate = `${currentYear}-01-01`;
+        // input 요소에 기본값 설정
+        document.getElementById('srchStartDt').value = defaultDate;
+
+
+        // 현재 연도를 가져옴
+        const currentYear2 = new Date().getFullYear();
+        // 1월 1일 날짜 문자열 생성
+        const defaultDate2 = `${currentYear2}-12-31`;
+        // input 요소에 기본값 설정
+        document.getElementById('srchEndDt').value = defaultDate2;
+
+
+
+
+
 
         $(document).ready(function (e) {
 

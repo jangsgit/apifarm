@@ -90,16 +90,16 @@
 
                             </div>
                         </form>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+<!--                        <div class="button-wrap">-->
+<!--                            <ul>-->
+<!--                                <li>-->
+<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
+<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
+<!--                                        엑셀다운로드-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
                     </div> <!--//section-top end -->
                     <div class="container-fluid" id="theGridContainer">
                         <p id="selectedItem"></p>
@@ -205,6 +205,9 @@
             theGrid.refresh();
 
 
+            new FlexGridContextMenu(theGrid);
+            window.downloadFileName = '로그인로그';
+
             // 검색
             $('#btnSearch').click(searchDataBind);
 
@@ -278,8 +281,25 @@
         let page = null;
 
 
-        $('#srchStartDt').val(CommonUtil.getYYYYMMDD());
-        $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+        // $('#srchStartDt').val(CommonUtil.getYYYYMMDD());
+        // $('#srchEndDt').val(CommonUtil.getYYYYMMDD());
+
+
+
+        // 현재 연도를 가져옴
+        const currentYear = new Date().getFullYear();
+        // 1월 1일 날짜 문자열 생성
+        const defaultDate = `${currentYear}-01-01`;
+        // input 요소에 기본값 설정
+        document.getElementById('srchStartDt').value = defaultDate;
+
+        // 현재 연도를 가져옴
+        const currentYear2 = new Date().getFullYear();
+        // 1월 1일 날짜 문자열 생성
+        const defaultDate2 = `${currentYear2}-12-31`;
+        // input 요소에 기본값 설정
+        document.getElementById('srchEndDt').value = defaultDate2;
+
 
 
         $(document).ready(function (e) {

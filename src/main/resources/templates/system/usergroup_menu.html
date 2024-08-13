@@ -74,11 +74,7 @@
                                         </label>
                                     </dt>
                                     <dd>
-                                        <div class="srch-box">
-                                        <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder">
-                                        </select>
-                                            <a class="btn-srch" id="btnSearch" title="검색"></a>
-                                        </div>
+                                        <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder"></select>
                                     </dd>
                                 </dl>
 
@@ -249,6 +245,9 @@
             $('#btnSave').click(saveUserGroupMenu);
 
 
+
+            new FlexGridContextMenu(theGrid);
+            window.downloadFileName = '메뉴권한';
         }
 
 
@@ -366,11 +365,12 @@
         }
 
         function saveUserGroupMenu() {
-            let _this = this;
-            let url = '/api/system/usergroupmenu/save';
-            let group_id = $('#cboUserGroup').val();
-            let data = {group_id: group_id, Q : ''};
 
+            let group_id = $('#cboUserGroup').val();
+            let folder_id = $('#cboMenuFolder').val();
+
+            let url = '/api/system/usergroupmenu/save';
+            let data = {group_id: group_id, Q : ''};
             let items = [];
 
 
@@ -421,7 +421,10 @@
         }
 
 
-
+        $('#cboUserGroup, #cboMenuFolder').change(function() {
+            // 값이 변경되었을 때 searchData 함수를 호출
+            searchData();
+        });
 
 
         $(document).ready(function (e){

@@ -1,5 +1,6 @@
 package mes.app.system;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -60,4 +61,40 @@ public class MenuLogController {
 		
 		return result;
 	}
+	@GetMapping("/read")
+	public AjaxResult getLogReadList(
+			@RequestParam(value = "date_from", required = false) String dateFrom,
+			@RequestParam(value = "date_to", required = false) String dateTo,
+			@RequestParam(value = "cboMenu", required = false) String menuCode,
+			@RequestParam(value = "cboUser", required = false) String userPk) {
+
+		// 데이터 조회
+		List<Map<String, Object>> items = this.menuLogService.getLogCount(dateFrom,dateTo,menuCode,userPk);
+
+		// AjaxResult 객체 생성
+		AjaxResult result = new AjaxResult();
+		result.data = items;
+
+		return result;
+	}
+
+	@GetMapping("/read2")
+	public AjaxResult getLogReadList2(
+			@RequestParam(value = "date_from", required = false) String dateFrom,
+			@RequestParam(value = "date_to", required = false) String dateTo,
+			@RequestParam(value = "cboMenu", required = false) String menuCode,
+			@RequestParam(value = "cboUser", required = false) String userPk) {
+
+		// 데이터 조회
+		List<Map<String, Object>> items = this.menuLogService.getLogList(dateFrom,dateTo,menuCode,userPk);
+
+		// AjaxResult 객체 생성
+		AjaxResult result = new AjaxResult();
+		result.data = items;
+
+		return result;
+	}
+
+
+
 }
