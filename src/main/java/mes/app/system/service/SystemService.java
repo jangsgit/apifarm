@@ -391,30 +391,32 @@ public class SystemService {
     }
 
     public List<Map<String, Object>> getSystemLogList(Timestamp start, Timestamp end, String type, String source) {
-        String sql = """    			
-                       select id
-                       , "Type" as type
-                       , "Source" as source
-                       ,"Message" as message
-                       , to_char("_created" ,'yyyy-mm-dd hh24:mi:ss') as created
-                       from sys_log sl
-                       where _created between :start and :end    			
-                """;
+        String sql = """
+                   select 
+                       ROW_NUMBER() OVER (ORDER BY _created DESC) as row_num,
+                       id,
+                       "Type" as type,
+                       "Source" as source,
+                       "Message" as message,
+                       to_char("_created", 'yyyy-mm-dd hh24:mi:ss') as created
+                   from sys_log sl
+                   where _created between :start and :end
+            """;
 
         if (StringUtils.hasText(type)) {
-            sql += """    				
-                    and "Type" ilike concat('%',:type,'%')
-                    """;
+            sql += """
+                and "Type" ilike concat('%',:type,'%')
+                """;
         }
 
         if (StringUtils.hasText(source)) {
             sql += """
-                    and "Source" ilike concat('%', :source, '%')		
-                    """;
+                and "Source" ilike concat('%', :source, '%')		
+                """;
         }
         sql += """
-                order by _created desc		
-                """;
+            order by _created desc		
+            """;
 
         //Map<String, Object> dicParam = new HashMap<String, Object>();
         //dicParam.put("start", start);
@@ -424,11 +426,11 @@ public class SystemService {
         //return this.sqlRunner.getRows(sql, dicParam);
 
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-
         namedParameters.addValue("start", start, java.sql.Types.TIMESTAMP);
         namedParameters.addValue("end", end, java.sql.Types.TIMESTAMP);
         namedParameters.addValue("type", type);
         namedParameters.addValue("source", source);
+
         return this.jdbcTemplate.queryForList(sql, namedParameters);
     }
 
