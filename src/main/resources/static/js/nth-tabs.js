@@ -80,8 +80,11 @@
                 var fadeIn = options.fadeIn == undefined ? settings.fadeIn : options.fadeIn;
                 var url = options.url == undefined ? "" : options.url;
                 var ismanual = options.ismanual == undefined ? 'false' : options.ismanual;
+                var isbookmark = options.isbookmark == undefined ? 'false' : options.isbookmark;
+                var objid = options.id;
 
-                tab.push('<li data-title="' + options.title + '" ' + (allowClose ? '' : 'not-allow-close') + '>');
+                // tab.push('<li data-title="' + options.title + '" ' + (allowClose ? '' : 'not-allow-close') + '>');
+                tab.push('<li data-title="' + options.title + '" data-isbookmark="' + isbookmark + '"' + (allowClose ? '' : 'not-allow-close') + '>');
                 tab.push('<a href="#' + options.id + '" data-toggle="tab" data-optionurl="' + options.url + '">');
                 tab.push('<span>' + options.title + '</span>');
                 ismanual == 'true' ? tab.push('<i class="fas fa-question-circle tab-question" data-objid="' + options.id + '" title="매뉴얼"></i>') : '';
@@ -103,6 +106,11 @@
                 active && this.setActTab(options.id);
                 location && this.locationTab(options.id);
 
+                // 탭 로드 후 북마크 이벤트 바인딩
+                this.bindBookmarkEvent(objid, isbookmark);
+
+                console.log('tab', tab);
+
                 sortable('#tabdragdrop', {
                     forcePlaceholderSize: true
                 });
@@ -118,6 +126,79 @@
                     this.addTab(tabsOptions[index]);
                 }
                 return this;
+            },
+
+            bindBookmarkEvent: function(objid, isbookmark) {
+                var iframe = document.querySelector('#' + objid + ' iframe');
+                if (iframe) {
+                    iframe.onload = function() {
+                        var bookmarkButton = iframe.contentWindow.document.querySelector('.bookmark.toggle');
+                        if (bookmarkButton) {
+                            // 북마크 초기 상태 설정
+                            if (isbookmark === 'true') {
+                                bookmarkButton.classList.add('on');
+                            } else {
+                                bookmarkButton.classList.remove('on');
+                            }
+
+                            // 북마크 클릭 이벤트 바인딩
+                            bookmarkButton.addEventListener('click', function() {
+
+                                var menuCode = objid;
+                                var isBookmarked = bookmarkButton.classList.contains('on');
+                                let csrf = document.querySelector('[name=_csrf]').value;
+
+                                // 현재 탭의 제목을 가져옴
+                                var currentTabTitle = $('#main-tabs').find('a[href="#' + objid + '"] span').text();
+                                var menuUrl = bookmarkButton.getAttribute('menuurl');  // URL도 가져오기
+
+                                // 북마크 상태 저장
+                                $.ajax({
+                                    url: '/api/system/bookmark/save',
+                                    type: 'POST',
+                                    data: {
+                                        menucode: menuCode,
+                                        isbookmark: isBookmarked ? 'true' : 'false', // 북마크 상태를 반전시켜 전송
+                                        '_csrf': csrf
+                                    },
+                                    success: function (response) {
+                                        if (response.success) {
+                                            console.log('Bookmark saved successfully.');
+                                            if (!isBookmarked) { // 북마크를 추가하는 경우
+
+                                                // 탭의 data-isbookmark 속성 업데이트
+                                                $('a[href="#' + objid + '"]').closest('li').attr('data-isbookmark', 'true');
+
+                                                // 북마크 메뉴에 항목 추가
+                                                if ($('#bookmark-menu a[data-objid="' + menuCode + '"]').length === 0) {
+                                                    $('#bookmark-menu').append('<li><a data-manual="false" data-objid="' + menuCode + '" menuurl="' + menuUrl + '">' + currentTabTitle + '</a></li>');
+                                                }
+
+                                            } else { // 북마크를 제거하는 경우
+
+                                                // 탭의 data-isbookmark 속성 업데이트
+                                                $('a[href="#' + objid + '"]').closest('li').attr('data-isbookmark', 'false');
+
+                                                // 북마크 메뉴에서 항목 제거
+                                                $('#bookmark-menu a[data-objid="' + menuCode + '"]').parent('li').remove();
+                                            }
+                                            // 메인 창에 북마크가 변경되었음을 알림
+                                            if (window.opener) {
+                                                var event = new CustomEvent('bookmarkChanged');
+                                                window.opener.dispatchEvent(event);
+                                            }
+                                        } else {
+                                            console.error('Failed to save bookmark.');
+                                        }
+                                    },
+                                    error: function () {
+                                        console.error('Error occurred while saving bookmark.');
+                                    }
+                                });
+                            });
+                        }
+                    };
+                }
             },
 
             locationTab: function (tabId) {
@@ -169,13 +250,14 @@
                 return this;
             },
 
-            openNewWindow: function (_targetObjId) {
+            openNewWindow: function (_targetObjId, isbookmark) {
                 var navTabA = nthTabs.find("[href='" + _targetObjId + "']");
                 this.openWindowTab(navTabA.data('optionurl'), {
                     width: 1280,
                     height: 720,
                     winname: 'newTabWindow-' + _targetObjId,
-                    params: { wintitle: encodeURI(navTabA.closest('li').data('title')) }
+                    params: { wintitle: encodeURI(navTabA.closest('li').data('title')),
+                              isbookmark: isbookmark }
                 });
                 return this;
             },
@@ -309,7 +391,65 @@
             onTabNewWindow: function () {
                 nthTabs.on("click", '.tab-open-current', function (e) {
                     e.preventDefault();
-                    methods.openNewWindow($(this).closest('ul').attr('targetObjId'));
+
+                    var targetObjId = $(this).closest('ul').attr('targetObjId');
+                    // 정확히 'href' 속성에 해당하는 항목을 찾고, 'li' 요소의 'data-isbookmark' 값을 읽음
+                    var isbookmark = nthTabs.find("a[href='" + targetObjId + "']").closest('li').attr('data-isbookmark') === 'true';
+                    console.log(isbookmark);
+                    // openNewWindow를 사용하여 새 창을 엶
+                    methods.openNewWindow(targetObjId, isbookmark);
+
+                    var newWindow = window.open('', 'newTabWindow-' + targetObjId);
+
+                    if (newWindow) {
+                        newWindow.onload = function () {
+                            // 새 창이 로드된 후 북마크 상태와 이벤트를 설정
+                            var bookmarkButton = newWindow.document.querySelector('.bookmark.toggle');
+                            if (bookmarkButton) {
+                                // 북마크 초기 상태 설정
+                                if (isbookmark) {
+                                    bookmarkButton.classList.add('on');
+                                } else {
+                                    bookmarkButton.classList.remove('on');
+                                }
+
+                                // 북마크 클릭 이벤트 바인딩
+                                bookmarkButton.addEventListener('click', function () {
+                                    var menuCode = targetObjId.slice(1);
+                                    var isBookmarked = bookmarkButton.classList.contains('on');
+                                    let csrf = document.querySelector('[name=_csrf]').value;
+
+                                    // 북마크 상태 저장
+                                    $.ajax({
+                                        url: '/api/system/bookmark/save',
+                                        type: 'POST',
+                                        data: {
+                                            menucode: menuCode,
+                                            isbookmark: isBookmarked ? 'true' : 'false',
+                                            '_csrf': csrf
+                                        },
+                                        success: function (response) {
+                                            if (response.success) {
+                                                console.log('Bookmark saved successfully.');
+                                                if (isBookmarked) {
+                                                    bookmarkButton.classList.remove('on');
+                                                } else {
+                                                    bookmarkButton.classList.add('on');
+                                                }
+
+                                                addMenuBookmark();
+                                            } else {
+                                                console.error('Failed to save bookmark.');
+                                            }
+                                        },
+                                        error: function () {
+                                            console.error('Error occurred while saving bookmark.');
+                                        }
+                                    });
+                                });
+                            }
+                        };
+                    }
                 });
                 return this;
             },
