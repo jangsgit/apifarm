@@ -5,14 +5,11 @@
 
 <head>
     <style>
-        #theGrid2.wj-flexgrid .wj-cell {
-            padding: 12px;
-
+        .wj-header {
+            text-align: center !important; /* 헤더를 가운데 정렬 */
         }
-
-        #theGrid2.wj-flexgrid .downloads {
-
-            padding-top: 0px;
+        .wj-cell {
+            text-align: left; /* 데이터 셀을 왼쪽 정렬 */
         }
 
     </style>
@@ -211,6 +208,10 @@
             {binding: 'description', header: '설명', align: 'left', width: "*"}
         ];
 
+        // 스타일 적용
+        var headerCells = document.querySelectorAll('.wj-header');
+        headerCells.forEach(cell => cell.style.textAlign = 'center');
+
         document.readyState === 'complete' ? init() : window.onload = init;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -263,23 +264,27 @@
 
             theGrid.selectionChanged.addHandler(function (s, e) {
                 var selectedRow = s.selection.row;
-                selectedItem = s.rows[selectedRow].dataItem;
+                var selectedItem = s.rows[selectedRow].dataItem;
 
                 console.log('Selected Item:', selectedItem); // 선택된 항목을 확인
 
                 if (selectedItem) {
-                    // 그룹 셀 클릭 시 처리
                     if (selectedItem.items) {
-                        var groupInfo = selectedItem.groupName || selectedItem.items[0].groupnm || ""; // 그룹명 가져오기
+                        // 그룹 셀 클릭 시 처리
+                        // 그룹 셀의 _name을 상위코드 입력 태그에 설정
+                        $('#parent_name').val(selectedItem._name || '');
 
-                        // '상위코드' input 필드에 groupnm 값을 반영
-                        $('#name').val(groupInfo);
-                        $('#parent_id').val(''); // 초기화
+                        // 그룹 셀에 속한 첫 번째 셀의 parent_id를 가져오기
+                        var firstChildItem = selectedItem.items[0];
+                        var parentId = firstChildItem ? firstChildItem.parent_id || '' : '';
+
+                        // 그룹 셀의 parent_id 필드에 값을 설정
+                        $('#parent_id').val(parentId);
 
                         // 다른 필드들을 비워둠
-                        $('#parent_name').val('');
                         $('#code').val('');
                         $('#description').val('');
+                        $('#name').val('');
                     } else {
                         // 일반 셀 클릭 시 처리
                         $('#id').val(selectedItem.id || '');
@@ -287,18 +292,11 @@
                         $('#code').val(selectedItem.code || '');
                         $('#name').val(selectedItem.name || '');
                         $('#description').val(selectedItem.description || '');
-
                     }
                 }
             });
 
 
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
-
-                }
-            })
 
 
             // 선택이 변경될 때, 현재 항목 업데이트
@@ -413,52 +411,6 @@
             theGrid.refresh();
         }
 
-        // function editCode() {
-        //     var selectedRow = theGrid.selection.row;
-        //     if (selectedRow === null || selectedRow < 0) {
-        //         Alert.alert('', '수정할 행을 선택해주세요');
-        //         return;
-        //     }
-        //
-        //     var selectedItem = theGrid.rows[selectedRow].dataItem;
-        //
-        //     // Update form fields with selected item data
-        //     $('#groupcd').val(selectedItem.groupcd || '');
-        //     $('#itemcd').val(selectedItem.itemcd || '');
-        //     $('#itemnm').val(selectedItem.itemnm || '');
-        //     $('#itemrm').val(selectedItem.itemrm || '');
-        // }
-
-        // function deleteCode() {
-        //     let selectedRow = theGrid.selection.row;
-        //     if (selectedRow === null || selectedRow < 0) {
-        //         Alert.alert('', '삭제할 행을 선택해주세요');
-        //         return;
-        //     }
-        //
-        //     let selectedItem = theGrid.rows[selectedRow].dataItem;
-        //     let itemId = selectedItem.itemcd; // Assuming itemcd is a unique identifier
-        //
-        //     let url = '/api/system/tbrp910/delete';
-        //     let data = { itemcd: itemId };
-        //
-        //     $.ajax({
-        //         url: url,
-        //         type: 'POST',
-        //         data: data,
-        //         success: function (result) {
-        //             if (result.success) {
-        //                 Notify.success('삭제되었습니다');
-        //                 searchDataBind(); // Refresh data
-        //             } else {
-        //                 Alert.alert('', result.message);
-        //             }
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             console.error('Error deleting data:', textStatus, errorThrown);
-        //         }
-        //     });
-        // }
 
         function deleteCode() {
             if (!selectedItem || !selectedItem.id) {
