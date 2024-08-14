@@ -100,11 +100,11 @@ function updateFileListUI() {
 }
 
 
-function updateTabLink(){
-    const spuncode = document.getElementById('spuncode').value;
+function updateTabLink(pkName){
+    const pk = document.getElementById(pkName).value;
     const inputTabLink = document.getElementById('inputTabLink');
 
-    if(spuncode){
+    if(pk){
         inputTabLink.textContent = '수정';
         inputTabLink.title = '수정'
     }else {
@@ -185,6 +185,7 @@ function initializeSelect({
                               textField = "value"     // 데이터의 표시 필드 이름
                           }) {
     $.get(url, params, function(data){
+        console.log('확인: ', data);
         let selectElement = $(`#${elementId}`);
         selectElement.empty();
         selectElement.append(`<option value="">${defaultOption}</option>`);
@@ -222,6 +223,7 @@ function getLastDayOfCurrentMonth() {
 }
 
 
+
 $(document).ready(function (e) {
     //점검결과 클릭시 텍스트 순환
     $('.checkbox-cell').click(function() {
@@ -235,6 +237,8 @@ $(document).ready(function (e) {
 
 
 })
+
+
 
 
 

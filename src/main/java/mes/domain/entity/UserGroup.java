@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,4 +41,8 @@ public class UserGroup extends AbstractAuditModel implements Serializable {
 	
 	@Column(name = "\"Description\"")
 	String description;
+
+	@Column(name = "\"gmenu\"") @NotNull
+	String gmenu;
+
 }

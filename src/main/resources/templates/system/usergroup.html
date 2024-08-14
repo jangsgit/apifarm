@@ -22,43 +22,40 @@
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
-            <ul>
-                <li>
-                    <select title="지역">
-                        <option>대구</option>
-                    </select>
-                </li>
-                <li>
-                    <select title="구">
-                        <option>성서산단</option>
-                    </select>
-                </li>
-                <li>
-                    <select title="동">
-                        <option>성서</option>
-                    </select>
-                </li>
-            </ul>
-        </div>
+
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">목록</a>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">등록</a>
+                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
                 </li>
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
-                     <!--//section-top end -->
+                    <div class="section-top" style="float: right">
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
                         <div id="theGrid" style=" height: 500px"></div>
-                    </div>
-                    <div class="btn-wrap">
                     </div>
                 </section>
                 <!-- Section -->
@@ -70,15 +67,9 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
-                                    </a>
-                                </li>
-                                <li>
-                                    <a  class="btn btn-delete" title="삭제">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                        삭제
                                     </a>
                                 </li>
                                 <li>
@@ -102,20 +93,21 @@
                             <tbody>
                             <tr>
                                 <th>
-                                    <label for="supplier">
+                                    <label for="code">
                                         코드
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="코드">
+                                    <input type="text" id="code" name="code" class="wp100" maxlength="30" placeholder="코드">
+                                    <input type="hidden" id="id" name="id" class="wp100" maxlength="30" placeholder="id">
                                 </td>
                                 <th>
-                                    <label for="supplier2">
+                                    <label for="name">
                                         그룹명
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier2" name="supplier" class="wp100" maxlength="50" placeholder="그룹명">
+                                    <input type="text" id="name" name="name" class="wp100" maxlength="50" placeholder="그룹명">
                                 </td>
 
                             </tr>
@@ -123,109 +115,27 @@
                                 <th>
                                     설명
                                 </th>
-                                <td colspan="3">
+                                <td>
                                     <input type="text" id="description" name="description" maxlength="100" class="wp100" placeholder="설명">
                                 </td>
+                                <th>
+                                    <label for="name">
+                                        기본화면
+                                    </label>
+                                </th>
+                                <td>
+                                    <select class="mg-r5" id="gmenu" name="gmenu" style="width: 100%">
+                                        <option></option>
+                                    </select>
+                                </td>
                             </tr>
-
-
-
-                            </tbody>
+                        </tbody>
                         </table>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-
-    <!-- 팝업 -->
-    <div class="modal">
-
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <table class="write-table">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">
-                                    등록일자
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="date" id="date6" name="" value="2024-06-27">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext1">
-                                    점검자
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear"><input type="text" id="popuptext1" class="wp60" placeholder="점검자"><span class="btn-clear">×</span></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">
-                                    점검장소
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear"><input type="text" id="popuptext2" class="wp100" placeholder="점검장소"><span class="btn-clear">×</span></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                첨부파일
-                            </th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
-                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
-            </div>
-
-        </div>
-
-    </div>
-
-
 
 
 
@@ -242,14 +152,24 @@
         var theGrid;
         var viewdata;
         let selectedFiles = [];
+        let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
+        let columns = [
+            { binding: 'id', header: 'id', width: '*', align: 'center', visible: false },
+            { binding: 'code', header: '코드', width: '*', align: 'center' },
+            { binding: 'name', header: '그룹명', width: '*', align: 'center' },
+            { binding: 'description', header: '설명', width: '*', align: 'center' },
+            { binding: 'gmenu', header: 'Dashboard', width: '*', align: 'center' },
+        ]
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             let data2 = [];
-            let searchusr = $('#searchusr').val();
+
 
             $.ajax({
                 url: '/api/system/usergroup/read',
@@ -259,7 +179,13 @@
                 },
                 async: false,
                 success: function(data){
-                    console.log('wijmo', data.data);
+                    let DataLength = 10 - data.data.length;
+
+                    if(data.data.length < 10){
+                        for(let i=0; i < DataLength; i++){
+                            data.data.push('empty');
+                        }
+                    }
                     data2 = data.data;
                 }
             })
@@ -269,98 +195,180 @@
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
-                columns: [
-                    { binding: 'code', header: '코드', width: '*', align: 'center' },
-                    { binding: 'name', header: '그룹명', width: '*', align: 'center' },
-                    { binding: 'description', header: '설명', width: '*', align: 'center' },
-
-                ],  //홀짝 로우 음영주기
+                isReadOnly: true,
+                columns: columns,  //홀짝 로우 음영주기
                 itemsSource: viewdata
             });
-            /*let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: () => {
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: (e, ctx) => {
+                    SelectItem = theGrid.rows.filter(r => r.isSelected);
 
                 }
-            })*/
+            })
 
             // 선택이 변경될 때, 현재 항목 업데이트
-
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
 
-        <!-- 점검자 추가 버튼 이벤트 끝-->
+        function searchData(){
 
+            let result =  AjaxUtil.getSyncData('/api/system/usergroup/read', {});
 
-        let page = null;
+            if(result.success){
+                console.log(result.data);
 
-        $(document).ready(function (e) {
+                let DataLength = 10 - result.data.length;
 
-
-            $('#btnSave').click(function (e){
-
-                console.log('selectedFiles: ', selectedFiles);
-
-                Alert.confirm('', '저장하시겠습니까?', function() {
-
-                        let fileInput = document.getElementById('fileInput1');
-                        let files = fileInput.files;
-                        let formData = new FormData();
-
-                        for (var i = 0; i < files.length; i++) {
-                            formData.append('filelist', files[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('checkitem', $('#checkitem').val());
-                        formData.append('checkplan', $('#checkplan').val());
-                        formData.append('randomuuid', randomString);
-                        formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
+                if(result.data.length < 10){
+                    for(let i=0; i < DataLength; i++){
+                        result.data.push('empty');
                     }
-                )
+                }
+                grid_binding(result.data);
+            }
+        }
+
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+            var cnt = 1;
+            for (let i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    id: inspecDto[i]["id"],
+                    code: inspecDto[i]["code"],
+                    name: inspecDto[i]["name"],
+                    description: inspecDto[i]["description"],
+                    gmenu: inspecDto[i]["gmenu"]
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+
+            for (let i = 0; i < columns.length; i++) {
+                let col = new wijmo.grid.Column(columns[i]);
+                theGrid.columns.push(col);
+            }
+            SelectItem = undefined;
+        }
+
+
+        function clearForm(){
+            ['id', 'code', 'name', 'description', 'gmenu'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            updateTabLink('id');
+        }
+
+        //수정
+        function modifyData(){
+            if(SelectItem === undefined || SelectItem.length === 0){
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }else if(SelectItem.length > 1){
+                Alert.alert('', '하나의 항목만 선택해주세요');
+                return;
+            }
+            let selectedItem = SelectItem[0];
+
+            let id = selectedItem._data.id;
+
+            Alert.confirm('', '수정하시겠습니까?', function(){
+                if(!selectedItem._data.id){
+                    Alert.alert('', '수정할 게시물이 없습니다.',);
+                    return false;
+                }
+                let jsonId = JSON.stringify(id);
+
+                $('#inputTabLink').click();
+
+                document.getElementById('code').value = selectedItem._data.code;
+                document.getElementById('name').value = selectedItem._data.name;
+                document.getElementById('id').value = selectedItem._data.id;
+                document.getElementById('description').value = selectedItem._data.description;
+                document.getElementById('gmenu').value = selectedItem._data.gmenu;
+
+                updateTabLink('id');
+
             })
 
+        }
+
+       $(document).ready(function (e) {
+
+        initializeSelect({ url: '/api/system/usergroup/defaultMenu', params: {}, elementId: 'gmenu', valueField: "menuCode", textField: "menuName" });
+
+
+
+        $('#btnSave').click(function(){
+
+            Alert.confirm('', '저장하시겠습니까?', function(){
+
+                const id = $('#id').val().trim();
+                const code = $('#code').val().trim();
+                const name = $('#name').val().trim();
+                const description = $('#description').val().trim();
+                const gmenu = $('#gmenu').val();
+
+                if(!code){
+                    Alert.alert('', '코드를 입력해주세요.');
+                    $('#code').focus();
+                    return;
+                }
+                if(!name){
+                    Alert.alert('', '그룹명을 입력해주세요.');
+                    $('#name').focus();
+                    return;
+                }
+                if(!gmenu){
+                    Alert.alert('', '기본화면 설정을 해주세요.');
+                    $('#gmenu').focus();
+                    return;
+                }
+                const data = { code: code, name: name, description: description, id: id, gmenu: gmenu };
+                const fnSuccess = function (res) {
+                    Alert.alert('', res.message);
+                    $('#listTabLink').click();
+                    searchData();
+                    clearForm();
+                };
+                AjaxUtil.postAsyncData("/api/system/usergroup/save", data, fnSuccess, function(){
+                    Alert.alert('', '서버통신실패');
+                })
+            })
+        })
+
+        //삭제
+        $('#btnDelete').click(function(){
+
+            if(SelectItem === undefined || SelectItem.length === 0){
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+
+            let delList = [];
+
+            delList = SelectItemPush(SelectItem, '_data.id');
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                let data = {
+                    'id': JSON.stringify(delList),
+                    '_csrf': csrfToken
+                }
+                let fnSuccess = function (res) {
+                    if (res.success) {
+                        Alert.alert('', '삭제되었습니다.');
+                        searchData();
+                    }
+                }
+                AjaxUtil.postAsyncData('/api/system/usergroup/delete', data, fnSuccess);
+            })
+        })
 
         });
     </script>

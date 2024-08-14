@@ -20,7 +20,8 @@ public class UserGroupService {
 			select id, "Code" as code 
             , "Name" as name 
             , "Description" as description 
-            , "Disabled" as disabled 
+            , "Disabled" as disabled
+            , "gmenu" as gmenu 
             , to_char("_created" ,'yyyy-mm-dd hh24:mi:ss') as created
             from user_group ug 
             where 1 = 1

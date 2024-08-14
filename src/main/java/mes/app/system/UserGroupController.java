@@ -5,6 +5,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mes.app.UtilClass;
+import mes.domain.entity.MenuItem;
+import mes.domain.entity.UserCode;
+import mes.domain.repository.MenuItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -31,8 +35,11 @@ public class UserGroupController{
 	
 	@Autowired 
 	private UserGroupService userGroupService;
-	
-	
+
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
+
 	@GetMapping("/read")
 	public AjaxResult getUserGroupList(HttpServletRequest request,
 			Authentication auth) {
@@ -85,6 +92,7 @@ public class UserGroupController{
 			@RequestParam("code") String code,
 			@RequestParam("name") String name,
 			@RequestParam ("description") String description,
+			@RequestParam("gmenu") String gmenu,
 			HttpServletRequest request,
 			Authentication auth) {
 			User user = (User)auth.getPrincipal();
@@ -101,22 +109,38 @@ public class UserGroupController{
 			ug.setCode(code);
 			ug.setDescription(description);
 			ug.set_audit(user);
+			ug.setGmenu(gmenu);
 			
 			ug = this.userGroupRepository.save(ug);
 			
 			AjaxResult result = new AjaxResult();
 			result.data = ug;
-			
+
+			result.success = true;
+			result.message = "저장완료하였습니다.";
 			return result;
 			
 	}
 	
 	@PostMapping("/delete")
-	public AjaxResult deleteUserGroup(@RequestParam("id") Integer id) {
-		this.userGroupRepository.deleteById(id);
+	public AjaxResult deleteUserGroup(@RequestParam("id") String id) {
+
+		List<Integer> paramList = new UtilClass().parseUserIdsToInt(id);
+
+		for(Integer param : paramList){
+			this.userGroupRepository.deleteById(param);
+		}
+
 		AjaxResult result = new AjaxResult();
-		
+		result.success = true;
+		result.message = "삭제하였습니다.";
 		return result;
+	}
+
+	@GetMapping("/defaultMenu")
+	public List<MenuItem> getMenuItem(){
+		List<MenuItem> defaultList = menuItemRepository.findByMenuFolderId(1);
+		return defaultList;
 	}
 	
 	
