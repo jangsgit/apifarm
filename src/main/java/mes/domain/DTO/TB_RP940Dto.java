@@ -14,6 +14,8 @@ import java.time.OffsetDateTime;
 public class TB_RP940Dto {
 
     private String agency; //소속사
+    private String agencynm;
+
     private String agencyDepartment; //소속부서
     private String level; //직급
     private String name; //성명
@@ -27,6 +29,7 @@ public class TB_RP940Dto {
 
     private String reason; //신청사유
     private String appflag;
+
 
     private OffsetDateTime appdatem;
 

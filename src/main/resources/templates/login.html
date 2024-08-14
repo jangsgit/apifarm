@@ -16,9 +16,137 @@
 
 
     <title>SMART FOMS</title>
+    <style>
+        /* 공통 Modal 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* 공통 Modal 컨텐츠 스타일 */
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            margin: 10% auto;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            top: 15%;
+        }
+
+        /* Form 스타일 */
+        #idFindForm,
+        #pwFindForm {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 라벨과 인풋박스를 한 줄에 배치 */
+        #idFindForm .form-group,
+        #pwFindForm .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #idFindForm .form-group label,
+        #pwFindForm .form-group label {
+            width: 100px; /* 라벨의 너비를 고정 */
+            margin-right: 10px;
+        }
+
+        #idFindForm .form-group input,
+        #pwFindForm .form-group input {
+            flex: 1; /* 입력 박스가 가능한 한 넓게 */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #idFindForm button,
+        #pwFindForm button {
+            padding: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px; /* 버튼을 위의 입력 필드와 떨어지게 */
+        }
+
+        #idFindForm button:hover,
+        #pwFindForm button:hover {
+            background-color: #45a049;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        #ErrMsg.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            z-index: 9998; /* 로딩 바 바로 아래에 위치 */
+            display: none;
+        }
+        #loading {
+            position: fixed;
+            top: 44%;
+            left: 48%;
+            display: none;
+            width: 55px;
+            height: 55px;
+            border: 7px solid gray;
+            border-radius: 50%;
+            border-top-color: dodgerblue;
+            animation: spin 1s ease-in-out infinite;
+            -webkit-animation: spin 1s ease-in-out infinite;
+            z-index: 9999;
+        }
+
+        /* 회전 애니메이션 정의 */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 <body>
-
+<div id="loadingOverlay"></div>
+<div id="loading"></div>
 <div class="page-wrapper page-login"><!-- ★페이지 Class명 -->
     <div class="dashboard-login-wrap">
         <div class="login-wrap">
@@ -48,10 +176,6 @@
                         <dd>
                             <input type="password" id="loginPwd" name="password" placeholder="비밀번호를 입력해주세요" required title="패스워드 입력" autocomplete="off">
                         </dd>
-                        <!--<dd class="hint">
-                            <img src="/images/icon/ico-info.svg" alt="힌트메세지">
-                            힌트메세지
-                        </dd>-->
                     </dl>
                     <div class="check-save">
                         <input type="checkbox" id="login_chk">
@@ -63,10 +187,10 @@
                             <a class="btn btn-popup-open" data-popup="popup1" title="사용자신청" onclick="RegisterUser()">사용자신청</a>
                         </li>
                         <li>
-                            <a href="#" class="btn" title="아이디 찾기">아이디 찾기</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup2" title="아이디 찾기" onclick="openModal()">아이디 찾기</a>
                         </li>
                         <li>
-                            <a href="#" class="btn" title="비밀번호 찾기">비밀번호 찾기</a>
+                            <a href="#" class="btn" title="비밀번호 찾기" onclick="openPwModal()">비밀번호 찾기</a>
                         </li>
                     </ul>
                 </div>
@@ -106,11 +230,6 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <!--<select class="mg-r5" id="agency" name="agency" style="width: 100%">
-                                        <option value='CO_ID'>에너지발전소관련업체</option>
-                                        <option value='C001'>블룸에너지</option>
-                                        <option value='C002'>ESG Corp</option>
-                                    </select>-->
                                     <select class="mg-r5" id="agency" name="agency" style="width: 100%">
                                         <option></option>
                                     </select>
@@ -245,37 +364,6 @@
                                 </div>
                             </td>
                         </tr>
-                        <!--<tr>
-                            <th>
-                                권한그룹
-                            </th>
-                            <td colspan="3">
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">대구</label>
-                                </div>
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">성서</label>
-                                </div>
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">대관령</label>
-                                </div>
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">창원</label>
-                                </div>
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">대덕</label>
-                                </div>
-                                <div class="check-box">
-                                    <input type="checkbox" id="">
-                                    <label for="">울산</label>
-                                </div>
-                            </td>
-                        </tr>-->
                         <tr>
                             <th>
                                 <label for="">
@@ -291,6 +379,7 @@
                         </tbody>
                     </table>
                 </div>
+
                 </form>
             </div>
             <div class="popup-button">
@@ -299,6 +388,76 @@
             </div>
         </div>
     </div> <!-- //dashboard-layout-popup end -->
+
+    <!--#############################################################################################  아이디-->
+    <div id="idFindModal" class="modal">
+        <div class="modal-content">
+            <h2 style="text-align: center;">아이디 찾기</h2>
+            <form id="idFindForm">
+                <div style="margin-top: 10px;">
+                    <label style="width: 15%;">이름: </label>
+                    <input type="text" id="usernm" name="usernm" required="" maxlength="20" autocomplete="off" style="width: 80%;">
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="width: 15%;">이메일: </label>
+                    <input type="email" id="mail" name="mail" required="" maxlength="30" autocomplete="off" style="width: 80%;">
+                </div>
+                <div id="ErrMsg" style="margin-top: 10px;text-align: center; display: none; color: red;"><span>해당 사용자는 존재하지 않습니다.</span></div>
+
+                <div style="margin: 0 auto;">
+                    <button type="button" class="close" onclick="closeModal()" style="width: 100px;margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
+                    <button type="button" style="width: 100px; border: 1px solid white; border-radius: 3px; color: white; background: #03428E" id="btnSearch">아이디 찾기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--#############################################################################################  비밀번호-->
+    <div id="pwFindModal" class="modal">
+        <div class="modal-content">
+            <h2 style="text-align: center;">비밀번호 변경</h2>
+            <form id="pwFindForm">
+
+                <div style="margin-top: 10px;">
+                    <label style="width: 15%;">아이디: </label>
+                    <input type="text" id="userid" name="userid" required="" maxlength="20" autocomplete="off" style="width: 80%;">
+
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <label style="width: 15%;">이메일: </label>
+                    <input type="email" id="mailAddres" name="mailAddres" required="" maxlength="20" autocomplete="off" style="width: 62%;">
+                    <button type="button" style="margin: 0px;width: 17%;background: white;color: #03428E;border: 1px solid #03428E;" id="BtnAuthentication">코드발급</button>
+                </div>
+
+                <div style="margin-top: 10px;" id="codeInputDiv">
+                    <label style="width: 15%;">인증코드: </label>
+                    <input type="text" id="AuthenticationCode" name="AuthenticationCode" required="" maxlength="38" autocomplete="off" style="width: 70%;border: none;border-bottom: 1px solid;
+                       border-radius: 0px;">
+                    <span id="timer" style="width: 10%; text-align: right; color: red; display: inline-block;"></span>
+                </div>
+
+                <div style="margin-top: 10px;" id="PasswordInputDiv">
+                    <label style="width: 15%;">변경 비밀번호: </label>
+                    <input type="password" id="PasswordChange" name="PasswordChange" autocomplete="off" style="width: 70%;border: none;border-bottom: 1px solid;
+                       border-radius: 0px;">
+                </div>
+
+                <div style="margin-top: 10px;" id="PasswordChkInputDiv">
+                    <label style="width: 15%;">비밀번호 확인: </label>
+                    <input type="password" id="PasswordChangeChk" name="PasswordChangeChk" autocomplete="off" style="width: 70%;border: none;border-bottom: 1px solid;
+                       border-radius: 0px;">
+                </div>
+
+
+
+                <div style="margin: 0 auto;">
+                    <button type="button" class="close" onclick="closePwModal()" style="width: 100px; margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
+                    <button type="button" style="width: 100px; border: 1px solid white; border-radius: 3px; color: white; background: #03428E" id="btnPwSearch">비밀번호 변경</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div> <!-- //page-wrapper end-->
 
 
@@ -319,6 +478,44 @@
 
 
 <script type="text/javascript">
+
+    // 로딩 바를 보여주는 함수
+    function showLoadingBar() {
+        let loadingBar = document.getElementById("loading");
+        let loadingOverlay = document.getElementById("loadingOverlay");
+        loadingBar.style.display = "inline-block";
+        loadingOverlay.style.display = "block"; // 오버레이 표시
+    }
+
+    // 로딩 바를 감추는 함수
+    function hideLoadingBar() {
+        let loadingBar = document.getElementById("loading");
+        let loadingOverlay = document.getElementById("loadingOverlay");
+        loadingBar.style.display = "none";
+        loadingOverlay.style.display = "none"; // 오버레이 숨기기
+    }
+
+
+    function openPwModal() {
+        document.getElementById('pwFindModal').style.display = 'block';
+    }
+
+    function closePwModal() {
+        document.getElementById('pwFindModal').style.display = 'none';
+    }
+
+
+    //##############################################  아이디 찾기 모달
+    function openModal() {
+        document.getElementById('idFindModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('idFindModal').style.display = 'none';
+    }
+
+    document.querySelector('.close').onclick = closeModal;
+    //##############################################  아이디 찾기 모달 끝
 
 
 
@@ -381,20 +578,13 @@
 
         // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
         parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-
-
-    }
+   }
 
     function deleteSelectField(inputField) {
         // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
         var tdToDelete = inputField.parentElement;
         tdToDelete.parentElement.removeChild(tdToDelete);
     }
-
-
-
-
-
 
 
     function updateNextSelect(param) {
@@ -507,6 +697,7 @@
         return true;
     }
 
+
     function RegisterUser(){
         let popup = document.getElementById('popup1');
         let wrapper = document.getElementById('wrapper1');
@@ -585,30 +776,48 @@
 
 
 
+    function emailValidate(emailVal){
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        return emailPattern.test(emailVal);
+    }
+
     $(document).ready(function () {
 
+        function startTimer(duration){
+            let timer = duration, minutes, seconds;
+            let timerElement = document.getElementById('timer');
+
+            const interval =  setInterval(function (){
+                minutes = Math.floor(timer / 60);
+                seconds = Math.floor(timer % 60);
+
+                // 분과 초가 10보다 작으면 앞에 0을 붙임
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                // 타이머 요소에 현재 시간 표시
+                timerElement.textContent = minutes + ":" + seconds;
+
+                // 타이머를 1초 줄임
+                timer--;
+
+                // 타이머가 0보다 작으면 종료
+                if (timer < 0) {
+                    clearInterval(interval);
+                    timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
+                }
+            }, 1000);
+        }
 
 
+        const selectConfigurations = [
+            {  url: '/user-codes/parent',params: { parentId: 154 },elementId: 'agency'},
+            {  url: '/user-codes/parent',params: { parentId: 110 },elementId: 'firstSelect'},
+            {  url: '/user-auth/type',params: {},elementId: 'authType',valueField: "code",textField: 'name'}
+        ];
 
-        initializeSelect({
-            url: '/user-codes/parent',
-            params: { parentId: 154 },
-            elementId: 'agency'
-        })
-
-        initializeSelect({
-            url: '/user-codes/parent',
-            params: { parentId: 110 },
-            elementId: 'firstSelect'
-        })
-
-        initializeSelect({
-            url: '/user-auth/type',
-            params: {},
-            elementId: 'authType',
-            valueField: "code",
-            textField: 'name'
-        })
+        selectConfigurations.forEach(config => initializeSelect(config));
 
 
         let AuthCode = false;
@@ -633,10 +842,7 @@
                 return;
             }
 
-            let data = {
-                _CsrfValue,
-                userid
-            }
+            let data = { _CsrfValue, userid }
 
             let fnSuccess = function (res) {
                 if(res.success){
@@ -653,7 +859,151 @@
 
         })
 
+        //아이디 찾기
+        $('#btnSearch').click(function (e){
 
+            const errMsgDiv = document.getElementById('ErrMsg');
+            const errMsgSpan = errMsgDiv.querySelector('span');
+
+            errMsgDiv.style.display = 'none';
+            errMsgDiv.style.color = 'red';
+            errMsgDiv.classList.remove('show');
+            errMsgSpan.textContent = '해당 사용자는 존재하지 않습니다.';
+
+            let usernm = document.getElementById('usernm').value;
+            let mail = document.getElementById('mail').value;
+
+            if(usernm.trim().length === 0 || mail.trim().length === 0){
+                Alert.alert('', '빈 값은 불가능합니다.');
+                return false;
+            }
+
+
+            if(!emailValidate(mail.trim()))
+            { Alert.alert('', '유효한 이메일 형식을 입력하세요.'); return false; }
+
+            let data = { usernm, mail, _CsrfValue }
+
+            let fnSuccess = function (res){
+
+
+
+                if(res.success){
+
+
+                    if (Array.isArray(res.data)) {
+                        errMsgSpan.textContent = res.data.join(', ') + '입니다.'; // 각 배열 요소를 쉼표로 구분하여 표시
+                    } else {
+                        errMsgSpan.textContent = res.data + '입니다.'; // 배열이 아니면 그대로 표시
+                    }
+                    errMsgDiv.style.display = 'block';
+                    errMsgDiv.style.color = 'black';
+                    errMsgDiv.classList.add('show');
+
+
+                    console.log(res)
+                } else if (!res.success){
+
+
+
+                    errMsgDiv.style.display = 'block';
+                    errMsgDiv.classList.add('show');
+
+
+                    errMsgDiv.addEventListener('animationend', function() {
+                        errMsgDiv.classList.remove('show');
+                    });
+
+                }
+            };
+            AjaxUtil.postAsyncData("/user-auth/searchAccount", data, fnSuccess, function(){ Alert.alert('', '서버통신 실패') });
+        })
+
+        //비밀번호  찾기 > 이메일 인증
+        $('#BtnAuthentication').click(function (e){
+            let user = document.getElementById('userid');
+            let usernm = user.value;
+
+            let email = document.getElementById('mailAddres');
+            let mail   = email.value;
+
+            if(usernm.trim().length === 0){ Alert.alert('', '아이디를 입력해주세요.'); user.focus(); return;}
+            else if(mail.trim().length === 0){ Alert.alert('', '이메일을 입력해주세요.'); email.focus();  return;}
+
+            if(!emailValidate(mail.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return false; }
+            let data = { usernm, mail, _CsrfValue }
+            showLoadingBar();
+
+            let fnSuccess = function (res){
+                if(res.success){
+                    hideLoadingBar();
+                    Alert.alert('', res.message, function(e){
+
+                        document.getElementById('codeInputDiv').style.display = 'block';
+                        startTimer(180);
+                    });
+                }
+                else if(!res.success){
+                    hideLoadingBar();
+                    Alert.alert('', res.message, function(){});
+
+                }
+            };
+            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoadingBar(); Alert.alert('', '서버통신 실패');});
+        })
+
+        //비밀번호 재설정
+        $('#btnPwSearch').click(function(){
+
+            const authCode = $('#AuthenticationCode').val().trim();
+            const email = $('#mailAddres').val().trim();
+            const password = $('#PasswordChange').val().trim();
+            const passwordChk = $('#PasswordChangeChk').val().trim();
+            const userid = $('#userid').val().trim();
+
+            if (!authCode) {
+                Alert.alert('', '인증코드를 입력해주세요.');
+                $('#AuthenticationCode').focus();
+                return;
+            }
+            if (!email) {
+                Alert.alert('', '이메일을 입력해주세요.');
+                $('#mailAddres').focus();
+                return;
+            }
+            if (!password) {
+                Alert.alert('', '변경할 비밀번호를 입력해주세요.');
+                $('#PasswordChange').focus();
+                return;
+            }
+            if (!passwordChk) {
+                Alert.alert('', '비밀번호 확인을 입력해주세요.');
+                $('#PasswordChangeChk').focus();
+                return;
+            }
+            if (!userid) {
+                Alert.alert('', '아이디를 입력해주세요.');
+                $('#userid').focus();
+                return;
+            }
+            if (password !== passwordChk) {
+                Alert.alert('', '변경 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+                return;
+            }
+            if(!emailValidate(email.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return; }
+
+            const data = { code: authCode, _CsrfValue, mail: email, password: password, userid : userid };
+
+            const fnSuccess = function (res) {
+                Alert.alert('', res.message, function(){ location.reload(); });
+            };
+
+            AjaxUtil.postAsyncData("/user-auth/verifyCode", data, fnSuccess, function () {
+                hideLoadingBar();
+                Alert.alert('', '서버 통신 실패');
+            });
+
+        })
 
 
         //권한신청 버튼 클릭
@@ -681,13 +1031,9 @@
             const emailInput = document.getElementById('email');
             const emailValue = emailInput.value.trim();
 
-            // 이메일 형식의 정규 표현식
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailValidate(emailValue.trim()))
+            { Alert.alert('', '유효한 이메일 형식을 입력하세요.'); return false; }
 
-            if (!emailPattern.test(emailValue)) {
-                Alert.alert('', '유효한 이메일 주소를 입력하세요.');
-                return;
-            }
 
             let password = document.getElementById('password').value;
             let password2 = document.getElementById('passwordchk').value;
@@ -715,7 +1061,7 @@
             let firstText  = extractSelectTexts('spworkcd');
             let secondText = extractSelectTexts('spcompcd');
             let thirdText  = extractSelectTexts('spplancd');
-
+            let agencynm = extractSelectTexts('agency');
 
             console.log('spplancdString', spplancdString)
 
@@ -729,6 +1075,7 @@
             data.secondText = secondText;
             data.thirdText = thirdText;
             data.authTypeText = authTypeText;
+            data.agencynm = agencynm;
 
             console.log(data);
 

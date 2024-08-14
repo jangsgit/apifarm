@@ -58,7 +58,7 @@ public class MenuSetupController {
 		return result;
 	}
 	
-	// 메뉴항목) 리스트 조회
+	// 메뉴항목) 리스트 조회 //TODO: 이거가져와라, 사용자그룹    menu_item 참조 MenuCode 기본키이니깐 사용자그룹테이블에 추가
 	@GetMapping("/submenu_list")
 	public AjaxResult getMenuList(
 			@RequestParam(value = "folder_id") Integer folder_id) {

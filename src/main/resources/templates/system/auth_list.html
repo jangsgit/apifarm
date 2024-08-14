@@ -319,17 +319,20 @@
         let csrfToken = $("[name=_csrf]").val();
 
         let columns = [
-            { binding: 'userid', header: '아아디', align: 'center', width: 200 },
-            { binding: 'agencycd', header: '회사', align: 'center', width: 230 },
+            { binding: 'askdatem', header: '신청일자', align: 'center', width:"*"},
+            { binding: 'agencynm', header: '소속사', align: 'center', width:"*"},
             { binding: 'divinm', header: '부서', align: 'center', width: 200 },
             { binding: 'ranknm', header: '직급', align: 'center', width: 140 },
             { binding: 'usernm', header: '성명', align: 'center', width: 200 },
-            { binding: 'askdatem', header: '신청일자', align: 'center', width:"*"},
+            { binding: 'authgrpcd', header: '권한그룹', align: 'center', width: "*", visible: false },
+            { binding: 'userid', header: '아아디', align: 'center', width: 200 },
+            { binding: 'agencycd', header: '회사', align: 'center', width: 230 },
+
+
             { binding: 'appdatem', header: '승인일자', align: 'center', width: "*" },
             { binding: 'askreason', header: '신청사유', align: 'center', width: "*", visible: false },
             { binding: 'userhp', header: '핸드폰', align: 'center', width: "*", visible: false },
             { binding: 'usermail', header: '이메일', align: 'center', width: "*", visible: false },
-            { binding: 'authgrpcd', header: '권한그룹', align: 'center', width: "*", visible: false },
             { binding: 'appflag', header: '승인여부', align: 'center', width: "*", visible: false },
             { binding: 'spworknm', header: '관리대상발전시설명', align: 'center', width: "*", visible: false },
             { binding: 'spcompnm', header: '관리대상발전산단명', align: 'center', width: "*", visible: false },
@@ -340,7 +343,7 @@
         function submitTextarea(event){
             let key = event.key || event.keyCode;
 
-            if(key === 'Enter' || key == 13){
+            if(key === 'Enter' || key === 13){
                 searchData();
             }
         }
@@ -389,9 +392,10 @@
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
+                isReadOnly: true,
                 columns: columns,
                 allowSorting: 'MultiColumn',
-                selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
+                selectionMode: 'ListBox',
                 itemsSource: viewdata
             });
 
@@ -456,6 +460,9 @@
                     spworknm : inspecDto[i]["spworknm"],
                     spcompnm : inspecDto[i]["spcompnm"],
                     spplannm : inspecDto[i]["spplannm"],
+                    agencynm : inspecDto[i]["agencynm"],
+
+
 
 
                 });

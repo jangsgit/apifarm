@@ -3,6 +3,8 @@ package mes.app.account;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 
+import mes.app.MailService;
 import mes.app.account.service.TB_RP940_Service;
 import mes.app.account.service.TB_RP945_Service;
 import mes.domain.DTO.TB_RP940Dto;
@@ -73,11 +76,19 @@ public class AccountController {
 	@Autowired
 	TB_RP945Repository tb_rp945Repository;
 
+	@Autowired
+	MailService emailService;
+
 
 	@Resource(name="authenticationManager")
     private AuthenticationManager authManager;
     @Autowired
     private UserGroupRepository userGroupRepository;
+
+
+
+	private final ConcurrentHashMap<String, String> tokenStore = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, Long> tokenExpiry = new ConcurrentHashMap<>();
 
 	@GetMapping("/login")
     public ModelAndView loginPage(
@@ -277,7 +288,9 @@ public class AccountController {
 			@RequestParam(value = "firstText") String firstText,
 			@RequestParam(value = "secondText") String secondText,
 			@RequestParam(value = "thirdText") String thirdText,
-			@RequestParam(value = "authTypeText") String authTypeText
+			@RequestParam(value = "authTypeText") String authTypeText,
+			@RequestParam(value = "agencynm") String agencynm
+
 			){
 
 			AjaxResult result = new AjaxResult();
@@ -295,6 +308,7 @@ public class AccountController {
 
 					TB_RP940Dto dto = TB_RP940Dto.builder()
 						.agency(agency)
+							.agencynm(agencynm)
 						.agencyDepartment(agencyDepartment)
 						.authType(authType)
 							.authgrpnm(authTypeText)
@@ -352,6 +366,88 @@ public class AccountController {
 			}
 
 	}
+
+	@PostMapping("/user-auth/searchAccount")
+	public AjaxResult IdSearch(@RequestParam("usernm") final String usernm,
+							   @RequestParam("mail") final String mail){
+
+		AjaxResult result = new AjaxResult();
+
+		List<String> user = userRepository.findByFirstNameAndEmailNative(usernm, mail);
+
+		if(!user.isEmpty()){
+			result.success = true;
+			result.data = user;
+        }else {
+			result.success = false;
+			result.message = "해당 사용자가 존재하지 않습니다.";
+        }
+        return result;
+    }
+
+	@PostMapping("/user-auth/AuthenticationEmail")
+	public AjaxResult PwSearch(@RequestParam("usernm") final String usernm,
+							   @RequestParam("mail") final String mail){
+
+		AjaxResult result = new AjaxResult();
+
+		boolean flag = userRepository.existsByUsernameAndEmail(usernm, mail);
+
+		if(flag) {
+			String uuid = UUID.randomUUID().toString();
+			emailService.sendVerificationEmail(mail, usernm, uuid);
+
+			tokenStore.put(mail, uuid);
+			tokenExpiry.put(mail, System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3));
+
+			result.success = true;
+			result.message = "인증 메일이 발송되었습니다.";
+		}else {
+			result.success = false;
+			result.message = "해당 사용자가 존재하지 않습니다.";
+		}
+
+		return result;
+	}
+
+	@PostMapping("/user-auth/verifyCode")
+	public AjaxResult verifyCode(@RequestParam("code") final String code,
+								 @RequestParam("mail") final String mail,
+								 @RequestParam("password") final String password,
+								 @RequestParam("userid") final String userid
+								 ){
+
+		AjaxResult result = new AjaxResult();
+
+
+		String storedToken = tokenStore.get(mail);
+
+		if(storedToken != null && storedToken.equals(code)){
+			long expiryTime = tokenExpiry.getOrDefault(mail, 0L);
+			if(System.currentTimeMillis() > expiryTime){
+				result.success = false;
+				result.message = "인증 코드가 만료되었습니다.";
+				tokenStore.remove(mail);
+				tokenExpiry.remove(mail);
+			} else {
+
+				String pw = Pbkdf2Sha256.encode(password);
+
+
+				userRepository.PasswordChange(pw, userid);
+
+
+				result.success = true;
+				result.message = "비밀번호가 변경되었습니다.";
+			}
+		}else {
+			result.success = false;
+			result.message = "인증 코드가 유효하지 않습니다.";
+		}
+
+		return result;
+	}
+
 
 	@GetMapping("/user-codes/parent")
 	public List<UserCode> getUserCodeByParentId(@RequestParam Integer parentId){

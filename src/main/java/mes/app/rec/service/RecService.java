@@ -74,7 +74,6 @@ public class RecService {
 				+ "&numOfRows=1"
 				+ "&dataType=json"
 				+ "&bzDd=" + formattedDate);
-		System.out.println("조회 시도된 uri : " + uri);
 		return restTemplate.getForObject(uri, String.class);
 	}
 	

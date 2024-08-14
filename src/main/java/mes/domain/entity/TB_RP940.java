@@ -75,11 +75,15 @@ public class TB_RP940{
     @Column(name = "\"appreason\"")
     private String appreason;
 
+    @Column(name = "\"agencynm\"")
+    private String agencynm;
+
 
     public static TB_RP940 toSaveEntity(TB_RP940Dto DTO){
         TB_RP940 tbRp940 = new TB_RP940();
         tbRp940.setUserid(DTO.getId());  //id
         tbRp940.setAgencycd(DTO.getAgency());
+        tbRp940.setAgencynm(DTO.getAgencynm());
         tbRp940.setDivinm(DTO.getAgencyDepartment()); //소속부서
         tbRp940.setRanknm(DTO.getLevel());
         tbRp940.setUsernm(DTO.getName());
