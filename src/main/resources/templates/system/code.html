@@ -40,26 +40,26 @@
 
         <!-- Select -->
         <div class="search-wrap">
-            <ul>
-                <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
-                    </select>
-                </li>
-                <li>
-                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
-                    </select>
-                </li>
-                <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">대구물류센터</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
-                    </select>
-                </li>
-            </ul>
+<!--            <ul>-->
+<!--                <li>-->
+<!--                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">-->
+<!--                        <option value="001">대구</option>-->
+<!--                        <input type="hidden" id="spworknm" name="spworknm">-->
+<!--                    </select>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">-->
+<!--                        <option value="001">성서산단</option>-->
+<!--                        <input type="hidden" id="spcompnm" name="spcompnm">-->
+<!--                    </select>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">-->
+<!--                        <option value="001">대구물류센터</option>-->
+<!--                        <input type="hidden" id="spplannm" name="spplannm">-->
+<!--                    </select>-->
+<!--                </li>-->
+<!--            </ul>-->
         </div>
 
         <div class="tab-wrap">
@@ -95,11 +95,18 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드" id="NewbtnSave">
+                                    <a class="btn btn-excell" title="신규등록">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="btn" title="하위추가" id="btnAddChild">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        하위추가
+                                    </a>
+                                </li>
+
                                 <li>
                                     <a class="btn btn-edit" id="btnSave" title="저장">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
@@ -112,12 +119,12 @@
                                         삭제
                                     </a>
                                 </li>
-                                <li>
-                                    <a class="btn btn-edit" title="수정" id="btnEdit">
-                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                        수정
-                                    </a>
-                                </li>
+<!--                                <li>-->
+<!--                                    <a class="btn btn-edit" title="수정" id="btnEdit">-->
+<!--                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">-->
+<!--                                        수정-->
+<!--                                    </a>-->
+<!--                                </li>-->
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
@@ -131,9 +138,10 @@
                         <div class="col wp40">
                             <div class="section">
                                 <form id="codeForm">
-                                    <!--                                    <input type="hidden" id="parent_id" name="parent_id" value=""/>-->
+                                    <input type="hidden" id="parent_id" name="parent_id" value=""/>
+                                    <input class="form-control2" type="text" id="id" name="id" hidden />
                                     <div class="table-wrap">
-                                        <table class="view-table">
+                                        <table class="view-table" id="selectedData">
                                             <caption>보고분기 상세 테이블</caption>
                                             <colgroup>
                                                 <col class="wp20">
@@ -141,27 +149,27 @@
                                             </colgroup>
                                             <tbody>
                                             <tr>
-                                                <th><label for="groupcd">상위코드</label></th>
+                                                <th><label for="parent_name">상위코드</label></th>
                                                 <td>
-                                                    <input type="text" id="groupcd" name="groupcd" class="wp100">
+                                                    <input type="text" id="parent_name" name="parent_name" class="wp100"  >
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="itemnm">코드명</label></th>
+                                                <th><label for="code">코드</label></th>
                                                 <td>
-                                                    <input type="text" id="itemnm" name="itemnm" class="wp100">
+                                                    <input type="text" id="code" name="code" class="wp100" required>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="itemcd">코드</label></th>
+                                                <th><label for="name">코드명</label></th>
                                                 <td>
-                                                    <input type="text" id="itemcd" name="itemcd" class="wp100" required>
+                                                    <input type="text" id="name" name="name" class="wp100">
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th><label for="itemrm">설명</label></th>
+                                                <th><label for="description">설명</label></th>
                                                 <td>
-                                                    <input type="text" id="itemrm" name="itemrm" class="wp100">
+                                                    <input type="text" id="description" name="description" class="wp100">
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -191,11 +199,16 @@
         var viewdata;
         var theGrid2;
         let csrfToken = $("[name=_csrf]").val();
+        var selectedItem; // 전역 변수로 선택한 항목을 저장
+        var menuGroupName;
 
+
+        // wijmo grid에서 hidden 사용할려면 visible 사용해야함
         var columns = [
-            {binding: 'itemnm', header: '코드명', align: 'center', width: 200},
-            {binding: 'itemcd', header: '코드', align: 'center', width: 200},
-            {binding: 'itemrm', header: '설명', align: 'center', width: "*"}
+            {binding: 'id', header: '코드번호', align: 'center', visible:false},
+            {binding: 'name', header: '코드명', align: 'center', width: 200},
+            {binding: 'code', header: '코드', align: 'center', width: 200},
+            {binding: 'description', header: '설명', align: 'left', width: "*"}
         ];
 
         document.readyState === 'complete' ? init() : window.onload = init;
@@ -208,7 +221,7 @@
             let txtCode = $('#txtCode').val();
 
             $.ajax({
-                url: '/api/system/tbrp910/read',
+                url: '/api/system/code/read',
                 type: 'GET',
                 data: {
                     'txtCode': txtCode,
@@ -220,7 +233,7 @@
                 }
             })
 
-            let menuGroupName = new wijmo.collections.PropertyGroupDescription('itemnm', function (item, proName) {
+           menuGroupName = new wijmo.collections.PropertyGroupDescription('name', function (item, proName) {
                 return item.groupnm;
             });
 
@@ -248,12 +261,37 @@
                 itemsSource: viewdata
             });
 
-            // 행 선택 이벤트 핸들러 (Optional)
             theGrid.selectionChanged.addHandler(function (s, e) {
                 var selectedRow = s.selection.row;
-                var selectedItem = s.rows[selectedRow].dataItem;
-                console.log('Selected row ID:', selectedItem.id);
+                selectedItem = s.rows[selectedRow].dataItem;
+
+                console.log('Selected Item:', selectedItem); // 선택된 항목을 확인
+
+                if (selectedItem) {
+                    // 그룹 셀 클릭 시 처리
+                    if (selectedItem.items) {
+                        var groupInfo = selectedItem.groupName || selectedItem.items[0].groupnm || ""; // 그룹명 가져오기
+
+                        // '상위코드' input 필드에 groupnm 값을 반영
+                        $('#name').val(groupInfo);
+                        $('#parent_id').val(''); // 초기화
+
+                        // 다른 필드들을 비워둠
+                        $('#parent_name').val('');
+                        $('#code').val('');
+                        $('#description').val('');
+                    } else {
+                        // 일반 셀 클릭 시 처리
+                        $('#id').val(selectedItem.id || '');
+                        $('#parent_name').val(selectedItem.groupnm || '');
+                        $('#code').val(selectedItem.code || '');
+                        $('#name').val(selectedItem.name || '');
+                        $('#description').val(selectedItem.description || '');
+
+                    }
+                }
             });
+
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
@@ -267,51 +305,55 @@
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
-            //저장
-            $('#NewbtnSave').click(saveCode); // 신규등록 버튼 클릭 이벤트 핸들러 등록
-            // $('#btnSave').click(updateCode);   // 등록 버튼 클릭 이벤트 핸들러 등록
+            $('#btnSave').click(saveCode);   // 등록 버튼 클릭 이벤트 핸들러 등록
 
-            // $('#btnDelete').click(deleteCode);
+            $('#btnDelete').click(deleteCode);
 
             $('#btnSearch').click(searchDataBind); // 검색 버튼 클릭 이벤트 핸들러 등록
 
-            $('#btnEdit').click(editCode); // 수정 버튼 클릭 이벤트 핸들러 등록
+            $('#btnAddChild').click(addChildCode);
+
+
 
         }
 
+        function addChildCode() {
+            console.log("하위추가 버튼 클릭 이벤트");
+
+            // 선택된 셀의 `name`을 `parent_name`으로 설정
+            $('#parent_name').val($('#name').val());
+            // 선택된 셀의 `id`를 `parent_id`로 설정 (새로 추가되는 데이터의 상위 ID로 설정)
+            $('#parent_id').val($('#id').val());
+
+            // 새로운 데이터를 입력할 수 있도록 나머지 필드들은 초기화
+            $('#id').val('');  // 새로운 데이터이므로 id는 초기화 (신규 등록을 의미)
+            $('#name').val('');
+            $('#description').val('');
+            $('#code').val('');
+        }
 
         function saveCode() {
 
-            let url = '/api/system/tbrp910/save';
+            let url = '/api/system/code/save';
 
             //let data = $('#codeForm').serialize();
-            let data = {
-                groupcd: $('#groupcd').val(),
-                itemcd: $('#itemcd').val(),
-                itemnm: $('#itemnm').val(),
-                itemrm: $('#itemrm').val()
-            };
+            let data = FormUtil.extractForm($('#codeForm'));
 
-            // if (!data.itemcd || !data.itemnm) {
-            //     Alert.alert('', '필수항목을 입력해주세요');
-            //     return;
-            // }
+            if (!data.code || !data.name) {
+                Alert.alert('', '필수항목을 입력해주세요');
+                return;
+            }
 
             let fnSuccess = function (res) {
                 if (res.success) {
-                    Notify.success(res.message || '저장되었습니다'); // 수정된 메시지 표시
-                    searchDataBind(); // 저장 후 데이터 새로 고침
-                    location.reload();
+                    Alert.alert('','저장되었습니다.');
+                    searchDataBind();
                 } else {
-                    Alert.alert('', res.message);
+                    Alert.alert('', res.message)
                 }
             };
-
-            // Ajax 요청 보내기
             AjaxUtil.postAsyncData(url, data, fnSuccess);
         }
-
-
 
 
         function searchDataBind() {
@@ -322,7 +364,7 @@
             console.log("Data to send:", data);
 
             $.ajax({
-                url: '/api/system/tbrp910/read',
+                url: '/api/system/code/read',
                 type: 'GET',
                 data: data,
                 success: function (result) {
@@ -339,51 +381,53 @@
             });
         }
 
-
-        let menuGroupName = new wijmo.collections.PropertyGroupDescription('itemnm', function (item, proName) {
-            return item.groupcd;
-        });
-
-
         function grid_binding(data) {
-
+            // 데이터 가공
             let formattedData = data.map(item => ({
-                itemnm: item.itemnm,
-                itemcd: item.itemcd,
-                itemrm: item.itemrm,
+                id: item.id,
+                name: item.name,
+                code: item.code,
+                description: item.description,
+                groupnm: item.groupnm, // 그룹화를 위해 필요한 필드 추가
+                parent_name: item.parent_name // 다른 필드 추가
             }));
 
+            // 그리드 초기화
             theGrid.columns.clear();
             theGrid.autoGenerateColumns = false;
 
+            // 컬럼 정의 추가
             columns.forEach(colDef => {
                 let col = new wijmo.grid.Column(colDef);
                 theGrid.columns.push(col);
             });
 
+            // CollectionView 생성
             viewdata = new wijmo.collections.CollectionView(formattedData);
+
+            // groupnm 필드를 기준으로 그룹화 적용
             viewdata.groupDescriptions.push(menuGroupName);
 
+            // 그리드에 데이터 바인딩
             theGrid.itemsSource = viewdata;
             theGrid.refresh();
-
         }
 
-        function editCode() {
-            var selectedRow = theGrid.selection.row;
-            if (selectedRow === null || selectedRow < 0) {
-                Alert.alert('', '수정할 행을 선택해주세요');
-                return;
-            }
-
-            var selectedItem = theGrid.rows[selectedRow].dataItem;
-
-            // Update form fields with selected item data
-            $('#groupcd').val(selectedItem.groupcd || '');
-            $('#itemcd').val(selectedItem.itemcd || '');
-            $('#itemnm').val(selectedItem.itemnm || '');
-            $('#itemrm').val(selectedItem.itemrm || '');
-        }
+        // function editCode() {
+        //     var selectedRow = theGrid.selection.row;
+        //     if (selectedRow === null || selectedRow < 0) {
+        //         Alert.alert('', '수정할 행을 선택해주세요');
+        //         return;
+        //     }
+        //
+        //     var selectedItem = theGrid.rows[selectedRow].dataItem;
+        //
+        //     // Update form fields with selected item data
+        //     $('#groupcd').val(selectedItem.groupcd || '');
+        //     $('#itemcd').val(selectedItem.itemcd || '');
+        //     $('#itemnm').val(selectedItem.itemnm || '');
+        //     $('#itemrm').val(selectedItem.itemrm || '');
+        // }
 
         // function deleteCode() {
         //     let selectedRow = theGrid.selection.row;
@@ -416,46 +460,51 @@
         //     });
         // }
 
-        $(document).ready(function() {
-            var csrfToken = $('meta[name="_csrf"]').attr('content');
-            var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
-
-            function deleteCode() {
-                let selectedRow = theGrid.selection.row;
-                if (selectedRow === null || selectedRow < 0) {
-                    Alert.alert('', '삭제할 행을 선택해주세요');
-                    return;
-                }
-
-                let selectedItem = theGrid.rows[selectedRow].dataItem;
-                let itemId = selectedItem.itemcd;
-
-                let url = '/api/system/tbrp910/delete';
-                let data = { itemcds: [itemId] };
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: JSON.stringify(data),
-                    contentType: 'application/json',
-                    headers: {
-                        [csrfHeader]: csrfToken
-                    },
-                    success: function(result) {
-                        if (result.success) {
-                            Notify.success('삭제되었습니다');
-                            searchDataBind();
-                        } else {
-                            Alert.alert('', result.message);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.error('Error deleting data:', textStatus, errorThrown);
-                    }
-                });
+        function deleteCode() {
+            if (!selectedItem || !selectedItem.id) {
+                Alert.alert('', '삭제할 항목을 선택해주세요.');
+                return;
             }
 
-            $('#btnDelete').click(deleteCode);
+            let url = '/api/system/code/delete';
+            let data =
+                { id: selectedItem.id,
+                    '_csrf': csrfToken
+                };
+
+            console.log(data, "id값 불러오기");
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(res) {
+                    if (res.success) {
+                        Alert.alert('', '삭제되었습니다.');
+                        searchDataBind(); // 데이터 삭제 후 그리드를 새로 고침
+                    } else {
+                        Alert.alert('', res.message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+
+            // 신규등록 버튼 클릭 이벤트
+            $('.btn-excell').click(function (event) {
+                // 기본 동작 방지 (페이지 새로고침 방지)
+                event.preventDefault();
+
+                // 입력 폼의 모든 입력 필드 초기화
+                $('#codeForm input[type="text"]').val('');
+            });
+
+
+
         });
 
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -85,6 +86,7 @@ public class UserCodeController {
 	}
 	
 	@PostMapping("/delete")
+	@Transactional
 	public AjaxResult deleteCode(@RequestParam("id") Integer id) {
 		this.userCodeRepository.deleteById(id);
 		AjaxResult result = new AjaxResult();

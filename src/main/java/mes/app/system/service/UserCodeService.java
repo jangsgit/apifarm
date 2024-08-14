@@ -21,14 +21,15 @@ public class UserCodeService {
 		dicParam.addValue("txtCode", txtCode);
 		
 		String sql = """
-				select id
-                , "Parent_id" as parent_id
-                , "Code" as code
-                , "Value" as name
-                ,"Description" as description
-                from user_code
-                where "Value" ilike concat('%%',:txtCode,'%%')
-                order by "Value"
+				select A.id
+				,B."Value" as groupnm
+                ,A."Parent_id" as parent_id
+                ,A."Code" as code
+                ,A."Value" as name
+                ,A."Description" as description
+                from user_code A
+                LEFT OUTER JOIN user_code B ON B.id = A."Parent_id"
+                where A."Value" ilike concat('%%');
 				""";
 		List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
 		return items;
