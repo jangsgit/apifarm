@@ -74,7 +74,7 @@ public class SystemService {
                 from user_group_menu gm 
                 where gm."MenuCode" = mi."MenuCode" 
                 and gm."UserGroup_id" = :group_id
-                and gm."AuthCode" like '%R%'
+                and (gm."AuthCode" like '%R%' OR gm."AuthCode" LIKE '%W%')
             ))
         and 
             not cycle

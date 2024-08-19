@@ -49,7 +49,7 @@ public class HomeController {
 		mv.addObject("username", username);
 		mv.addObject("userinfo", user);
 		mv.addObject("system_title", logoTitle);
-		mv.addObject("default_menu_code", "wm_dashboard_summary");
+//		mv.addObject("default_menu_code", "wm_dashboard_summary");
 
 		
 		String mqtt_host = settings.getProperty("mqtt_host");

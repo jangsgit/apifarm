@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -18,4 +19,9 @@ public interface TB_RP750Repository extends JpaRepository<TB_RP750, TB_RP750_PK>
                                      @Param("spcompcd") String spcompcd,
                                      @Param("spplancd") String spplancd,
                                      @Param("checkdt") String checkdt);
+
+    @Query("SELECT DISTINCT t.checkarea FROM TB_RP750 t WHERE LOWER(t.checkarea) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findCheckareasByQuery(@Param("query") String query);
+
+
 }

@@ -95,6 +95,24 @@ public class ElecSafeController {
                     }
                 }
             }
+
+            // 날짜 형식 변환 (registdt, checkdt)
+            if (item.containsKey("registdt")) {
+                String registdt = (String) item.get("registdt");
+                if (registdt != null && registdt.length() == 8) {
+                    String formattedDate = registdt.substring(0, 4) + "-" + registdt.substring(4, 6) + "-" + registdt.substring(6, 8);
+                    item.put("registdt", formattedDate);
+                }
+            }
+
+            if (item.containsKey("checkdt")) {
+                String checkdt = (String) item.get("checkdt");
+                if (checkdt != null && checkdt.length() == 8) {
+                    String formattedDate = checkdt.substring(0, 4) + "-" + checkdt.substring(4, 6) + "-" + checkdt.substring(6, 8);
+                    item.put("checkdt", formattedDate);
+                }
+            }
+
             // 파일 이름과 경로를 리스트로 변환
             if (item.containsKey("filenames") && item.containsKey("filepaths")) {
                 String filenames = (String) item.get("filenames");
@@ -407,4 +425,13 @@ public class ElecSafeController {
                 .headers(headers)
                 .body(zipResource);
     }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<String>> autocomplete(@RequestParam String query) {
+        List<String> suggestions = elecSafeService.getSuggestions(query);
+        return ResponseEntity.ok(suggestions);
+    }
+
+
+
 }

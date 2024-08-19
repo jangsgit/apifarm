@@ -154,11 +154,15 @@
 
         var theGrid;    // 이벤트 발생 현황
         var theGrid1;   // 적외선 감지 현황
+
+        // 새창으로 열기하고 내메뉴를 안보여주기 위함
         document.readyState === 'complete' ? init() : window.onload = init;
+        // window.addEventListener('load', init);
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             fetchListData();
+            console.log('init');
         }
 
         function fetchListData() {
@@ -192,6 +196,7 @@
                     ],
                     itemsSource: tempData
                 });
+
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
                 new FlexGridContextMenu(theGrid);
                 window.downloadFileName = '이벤트 발생 현황';
@@ -220,6 +225,7 @@
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;
             }
+            console.log('sdfsdfsdf');
         }
 
     </script>

@@ -11,7 +11,7 @@
             <div class="left">
                 <h2>전기안전 점검 등록</h2>
                 <a title="북마크" class="bookmark toggle">
-                    내메뉴
+                    내 메뉴
                 </a>
             </div>
             <ul class="page-navi">
@@ -49,7 +49,7 @@
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
-                <li>
+                <li th:if="${write_flag}">
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
 
                 </li>
@@ -92,13 +92,13 @@
                         </div>
                         <div class="button-wrap">
                             <ul>
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
                                         <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
                                         삭제
                                     </a>
                                 </li>
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-edit" title="수정" onclick="modifyData()">
                                         <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
                                         수정
@@ -159,7 +159,7 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="checktitle" class="wp100">
+                                        <input type="text" id="checktitle" class="wp100" autocomplete="off">
                                     </td>
                                     <th>
                                         <label for="registdt">
@@ -176,20 +176,20 @@
                                             점검 일자
                                         </label>
                                     </th>
-                                    <td>
+                                    <td colspan="3">
                                         <input type="date" id="checkdt">
                                     </td>
-                                    <th>
-                                        <label for="docdv">
-                                            문서 구분
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <select id="docdv" name="docselect">
-                                            <option value="">문서를 선택하세요</option>
-                                            <option value="0">전기 설비점검결과표</option>
-                                        </select>
-                                    </td>
+<!--                                    <th>-->
+<!--                                        <label for="docdv">-->
+<!--                                            문서 구분-->
+<!--                                        </label>-->
+<!--                                    </th>-->
+<!--                                    <td>-->
+<!--                                        <select id="docdv" name="docselect">-->
+<!--                                            <option value="">문서를 선택하세요</option>-->
+<!--                                            <option value="0">전기 설비점검결과표</option>-->
+<!--                                        </select>-->
+<!--                                    </td>-->
                                 </tr>
                                 <tr>
                                     <th>
@@ -198,10 +198,8 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <select type="text" id="checkarea" class="wp100">
-                                            <option VALUE="">점검 장소를 선택하세요</option>
-                                            <option VALUE="KT대구물류센터 연료전지발전소">KT 대구물류센터 연료전지 발전소</option>
-                                        </select>
+                                        <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()" autocomplete="off">
+                                        <ul id="suggestions" class="suggestions-list"></ul>
                                     </td>
                                     <th>
                                         <label for="endresult">
@@ -210,8 +208,7 @@
                                     </th>
                                     <td>
                                         <select id="endresult">
-                                            <option VALUE="">점검 결과를 선택하세요</option>
-                                            <option VALUE="0">양호</option>
+                                            <option selected VALUE="0">양호</option>
                                             <option VALUE="1">좋음</option>
                                             <option VALUE="2">나쁨</option>
                                         </select>
@@ -273,6 +270,25 @@
         var theGrid;
 
         document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        // 현재 연도를 가져옴
+        const currentYear = new Date().getFullYear();
+        // 1월 1일 날짜 문자열 생성
+        const defaultDate = `${currentYear}-01-01`;
+        // input 요소에 기본값 설정
+        document.getElementById('startDate').value = defaultDate;
+
+        // 현재 연도를 가져옴
+        const currentYear2 = new Date().getFullYear();
+        // 12월 31일 날짜 문자열 생성
+        const defaultDate2 = `${currentYear2}-12-31`;
+        // input 요소에 기본값 설정
+        document.getElementById('endDate').value = defaultDate2;
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('registdt').value = today;
+        document.getElementById('checkdt').value = today;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 -->
         function init() {
@@ -342,11 +358,12 @@
 
             // 선택된 항목에서 다운로드할 파일 목록 생성
             selectedItems.forEach(function (item) {
+                let checkdtFormatted = item.checkdt.replace(/-/g, '');
                 downloadList.push({
                     spworkcd: item.spworkcd,
                     spcompcd: item.spcompcd,
                     spplancd: item.spplancd,
-                    checkdt: item.checkdt,
+                    checkdt: checkdtFormatted,
                     checkseq: item.checkseq
                 });
             });
@@ -446,12 +463,13 @@
         function modifyData() {
 
             let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
 
             let data = {
                 spworkcd: selectedItem.spworkcd,
                 spcompcd: selectedItem.spcompcd,
                 spplancd: selectedItem.spplancd,
-                checkdt: selectedItem.checkdt,
+                checkdt: checkdtFormatted,
                 checkseq: selectedItem.checkseq
             };
 
@@ -489,7 +507,7 @@
                             document.getElementById('registdt').value = formatDate(data2.registdt);
                             document.getElementById('checkdt').value = formatDate(data2.checkdt);
                             document.getElementById('endresult').value = data2.endresult;
-                            document.getElementById('docdv').value = data2.docdv;
+                            // document.getElementById('docdv').value = data2.docdv;
                             document.getElementById('checkarea').value = data2.checkarea;
                             document.getElementById('bfconsres').value = data2.bfconsres;
                             document.getElementById('checkseq').value = data2.checkseq;
@@ -557,12 +575,14 @@
             let delList = [];
             let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
 
+
             for (let i = 0; i < selectedItems.length; i++) {
+                let checkdtFormatted = selectedItems[i].checkdt.replace(/-/g, '');
                 delList.push({
                     spworkcd: selectedItems[i].spworkcd,
                     spcompcd: selectedItems[i].spcompcd,
                     spplancd: selectedItems[i].spplancd,
-                    checkdt: selectedItems[i].checkdt,
+                    checkdt: checkdtFormatted,
                     checkseq: selectedItems[i].checkseq
                 });
             }
@@ -649,8 +669,10 @@
 
         // 신규등록 버튼 클릭
         function clearForm() {
-            ['checkdt', 'checktitle', 'registdt', 'checkarea', 'bfconsres', 'docdv', 'endresult', 'checkseq'].forEach(id => {
+            ['checktitle', 'checkarea', 'bfconsres', 'checkseq'].forEach(id => {
                 document.getElementById(id).value = '';
+                document.getElementById('checkdt').value = today;
+                document.getElementById('registdt').value = today;
             });
             $('.filelist').empty(); // 파일 리스트 초기화
             uploadedFiles = []; // 업로드된 파일 리스트 초기화
@@ -684,7 +706,7 @@
                     { id: '#checktitle', label: '점검명을 입력해주세요' },
                     { id: '#registdt', label: '등록 일자를 입력해주세요' },
                     { id: '#checkdt', label: '점검 일자를 입력해주세요' },
-                    { id: '#docdv', label: '문서 구분을 선택해주세요' },
+                    // { id: '#docdv', label: '문서 구분을 선택해주세요' },
                     { id: '#checkarea', label: '점검 장소를 선택해주세요' },
                     { id: '#endresult', label: '점검 결과를 선택해주세요' },
                     { id: '#bfconsres', label: '점검 사항을 입력해주세요' }
@@ -715,7 +737,7 @@
                     formData.append('registdt', $('#registdt').val());
                     formData.append('checkarea', $('#checkarea').val());
                     formData.append('bfconsres', $('#bfconsres').val());
-                    formData.append('docdv', $('#docdv').val());
+                    // formData.append('docdv', $('#docdv').val());
                     formData.append('endresult', $('#endresult').val());
 
                     // 새로 추가된 파일만 폼 데이터에 추가
@@ -780,6 +802,126 @@
                 inputTabLink.title = '수정';
             }
         });
+
+        // 자동완성
+        let debounceTimeout;
+        let selectedSuggestionIndex = -1;
+        let suggestionsVisible = false;
+
+        function fetchSuggestions() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                const inputField = document.getElementById('checkarea');
+                let suggestionsList = document.getElementById('suggestions');
+
+                const inputClearDiv = inputField.parentElement;
+                inputClearDiv.appendChild(suggestionsList);
+
+                const query = inputField.value;
+                if (query.length > 0) {
+                    fetch(`/api/inspec/elec_safe/autocomplete?query=${encodeURIComponent(query)}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            const previousSelectedText = (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < data.length) ? data[selectedSuggestionIndex] : null;
+                            suggestionsList.innerHTML = '';
+                            if (data.length > 0) {
+                                suggestionsVisible = true;
+                                suggestionsList.style.display = 'block'; // 결과가 있을 때만 표시
+                                data.forEach((item, index) => {
+                                    let li = document.createElement('li');
+                                    li.textContent = item;
+                                    li.setAttribute('data-index', index);
+                                    li.onclick = function () {
+                                        document.getElementById('checkarea').value = this.textContent;
+                                        suggestionsList.innerHTML = '';
+                                        suggestionsList.style.display = 'none';
+                                        suggestionsVisible = false;
+                                    };
+                                    suggestionsList.appendChild(li);
+                                    // 이전에 선택한 항목을 다시 선택 상태로 설정
+                                    if (item === previousSelectedText) {
+                                        selectedSuggestionIndex = index;
+                                        li.classList.add('selected');
+                                    }
+                                });
+                            } else {
+                                suggestionsList.style.display = 'none'; // 결과가 없으면 숨김
+                                suggestionsVisible = false;
+                                selectedSuggestionIndex = -1;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Fetch error:', error);
+                            suggestionsList.style.display = 'none'; // 오류 시 숨김
+                            suggestionsVisible = false;
+                            selectedSuggestionIndex = -1;
+                        });
+                } else {
+                    suggestionsList.innerHTML = '';
+                    suggestionsList.style.display = 'none';
+                    suggestionsVisible = false;
+                    selectedSuggestionIndex = -1;
+                }
+            }, 300);  // 300ms의 디바운스 타임 적용
+        }
+
+        document.getElementById('checkarea').addEventListener('keydown', function(event) {
+            const suggestionsList = document.getElementById('suggestions');
+            const items = suggestionsList.getElementsByTagName('li');
+
+            if (suggestionsVisible) {
+                if (event.key === 'ArrowDown') {
+                    // 아래 화살표 키를 누르면
+                    event.preventDefault(); // 기본 동작 방지
+                    selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+                    updateSuggestionSelection(items);
+                } else if (event.key === 'ArrowUp') {
+                    // 위 화살표 키를 누르면
+                    event.preventDefault(); // 기본 동작 방지
+                    selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+                    updateSuggestionSelection(items);
+                } else if (event.key === 'Enter') {
+                    // Enter 키를 누르면
+                    if (selectedSuggestionIndex >= 0) {
+                        event.preventDefault(); // 기본 동작 방지
+                        items[selectedSuggestionIndex].click();
+                        suggestionsVisible = false; // Enter 키를 누르면 선택을 확정하고 목록을 숨김
+                        document.getElementById('checkarea').blur(); // 입력 필드 포커스 해제
+                    }
+                } else if (event.key === 'Escape') {
+                    // Escape 키를 누르면
+                    suggestionsList.style.display = 'none';
+                    suggestionsVisible = false;
+                }
+            }
+        });
+
+        // 포커스 해제 시 자동 완성 목록 숨기기
+        document.getElementById('checkarea').addEventListener('blur', function() {
+            setTimeout(function() {
+                const suggestionsList = document.getElementById('suggestions');
+                suggestionsList.style.display = 'none';
+                suggestionsVisible = false;
+            }, 300); // 300ms 지연 시간
+        });
+
+        function updateSuggestionSelection(items) {
+            // 모든 항목의 선택 상태 초기화
+            for (let i = 0; i < items.length; i++) {
+                items[i].classList.remove('selected');
+            }
+
+            // 현재 선택된 항목에 선택 상태 추가
+            if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < items.length) {
+                items[selectedSuggestionIndex].classList.add('selected');
+                items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
 
 
     </script>

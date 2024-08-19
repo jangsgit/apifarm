@@ -67,7 +67,7 @@ public class ElecSafeService {
 
         sql.append("""
                 SELECT
-                    ROW_NUMBER() OVER (ORDER BY t1.registdt DESC) AS rownum,
+                    ROW_NUMBER() OVER (ORDER BY t1.registdt DESC, t1.indatem DESC) AS rownum,
                     t1.*,
                     STRING_AGG(CAST(t2.fileornm AS TEXT), ',') AS filenames,
                     STRING_AGG(CAST(t2.filepath AS TEXT), ',') AS filepaths
@@ -116,7 +116,7 @@ public class ElecSafeService {
                 GROUP BY
                     t1.spworkcd, t1.spcompcd, t1.spplancd, t1.checkdt, t1.checkseq, t1.registdt, t1.checktitle, t1.endresult, t1.checktitle
                 ORDER BY
-                    t1.registdt DESC
+                    t1.registdt DESC, t1.indatem DESC
                 """);
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql.toString(), dicParam);
@@ -271,4 +271,11 @@ public class ElecSafeService {
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql.toString(), dicParam);
         return items;
     }
+
+    @Transactional
+    public List<String> getSuggestions(String query) {
+        return TBRP750Repository.findCheckareasByQuery(query);
+    }
+
+
 }

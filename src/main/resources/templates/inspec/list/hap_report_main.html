@@ -49,7 +49,8 @@
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
-                <li>
+                <!-- write_flag가 true일 때만 '등록' 탭을 보여줍니다. -->
+                <li th:if="${write_flag}">
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
                 </li>
             </ul>
@@ -106,13 +107,13 @@
                         </div>
                         <div class="button-wrap">
                             <ul>
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
                                 </li>
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-edit" title="수정" onclick="modifyData()">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
