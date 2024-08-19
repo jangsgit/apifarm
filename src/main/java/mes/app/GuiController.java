@@ -1,9 +1,11 @@
 package mes.app;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import mes.app.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.security.core.Authentication;
@@ -35,6 +37,9 @@ public class GuiController {
 	
 	@Autowired
 	MenuUseLogRepository menuUseLogRepository;
+
+	@Autowired
+	UserService userService;
 	
 	private ModelAndView getView(String gui, String templateName, User user, MultiValueMap<String, String> allRequestParams) {
 		ModelAndView mv = new ModelAndView();                                  //ModelAndView 객체 생성
@@ -42,7 +47,8 @@ public class GuiController {
         if (guiData!=null) {
 			String userid = user.getUsername();
         	String username = user.getUserProfile().getName();
-        	
+			List<Map<String, Object>> sandanList = userService.getUserSandanList(userid);
+
         	for(String k : allRequestParams.keySet()){
         	     mv.addObject(k, allRequestParams.get(k).get(0));
         	}
@@ -58,6 +64,7 @@ public class GuiController {
     		mv.addObject("userinfo", user);    		
     		mv.addObject("gui_code", gui);
     		mv.addObject("template_key", templateName);
+			mv.addObject("sandanList", sandanList);
     		
     		String mqtt_host = settings.getProperty("mqtt_host");  //application.properties에 명시되어 있는 mqtt_host 속성의 값을 가져옴
     		String mqtt_web_port = settings.getProperty("mqtt_web_port"); //이하 동문

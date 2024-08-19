@@ -55,7 +55,10 @@ public class ElecSafeController {
     @GetMapping("/read")
     public AjaxResult getList(@RequestParam(value = "startDate", required = false) String startDate,
                               @RequestParam(value = "endDate", required = false) String endDate,
-                              @RequestParam(value = "searchtitle", required = false) String searchTitle) {
+                              @RequestParam(value = "searchtitle", required = false) String searchTitle,
+                              @RequestParam(value = "spworkcd") String spworkcd,
+                              @RequestParam(value = "spcompcd") String spcompcd,
+                              @RequestParam(value = "spplancd") String spplancd) {
 
         if (searchTitle == null) {
             searchTitle = "";
@@ -72,7 +75,7 @@ public class ElecSafeController {
         String c_startDate = startDate.replaceAll("-", "");
         String c_endDate = endDate.replaceAll("-", "");
 
-        List<Map<String, Object>> items = this.elecSafeService.getList(searchTitle, c_startDate, c_endDate);
+        List<Map<String, Object>> items = this.elecSafeService.getList(searchTitle, c_startDate, c_endDate, spworkcd, spcompcd, spplancd);
 
         // 각 항목의 endresult 값을 변환
         for (Map<String, Object> item : items) {

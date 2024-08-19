@@ -26,7 +26,7 @@ public class HomeController {
 	
 	@Autowired
 	SystemOptionRepository systemOptionRepository;
-	
+
 	@Autowired
 	Settings settings;	
 	
@@ -38,7 +38,7 @@ public class HomeController {
         User user = (User)auth.getPrincipal();
 		String userid = user.getUsername();
         String username = user.getUserProfile().getName();;
-                
+
         SystemOption sysOpt= this.systemOptionRepository.getByCode("LOGO_TITLE");
         String logoTitle = sysOpt.getValue();
         

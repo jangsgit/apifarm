@@ -56,7 +56,7 @@ public class ElecSafeService {
     }
 
     // 검색
-    public List<Map<String, Object>> getList(String searchTitle, String startDate, String endDate) {
+    public List<Map<String, Object>> getList(String searchTitle, String startDate, String endDate, String spworkcd, String spcompcd, String spplancd) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
@@ -64,6 +64,9 @@ public class ElecSafeService {
         dicParam.addValue("searchTitle", "%" + searchTitle + "%");
         dicParam.addValue("startDate", startDate);
         dicParam.addValue("endDate", endDate);
+        dicParam.addValue("spworkcd", spworkcd);
+        dicParam.addValue("spcompcd", spcompcd);
+        dicParam.addValue("spplancd", spplancd);
 
         sql.append("""
                 SELECT
@@ -81,34 +84,22 @@ public class ElecSafeService {
                     t1.spplancd = t2.spplancd AND
                     t1.checkdt = t2.checkdt AND
                     t1.checkseq = t2.checkseq
+                WHERE
+                    t1.spworkcd = :spworkcd AND
+                    t1.spcompcd = :spcompcd AND
+                    t1.spplancd = :spplancd
                 """);
 
-        // 조건 추가
-        boolean hasWhereClause = false;
-
         if (searchTitle != null && !searchTitle.isEmpty()) {
-            sql.append("  WHERE t1.checktitle LIKE :searchTitle ");
-            hasWhereClause = true;
+            sql.append(" AND t1.checktitle LIKE :searchTitle ");
         }
 
         if (startDate != null && !startDate.isEmpty()) {
-            if (!hasWhereClause) {
-                sql.append(" where ");
-                hasWhereClause = true;
-            } else {
-                sql.append(" and ");
-            }
-            sql.append(" t1.registdt >= :startDate ");
+            sql.append(" AND t1.registdt >= :startDate ");
         }
 
         if (endDate != null && !endDate.isEmpty()) {
-            if (!hasWhereClause) {
-                sql.append(" where ");
-                hasWhereClause = true;
-            } else {
-                sql.append(" and ");
-            }
-            sql.append(" t1.registdt <= :endDate ");
+            sql.append(" AND t1.registdt <= :endDate ");
         }
 
         // 마지막으로 order by 절 추가

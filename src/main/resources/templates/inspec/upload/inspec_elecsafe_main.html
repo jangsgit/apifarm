@@ -23,29 +23,48 @@
         <!-- Select -->
         <div class="search-wrap">
             <ul>
+                <!--                <li>-->
+                <!--                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">-->
+                <!--                        <option value="001">대구</option>-->
+                <!--                        <input type="hidden" id="spworknm" name="spworknm">-->
+                <!--                    </select>-->
+                <!--                </li>-->
+                <!--                <li>-->
+                <!--                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">-->
+                <!--                        <option value="001">성서산단</option>-->
+                <!--                        <input type="hidden" id="spcompnm" name="spcompnm">-->
+                <!--                    </select>-->
+                <!--                </li>-->
+                <!--                <li>-->
+                <!--                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">-->
+                <!--                        <option value="001">KT 대구물류센터 연료전지 발전소</option>-->
+                <!--                        <input type="hidden" id="spplannm" name="spplannm">-->
+                <!--                    </select>-->
+                <!--                </li>-->
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
+                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateCompcdOptions()">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updatePlancdOptions()">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">KT 대구물류센터 연료전지 발전소</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
+                    <select title="시설" id="spplancd" name="spplancd">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
+
             </ul>
         </div>
         <div class="tab-wrap">
             <ul class="tab-links">
-                <input type="hidden" id="checkseq" name="checkseq" />
+                <input type="hidden" id="checkseq" name="checkseq"/>
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
@@ -179,17 +198,17 @@
                                     <td colspan="3">
                                         <input type="date" id="checkdt">
                                     </td>
-<!--                                    <th>-->
-<!--                                        <label for="docdv">-->
-<!--                                            문서 구분-->
-<!--                                        </label>-->
-<!--                                    </th>-->
-<!--                                    <td>-->
-<!--                                        <select id="docdv" name="docselect">-->
-<!--                                            <option value="">문서를 선택하세요</option>-->
-<!--                                            <option value="0">전기 설비점검결과표</option>-->
-<!--                                        </select>-->
-<!--                                    </td>-->
+                                    <!--                                    <th>-->
+                                    <!--                                        <label for="docdv">-->
+                                    <!--                                            문서 구분-->
+                                    <!--                                        </label>-->
+                                    <!--                                    </th>-->
+                                    <!--                                    <td>-->
+                                    <!--                                        <select id="docdv" name="docselect">-->
+                                    <!--                                            <option value="">문서를 선택하세요</option>-->
+                                    <!--                                            <option value="0">전기 설비점검결과표</option>-->
+                                    <!--                                        </select>-->
+                                    <!--                                    </td>-->
                                 </tr>
                                 <tr>
                                     <th>
@@ -198,7 +217,8 @@
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()" autocomplete="off">
+                                        <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()"
+                                               autocomplete="off">
                                         <ul id="suggestions" class="suggestions-list"></ul>
                                     </td>
                                     <th>
@@ -265,12 +285,11 @@
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
 
-    <script type="text/javascript">
+    <script th:inline="javascript">
 
         var theGrid;
 
         document.readyState === 'complete' ? init() : window.onload = init;
-
 
         // 현재 연도를 가져옴
         const currentYear = new Date().getFullYear();
@@ -292,15 +311,33 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 -->
         function init() {
+            initializeSelections();
             fetchListData();
+
+
+            // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
+            document.getElementById('spworkcd').addEventListener('change', fetchListData);
+            document.getElementById('spcompcd').addEventListener('change', fetchListData);
+            document.getElementById('spplancd').addEventListener('change', fetchListData);
         }
 
         function fetchListData() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
             let data2 = [];
 
             $.ajax({
                 url: '/api/inspec/elec_safe/read',
                 type: 'GET',
+                data: {
+                    'startDate': defaultDate,
+                    'endDate': defaultDate2,
+                    spworkcd: spworkcd,
+                    spcompcd: spcompcd,
+                    spplancd: spplancd
+                },
                 async: false,
                 success: function (data) {
                     data2 = data.data;
@@ -317,14 +354,63 @@
                     allowSorting: 'MultiColumn',
                     columns: [
                         {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'registdt', header: '등록일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '산단지역본부', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spcompnm', header: '산단명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spplannm', header: '발전소명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checktitle', header: '점검명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'endresult', header: '점검결과', width: '*', minWidth: 100,align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '점검일자', width: '*', minWidth: 100,align: 'center', isReadOnly: true},
-                        {binding: 'downloads', header: '다운로드', width: '*', minWidth: 100,align: 'center'}
+                        {
+                            binding: 'registdt',
+                            header: '등록일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spworknm',
+                            header: '산단지역본부',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spcompnm',
+                            header: '산단명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spplannm',
+                            header: '발전소명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checktitle',
+                            header: '점검명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'endresult',
+                            header: '점검결과',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkdt',
+                            header: '점검일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {binding: 'downloads', header: '다운로드', width: '*', minWidth: 100, align: 'center'}
                     ],
                     itemsSource: viewdata,
                     itemFormatter: function (panel, r, c, cell) {
@@ -421,10 +507,17 @@
 
         // 검색
         function searchData() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
             let data = {
                 'startDate': $('#startDate').val(),
                 'endDate': $('#endDate').val(),
-                'searchtitle': $('#searchtitle').val()
+                'searchtitle': $('#searchtitle').val(),
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd
             }
             let data2 = [];
             $.ajax({
@@ -455,7 +548,8 @@
                 inputTabLink.title = '등록';
             }
         }
-        document.addEventListener("DOMContentLoaded", function() {
+
+        document.addEventListener("DOMContentLoaded", function () {
             updateTabLink();
         });
 
@@ -624,7 +718,7 @@
             }];
             Alert.confirm('', '삭제하시겠습니까?', function () {
 
-                if($('#checkseq').val() ===''){
+                if ($('#checkseq').val() === '') {
                     Alert.alert('', '삭제할 내용이 없습니다.');
                     return;
                 }
@@ -703,13 +797,13 @@
 
                 // 필수 입력 필드 검사
                 let requiredFields = [
-                    { id: '#checktitle', label: '점검명을 입력해주세요' },
-                    { id: '#registdt', label: '등록 일자를 입력해주세요' },
-                    { id: '#checkdt', label: '점검 일자를 입력해주세요' },
+                    {id: '#checktitle', label: '점검명을 입력해주세요'},
+                    {id: '#registdt', label: '등록 일자를 입력해주세요'},
+                    {id: '#checkdt', label: '점검 일자를 입력해주세요'},
                     // { id: '#docdv', label: '문서 구분을 선택해주세요' },
-                    { id: '#checkarea', label: '점검 장소를 선택해주세요' },
-                    { id: '#endresult', label: '점검 결과를 선택해주세요' },
-                    { id: '#bfconsres', label: '점검 사항을 입력해주세요' }
+                    {id: '#checkarea', label: '점검 장소를 선택해주세요'},
+                    {id: '#endresult', label: '점검 결과를 선택해주세요'},
+                    {id: '#bfconsres', label: '점검 사항을 입력해주세요'}
                 ];
 
                 for (let i = 0; i < requiredFields.length; i++) {
@@ -747,7 +841,7 @@
 
                     // 삭제된 파일 목록 추가
                     deletedFiles.forEach((file, index) => {
-                        formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                        formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
                     });
 
                     $.ajax({
@@ -777,23 +871,10 @@
                     });
                 })
             })
-            // select 아이디에 따라 히든 input 설정
-            const selects = [
-                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
-                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
-                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
-            ];
-            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
         })
 
-        //  select 바뀌면 hidden input 변경
-        function updateSelect(selectId, hiddenInputId) {
-            var selectElement = document.getElementById(selectId);
-            document.getElementById(hiddenInputId).value = selectElement.options[selectElement.selectedIndex].text;
-        }
-
         // checkseq 값 있으면 수정 탭으로 변경
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const checkseq = document.getElementById('checkseq').value;
             const inputTabLink = document.getElementById('inputTabLink');
 
@@ -870,7 +951,7 @@
             }, 300);  // 300ms의 디바운스 타임 적용
         }
 
-        document.getElementById('checkarea').addEventListener('keydown', function(event) {
+        document.getElementById('checkarea').addEventListener('keydown', function (event) {
             const suggestionsList = document.getElementById('suggestions');
             const items = suggestionsList.getElementsByTagName('li');
 
@@ -902,8 +983,8 @@
         });
 
         // 포커스 해제 시 자동 완성 목록 숨기기
-        document.getElementById('checkarea').addEventListener('blur', function() {
-            setTimeout(function() {
+        document.getElementById('checkarea').addEventListener('blur', function () {
+            setTimeout(function () {
                 const suggestionsList = document.getElementById('suggestions');
                 suggestionsList.style.display = 'none';
                 suggestionsVisible = false;
@@ -919,10 +1000,93 @@
             // 현재 선택된 항목에 선택 상태 추가
             if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < items.length) {
                 items[selectedSuggestionIndex].classList.add('selected');
-                items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+                items[selectedSuggestionIndex].scrollIntoView({block: 'nearest'});
             }
         }
 
+        // 산단 연동
+        let sandanData = /*[[${sandanList}]]*/ [];  // 서버에서 받은 산단 리스트 데이터를 사용
+
+        function updateCompcdOptions() {
+            var spworkcd = document.getElementById('spworkcd').value;
+            var spworknm = sandanData.find(item => item.spworkcd === spworkcd).spworknm;
+            document.getElementById('spworknm').value = spworknm; // spworknm 업데이트
+
+            var spcompcdSelect = document.getElementById('spcompcd');
+            spcompcdSelect.innerHTML = ''; // 기존 옵션 제거
+
+            var filteredCompcdItems = sandanData
+                .filter(function (item) {
+                    return item.spworkcd === spworkcd;
+                })
+                .reduce(function (accumulator, current) {
+                    // spcompcd 중복 제거
+                    if (!accumulator.some(item => item.spcompcd === current.spcompcd)) {
+                        accumulator.push(current);
+                    }
+                    return accumulator;
+                }, []);
+
+            filteredCompcdItems.forEach(function (item) {
+                var option = document.createElement('option');
+                option.value = item.spcompcd;
+                option.textContent = item.spcompnm;
+                spcompcdSelect.appendChild(option);
+            });
+
+            if (filteredCompcdItems.length > 0) {
+                spcompcdSelect.selectedIndex = 0;
+                updatePlancdOptions(); // 첫 번째 산단 선택 시 시설 옵션 업데이트
+            }
+
+        }
+
+        function updatePlancdOptions() {
+            var spcompcd = document.getElementById('spcompcd').value;
+            var spcompnm = sandanData.find(item => item.spcompcd === spcompcd).spcompnm;
+            document.getElementById('spcompnm').value = spcompnm; // spcompnm 업데이트
+
+            var spplancdSelect = document.getElementById('spplancd');
+            spplancdSelect.innerHTML = ''; // 기존 옵션 제거
+
+            var filteredPlancdItems = sandanData.filter(function (item) {
+                return item.spcompcd === spcompcd;
+            });
+
+            filteredPlancdItems.forEach(function (item) {
+                var option = document.createElement('option');
+                option.value = item.spplancd;
+                option.textContent = item.spplannm;
+                spplancdSelect.appendChild(option);
+            });
+
+            if (filteredPlancdItems.length > 0) {
+                spplancdSelect.selectedIndex = 0;
+                document.getElementById('spplannm').value = spplancdSelect.options[0].textContent;
+            }
+        }
+
+        function initializeSelections() {
+            var spworkcdSelect = document.getElementById('spworkcd');
+            spworkcdSelect.innerHTML = ''; // 기존 옵션 제거
+
+            var uniqueWorkcdItems = [...new Set(sandanData.map(item => item.spworkcd))];
+
+            uniqueWorkcdItems.forEach(function (spworkcd) {
+                var item = sandanData.find(function (item) {
+                    return item.spworkcd === spworkcd;
+                });
+                var option = document.createElement('option');
+                option.value = item.spworkcd;
+                option.textContent = item.spworknm;
+                spworkcdSelect.appendChild(option);
+            });
+
+            if (uniqueWorkcdItems.length > 0) {
+                spworkcdSelect.selectedIndex = 0;
+                updateCompcdOptions(); // 첫 번째 지역 선택 시 산단 옵션 업데이트
+            }
+        }
 
     </script>
 
