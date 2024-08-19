@@ -103,6 +103,7 @@ public class SmpService {
 		}
 		
 		System.out.println("No valid data found in DTO");
-		return "No valid data found";
+//		return "No valid data found";
+		return "로딩중";
 	}
 }

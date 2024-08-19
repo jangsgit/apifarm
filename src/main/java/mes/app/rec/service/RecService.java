@@ -55,7 +55,7 @@ public class RecService {
 					break;  // 유효한 데이터를 찾으면 루프 중단
 				}
 			} catch (URISyntaxException e) {
-				System.err.println("URI syntax error: " + e.getMessage());
+//				System.err.println("URI syntax error: " + e.getMessage());
 				continue;  // URI 생성 실패 시, 다음 날짜로 넘어감
 			}
 		}
@@ -90,7 +90,7 @@ public class RecService {
 				}
 			}
 		} catch (Exception e) {
-			System.err.println("Failed to parse JSON response: " + e.getMessage());
+//			System.err.println("Failed to parse JSON response: " + e.getMessage());
 		}
 		return null;  // 유효한 데이터가 없거나 파싱에 실패한 경우
 	}
