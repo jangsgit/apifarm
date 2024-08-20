@@ -772,18 +772,6 @@
                         theGrid2.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
 
                         initializeColumnToggle(theGrid2); // 컬럼 숨기기 초기화 함수 호출
-
-                        theGrid2.formatItem.addHandler(function (s, e) {
-                            if (e.panel.cellType == wijmo.grid.CellType.Cell) {
-                                switch (e.col) {
-                                    case s.columns.indexOf(theGrid2.columns.getColumn('indatem')):
-                                    case s.columns.indexOf(theGrid2.columns.getColumn('inusernm')):
-                                    case s.columns.indexOf(theGrid2.columns.getColumn('updatem')):
-                                        e.cell.textContent = e.cell.textContent || '정보 없음';
-                                        break;
-                                }
-                            }
-                        });
                     } catch (error) {
                         console.error('Failed to initialize grid:', error);
                     }
@@ -846,7 +834,6 @@
             ];
             selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 
-
             // 발전기코드 옵션 동적 생성
             function loadPowerIds() {
                 fetch('/api/gene/upload/powerids')
@@ -867,7 +854,6 @@
                     })
                     .catch(error => console.error('Error loading power IDs:', error));
             }
-
         });
 
 
@@ -887,10 +873,10 @@
             if (files.length > 0) {
                 // 단일 파일만 추가
                 formData.append('upload_file', files[0]);  // 배열 대신 첫 번째 파일 객체를 직접 참조
-                console.log(files);
+                console.log('파일이 FormData에 추가되었습니다:', files[0].name);
             } else {
                 Alert.alert('', '파일을 첨부해 주세요.');
-                console.log(files);
+                console.log('파일이 없습니다.', files[0].name);
                 return;
             }
 
@@ -988,7 +974,7 @@
                                 if (response.success) {
                                     Alert.alert('', '수정되었습니다.'); // 수정 완료 후 알림창
                                     viewdata2.commitChanges();
-                                    // location.reload();
+                                    location.reload();
                                 } else {
                                     Alert.alert('수정 실패', response.message);
                                 }

@@ -134,11 +134,18 @@ public class GeneUploadController {
 	// 수정
 	// PostMapping, PutMapping(멱등성), PatchMapping 중 PatchMapping 사용
 	@PatchMapping("/update")
-	public ResponseEntity<AjaxResult> updateData(@RequestBody List<TB_RP320> updates) {
+	public ResponseEntity<AjaxResult> updateData(@RequestBody List<TB_RP320> updates, Authentication auth) {
 		AjaxResult result = new AjaxResult();
 		try {
+			// 사용자 정보 가져오기
+			User user = (User) auth.getPrincipal();
+			String currentUserId = user.getUsername();
+			String currentUserName = user.getFirst_name() + " " + user.getLast_name();
+			
 			for (TB_RP320 update : updates) {
 				update.setUpdatem(LocalDate.now());  // 현재 날짜로 설정
+				update.setInuserid(currentUserId);   // 현재 사용자의 ID로 수정
+				update.setInusernm(currentUserName); // 현재 사용자의 이름으로 수정
 				TB_RP320Repository.save(update);  // JpaRepository의 save 메소드는 ID가 존재하면 merge (업데이트)를 수행합니다.
 			}
 			result.success = true;
