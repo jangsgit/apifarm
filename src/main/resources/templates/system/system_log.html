@@ -102,36 +102,12 @@
                         </div>
                         <div class="button-wrap">
                             <ul>
-<!--                                <li>-->
-<!--                                    <a class="btn btn-excell" title="일괄다운로드">-->
-<!--                                        <img src="/images/icon/ico-down-blue.svg" alt="엑셀 아이콘">-->
-<!--                                        일괄다운로드-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a  class="btn btn-excell" title="엑셀다운로드">-->
-<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
-<!--                                        엑셀다운로드-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a  class="btn btn-delete" title="삭제">-->
-<!--                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">-->
-<!--                                        삭제-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a  class="btn btn-edit" title="수정" >-->
-<!--                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">-->
-<!--                                        수정-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a class="btn btn-print" title="순회점검일지 출력">-->
-<!--                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">-->
-<!--                                        순회점검일지 출력-->
-<!--                                    </a>-->
-<!--                                </li>-->
+                                <li>
+                                    <a class="btn btn-edit" id="detail" title="상세정보보기">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        상세정보보기
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
@@ -297,6 +273,7 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
+                isReadOnly: true,
                 itemsSource: viewdata
             });
 
@@ -318,85 +295,40 @@
             window.downloadFileName = '시스템로그';
 
 
+            $('#btnSearch').click(searchData);
 
-            // 더블 클릭 이벤트 핸들러
-            theGrid.hostElement.addEventListener('click', function(e) {
-                // 더블 클릭된 셀의 행 인덱스 가져오기
-                var ht = theGrid.hitTest(e);
-                var row = ht.row;
-
-                if (row >= 0) {
-                    // 해당 행의 데이터 가져오기
-                    var item = theGrid.rows[row].dataItem;
-
-                    // 선택된 데이터를 HTML 테이블에 추가
-                    // var tableBody = document.querySelector("#selectedData tbody");
-                    // var newRow = tableBody.insertRow();
-
-                    // newRow.insertCell(0).textContent = item.type;
-                    // newRow.insertCell(1).textContent = item.source;
-                    // newRow.insertCell(2).textContent = item.created;
-                    // newRow.insertCell(3).textContent = item.message;
-
-
-                    // 선택된 데이터를 HTML 테이블의 input/textarea 태그에 넣기
-                    document.getElementById('type').value = item.type;
-                    document.getElementById('source').value = item.source;
-                    document.getElementById('created').value = item.created;
-                    document.getElementById('message').value = item.message;
-
-                    // tab2로 이동
-                    var tab2 = document.querySelector('.SystemLogTab2');
-                    if (tab2) {
-                        // 모든 tab-item을 숨기기
-                        document.querySelectorAll('.tab-item').forEach(function(tab) {
-                            tab.style.display = 'none';
-                        });
-
-                        // tab2만 보이게 하기
-                        tab2.style.display = 'block';
-
-                        // 'active' 클래스 제거 및 tab2에 추가
-                        var tabs = document.querySelectorAll('.tab-item');
-                        tabs.forEach(function(tab) {
-                            tab.classList.remove('active');
-                        });
-                        tab2.classList.add('active');
-
-                        // li 태그에 필요한 CSS 클래스 추가
-                        var tab2Link = document.querySelector('a[href="#tab2"]');
-                        var tab1Link = document.querySelector('a[href="#tab1"]');
-
-                        if (tab2Link) {
-                            console.log("css진입");
-
-                            var tab2Li = tab2Link.parentElement; // a 태그의 부모인 li 선택
-                            var tab1Li = tab1Link.parentElement;
-                            console.log(tab2Li);
-
-                            // `!important`를 사용하여 스타일 우선순위 설정
-
-                            tab1Li.classList.remove('active');
-
-                            tab2Li.classList.add('active');
-
-
-                            tab2Li.style.setProperty('background-color', '#FFFFFF', 'important'); // 배경색 설정
-                            tab2Li.style.setProperty('color', '#03428E', 'important'); // 글자색 설정
-                        } else {
-                            console.error('Tab2 link element not found');
-                        }
-                    }
-                }
+            // detail 버튼 클릭 시, 선택된 데이터를 tab2에 표시하는 함수 호출
+            $('#detail').click(function() {
+                fillTab2WithSelectedData();
             });
 
-
-            $('#btnSearch').click(searchData);
         }
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
 
         let page = null;
+
+        // 그리드에서 선택된 데이터를 tab2에 채워주는 함수
+        function fillTab2WithSelectedData() {
+            // 선택된 행 데이터 가져오기
+            let selectedRow = theGrid.selection.row;
+            if (selectedRow < 0) {
+                alert('먼저 그리드에서 항목을 선택하세요.');
+                return;
+            }
+
+            let selectedItem = theGrid.rows[selectedRow].dataItem;
+
+            // tab2의 입력 필드에 선택된 데이터 채우기
+            $('#type').val(selectedItem.type);
+            $('#source').val(selectedItem.source);
+            $('#created').val(selectedItem.created);
+            $('#message').val(selectedItem.message);
+
+            // tab2로 전환
+            $('.tab-links a[href="#tab2"]').click();
+        }
 
         //검색
         function searchData(){

@@ -205,7 +205,20 @@
                     {binding: '', header: '', width: "*", align: 'center'},
 
                 ],
-                itemsSource: viewdata
+                itemsSource: viewdata,
+                formatItem: function (s, e) {
+                    // 특정 컬럼과 행에 대해 readonly 속성을 부여
+                    if (e.panel.cellType == wijmo.grid.CellType.Cell) {
+                        var col = s.columns[e.col];
+                        var item = s.rows[e.row].dataItem;
+
+                        // 예: 첫 번째 컬럼의 셀을 읽기 전용으로 설정
+                        if (col.binding == 'name') {
+                            e.cell.style.pointerEvents = 'none';  // 마우스 클릭 비활성화
+                            e.cell.style.userSelect = 'none';  // 텍스트 선택 비활성화
+                        }
+                    }
+                }
             });
 
 
@@ -238,11 +251,18 @@
                 }
             });
 
-            // theGrid를 _this.grid로 설정
-            _this.grid = theGrid;
-
             $('#btnSearch').click(searchData);
             $('#btnSave').click(saveUserGroupMenu);
+
+
+
+
+
+
+
+
+
+
 
 
 
