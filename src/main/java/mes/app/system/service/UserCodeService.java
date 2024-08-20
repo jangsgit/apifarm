@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.Map;
 
+import mes.domain.repository.UserCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,6 +18,9 @@ public class UserCodeService {
 
 	@Autowired
 	SqlRunner sqlRunner;
+
+	@Autowired
+	private UserCodeRepository codeRepository;
 
 	public List<Map<String, Object>> getCodeList(String txtCode){
 
@@ -60,6 +64,10 @@ public class UserCodeService {
 				""";
 		List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
 		return items;
+	}
+
+	public boolean existsByCode(String code) {
+		return codeRepository.existsByCode(code);
 	}
 
 	public Map<String, Object> getCode(int id) {

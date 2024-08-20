@@ -6,14 +6,9 @@
 <head>
     <style>
 
-        /* 투명도를 제거 */
-        .wj-flexgrid .wj-cell {
-            opacity: 1 !important;
-        }
-
-        /* 가시성을 항상 표시되도록 설정 */
-        .wj-flexgrid .wj-cell {
-            visibility: visible !important;
+        /* Description column alignment */
+        .wj-flexgrid .wj-cell[data-binding='Description'] {
+            text-align: left; /* Left align for cell content */
         }
 
     </style>
@@ -93,10 +88,10 @@
                                 </dd>
                             </dl>
                         </div>
-                        <div class="button-wrap">
+                        <div class="button-wrap" style="border-top:none;">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="신규등록">
+                                    <a class="btn btn-excell" title="신규등록" id="Newbtn">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
@@ -152,13 +147,16 @@
                                             <tr>
                                                 <th><label for="parent_name">상위코드</label></th>
                                                 <td>
-                                                    <input type="text" id="parent_name" name="parent_name" class="wp100"  >
+                                                    <input type="text" id="parent_name" name="parent_name" class="wp100" readonly  >
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th><label for="code">코드</label></th>
                                                 <td>
                                                     <input type="text" id="code" name="code" class="wp100" required>
+                                                    <div style="text-align:left; ">
+                                                        <span id="code-check-message" style="color: red; display: none; ">중복된 코드입니다.</span>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -178,7 +176,47 @@
                                     </div>
                                 </form>
                             </div>
+
+
+                            <div class="section">
+                                <div class="title-wrap mg-b10">
+                                    <h3>공통코드 등록 방법</h3>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>보고분기 상세 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody >
+                                        <tr>
+                                            <th><label for="">상위코드</label></th>
+                                            <td style="font-size: 14px;">
+                                                코드와 코드명을 입력 후 저장 버튼을 누릅니다.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">중위코드</label></th>
+                                            <td colspan="3" style="font-size: 14px;">
+                                                상위분류명을 클릭 후 하위추가 버튼을 누르고 입력값 입력 후 저장 버튼을 누릅니다.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">하위코드</label></th>
+                                            <td colspan="3" style="font-size: 14px;">
+                                                중분류명을 클릭 후 하위추가 버튼을 누르고 입력값 입력 후 저장 버튼을 누릅니다.
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
+
                     </div>
                 </section>
                 <!-- Section -->
@@ -207,14 +245,17 @@
         // wijmo grid에서 hidden 사용할려면 visible 사용해야함
         var columns = [
             { binding: 'aid', header: 'AID', align: 'center', width: 100, visible: false },
-            { binding: 'agroupcd', header: 'A 그룹 코드', align: 'center', width: 100, visible: false },
+            { binding: 'agropcd', header: '상위코드', align: 'center', width: 100, isReadOnly: true },
             { binding: 'agroupnm', header: '상위분류명', align: 'center', width: 150 },
+
             { binding: 'bid', header: 'BID', align: 'center', width: 100, visible: false },
-            { binding: 'bgroupcd', header: 'B 그룹 코드', align: 'center', width: 100, visible: false },
+            { binding: 'bgropcd', header: '중위코드', align: 'center', width: 100, isReadOnly: true  },
             { binding: 'bgroupnm', header: '중분류명', align: 'center', width: 150 },
+
             { binding: 'cid', header: 'CID', align: 'center', width: 100, visible: false },
-            { binding: 'cgropcd', header: 'C 그룹 코드', align: 'center', width: 100, visible: false },
+            { binding: 'cgropcd', header: '하위코드', align: 'center', width: 100, isReadOnly: true  },
             { binding: 'cgroupnm', header: '하위분류명', align: 'center', width: 150 },
+
             { binding: 'Description', header: '설명', align: 'center', width: '*' }
         ];
 
@@ -283,18 +324,21 @@
                 if (selectedItem) {
                     var binding = theGrid.columns[s.selection.col].binding;
 
-                    // 바인딩에 따라 빈 값인지 확인
-                    if (binding === 'agroupnm' && selectedItem.agroupnm) {
+                    // 바인딩에 따라 값을 필드에 설정
+                    if (binding === 'agroupnm') {
                         $('#id').val(selectedItem.aid || '');
                         $('#code').val(selectedItem.agropcd || '');
                         $('#name').val(selectedItem.agroupnm || '');
                         $('#description').val(selectedItem.Description || '');
-                    } else if (binding === 'bgroupnm' && selectedItem.bgroupnm) {
+                        $('#parent_name').val(''); // 상위코드는 비웁니다
+                    } else if (binding === 'bgroupnm') {
+                        $('#id').val(selectedItem.bid || '');
                         $('#parent_name').val(selectedItem.agropcd || '');
                         $('#code').val(selectedItem.bgropcd || '');
                         $('#name').val(selectedItem.bgroupnm || '');
                         $('#description').val(selectedItem.Description || '');
-                    } else if (binding === 'cgroupnm' && selectedItem.cgroupnm) {
+                    } else if (binding === 'cgroupnm') {
+                        $('#id').val(selectedItem.cid || '');
                         $('#parent_name').val(selectedItem.bgropcd || '');
                         $('#code').val(selectedItem.cgropcd || '');
                         $('#name').val(selectedItem.cgroupnm || '');
@@ -325,6 +369,15 @@
             // 선택이 변경될 때, 현재 항목 업데이트
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            // 신규등록 버튼 클릭 이벤트 핸들러 등록
+            $('#Newbtn').click(function() {
+                // 상위코드 입력 필드를 비활성화
+                $('#parent_name').prop('disabled', true);
+
+                // 나머지 필드 초기화
+                $('#codeForm input[type="text"]').val('');
+            });
 
             $('#btnSave').click(saveCode);   // 등록 버튼 클릭 이벤트 핸들러 등록
 
@@ -371,13 +424,19 @@
                 if (res.success) {
                     Alert.alert('','저장되었습니다.');
                     searchDataBind();
+
+                    // 입력 필드 초기화
+                    clearTableInputs();
+
+                    // 그리드의 선택 상태를 초기화
+                    theGrid.collectionView.moveCurrentToPosition(-1);
+                    theGrid.selection = new wijmo.grid.CellRange(-1, -1, -1, -1); // 모든 셀의 선택을 해제
                 } else {
                     Alert.alert('', res.message)
                 }
             };
             AjaxUtil.postAsyncData(url, data, fnSuccess);
         }
-
 
         function searchDataBind() {
             console.log("searchDataBind called");
@@ -403,70 +462,6 @@
                 }
             });
         }
-
-        // function grid_binding(data) {
-        //
-        //     console.log("Data passed to grid_binding:", data);
-        //
-        //     if (!data || data.length === 0) {
-        //         console.error("No data available to bind to the grid.");
-        //         return;
-        //     }
-        //
-        //     // 데이터 가공
-        //     let formattedData = data.map(item => ({
-        //         aid: item.aid,
-        //         agroupcd: item.agroupcd,
-        //         agroupnm: item.agroupnm,
-        //         bid: item.bid,
-        //         bgroupcd: item.bgroupcd,
-        //         bgroupnm: item.bgroupnm,
-        //         cid: item.cid,
-        //         cgropcd: item.cgropcd,
-        //         cgroupnm: item.cgroupnm,
-        //         description: item.Description
-        //     }));
-        //
-        //     // Check if the grid and columns array are initialized
-        //     if (typeof theGrid === 'undefined' || typeof columns === 'undefined') {
-        //         console.error("Grid or columns are not defined.");
-        //         return;
-        //     }
-        //
-        //
-        //     // 그리드 초기화
-        //     theGrid.columns.clear();
-        //     theGrid.autoGenerateColumns = false;
-        //
-        //     // 컬럼 정의 추가
-        //     columns.forEach(colDef => {
-        //         let col = new wijmo.grid.Column(colDef);
-        //         theGrid.columns.push(col);
-        //     });
-        //
-        //     // CollectionView 생성
-        //     viewdata = new wijmo.collections.CollectionView(formattedData);
-        //
-        //     // Check if menuGroupName is defined
-        //     if (typeof menuGroupName !== 'undefined') {
-        //         viewdata.groupDescriptions.clear();
-        //         viewdata.groupDescriptions.push(menuGroupName);
-        //     } else {
-        //         console.error("menuGroupName is not defined.");
-        //     }
-        //
-        //     // // 기존 그룹화를 초기화
-        //     // viewdata.groupDescriptions.clear();
-        //
-        //     // 그룹화 적용 (menuGroupName 사용하여 'agroupnm' 기준으로 그룹화)
-        //     viewdata.groupDescriptions.push(menuGroupName);
-        //
-        //     // 그리드에 데이터 바인딩
-        //     theGrid.itemsSource = viewdata;
-        //     theGrid.refresh();
-        // }
-
-
 
         function grid_binding(data) {
             console.log("Data to bind to grid:", data);
@@ -517,7 +512,7 @@
         function deleteCode() {
             // 그리드에서 선택된 항목과 열 정보를 가져옵니다
             var selectedRow = theGrid.selection.row;
-            var selectedColumn = theGrid.selection.column;
+            var selectedColumn = theGrid.selection.col; // .column 대신 .col로 변경
 
             // 선택된 항목의 데이터 아이템을 가져옵니다
             var selectedItem = theGrid.rows[selectedRow]?.dataItem;
@@ -527,8 +522,25 @@
                 return;
             }
 
-            // 선택된 열의 바인딩 이름을 가져옵니다
-            var cellBinding = theGrid.columns[selectedColumn]?.binding;
+            if (selectedColumn === null || selectedColumn === undefined) {
+                alert('선택된 열이 없습니다.');
+                console.error('Invalid column index:', selectedColumn);
+                return;
+            }
+
+            var column = theGrid.columns[selectedColumn];
+
+            if (!column) {
+                alert('유효한 열이 아닙니다. 선택된 열이 없는 것 같습니다.');
+                console.error('Invalid column:', column);
+                return;
+            }
+
+            var cellBinding = column.binding;
+
+            // 바인딩 이름을 확인합니다
+            console.log('Selected Column Object:', column);
+            console.log('Selected Cell Binding:', cellBinding);
 
             // 셀의 바인딩 이름에 따라 ID를 설정합니다
             let id = null;
@@ -543,13 +555,12 @@
                     id = selectedItem.cid;
                     break;
                 default:
-                    Alert.alert('', '알 수 없는 바인딩입니다.');
+                    alert('알 수 없는 바인딩입니다: ' + cellBinding); // 바인딩 이름을 출력
                     return;
             }
 
-
             if (!id) {
-                Alert.alert('', '유효한 ID를 찾을 수 없습니다.');
+                alert('유효한 ID를 찾을 수 없습니다.');
                 return;
             }
 
@@ -571,10 +582,18 @@
                 success: function(res) {
                     // 삭제 성공 시 사용자에게 알림 표시 후 그리드 갱신
                     if (res.success) {
-                        Alert.alert('', '삭제되었습니다.');
+                        Alert.alert('삭제되었습니다.');
                         searchDataBind(); // 데이터 삭제 후 그리드를 새로 고침
+
+                        // 입력 필드 초기화
+                        clearTableInputs();
+
+                        // 그리드의 선택 상태를 초기화
+                        theGrid.collectionView.moveCurrentToPosition(-1);
+                        theGrid.selection = new wijmo.grid.CellRange(-1, -1, -1, -1); // 모든 셀의 선택을 해제
+
                     } else {
-                        Alert.alert('', res.message);  // 오류 발생 시 사용자에게 알림 표시
+                        alert(res.message);  // 오류 발생 시 사용자에게 알림 표시
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -583,26 +602,44 @@
             });
         }
 
-        $(document).ready(function() {
-            // searchDataBind();
-            // init();
-            // 신규등록 버튼 클릭 이벤트
-            $('.btn-excell').click(function (event) {
-                // 기본 동작 방지 (페이지 새로고침 방지)
-                event.preventDefault();
+        function clearTableInputs() {
+            // 모든 입력 필드를 선택합니다.
+            let inputs = document.querySelectorAll('#codeForm input[type="text"], #codeForm input[type="number"], #codeForm textarea');
 
-                // 입력 폼의 모든 입력 필드 초기화
-                $('#codeForm input[type="text"]').val('');
+            // 각 입력 필드의 값을 빈 문자열로 설정하여 초기화합니다.
+            inputs.forEach(function(input) {
+                input.value = '';
             });
+        }
 
+        function checkCodeDuplicate(code) {
+            $.ajax({
+                url: '/api/system/code/checkDuplicate',
+                type: 'GET',
+                data: { code: code },
+                success: function(response) {
+                    if (response.exists) {
+                        $('#code-check-message').text('중복된 코드입니다.').show();
+                    } else {
+                        $('#code-check-message').hide();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('중복 체크 오류:', textStatus, errorThrown);
+                }
+            });
+        }
 
-
+        $(document).ready(function() {
+            $('#code').on('input', function() {
+                let code = $(this).val();
+                if (code) {
+                    checkCodeDuplicate(code);
+                } else {
+                    $('#code-check-message').hide();
+                }
+            });
         });
-
-
-
-
-
 
     </script>
 
