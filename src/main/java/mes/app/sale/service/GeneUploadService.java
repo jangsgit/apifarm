@@ -1,6 +1,7 @@
 package mes.app.sale.service;
 
 import mes.config.Settings;
+import mes.domain.entity.actasEntity.TB_RP320_Id;
 import mes.domain.repository.TB_RP320Repository;
 import mes.domain.services.SqlRunner;
 import org.apache.poi.ss.usermodel.CellType;
@@ -40,6 +41,7 @@ public class GeneUploadService {
 //	 각 셀을 읽을 때 유효성 검사를 추가하거나,
 //	 특정 필드(예: 날짜, 숫자)의 형식이 올바른지 확인하는 로직을 추가하기
 	
+	// 엑셀 파일 데이터 읽기 메소드
 	public List<List<String>> excel_read(String filename) throws IOException{
 		
 		System.out.println("Reading Excel file: " + filename);
@@ -94,6 +96,8 @@ public class GeneUploadService {
 		return all_rows;
 	}
 	
+	
+	// 업로드된 파일 저장 메소드
 	public String saveUploadedFile(MultipartFile file) throws IOException {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime now = LocalDateTime.now();
@@ -113,5 +117,8 @@ public class GeneUploadService {
 	}
 	
 	
-	
+	// 데이터 삭제 메소드
+	public void deleteGeneData(TB_RP320_Id id) {
+		TB_RP320Repository.deleteById(id);
+	}
 }

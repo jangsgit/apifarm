@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -125,7 +125,7 @@ public class TB_RP320 {
 	private BigDecimal mevaluet;
 	
 	@Column(name = "indatem")
-	private LocalDateTime indatem;
+	private LocalDate indatem = LocalDate.now();
 	
 	@Column(name = "inuserid")
 	private String inuserid;
@@ -134,6 +134,6 @@ public class TB_RP320 {
 	private String inusernm;
 	
 	@Column(name = "updatem")
-	private LocalDateTime updatem;
+	private LocalDate updatem = LocalDate.now();
 	
 }
