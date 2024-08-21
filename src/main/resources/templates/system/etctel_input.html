@@ -89,8 +89,6 @@
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="checkph" name="checkph" class="input-srch">
-                                        <a class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
-                                           onkeyup="searchData()"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -179,9 +177,7 @@
                     </div>
                     <div class="table-wrap">
                         <form id="980_form">
-<!--                            <input type="hidden" id="emcontno" name="emcontno">-->
-                            <input type="hidden" id="inuserid" name="inuserid">
-                            <input type="hidden" id="inusernm" name="inusernm">
+                            <input type="hidden" id="emcontno" name="emcontno">
                             <table class="write-table">
                                 <caption>비상연락망등록 테이블</caption>
                                 <colgroup>
@@ -200,8 +196,8 @@
                                     <td>
                                         <ul>
                                             <li>
-                                                <select title="지역">
-                                                    <option>대구</option>
+                                                <select title="지역" id="emconcomp">
+                                                    <option value="">대구</option>
                                                 </select>
                                             </li>
                                         </ul>
@@ -265,8 +261,8 @@
                                     <td>
                                         <ul>
                                             <li>
-                                                <select title="지역">
-                                                    <option>대구</option>
+                                                <select title="지역" id="spworkcd">
+                                                    <option value="">대구</option>
                                                 </select>
                                             </li>
                                         </ul>
@@ -279,7 +275,7 @@
                                     <td>
                                         <ul>
                                             <li>
-                                                <select title="구">
+                                                <select title="구" id="spcompcd">
                                                     <option>성서산단</option>
                                                 </select>
                                             </li>
@@ -297,12 +293,12 @@
                                         <input type="text" id="taskwork" name="taskwork" class="wp100" maxlength="50" placeholder="유지보수">
                                     </td>
                                     <th>
-                                        <label for="nowDate">
+                                        <label for="indatem">
                                             생성일시
                                         </label>
                                     </th>
                                     <td>
-                                        <input type="text" id="nowDate" name="nowDate" autocomplete="off" readonly >
+                                        <input type="text" id="indatem" name="indatem" autocomplete="off" readonly >
                                     </td>
                                 </tr>
 
@@ -314,101 +310,6 @@
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-
-<!--    &lt;!&ndash; 팝업 &ndash;&gt;-->
-<!--    <div class="modal">-->
-
-<!--        <div class="popup-wrapper w700" id="popup1">-->
-<!--            <div class="popup-title">-->
-<!--                <h3>점검일지 업로드</h3>-->
-<!--                <a href="#" title="팝업닫기" onclick="closePopup()" class="btn-popup-close">-->
-<!--                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <div class="popup-contents">-->
-<!--                <div class="table-wrap">-->
-<!--                    <table class="write-table">-->
-<!--                        <caption>점검등록 테이블</caption>-->
-<!--                        <colgroup>-->
-<!--                            <col class="wp20">-->
-<!--                            <col class="wp80">-->
-<!--                        </colgroup>-->
-<!--                        <tbody>-->
-<!--                        <tr>-->
-<!--                            <th>-->
-<!--                                <label for="date6">-->
-<!--                                    등록일자-->
-<!--                                </label>-->
-<!--                            </th>-->
-<!--                            <td>-->
-<!--                                <div class="input-clear">-->
-<!--                                    <input type="date" id="date6" name="" value="2024-06-27">-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th>-->
-<!--                                <label for="popuptext1">-->
-<!--                                    점검자-->
-<!--                                </label>-->
-<!--                            </th>-->
-<!--                            <td>-->
-<!--                                <div class="input-clear"><input type="text" id="popuptext1" class="wp60"-->
-<!--                                                                placeholder="점검자"><span class="btn-clear">×</span></div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th>-->
-<!--                                <label for="popuptext2">-->
-<!--                                    점검장소-->
-<!--                                </label>-->
-<!--                            </th>-->
-<!--                            <td>-->
-<!--                                <div class="input-clear"><input type="text" id="popuptext2" class="wp100"-->
-<!--                                                                placeholder="점검장소"><span class="btn-clear">×</span>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th>-->
-<!--                                첨부파일-->
-<!--                            </th>-->
-<!--                            <td>-->
-<!--                                <div id="uploadComponent2" class="upload-component">-->
-<!--                                    <div class="upload-filebox">-->
-<!--                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">-->
-<!--                                        <a href="#" class="btn" title="파일업로드">파일업로드</a>-->
-<!--                                        <input type="file" id="fileInput2" class="fileInput" multiple="">-->
-<!--                                        <p>Maximun upload file size <span>1GiB</span></p>-->
-<!--                                    </div>-->
-<!--                                    <div class="upload-filelist">-->
-<!--                                        <div class="title">-->
-<!--                                            <h5>Files (0)</h5>-->
-<!--                                            <a href="#" title="Delete all" class="btn-file-deleteall">Delete all</a>-->
-<!--                                        </div>-->
-<!--                                        <ul class="filelist">-->
-<!--                                        </ul>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="popup-button">-->
-<!--                <button onclick="closePopup()"-->
-<!--                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소-->
-<!--                </button>-->
-<!--                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">-->
-<!--                    저장-->
-<!--                </button>-->
-<!--            </div>-->
-
-<!--        </div>-->
-
-<!--    </div>-->
-
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -422,45 +323,36 @@
         var viewdata;
 
 
-        function closePopup() {
-            const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';
-        }
-
-        function showPopup() {
-
-            const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'block';
-            modalOpen.style.display = 'block';
-            /*var popup = document.getElementById('popup1');
-
-            popup.style.display = 'block';*/
-        }
-
-        function submitTextarea(event){
-            let key = event.key || event.keyCode;
-
-            if(key === 'Enter' || key == 13){
-                searchData();
-            }
-        }
-
         let searchusrval = document.getElementById('emconper');
         let searchusrval2 = document.getElementById('emconmno');
 
-        searchusrval.addEventListener('keyup', event => submitTextarea(event))
-        searchusrval2.addEventListener('keyup', event => submitTextarea(event))
-
-        var input = document.getElementById('nowDate');
+        var input = document.getElementById('indatem');
         var today = new Date();
         var year = today.getFullYear();
         var month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
         var day = String(today.getDate()).padStart(2, '0');
         var formattedDate = year + '-' + month + '-' + day;
         input.value = formattedDate;
+
+
+
+        var columns = [
+                {binding: 'rownum', header: 'NO', width: 80, align: 'center'},
+                {binding: 'workcd', header: '지역명', width: 140, align: 'center'},
+                {binding: 'compcd', header: '산단명', width: 140, align: 'center'},
+                {binding: 'emconcomp', header: '협력사', width: 140, align: 'center'},
+                {binding: 'indatem', header: '생성일시', width: 140, align: 'center'},
+                {binding: 'divinm', header: '소속부서', width: 140, align: 'center'},
+                {binding: 'emconper', header: '성명', width: 140, align: 'center'},
+                {binding: 'taskwork', header: '담당업무', width: 160, align: 'center'},
+                {binding: 'emcontel', header: '사무실전화', width: 140, align: 'center'},
+                {binding: 'emconmno', header: '모바일', width: 160, align: 'center'},
+                {binding: 'emconemail', header: '이메일', width: "*", align: 'center'},
+
+            ];
+
+
+
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -473,30 +365,14 @@
             let emconmno = $('#emconmno').val();
             this.base_url = '/api/system/tel_List';
 
-            // $.ajax({
-            //     url: '/api/system/tel_List/read',
-            //     type: 'GET',
-            //     data: {
-            //         'emconper': emconper,
-            //         'emconmno': emconmno
-            //     },
-            //     async: false,
-            //     success: function (data) {
-            //         console.log('wijmo', data.data);
-            //         data2 = data.data;
-            //     },
-            //     error: function (jqXHR, textStatus, errorThrown) {
-            //         console.error('Error fetching log_list data:', textStatus, errorThrown);
-            //     }
-            // });
 
             $.ajax({
-                url: '/api/system/List/read',
+                url: '/api/system/tbRp980/read',
                 type: 'GET',
-                // data: {
-                //     'emconper': emconper,
-                //     'emconmno': emconmno
-                // },
+                data: {
+                    'emconper': emconper,
+                    'emconmno': emconmno
+                },
                 async: false,
                 success: function (data) {
                     console.log('wijmo', data.data);
@@ -522,21 +398,7 @@
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
-                columns: [
-                    {binding: 'rownum', header: 'NO', width: 80, align: 'center'},
-                    {binding: 'workcd', header: '지역명', width: 140, align: 'center'},
-                    {binding: 'compcd', header: '산단명', width: 140, align: 'center'},
-                    {binding: 'emconcomp', header: '협력사', width: 140, align: 'center'},
-                    {binding: 'indatem', header: '생성일시', width: 140, align: 'center'},
-                    {binding: 'divinm', header: '소속부서', width: 140, align: 'center'},
-                    {binding: 'emconper', header: '성명', width: 140, align: 'center'},
-                    {binding: 'taskwork', header: '담당업무', width: 160, align: 'center'},
-                    {binding: 'emcontel', header: '사무실전화', width: 140, align: 'center'},
-                    {binding: 'emconmno', header: '모바일', width: 160, align: 'center'},
-                    {binding: 'emconemail', header: '이메일', width: "*", align: 'center'},
-
-                ],
-
+                columns: columns,
                 itemsSource: viewdata
             });
 
@@ -554,84 +416,124 @@
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
 
-            theGrid.setCellData(0,'rownum','1');
-            theGrid.setCellData(0,'workcd','대구');
-            theGrid.setCellData(0,'compcd','성서산단');
-            theGrid.setCellData(0,'emconcomp','성서발전소');
-            theGrid.setCellData(0,'indatem','2024-07-24');
-            theGrid.setCellData(0,'divinm', '유지보수');
-            theGrid.setCellData(0,'emconper','홍길동');
-            theGrid.setCellData(0,'taskwork','유지보수');
-            theGrid.setCellData(0,'emcontel','02-451-3321');
-            theGrid.setCellData(0,'emconmno','010-3256-3241');
-            theGrid.setCellData(0,'emconemail','admin@naver.com');
-
-            theGrid.setCellData(1,'rownum','2');
-            theGrid.setCellData(1,'workcd','대구');
-            theGrid.setCellData(1,'compcd','성서산단');
-            theGrid.setCellData(1,'emconcomp','성서발전소');
-            theGrid.setCellData(1,'indatem','2024-07-25');
-            theGrid.setCellData(1,'divinm', '점검관리');
-            theGrid.setCellData(1,'emconper','홍동');
-            theGrid.setCellData(1,'taskwork','점검관리');
-            theGrid.setCellData(1,'emcontel','02-325-7840');
-            theGrid.setCellData(1,'emconmno','010-3125-7241');
-            theGrid.setCellData(1,'emconemail','admin1@naver.com');
-
-
+            // theGrid.setCellData(0,'rownum','1');
+            // theGrid.setCellData(0,'workcd','대구');
+            // theGrid.setCellData(0,'compcd','성서산단');
+            // theGrid.setCellData(0,'emconcomp','성서발전소');
+            // theGrid.setCellData(0,'indatem','2024-07-24');
+            // theGrid.setCellData(0,'divinm', '유지보수');
+            // theGrid.setCellData(0,'emconper','홍길동');
+            // theGrid.setCellData(0,'taskwork','유지보수');
+            // theGrid.setCellData(0,'emcontel','02-451-3321');
+            // theGrid.setCellData(0,'emconmno','010-3256-3241');
+            // theGrid.setCellData(0,'emconemail','admin@naver.com');
+            //
+            // theGrid.setCellData(1,'rownum','2');
+            // theGrid.setCellData(1,'workcd','대구');
+            // theGrid.setCellData(1,'compcd','성서산단');
+            // theGrid.setCellData(1,'emconcomp','성서발전소');
+            // theGrid.setCellData(1,'indatem','2024-07-25');
+            // theGrid.setCellData(1,'divinm', '점검관리');
+            // theGrid.setCellData(1,'emconper','홍동');
+            // theGrid.setCellData(1,'taskwork','점검관리');
+            // theGrid.setCellData(1,'emcontel','02-325-7840');
+            // theGrid.setCellData(1,'emconmno','010-3125-7241');
+            // theGrid.setCellData(1,'emconemail','admin1@naver.com');
 
 
+
+            $('#btnSave').click(save);
 
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
-        let filelist = [];
-
-        function filevalueinit(param) {
-            filelist = param;
-
-        }
-
         let page = null;
 
+
+        // 비상연락망 저장
+        function save() {
+            let url ='/api/system/tbRp980/save';
+
+            let data = FormUtil.extractForm($('#980_form'));
+
+            // if (!data.code || !data.name) {
+            //     Alert.alert('', '필수항목을 입력해주세요');
+            //     return;
+            // }
+
+            let fnSuccess = function (res) {
+                console.log(res, "+", data);
+                if (res.success) {
+                    Alert.alert('','저장되었습니다.');
+
+                    searchDataBind();
+                } else {
+                    Alert.alert('', res.message);
+                }
+            };
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
         //검색
-        function searchData() {
+        function searchDataBind() {
+
             let data = {
                 'emconper': $('#emconper').val(),
                 'emconmno' : $('#emconmno').val()
             }
 
-            let result = AjaxUtil.getSyncData('/api/system/tel_List/read', data);
+            console.log("Data to send:", data);
 
-            if (result.success) {
-                console.log(result.data);
-                grid_binding(result.data);
-            }
+            $.ajax({
+                url: '/api/system/tbRp980/read',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
         }
 
-        // 비상연락망 저장
-        function saveTel(type) {
-            let _this = this;
+        function grid_binding(data){
+            console.log("Data to bind to grid:", data);
 
-            let data = FormUtil.extractForm($('#980_form'));
-            let fnSuccess = function (res) {
-                data.type = type;
-                console.log(res, "+", data);
+            let formattedData = data.map(item => ({
+                rownum: item.rownum,
+                workcd: item.workcd,
+                compcd: item.compcd,
+                emconcomp: item.emconcomp,
+                indatem: item.indatem,
+                divinm: item.divinm,
+                emconper: item.emconper,
+                taskwork: item.taskwork,
+                emcontel: item. emcontel,
+                emconmno: item.emconmno,
+                emconemail: item. emconemail
+            }));
 
-                if (res.success) {
-                    Notify.success("등록되었습니다.");
 
-                    location.reload();
-                } else if (!res.success) {
-                    Alert.alert('', res.message);
-                }
-            };
-            AjaxUtil.postAsyncData(_this.base_url + '/save', data, fnSuccess);
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+
+            columns.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid.columns.push(col);
+            });
+
+            viewdata = new wijmo.collections.CollectionView(formattedData);
+
+            theGrid.itemsSource = viewdata;
+            theGrid.refresh();
+
         }
 
 
@@ -663,207 +565,9 @@
         //
         // }
 
-        function grid_binding(data){
-            var tb_rp980Dto = data;
-            var tb_rp980Data = [];
-            console.log(tb_rp980Data+"/"+data);
 
-            for (var i = 0; i < tb_rp980Dto.length; i++) {
-                tb_rp980Data.push({
-                    rownum: tb_rp980Dto[i]["rownum"],
-                    workcd: tb_rp980Dto[i]["workcd"],
-                    compcd: tb_rp980Dto[i]["compcd"],
-                    emconcomp: tb_rp980Dto[i]["emconcomp"],
-                    indatem: tb_rp980Dto[i]["indatem"],
-                    divinm: tb_rp980Dto[i]["divinm"],
-                    emconper: tb_rp980Dto[i]["emconper"],
-                    taskwork: tb_rp980Dto[i]["taskwork"],
-                    emcontel: tb_rp980Dto[i]["emcontel"],
-                    emconmno: tb_rp980Dto[i]["emconmno"],
-                    emconemail: tb_rp980Dto[i]["emconemail"],
-
-
-                });
-
-            }
-
-            theGrid.columns.clear();
-            theGrid.autoGenerateColumns = false;
-            viewdata.sourceCollection = tb_rp980Data;
-
-            for (var i =0; i <columns.length; i++){
-                var col = new wijmo.grid.Column(columns[i]);
-                theGrid.columns.push(col);
-            }
-
-            // var cols = new wijmo.grid.Column();
-            // cols.binding = 'rownum';
-            // cols.header = '순번';
-            // cols.align = "center";
-            // cols.width = 60;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'spworknm';
-            // cols.header = '지역명';
-            // cols.align = "center";
-            // cols.width = 140;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'sspcompcd';
-            // cols.header = '산단명';
-            // cols.align = "center";
-            // cols.width = 140;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'emconcomp';
-            // cols.header = '협력사';
-            // cols.align = "center";
-            // cols.width = 140;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'indatem';
-            // cols.header = '생성일시';
-            // cols.align = "center";
-            // cols.width = 140;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'divinm';
-            // cols.header = '소속부서';
-            // cols.align = "center";
-            // cols.width = 140;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'emconper';
-            // cols.header = '성명';
-            // cols.align = "center";
-            // cols.width = 200;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'taskwork';
-            // cols.header = '담당업무';
-            // cols.align = "center";
-            // cols.width = 260;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'emcontel';
-            // cols.header = '사무실전화';
-            // cols.align = "center";
-            // cols.width = 260;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'emconmno';
-            // cols.header = '모바일';
-            // cols.align = "center";
-            // cols.width = 260;
-            // theGrid.columns.push(cols);
-            //
-            // cols = new wijmo.grid.Column();
-            // cols.binding = 'emconemail';
-            // cols.header = '이메일';
-            // cols.align = "center";
-            // cols.width = 260;
-            // theGrid.columns.push(cols);
-
-
-
-
-
-        }
 
         $(document).ready(function (e) {
-
-
-            // page = new CheckResultDiaryPage();
-
-
-            // $('#btnSave').click(function (e){
-            //     console.log("22")
-            //
-            //
-            //     Alert.confirm('', '저장하시겠습니까?', function() {
-            //
-            //             let fileInput = document.getElementById('fileInput1');
-            //             let files = fileInput.files;
-            //             let formData = new FormData();
-            //
-            //             for (var i = 0; i < files.length; i++) {
-            //                 formData.append('filelist', files[i]);
-            //             }
-            //
-            //             const randomString = generateRandomStringWithDate();
-            //
-            //             var inputs = document.querySelectorAll('input[name="checkusr"]');
-            //             var values = [];
-            //
-            //             inputs.forEach(function(input){
-            //                 values.push(input.value);
-            //
-            //             })
-            //
-            //             var checkusrString = values.join(',');
-            //
-            //
-            //
-            //             // 다른 데이터를 FormData에 추가합니다.
-            //             formData.append('workcd ', $('#workcd').val());
-            //             formData.append('compcd', $('#compcd').val());
-            //             formData.append('emconcomp', $('#emconcomp').val());
-            //
-            //             formData.append('indatem', $('#indatem').val());
-            //             formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-            //             formData.append('divinm', $('#divinm').val());
-            //             formData.append('emconper', $('#emconper').val());
-            //             formData.append('taskwork', $('#taskwork').val());
-            //             formData.append('emcontel', $('#emcontel').val());
-            //             formData.append('emconmno', $('#emconmno').val());
-            //             formData.append('emconemail', $('#emconemail').val());
-            //
-            //
-            //
-            //             $.ajax({
-            //                 url: '/api/system/tel_List/save',
-            //                 type: 'POST',
-            //                 data: formData,
-            //                 processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-            //                 contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-            //                 success: function (response) {
-            //                     if(response.success){
-            //                         Alert.alert('', response.message);
-            //                     }
-            //                 },
-            //                 error: function (jqXHR, textStatus, errorThrown) {
-            //                     Alert.alert('', '에러가발생하였습니다.');
-            //                 }
-            //             });
-            //
-            //
-            //         },
-            //         function () {}
-            //
-            //
-            //     )
-            // })
-
-            $('#btnSave').click(function (e) {
-                Alert.confirm('',
-                    '등록하시겠습니까?',
-                    function () {
-                        saveTel("S")
-                    },
-                    function () {
-                    // 취소 버튼을 눌렀을 때 처리
-                    }
-                );
-            });
 
 
             $('#btnDelete').click(function(e){

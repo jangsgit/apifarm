@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mes.domain.DTO.TB_RP940Dto;
-import mes.domain.DTO.TB_RP980Dto;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Setter
@@ -20,7 +17,7 @@ import java.util.Date;
 public class TB_RP980 {
 
     @Id
-    @Column(name = "EMCONTNO",length = 3, nullable = false)  // 기본키
+    @Column(name = "EMCONTNO", nullable = false)
     private String emcontno;
 
     @Column(name = "EMCONCOMP") // 업체명
@@ -50,8 +47,8 @@ public class TB_RP980 {
     @Column(name = "USEYN")     // 사용여부
     private String useyn;
 
-    @Column (name = "DIVINM")   // 소속부서
-    private String divinm;
+//    @Column (name = "DIVINM")   // 소속부서
+//    private String divinm;
 
     @Column(name = "INDATEM")
     private Date indatem;
@@ -61,26 +58,5 @@ public class TB_RP980 {
 
     @Column(name = "INUSERNM")
     private String inusernm;
-
-
-    public static TB_RP980 toSaveEntity(TB_RP980Dto dto) {
-        TB_RP980 entity = new TB_RP980();
-        entity.setEmcontno(dto.getEmcontno());
-        entity.setEmconcomp(dto.getComp());
-        entity.setEmconper(dto.getPer());
-        entity.setEmcontel(dto.getTel());
-        entity.setUseyn(dto.getUseyn());
-        entity.setIndatem(dto.getIndatem());
-        entity.setInuserid(dto.getInuserid());
-        entity.setInusernm(dto.getInusernm());
-
-        entity.setDivinm(dto.getDivinm());
-        entity.setEmconmno(dto.getMno());
-        entity.setEmconemail(dto.getEmail());
-        entity.setTaskwork(dto.getTaskwork());
-        entity.setSpworkcd(dto.getWorkcd());
-        entity.setSpcompcd(dto.getCompcd());
-        return entity;
-    }
 
 }

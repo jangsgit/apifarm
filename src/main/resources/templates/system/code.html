@@ -5,12 +5,14 @@
 
 <head>
     <style>
-
-        /* Description column alignment */
-        .wj-flexgrid .wj-cell[data-binding='Description'] {
-            text-align: left; /* Left align for cell content */
+        .wj-header {
+            text-align: center;
         }
 
+        /* 셀 왼쪽 정렬 */
+        .wj-cell {
+            text-align: left;
+        }
     </style>
 </head>
 
@@ -180,7 +182,7 @@
 
                             <div class="section">
                                 <div class="title-wrap mg-b10">
-                                    <h3>공통코드 등록 방법</h3>
+                                    <h3>공통코드 등록 및 삭제 방법</h3>
                                 </div>
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -208,6 +210,12 @@
                                             <th><label for="">하위코드</label></th>
                                             <td colspan="3" style="font-size: 14px;">
                                                 중분류명을 클릭 후 하위추가 버튼을 누르고 입력값 입력 후 저장 버튼을 누릅니다.
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">삭제</label></th>
+                                            <td colspan="3" style="font-size: 14px;">
+                                                상위분류명, 중분류명, 하위분류명 중 삭제 대상을 클릭 후 삭제 버튼을 누릅니다.
                                             </td>
                                         </tr>
                                         </tbody>
@@ -313,6 +321,15 @@
                 isReadOnly: true,
             });
 
+            // 헤더 스타일 추가
+            document.querySelectorAll('.wj-header').forEach(header => {
+                header.style.textAlign = 'center';
+            });
+
+            // 셀 스타일 추가
+            document.querySelectorAll('.wj-cell').forEach(cell => {
+                cell.style.textAlign = 'left';
+            });
 
             theGrid.selectionChanged.addHandler(function (s, e) {
                 var selectedRow = s.selection.row;
