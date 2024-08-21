@@ -149,9 +149,20 @@ $(document).ready(function () {
         const $fileCountTitle = $(component).find('.upload-filelist .title h5');
 
         $fileInput.on('change', function (event) {
-            handleFileSelect(event.target.files);
+            // handleFileSelect(event.target.files);
             // 파일 선택 후 파일 입력 요소 초기화
             // resetFileInput($fileInput);
+
+            const files = event.target.files;
+
+            // 특정 모달에서만 파일이 두 개 이상 선택되었는지 확인
+            if ($('#single-file-upload-page').length > 0 && (files.length > 1 || uploadedFiles.length > 0)) {
+                Alert.alert('', '파일은 한 개만 첨부할 수 있습니다.');
+                resetFileInput($fileInput);
+                return;
+            }
+
+            handleFileSelect(files);
         });
 
         $(component).find('.upload-filebox').on('dragover', function (event) {
@@ -170,7 +181,18 @@ $(document).ready(function () {
             event.preventDefault();
             event.stopPropagation();
             $(this).removeClass('dragging');
-            handleFileSelect(event.originalEvent.dataTransfer.files);
+            // handleFileSelect(event.originalEvent.dataTransfer.files);
+
+            const files = event.originalEvent.dataTransfer.files;
+
+            // 특정 페이지에서만 드래그 앤 드롭으로 추가된 파일들이 두 개 이상인지 확인
+            if ($('#single-file-upload-page').length > 0 && (files.length > 1 || uploadedFiles.length > 0)) {
+                Alert.alert('', '파일은 한 개만 첨부할 수 있습니다.');
+                resetFileInput($fileInput);
+                return;
+            }
+
+            handleFileSelect(files);
             // 드래그 앤 드롭 후 파일 입력 요소 초기화
             resetFileInput($fileInput);
         });

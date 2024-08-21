@@ -1,7 +1,11 @@
 package mes.app.sale.service;
 
 import mes.config.Settings;
+import mes.domain.entity.User;
+import mes.domain.entity.actasEntity.TB_RP310;
+import mes.domain.entity.actasEntity.TB_RP320;
 import mes.domain.entity.actasEntity.TB_RP320_Id;
+import mes.domain.repository.TB_RP310Repository;
 import mes.domain.repository.TB_RP320Repository;
 import mes.domain.services.SqlRunner;
 import org.apache.poi.ss.usermodel.CellType;
@@ -12,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -19,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +39,9 @@ public class GeneUploadService {
 	
 	@Autowired
 	TB_RP320Repository TB_RP320Repository;
+	
+	@Autowired
+	TB_RP310Repository TB_RP310Repository;
 	
 	@Autowired
 	Settings settings;
@@ -121,4 +130,45 @@ public class GeneUploadService {
 	public void deleteGeneData(TB_RP320_Id id) {
 		TB_RP320Repository.deleteById(id);
 	}
+	
+	
+	// 수정
+	@Transactional
+	public void updateGeneData(List<TB_RP320> updates, User currentUser) {
+		for (TB_RP320 update : updates) {
+			
+			// 기존 데이터 가져오기
+			TB_RP320 existingData = TB_RP320Repository.findById(new TB_RP320_Id(update.getStanddt(), update.getPowerid())).orElse(null);
+			
+			if (existingData != null && !existingData.equals(update)) {
+				// 수정 이력 기록 (TB_RP310)
+				TB_RP310 history = new TB_RP310();
+				history.setSpworkcd(existingData.getSpworkcd());
+				history.setSpworknm(existingData.getSpworknm());
+				history.setSpcompcd(existingData.getSpcompcd());
+				history.setSpcompnm(existingData.getSpcompnm());
+				history.setSpplancd(existingData.getSpplancd());
+				history.setSpplannm(existingData.getSpplannm());
+				history.setStanddt(existingData.getStanddt());
+				history.setUserid(currentUser.getUsername());
+				history.setUsernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
+				history.setCreartdt(LocalDateTime.now());
+				history.setPowerid(existingData.getPowerid());
+				history.setPowernm(existingData.getPowernm());
+				history.setUptyn("Y"); // 업데이트 여부 'Y'로 설정
+				
+				TB_RP310Repository.save(history);
+				
+				// 기존 데이터의 등록자 정보를 수정자로 업데이트
+				update.setInuserid(currentUser.getUsername());
+				update.setInusernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
+				update.setUpdatem(LocalDate.now());
+				
+				// TB_RP320 테이블 업데이트
+				TB_RP320Repository.save(update);
+			}
+		}
+	}
+	
+	
 }

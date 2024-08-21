@@ -216,80 +216,82 @@
                 </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
-    </div> <!--//layout-contents end -->
 
-    <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>엑셀 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <form id="file-upload-form" enctype="multipart/form-data">
-                    <div class="table-wrap">
-                        <table class="write-table">
-                            <caption>발전량등록 테이블</caption>
-                            <colgroup>
-                                <col class="wp20">
-                                <col class="wp80">
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <th>
-                                    <label for="date6">
-                                        일자
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="input-clear">
-                                        <input type="date" id="date6" name="" value="2024-06-27">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    첨부파일
-                                </th>
-                                <td>
-                                    <div id="uploadComponent2" class="upload-component">
-                                        <div class="upload-filebox">
-                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                            <a class="btn" title="파일업로드">파일업로드</a>
-                                            <input type="file" id="fileInput" class="fileInput" name="upload_file">
-                                            <p>Maximun upload file size <span>1GiB</span></p>
-                                            <p>*업로드 시 상태는 Excel이며, 수주전환 이전데이터만 삭제가능합니다.</p>
+        <!-- 팝업 -->
+        <div class="modal" id="single-file-upload-page">
+            <div class="popup-wrapper w700" id="popup1">
+                <div class="popup-title">
+                    <h3>엑셀 업로드</h3>
+                    <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                        <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <form id="file-upload-form" enctype="multipart/form-data">
+                        <div class="table-wrap">
+                            <table class="write-table">
+                                <caption>발전량등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp20">
+                                    <col class="wp80">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="date6">
+                                            일자
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <div class="input-clear">
+                                            <input type="date" id="date6" name="">
                                         </div>
-
-                                        <div class="upload-filelist">
-                                            <div class="title">
-                                                <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        첨부파일
+                                    </th>
+                                    <td>
+                                        <div id="uploadComponent2" class="upload-component">
+                                            <div class="upload-filebox">
+                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <input type="file" id="fileInput" class="fileInput" name="upload_file">
+                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                                <p>*업로드 시 상태는 Excel이며, 파일은 한 개만 첨부할 수 있습니다.</p>
                                             </div>
-                                            <ul class="filelist" id="filelist">
-                                            </ul>
+
+                                            <div class="upload-filelist">
+                                                <div class="title">
+                                                    <h5>Files (0)</h5>
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                                </div>
+                                                <ul class="filelist" id="filelist">
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="popup-button">
-                        <button onclick="closePopup()"
-                                style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
-                        </button>
-                        <button type="button" onclick="uploadExcelAndLoadData()"
-                                style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
-                            저장
-                        </button>
-                    </div>
-                </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="popup-button">
+                            <button onclick="closePopup()"
+                                    style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
+                            </button>
+                            <button type="button" onclick="uploadExcelAndLoadData()"
+                                    style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
+                                저장
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </div> <!--//layout-contents end -->
+
+
 
     <!-- [대시보드] 팝업  -->
     <div class="dashboard-layout-popup">
@@ -473,7 +475,6 @@
             });
         }
 
-
         function closePopup() {
             /*const modal2 = document.querySelector('.modal');
             const modalOpen = document.querySelector('.popup-wrapper');
@@ -597,6 +598,7 @@
                 // NO에 1부터 시작하는 번호 설정
                 data.forEach((item, index) => {
                     item.rownum = index + 1; // 1부터 시작하는 번호 설정
+                    calculateSumForRow(item); // 각 행의 합계를 계산하여 반영
                 });
 
                 // `tab1`의 그리드 데이터 바인딩
@@ -619,15 +621,25 @@
 
             // 초기에 04시~22시 컬럼을 숨김
             function initializeColumnToggle(grid) {
-                toggleColumns(grid, false);
+
+                // 상태를 추적하기 위한 변수
+                let columnsVisible = false;
+
+                toggleColumns(grid, columnsVisible);
 
                 grid.formatItem.addHandler(function (sender, e) {
                     if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
-                        if (e.cell.textContent === '...') {
+                        if (e.cell.textContent.trim() === '...') {
                             e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
-                            e.cell.onclick = function () {
-                                toggleColumns(grid, true); // 컬럼을 펼치고
-                                grid.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
+                            e.cell.onclick = function (event) {
+                                event.stopPropagation(); // 이벤트 전파 막기
+
+                                // 토글 상태에 따라 컬럼을 펼치거나 접음
+                                columnsVisible = !columnsVisible;
+                                toggleColumns(grid, columnsVisible);
+
+                                // '...' 컬럼의 가시성 토글
+                                grid.columns.getColumn('toggle').visible = !columnsVisible;
                             };
                         }
                     }
@@ -643,7 +655,6 @@
                     }
                 });
             }
-
 
             // 그리드 초기화
             function initializeGrid(data) {
@@ -766,7 +777,13 @@
                                 {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                                 {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
                             ],
-                            itemsSource: data
+                            itemsSource: data,
+
+                            cellEditEnded: function (s, e) {
+                                const item = s.rows[e.row].dataItem; // 현재 편집된 행의 데이터
+                                calculateSumForRow(item); // 합계 계산
+                                s.invalidate(); // 그리드 새로 고침
+                            }
                         });
 
                         theGrid2.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
@@ -779,7 +796,6 @@
             }
 
             init(); // 초기화 함수 호출
-
 
             // 데이터 로드 함수
             function loadData() {
@@ -854,44 +870,61 @@
                     })
                     .catch(error => console.error('Error loading power IDs:', error));
             }
+
+            document.getElementById('btnSave').addEventListener('click', function() {
+                // 변경 사항이 있는지 확인
+                if (viewdata2.itemsEdited.length === 0 && viewdata2.itemsAdded.length === 0 && viewdata2.itemsRemoved.length === 0) {
+                    Alert.alert('', '수정사항이 없습니다.');
+                } else {
+                    handleUpdate(); // 변경 사항이 있는 경우에만 업데이트 함수 호출
+                }
+            });
+
         });
 
 
-        // 엑셀파일 업로드 / 조회
+        // 엑셀 파일 저장
         function uploadExcelAndLoadData(event) {
+            const formData = new FormData(); // 새로운 FormData 생성
+            const fileInput = document.getElementById('fileInput'); // 파일 입력 필드의 ID
+            const files = fileInput.files;
 
-            let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID
-            let fileInput = document.getElementById('fileInput'); // 파일 입력 필드의 ID
-            let files = fileInput.files;
-
-            /*if (files.length > 0) {
-                formData.append('upload_file', files); // 'upload_file'이 서버에서 요구하는 파트 이름
-            } else {
-                Alert.alert('', '파일을 첨부해 주세요.');
-                event.preventDefault();  // 폼의 자동 제출 방지
-            }*/
-            if (files.length > 0) {
-                // 단일 파일만 추가
-                formData.append('upload_file', files[0]);  // 배열 대신 첫 번째 파일 객체를 직접 참조
-                console.log('파일이 FormData에 추가되었습니다:', files[0].name);
-            } else {
-                Alert.alert('', '파일을 첨부해 주세요.');
-                console.log('파일이 없습니다.', files[0].name);
+            // 첨부 파일이 두 개 이상이면 경고창 표시
+            if (files.length > 1) {
+                Alert.alert('', '파일은 한 개만 첨부할 수 있습니다.');
                 return;
             }
 
-            // formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
-            // 추가적인 데이터 : no, 등록일자, 등록자, 최종수정일
+            // 드래그 앤 드롭으로 추가된 파일도 formData에 추가
+            if (uploadedFiles.length > 0) {
+                uploadedFiles.forEach(file => {
+                    formData.append('upload_file', file);
+                });
+            }
 
+            // 파일 선택 버튼으로 추가된 파일을 formData에 추가
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('upload_file', files[i]);
+                }
+            }
+
+            if (uploadedFiles.length === 0 && files.length === 0) {
+                Alert.alert('', '파일을 첨부해 주세요.');
+                return;
+            }
+
+            // 추가적인 데이터 필드 설정
             formData.append('spworkcd', document.getElementById('spworkcd').value);
             formData.append('spworknm', document.getElementById('spworknm').value);
             formData.append('spcompcd', document.getElementById('spcompcd').value);
             formData.append('spcompnm', document.getElementById('spcompnm').value);
             formData.append('spplancd', document.getElementById('spplancd').value);
             formData.append('spplannm', document.getElementById('spplannm').value);
+            formData.append('date6', document.getElementById('date6').value);
 
             $.ajax({
-                url: '/api/gene/upload/upload_save', // 서버의 엑셀 업로드 API 주소
+                url: '/api/gene/upload/upload_save',
                 type: 'POST',
                 data: formData,
                 processData: false, // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
@@ -901,18 +934,58 @@
                         Alert.alert('', '파일이 성공적으로 업로드되었습니다.', function () {
                             location.reload();  // 사용자가 확인 버튼을 누르면 페이지 새로 고침
                         });
-                        // updateGrid(response.data); // 응답에서 데이터를 받아 그리드 업데이트
-
                     } else {
-                        // Alert.alert('', '업로드 실패: ' + response.message);
-                        Alert.alert('업로드 실패: ' + response.message);
+                        Alert.alert('업로드 실패', response.message);
                     }
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     Alert.alert('', '에러가 발생하였습니다.');
                 }
             });
+        }
+
+        // 수정
+        function handleUpdate() {
+            Alert.confirm(
+                '확인',
+                '수정하시겠습니까?',
+                function () { // 확인 버튼 클릭 시 실행할 함수
+                    var edits = viewdata2.itemsEdited.map(item => ({ ...item, type: 'edit' }));
+                    var adds = viewdata2.itemsAdded.map(item => ({ ...item, type: 'add' }));
+                    var deletes = viewdata2.itemsRemoved.map(item => ({ ...item, type: 'delete' }));
+
+                    var changes = edits.concat(adds).concat(deletes);
+
+                    if (changes.length > 0) {
+                        $.ajax({
+                            url: '/api/gene/upload/update',
+                            type: 'PATCH',
+                            contentType: 'application/json',
+                            data: JSON.stringify(changes),
+                            success: function (response) {
+                                if (response.success) {
+                                    Alert.alert('', '수정되었습니다.', function () {
+                                        location.reload();
+                                    }); // 수정 완료 후 알림창
+                                    viewdata2.commitChanges();
+                                    // location.reload();
+                                    // loadData();
+                                } else {
+                                    Alert.alert('수정 실패', response.message);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                Alert.alert('수정 실패', '서버 에러');
+                            }
+                        });
+                    } else {
+                        Alert.alert('', '변경된 내용이 없습니다.');
+                    }
+                },
+                function () {
+                    // 취소 시 실행할 로직이 있을 경우 여기에 추가
+                }
+            );
         }
 
         // function updateGrid(data) {
@@ -949,79 +1022,6 @@
             edited: view.itemsEdited
         };*/
 
-
-
-        // 수정
-        document.getElementById('btnSave').addEventListener('click', function () {
-            // 수정하시겠습니까? 확인창을 띄웁니다.
-            Alert.confirm(
-                '확인',
-                '수정하시겠습니까?',
-                function () { // 확인 버튼 클릭 시 실행할 함수
-                    var edits = viewdata2.itemsEdited.map(item => ({ ...item, type: 'edit' }));
-                    var adds = viewdata2.itemsAdded.map(item => ({ ...item, type: 'add' }));
-                    var deletes = viewdata2.itemsRemoved.map(item => ({ ...item, type: 'delete' }));
-
-                    var changes = edits.concat(adds).concat(deletes);
-
-                    if (changes.length > 0) {
-                        $.ajax({
-                            url: '/api/gene/upload/update',
-                            type: 'PATCH',
-                            contentType: 'application/json',
-                            data: JSON.stringify(changes),
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', '수정되었습니다.'); // 수정 완료 후 알림창
-                                    viewdata2.commitChanges();
-                                    location.reload();
-                                } else {
-                                    Alert.alert('수정 실패', response.message);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                Alert.alert('수정 실패', '서버 에러');
-                            }
-                        });
-                    } else {
-                        Alert.alert('', '변경된 내용이 없습니다.');
-                    }
-                },
-                function () { // 취소 버튼 클릭 시 실행할 함수
-                    // 취소 시 실행할 로직이 있을 경우 여기에 추가
-                }
-            );
-        });
-
-
-        // 삭제
-        /*document.getElementById('btnDelete').addEventListener('click', function () {
-            var selectedItem = theGrid2.collectionView.currentItem;
-            if (selectedItem) {
-                if (confirm('이 데이터를 삭제하시겠습니까?')) {
-                    var deleteUrl = `/api/gene/upload/delete/${selectedItem.standdt}/${selectedItem.powerid}`;
-
-                    $.ajax({
-                        url: deleteUrl,
-                        type: 'DELETE',
-                        success: function (response) {
-                            if (response.success) {
-                                theGrid2.itemsSource.remove(selectedItem);
-                                alert('삭제되었습니다.');
-                            } else {
-                                alert('삭제 실패: ' + response.message);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            var errorMessage = xhr.status + ': ' + xhr.statusText
-                            alert('서버 에러 발생: ' + errorMessage);
-                        }
-                    });
-                }
-            } else {
-                alert('선택된 행이 없습니다.');
-            }
-        });*/
 
         // 삭제 확인 모달을 띄우는 함수
         function openDeleteConfirmModal(regDate) {
@@ -1071,6 +1071,15 @@
             }
         });
 
+        // 합계 계산
+        function calculateSumForRow(item) {
+            let sum = 0;
+            for (let i = 1; i <= 24; i++) {
+                const field = `mevalue${i < 10 ? '0' + i : i}`;
+                sum += parseFloat(item[field]) || 0; // 각 시간을 합산 (NaN을 피하기 위해 0으로 처리)
+            }
+            item.mevaluet = sum; // 합계를 합계 컬럼에 반영
+        }
 
     </script>
 </th:block>

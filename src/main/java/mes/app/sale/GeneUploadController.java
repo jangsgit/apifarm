@@ -7,8 +7,10 @@ import mes.domain.entity.actasEntity.TB_RP320;
 import mes.domain.model.AjaxResult;
 import mes.domain.repository.TB_RP320Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,7 +50,7 @@ public class GeneUploadController {
 	
 	// 엑셀 업로드
 	@PostMapping("/upload_save")
-//	@Transactional
+	@Transactional
 	public AjaxResult saveGeneData(
 			@RequestParam("upload_file") MultipartFile upload_file,
 			@RequestParam("spworkcd") String spworkcd,
@@ -57,54 +59,72 @@ public class GeneUploadController {
 			@RequestParam("spcompnm") String spcompnm,
 			@RequestParam("spplancd") String spplancd,
 			@RequestParam("spplannm") String spplannm,
+			@RequestParam(value = "date6", required = false) String date6,
 			Authentication auth
 	) throws FileNotFoundException, IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 		
-		User user = (User) auth.getPrincipal();
-		
-		// Step 1: 기존 데이터 삭제
-		TB_RP320Repository.deleteAll();
-		
-		// Step 2: 엑셀 파일 저장 및 읽기
-		String uploadFilename = geneUploadService.saveUploadedFile(upload_file);
-		List<List<String>> dataRows = geneUploadService.excel_read(uploadFilename);
-		
-		// Step 3: 새 데이터 저장
-		for (int i = 0; i < dataRows.size(); i++) {
-			List<String> row = dataRows.get(i);
-			TB_RP320 entity = new TB_RP320();
+		AjaxResult result = new AjaxResult();
+		try {
+			User user = (User) auth.getPrincipal();
 			
-			// 사용자 정보 설정
-			entity.setInuserid(user.getUsername());  // 사용자 아이디
-			entity.setInusernm(user.getFirst_name() + " " + user.getLast_name());  // 사용자 전체 이름
+			String dateToUse = (date6 != null && !date6.isEmpty()) ? date6 : LocalDate.now().toString(); // date6 없으면 현재날짜 사용
 			
-			entity.setSpworkcd(spworkcd);
-			entity.setSpworknm(spworknm);
-			entity.setSpcompcd(spcompcd);
-			entity.setSpcompnm(spcompnm);
-			entity.setSpplancd(spplancd);
-			entity.setSpplannm(spplannm);
+			// Step 1: 엑셀 파일 저장 및 읽기
+			String uploadFilename = geneUploadService.saveUploadedFile(upload_file);
+			List<List<String>> dataRows = geneUploadService.excel_read(uploadFilename);
 			
-			entity.setStanddt(row.get(STANDDT_COL));
-			entity.setPowerid(row.get(POWERID_COL));
-			entity.setPowernm(row.get(POWERNM_COL));
-			entity.setChargedv(row.get(CHARGEDV_COL));
+			// Step 2: 새 데이터 저장
+			// 새로운 데이터를 저장하기 전에 기존 데이터를 삭제하는 대신, 새 데이터를 성공적으로 저장한 후 삭제 작업을 수행합니다.
+			List<TB_RP320> entitiesToSave = dataRows.stream().map(row -> {
+				TB_RP320 entity = new TB_RP320();
+				// 사용자 정보 설정
+				entity.setInuserid(user.getUsername());  // 사용자 아이디
+				entity.setInusernm(user.getFirst_name() + " " + user.getLast_name());  // 사용자 전체 이름
+				entity.setSpworkcd(spworkcd);
+				entity.setSpworknm(spworknm);
+				entity.setSpcompcd(spcompcd);
+				entity.setSpcompnm(spcompnm);
+				entity.setSpplancd(spplancd);
+				entity.setSpplannm(spplannm);
+				entity.setStanddt(row.get(STANDDT_COL));
+				entity.setPowerid(row.get(POWERID_COL));
+				entity.setPowernm(row.get(POWERNM_COL));
+				entity.setChargedv(row.get(CHARGEDV_COL));
+				
+				for (int j = 0; j < MEVALUE_LIST.size(); j++) {
+					try {
+						entity.getClass().getMethod("setMevalue" + String.format("%02d", j + 1), BigDecimal.class)
+								.invoke(entity, new BigDecimal(row.get(MEVALUE_LIST.get(j))));
+					} catch (Exception e) {
+						throw new RuntimeException("Error setting mevalue for " + j, e);
+					}
+				}
+				entity.setMevaluet(new BigDecimal(row.get(MEVALUET_COL)));
+				
+				entity.setIndatem(LocalDate.parse(dateToUse)); // date6 값을 indatem에 설정
+				
+				return entity;
+			}).collect(Collectors.toList());
 			
-			for (int j = 0; j < MEVALUE_LIST.size(); j++) {
-				entity.getClass().getMethod("setMevalue" + String.format("%02d", j + 1), BigDecimal.class)
-						.invoke(entity, new BigDecimal(row.get(MEVALUE_LIST.get(j))));
-			}
-			entity.setMevaluet(new BigDecimal(row.get(MEVALUET_COL)));
+			// Step 3: 기존 데이터 삭제 후 새로운 데이터 저장
+			TB_RP320Repository.deleteAll();
+			TB_RP320Repository.saveAll(entitiesToSave);
 			
-			TB_RP320Repository.save(entity);
+			result.success = true;
+			result.message = "Data saved successfully!";
+		} catch (Exception e) {
+			result.success = false;
+			result.message = "An error occurred: " + e.getMessage();
+			throw e; // 예외를 다시 던져 트랜잭션이 롤백되도록 함
 		}
 		
-		return new AjaxResult();
+		return result;
 	}
 	
 	@GetMapping("/read")
 	public ResponseEntity<List<TB_RP320>> getAllData() {
-		List<TB_RP320> data = TB_RP320Repository.findAll();
+//		List<TB_RP320> data = TB_RP320Repository.findAll();
+		List<TB_RP320> data = TB_RP320Repository.findAll(Sort.by(Sort.Direction.ASC, "standdt", "powerid"));
 		return ResponseEntity.ok(data);
 	}
 	
@@ -130,24 +150,14 @@ public class GeneUploadController {
 		return ResponseEntity.ok(results);
 	}
 	
-	
 	// 수정
-	// PostMapping, PutMapping(멱등성), PatchMapping 중 PatchMapping 사용
 	@PatchMapping("/update")
 	public ResponseEntity<AjaxResult> updateData(@RequestBody List<TB_RP320> updates, Authentication auth) {
 		AjaxResult result = new AjaxResult();
 		try {
-			// 사용자 정보 가져오기
 			User user = (User) auth.getPrincipal();
-			String currentUserId = user.getUsername();
-			String currentUserName = user.getFirst_name() + " " + user.getLast_name();
+			geneUploadService.updateGeneData(updates, user);
 			
-			for (TB_RP320 update : updates) {
-				update.setUpdatem(LocalDate.now());  // 현재 날짜로 설정
-				update.setInuserid(currentUserId);   // 현재 사용자의 ID로 수정
-				update.setInusernm(currentUserName); // 현재 사용자의 이름으로 수정
-				TB_RP320Repository.save(update);  // JpaRepository의 save 메소드는 ID가 존재하면 merge (업데이트)를 수행합니다.
-			}
 			result.success = true;
 			result.message = "Data updated successfully!";
 		} catch (Exception e) {

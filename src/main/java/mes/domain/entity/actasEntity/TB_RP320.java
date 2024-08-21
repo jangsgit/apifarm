@@ -125,7 +125,7 @@ public class TB_RP320 {
 	private BigDecimal mevaluet;
 	
 	@Column(name = "indatem")
-	private LocalDate indatem = LocalDate.now();
+	private LocalDate indatem;
 	
 	@Column(name = "inuserid")
 	private String inuserid;
