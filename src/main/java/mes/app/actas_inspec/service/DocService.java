@@ -103,7 +103,7 @@ public class DocService {
         }
 
         if (finddocdv != 0) {
-            sql.append(" AND t1.docdv <= :finddocdv ");
+            sql.append(" AND t1.docdv = :finddocdv ");
         }
 
         // 마지막으로 order by 절 추가
