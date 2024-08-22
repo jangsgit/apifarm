@@ -16,4 +16,8 @@ public class UtilClass {
                 .map(Integer::parseInt)       // 각 요소를 Integer로 변환
                 .collect(Collectors.toList()); // 리스트로 수집
     }
+
+    public String removeBrackers(String input){
+        return input.replaceAll("[\\[\\]\"]", "");
+    }
 }

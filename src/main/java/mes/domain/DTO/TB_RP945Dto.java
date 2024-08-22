@@ -20,6 +20,9 @@ public class TB_RP945Dto {
     private String spcompnm; //관리대상 발전시설명 상세
     private String spplancd;
     private String spplannm;
+    private Integer spcompid;
+    private Integer spworkid;
+    private Integer spplanid;
 
 
 }

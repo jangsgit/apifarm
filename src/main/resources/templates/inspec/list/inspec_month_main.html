@@ -575,14 +575,18 @@
                 false, // contentType
                 false, // processData
                 formData,
-                fnSuccess2,
+                function (res){
+                    Alert.alert('', res.message);
+                    closePopup();
+                    searchData();
+                },
                 fnFailure
             );
         }
 
         function clearForm(){
             ['supplier', 'checkdt', 'checkstdt', 'checkendt', 'checkusr', 'checkarea',
-            'inspecreform1', 'inspecreform2', 'inspecreform3', 'inspecreform4', 'inspecreform5', 'inspecreform6'
+                'inspecreform1', 'inspecreform2', 'inspecreform3', 'inspecreform4', 'inspecreform5', 'inspecreform6'
             ].forEach(id => {
                 document.getElementById(id).value = '';
             });
@@ -686,7 +690,7 @@
                 window.URL.revokeObjectURL(url); // URL 객체 해제
             }, function(error) {
                 console.error('There was a problem with the fetch operation:', error);
-                alert(error.message);
+                Alert.alert('', error.message);
             });
         }
 
@@ -728,6 +732,7 @@
                 showMarquee: true,
                 columns: columns,
                 allowSorting: 'MultiColumn',
+                isReadOnly: true,
                 selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
                 itemsSource: viewdata,
                 formatItem: function(s, e) {
@@ -764,7 +769,97 @@
                 }
             })
 
+            theGrid.hostElement.addEventListener('dblclick', function(e){
+                let hitTest = theGrid.hitTest(e);
+                if (hitTest.cellType === wijmo.grid.CellType.Cell) {
+                    let row = hitTest.row;
+                    let item = theGrid.rows[row].dataItem;
+                    console.log('Row double-clicked:', item);
+                    console.log('Row double-clicked22:', SelectItem);
 
+                    if(item === 'empty' || item.checkdt === undefined){ return; }
+
+                    if(theGrid.rows.filter(r => r.isSelected).length > 0){
+                        console.log('선택값: ', theGrid.rows.filter(r => r.isSelected))
+                        Alert.alert('', '선택기에 선택된 값이 있습니다.');
+                        return false;
+                    }
+                    let spuncode = item.spuncode;
+                    let jsonSpunCode = JSON.stringify(spuncode);
+
+                    AjaxFunction.PostAjaxRequest('/api/inspec_report/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
+
+                        let inputFields = document.querySelectorAll('.addusr');
+                        if (inputFields) {
+
+                            inputFields.forEach(r => {
+                                deleteInputField(r);
+                            })
+
+                        }
+
+                        let data2 = data.data;
+                        console.log('data2', data2);
+                        $('#inputTabLink').click();
+
+                        let str = data2.checkdt;
+                        let year = str.substring(0, 4);
+                        let month = str.substring(4, 6);
+                        let day = str.substring(6, 8);
+
+                        let formattedDate = `${year}-${month}-${day}`;
+
+                        document.getElementById('spuncode').value = data2.spuncode;
+                        document.getElementById('supplier').value = data2.supplier;
+                        document.getElementById('checkdt').value = formattedDate;
+                        document.getElementById('checkstdt').value = data2.checkstdt;
+                        document.getElementById('checkendt').value = data2.checkendt;
+                        document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkarea').value = data2.checkarea;
+
+
+
+                        console.log()
+                        for (let i = 0; i < data2.inspecitem.length; i++) {
+                            updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
+                            updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
+
+                            let str = "seq" + (i+1);
+                            document.getElementById(str).value = data2.inspecitem[i].seq;
+
+                        }
+
+
+                        //탭 수정으로 업더이트
+                        updateTabLink('spuncode');
+
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                        deletedFiles = [];
+                        uploadedFiles = [];
+                        $('.filelist').empty(); // 파일 리스트 초기화
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                spuncode_id: file.spuncode_id,
+                                checkseq: file.checkseq,
+                                filepath: file.filepath,
+                                filesvnm: file.filesvnm
+
+                            };
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
+                        console.log('파일목록확인', uploadedFiles)
+                        updateFileListUI();
+                        updateFileCount();
+
+                    }, fnFailure)
+
+                }
+            })
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -784,13 +879,47 @@
                 'searchtodate': $('#searchtodate').val(),
                 'searchflag' : $('#flag').val()
             }
-
+            let data2 = [];
             let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
-
+            //선택기 그리드면 이거
             if(result.success){
+                console.log(result.data);
+
+                let DataLength = 10 - result.data.length;
+
+                if(result.data.length < 10){
+                    for(let i=0; i < DataLength; i++){
+                        result.data.push('empty');
+                    }
+                }
 
                 grid_binding(result.data);
             }
+
+            /*if(result.success){
+                console.log(result.data);
+                let DataLength = 10 - result.data.length;
+                if(result.data.length < 10){
+                    for(let i=0; i < DataLength; i++){
+                        result.data.push('empty');
+                    }
+                }
+                data2 = result.data
+                viewdata = new wijmo.collections.CollectionView(data2);
+                theGrid.itemsSource = viewdata;
+
+                let selector = new wijmo.grid.selector.Selector(theGrid, {
+                    itemChecked: (e, ctx) => {
+                        // 선택된 항목들을 초기화 (선택 해제)
+                        theGrid.select(-1, -1);  // 그리드에서 모든 행의 선택을 해제
+
+                    }
+                });
+
+                SelectItem = undefined;
+
+                //grid_binding(result.data);
+            }*/
         }
 
         function grid_binding(data){
@@ -824,7 +953,7 @@
                 var col = new wijmo.grid.Column(columns[i]);
                 theGrid.columns.push(col);
             }
-                SelectItem = undefined;
+            SelectItem = undefined;
 
 
         }
@@ -843,6 +972,11 @@
 
             if(SelectItem === undefined || SelectItem.length === 0){
                 Alert.alert('', '출력할 항목을 선택하세요.');
+                return;
+            }
+
+            if(!checkEmptySelectedItem(SelectItem, 'checkdt')){
+                Alert.alert('', '빈 값은 불가능합니다.');
                 return;
             }
 
@@ -866,7 +1000,7 @@
 
             }, function(error) {
                 console.error('There was a problem with the fetch operation:', error);
-                alert("File download failed!");
+                Alert.alert('', "File download failed!");
 
             });
 
@@ -909,76 +1043,74 @@
 
             let spuncode = selectedItem._data.spuncode;
 
+            if(!selectedItem._data.spuncode){
+                Alert.alert('', '수정할 게시물이 없습니다.', function () {
 
-            Alert.confirm('', '수정하시겠습니까?', function(){
-                if(!selectedItem._data.spuncode){
-                    Alert.alert('', '수정할 게시물이 없습니다.', function () {
+                });
+                return false;
+            }
+            let jsonSpunCode = JSON.stringify(spuncode);
+            AjaxFunction.PostAjaxRequest('/api/inspec_report/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
+                let data2 = data.data;
+                console.log('data2', data2);
+                $('#inputTabLink').click();
 
-                    });
-                    return false;
+                let str = data2.checkdt;
+                let year = str.substring(0, 4);
+                let month = str.substring(4, 6);
+                let day = str.substring(6, 8);
+
+                let formattedDate = `${year}-${month}-${day}`;
+
+                document.getElementById('spuncode').value = data2.spuncode;
+                document.getElementById('supplier').value = data2.supplier;
+                document.getElementById('checkdt').value = formattedDate;
+                document.getElementById('checkstdt').value = data2.checkstdt;
+                document.getElementById('checkendt').value = data2.checkendt;
+                document.getElementById('checkusr').value = data2.checkusr;
+                document.getElementById('checkusr').value = data2.checkusr;
+                document.getElementById('checkarea').value = data2.checkarea;
+
+
+
+                console.log()
+                for (let i = 0; i < data2.inspecitem.length; i++) {
+                    updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
+                    updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
+
+                    let str = "seq" + (i+1);
+                    document.getElementById(str).value = data2.inspecitem[i].seq;
+
                 }
-                let jsonSpunCode = JSON.stringify(spuncode);
-                AjaxFunction.PostAjaxRequest('/api/inspec_report/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
-                    let data2 = data.data;
-                    console.log('data2', data2);
-                    $('#inputTabLink').click();
-
-                    let str = data2.checkdt;
-                    let year = str.substring(0, 4);
-                    let month = str.substring(4, 6);
-                    let day = str.substring(6, 8);
-
-                    let formattedDate = `${year}-${month}-${day}`;
-
-                    document.getElementById('spuncode').value = data2.spuncode;
-                    document.getElementById('supplier').value = data2.supplier;
-                    document.getElementById('checkdt').value = formattedDate;
-                    document.getElementById('checkstdt').value = data2.checkstdt;
-                    document.getElementById('checkendt').value = data2.checkendt;
-                    document.getElementById('checkusr').value = data2.checkusr;
-                    document.getElementById('checkusr').value = data2.checkusr;
-                    document.getElementById('checkarea').value = data2.checkarea;
 
 
+                //탭 수정으로 업더이트
+                updateTabLink('spuncode');
 
-                    console.log()
-                    for (let i = 0; i < data2.inspecitem.length; i++) {
-                        updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
-                        updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
+                let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                deletedFiles = [];
+                uploadedFiles = [];
+                $('.filelist').empty(); // 파일 리스트 초기화
 
-                        let str = "seq" + (i+1);
-                        document.getElementById(str).value = data2.inspecitem[i].seq;
+                fileList.forEach(file => {
+                    let newFile = {
+                        name: file.fileornm,
+                        size: file.filesize,
+                        type: file.fileextns,
+                        spuncode_id: file.spuncode_id,
+                        checkseq: file.checkseq,
+                        filepath: file.filepath,
+                        filesvnm: file.filesvnm
 
-                    }
+                    };
+                    uploadedFiles.push(newFile); // 파일 리스트에 추가
+                });
+                console.log('파일목록확인', uploadedFiles)
+                updateFileListUI();
+                updateFileCount();
 
+            }, fnFailure)
 
-                    //탭 수정으로 업더이트
-                    updateTabLink('spuncode');
-
-                    let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
-                    deletedFiles = [];
-                    uploadedFiles = [];
-                    $('.filelist').empty(); // 파일 리스트 초기화
-
-                    fileList.forEach(file => {
-                        let newFile = {
-                            name: file.fileornm,
-                            size: file.filesize,
-                            type: file.fileextns,
-                            spuncode_id: file.spuncode_id,
-                            checkseq: file.checkseq,
-                            filepath: file.filepath,
-                            filesvnm: file.filesvnm
-
-                        };
-                        uploadedFiles.push(newFile); // 파일 리스트에 추가
-                    });
-                    console.log('파일목록확인', uploadedFiles)
-                    updateFileListUI();
-                    updateFileCount();
-
-                }, fnFailure)
-            })
         }
 
         //이거는 따로 못뺀다.
@@ -998,17 +1130,17 @@
                 searchData();
                 clearForm();
 
-                let inputField = document.querySelector('.addusr');
-                if (inputField) {
-                    deleteInputField(inputField);
+                let inputFields = document.querySelectorAll('.addusr');
+                if (inputFields) {
+
+                    inputFields.forEach(r => {
+                        deleteInputField(r);
+                    })
+
                 }
             });
         }
 
-        let fnSuccess2 = function (res){
-            Alert.alert('', res.message);
-            searchData();
-        }
 
         let fnFailure = function(){
             Alert.alert('', '에러가발생하였습니다.');
@@ -1163,6 +1295,11 @@
                     return;
                 }
 
+                if(!checkEmptySelectedItem(SelectItem, 'checkdt')){
+                    Alert.alert('', '빈 값은 불가능합니다.');
+                    return;
+                }
+
                 let apprList = [];
 
                 apprList = SelectItemPush(SelectItem, '_data.spuncode');
@@ -1185,9 +1322,13 @@
 
             //삭제
             $('#btnDelete').click(function (e) {
-
+                console.log('z', SelectItem);
                 if(SelectItem === undefined || SelectItem.length === 0){
                     Alert.alert('', '삭제할 항목을 선택하세요.');
+                    return;
+                }
+                if(!checkEmptySelectedItem(SelectItem, 'checkdt')){
+                    Alert.alert('', '빈 항목은 불가합니다.');
                     return;
                 }
 

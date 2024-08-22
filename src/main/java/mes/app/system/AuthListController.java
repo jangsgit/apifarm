@@ -118,8 +118,10 @@ public class AuthListController {
     public AjaxResult saveFilter(
             @RequestParam(value = "userid") String userid,
             @RequestParam(value = "appflag") String appflag,
+            @RequestParam(value = "authgrpcd") String authgrpcd,
+            @RequestParam(value = "authgrpnm") String authgrpnm,
             Authentication auth
-            ){
+    ){
         AjaxResult result = new AjaxResult();
 
 
@@ -135,13 +137,13 @@ public class AuthListController {
 
         Timestamp today = new Timestamp(System.currentTimeMillis());
         try{
-           if(appflag.equals("Y")){
+            if(appflag.equals("Y")){
 
-               if (username_chk == false) {
-                   result.success = false;
-                   result.message="중복된 사번이 존재합니다.";
-                   return result;
-               }
+                if (username_chk == false) {
+                    result.success = false;
+                    result.message="중복된 사번이 존재합니다.";
+                    return result;
+                }
 
 
 
@@ -151,7 +153,7 @@ public class AuthListController {
                     User user = createUserFromTB940(tb940, today);
 
                     userService.SaveUser(user, auth, tb940.getAuthgrpcd(), tb940.getAuthgrpnm());
-                    tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime);
+                    tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime, authgrpcd, authgrpnm);
 
                 }else {
                     result.success = false;
@@ -161,18 +163,18 @@ public class AuthListController {
 
 
 
-               tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime);
+                tb_rp940Repository.updateApprflagToYByUserid(userid, offsetDateTime, authgrpcd, authgrpnm);
 
-           }else{
-               tb_rp940Repository.updateApprflagToYByUserid(userid, appflag);
+            }else{
+                tb_rp940Repository.updateApprflagToYByUserid(userid, appflag, authgrpcd, authgrpnm);
 
-               userRepository.deleteByUsername(userid);
+                userRepository.deleteByUsername(userid);
 
-           }
+            }
 
-           result.success = true;
-           result.message = "저장하였습니다.";
-           return result;
+            result.success = true;
+            result.message = "저장하였습니다.";
+            return result;
 
         }catch(Exception e){
             System.out.println(e);
@@ -215,10 +217,16 @@ public class AuthListController {
 
     @PostMapping("/approve")
     @Transactional
-    public AjaxResult approve(@RequestParam(value = "userid") String userid, Authentication auth)
+    public AjaxResult approve(@RequestParam(value = "userid") String userid,
+                              @RequestParam(value = "authgrpcd") String authgrpcd,
+                              @RequestParam(value = "authgrpnm") String authgrpnm,
+                              Authentication auth)
     {
 
         List<String> paramList = new UtilClass().parseUserIds(userid);
+        List<String> authcdList = new UtilClass().parseUserIds(authgrpcd);
+        List<String> authnmList = new UtilClass().parseUserIds(authgrpnm);
+
 
         AjaxResult result = new AjaxResult();
 
@@ -227,7 +235,26 @@ public class AuthListController {
         Timestamp today = new Timestamp(System.currentTimeMillis());
         try{
 
-                for(String param: paramList){
+
+            for(int i=0; i < paramList.size(); i++){
+                Optional<TB_RP940> TB940list = tb_rp940Repository.findByUserid(paramList.get(i));
+                if(TB940list.isPresent()){
+                    TB_RP940 tb940 = TB940list.get();
+                    User user = createUserFromTB940(tb940, today);
+
+                    userService.SaveUser(user, auth, tb940.getAuthgrpcd(), tb940.getAuthgrpnm());
+                    tb_rp940Repository.updateApprflagToYByUserid(paramList.get(i), offsetDateTime, authcdList.get(i), authnmList.get(i));
+
+
+                }else {
+                    result.success = false;
+                    result.message = "신청목록에 없습니다.";
+                    return result;
+                }
+            }
+
+
+                /*for(String param: paramList){
 
                     Optional<TB_RP940> TB940list = tb_rp940Repository.findByUserid(param);
                     if(TB940list.isPresent()){
@@ -235,7 +262,7 @@ public class AuthListController {
                         User user = createUserFromTB940(tb940, today);
 
                         userService.SaveUser(user, auth, tb940.getAuthgrpcd(), tb940.getAuthgrpnm());
-                        tb_rp940Repository.updateApprflagToYByUserid(param, offsetDateTime);
+                        tb_rp940Repository.updateApprflagToYByUserid(param, offsetDateTime, authgrpcd, authgrpnm);
 
 
                     }else {
@@ -244,7 +271,7 @@ public class AuthListController {
                         return result;
                     }
 
-                }
+                }*/
             result.success = true;
             result.message = "저장하였습니다.";
             return result;
@@ -261,9 +288,11 @@ public class AuthListController {
 
 
     private User createUserFromTB940(TB_RP940 tb940, Timestamp today) {
+
+
         User user = new User();
         user.setPassword(tb940.getLoginpw());
-        user.setSuperUser(false); // 이 부분은 상황에 따라 다르게 설정할 수 있습니다.
+        user.setSuperUser(false); // 이 부분은 상황에 따라 다르게 설정
         user.setUsername(tb940.getUserid());
         user.setFirst_name(tb940.getUsernm());
         user.setEmail(tb940.getUsermail());

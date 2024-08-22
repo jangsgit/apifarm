@@ -42,6 +42,15 @@ public class TB_RP945 {
     @Column(name = "\"spplannm\"")
     private String spplannm;
 
+    @Column(name = "\"spworkid\"")
+    private Integer spworkid;
+
+    @Column(name = "\"spcompid\"")
+    private Integer spcompid;
+
+    @Column(name = "\"spplanid\"")
+    private Integer spplanid;
+
 
 
 
@@ -55,6 +64,10 @@ public class TB_RP945 {
         tbRp945Dto.setSpcompnm(DTO.getSpcompnm());
         tbRp945Dto.setSpplancd(DTO.getSpplancd());
         tbRp945Dto.setSpplannm(DTO.getSpplannm());
+        tbRp945Dto.setSpworkid(DTO.getSpworkid());
+        tbRp945Dto.setSpcompid(DTO.getSpcompid());
+        tbRp945Dto.setSpplanid(DTO.getSpplanid());
+
         return tbRp945Dto;
     }
 

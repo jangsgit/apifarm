@@ -166,47 +166,47 @@ public class InspecService {
     public void TB_RP715_Save(String spuncode, Map<String, Object> fileinform, String repyn){
 
 
-            TB_RP715 attachedFile = new TB_RP715();
+        TB_RP715 attachedFile = new TB_RP715();
 
-            List<Map<String, Object>> fileItem = getFileList(spuncode);
+        List<Map<String, Object>> fileItem = getFileList(spuncode);
 
-            String fileName = (String) fileinform.get("fileName");
+        String fileName = (String) fileinform.get("fileName");
 
-            for(Map<String, Object> item : fileItem){
-                String fileOrNm = (String) item.get("fileornm");
-                if(fileName.equals(fileOrNm)){
-                    return;
-                }
+        for(Map<String, Object> item : fileItem){
+            String fileOrNm = (String) item.get("fileornm");
+            if(fileName.equals(fileOrNm)){
+                return;
             }
+        }
 
 
-            String formattedFileValue;
-            Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(spuncode);
-            if(checkseqvalue.isPresent()){
-                Integer checknointvalue = Integer.parseInt(checkseqvalue.get()) + 1;
-                formattedFileValue = String.format("%02d", checknointvalue);
-            } else {
-                formattedFileValue = "01";
-            }
+        String formattedFileValue;
+        Optional<String> checkseqvalue = tb_rp715Repository.findMaxChecknoByCheckdt(spuncode);
+        if(checkseqvalue.isPresent()){
+            Integer checknointvalue = Integer.parseInt(checkseqvalue.get()) + 1;
+            formattedFileValue = String.format("%02d", checknointvalue);
+        } else {
+            formattedFileValue = "01";
+        }
 
-            attachedFile.setSpworkcd("001");
-            attachedFile.setSpcompcd("001");
-            attachedFile.setSpplancd("001");
-            attachedFile.setSpuncode_id(spuncode);
-            attachedFile.setSpworknm("관할지역명");
-            attachedFile.setSpcompnm("발전산단명");
-            attachedFile.setSpplannm("발전소명");
-            attachedFile.setCheckseq(formattedFileValue);
-            attachedFile.setFilepath(fileinform.get("saveFilePath").toString());
-            attachedFile.setFilesvnm(fileinform.get("file_uuid_name").toString());
-            attachedFile.setFileextns(fileinform.get("ext").toString());
-            attachedFile.setFileornm(fileinform.get("fileName").toString());
-            attachedFile.setFilesize((Float) fileinform.get("fileSize"));
-            attachedFile.setRepyn(repyn);
-            attachedFile.setInuserid("홍길동");
-            attachedFile.setInusernm("홍길동");
+        attachedFile.setSpworkcd("001");
+        attachedFile.setSpcompcd("001");
+        attachedFile.setSpplancd("001");
+        attachedFile.setSpuncode_id(spuncode);
+        attachedFile.setSpworknm("관할지역명");
+        attachedFile.setSpcompnm("발전산단명");
+        attachedFile.setSpplannm("발전소명");
+        attachedFile.setCheckseq(formattedFileValue);
+        attachedFile.setFilepath(fileinform.get("saveFilePath").toString());
+        attachedFile.setFilesvnm(fileinform.get("file_uuid_name").toString());
+        attachedFile.setFileextns(fileinform.get("ext").toString());
+        attachedFile.setFileornm(fileinform.get("fileName").toString());
+        attachedFile.setFilesize((Float) fileinform.get("fileSize"));
+        attachedFile.setRepyn(repyn);
+        attachedFile.setInuserid("홍길동");
+        attachedFile.setInusernm("홍길동");
 
-            tb_rp715Repository.save(attachedFile);
+        tb_rp715Repository.save(attachedFile);
 
 
     }
@@ -271,7 +271,7 @@ public class InspecService {
             sql = """
                      select
                       sb.*,
-                      "checkstdt" || '~' || "checkendt" as checktmdt,
+                      TO_CHAR(CAST("checkstdt" AS TIMESTAMP), 'YYYY-MM-DD HH24:MI') || ' ~ ' || TO_CHAR(CAST("checkendt" AS TIMESTAMP), 'YYYY-MM-DD HH24:MI') AS checktmdt,
                       'Y' as downloads,
                       'Y' as upload,
                       coalesce(

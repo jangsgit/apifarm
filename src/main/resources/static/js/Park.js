@@ -153,6 +153,22 @@ function ElementBinding(element, paramvalue){
 
 }
 
+function checkEmptySelectedItem(SelectItem, pk) {
+    const hasEmpty = SelectItem.some(r => {
+        if (r._data === "empty") {
+
+            return true;
+        }
+        if (r._data[pk] === undefined) {
+
+            return true;
+        }
+        return false;
+    });
+
+    return !hasEmpty;
+}
+
 function SelectItemPush(array, propertyPath){
 
     console.log('trigger: ');
@@ -196,6 +212,76 @@ function initializeSelect({
 }
 
 
+//이메일 정규식
+function emailValidate(emailVal){
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    return emailPattern.test(emailVal);
+}
+
+//같은 name값의 select요소 value 추출
+function extractSelectValues(selectName) {
+    let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
+    return Array.from(inputs).map(input => input.value).join(',');
+}
+
+//같은 name값의 select요소 텍스트 추출
+function extractSelectTexts(selectName) {
+    let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
+    return Array.from(inputs).map(input => input.options[input.selectedIndex].text).join(',');
+}
+
+
+// 유효성 검사
+function validateFields() {
+    for (let field of requiredFields) {
+        if (!validateFieldById(field.id, field.name)) {
+            return false;
+        }
+    }
+
+    for (let field of nameBasedFields) {
+        if (!validateFieldsByName(field.name, field.displayName)) {
+            return false;
+        }
+    }
+
+    return true;  // 모든 유효성 검사를 통과했을 경우
+}
+
+// ID로 유효성 검사 함수
+function validateFieldById(id, fieldName) {
+    const value = document.getElementById(id)?.value.trim();
+
+    if (!value) {
+        Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+        return false;
+    }
+
+    return true;
+}
+
+// name 속성으로 유효성 검사 함수
+function validateFieldsByName(name, fieldName) {
+    const elements = document.getElementsByName(name);
+
+    if (elements.length === 0) {
+        console.error(`이름이 ${name}인 요소를 찾을 수 없습니다.`);
+        return false;
+    }
+
+    for (let element of elements) {
+        const value = element.value.trim();
+        if (!value) {
+            Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 //############################날짜함수
 
 //당일
@@ -222,7 +308,64 @@ function getLastDayOfCurrentMonth() {
     return `${year}-${lastMonth}-${day}`;
 }
 
+function fetchAndPopulateData(userid, dataListId, active) {
+    $.ajax({
+        url: '/api/system/auth_list/tb_rp945List',
+        type: 'GET',
+        data: {
+            'userid': userid
+        },
+        success: function(data) {
+            console.log(data);
 
+            const listLen = data.data.length;
+            const parent = $('#' + dataListId);
+
+            // 기존 리스트를 비우고 새 데이터를 추가
+            parent.empty();
+
+            for (let i = 0; i < listLen; i++) {
+                const newLi = $('<li>');
+
+                const firstInput = $('<input>', {
+                    type: 'text',
+                    id: 'spworknm' + (i + 1),
+                    name: 'spworknm' + (i + 1),
+                    class: 'w150',
+                    style: 'margin: 3px 5px',
+                    readOnly: active,
+                    value: data.data[i].spworknm
+                });
+
+                const secondInput = $('<input>', {
+                    type: 'text',
+                    id: 'spcompnm' + (i + 1),
+                    name: 'spcompnm' + (i + 1),
+                    class: 'w150',
+                    style: 'margin: 3px 5px',
+                    readOnly: active,
+                    value: data.data[i].spcompnm
+                });
+
+                const thirdInput = $('<input>', {
+                    type: 'text',
+                    id: 'spplannm' + (i + 1),
+                    name: 'spplannm' + (i + 1),
+                    class: 'w150',
+                    style: 'margin: 3px 5px',
+                    readOnly: active,
+                    value: data.data[i].spplannm
+                });
+
+                newLi.append(firstInput).append(secondInput).append(thirdInput);
+                parent.append(newLi);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.log('error');
+        }
+    });
+}
 
 $(document).ready(function (e) {
     //점검결과 클릭시 텍스트 순환

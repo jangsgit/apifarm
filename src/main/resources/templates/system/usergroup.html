@@ -129,7 +129,7 @@
                                     </select>
                                 </td>
                             </tr>
-                        </tbody>
+                            </tbody>
                         </table>
                     </div>
                 </section>
@@ -163,7 +163,9 @@
             { binding: 'code', header: '코드', width: '*', align: 'center' },
             { binding: 'name', header: '그룹명', width: '*', align: 'center' },
             { binding: 'description', header: '설명', width: '*', align: 'center' },
-            { binding: 'gmenu', header: 'Dashboard', width: '*', align: 'center' },
+            { binding: 'gmenu', header: 'Dashboard', width: '*', align: 'center', visible: false },
+            { binding: 'gmenuname', header: 'Dashboard', width: '*', align: 'center' },
+
         ]
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -197,6 +199,7 @@
                 showMarquee: true,
                 isReadOnly: true,
                 columns: columns,  //홀짝 로우 음영주기
+
                 itemsSource: viewdata
             });
             let selector = new wijmo.grid.selector.Selector(theGrid, {
@@ -206,7 +209,35 @@
                 }
             })
 
-            // 선택이 변경될 때, 현재 항목 업데이트
+            // 더블클릭 이벤트 추가
+            theGrid.hostElement.addEventListener('dblclick', function(e) {
+                let hitTest = theGrid.hitTest(e);
+                if (hitTest.cellType === wijmo.grid.CellType.Cell) {
+                    let row = hitTest.row;
+                    let item = theGrid.rows[row].dataItem;
+
+                    if(item === 'empty'){
+                        return;
+                    }
+                    console.log('Row double-clicked:', item);
+
+
+                    document.getElementById('code').value = item.code;
+                    document.getElementById('name').value = item.name;
+                    document.getElementById('id').value = item.id;
+                    document.getElementById('description').value = item.description;
+                    document.getElementById('gmenu').value = item.gmenu;
+
+                    updateTabLink('id');
+
+                    let tabIds = '#tab2';
+                    $(".tab-item").hide();
+                    $(tabIds).show();
+
+                    $("#listTabLink").parent().removeClass("active");
+                    $("#inputTabLink").parent().addClass("active");
+                }
+            });
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
@@ -256,6 +287,17 @@
             SelectItem = undefined;
         }
 
+        function checkAndAlert(){
+            for (let i = 0; i < SelectItem.length; i++) {
+                const data = SelectItem[i]._data;
+
+                if(data.id === null || data.id === undefined){
+                    Alert.alert('', '빈 값이 존재합니다.');
+                    return false;
+                }
+            }
+            return true;
+        }
 
         function clearForm(){
             ['id', 'code', 'name', 'description', 'gmenu'].forEach(id => {
@@ -278,97 +320,144 @@
 
             let id = selectedItem._data.id;
 
-            Alert.confirm('', '수정하시겠습니까?', function(){
-                if(!selectedItem._data.id){
-                    Alert.alert('', '수정할 게시물이 없습니다.',);
+
+            if(!selectedItem._data.id){
+                Alert.alert('', '수정할 게시물이 없습니다.',);
+                return false;
+            }
+
+            let tabIds = '#tab2';
+            $(".tab-item").hide();
+            $(tabIds).show();
+
+            $("#listTabLink").parent().removeClass("active");
+            $("#inputTabLink").parent().addClass("active");
+
+
+            document.getElementById('code').value = selectedItem._data.code;
+            document.getElementById('name').value = selectedItem._data.name;
+            document.getElementById('id').value = selectedItem._data.id;
+            document.getElementById('description').value = selectedItem._data.description;
+            document.getElementById('gmenu').value = selectedItem._data.gmenu;
+
+            updateTabLink('id');
+
+
+
+        }
+
+        $(document).ready(function (e) {
+
+            initializeSelect({ url: '/api/system/usergroup/defaultMenu', params: {}, elementId: 'gmenu', valueField: "menuCode", textField: "menuName" });
+
+            $('#btnSave').click(function(){
+
+                Alert.confirm('', '저장하시겠습니까?', function(){
+
+                    const id = $('#id').val().trim();
+                    const code = $('#code').val().trim();
+                    const name = $('#name').val().trim();
+                    const description = $('#description').val().trim();
+                    const gmenu = $('#gmenu').val();
+
+                    if(!code){
+                        Alert.alert('', '코드를 입력해주세요.');
+                        $('#code').focus();
+                        return;
+                    }
+                    if(!name){
+                        Alert.alert('', '그룹명을 입력해주세요.');
+                        $('#name').focus();
+                        return;
+                    }
+                    if(!gmenu){
+                        Alert.alert('', '기본화면 설정을 해주세요.');
+                        $('#gmenu').focus();
+                        return;
+                    }
+                    const data = { code: code, name: name, description: description, id: id, gmenu: gmenu };
+                    const fnSuccess = function (res) {
+                        Alert.alert('', res.message);
+                        $('#listTabLink').click();
+                        searchData();
+                        clearForm();
+                    };
+                    AjaxUtil.postAsyncData("/api/system/usergroup/save", data, fnSuccess, function(){
+                        Alert.alert('', '서버통신실패');
+                    })
+                })
+            })
+
+            //삭제
+            $('#btnDelete').click(function(){
+
+                if(SelectItem === undefined || SelectItem.length === 0){
+                    Alert.alert('', '삭제할 항목을 선택하세요.');
+                    return;
+                }
+
+                console.log('asd: ', SelectItem);
+
+                if(!checkAndAlert()){
+                    return;
+                }
+
+                let delList = [];
+
+                delList = SelectItemPush(SelectItem, '_data.id');
+                Alert.confirm('', '삭제하시겠습니까?', function () {
+                    let data = {
+                        'id': JSON.stringify(delList),
+                        '_csrf': csrfToken
+                    }
+                    let fnSuccess = function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            searchData();
+                        }
+                    }
+                    AjaxUtil.postAsyncData('/api/system/usergroup/delete', data, fnSuccess);
+                })
+            })
+
+            $('#inputTabLink').click(function(){
+
+                if(!checkAndAlert()){
+                    $('#listTabLink').click();
+                    return;
+                }
+
+                /*if(SelectItem === undefined){
+                    Alert.alert('', '항목을 선택해주세요', function(){
+                        $('#listTabLink').click();
+                    });
+                    return false;
+                }*/
+                if(SelectItem.length > 1){
+
+                    Alert.alert('', '하나의 항목만 선택해주세요', function(){
+                        $('#listTabLink').click();
+                    });
+
                     return false;
                 }
-                let jsonId = JSON.stringify(id);
+                let selectedItem = SelectItem[0];
 
-                $('#inputTabLink').click();
+                if(selectedItem === undefined){
+                    clearForm();
+                    return false;
+                }
+                let bindingList = ['id', 'code', 'name', 'description', 'gmenu'];
+                let valueList = [ selectedItem._data.id ,selectedItem._data.code, selectedItem._data.name, selectedItem._data.description, selectedItem._data.gmenu ];
 
-                document.getElementById('code').value = selectedItem._data.code;
-                document.getElementById('name').value = selectedItem._data.name;
-                document.getElementById('id').value = selectedItem._data.id;
-                document.getElementById('description').value = selectedItem._data.description;
-                document.getElementById('gmenu').value = selectedItem._data.gmenu;
+                for(let i=0; i < bindingList.length; i++){
+                    console.log(bindingList[i], valueList[i]);
+                    ElementBinding(bindingList[i], valueList[i]);
+                }
 
                 updateTabLink('id');
 
             })
-
-        }
-
-       $(document).ready(function (e) {
-
-        initializeSelect({ url: '/api/system/usergroup/defaultMenu', params: {}, elementId: 'gmenu', valueField: "menuCode", textField: "menuName" });
-
-
-
-        $('#btnSave').click(function(){
-
-            Alert.confirm('', '저장하시겠습니까?', function(){
-
-                const id = $('#id').val().trim();
-                const code = $('#code').val().trim();
-                const name = $('#name').val().trim();
-                const description = $('#description').val().trim();
-                const gmenu = $('#gmenu').val();
-
-                if(!code){
-                    Alert.alert('', '코드를 입력해주세요.');
-                    $('#code').focus();
-                    return;
-                }
-                if(!name){
-                    Alert.alert('', '그룹명을 입력해주세요.');
-                    $('#name').focus();
-                    return;
-                }
-                if(!gmenu){
-                    Alert.alert('', '기본화면 설정을 해주세요.');
-                    $('#gmenu').focus();
-                    return;
-                }
-                const data = { code: code, name: name, description: description, id: id, gmenu: gmenu };
-                const fnSuccess = function (res) {
-                    Alert.alert('', res.message);
-                    $('#listTabLink').click();
-                    searchData();
-                    clearForm();
-                };
-                AjaxUtil.postAsyncData("/api/system/usergroup/save", data, fnSuccess, function(){
-                    Alert.alert('', '서버통신실패');
-                })
-            })
-        })
-
-        //삭제
-        $('#btnDelete').click(function(){
-
-            if(SelectItem === undefined || SelectItem.length === 0){
-                Alert.alert('', '삭제할 항목을 선택하세요.');
-                return;
-            }
-
-
-            let delList = [];
-
-            delList = SelectItemPush(SelectItem, '_data.id');
-            Alert.confirm('', '삭제하시겠습니까?', function () {
-                let data = {
-                    'id': JSON.stringify(delList),
-                    '_csrf': csrfToken
-                }
-                let fnSuccess = function (res) {
-                    if (res.success) {
-                        Alert.alert('', '삭제되었습니다.');
-                        searchData();
-                    }
-                }
-                AjaxUtil.postAsyncData('/api/system/usergroup/delete', data, fnSuccess);
-            })
-        })
 
         });
     </script>

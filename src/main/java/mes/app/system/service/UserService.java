@@ -26,56 +26,66 @@ public class UserService {
     private UserGroupRepository userGroupRepository;
 
     // 사용자 리스트 조회
-    public List<Map<String, Object>> getUserList(boolean superUser, Integer group, String keyword, String username, Integer departId) {
+    public List<Map<String, Object>> getUserList(boolean superUser, Integer group, String keyword, String username, Integer departId, String divinm){
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
         dicParam.addValue("group", group);
         dicParam.addValue("keyword", keyword);
         dicParam.addValue("username", username);
         dicParam.addValue("departId", departId);
+        dicParam.addValue("divinm", divinm);
+
 
         String sql = """
-                select au.id
-                           , up."Name"
-                           , au.username as login_id
-                           , up."UserGroup_id"
-                           , au.email
-                           , ug."Name" as group_name
-                           , up."Factory_id"
-                           , f."Name" as factory_name
-                           , d."Name" as dept_name
-                           , up."Depart_id"
-                           , up.lang_code
-                           , au.is_active
-                           , to_char(au.date_joined ,'yyyy-mm-dd hh24:mi') as date_joined
-                         from auth_user au 
-                         left join user_profile up on up."User_id" = au.id
-                         left join user_group ug on ug.id = up."UserGroup_id"
-                         left join factory f on f.id = up."Factory_id"
-                         left join depart d on d.id = up."Depart_id"
-                         where is_superuser = false
-                   """;
+			select au.id
+              , up."Name"
+              , au.username as login_id
+              , up."UserGroup_id"
+              , ug."id" as group_id
+              , au.email
+              , au.tel
+              , au.agencycd
+              , ug."Name" as group_name
+              , up."Factory_id"
+              , uc."Value"
+			  , au.divinm
+			  , rp."ranknm"
+              , up."Depart_id"
+              , up.lang_code
+              , au.is_active
+              , to_char(au.date_joined ,'yyyy-mm-dd hh24:mi') as date_joined
+            from auth_user au 
+            left join user_profile up on up."User_id" = au.id
+            left join user_group ug on ug.id = up."UserGroup_id"
+            left join user_code uc on au.agencycd::Integer = uc.id
+			left join tb_rp940 rp on rp.userid = au.username
+            where is_superuser = false
+		    """;
 
         if (superUser != true) {
             sql += "  and ug.\"Code\" <> 'dev' ";
         }
 
-        if (group != null) {
-            sql += " and ug.\"id\" = :group ";
+        if (group!=null){
+            sql+= " and ug.\"id\" = :group ";
         }
 
-        if (StringUtils.isEmpty(keyword) == false) {
+        if (!StringUtils.isEmpty(keyword)) {
             sql += " and up.\"Name\" like concat('%%', :keyword, '%%') ";
         }
 
-        if (StringUtils.isEmpty(username) == false) {
-            sql += " and au.\"username\" = :username ";
+        if (!StringUtils.isEmpty(username)) {
+            sql += " and au.\"username\" like concat('%%', :username, '%%') ";
+        }
+        if (!StringUtils.isEmpty(divinm)) {
+            sql += " and rp.\"divinm\" like concat('%%', :divinm, '%%') ";
         }
         if (departId != null) {
             sql += " and up.\"Depart_id\" = :departId ";
         }
 
-        sql += "order by ug.\"Name\", up.\"Name\"";
+        sql += "order by au.date_joined desc";
+
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
 
@@ -83,32 +93,32 @@ public class UserService {
     }
 
     // 사용자 상세정보 조회
-    public Map<String, Object> getUserDetail(Integer id) {
+    public Map<String, Object> getUserDetail(Integer id){
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
         dicParam.addValue("id", id);
 
         String sql = """
-                select au.id
-                           , up."Name"
-                           , au.username as login_id
-                           , au.email
-                           , ug."Name" as group_name
-                           , up."UserGroup_id"
-                           , up."Factory_id"
-                           , f."Name" as factory_name
-                           , d."Name" as dept_name
-                           , up."Depart_id"
-                           , up.lang_code
-                           , au.is_active
-                           , to_char(au.date_joined ,'yyyy-mm-dd hh24:mi') as date_joined
-                         from auth_user au 
-                         left join user_profile up on up."User_id" = au.id
-                         left join user_group ug on up."UserGroup_id" = ug.id 
-                         left join factory f on up."Factory_id" = f.id 
-                         left join depart d on d.id = up."Depart_id"
-                         where au.id = :id
-                   """;
+			select au.id
+              , up."Name"
+              , au.username as login_id
+              , au.email
+              , ug."Name" as group_name
+              , up."UserGroup_id"
+              , up."Factory_id"
+              , f."Name" as factory_name
+              , d."Name" as dept_name
+              , up."Depart_id"
+              , up.lang_code
+              , au.is_active
+              , to_char(au.date_joined ,'yyyy-mm-dd hh24:mi') as date_joined
+            from auth_user au 
+            left join user_profile up on up."User_id" = au.id
+            left join user_group ug on up."UserGroup_id" = ug.id 
+            left join factory f on up."Factory_id" = f.id 
+            left join depart d on d.id = up."Depart_id"
+            where au.id = :id
+		    """;
 
         Map<String, Object> item = this.sqlRunner.getRow(sql, dicParam);
 
@@ -122,21 +132,21 @@ public class UserService {
         dicParam.addValue("id", id);
 
         String sql = """
-                select ug.id as grp_id
-                   , ug."Name" as grp_name
-                   ,rd."Char1" as grp_check
-                   from user_group ug 
-                   left join rela_data rd on rd."DataPk2" = ug.id 
-                   and "RelationName" = 'auth_user-user_group' 
-                   and rd."DataPk1" = :id
-                   where coalesce(ug."Code",'') <> 'dev'
-                """;
+        		select ug.id as grp_id
+	            , ug."Name" as grp_name
+	            ,rd."Char1" as grp_check
+	            from user_group ug 
+	            left join rela_data rd on rd."DataPk2" = ug.id 
+	            and "RelationName" = 'auth_user-user_group' 
+	            and rd."DataPk1" = :id
+	            where coalesce(ug."Code",'') <> 'dev'
+        		""";
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
     }
 
-    public Boolean SaveUser(User user, Authentication auth, String authType, String authCode) {
+    public Boolean SaveUser(User user, Authentication auth, String authType, String authCode){
 
         try {
             User UserEntity = userRepository.save(user);
@@ -153,10 +163,10 @@ public class UserService {
             dicParam.addValue("loginUser", loginUser.getId());
 
             String sql = """
-                    	INSERT INTO user_profile 
-                    	("_created", "_creater_id", "User_id", "lang_code", "Name", "UserGroup_id" ) 
-                    	VALUES (now(), :loginUser, :User_id, :lang_code, :name, :UserGroup_id )
-                    """;
+		        	INSERT INTO user_profile 
+		        	("_created", "_creater_id", "User_id", "lang_code", "Name", "UserGroup_id" ) 
+		        	VALUES (now(), :loginUser, :User_id, :lang_code, :name, :UserGroup_id )
+		        """;
 
             dicParam.addValue("name", user.getFirst_name());
             dicParam.addValue("lang_code", "ko-KR");
@@ -167,12 +177,14 @@ public class UserService {
 
             this.sqlRunner.execute(sql, dicParam);
             return true;
-        } catch (Exception e) {
+        }catch(Exception e){
             e.getMessage();
             return false;
         }
 
+
     }
+
 
     public List<Map<String, Object>> getUserSandanList(String id) {
 
@@ -199,5 +211,6 @@ public class UserService {
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;
     }
+
 
 }

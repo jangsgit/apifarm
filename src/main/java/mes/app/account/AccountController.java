@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +16,16 @@ import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 
 import mes.app.MailService;
+import mes.app.UtilClass;
 import mes.app.account.service.TB_RP940_Service;
 import mes.app.account.service.TB_RP945_Service;
 import mes.domain.DTO.TB_RP940Dto;
 import mes.domain.DTO.TB_RP945Dto;
+import mes.domain.DTO.UserCodeDto;
 import mes.domain.entity.UserCode;
 import mes.domain.entity.UserGroup;
 import mes.domain.repository.*;
+import org.apache.fop.layoutmgr.BorderOrPaddingElement;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,16 +55,16 @@ import mes.domain.services.SqlRunner;
 
 @RestController
 public class AccountController {
-	
+
 	@Autowired
 	AccountService accountService;
-		
-    @Autowired
-    UserRepository userRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	UserCodeRepository userCodeRepository;
-	
+
 	@Autowired
 	SqlRunner sqlRunner;
 
@@ -81,9 +86,9 @@ public class AccountController {
 
 
 	@Resource(name="authenticationManager")
-    private AuthenticationManager authManager;
-    @Autowired
-    private UserGroupRepository userGroupRepository;
+	private AuthenticationManager authManager;
+	@Autowired
+	private UserGroupRepository userGroupRepository;
 
 
 
@@ -91,14 +96,14 @@ public class AccountController {
 	private final ConcurrentHashMap<String, Long> tokenExpiry = new ConcurrentHashMap<>();
 
 	@GetMapping("/login")
-    public ModelAndView loginPage(
-    		HttpServletRequest request,
-    		HttpServletResponse response,
-    		HttpSession session, Authentication auth) {
+	public ModelAndView loginPage(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			HttpSession session, Authentication auth) {
 
-		ModelAndView mv = new ModelAndView("login");		
-		
-		Map<String, Object> userInfo = new HashMap<String, Object>(); 
+		ModelAndView mv = new ModelAndView("login");
+
+		Map<String, Object> userInfo = new HashMap<String, Object>();
 		Map<String, Object> gui = new HashMap<String, Object>();
 
 		mv.addObject("userinfo", userInfo);
@@ -108,42 +113,42 @@ public class AccountController {
 			SecurityContextLogoutHandler handler =  new SecurityContextLogoutHandler();
 			handler.logout(request, response, auth);
 		}
-		
+
 		return mv;
 	}
-	
+
 	@GetMapping("/logout")
 	public void logout(
 			HttpServletRequest request
 			, HttpServletResponse response) throws IOException {
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();		
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SecurityContextLogoutHandler handler =  new SecurityContextLogoutHandler();
-		
+
 		this.accountService.saveLoginLog("logout", auth);
-		
+
 		handler.logout(request, response, auth);
-	    response.sendRedirect("/login");
+		response.sendRedirect("/login");
 	}
 
-    @PostMapping("/login")
-    public AjaxResult postLogin(
-    		@RequestParam("username") final String username,
-    		@RequestParam("password") final String password,
-    		final HttpServletRequest request) throws UnknownHostException {
-    	// 여기로 들어오지 않음.
+	@PostMapping("/login")
+	public AjaxResult postLogin(
+			@RequestParam("username") final String username,
+			@RequestParam("password") final String password,
+			final HttpServletRequest request) throws UnknownHostException {
+		// 여기로 들어오지 않음.
 
 		//List<TB_RP940> list = tb_rp940Repository.findAll();
 
 		//System.out.print(list);
 
 
-    	AjaxResult result = new AjaxResult();
+		AjaxResult result = new AjaxResult();
 
-    	HashMap<String, Object> data = new HashMap<String, Object>();
-    	result.data = data;
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		result.data = data;
 
-        UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
+		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
 		CustomAuthenticationToken auth = null;
 		try{
 			auth = (CustomAuthenticationToken)authManager.authenticate(authReq);
@@ -153,10 +158,10 @@ public class AccountController {
 			return result;
 		}
 
-        if(auth!=null) {
-        	User user = (User)auth.getPrincipal();
-        	user.getActive();
-        	data.put("code", "OK");
+		if(auth!=null) {
+			User user = (User)auth.getPrincipal();
+			user.getActive();
+			data.put("code", "OK");
 
 			try {
 				this.accountService.saveLoginLog("login", auth);
@@ -164,73 +169,73 @@ public class AccountController {
 				// Handle the exception (e.g., log it)
 				e.printStackTrace();
 			}
-        } else {
-        	result.success=false;
-        	data.put("code", "NOID");
-        }
+		} else {
+			result.success=false;
+			data.put("code", "NOID");
+		}
 
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
+		SecurityContext sc = SecurityContextHolder.getContext();
+		sc.setAuthentication(auth);
 
-        HttpSession session = request.getSession(true);
-        session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
+		HttpSession session = request.getSession(true);
+		session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
 
-        return result;
-    }
-    
-    @GetMapping("/account/myinfo")
-    public AjaxResult getUserInfo(Authentication auth){
-    	User user = (User)auth.getPrincipal();
-    	AjaxResult result = new AjaxResult();
-    	
-    	Map<String, Object> dicData = new HashMap<String, Object>();
-    	dicData.put("login_id", user.getUsername());
-    	dicData.put("name", user.getUserProfile().getName());    	
-    	result.data = dicData;    	
-    	return result;    	
-    }
-    
-    @PostMapping("/account/myinfo/password_change")
-    public AjaxResult userPasswordChange(
-    		@RequestParam("name") final String name,
-    		@RequestParam("loginPwd") final String loginPwd,
-    		@RequestParam("loginPwd2") final String loginPwd2,    		
-    		Authentication auth
-    		) {
-    	
-    	User user = (User)auth.getPrincipal();
-        AjaxResult result = new AjaxResult();
-        
-        if (StringUtils.hasText(loginPwd)==false | StringUtils.hasText(loginPwd2)==false) {
-        	result.success=false;
-        	result.message="The verification password is incorrect.";
-        	return result;
-        }
-        
-        if(loginPwd.equals(loginPwd2)==false) {        	
-        	result.success=false;
-        	result.message="The verification password is incorrect.";
-        	return result;
-        }
-        
-        user.setPassword(Pbkdf2Sha256.encode(loginPwd2));        
-        //user.getUserProfile().setName(name);
-        this.userRepository.save(user);
-        
-        String sql = """
+		return result;
+	}
+
+	@GetMapping("/account/myinfo")
+	public AjaxResult getUserInfo(Authentication auth){
+		User user = (User)auth.getPrincipal();
+		AjaxResult result = new AjaxResult();
+
+		Map<String, Object> dicData = new HashMap<String, Object>();
+		dicData.put("login_id", user.getUsername());
+		dicData.put("name", user.getUserProfile().getName());
+		result.data = dicData;
+		return result;
+	}
+
+	@PostMapping("/account/myinfo/password_change")
+	public AjaxResult userPasswordChange(
+			@RequestParam("name") final String name,
+			@RequestParam("loginPwd") final String loginPwd,
+			@RequestParam("loginPwd2") final String loginPwd2,
+			Authentication auth
+	) {
+
+		User user = (User)auth.getPrincipal();
+		AjaxResult result = new AjaxResult();
+
+		if (StringUtils.hasText(loginPwd)==false | StringUtils.hasText(loginPwd2)==false) {
+			result.success=false;
+			result.message="The verification password is incorrect.";
+			return result;
+		}
+
+		if(loginPwd.equals(loginPwd2)==false) {
+			result.success=false;
+			result.message="The verification password is incorrect.";
+			return result;
+		}
+
+		user.setPassword(Pbkdf2Sha256.encode(loginPwd2));
+		//user.getUserProfile().setName(name);
+		this.userRepository.save(user);
+
+		String sql = """
         	update user_profile set 
         	"Name"=:name, _modified = now(), _modifier_id=:id 
         	where id=:id 
         """;
-        
-        MapSqlParameterSource dicParam = new MapSqlParameterSource();
-        dicParam.addValue("name", name);
-        dicParam.addValue("id", user.getId());
-        this.sqlRunner.execute(sql, dicParam);
-        
-        
-        return result;
-    }
+
+		MapSqlParameterSource dicParam = new MapSqlParameterSource();
+		dicParam.addValue("name", name);
+		dicParam.addValue("id", user.getId());
+		this.sqlRunner.execute(sql, dicParam);
+
+
+		return result;
+	}
 
 
 	/***
@@ -289,30 +294,37 @@ public class AccountController {
 			@RequestParam(value = "secondText") String secondText,
 			@RequestParam(value = "thirdText") String thirdText,
 			@RequestParam(value = "authTypeText") String authTypeText,
-			@RequestParam(value = "agencynm") String agencynm
+			@RequestParam(value = "agencynm") String agencynm,
+			@RequestParam(value = "AuthenticationCode") String AuthenticationCode
 
-			){
+	){
 
-			AjaxResult result = new AjaxResult();
+		AjaxResult result = new AjaxResult();
 
-			try {
-					//클라에서 동적으로 값이 넘어와서 몇개인지 모름, 그래서 쉼표구분자로 리스트형태로 분개해서 서버에서 노가다 뛰어여한다.
-					List<String> spworkList = Arrays.asList(spworkcd.split(","));
-					List<String> spcompList = Arrays.asList(spcompcd.split(","));
-					List<String> spplanList = Arrays.asList(spplancd.split(","));
-
-					List<String> firstTextList = Arrays.asList(firstText.split(","));
-					List<String> secondTextList = Arrays.asList(secondText.split(","));
-					List<String> thirdTextList = Arrays.asList(thirdText.split(","));
+		try {
+			result = verifyAuthenticationCode(AuthenticationCode, email);
+			if(result.success){
+				//클라에서 동적으로 값이 넘어와서 몇개인지 모름, 그래서 쉼표구분자로 리스트형태로 분개해서 서버에서 노가다 뛰어여한다.
 
 
-					TB_RP940Dto dto = TB_RP940Dto.builder()
+				UtilClass util = new UtilClass();
+				List<Integer> spworkidList = util.parseUserIdsToInt(spworkcd);
+				List<Integer> spcompidList = util.parseUserIdsToInt(spcompcd);
+				List<Integer> spplanidList = util.parseUserIdsToInt(spplancd);
+
+
+				List<String> firstTextList = Arrays.asList(firstText.split(","));
+				List<String> secondTextList = Arrays.asList(secondText.split(","));
+				List<String> thirdTextList = Arrays.asList(thirdText.split(","));
+
+
+				TB_RP940Dto dto = TB_RP940Dto.builder()
 						.agency(agency)
-							.agencynm(agencynm)
+						.agencynm(agencynm)
 						.agencyDepartment(agencyDepartment)
 						.authType(authType)
-							.authgrpnm(authTypeText)
-							.appflag("N")
+						.authgrpnm(authTypeText)
+						.appflag("N")
 						.email(email)
 						.id(id)
 						.level(level)
@@ -332,20 +344,36 @@ public class AccountController {
 				int AskSeqInt = Integer.parseInt(RawAskSeq) + 1;
 
 
-				for(int i=0; i<spworkList.size(); i++){
+				// 필요한 모든 UserCode를 한 번에 조회
+				Map<Integer, UserCode> spworkCodes = userCodeRepository.findAllById(spworkidList)
+						.stream().collect(Collectors.toMap(UserCode::getId, Function.identity()));
+				Map<Integer, UserCode> spcompCodes = userCodeRepository.findAllById(spcompidList)
+						.stream().collect(Collectors.toMap(UserCode::getId, Function.identity()));
+				Map<Integer, UserCode> spplanCodes = userCodeRepository.findAllById(spplanidList)
+						.stream().collect(Collectors.toMap(UserCode::getId, Function.identity()));
+
+				for(int i=0; i<spworkidList.size(); i++){
 
 
 					String askseq = String.format("%03d", AskSeqInt);
 
+					UserCode spworkid = spworkCodes.get(spworkidList.get(i));
+					UserCode spcompid = spcompCodes.get(spcompidList.get(i));
+					UserCode spplanid = spplanCodes.get(spplanidList.get(i));
+
+
 					TB_RP945Dto dto2 = TB_RP945Dto.builder()
 							.userid(id)
 							.askseq(askseq)
-							.spworkcd(spworkList.get(i))
-							.spcompcd(spcompList.get(i))
-							.spplancd(spplanList.get(i))
+							.spworkcd(spworkid.getCode())
+							.spcompcd(spcompid.getCode())
+							.spplancd(spplanid.getCode())
 							.spworknm(firstTextList.get(i))
 							.spcompnm(secondTextList.get(i))
 							.spplannm(thirdTextList.get(i))
+							.spworkid(spworkid.getId())
+							.spcompid(spcompid.getId())
+							.spplanid(spplanid.getId())
 							.build();
 
 					tbRp945Service.save(dto2);
@@ -356,14 +384,16 @@ public class AccountController {
 				result.success = true;
 				result.message = "신청이 완료되었습니다.";
 				return result;
-
-			} catch(Exception e){
-				System.out.println(e);
-
-				result.success = false;
-				result.message = "에러가발생하였습니다.";
+			}else{
 				return result;
 			}
+		} catch(Exception e){
+			System.out.println(e);
+
+			result.success = false;
+			result.message = "에러가발생하였습니다.";
+			return result;
+		}
 
 	}
 
@@ -378,12 +408,12 @@ public class AccountController {
 		if(!user.isEmpty()){
 			result.success = true;
 			result.data = user;
-        }else {
+		}else {
 			result.success = false;
 			result.message = "해당 사용자가 존재하지 않습니다.";
-        }
-        return result;
-    }
+		}
+		return result;
+	}
 
 	@PostMapping("/user-auth/AuthenticationEmail")
 	public AjaxResult PwSearch(@RequestParam("usernm") final String usernm,
@@ -391,14 +421,18 @@ public class AccountController {
 
 		AjaxResult result = new AjaxResult();
 
+		if(usernm.equals("empty")){
+			sendEmailLogic(mail, "신규사용자");
+
+			result.success = true;
+			result.message = "인증 메일이 발송되었습니다.";
+			return result;
+		}
+
 		boolean flag = userRepository.existsByUsernameAndEmail(usernm, mail);
 
 		if(flag) {
-			String uuid = UUID.randomUUID().toString();
-			emailService.sendVerificationEmail(mail, usernm, uuid);
-
-			tokenStore.put(mail, uuid);
-			tokenExpiry.put(mail, System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3));
+			sendEmailLogic(mail, usernm);
 
 			result.success = true;
 			result.message = "인증 메일이 발송되었습니다.";
@@ -410,14 +444,43 @@ public class AccountController {
 		return result;
 	}
 
+	private void sendEmailLogic(String mail, String usernm){
+		Random random = new Random();
+		int randomNum = 100000 + random.nextInt(900000); // 100000부터 999999까지의 랜덤 난수 생성
+		String verificationCode = String.valueOf(randomNum); // 정수를 문자열로 변환
+		emailService.sendVerificationEmail(mail, usernm, verificationCode);
+
+		tokenStore.put(mail, verificationCode);
+		tokenExpiry.put(mail, System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3));
+
+	}
+
 	@PostMapping("/user-auth/verifyCode")
 	public AjaxResult verifyCode(@RequestParam("code") final String code,
 								 @RequestParam("mail") final String mail,
 								 @RequestParam("password") final String password,
 								 @RequestParam("userid") final String userid
-								 ){
+	){
 
 		AjaxResult result = new AjaxResult();
+		result = verifyAuthenticationCode(code, mail);
+
+		if(result.success){
+			String pw = Pbkdf2Sha256.encode(password);
+
+
+			userRepository.PasswordChange(pw, userid);
+
+
+			result.success = true;
+			result.message = "비밀번호가 변경되었습니다.";
+
+			return result;
+		}else{
+			return result;
+		}
+
+		/*AjaxResult result = new AjaxResult();
 
 
 		String storedToken = tokenStore.get(mail);
@@ -443,15 +506,49 @@ public class AccountController {
 		}else {
 			result.success = false;
 			result.message = "인증 코드가 유효하지 않습니다.";
-		}
+		}*/
 
+
+	}
+
+	private AjaxResult verifyAuthenticationCode(String code, String mail){
+
+		AjaxResult result = new AjaxResult();
+
+		String storedToken = tokenStore.get(mail);
+		if(storedToken != null && storedToken.equals(code)){
+			long expiryTime = tokenExpiry.getOrDefault(mail, 0L);
+			if(System.currentTimeMillis() > expiryTime){
+				result.success = false;
+				result.message = "인증 코드가 만료되었습니다.";
+				tokenStore.remove(mail);
+				tokenExpiry.remove(mail);
+			} else {
+				result.success = true;
+				result.message = "비밀번호가 변경되었습니다.";
+			}
+		}else{
+			result.success = false;
+			result.message = "인증 코드가 유효하지 않습니다.";
+		}
 		return result;
 	}
 
 
 	@GetMapping("/user-codes/parent")
-	public List<UserCode> getUserCodeByParentId(@RequestParam Integer parentId){
-		return userCodeRepository.findByParentId(parentId);
+	public List<UserCodeDto> getUserCodeByParentId(@RequestParam Integer parentId){
+
+		List<UserCode> list = userCodeRepository.findByParentId(parentId);
+
+		List<UserCodeDto> dtoList = list.stream()
+				.map(userCode -> new UserCodeDto(
+						userCode.getId(),
+						userCode.getCode(),
+						userCode.getValue()
+				))
+				.toList();
+
+		return dtoList;
 	}
 
 	@GetMapping("/user-auth/type")
@@ -461,14 +558,20 @@ public class AccountController {
 	}
 
 	@GetMapping("/user-codes/code")
-	public List<UserCode> getUserCodesByCode(@RequestParam String code, @RequestParam String value) {
+	public List<UserCodeDto> getUserCodesByCode(@RequestParam Integer code) {
 
-		List<UserCode> list = userCodeRepository.findByCodeAndValue(code, value);  //TODO: 이거 PK도 아닌데 여러개의 값이 나온다면 어떡하지? 근데 웬만해서는 단일값만 나올것이지만 에러처리는 해야할듯?
+		List<UserCode> list = userCodeRepository.findByParentId(code);
 
+		List<UserCodeDto> dtoList = list.stream()
+				.map(userCode -> new UserCodeDto(
+						userCode.getId(),
+						userCode.getCode(),
+						userCode.getValue()
+				)).toList();
 
-		return userCodeRepository.findByParentId(list.get(0).getId());
+		return dtoList;
 	}
 
 
-    
+
 }

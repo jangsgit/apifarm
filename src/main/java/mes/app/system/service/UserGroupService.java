@@ -14,7 +14,7 @@ public class UserGroupService {
 	
 	@Autowired
 	SqlRunner sqlRunner;
-	
+
 	public List<Map<String,Object>> getUserGroupList(Boolean super_user) {
 		String sql = """
 			select id, "Code" as code 
@@ -22,21 +22,24 @@ public class UserGroupService {
             , "Description" as description 
             , "Disabled" as disabled
             , "gmenu" as gmenu 
-            , to_char("_created" ,'yyyy-mm-dd hh24:mi:ss') as created
+            , mi."MenuName" as gmenuname
+            , to_char(ug."_created" ,'yyyy-mm-dd hh24:mi:ss') as created
             from user_group ug 
+            left join menu_item mi
+			on mi."MenuCode" = ug.gmenu
             where 1 = 1
 			""";
-				
-			
+
+
 		if (super_user == false) {
 			sql += "and \"Code\" <> 'dev' ";
 		}
-			
-		
+
+
 		sql += " order by \"Name\" ";
 		List<Map<String,Object>> items = this.sqlRunner.getRows(sql, null);
 		return items;
-		
+
 	}
 	
 	public Map<String, Object> getUserGroup(int id) {

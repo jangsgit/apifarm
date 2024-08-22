@@ -47,6 +47,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -109,6 +110,9 @@ public class InspecController {
 
 
         items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate, "", flag);
+
+
+
 
         AjaxResult result = new AjaxResult();
         result.data = items;
