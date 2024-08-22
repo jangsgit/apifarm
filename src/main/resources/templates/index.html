@@ -565,21 +565,21 @@
                             // var _manual = $(this).attr('data-manual');
 
 
-                                if (nthTabs.isExistsTab('#' + objid)) {
-                                    nthTabs.toggleTab('#' + objid);
-                                } else {
-                                    nthTabs.addTab({
-                                        id: objid,
-                                        title: val,
-                                        url: '/gui/' + objid + '/default',
-                                        active: true,
-                                        allowClose: true,
-                                        // ismanual: _manual,
-                                        isbookmark: _bookmark
-                                    });
-                                    // 추가된 탭에 대한 북마크 초기화
-                                    nthTabs.bindBookmarkEvent(objid, _bookmark);
-                                }
+                            if (nthTabs.isExistsTab('#' + objid)) {
+                                nthTabs.toggleTab('#' + objid);
+                            } else {
+                                nthTabs.addTab({
+                                    id: objid,
+                                    title: val,
+                                    url: '/gui/' + objid + '/default',
+                                    active: true,
+                                    allowClose: true,
+                                    // ismanual: _manual,
+                                    isbookmark: _bookmark
+                                });
+                                // 추가된 탭에 대한 북마크 초기화
+                                nthTabs.bindBookmarkEvent(objid, _bookmark);
+                            }
                         });
                     }
                 }
@@ -851,11 +851,15 @@
 
     function fetchRecData() {
         fetch('/rec/recAverage')
-            .then(response => response.json()) // JSON 형식의 응답을 파싱
+            .then(response => response.text())
+            // .then(response => response.json())
             .then(data => {
-                $('#recValue').text(data.landAvgPrc); // data 객체에서 landAvgPrc 필드의 값을 사용
+                const formattedValue = Number(data).toLocaleString();  // 숫자를 천 단위로 포맷팅
+                $('#recValue').text(formattedValue);
             })
-            .catch(error => console.error('Error fetching REC data:', error));
+            .catch(error => {
+                console.error('Error fetching REC data:', error);
+            });
     }
 
     // SMP 정보
@@ -1052,6 +1056,25 @@
     function UserInfo() {
         let popup = document.getElementById('popup1');
         let wrapper = document.getElementById('wrapper1');
+
+        $.ajax({
+            url: '/account/myinfo', // 사용자 정보를 가져올 URL
+            type: 'GET',
+            dataType: 'json', // 응답 데이터 형식 지정
+            success: function (response) {
+                // AJAX 호출 성공 시 처리할 로직
+                if (response && response.data) {
+                    $('#login_id').val(response.data.login_id); // ID 필드 채우기
+                    $('#name').val(response.data.name); // 이름 필드 채우기
+                    $('#email').val(response.data.email);
+                }
+                console.log('사용자 정보 가져오기 성공: ', response);
+            },
+            error: function (xhr, status, error) {
+                // AJAX 호출 실패 시 처리할 로직
+                console.error('사용자 정보 가져오기 실패: ', error);
+            }
+        });
 
         popup.style.display = 'block';
         wrapper.style.display = 'block';

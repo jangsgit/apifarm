@@ -2,70 +2,154 @@ package mes.app.rec.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import mes.domain.entity.UserCode;
+import mes.domain.repository.UserCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.NumberFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class RecService {
-	
+
 	@Value("${rec.api.endpoint}") // 보안을 위해 application.properties 에 저장해둠
 	private String apiEndpoint;
-	
+
 	@Value("${api.key}")
 	private String apiKey;
-	
+
 	// RestTemplate 을 사용하여 API 호출을 수행하고 응답받기
 	private final RestTemplate restTemplate;
-	
+
 	private final ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	@Autowired
 	public RecService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
+
+	@Autowired
+	private UserCodeRepository userCodeRepository;
 	
-	
-	/*
-	* 다중 인스턴스 환경: 애플리케이션이 여러 인스턴스에서 동작하고 있고, 각 인스턴스가 독립적으로 API를 호출하고 있다면, 전체적으로 보았을 때 API 호출 제한을 초과할 수 있습니다. 이 경우 중앙 집중식 캐시 솔루션(예: Redis)을 사용하여 모든 인스턴스 간에 캐시를 공유할 수 있습니다. -> 나중에 활용*/
-	@Cacheable(value = "recCache", key = "#root.method.name")
-	public ResponseEntity<?> getRecData() {
-		LocalDate today = LocalDate.now();
-		LocalDate startDay = today.minusDays(7);
-		String avgPrice = null;
+	@Scheduled(cron = "0 0 4 * * WED,FRI") // 매주 수요일과 금요일 새벽 4시에 실행
+	public void updateRecData() {
+		LocalDateTime now = LocalDateTime.now();
+		String formattedDate = now.format(DateTimeFormatter.BASIC_ISO_DATE);
 		
-		for (LocalDate date = today; !date.isBefore(startDay); date = date.minusDays(1)) {
-			String formattedDate = date.format(DateTimeFormatter.BASIC_ISO_DATE);
-			try {
-				String response = fetchFromAPI(formattedDate);
-				String price = parseResponse(response);
-				if (price != null) {
-					avgPrice = price;
-					break;  // 유효한 데이터를 찾으면 루프 중단
-				}
-			} catch (URISyntaxException e) {
-//				System.err.println("URI syntax error: " + e.getMessage());
-				continue;  // URI 생성 실패 시, 다음 날짜로 넘어감
-			}
-		}
-		
-		if (avgPrice != null) {
-			return ResponseEntity.ok().body("{\"landAvgPrc\": \"" + avgPrice + "\"}"); // JSON 형태로 응답
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"No data found\"}");
+		try {
+			String uriString = apiEndpoint + "/getRecMarketInfo2"
+					+ "?serviceKey=" + apiKey
+					+ "&pageNo=1"
+					+ "&numOfRows=1"
+					+ "&dataType=json"
+					+ "&bzDd=" + formattedDate;
+			
+			URI uri = new URI(uriString);
+			String response = restTemplate.getForObject(uri, String.class);
+			String avgPrice = parseRecPrice(response);  // 평균 가격을 String으로 변환
+			
+			System.out.println("REC URI: " + uri);
+			
+			// REC 단가 업데이트
+			Optional<UserCode> optionalRec = userCodeRepository.findById(161);
+			optionalRec.ifPresent(code -> {
+				code.setValue(avgPrice);
+				userCodeRepository.save(code);
+//				System.out.println("REC 단가 저장 성공: " + avgPrice);
+			});
+			
+			// 업데이트 시간 기록
+			Optional<UserCode> optionalTime = userCodeRepository.findById(162);
+			optionalTime.ifPresent(code -> {
+				code.setValue(LocalDateTime.now().toString());
+				userCodeRepository.save(code);
+//				System.out.println("업데이트 시간 저장 성공");
+			});
+			
+			System.out.println("REC 정보가 업데이트 되었습니다. REC 단가: " + avgPrice + ", 업데이트 시간: " + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		} catch (URISyntaxException e) {
+			System.err.println("Error fetching REC data: " + e.getMessage());
 		}
 	}
+	
+	private String parseRecPrice(String response) {
+		try {
+			JsonNode rootNode = objectMapper.readTree(response);
+			JsonNode itemNode = rootNode.path("response").path("body").path("items").path("item").get(0);
+			
+			if (itemNode != null) {
+				double recValue = itemNode.path("landAvgPrc").asDouble();
+				return String.format("%.2f", recValue); // 포맷팅된 평균 가격 반환
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to parse JSON response: " + e.getMessage());
+		}
+		return "데이터없음"; // 유효한 데이터가 없을 경우 "데이터없음"을 반환
+	}
+}
+
+
+// 즉시 실행되도록 수동으로 호출 버전
+	/*public void updateRecData() {
+		LocalDateTime today = LocalDateTime.now();
+		String avgPrice = null;
+		String businessDay = null;
+		
+		try {
+			// 현재 날짜부터 최대 일주일 전까지 조회
+			for (int i = 0; i < 7; i++) {
+				LocalDateTime targetDate = today.minusDays(i);
+				String formattedDate = targetDate.format(DateTimeFormatter.BASIC_ISO_DATE);
+				String response = fetchFromAPI(formattedDate);
+				JsonNode result = parseResponse(response);
+				
+				// 결과가 있으면 데이터를 추출하고 루프를 종료
+				if (result != null && !result.isEmpty()) {
+					avgPrice = result.path("landAvgPrc").asText();
+					businessDay = result.path("bzDd").asText();
+					System.out.println("Parsed avgPrice: " + avgPrice);  // 추가된 로그
+					System.out.println("Parsed businessDay: " + businessDay);  // 추가된 로그
+					break;
+				}
+			}
+			
+			if (avgPrice != null) {
+				// REC 단가 업데이트
+				Optional<UserCode> optionalRec = userCodeRepository.findById(161);
+				String finalAvgPrice = avgPrice;
+				optionalRec.ifPresent(code -> {
+					code.setValue(finalAvgPrice);
+					userCodeRepository.save(code);
+					System.out.println("REC 단가 저장 성공: " + finalAvgPrice);
+				});
+				
+				// 업데이트 시간 기록
+				Optional<UserCode> optionalTime = userCodeRepository.findById(162);
+				optionalTime.ifPresent(code -> {
+					code.setValue(LocalDateTime.now().toString());
+					userCodeRepository.save(code);
+					System.out.println("업데이트 시간 저장 성공");
+				});
+				
+				System.out.println("REC 정보가 업데이트되었습니다. REC 단가: " + avgPrice + ", 영업일: " + businessDay + ", 업데이트 시간: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			} else {
+				System.err.println("REC 정보를 찾을 수 없습니다.");
+			}
+		} catch (URISyntaxException e) {
+			System.err.println("Error fetching REC data: " + e.getMessage());
+		} catch (Exception e) {
+			System.err.println("Unexpected error: " + e.getMessage());
+			e.printStackTrace(); // 예외의 스택 트레이스를 콘솔에 출력
+		}
+	}
+	
 	
 	private String fetchFromAPI(String formattedDate) throws URISyntaxException {
 		URI uri = new URI(apiEndpoint + "/getRecMarketInfo2"
@@ -74,24 +158,19 @@ public class RecService {
 				+ "&numOfRows=1"
 				+ "&dataType=json"
 				+ "&bzDd=" + formattedDate);
+		
+		System.out.println("REC URI: " + uri);
+		
 		return restTemplate.getForObject(uri, String.class);
 	}
 	
-	private String parseResponse(String response) {
+	private JsonNode parseResponse(String response) {
 		try {
 			JsonNode rootNode = objectMapper.readTree(response);
-			JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
-			if (itemsNode.isArray() && itemsNode.size() > 0) {  // 배열이면서, 항목이 적어도 하나 이상 있는지 확인
-				JsonNode landAvgPrcNode = itemsNode.get(0).path("landAvgPrc");
-				if (!landAvgPrcNode.isMissingNode()) {
-					double avgPriceDouble = landAvgPrcNode.asDouble();
-					NumberFormat numberFormat = NumberFormat.getInstance(Locale.US);
-					return numberFormat.format(avgPriceDouble);
-				}
-			}
+			JsonNode itemNode = rootNode.path("response").path("body").path("items").path("item").get(0);
+			return itemNode;
 		} catch (Exception e) {
-//			System.err.println("Failed to parse JSON response: " + e.getMessage());
+			System.err.println("Failed to parse JSON response: " + e.getMessage());
+			return null;
 		}
-		return null;  // 유효한 데이터가 없거나 파싱에 실패한 경우
-	}
-}
+	}*/

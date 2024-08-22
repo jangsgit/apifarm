@@ -1,18 +1,20 @@
 package mes.app.smp.service;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import mes.domain.DTO.SmpDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import mes.domain.entity.UserCode;
+import mes.domain.repository.UserCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class SmpService {
@@ -25,85 +27,72 @@ public class SmpService {
 	
 	private final RestTemplate restTemplate;
 	
-	private final XmlMapper xmlMapper = new XmlMapper();  // XmlMapper 인스턴스 생성
+	private final ObjectMapper objectMapper = new ObjectMapper();
 	
 	@Autowired
 	public SmpService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate; // 생성자 주입
 	}
 	
-	/*// RestTemplate 을 사용하여 XML 응답을 SmpDto 객체로 자동 매핑
-	public SmpDto getSmpData() {
+	@Autowired
+	private UserCodeRepository userCodeRepository;
+	
+	@Scheduled(cron = "0 0 * * * *") // 매시 정각에 실행
+	public void updateSmpData() {
 		LocalDateTime now = LocalDateTime.now();
 		String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 		int hour = now.getHour();
 		
-		// URI 생성
-		URI uri = null;
-		try {
-			uri = new URI(apiEndpoint + "/getSmp1hToday"
-					+ "?areaCd=1"
-					+ "&serviceKey=" + apiKey
-					+ "&tradeDay=" + formattedDate
-					+ "&tradeHour=" + hour);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			throw new RuntimeException("URI syntax is incorrect: " + e.getMessage());
-		}
-		
-		// API 호출 및 결과 변환
-		SmpDto response = restTemplate.getForObject(uri, SmpDto.class);
-		
-		System.out.println("smp URI: " + uri);
-		
-		return response; // RestTemplate을 통해 API 호출 결과를 SmpDto로 변환
-		
-	}*/
-	
-	
-	public ResponseEntity<String> getCurrentSmp() {
-		LocalDateTime now = LocalDateTime.now();
-		String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		int hour = now.getHour();
-		
-		String uriString = apiEndpoint + "/getSmp1hToday?areaCd=1&serviceKey=" + apiKey +
-				"&tradeDay=" + formattedDate + "&tradeHour=" + hour;
+		String uriString = apiEndpoint + "/getSmpWithForecastDemand?serviceKey=" + apiKey +
+				"&pageNo=1&numOfRows=100&dataType=json&date=" + formattedDate;
 		
 		try {
 			URI uri = new URI(uriString);
+			String response = restTemplate.getForObject(uri, String.class);
+			String smp = parseSmp(response, hour, "육지");  // SMP 값을 String으로 변경
 			
-			System.out.println("Constructed URI: " + uri);
+			System.out.println("SMP URI : " + uri);
+//			System.out.println("Fetched SMP: " + smp);
 			
-			// RestTemplate가 리디렉션을 따르도록 설정
-			ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+			// SMP 데이터 업데이트
+			Optional<UserCode> optionalSmp = userCodeRepository.findById(158);
+			optionalSmp.ifPresent(code -> {
+				code.setValue(smp);
+				userCodeRepository.save(code);
+			});
 			
-			if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-				SmpDto dtoResponse = xmlMapper.readValue(response.getBody(), SmpDto.class);
-				String currentSmp = findCurrentSmp(dtoResponse, hour);
-				return ResponseEntity.ok(currentSmp);
-			} else {
-				return ResponseEntity.status(response.getStatusCode()).body("API call failed: " + response.getStatusCode());
-			}
-		} catch (URISyntaxException | IOException e) {
-			return ResponseEntity.badRequest().body("Error in accessing the API: " + e.getMessage());
+			// 현재 시각 업데이트
+			Optional<UserCode> optionalTime = userCodeRepository.findById(159);
+			optionalTime.ifPresent(code -> {
+				code.setValue(LocalDateTime.now().toString());
+				userCodeRepository.save(code);
+			});
+			
+			System.out.println(hour + "시의 SMP 정보가 업데이트 되었습니다. SMP 값: " + smp + ", 업데이트 시간: " + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			
+		} catch (URISyntaxException e) {
+			System.err.println("Error in accessing the API: " + e.getMessage());
 		}
 	}
 	
-	private String findCurrentSmp(SmpDto dto, int hour) {
-		System.out.println("Finding SMP for Hour: " + hour);
-		
-		if (dto != null && dto.getBody() != null && dto.getBody().getItems() != null) {
-			System.out.println("Items found: " + dto.getBody().getItems().getItems().size());
+	private String parseSmp(String response, int targetHour, String targetAreaName) {
+		try {
+			JsonNode rootNode = objectMapper.readTree(response);
+			JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
 			
-			return dto.getBody().getItems().getItems().stream()
-					.filter(item -> Integer.parseInt(item.getTradeHour()) == hour)
-					.findFirst()
-					.map(item -> String.format("%.2f", item.getSmp()))  // 여기서 item -> String.format 사용
-					.orElse("No data for current hour");
+			for (JsonNode item : itemsNode) {
+				int hour = item.path("hour").asInt();
+				String areaName = item.path("areaName").asText();
+				if (hour == targetHour && areaName.equals(targetAreaName)) {
+					double smpValue = item.path("smp").asDouble();
+					return String.format("%.2f", smpValue);
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("Failed to parse JSON response: " + e.getMessage());
 		}
-		
-		System.out.println("No valid data found in DTO");
-//		return "No valid data found";
-		return "로딩중";
+		return "데이터없음"; // 유효한 데이터가 없을 경우 "데이터없음"을 반환
 	}
+	
+	
 }
