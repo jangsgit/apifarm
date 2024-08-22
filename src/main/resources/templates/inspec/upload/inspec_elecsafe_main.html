@@ -4,7 +4,6 @@
 </style>
 <th:block layout:fragment="content">
 
-    <!--- (레이아웃) Contents 영역 -->
     <div class="layout-contents">
         <!-- Page Title -->
         <div class="page-title-wrap">
@@ -23,43 +22,26 @@
         <!-- Select -->
         <div class="search-wrap">
             <ul>
-                <!--                <li>-->
-                <!--                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">-->
-                <!--                        <option value="001">대구</option>-->
-                <!--                        <input type="hidden" id="spworknm" name="spworknm">-->
-                <!--                    </select>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">-->
-                <!--                        <option value="001">성서산단</option>-->
-                <!--                        <input type="hidden" id="spcompnm" name="spcompnm">-->
-                <!--                    </select>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">-->
-                <!--                        <option value="001">KT 대구물류센터 연료전지 발전소</option>-->
-                <!--                        <input type="hidden" id="spplannm" name="spplannm">-->
-                <!--                    </select>-->
-                <!--                </li>-->
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateCompcdOptions()">
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
                         <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updatePlancdOptions()">
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
                         <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd">
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
                 </li>
-
             </ul>
         </div>
         <div class="tab-wrap">
@@ -70,7 +52,6 @@
                 </li>
                 <li th:if="${write_flag}">
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
-
                 </li>
             </ul>
             <div class="tab-contents">
@@ -80,7 +61,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    등록 일자<span class="eq">*</span>
+                                    등록일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -104,7 +85,7 @@
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="searchtitle" name="searchtitle" class="input-srch">
-                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                        <a href="#a" class="btn-srch" title="검색" onclick="fetchListData()"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -113,13 +94,13 @@
                             <ul>
                                 <li th:if="${write_flag}">
                                     <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
                                     </a>
                                 </li>
                                 <li th:if="${write_flag}">
                                     <a class="btn btn-edit" title="수정" onclick="modifyData()">
-                                        <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
                                     </a>
                                 </li>
@@ -140,7 +121,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
@@ -152,7 +133,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                    <a class="btn btn-edit" title="저장" onclick="saveForm()">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
                                     </a>
@@ -162,117 +143,111 @@
                     </div>
                     <div class="table-wrap">
                         <table class="write-table">
-                            <form id="customForm">
-                                <caption>점검등록 테이블</caption>
-                                <colgroup>
-                                    <col class="wp12">
-                                    <col class="wp40">
-                                    <col class="wp12">
-                                    <col class="wp40">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th>
-                                        <label for="checktitle">
-                                            점검명
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="checktitle" class="wp100" autocomplete="off">
-                                    </td>
-                                    <th>
-                                        <label for="registdt">
-                                            등록 일자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="date" id="registdt">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="checkdt">
-                                            점검 일자
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <input type="date" id="checkdt">
-                                    </td>
-                                    <!--                                    <th>-->
-                                    <!--                                        <label for="docdv">-->
-                                    <!--                                            문서 구분-->
-                                    <!--                                        </label>-->
-                                    <!--                                    </th>-->
-                                    <!--                                    <td>-->
-                                    <!--                                        <select id="docdv" name="docselect">-->
-                                    <!--                                            <option value="">문서를 선택하세요</option>-->
-                                    <!--                                            <option value="0">전기 설비점검결과표</option>-->
-                                    <!--                                        </select>-->
-                                    <!--                                    </td>-->
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="checkarea">
-                                            점검 장소
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()"
-                                               autocomplete="off">
-                                        <ul id="suggestions" class="suggestions-list"></ul>
-                                    </td>
-                                    <th>
-                                        <label for="endresult">
-                                            점검 결과
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <select id="endresult">
-                                            <option selected VALUE="0">양호</option>
-                                            <option VALUE="1">좋음</option>
-                                            <option VALUE="2">나쁨</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="bfconsres">
-                                            점검 사항
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <div class="textarea-box">
-                                            <textarea id="bfconsres"></textarea>
-                                            <p class="text-count" id="text-count1">0/100</p>
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="checktitle">
+                                        점검명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checktitle" class="wp100" autocomplete="off">
+                                </td>
+                                <th>
+                                    <label for="registdt">
+                                        등록 일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="registdt">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkdt">
+                                        점검 일자
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="date" id="checkdt">
+                                </td>
+                                <!--                                    <th>-->
+                                <!--                                        <label for="docdv">-->
+                                <!--                                            문서 구분-->
+                                <!--                                        </label>-->
+                                <!--                                    </th>-->
+                                <!--                                    <td>-->
+                                <!--                                        <select id="docdv" name="docselect">-->
+                                <!--                                            <option value="">문서를 선택하세요</option>-->
+                                <!--                                            <option value="0">전기 설비점검결과표</option>-->
+                                <!--                                        </select>-->
+                                <!--                                    </td>-->
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkarea">
+                                        점검 장소
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()"
+                                           autocomplete="off">
+                                    <ul id="suggestions" class="suggestions-list"></ul>
+                                </td>
+                                <th>
+                                    <label for="endresult">
+                                        점검 결과
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="endresult"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="bfconsres">
+                                        점검 사항
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div class="textarea-box">
+                                        <textarea id="bfconsres"></textarea>
+                                        <p class="text-count" id="text-count1">0/100</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td colspan="3">
+                                    <div id="uploadComponent1" class="upload-component">
+                                        <div class="upload-filebox">
+                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                            <a class="btn" title="파일업로드">파일 업로드</a>
+                                            <input type="file" id="fileInput" class="fileInput" multiple>
+                                            <p>Maximun upload file size <span>1GiB</span></p>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        첨부파일
-                                    </th>
-                                    <td colspan="3">
-                                        <div id="uploadComponent1" class="upload-component">
-                                            <div class="upload-filebox">
-                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a class="btn" title="파일업로드">파일 업로드</a>
-                                                <input type="file" id="fileInput" class="fileInput" multiple>
-                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                        <div class="upload-filelist">
+                                            <div class="title">
+                                                <h5>Files (0)</h5>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete
+                                                    all</a>
                                             </div>
-                                            <div class="upload-filelist">
-                                                <div class="title">
-                                                    <h5>Files (0)</h5>
-                                                    <a title="Delete all" class="btn-file-deleteall">Delete
-                                                        all</a>
-                                                </div>
-                                                <ul class="filelist" id="filelist">
-                                                </ul>
-                                            </div>
+                                            <ul class="filelist" id="filelist">
+                                            </ul>
                                         </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
                 </section>
@@ -283,37 +258,29 @@
 </th:block>
 
 <th:block layout:fragment="scripts">
-    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
 
-    <script th:inline="javascript">
+    <script type="text/javascript">
 
         var theGrid;
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
-        // 현재 연도를 가져옴
-        const currentYear = new Date().getFullYear();
-        // 1월 1일 날짜 문자열 생성
-        const defaultDate = `${currentYear}-01-01`;
-        // input 요소에 기본값 설정
-        document.getElementById('startDate').value = defaultDate;
-
-        // 현재 연도를 가져옴
-        const currentYear2 = new Date().getFullYear();
-        // 12월 31일 날짜 문자열 생성
-        const defaultDate2 = `${currentYear2}-12-31`;
-        // input 요소에 기본값 설정
-        document.getElementById('endDate').value = defaultDate2;
-
+        // 오늘 날짜 설정
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('registdt').value = today;
         document.getElementById('checkdt').value = today;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 -->
         function init() {
+
+            // 산단 연동
             initializeSelections();
+
+            // read 초기화
             fetchListData();
 
+            // 검색 초기 날짜
+            setDefaultDates('startDate', 'endDate');
 
             // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
             document.getElementById('spworkcd').addEventListener('change', fetchListData);
@@ -332,8 +299,9 @@
                 url: '/api/inspec/elec_safe/read',
                 type: 'GET',
                 data: {
-                    'startDate': defaultDate,
-                    'endDate': defaultDate2,
+                    'startDate': $('#startDate').val(),
+                    'endDate': $('#endDate').val(),
+                    'searchtitle': $('#searchtitle').val(),
                     spworkcd: spworkcd,
                     spcompcd: spcompcd,
                     spplancd: spplancd
@@ -410,7 +378,7 @@
                             align: 'center',
                             isReadOnly: true
                         },
-                        {binding: 'downloads', header: '다운로드', width: '*', minWidth: 100, align: 'center'}
+                        {binding: 'downloads', header: '첨부파일', width: '*', minWidth: 100, align: 'center'}
                     ],
                     itemsSource: viewdata,
                     itemFormatter: function (panel, r, c, cell) {
@@ -426,6 +394,16 @@
                     }
                 });
 
+                // 그리드의 더블클릭 이벤트 추가
+                let lastClickTime = 0;
+                theGrid.hostElement.addEventListener('click', function (e) {
+                    const now = new Date().getTime();
+                    if (now - lastClickTime < 300) { // 300ms 이내의 두 번 클릭은 더블클릭으로 인식
+                        modifyData(); // 더블클릭 시 modifyData 함수 실행
+                    }
+                    lastClickTime = now;
+                });
+
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
                 new FlexGridContextMenu(theGrid);
                 window.downloadFileName = '전기안전점검';
@@ -436,9 +414,8 @@
             }
         }
 
-
+        // 다운로드
         function downloadFile() {
-
             let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
             let downloadList = [];
 
@@ -454,85 +431,11 @@
                 });
             });
 
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/inspec/elec_safe/downloader', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('[name=_csrf]').value);
-            xhr.responseType = 'blob';
+            // 다운로드 URL 지정
+            let downloadUrl = '/api/inspec/elec_safe/downloader';
 
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // 파일 다운로드 처리
-                    let blob = xhr.response;
-                    let link = document.createElement('a');
-                    let url = window.URL.createObjectURL(blob); // Blob으로부터 URL 생성
-                    let contentDisposition = xhr.getResponseHeader('Content-Disposition');
-                    let fileName = 'downloadedFile';
-
-                    // Content-Disposition 헤더에서 파일 이름 추출
-                    if (contentDisposition) {
-                        let fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        let matches = fileNameRegex.exec(contentDisposition);
-                        if (matches != null && matches[1]) {
-                            fileName = decodeURIComponent(matches[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
-                        }
-
-                        // 추가: filename* 속성에서 파일 이름 추출
-                        let fileNameStarRegex = /filename\*\=([^;]*)/;
-                        let matchesStar = fileNameStarRegex.exec(contentDisposition);
-                        if (matchesStar != null && matchesStar[1]) {
-                            fileName = decodeURIComponent(matchesStar[1].split("''")[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
-                        }
-                    }
-
-                    link.href = url;
-                    link.download = fileName; // 다운로드 파일 이름 설정
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    window.URL.revokeObjectURL(url); // URL 객체 해제
-                } else {
-                    console.error('Download failed:', xhr.statusText);
-                }
-            };
-
-            xhr.onerror = function () {
-                console.error('Network error');
-            };
-
-            xhr.send(JSON.stringify(downloadList));
-        }
-
-
-        // 검색
-        function searchData() {
-            let spworkcd = document.getElementById('spworkcd').value;
-            let spcompcd = document.getElementById('spcompcd').value;
-            let spplancd = document.getElementById('spplancd').value;
-
-            let data = {
-                'startDate': $('#startDate').val(),
-                'endDate': $('#endDate').val(),
-                'searchtitle': $('#searchtitle').val(),
-                spworkcd: spworkcd,
-                spcompcd: spcompcd,
-                spplancd: spplancd
-            }
-            let data2 = [];
-            $.ajax({
-                url: '/api/inspec/elec_safe/read',
-                type: 'GET',
-                data: data,
-                success: function (data) {
-                    data2 = data.data;
-                    viewdata = new wijmo.collections.CollectionView(data2);
-                    theGrid.itemsSource = viewdata;
-                },
-                error: function (xhr, status, error) {
-                    console.error('AJAX request error:', error);
-                }
-            });
+            // Jung.js에서 정의한 downloadFiles 함수 호출
+            downloadFiles(downloadList, downloadUrl);
         }
 
         // 탭 수정/등록으로 업데이트
@@ -548,10 +451,6 @@
                 inputTabLink.title = '등록';
             }
         }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            updateTabLink();
-        });
 
         // 수정하기
         function modifyData() {
@@ -572,94 +471,68 @@
                 return;
             }
 
-            Alert.confirm('', '수정하시겠습니까?', function () {
-                if (!selectedItem.checkseq) {
-                    Alert.alert('', '수정할 게시물이 없습니다.', function () {
-                        fetchListData();
-                    });
-                    return;
-                }
+            $.ajax({
+                url: "/api/inspec/elec_safe/modfind",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        $('#inputTabLink').click();
+                        document.getElementById('spworkcd').value = data2.spworkcd;
+                        document.getElementById('spcompcd').value = data2.spcompcd;
+                        document.getElementById('spplancd').value = data2.spplancd;
+                        document.getElementById('checktitle').value = data2.checktitle;
+                        document.getElementById('registdt').value = formatDate(data2.registdt);
+                        document.getElementById('checkdt').value = formatDate(data2.checkdt);
+                        document.getElementById('endresult').value = data2.endresult;
+                        // document.getElementById('docdv').value = data2.docdv;
+                        document.getElementById('checkarea').value = data2.checkarea;
+                        document.getElementById('bfconsres').value = data2.bfconsres;
+                        document.getElementById('checkseq').value = data2.checkseq;
 
-                $.ajax({
-                    url: "/api/inspec/elec_safe/modfind",
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    headers: {
-                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
-                    },
-                    async: false,
-                    success: function (data) {
-                        if (data.success) {
-                            let data2 = data.data;
-                            console.log('data2', data2);
-                            $('#inputTabLink').click();
-                            document.getElementById('spworkcd').value = data2.spworkcd;
-                            document.getElementById('spcompcd').value = data2.spcompcd;
-                            document.getElementById('spplancd').value = data2.spplancd;
-                            document.getElementById('checktitle').value = data2.checktitle;
-                            document.getElementById('registdt').value = formatDate(data2.registdt);
-                            document.getElementById('checkdt').value = formatDate(data2.checkdt);
-                            document.getElementById('endresult').value = data2.endresult;
-                            // document.getElementById('docdv').value = data2.docdv;
-                            document.getElementById('checkarea').value = data2.checkarea;
-                            document.getElementById('bfconsres').value = data2.bfconsres;
-                            document.getElementById('checkseq').value = data2.checkseq;
+                        // 탭 수정으로 업데이트
+                        updateTabLink();
 
-                            // 탭 수정으로 업데이트
-                            updateTabLink();
+                        // filelist 처리
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
 
-                            // filelist 처리
-                            let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
-                            console.log()
-                            deletedFiles = [];
-                            uploadedFiles = [];
-                            $('.filelist').empty(); // 파일 리스트 초기화
+                        deletedFiles = [];
+                        uploadedFiles = [];
+                        $('.filelist').empty(); // 파일 리스트 초기화
 
-                            fileList.forEach(file => {
-                                let newFile = {
-                                    name: file.fileornm,
-                                    size: file.filesize,
-                                    type: file.fileextns,
-                                    lastModified: new Date().getTime(),
-                                    spcompcd: file.spcompcd,
-                                    spplancd: file.spplancd,
-                                    spworkcd: file.spworkcd,
-                                    checkdt: file.checkdt,
-                                    checkseq: file.checkseq,
-                                    fileseq: file.fileseq,
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                lastModified: new Date().getTime(),
+                                spcompcd: file.spcompcd,
+                                spplancd: file.spplancd,
+                                spworkcd: file.spworkcd,
+                                checkdt: file.checkdt,
+                                checkseq: file.checkseq,
+                                fileseq: file.fileseq,
 
-                                };
-                                uploadedFiles.push(newFile); // 파일 리스트에 추가
-                            });
+                            };
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
 
-                            updateFileListUI();
-                            updateFileCount();
+                        updateFileListUI();
+                        updateFileCount();
 
-                        } else {
-                            Alert.alert('', '불러오기에 실패했습니다. ');
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Alert.alert('', '에러가 발생하였습니다.');
+                    } else {
+                        Alert.alert('', '불러오기에 실패했습니다. ');
                     }
-                });
-            })
-        }
-
-        // 파일 리스트 UI 업데이트 함수
-        function updateFileListUI() {
-            const $fileList = $('#filelist');
-
-            uploadedFiles.forEach(file => {
-                const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
-                const li = $('<li>').html(`
-                    <p>${file.name} <span>(${fileSize})</span></p>
-                    <a href="#" title="삭제" class="btn-file-delete">
-                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
-                    </a>
-                `);
-                $fileList.append(li);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
             });
         }
 
@@ -747,20 +620,6 @@
             });
         }
 
-        // 날짜 형식을 변환하는 함수
-        function formatDate(dateString) {
-            if (dateString && dateString.length === 8) {
-                return dateString.substring(0, 4) + '-' + dateString.substring(4, 6) + '-' + dateString.substring(6, 8);
-            }
-            return dateString;
-        }
-
-        // 파일 개수 업데이트 함수
-        function updateFileCount() {
-            const fileCount = uploadedFiles.length;
-            $('.upload-filelist .title h5').text(`Files (${fileCount})`);
-        }
-
         // 신규등록 버튼 클릭
         function clearForm() {
             ['checktitle', 'checkarea', 'bfconsres', 'checkseq'].forEach(id => {
@@ -776,11 +635,93 @@
             // 초기화된 파일 개수 업데이트
             updateFileCount();
             resetFileInput($('.fileInput'));
+
+            // endresult의 첫 번째 옵션을 선택
+            const endresultSelect = document.getElementById('endresult');
+            if (endresultSelect.options.length > 0) {
+                endresultSelect.selectedIndex = 0;
+            }
+            $('#text-count1').text('0/100'); // 글자 수 0으로 초기화
         }
 
-        // 파일 인풋 초기화
-        function resetFileInput($input) {
-            $input.val('');
+        // 정보 저장
+        function saveForm() {
+
+            // 필수 입력 필드 검사
+            let requiredFields = [
+                {id: '#checktitle', label: '점검명을 입력해주세요'},
+                {id: '#registdt', label: '등록 일자를 입력해주세요'},
+                {id: '#checkdt', label: '점검 일자를 입력해주세요'},
+                // { id: '#docdv', label: '문서 구분을 선택해주세요' },
+                {id: '#checkarea', label: '점검 장소를 선택해주세요'},
+                {id: '#endresult', label: '점검 결과를 선택해주세요'},
+                {id: '#bfconsres', label: '점검 사항을 입력해주세요'}
+            ];
+
+            for (let i = 0; i < requiredFields.length; i++) {
+                let field = requiredFields[i];
+                if ($(field.id).val().trim() === '') {
+                    Alert.alert('', field.label);
+                    return;
+                }
+            }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+                formData.append('checkdt', $('#checkdt').val());
+                formData.append('checkseq', $('#checkseq').val());
+
+                formData.append('spworknm', $('#spworknm').val());
+                formData.append('spcompnm', $('#spcompnm').val());
+                formData.append('spplannm', $('#spplannm').val());
+                formData.append('checktitle', $('#checktitle').val());
+                formData.append('registdt', $('#registdt').val());
+                formData.append('checkarea', $('#checkarea').val());
+                formData.append('bfconsres', $('#bfconsres').val());
+                // formData.append('docdv', $('#docdv').val());
+                formData.append('endresult', $('#endresult').val());
+
+                // 새로 추가된 파일만 폼 데이터에 추가
+                uploadedFiles.forEach((file, index) => {
+                    formData.append('filelist', file);
+                });
+
+                // 삭제된 파일 목록 추가
+                deletedFiles.forEach((file, index) => {
+                    formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
+                });
+
+                $.ajax({
+                    url: "/api/inspec/elec_safe/save",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                $('#listTabLink').click();
+                                fetchListData();
+                                clearForm();
+                            });
+
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
         }
 
         $(document).ready(function (e) {
@@ -792,89 +733,12 @@
                 }
             });
 
-            // 정보 저장
-            $('#btnSave').click(function (e) {
+            // 점검결과 공통코드 리스트
+            const parentId = 216;
+            const selectElementId = 'endresult';
+            fetchCommonCodes(parentId, selectElementId);
 
-                // 필수 입력 필드 검사
-                let requiredFields = [
-                    {id: '#checktitle', label: '점검명을 입력해주세요'},
-                    {id: '#registdt', label: '등록 일자를 입력해주세요'},
-                    {id: '#checkdt', label: '점검 일자를 입력해주세요'},
-                    // { id: '#docdv', label: '문서 구분을 선택해주세요' },
-                    {id: '#checkarea', label: '점검 장소를 선택해주세요'},
-                    {id: '#endresult', label: '점검 결과를 선택해주세요'},
-                    {id: '#bfconsres', label: '점검 사항을 입력해주세요'}
-                ];
-
-                for (let i = 0; i < requiredFields.length; i++) {
-                    let field = requiredFields[i];
-                    if ($(field.id).val().trim() === '') {
-                        Alert.alert('', field.label);
-                        return;
-                    }
-                }
-
-                Alert.confirm('', '저장하시겠습니까?', function () {
-
-                    let formData = new FormData($('#customForm')[0]);
-
-                    formData.append('spworkcd', $('#spworkcd').val());
-                    formData.append('spcompcd', $('#spcompcd').val());
-                    formData.append('spplancd', $('#spplancd').val());
-                    formData.append('checkdt', $('#checkdt').val());
-                    formData.append('checkseq', $('#checkseq').val());
-
-                    formData.append('spworknm', $('#spworknm').val());
-                    formData.append('spcompnm', $('#spcompnm').val());
-                    formData.append('spplannm', $('#spplannm').val());
-                    formData.append('checktitle', $('#checktitle').val());
-                    formData.append('registdt', $('#registdt').val());
-                    formData.append('checkarea', $('#checkarea').val());
-                    formData.append('bfconsres', $('#bfconsres').val());
-                    // formData.append('docdv', $('#docdv').val());
-                    formData.append('endresult', $('#endresult').val());
-
-                    // 새로 추가된 파일만 폼 데이터에 추가
-                    uploadedFiles.forEach((file, index) => {
-                        formData.append('filelist', file);
-                    });
-
-                    // 삭제된 파일 목록 추가
-                    deletedFiles.forEach((file, index) => {
-                        formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
-                    });
-
-                    $.ajax({
-                        url: "/api/inspec/elec_safe/save",
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                Alert.alert('', response.message, function () {
-                                    $('#listTabLink').click();
-                                    fetchListData();
-                                    clearForm();
-                                });
-
-                            } else {
-                                Alert.alert('', '저장에 실패했습니다. ');
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            Alert.alert('', '에러가 발생하였습니다.');
-                        }
-                    });
-                })
-            })
-        })
-
-        // checkseq 값 있으면 수정 탭으로 변경
-        document.addEventListener("DOMContentLoaded", function () {
+            // checkseq 값 있으면 수정 탭으로 변경
             const checkseq = document.getElementById('checkseq').value;
             const inputTabLink = document.getElementById('inputTabLink');
 
@@ -882,211 +746,16 @@
                 inputTabLink.textContent = '수정';
                 inputTabLink.title = '수정';
             }
-        });
 
-        // 자동완성
-        let debounceTimeout;
-        let selectedSuggestionIndex = -1;
-        let suggestionsVisible = false;
+            // 자동완성
+            const inputId = 'checkarea';
+            const apiUrl = '/api/inspec/elec_safe/autocomplete';
+            initializeAutoComplete(inputId, apiUrl);
 
-        function fetchSuggestions() {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                const inputField = document.getElementById('checkarea');
-                let suggestionsList = document.getElementById('suggestions');
+            // 수정 > 등록, 등록 > 수정
+            updateTabLink();
 
-                const inputClearDiv = inputField.parentElement;
-                inputClearDiv.appendChild(suggestionsList);
-
-                const query = inputField.value;
-                if (query.length > 0) {
-                    fetch(`/api/inspec/elec_safe/autocomplete?query=${encodeURIComponent(query)}`)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            const previousSelectedText = (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < data.length) ? data[selectedSuggestionIndex] : null;
-                            suggestionsList.innerHTML = '';
-                            if (data.length > 0) {
-                                suggestionsVisible = true;
-                                suggestionsList.style.display = 'block'; // 결과가 있을 때만 표시
-                                data.forEach((item, index) => {
-                                    let li = document.createElement('li');
-                                    li.textContent = item;
-                                    li.setAttribute('data-index', index);
-                                    li.onclick = function () {
-                                        document.getElementById('checkarea').value = this.textContent;
-                                        suggestionsList.innerHTML = '';
-                                        suggestionsList.style.display = 'none';
-                                        suggestionsVisible = false;
-                                    };
-                                    suggestionsList.appendChild(li);
-                                    // 이전에 선택한 항목을 다시 선택 상태로 설정
-                                    if (item === previousSelectedText) {
-                                        selectedSuggestionIndex = index;
-                                        li.classList.add('selected');
-                                    }
-                                });
-                            } else {
-                                suggestionsList.style.display = 'none'; // 결과가 없으면 숨김
-                                suggestionsVisible = false;
-                                selectedSuggestionIndex = -1;
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Fetch error:', error);
-                            suggestionsList.style.display = 'none'; // 오류 시 숨김
-                            suggestionsVisible = false;
-                            selectedSuggestionIndex = -1;
-                        });
-                } else {
-                    suggestionsList.innerHTML = '';
-                    suggestionsList.style.display = 'none';
-                    suggestionsVisible = false;
-                    selectedSuggestionIndex = -1;
-                }
-            }, 300);  // 300ms의 디바운스 타임 적용
-        }
-
-        document.getElementById('checkarea').addEventListener('keydown', function (event) {
-            const suggestionsList = document.getElementById('suggestions');
-            const items = suggestionsList.getElementsByTagName('li');
-
-            if (suggestionsVisible) {
-                if (event.key === 'ArrowDown') {
-                    // 아래 화살표 키를 누르면
-                    event.preventDefault(); // 기본 동작 방지
-                    selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
-                    updateSuggestionSelection(items);
-                } else if (event.key === 'ArrowUp') {
-                    // 위 화살표 키를 누르면
-                    event.preventDefault(); // 기본 동작 방지
-                    selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
-                    updateSuggestionSelection(items);
-                } else if (event.key === 'Enter') {
-                    // Enter 키를 누르면
-                    if (selectedSuggestionIndex >= 0) {
-                        event.preventDefault(); // 기본 동작 방지
-                        items[selectedSuggestionIndex].click();
-                        suggestionsVisible = false; // Enter 키를 누르면 선택을 확정하고 목록을 숨김
-                        document.getElementById('checkarea').blur(); // 입력 필드 포커스 해제
-                    }
-                } else if (event.key === 'Escape') {
-                    // Escape 키를 누르면
-                    suggestionsList.style.display = 'none';
-                    suggestionsVisible = false;
-                }
-            }
-        });
-
-        // 포커스 해제 시 자동 완성 목록 숨기기
-        document.getElementById('checkarea').addEventListener('blur', function () {
-            setTimeout(function () {
-                const suggestionsList = document.getElementById('suggestions');
-                suggestionsList.style.display = 'none';
-                suggestionsVisible = false;
-            }, 300); // 300ms 지연 시간
-        });
-
-        function updateSuggestionSelection(items) {
-            // 모든 항목의 선택 상태 초기화
-            for (let i = 0; i < items.length; i++) {
-                items[i].classList.remove('selected');
-            }
-
-            // 현재 선택된 항목에 선택 상태 추가
-            if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < items.length) {
-                items[selectedSuggestionIndex].classList.add('selected');
-                items[selectedSuggestionIndex].scrollIntoView({block: 'nearest'});
-            }
-        }
-
-        // 산단 연동
-        let sandanData = /*[[${sandanList}]]*/ [];  // 서버에서 받은 산단 리스트 데이터를 사용
-
-        function updateCompcdOptions() {
-            var spworkcd = document.getElementById('spworkcd').value;
-            var spworknm = sandanData.find(item => item.spworkcd === spworkcd).spworknm;
-            document.getElementById('spworknm').value = spworknm; // spworknm 업데이트
-
-            var spcompcdSelect = document.getElementById('spcompcd');
-            spcompcdSelect.innerHTML = ''; // 기존 옵션 제거
-
-            var filteredCompcdItems = sandanData
-                .filter(function (item) {
-                    return item.spworkcd === spworkcd;
-                })
-                .reduce(function (accumulator, current) {
-                    // spcompcd 중복 제거
-                    if (!accumulator.some(item => item.spcompcd === current.spcompcd)) {
-                        accumulator.push(current);
-                    }
-                    return accumulator;
-                }, []);
-
-            filteredCompcdItems.forEach(function (item) {
-                var option = document.createElement('option');
-                option.value = item.spcompcd;
-                option.textContent = item.spcompnm;
-                spcompcdSelect.appendChild(option);
-            });
-
-            if (filteredCompcdItems.length > 0) {
-                spcompcdSelect.selectedIndex = 0;
-                updatePlancdOptions(); // 첫 번째 산단 선택 시 시설 옵션 업데이트
-            }
-
-        }
-
-        function updatePlancdOptions() {
-            var spcompcd = document.getElementById('spcompcd').value;
-            var spcompnm = sandanData.find(item => item.spcompcd === spcompcd).spcompnm;
-            document.getElementById('spcompnm').value = spcompnm; // spcompnm 업데이트
-
-            var spplancdSelect = document.getElementById('spplancd');
-            spplancdSelect.innerHTML = ''; // 기존 옵션 제거
-
-            var filteredPlancdItems = sandanData.filter(function (item) {
-                return item.spcompcd === spcompcd;
-            });
-
-            filteredPlancdItems.forEach(function (item) {
-                var option = document.createElement('option');
-                option.value = item.spplancd;
-                option.textContent = item.spplannm;
-                spplancdSelect.appendChild(option);
-            });
-
-            if (filteredPlancdItems.length > 0) {
-                spplancdSelect.selectedIndex = 0;
-                document.getElementById('spplannm').value = spplancdSelect.options[0].textContent;
-            }
-        }
-
-        function initializeSelections() {
-            var spworkcdSelect = document.getElementById('spworkcd');
-            spworkcdSelect.innerHTML = ''; // 기존 옵션 제거
-
-            var uniqueWorkcdItems = [...new Set(sandanData.map(item => item.spworkcd))];
-
-            uniqueWorkcdItems.forEach(function (spworkcd) {
-                var item = sandanData.find(function (item) {
-                    return item.spworkcd === spworkcd;
-                });
-                var option = document.createElement('option');
-                option.value = item.spworkcd;
-                option.textContent = item.spworknm;
-                spworkcdSelect.appendChild(option);
-            });
-
-            if (uniqueWorkcdItems.length > 0) {
-                spworkcdSelect.selectedIndex = 0;
-                updateCompcdOptions(); // 첫 번째 지역 선택 시 산단 옵션 업데이트
-            }
-        }
+        })
 
     </script>
 

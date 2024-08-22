@@ -230,7 +230,6 @@ $(document).ready(function () {
             if (removedFile) {
                 deletedFiles.push(removedFile);
             }
-
             li.remove();
             updateFileCount();
 
@@ -240,6 +239,9 @@ $(document).ready(function () {
 
         $(component).find('.btn-file-deleteall').on('click', function (event) {
             event.preventDefault();
+            // 모든 업로드된 파일을 삭제된 파일 리스트에 추가
+            deletedFiles = deletedFiles.concat(uploadedFiles);
+
             $fileList.empty();
             uploadedFiles = [];
             updateFileCount();

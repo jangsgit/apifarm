@@ -1,11 +1,14 @@
 package mes.app;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mes.app.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,7 +31,10 @@ public class HomeController {
 	SystemOptionRepository systemOptionRepository;
 
 	@Autowired
-	Settings settings;	
+	Settings settings;
+
+	@Autowired
+	UserService userService;
 	
 	@RequestMapping(value= "/", method=RequestMethod.GET)
     public ModelAndView pageIndex(HttpServletRequest request, HttpSession session) {	
@@ -38,17 +44,22 @@ public class HomeController {
         User user = (User)auth.getPrincipal();
 		String userid = user.getUsername();
         String username = user.getUserProfile().getName();;
+		List<Map<String, Object>> sandanList = userService.getUserSandanList(userid);
 
         SystemOption sysOpt= this.systemOptionRepository.getByCode("LOGO_TITLE");
         String logoTitle = sysOpt.getValue();
         
         //q = this.systemOptionRepository.getByCode("main_menu");        
-        
+
+		// 세션에 데이터 저장
+		session.setAttribute("sandanList", sandanList);
+
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("userid", userid);
 		mv.addObject("username", username);
 		mv.addObject("userinfo", user);
 		mv.addObject("system_title", logoTitle);
+//		mv.addObject("sandanList", sandanList);
 //		mv.addObject("default_menu_code", "wm_dashboard_summary");
 
 		
@@ -58,9 +69,8 @@ public class HomeController {
 		mv.addObject("mqtt_host", mqtt_host);
 		mv.addObject("mqtt_web_port", mqtt_web_port);
 		mv.addObject("hmi_topic", hmi_topic);
-		
+
 		mv.setViewName("index");
-		
 		return mv;
 	}
 	

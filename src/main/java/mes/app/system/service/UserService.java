@@ -180,11 +180,20 @@ public class UserService {
         dicParam.addValue("id", id);
 
         String sql = """
-                select a.username, t.spcompcd, t.spcompnm, t.spplancd, t.spplannm, t.spworkcd, t.spworknm
-                	 from auth_user as a
-                	join tb_rp945 t on a."username" = t."userid"
-                	where a."username" = :id
-                	order by t.askseq
+                SELECT t.userid,
+                       t.spcompid AS spcompcd,
+                       u_c."Value" AS spcompnm,
+                       t.spplanid AS spplancd,
+                       u_p."Value" AS spplannm,
+                       t.spworkid AS spworkcd,
+                       u_w."Value" AS spworknm,
+                       t.askseq
+                FROM tb_rp945 AS t
+                LEFT JOIN user_code u_c ON t.spcompid = u_c.id
+                LEFT JOIN user_code u_p ON t.spplanid = u_p.id
+                LEFT JOIN user_code u_w ON t.spworkid = u_w.id
+                WHERE t.userid = :id
+                ORDER BY t.askseq;
                 """;
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);

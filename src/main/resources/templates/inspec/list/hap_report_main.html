@@ -389,17 +389,23 @@
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-    <footer>
-        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
-    </footer>
-    </div> <!-- //dashboard-layout-right end-->
-
-    </div> <!-- //dashboard-layout-contents end-->
 
 </th:block>
 
 <th:block layout:fragment="scripts">
-    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+<!--    <script th:inline="javascript">-->
+<!--        // 산단 연동-->
+<!--        let sandanData = /*[[${sandanList}]]*/ [];-->
+<!--        document.addEventListener("DOMContentLoaded", function () {-->
+
+<!--            initializeSelections();-->
+
+<!--            // 초기화 이후 이벤트 설정-->
+<!--            document.getElementById('spworkcd').addEventListener('change', updateCompcdOptions);-->
+<!--            document.getElementById('spcompcd').addEventListener('change', updatePlancdOptions);-->
+<!--        });-->
+<!--    </script>-->
 
     <script type="text/javascript">
 
@@ -409,7 +415,10 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            // initializeSelections();
             fetchListData();
+            // 검색 초기 날짜
+            setDefaultDates('startDate', 'endDate');
         }
 
         function fetchListData() {

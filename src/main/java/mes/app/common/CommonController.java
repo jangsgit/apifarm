@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import mes.app.common.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,9 @@ public class CommonController {
 	
 	@Autowired
 	SqlRunner sqlRunner;
+
+	@Autowired
+	CommonService commonService;
 
 	@GetMapping("/labels")
 	public AjaxResult labes(
@@ -140,4 +144,12 @@ public class CommonController {
         result.data = items;
 		return result;
 	}
+
+	// 공통코드 리스트 가져오기
+	@GetMapping("/find_parent_id")
+	public List<Map<String, Object>> getCommonCodeList(@RequestParam("id") Integer id) {
+		return commonService.findByParentId(id);
+	}
+
+
 }

@@ -105,7 +105,7 @@ public class ElecSafeService {
         // 마지막으로 order by 절 추가
         sql.append("""
                 GROUP BY
-                    t1.spworkcd, t1.spcompcd, t1.spplancd, t1.checkdt, t1.checkseq, t1.registdt, t1.checktitle, t1.endresult, t1.checktitle
+                    t1.spworkcd, t1.spcompcd, t1.spplancd, t1.checkdt, t1.checkseq, t1.registdt, t1.checktitle, t1.endresult
                 ORDER BY
                     t1.registdt DESC, t1.indatem DESC
                 """);
@@ -267,6 +267,5 @@ public class ElecSafeService {
     public List<String> getSuggestions(String query) {
         return TBRP750Repository.findCheckareasByQuery(query);
     }
-
 
 }

@@ -2,6 +2,8 @@ package mes.app.actas_inspec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mes.app.actas_inspec.service.ElecSafeService;
+import mes.app.common.CommonController;
+import mes.app.common.service.CommonService;
 import mes.config.Settings;
 import mes.domain.entity.actasEntity.TB_RP750;
 import mes.domain.entity.actasEntity.TB_RP750_PK;
@@ -50,6 +52,12 @@ public class ElecSafeController {
     TB_RP760Repository TBRP760Repository;
 
     @Autowired
+    CommonController commonController;
+
+    @Autowired
+    CommonService commonService;
+
+    @Autowired
     Settings settings;
 
     @GetMapping("/read")
@@ -81,21 +89,10 @@ public class ElecSafeController {
         for (Map<String, Object> item : items) {
             if (item.containsKey("endresult")) {
                 Object endresult = item.get("endresult");
-                if (endresult instanceof String) {
-                    String value = (String) endresult;
-                    switch (value) {
-                        case "0":
-                            item.put("endresult", "양호");
-                            break;
-                        case "1":
-                            item.put("endresult", "좋음");
-                            break;
-                        case "2":
-                            item.put("endresult", "나쁨");
-                            break;
-                        default:
-                            item.put("endresult", "");
-                    }
+                if (endresult instanceof Integer) {
+                    // endresult 값이 Integer인 경우, findById 메서드를 통해 문자열로 변환
+                    String endresultValue = this.commonService.findById((Integer) endresult);
+                    item.put("endresult", endresultValue);
                 }
             }
 
@@ -185,10 +182,10 @@ public class ElecSafeController {
         TBRP750.setDocdv(params.get("docdv"));
         TBRP750.setCheckarea(params.get("checkarea"));
         TBRP750.setBfconsres(params.get("bfconsres"));
-        TBRP750.setEndresult(params.get("endresult"));
+        TBRP750.setEndresult(Integer.parseInt(params.get("endresult")));
         TBRP750.setIndatem(now);
-        TBRP750.setInusernm(user.getUsername());
-        TBRP750.setInuserid(String.valueOf(user.getId()));
+        TBRP750.setInusernm(user.getFirst_name());
+        TBRP750.setInuserid(user.getUsername());
         TBRP750.setRegistdt(nregistdt);
 
         AjaxResult result = new AjaxResult();
@@ -269,8 +266,8 @@ public class ElecSafeController {
                 TBRP760.setFileornm(fileName);
                 TBRP760.setFilesize(fileSize);
                 TBRP760.setIndatem(now);
-                TBRP760.setInusernm(user.getUsername());
-                TBRP760.setInuserid(String.valueOf(user.getId()));
+                TBRP760.setInusernm(user.getFirst_name());
+                TBRP760.setInuserid(user.getUsername());
 
                 if (!elecSafeService.saveFile(TBRP760)) {
                     success2 = false;

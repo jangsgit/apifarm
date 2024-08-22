@@ -47,7 +47,7 @@ public class GuiController {
         if (guiData!=null) {
 			String userid = user.getUsername();
         	String username = user.getUserProfile().getName();
-			List<Map<String, Object>> sandanList = userService.getUserSandanList(userid);
+//			List<Map<String, Object>> sandanList = userService.getUserSandanList(userid);
 
         	for(String k : allRequestParams.keySet()){
         	     mv.addObject(k, allRequestParams.get(k).get(0));
@@ -64,7 +64,7 @@ public class GuiController {
     		mv.addObject("userinfo", user);    		
     		mv.addObject("gui_code", gui);
     		mv.addObject("template_key", templateName);
-			mv.addObject("sandanList", sandanList);
+//			mv.addObject("sandanList", sandanList);
     		
     		String mqtt_host = settings.getProperty("mqtt_host");  //application.properties에 명시되어 있는 mqtt_host 속성의 값을 가져옴
     		String mqtt_web_port = settings.getProperty("mqtt_web_port"); //이하 동문
