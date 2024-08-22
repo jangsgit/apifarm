@@ -19,9 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -51,39 +48,27 @@ public class GeneUploadService {
 //	 특정 필드(예: 날짜, 숫자)의 형식이 올바른지 확인하는 로직을 추가하기
 	
 	// 엑셀 파일 데이터 읽기 메소드
-	public List<List<String>> excel_read(String filename) throws IOException{
-		
-		System.out.println("Reading Excel file: " + filename);
-		
+	public List<List<String>> excel_read(MultipartFile file) throws IOException {
 		List<List<String>> all_rows = new ArrayList<>();
-		
-		FileInputStream file = new FileInputStream(filename);
-		XSSFWorkbook wb = new XSSFWorkbook(file);
+		XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
 		XSSFSheet sheet = wb.getSheetAt(0);
 		
-		System.out.println("getLastRowNum" + sheet.getLastRowNum());
-		
-		
-		for (int i=1; i<=sheet.getLastRowNum(); i++) {
+		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
 			XSSFRow row = sheet.getRow(i);
 			List<String> value_list = new ArrayList<>();
 			
-			for (int j=0; j<row.getLastCellNum(); j++) {
+			for (int j = 0; j < row.getLastCellNum(); j++) {
 				XSSFCell cell = row.getCell(j);
 				String cellValue = "";
-				
-//				System.out.println("Cell[" + i + ", " + j + "]: Type=" + cell.getCellType());
 				
 				if (cell != null) {
 					if (cell.getCellType() == CellType.NUMERIC) {
 						if (DateUtil.isCellDateFormatted(cell)) {
-							// 날짜 포맷으로 처리하고 yyyy-MM-dd 형식의 문자열로 변환
 							cellValue = cell.getDateCellValue().toInstant()
 									.atZone(ZoneId.systemDefault())
 									.toLocalDate()
 									.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 						} else {
-							// 숫자 포맷으로 처리
 							cellValue = new BigDecimal(cell.getNumericCellValue()).toPlainString();
 						}
 					} else if (cell.getCellType() == CellType.STRING) {
@@ -93,21 +78,16 @@ public class GeneUploadService {
 				value_list.add(cellValue);
 			}
 			all_rows.add(value_list);
-			
-			
 		}
 		
-//		System.out.println("all_rows" + all_rows);
-		
-		
 		wb.close();
-		
 		return all_rows;
 	}
 	
 	
+	
 	// 업로드된 파일 저장 메소드
-	public String saveUploadedFile(MultipartFile file) throws IOException {
+	/*public String saveUploadedFile(MultipartFile file) throws IOException {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime now = LocalDateTime.now();
 		String formattedDate = dtf.format(now);
@@ -123,7 +103,7 @@ public class GeneUploadService {
 			fos.write(file.getBytes());
 		}
 		return fullPath;
-	}
+	}*/
 	
 	
 	// 데이터 삭제 메소드

@@ -8,6 +8,7 @@ import mes.domain.model.AjaxResult;
 import mes.domain.repository.TB_RP320Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,9 +70,9 @@ public class GeneUploadController {
 			
 			String dateToUse = (date6 != null && !date6.isEmpty()) ? date6 : LocalDate.now().toString(); // date6 없으면 현재날짜 사용
 			
-			// Step 1: 엑셀 파일 저장 및 읽기
-			String uploadFilename = geneUploadService.saveUploadedFile(upload_file);
-			List<List<String>> dataRows = geneUploadService.excel_read(uploadFilename);
+			// Step 1: 엑셀 파일 읽기 (파일을 저장하지 않고 바로 읽기)
+			List<List<String>> dataRows = geneUploadService.excel_read(upload_file);
+			List<String> dates = dataRows.stream().map(row -> row.get(STANDDT_COL)).collect(Collectors.toList());
 			
 			// Step 2: 새 데이터 저장
 			// 새로운 데이터를 저장하기 전에 기존 데이터를 삭제하는 대신, 새 데이터를 성공적으로 저장한 후 삭제 작업을 수행합니다.
@@ -111,7 +112,9 @@ public class GeneUploadController {
 			TB_RP320Repository.saveAll(entitiesToSave);
 			
 			result.success = true;
-			result.message = "Data saved successfully!";
+			result.message = "데이터가 성공적으로 저장되었습니다!";
+			// 추출된 날짜 데이터를 클라이언트로 반환
+			result.data = dates; // 날짜 목록을 클라이언트에 전송
 		} catch (Exception e) {
 			result.success = false;
 			result.message = "An error occurred: " + e.getMessage();
@@ -125,6 +128,9 @@ public class GeneUploadController {
 	public ResponseEntity<List<TB_RP320>> getAllData() {
 //		List<TB_RP320> data = TB_RP320Repository.findAll();
 		List<TB_RP320> data = TB_RP320Repository.findAll(Sort.by(Sort.Direction.ASC, "standdt", "powerid"));
+		if (data.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}
 		return ResponseEntity.ok(data);
 	}
 	
