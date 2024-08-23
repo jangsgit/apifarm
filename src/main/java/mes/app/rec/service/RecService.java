@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -41,7 +43,8 @@ public class RecService {
 	@Scheduled(cron = "0 0 4 * * WED,FRI") // 매주 수요일과 금요일 새벽 4시에 실행
 	public void updateRecData() {
 		LocalDateTime now = LocalDateTime.now();
-		String formattedDate = now.format(DateTimeFormatter.BASIC_ISO_DATE);
+		LocalDate lastRecDay = getLastRecDay(now.toLocalDate());
+		String formattedDate = lastRecDay.format(DateTimeFormatter.BASIC_ISO_DATE);
 		
 		try {
 			String uriString = apiEndpoint + "/getRecMarketInfo2"
@@ -79,6 +82,23 @@ public class RecService {
 		}
 	}
 	
+	private LocalDate getLastRecDay(LocalDate currentDate) {
+		DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
+		
+		if (dayOfWeek == DayOfWeek.WEDNESDAY) {
+			return currentDate.minusDays(1); // 화요일로 설정
+		} else if (dayOfWeek == DayOfWeek.FRIDAY || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY || dayOfWeek == DayOfWeek.MONDAY) {
+			return currentDate.with(DayOfWeek.THURSDAY); // 가장 최근의 목요일로 설정
+		} else if (dayOfWeek == DayOfWeek.TUESDAY) {
+			return currentDate.minusDays(4); // 바로 직전의 목요일로 설정
+		} else if (dayOfWeek == DayOfWeek.THURSDAY) {
+			return currentDate.minusDays(2); // 화요일로 설정
+		}
+		
+		return currentDate;
+	}
+	
+	
 	private String parseRecPrice(String response) {
 		try {
 			JsonNode rootNode = objectMapper.readTree(response);
@@ -94,7 +114,6 @@ public class RecService {
 		return "데이터없음"; // 유효한 데이터가 없을 경우 "데이터없음"을 반환
 	}
 }
-
 
 // 즉시 실행되도록 수동으로 호출 버전
 	/*public void updateRecData() {

@@ -84,8 +84,6 @@ public class GeneUploadService {
 		return all_rows;
 	}
 	
-	
-	
 	// 업로드된 파일 저장 메소드
 	/*public String saveUploadedFile(MultipartFile file) throws IOException {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -104,7 +102,6 @@ public class GeneUploadService {
 		}
 		return fullPath;
 	}*/
-	
 	
 	// 데이터 삭제 메소드
 	public void deleteGeneData(TB_RP320_Id id) {
@@ -149,6 +146,4 @@ public class GeneUploadService {
 			}
 		}
 	}
-	
-	
 }

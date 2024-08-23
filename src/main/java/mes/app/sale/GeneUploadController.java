@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/gene/upload")
 public class GeneUploadController {
-
-
-//	try catch문!!!!
 	
 	@Autowired
 	TB_RP320Repository TB_RP320Repository;
@@ -47,7 +44,6 @@ public class GeneUploadController {
 	private static final int CHARGEDV_COL = 3; // 충전/방전
 	private static final List<Integer> MEVALUE_LIST = Arrays.asList(4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27); // 계량값 01시부터 24시
 	private static final int MEVALUET_COL = 28; // 계량값 합계
-	
 	
 	// 엑셀 업로드
 	@PostMapping("/upload_save")
@@ -67,7 +63,6 @@ public class GeneUploadController {
 		AjaxResult result = new AjaxResult();
 		try {
 			User user = (User) auth.getPrincipal();
-			
 			String dateToUse = (date6 != null && !date6.isEmpty()) ? date6 : LocalDate.now().toString(); // date6 없으면 현재날짜 사용
 			
 			// Step 1: 엑셀 파일 읽기 (파일을 저장하지 않고 바로 읽기)
@@ -75,9 +70,9 @@ public class GeneUploadController {
 			List<String> dates = dataRows.stream().map(row -> row.get(STANDDT_COL)).collect(Collectors.toList());
 			
 			// Step 2: 새 데이터 저장
-			// 새로운 데이터를 저장하기 전에 기존 데이터를 삭제하는 대신, 새 데이터를 성공적으로 저장한 후 삭제 작업을 수행합니다.
 			List<TB_RP320> entitiesToSave = dataRows.stream().map(row -> {
 				TB_RP320 entity = new TB_RP320();
+				
 				// 사용자 정보 설정
 				entity.setInuserid(user.getUsername());  // 사용자 아이디
 				entity.setInusernm(user.getFirst_name() + " " + user.getLast_name());  // 사용자 전체 이름
@@ -107,8 +102,7 @@ public class GeneUploadController {
 				return entity;
 			}).collect(Collectors.toList());
 			
-			// Step 3: 기존 데이터 삭제 후 새로운 데이터 저장
-			TB_RP320Repository.deleteAll();
+			// Step 3: 새로운 데이터 저장
 			TB_RP320Repository.saveAll(entitiesToSave);
 			
 			result.success = true;
@@ -174,18 +168,37 @@ public class GeneUploadController {
 	}
 	
 	// 삭제
-	@DeleteMapping("/deleteAll")
-	public ResponseEntity<AjaxResult> deleteAllGeneData() {
+	@DeleteMapping("/delete")
+	public ResponseEntity<AjaxResult> deleteGeneDataByDate(@RequestParam String indatem) {
 		AjaxResult result = new AjaxResult();
 		try {
-			TB_RP320Repository.deleteAll();
-			result.success = true;
-			result.message = "All data deleted successfully!";
+			// String으로 전달된 날짜 값을 LocalDate로 변환
+			LocalDate indatemDate = LocalDate.parse(indatem);
+			
+			// indatem을 LocalDate로 변환하여 findByIndatem 호출
+			List<TB_RP320> dataToDelete = TB_RP320Repository.findByIndatem(indatemDate);
+			
+			if (!dataToDelete.isEmpty()) {
+				TB_RP320Repository.deleteAll(dataToDelete);
+				result.success = true;
+				result.message = "등록일자: " + indatem + " 데이터가 삭제되었습니다.";
+			} else {
+				result.success = false;
+				result.message = "선택한 날짜에 대한 데이터가 없습니다.";
+			}
 		} catch (Exception e) {
 			result.success = false;
-			result.message = "Failed to delete data: " + e.getMessage();
+			result.message = "데이터 삭제 실패: " + e.getMessage();
 		}
 		return ResponseEntity.ok(result);
+	}
+	
+	
+	// 등록 목록
+	@GetMapping("/regYMList")
+	public ResponseEntity<List<String>> getRegYMList() {
+		List<String> regYMList = TB_RP320Repository.findDistinctYearMonths();
+		return ResponseEntity.ok(regYMList);
 	}
 	
 }
