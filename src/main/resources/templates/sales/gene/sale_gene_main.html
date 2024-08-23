@@ -14,15 +14,29 @@
             padding-top: 0px;
         }
 
-        .container-fluid {
+        /*.container-fluid {
             overflow-x: auto;
             max-width: 100%;
-        }
+        }*/
 
         /* 토글 클릭시 애니메이션 효과*/
         .wj-flexgrid .wj-colheaders, .wj-flexgrid .wj-cell {
             transition: all 0.2s ease;
         }
+
+        #date-list-modal .popup-wrapper {
+            min-width: unset !important; /* layout.css 무시 */
+            width: 300px !important;
+            height: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .popup-wrapper::-webkit-scrollbar-track {
+            background-color: transparent !important;
+        }
+
+
     </style>
 </head>
 
@@ -126,12 +140,13 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <select id="regYMSelect_tab1" onchange="onRegYMSelect(this.value, 'tab1')" class="w120">
-                                        <option value="" disabled selected>일자목록</option>
-                                    </select>
+                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab1')" data-popup="popup2"
+                                       id="btnShowDateList">
+                                        일자목록
+                                    </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-popup-open" title="" onclick="showPopup()" data-popup="popup1"
+                                    <a class="btn btn-popup-open" title="" onclick="showPopup(event)" data-popup="popup1"
                                        id="btnShowUpload">
                                         <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
                                         엑셀업로드
@@ -195,9 +210,10 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <select id="regYMSelect_tab2" onchange="onRegYMSelect(this.value, 'tab2')" class="w120">
-                                        <option value="" disabled selected>일자목록</option>
-                                    </select>
+                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab2')" data-popup="popup2"
+                                       id="btnShowDateList2">
+                                        일자목록
+                                    </a>
                                 </li>
                                 <li>
                                     <a class="btn btn-delete" id="btnDelete" title="삭제">
@@ -222,7 +238,7 @@
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
 
-        <!-- 팝업 -->
+        <!-- 엑셀업로드 팝업 -->
         <div class="modal" id="single-file-upload-page">
             <div class="popup-wrapper w700" id="popup1">
                 <div class="popup-title">
@@ -294,6 +310,27 @@
                 </div>
             </div>
         </div>
+
+        <!-- 일자목록 팝업 -->
+        <div class="modal" id="date-list-modal">
+            <div class="popup-wrapper" id="popup2">
+                <div class="popup-title">
+                    <h3>일자 목록</h3>
+                    <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                        <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents" id="date-list-content">
+                    <div class="table-wrap">
+                        <table class="list-table">
+                            <tbody id="date-list-table-body">
+                            <!-- JavaScript로 데이터 행이 추가됩니다 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div> <!--//layout-contents end -->
 </th:block>
 
@@ -305,9 +342,10 @@
 
     <script type="text/javascript">
 
-        function showPopup() {
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
+        function showPopup(event) {
+            const targetPopupId = event.target.getAttribute('data-popup');
+            const modal = document.getElementById(targetPopupId).closest('.modal');
+            const modalContent = document.getElementById(targetPopupId);
 
             // 모달과 콘텐츠를 표시
             modal.style.display = 'block';
@@ -318,25 +356,144 @@
                 modal.classList.add('show');
                 modalContent.classList.add('show');
             });
+
+            // 만약 일자 목록 팝업을 연다면 날짜 데이터를 로드
+            if (targetPopupId === 'popup2') {
+                loadDateList();
+            }
+        }
+
+
+        function showPopupWithDateList(tabSuffix) {
+            const modal = document.getElementById('date-list-modal');
+            const tableBody = document.getElementById('date-list-table-body');
+
+            // 기존 리스트 초기화
+            tableBody.innerHTML = '';
+
+            // API 요청 URL 구성
+            let query = `/api/gene/upload/regYMList?tab=${tabSuffix}`;
+
+            fetch(query)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        data.forEach((date) => {
+                            // 각 데이터를 행으로 추가
+                            const row = document.createElement('tr');
+
+                            // 일자 열
+                            const cellDate = document.createElement('td');
+                            cellDate.textContent = date;
+                            cellDate.onclick = function() {
+                                onDateSelected(date, tabSuffix);
+                            };
+                            cellDate.style.cursor = 'pointer'; // 클릭 가능한 커서 스타일 추가
+                            row.appendChild(cellDate);
+
+                            // 행을 테이블에 추가
+                            tableBody.appendChild(row);
+                        });
+                    } else {
+                        const emptyRow = document.createElement('tr');
+                        const emptyCell = document.createElement('td');
+                        emptyCell.textContent = '일자 목록이 없습니다.';
+                        emptyRow.appendChild(emptyCell);
+                        tableBody.appendChild(emptyRow);
+                    }
+
+                    // 모달 표시
+                    modal.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        modal.classList.add('show');
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading date list:', error);
+                    const errorRow = document.createElement('tr');
+                    const errorCell = document.createElement('td');
+                    errorCell.textContent = '일자 목록을 불러오는 중 오류가 발생했습니다.';
+                    errorRow.appendChild(errorCell);
+                    tableBody.appendChild(errorRow);
+
+                    // 모달 표시
+                    modal.style.display = 'block';
+                    requestAnimationFrame(() => {
+                        modal.classList.add('show');
+                    });
+                });
+        }
+
+        function onDateSelected(date, tabSuffix) {
+            // 선택된 값은 "YYYY-MM" 형식
+            const [year, month] = date.split('-');
+
+            // 월의 첫 번째 날 (1일)
+            const startDate = new Date(year, month - 1, 1);
+
+            // 월의 마지막 날
+            const endDate = new Date(year, month, 0); // 다음 달의 0번째 날은 현재 달의 마지막 날
+
+            // 날짜를 'YYYY-MM-DD' 형식으로 변환
+            const formatDate = date => {
+                const yyyy = date.getFullYear();
+                const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로
+                const dd = String(date.getDate()).padStart(2, '0'); // 일을 2자리로
+                return `${yyyy}-${mm}-${dd}`;
+            };
+
+            // HTML의 날짜 입력 필드에 값을 설정
+            document.getElementById('date1_' + tabSuffix).value = formatDate(startDate);
+            document.getElementById('date2_' + tabSuffix).value = formatDate(endDate);
+
+            closePopup();
         }
 
         function closePopup() {
-            /*const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';*/
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
+            const modal = document.querySelector('.modal.show');  // 현재 표시되고 있는 모달을 선택
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);  // 애니메이션 종료 후 display를 none으로 설정
+            }
+        }
 
-            // 애니메이션을 위한 클래스 제거
-            modal.classList.remove('show');
-            modalContent.classList.remove('show');
+        // 일자목록 함수
+        function loadDateList() {
+            const modalContent = document.getElementById('date-list-content');
 
-            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modalContent.style.display = 'none';
-            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+            // API 요청 URL 구성
+            fetch('/api/gene/upload/regYMList')
+                .then(response => response.json())
+                .then(data => {
+                    // 기존 리스트 초기화
+                    modalContent.innerHTML = '';
+
+                    if (data.length > 0) {
+                        const ul = document.createElement('ul');
+                        ul.classList.add('date-list');
+
+                        data.forEach(date => {
+                            const li = document.createElement('li');
+                            li.textContent = date;
+                            li.onclick = function() {
+                                onDateSelected(date);
+                            };
+                            ul.appendChild(li);
+                        });
+
+                        modalContent.appendChild(ul);
+                    } else {
+                        const p = document.createElement('p');
+                        p.textContent = '일자 목록이 없습니다.';
+                        modalContent.appendChild(p);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading date list:', error);
+                    modalContent.innerHTML = '<p>일자 목록을 불러오는 중 오류가 발생했습니다.</p>';
+                });
         }
 
         // 날짜 설정 함수
@@ -384,7 +541,6 @@
                 loadPowerIds(); // 발전기코드 옵션
                 setStartAndEndDate('tab1'); // 시작일, 종료일 설정 (tab1)
                 setStartAndEndDate('tab2'); // 시작일, 종료일 설정 (tab2)
-                showRegYM(); // 페이지 로드 시 연월 목록
             }
 
             // 현재 날짜를 설정하는 함수
@@ -554,7 +710,7 @@
                                 {binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0'},
                                 {binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0'},
                                 {binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0'},
-                                {binding: 'mevaluet', header: '합계', width: '*', minWidth: 110, align: 'right', format: 'n0'},
+                                {binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0'},
                                 {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                                 {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                                 {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -912,51 +1068,6 @@
             }
             item.mevaluet = sum; // 합계를 합계 컬럼에 반영
         }
-
-        // 등록목록 (등록년월)
-        function showRegYM() {
-            fetch('/api/gene/upload/regYMList')
-                .then(response => response.json())
-                .then(data => {
-                    const selectIds = ['regYMSelect_tab1', 'regYMSelect_tab2'];
-                    selectIds.forEach(selectId => {
-                        const select = document.getElementById(selectId);
-                        select.innerHTML = '<option value="" disabled selected>일자목록</option>'; // 기본 선택값 추가
-                        data.forEach(yymm => {
-                            const option = document.createElement('option');
-                            option.value = yymm;
-                            option.text = yymm;
-                            select.appendChild(option);
-                        });
-                    });
-                })
-                .catch(error => console.error('등록 연월 목록 로딩 오류:', error));
-        }
-
-
-        function onRegYMSelect(selectedValue, tab) {
-            // 선택된 값은 "YYYY-MM" 형식
-            const [year, month] = selectedValue.split('-');
-
-            // 월의 첫 번째 날 (1일)
-            const startDate = new Date(year, month - 1, 1);
-
-            // 월의 마지막 날
-            const endDate = new Date(year, month, 0); // 다음 달의 0번째 날은 현재 달의 마지막 날
-
-            // 날짜를 'YYYY-MM-DD' 형식으로 변환
-            const formatDate = date => {
-                const yyyy = date.getFullYear();
-                const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로
-                const dd = String(date.getDate()).padStart(2, '0'); // 일을 2자리로
-                return `${yyyy}-${mm}-${dd}`;
-            };
-
-            // HTML의 날짜 입력 필드에 값을 설정
-            document.getElementById('date1_' + tab).value = formatDate(startDate);
-            document.getElementById('date2_' + tab).value = formatDate(endDate);
-        }
-
     </script>
 </th:block>
 
