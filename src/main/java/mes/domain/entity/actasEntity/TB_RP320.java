@@ -133,7 +133,7 @@ public class TB_RP320 {
 	@Column(name = "inusernm")
 	private String inusernm;
 	
-	@Column(name = "updatem")
-	private LocalDate updatem = LocalDate.now();
+	@Column(name = "updatem", nullable = true)
+	private LocalDate updatem;
 	
 }
