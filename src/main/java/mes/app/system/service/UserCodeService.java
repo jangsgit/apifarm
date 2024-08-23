@@ -1,12 +1,17 @@
 package mes.app.system.service;
 
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mes.domain.entity.UserCode;
+import mes.domain.repository.TB_RP980Repository;
 import mes.domain.repository.UserCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -20,7 +25,16 @@ public class UserCodeService {
 	SqlRunner sqlRunner;
 
 	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
 	private UserCodeRepository codeRepository;
+
+	@Autowired
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	@Autowired
+	private TB_RP980Repository tbRp980Repository;
 
 	public List<Map<String, Object>> getCodeList(String txtCode){
 
@@ -69,6 +83,7 @@ public class UserCodeService {
 	public boolean existsByCode(String code) {
 		return codeRepository.existsByCode(code);
 	}
+
 
 	public Map<String, Object> getCode(int id) {
 		String sql = """
@@ -218,5 +233,64 @@ public class UserCodeService {
 
         return items;
 	}
+
+	// 비상연락망 지역, 산단 목록 반환
+	public Map<String, Map<String, Object>> getRegionsWithDistricts() {
+		// 데이터베이스에서 지역과 산단 정보를 가져옴
+		String sql = """
+    WITH AGroupTB AS (
+        SELECT *
+        FROM user_code A
+        WHERE A."Code" = 'region'
+    ),
+    BGroupTB AS (
+        SELECT A.*, A."Value" AS bgroupnm, A."Code" AS bgroupcd
+        FROM user_code A
+        JOIN AGroupTB B ON A."Parent_id" = B.id
+    ),
+    CGroupTB AS (
+        SELECT A.*, A."Value" AS cgroupnm, A."Code" AS cgroupcd
+        FROM user_code A
+        JOIN BGroupTB B ON A."Parent_id" = B.id
+    )
+    SELECT B.bgroupnm AS regionName, B.bgroupcd AS regionCode, C.cgroupnm AS districtName, C.cgroupcd AS districtCode
+    FROM BGroupTB B
+    LEFT JOIN CGroupTB C ON B.id = C."Parent_id"
+    ORDER BY B.bgroupcd, C.cgroupcd
+    """;
+
+		List<Map<String, Object>> results = namedParameterJdbcTemplate.queryForList(sql, new HashMap<>());
+
+		// 결과를 저장할 Map
+		Map<String, Map<String, Object>> regionsWithDistricts = new HashMap<>();
+
+		for (Map<String, Object> row : results) {
+			String regionName = (String) row.get("regionName");
+			String regionCode = (String) row.get("regionCode");
+			String districtName = (String) row.get("districtName");
+			String districtCode = (String) row.get("districtCode");
+
+			// 지역 코드와 이름을 포함하는 Map
+			if (!regionsWithDistricts.containsKey(regionCode)) {
+				Map<String, Object> regionData = new HashMap<>();
+				regionData.put("regionName", regionName);
+				regionData.put("districts", new ArrayList<Map<String, String>>());
+				regionsWithDistricts.put(regionCode, regionData);
+			}
+
+			// 산단 데이터 추가
+			if (districtName != null && districtCode != null) {
+				Map<String, String> districtData = new HashMap<>();
+				districtData.put("districtName", districtName);
+				districtData.put("districtCode", districtCode);
+				((List<Map<String, String>>) regionsWithDistricts.get(regionCode).get("districts")).add(districtData);
+			}
+		}
+
+		return regionsWithDistricts;
+	}
+
+
+
 
 }
