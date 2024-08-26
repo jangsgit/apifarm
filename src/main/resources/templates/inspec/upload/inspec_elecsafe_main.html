@@ -47,6 +47,7 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <input type="hidden" id="checkseq" name="checkseq"/>
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
@@ -175,8 +176,16 @@
                                         점검 일자
                                     </label>
                                 </th>
-                                <td colspan="3">
+                                <td>
                                     <input type="date" id="checkdt">
+                                </td>
+                                <th>
+                                    <label for="checkusr">
+                                        전기안전 관리자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkusr" autocomplete="off">
                                 </td>
                                 <!--                                    <th>-->
                                 <!--                                        <label for="docdv">-->
@@ -272,15 +281,15 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 -->
         function init() {
-
+            console.log('slkdjflskjdflksjldfjkslkjdflkj');
             // 산단 연동
             initializeSelections();
 
-            // read 초기화
-            fetchListData();
-
             // 검색 초기 날짜
             setDefaultDates('startDate', 'endDate');
+
+            // read 초기화
+            fetchListData();
 
             // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
             document.getElementById('spworkcd').addEventListener('change', fetchListData);
@@ -491,6 +500,7 @@
                         document.getElementById('registdt').value = formatDate(data2.registdt);
                         document.getElementById('checkdt').value = formatDate(data2.checkdt);
                         document.getElementById('endresult').value = data2.endresult;
+                        document.getElementById('checkusr').value = data2.checkusr;
                         // document.getElementById('docdv').value = data2.docdv;
                         document.getElementById('checkarea').value = data2.checkarea;
                         document.getElementById('bfconsres').value = data2.bfconsres;
@@ -622,7 +632,7 @@
 
         // 신규등록 버튼 클릭
         function clearForm() {
-            ['checktitle', 'checkarea', 'bfconsres', 'checkseq'].forEach(id => {
+            ['checktitle', 'checkarea', 'bfconsres', 'checkseq', 'checkusr'].forEach(id => {
                 document.getElementById(id).value = '';
                 document.getElementById('checkdt').value = today;
                 document.getElementById('registdt').value = today;
@@ -641,7 +651,12 @@
             if (endresultSelect.options.length > 0) {
                 endresultSelect.selectedIndex = 0;
             }
-            $('#text-count1').text('0/100'); // 글자 수 0으로 초기화
+            $('.text-count').text('0/100'); // 글자 수 0으로 초기화
+
+            // 특정 필드에 대한 btn-clear 숨김 처리
+            $('#checktitle, #checkusr, #checkarea').each(function() {
+                $(this).siblings('.btn-clear').hide();
+            });
         }
 
         // 정보 저장
@@ -655,7 +670,8 @@
                 // { id: '#docdv', label: '문서 구분을 선택해주세요' },
                 {id: '#checkarea', label: '점검 장소를 선택해주세요'},
                 {id: '#endresult', label: '점검 결과를 선택해주세요'},
-                {id: '#bfconsres', label: '점검 사항을 입력해주세요'}
+                {id: '#bfconsres', label: '점검 사항을 입력해주세요'},
+                {id: '#checkusr', label: '전기안전 관리자를 입력해주세요'}
             ];
 
             for (let i = 0; i < requiredFields.length; i++) {
@@ -683,6 +699,7 @@
                 formData.append('registdt', $('#registdt').val());
                 formData.append('checkarea', $('#checkarea').val());
                 formData.append('bfconsres', $('#bfconsres').val());
+                formData.append('checkusr', $('#checkusr').val());
                 // formData.append('docdv', $('#docdv').val());
                 formData.append('endresult', $('#endresult').val());
 
