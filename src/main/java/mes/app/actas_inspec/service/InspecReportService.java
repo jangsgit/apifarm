@@ -90,15 +90,18 @@ public class InspecReportService {
 
 
         String sql = """
-                    SELECT checkdt, '순회점검' AS inspectype, checkarea as inspecarea, TO_CHAR(CAST("checkstdt" AS TIMESTAMP), 'HH24:MI') || ' ~ ' || TO_CHAR(CAST("checkendt" AS TIMESTAMP), 'HH24:MI') AS checkhour
+                    SELECT 'wm_inspec_month_list' as inspectypeCode, 
+                    checkdt, '순회점검' AS inspectype, checkarea as inspecarea, TO_CHAR(CAST("checkstdt" AS TIMESTAMP), 'HH24:MI') || ' ~ ' || TO_CHAR(CAST("checkendt" AS TIMESTAMP), 'HH24:MI') AS checkhour
                     FROM tb_rp710
                     where checkdt between :frdate and :todate
                     UNION ALL
-                    SELECT checkdt, '전기안전점검' AS inspectype, checkarea as inspecarea, '' as checkhour
+                    SELECT 'wm_elecsafe_input' as inspectypeCode,  
+                    checkdt, '전기안전점검' AS inspectype, checkarea as inspecarea, '' as checkhour
                     FROM tb_rp750
                     where checkdt between :frdate and :todate
                     UNION ALL
-                    SELECT checkdt, '합동안전점검' AS inspectype, chkaddres as inspecarea, '' as checkhour
+                    SELECT 'wm_hap_list' as  inspectypeCode,
+                    checkdt, '합동안전점검' AS inspectype, chkaddres as inspecarea, '' as checkhour
                     FROM tb_rp720
                     where checkdt between :frdate and :todate
                     ORDER BY checkdt;

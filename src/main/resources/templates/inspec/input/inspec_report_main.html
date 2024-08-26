@@ -273,8 +273,6 @@
 
         function BlankOpen(dicType, checkdt) {
 
-            console.log('dicType: ', dicType);
-
             // 절대 경로 URL
             var url = `/gui/${dicType}/default?hideBookmark=true&checkdt=${checkdt}`;
 
@@ -338,7 +336,6 @@
                     if (hitTest.cellType === wijmo.grid.CellType.Cell) {
                         let row = hitTest.row;
                         let item = theGrid.rows[row].dataItem;
-                        console.log('item: ' ,item);
 
                         BlankOpen(item.inspectypecode, item.checkdt);
                     }
@@ -352,9 +349,6 @@
         }
 
         function init2(date){
-
-            console.log('date: ', date);
-
 
             let data2 = [];
             $.ajax({
@@ -390,6 +384,17 @@
                 });
 
                 theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+                // 더블클릭 이벤트 추가
+                theGrid2.hostElement.addEventListener('dblclick', function(e) {
+                    let hitTest = theGrid2.hitTest(e);
+                    if (hitTest.cellType === wijmo.grid.CellType.Cell) {
+                        let row = hitTest.row;
+                        let item = theGrid2.rows[row].dataItem;
+
+                        BlankOpen(item.inspectypecode, item.checkdt);
+                    }
+                });
             } else {
                 theGrid2.itemsSource = viewdata2;
             }
@@ -405,16 +410,13 @@
 
             const today = new Date();
             const specificMonth = getMonth(today);
-            console.log('specificMonth: ' + specificMonth);
-
-
 
             $('#StatusTitle').text(specificMonth + '월 순회점검현황');
             $('#MonthInpsecTitle').text(specificMonth + '월 점검현황');
 
 
             let fnsuccess = function(res){
-                console.log(res);
+
                 $('#totalCount').text(res.data[0].total_count ? res.data[0].total_count : '0');
                 $('#yCount').text(res.data[0].flag_y_count ? res.data[0].flag_y_count : '0');
                 $('#nCount').text(res.data[0].flag_n_count ? res.data[0].flag_n_count : '0');
@@ -435,8 +437,6 @@
                 .then(data => {
 
                     let events=  [];
-
-                    console.log('data: ', data);
 
                     data.data.forEach(function(item, index){
                         events.push({
@@ -484,7 +484,7 @@
                             let currentMonth = currentDate.getMonth() + 1;
 
 
-                            console.log('zzz: ', currentDate);
+
 
                             $('#StatusTitle').text(currentMonth + '월 순회점검 현황');
 
@@ -493,8 +493,6 @@
                             AjaxUtil.getAsyncData('/api/reportEvents/Inspection/status', data, fnsuccess, fnfailure);
 
                             $('#MonthInpsecTitle').text(currentMonth + '월 점검현황');
-                            console.log('currentYear: ', currentYear);
-                            console.log('currentMonth: ', currentMonth);
 
                             let monthString = '';
 
