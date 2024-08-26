@@ -44,6 +44,7 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <input type="hidden" id="spuncode" name="spuncode" />
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
 
 
                 <li>
@@ -494,6 +495,8 @@
 
     <script type="text/javascript">
 
+
+
         const modal2 = document.querySelector('.modal2');
         const modalOpen = document.querySelector('.modal_btn');
         const modalClose = document.querySelector('.close_btn');
@@ -700,6 +703,30 @@
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
             let data2 = [];
+
+            let checkdt = $('#checkdtParam').val().trim();
+
+            if(checkdt !== null && checkdt !== ''){
+
+                console.log('??: ', checkdt);
+
+
+                let searchdate = checkdt.slice(0, 4) + "-" + checkdt.slice(4, 6) + "-" + checkdt.slice(6, 8);
+                console.log('???: ', searchdate);
+                document.getElementById("searchfrdate").value = searchdate;
+                document.getElementById("searchtodate").value = searchdate;
+
+            }else{
+                console.log('chk: ', getDateYYYYMMDD().slice(0, 7) + "-" + "01");
+                console.log('chk2: ', getLastDayOfCurrentMonth());
+
+                document.getElementById("searchfrdate").value = getDateYYYYMMDD().slice(0, 7) + "-" + "01";
+                document.getElementById("searchtodate").value = getLastDayOfCurrentMonth();
+            }
+
+
+            console.log('발류: ', checkdt);
+
             let searchusr = $('#searchusr').val();
 
             $.ajax({
@@ -707,6 +734,8 @@
                 type: 'GET',
                 data: {
                     'searchusr' : searchusr,
+                    'searchfrdate' : $('#searchfrdate').val(),
+                    'searchtodate' : $('#searchtodate').val()
 
                 },
                 async: false,

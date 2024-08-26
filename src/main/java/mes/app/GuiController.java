@@ -164,6 +164,7 @@ public class GuiController {
 			@PathVariable("gui")String gui, 
 			@PathVariable("template")Optional<String> template,
 			@RequestParam MultiValueMap<String, String> allRequestParams,
+			@RequestParam(value = "checkdt", required = false) String checkdt,
 			Authentication auth
 			) {	
         
@@ -175,6 +176,7 @@ public class GuiController {
         }
         
         ModelAndView mv = this.getView(gui, templateName, user, allRequestParams);
+		mv.addObject("checkdt", checkdt);
 		return mv;
 	}
 	

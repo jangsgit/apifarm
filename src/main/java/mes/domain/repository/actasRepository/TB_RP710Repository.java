@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +23,5 @@ public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> 
   @Modifying
   @Query("UPDATE TB_RP710 t SET t.flag = 'Y' WHERE t.spuncode = :spuncode")
   void updateFlagToYBySpuncode(@Param("spuncode") String spuncode);
+
 }

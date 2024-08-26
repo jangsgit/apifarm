@@ -1,4 +1,6 @@
 package mes.app;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,5 +21,16 @@ public class UtilClass {
 
     public String removeBrackers(String input){
         return input.replaceAll("[\\[\\]\"]", "");
+    }
+
+    //월에 마지막날 구하기  , day값 형태는 yyyy-MM
+    public String getLastDay(String day){
+        int year = Integer.parseInt(day.substring(0,4));
+        int month = Integer.parseInt(day.substring(4,6));
+
+        YearMonth yearMonth = YearMonth.of(year, month);
+
+        LocalDate LastDay = yearMonth.atEndOfMonth();
+        return LastDay.toString();
     }
 }

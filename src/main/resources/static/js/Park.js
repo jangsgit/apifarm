@@ -308,6 +308,13 @@ function getLastDayOfCurrentMonth() {
     return `${year}-${lastMonth}-${day}`;
 }
 
+//특정날짜의 월 구하기
+function getMonth(dateString){
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    return month;
+}
+
 function fetchAndPopulateData(userid, dataListId, active) {
     $.ajax({
         url: '/api/system/auth_list/tb_rp945List',
