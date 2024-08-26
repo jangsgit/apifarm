@@ -21,7 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -193,12 +195,146 @@ public class GeneUploadController {
 		return ResponseEntity.ok(result);
 	}
 	
-	
 	// 등록 목록
 	@GetMapping("/regYMList")
 	public ResponseEntity<List<String>> getRegYMList() {
 		List<String> regYMList = TB_RP320Repository.findDistinctYearMonths();
 		return ResponseEntity.ok(regYMList);
+	}
+	
+	// ============================================================================
+	// 발전기명 옵션 동적 생성
+	@GetMapping("/generatornames")
+	public ResponseEntity<List<String>> getGeneratorNames() {
+		List<TB_RP320> data = TB_RP320Repository.findAll();
+		List<String> generatorNames = data.stream()
+				.map(TB_RP320::getPowernm)  // 발전기명 컬럼에 해당하는 메서드로 변경
+				.distinct()
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(generatorNames);
+	}
+	
+	
+	// 기간별 조회 검색
+	/*@GetMapping("/periodSearch")
+	public ResponseEntity<List<TB_RP320Dto>> searchByPeriod(
+			@RequestParam String periodType,
+			@RequestParam String startdt,
+			@RequestParam(required = false) String enddt,
+			@RequestParam(required = false) String powerid,
+			@RequestParam(required = false) String startHour,
+			@RequestParam(required = false) String endHour) {
+		
+		// 로그 추가
+		System.out.println("Period Type: " + periodType);
+		System.out.println("Start Date: " + startdt);
+		System.out.println("End Date: " + enddt);
+		System.out.println("Start Hour: " + startHour);
+		System.out.println("End Hour: " + endHour);
+		System.out.println("Power ID: " + powerid);
+		
+		List<TB_RP320Dto> results;
+		
+		switch (periodType.toLowerCase()) {
+			case "hourly":
+				results = TB_RP320Repository.searchHourlyData(startdt, powerid);
+				break;
+			case "monthly":
+				results = TB_RP320Repository.searchMonthlyData(startdt, enddt, powerid);
+				break;
+			case "quarterly":
+				results = TB_RP320Repository.searchQuarterlyData(startdt, enddt, powerid);
+				break;
+			case "halfyearly":
+				results = TB_RP320Repository.searchHalfYearlyData(startdt, enddt, powerid);
+				break;
+			case "yearly":
+				results = TB_RP320Repository.searchYearlyData(startdt, enddt, powerid);
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid period type: " + periodType);
+		}
+		
+		// 결과 로그 추가
+		System.out.println("Query Result Size: " + results.size());
+		
+		return ResponseEntity.ok(results);
+	}*/
+	@GetMapping("/periodSearch")
+	public ResponseEntity<List<?>> searchByPeriod(
+			@RequestParam String periodType,
+			@RequestParam String startdt,
+			@RequestParam(required = false) String enddt,
+			@RequestParam(required = false) String powerid,
+			@RequestParam(required = false) String startHour,
+			@RequestParam(required = false) String endHour) {
+		
+		List<?> results;
+		
+		
+		switch (periodType.toLowerCase()) {
+			case "hourly":
+				// 시간별 검색 로직
+				List<Map<String, Object>> hourlyResults = TB_RP320Repository.searchHourlyData(startdt, powerid);
+				results = filterHourlyData(hourlyResults, startHour, endHour);
+				break;
+			case "monthly":
+				results = TB_RP320Repository.searchMonthlyData(startdt, enddt, powerid);
+				break;
+			case "quarterly":
+				results = TB_RP320Repository.searchQuarterlyData(startdt, enddt, powerid);
+				break;
+			case "halfyearly":
+				results = TB_RP320Repository.searchHalfYearlyData(startdt, enddt, powerid);
+				break;
+			case "yearly":
+				results = TB_RP320Repository.searchYearlyData(startdt, enddt, powerid);
+				break;
+			default:
+				throw new IllegalArgumentException("Invalid period type: " + periodType);
+		}
+		
+		return ResponseEntity.ok(results);
+	}
+	
+	// 시간 필터링 메소드 추가
+	private List<Map<String, Object>> filterHourlyData(List<Map<String, Object>> data, String startHour, String endHour) {
+		int start = Integer.parseInt(startHour);
+		int end = Integer.parseInt(endHour);
+		
+		return data.stream().map(row -> {
+			Map<String, Object> filteredRow = new HashMap<>();
+			filteredRow.put("period", row.get("period"));
+			filteredRow.put("powernm", row.get("powernm"));
+			
+			for (int i = start; i <= end; i++) {
+				String hourKey = String.format("hour%02d", i);
+				filteredRow.put(hourKey, row.get(hourKey));
+			}
+			return filteredRow;
+		}).collect(Collectors.toList());
+	}
+	
+	
+	@GetMapping("/dateRange")
+	public ResponseEntity<Map<String, String>> getDateRange() {
+		Map<String, String> dateRange = new HashMap<>();
+		
+		// 데이터베이스에서 최소 날짜와 최대 날짜를 가져옵니다.
+		String startDate = TB_RP320Repository.findMinDate();
+		String endDate = TB_RP320Repository.findMaxDate();
+		
+		dateRange.put("startdt", startDate);
+		dateRange.put("enddt", endDate);
+		
+		return ResponseEntity.ok(dateRange);
+	}
+	
+	// 연도 목록 동적 생성
+	@GetMapping("/distinctYears")
+	public ResponseEntity<List<String>> getDistinctYears() {
+		List<String> years = TB_RP320Repository.findDistinctYears();
+		return ResponseEntity.ok(years);
 	}
 	
 }

@@ -28,6 +28,7 @@
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스 분석</li>
+                <li>매출 관리</li>
                 <li>기간별 발전량 조회</li>
             </ul>
         </div>
@@ -66,7 +67,6 @@
                 </li>
             </ul>
 
-
             <div class="tab-contents">
                 <!-- tab1 -->
                 <section class="tab-item" id="tab1">
@@ -78,13 +78,15 @@
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
-                                        <li>
-                                            <input type="month" id="startDate" name="startDate" value="2024-01">
-                                            <label for="startDate" class="hide">시작일</label>
+                                        <li id="startDateContainer">
+                                            <!--<input type="month" id="startDate" name="startDate" value="2024-01">
+                                            <label for="startDate" class="hide">시작일</label>-->
+                                            <input type="month" id="startDate" name="startDate">
                                         </li>
-                                        <li>
-                                            <input type="month" id="endDate" name="endDate" value="2024-12">
-                                            <label for="endDate" class="hide">종료일</label>
+                                        <li id="endDateContainer">
+                                            <!--<input type="month" id="endDate" name="endDate" value="2024-12">
+                                            <label for="endDate" class="hide">종료일</label>-->
+                                            <input type="month" id="endDate" name="endDate">
                                         </li>
                                     </ul>
                                 </dd>
@@ -92,17 +94,15 @@
 
                             <dl>
                                 <dt>
-                                    <label for="ticketcategory">
+                                    <label for="genename">
                                         발전기명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <!-- 옵션 이게 맞아?-->
-                                                <option value="매출">전체</option>
-                                                <option value="비용">KT물류센터</option>
+                                            <select id="genename" name="genename">
+                                                <!-- 동적으로 발전기명을 가져와서 옵션으로 추가 -->
                                             </select>
                                         </li>
                                     </ul>
@@ -111,48 +111,30 @@
 
                             <dl>
                                 <dt>
-                                    <label for="ticketcategory">
-                                        기간<span class="eq">*</span>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <option value="일간">월별</option>
-                                                <option value="년간">일별</option>
-                                                <option value="월간">분기별</option>
-                                                <option value="년간">년별</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <label for="ticketcategory">
-                                        차트타입(임시라벨)<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <option value="일간">Pie 3D</option>
+                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
                                             </select>
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-reset-chart">
                                                 차트설정 초기화
                                             </a>
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchData()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -160,8 +142,6 @@
                                     </ul>
                                 </dd>
                             </dl>
-
-
                         </div>
 
                         <div class="button-wrap">
@@ -176,7 +156,6 @@
                         </div>
                     </div> <!--//section-top end -->
 
-                    <!--                <div style="width: auto; height: 290px;">-->
                     <div class="row row-2">
                         <section class="wp50" style="height: 530px; border-radius: 15px;">
                             <!-- 그래프 -->
@@ -203,9 +182,8 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <!--                                                어떤 연도가 들어올지 모르니까 이건 동적으로 만들기-->
-                                                <option value="뭐야이거지워도되나">2024</option>
+                                            <select id="yearSelect" name="yearSelect">
+                                                <option th:each="year : ${years}" th:value="${year}" th:text="${year} + '년'"></option>
                                             </select>
                                         </li>
                                     </ul>
@@ -214,17 +192,17 @@
 
                             <dl>
                                 <dt>
-                                    <label for="ticketcategory">
+                                    <label for="generatorSelect">
                                         발전기명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <option value="일간">전체</option>
-                                                <option value="월간">AJ380</option>
-                                                <option value="년간">AJ390</option>
+                                            <select id="generatorSelect" name="generatorSelect">
+                                                <option value="all">전체</option>
+                                                <option value="AJ380">AJ380</option>
+                                                <option value="AJ390">AJ390</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -233,50 +211,29 @@
 
                             <dl>
                                 <dt>
-                                    <label for="ticketcategory">
-                                        기간<span class="eq">*</span>
+                                    <label for="comparisonType">
+                                        비교 유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <!-- 옵션 이게 맞아?-->
-                                                <option value="전년대비증감율">YoY</option>
-                                                <option value="전분기대비증감율">QoQ</option>
-                                                <option value="전월대비증감율">MoM</option>
-                                                <option value="연초대비증감율">YTD</option>
-                                                <option value="뭐야이거지워도되나">YoY YTD</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <label for="ticketcategory">
-                                        차트타입(임시라벨)<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="ticketcategory" name="ticketcategory">
-                                                <option value="일간">Line ItemRenderer</option>
+                                            <select id="comparisonType" name="comparisonType">
+                                                <option value="YoY">YoY</option>
+                                                <option value="QoQ">QoQ</option>
+                                                <option value="MoM">MoM</option>
+                                                <option value="YTD">YTD</option>
                                             </select>
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-reset-chart2">
                                                 차트설정 초기화
                                             </a>
                                         </li>
 
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchComparisonData()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -284,8 +241,6 @@
                                     </ul>
                                 </dd>
                             </dl>
-
-
                         </div>
 
                         <div class="button-wrap">
@@ -300,23 +255,17 @@
                         </div>
                     </div> <!--//section-top end -->
 
-                    <!--                <div style="width: auto; height: 290px;">-->
                     <div class="row row-2">
-                        <section class="wp50" style="height: 530px; border-radius: 15px;" >
-                            <!-- 그래프 -->
-                            <!--                            <div id="chartHolder2" style="width:600px; height:400px;"></div>-->
-                            <div>
-                                <img src="/images/rMate_imsi_3.png" alt="그래프_삭제예정" style="width: 727px;">
-                            </div>
+                        <section class="wp50" style="height: 530px; border-radius: 15px;">
+                            <div id="chartHolder2" style="width:600px; height:400px;"></div>
                         </section>
-                        <section class="wp50" style="height: 530px">
+                        <section class="wp50" style="height: 530px;">
                             <div class="container-fluid">
                                 <p id="selectedItem"></p>
-                                <div id="theGrid2" style="max-height: 485px"></div>
+                                <div id="theGrid2" style="max-height: 485px;"></div>
                             </div>
                         </section>
                     </div>
-
                 </section>
             </div><!--//tab-contents end -->
         </div>
@@ -326,293 +275,567 @@
 
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
 
-        // -----------------------차트 설정 시작-----------------------
+        // 차트 초기화 및 레이아웃 설정
+        function initChart(chartId, holderId, chartData) {
+            if (!chartData || !chartData.itemsSource || !chartData.columns) {
+                console.error("Invalid chart data provided:", chartData);
+                return;
+            }
 
-        // rMateChart 를 생성합니다.
-        // 파라메터 (순서대로)
-        //  1. 차트의 id ( 임의로 지정하십시오. )
-        //  2. 차트가 위치할 div 의 id (즉, 차트의 부모 div 의 id 입니다.)
-        //  3. 차트 생성 시 필요한 환경 변수들의 묶음인 chartVars
-        //  4. 차트의 가로 사이즈 (생략 가능, 생략 시 100%)
-        //  5. 차트의 세로 사이즈 (생략 가능, 생략 시 100%)
-        rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+            console.log("Initializing chart with data:", chartData); // 디버깅을 위한 로그 추가
 
-        function changeColor(){
-            document.getElementById("chart1").setLayout(layout(document.getElementById("color").value));
+            rMateChartH5.create(chartId, holderId, "", "120%", "120%");
+
+            // 차트 데이터를 분석하여 최대값을 동적으로 설정
+            const maxDataValue = Math.max(...chartData.itemsSource.sourceCollection.map(item => {
+                const values = Object.values(item).filter(val => typeof val === 'number');
+                return Math.max(...values);
+            }));
+            const vAxisMax = Math.ceil(maxDataValue / 100) * 100; // 최대값을 적절한 단위로 올림
+
+            // 레이아웃 정의
+            var layoutStr =
+                '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">' +
+                '<Options>' +
+                '<Caption text="기간별 발전현황" />' +
+                '<SubCaption text="From 01 To 12" textAlign="center" paddingBottom="35"/>' +
+                '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>' +
+                '</Options>' +
+                '<Column3DChart seriesMouseOverAction="none" showDataTips="true" columnWidthRatio="0.56" paddingBottom="25">' +
+                '<horizontalAxis>' +
+                '<CategoryAxis id="hAxis" categoryField="period"/>' + // 데이터 필드 매핑
+                '</horizontalAxis>' +
+                '<verticalAxis>' +
+                '<LinearAxis id="vAxis" maximum="' + vAxisMax + '"/>' +
+                '</verticalAxis>' +
+                '<series>';
+
+
+            // 각 발전소에 대한 시리즈 추가
+            chartData.columns.forEach(column => {
+                if (column.binding !== 'period') {
+                    layoutStr +=
+                        '<Column3DSeries labelPosition="outside" yField="' + column.binding + '" displayName="' + column.header + '" showValueLabels="[3]" outsideLabelXOffset="7">' +
+                        '<showDataEffect>' +
+                        '<SeriesInterpolate duration="1000"/>' +
+                        '</showDataEffect>' +
+                        '</Column3DSeries>';
+                }
+            });
+
+            layoutStr +=
+                '</series>' +
+                '<backgroundElements>' +
+                '<GridLines showBorderStroke="false"/>' +
+                '</backgroundElements>' +
+                '</Column3DChart>' +
+                '</rMateChart>';
+
+            // 차트 레이아웃 및 데이터 설정
+            rMateChartH5.calls(chartId, {
+                "setLayout": layoutStr,
+                "setData": chartData.itemsSource.sourceCollection
+            });
+
+            console.log("Chart data successfully set.");
         }
 
-        // 스트링 형식으로 레이아웃 정의.
-        var layoutStr =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">' +
-            '<Options>' +
-            '<Caption text="기간별 발전현황" />' +
-            '<SubCaption text="From 01 To 12" textAlign="center" paddingBottom="35"/>' +
-            '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>' +
-            '</Options>' +
-            '<Column3DChart seriesMouseOverAction="none" showDataTips="true" columnWidthRatio="0.6" paddingBottom="25">' +
-            '<horizontalAxis>' +
-            '<CategoryAxis categoryField="Month"/>' +
-            '</horizontalAxis>' +
-            '<verticalAxis>' +
-            '<LinearAxis minimum="0" maximum="1000"/>' + // 변경된 최대 축 값
-            '</verticalAxis>' +
-            '<series>' +
-            '<Column3DSeries labelPosition="outside" yField="AJ38" displayName="AJ38" showValueLabels="[3]" outsideLabelXOffset="7">' +
-            '<showDataEffect>' +
-            '<SeriesInterpolate duration="1000"/>' + // 애니메이션 효과 적용
-            '</showDataEffect>' +
-            '</Column3DSeries>' +
-            '<Column3DSeries labelPosition="outside" yField="AJ39" displayName="AJ39" showValueLabels="[3]" outsideLabelXOffset="7">' +
-            '<showDataEffect>' +
-            '<SeriesInterpolate duration="1000"/>' + // 애니메이션 효과 적용
-            '</showDataEffect>' +
-            '</Column3DSeries>' +
-            '</series>' +
-            '</Column3DChart>' +
-            '</rMateChart>';
 
 
-        // 차트 데이터
-        var chartData = [
-            {"Month": "Jan", "AJ38": 350, "AJ39": 200},
-            {"Month": "Feb", "AJ38": 550, "AJ39": 200},
-            {"Month": "Mar", "AJ38": 550, "AJ39": 300},
-            {"Month": "Apr", "AJ38": 400, "AJ39": 500},
-            {"Month": "May", "AJ38": 400, "AJ39": 200},
-            {"Month": "Jun", "AJ38": 650, "AJ39": 300},
-            {"Month": "Jul", "AJ38": 400, "AJ39": 300},
-            {"Month": "Aug", "AJ38": 450, "AJ39": 950},
-            {"Month": "Sep", "AJ38": 550, "AJ39": 350},
-            {"Month": "Oct", "AJ38": 650, "AJ39": 450},
-            {"Month": "Nov", "AJ38": 550, "AJ39": 550},
-            {"Month": "Dec", "AJ38": 650, "AJ39": 450}
-        ];
+        // rMateChartH5 차트 설정
+        // var chart1;
+        // var chart2;
 
-        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
-        //
-        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
-        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
-        //
-        // 아래 내용은
-        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
-        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
-        rMateChartH5.calls("chart1", {
-            "setLayout": layoutStr,
-            "setData": chartData
-        });
+        // 그리드 생성
+        function buildGridColumns(data) {
+            const columns = [
+                {binding: 'period', header: '기간', width: 180, align: 'center'},
+            ];
 
-        /**
-         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
-         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
-         *
-         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * -------------------------------------------------
-         *
-         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
-         */
-        rMateChartH5.registerTheme(rMateChartH5.themes);
+            // 모든 powernm(발전기명)을 확인하여 열을 동적으로 생성
+            const powerNames = [...new Set(data.map(item => item.powernm))];
+            powerNames.forEach(powerName => {
+                columns.push({
+                    binding: powerName,
+                    header: powerName,
+                    width: "*",
+                    align: 'right',
+                    format: 'n0'
+                });
+            });
 
-        /**
-         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
-         * 접근하는 차트 객체의 테마를 변경합니다.
-         * 파라메터로 넘어오는 값
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * - default
-         *
-         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
-         */
-        function rMateChartH5ChangeTheme(theme) {
-            document.getElementById("chart1").setTheme(theme);
+            return columns;
         }
 
-        // -----------------------차트 설정 끝 -----------------------
+        // 데이터 변환 + 그리드 업데이트
+        function transformDataForGrid(data) {
+            const gridData = {};
+
+            data.forEach(row => {
+                const period = row.period;
+                const powernm = row.powernm;
+
+                if (!gridData[period]) {
+                    gridData[period] = { period: period };
+                }
+                // gridData[period][powernm] = row.total.toLocaleString(); // total 값을 천단위 콤마 포함해서 저장
+                // 쉼표 제거 후 숫자로 변환
+                gridData[period][powernm] = parseFloat(row.total.toString().replace(/,/g, ''));
+            });
+
+            return Object.values(gridData);
+        }
 
 
-        var theGrid;    // 목록에 뿌림
-        var theGrid1;   // 등록에서 insert
-        var viewdata;
-        var data1 = [];
+        // 그리드 생성
+        function updateGrid(grid, data) {
+            console.log("Updating grid with data:", data); // 디버깅을 위한 로그 추가
 
-        var theGrid2;
+            const columns = buildGridColumns(data); // 그리드의 컬럼을 동적으로 생성
+            const transformedData = transformDataForGrid(data); // 데이터를 그리드에 맞게 변환
+
+            grid.initialize({
+                autoGenerateColumns: false,
+                columns: columns,
+                itemsSource: new wijmo.collections.CollectionView(transformedData), // 변환된 데이터를 소스로 설정
+                showMarquee: true,
+                isReadOnly: true,
+                headersVisibility: wijmo.grid.HeadersVisibility.Column // 컬럼 헤더만 보이도록 설정 (행 헤더는 숨김)
+            });
+
+            // 헤더 중앙 정렬을 위해 formatItem 이벤트 핸들러 추가
+            grid.formatItem.addHandler((s, e) => {
+                if (e.panel === s.columnHeaders) {
+                    e.cell.style.textAlign = 'center';
+                }
+            });
+
+            // 그리드 데이터를 그대로 차트에 전달
+            initChart("chart1", "chartHolder1", {
+                columns: columns,
+                itemsSource: grid.itemsSource
+            });
+        }
+
+        // 차트 데이터 설정 및 업데이트
+        /*function updateChart(chartId, data) {
+            // 데이터 시리즈 구성
+            const powerNames = [...new Set(data.map(item => item.powernm))];
+            let seriesStr = '';
+
+            powerNames.forEach(powerName => {
+                seriesStr +=
+                    `<Column3DSeries labelPosition="outside" yField="${powerName}" displayName="${powerName}"/>`;
+            });
+
+            // 데이터 시리즈 설정 및 레이아웃 적용
+            rMateChartH5.call(chartId, "setLayout", layoutStr);
+            /!*!// 데이터 시리즈 설정
+            rMateChartH5.call(chartId, "setLayout",
+                '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+                +'<Options>'
+                +'<Caption text="발전량 차트" fontSize="20"/>'
+                +'<Legend/>'
+                +'</Options>'
+                +'<Column2DChart showDataTips="true">'
+                +'<horizontalAxis>'
+                +'<CategoryAxis categoryField="period"/>'
+                +'</horizontalAxis>'
+                +'<verticalAxis>'
+                +'<LinearAxis/>'
+                +'</verticalAxis>'
+                +'<series>'
+                + seriesStr
+                +'</series>'
+                +'</Column2DChart>'
+                +'</rMateChart>');*!/
+
+            // 데이터 업데이트
+            const chartData = data.map(item => {
+                const obj = { period: item.period };
+                obj[item.powernm] = item.total;
+                return obj;
+            });
+
+            rMateChartH5.call(chartId, "setData", chartData);
+        }*/
 
 
-        document.readyState === 'complete' ? init() : window.onload = init;
 
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        // 검색
+        function searchData() {
+            const periodType = document.getElementById("periodType").value;
+            let startDate, endDate, startHour, endHour;
+
+            if (periodType === "hourly") {
+                startDate = document.getElementById("startDate").value;
+                startHour = document.getElementById("startHour").value;
+                endHour = document.getElementById("endHour").value;
+
+                const generator = document.getElementById("genename").value;
+                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&powerid=${generator}`;
+
+                // `fetch` 요청 실행
+                fetch(query)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            alert('데이터가 존재하지 않습니다.');
+                        } else {
+                            const filteredData = filterDataByHourRange(data, startHour, endHour);
+                            updateGrid(theGrid, filteredData);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching search data:', error));
+
+
+            } else if (periodType === "quarterly" || periodType === "halfyearly" || periodType === "yearly") {
+                const periodValue = periodType === "quarterly" ? document.getElementById("startQuarter").value :
+                    periodType === "halfyearly" ? document.getElementById("startHalf").value :
+                        document.getElementById("startYear").value;
+                const generator = document.getElementById("genename").value; // 여기에서 generator 변수를 선언하고 초기화
+
+                if (periodValue === "ALLQ" || periodValue === "ALLH") {
+                    getFullYearRangeFromData().then(([startDate, endDate]) => {
+                        let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+                        fetch(query)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length === 0) {
+                                    Alert.alert('', '데이터가 존재하지 않습니다.');
+                                } else {
+                                    updateGrid(theGrid, data); // 가져온 데이터로 그리드를 업데이트
+                                }
+                            })
+                            .catch(error => console.error('Error fetching search data:', error));
+                    });
+                    return;
+
+                } else {
+                    [startDate, endDate] = convertPeriodToDateRange(periodType, periodValue);
+                }
+            } else if (document.getElementById("startDate")) {
+                startDate = document.getElementById("startDate").value;
+                endDate = document.getElementById("endDate").value;
+            }
+
+            const generator = document.getElementById("genename").value;
+            let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+
+            fetch(query)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        Alert.alert('', '데이터가 존재하지 않습니다.');
+                    } else {
+                        updateGrid(theGrid, data); // 가져온 데이터로 그리드를 업데이트
+                    }
+                })
+                .catch(error => console.error('Error fetching search data:', error));
+        }
+
+
+
+        function filterDataByHourRange(data, startHour, endHour) {
+            return data.map(row => {
+                const filteredRow = { period: row.period, powernm: row.powernm, values: [] };
+                for (let i = parseInt(startHour); i <= parseInt(endHour); i++) {
+                    filteredRow.values.push(row[`mevalue${i.toString().padStart(2, '0')}`]);
+                }
+                return filteredRow;
+            });
+        }
+
+
+
+        function getFullYearRangeFromData() {
+            return fetch('/api/gene/upload/dateRange')
+                .then(response => response.json())
+                .then(dateRange => {
+                    const startDate = dateRange.startdt;  // 데이터베이스에서 가져온 최소 날짜
+                    const endDate = dateRange.enddt;      // 데이터베이스에서 가져온 최대 날짜
+                    return [startDate, endDate];
+                });
+        }
+
+        function convertPeriodToDateRange(periodType, periodValue) {
+            const year = new Date().getFullYear(); // 기본적으로 현재 연도 사용, 필요시 다른 연도를 사용 가능
+            let startMonth, endMonth;
+
+            switch (periodType) {
+                case "quarterly":
+                    switch (periodValue) {
+                        case "Q1":
+                            startMonth = "01";
+                            endMonth = "03";
+                            break;
+                        case "Q2":
+                            startMonth = "04";
+                            endMonth = "06";
+                            break;
+                        case "Q3":
+                            startMonth = "07";
+                            endMonth = "09";
+                            break;
+                        case "Q4":
+                            startMonth = "10";
+                            endMonth = "12";
+                            break;
+                    }
+                    break;
+                case "halfyearly":
+                    switch (periodValue) {
+                        case "H1":
+                            startMonth = "01";
+                            endMonth = "06";
+                            break;
+                        case "H2":
+                            startMonth = "07";
+                            endMonth = "12";
+                            break;
+                    }
+                    break;
+                case "yearly":
+                    startMonth = "01";
+                    endMonth = "12";
+                    break;
+                default:
+                    throw new Error(`Unknown period type: ${periodType}`);
+            }
+
+            const startDate = `${year}-${startMonth}-01`; // 기간의 시작 날짜
+            const endDate = new Date(year, parseInt(endMonth), 0); // 해당 월의 마지막 날짜 계산
+            return [startDate, `${year}-${endMonth}-${endDate.getDate()}`]; // 시작 날짜와 끝 날짜 반환
+        }
+
+
+        function searchComparisonData() {
+            const year = document.getElementById("yearSelect").value;
+            const generator = document.getElementById("generatorSelect").value;
+            const comparisonType = document.getElementById("comparisonType").value;
+
+            let query = `/api/gene/upload/searchComparison?year=${year}&generator=${generator}&comparisonType=${comparisonType}`;
+
+            fetch(query)
+                .then(response => response.json())
+                .then(data => {
+                    // updateChart(chart2, data); // 차트 업데이트
+                    updateGrid(theGrid2, data); // 그리드 업데이트
+                })
+                .catch(error => console.error('Error fetching comparison data:', error));
+        }
+
+
+        // 페이지 로드 시
         function init() {
-            fetchListData();
-            fetchListData2(); // tab2에 대한 데이터 로딩 함수
-            inputData();
+            // 차트 초기화
+            initChart("chart1", "chartHolder1");
+            // initChart("chart2", "chartHolder2");
+            // chart1 = rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+            // chart2 = rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
+
+            // 그리드 초기화
+            // theGrid = new wijmo.grid.FlexGrid('#theGrid');
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false, // 이 옵션은 그리드 초기화 시 자동 생성된 열을 비활성화합니다.
+                columns: [] // 초기 열 설정
+            });
+
+
+            // 기본으로 월별이 선택되도록 설정
+            document.getElementById("periodType").value = "monthly";
+
+            loadGeneratorNames(); // 발전기명 로드
+            updatePeriodInputs(); // 페이지 로드 시 초기화
+            loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
         }
-
-        // tab1
-        function fetchListData() {
-            var tempData = [
-                {month: '24.01', year2023: 200, year2024: 300},
-                {month: '24.02', year2023: 400, year2024: 500},
-                {month: '24.03', year2023: 500, year2024: 400},
-                {month: '24.04', year2023: 300, year2024: 300},
-                {month: '24.05', year2023: 700, year2024: 700},
-                {month: '24.06', year2023: 900, year2024: 600},
-                {month: '24.07', year2023: 400, year2024: 500},
-                {month: '24.08', year2023: 500, year2024: 400},
-                {month: '24.09', year2023: 600, year2024: 300},
-                {month: '24.10', year2023: 400, year2024: 700},
-                {month: '24.11', year2023: 200, year2024: 500},
-                {month: '24.12', year2023: 300, year2024: 400},
-            ];
-
-            // 그리드 설정
-            if (!theGrid) {
-                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                    autoGenerateColumns: false,
-                    columns: [
-                        {binding: 'month', header: '일자', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2023', header: 'AJ38', width: '*', align: 'center', isReadOnly: true},
-                        {binding: 'year2024', header: 'AJ39', width: '*', align: 'center', isReadOnly: true}
-                    ],
-                    itemsSource: tempData
-                });
-
-                // Footer 행 추가
-                theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
-                theGrid.bottomLeftCells.setCellData(0, 0, 'Σ');
-                theGrid.columnFooters.setCellData(0, 0, '계');
-
-                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
-
-            } else {
-                theGrid.itemsSource = new wijmo.collections.CollectionView(tempData);
-            }
-        }
-
-        //tab2
-        function fetchListData2() {
-            var tempData2 = [
-                {month: '01', year2023: 200, year2024: 300},
-                {month: '02', year2023: 400, year2024: 500},
-                {month: '03', year2023: 500, year2024: 400},
-                {month: '04', year2023: 300, year2024: 300},
-                {month: '05', year2023: 700, year2024: 700},
-                {month: '06', year2023: 900, year2024: 600},
-                {month: '07', year2023: 400, year2024: 500},
-                {month: '08', year2023: 500, year2024: 400},
-                {month: '09', year2023: 600, year2024: 300},
-                {month: '10', year2023: 400, year2024: 700},
-                {month: '11', year2023: 200, year2024: 500},
-                {month: '12', year2023: 300, year2024: 400},
-            ];
-
-            // 그리드 설정
-            if (!theGrid2) {
-                theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
-                    autoGenerateColumns: false,
-                    columns: [
-                        {binding: 'month', header: '월', width: 120, align: 'center', isReadOnly: true},
-                        {binding: 'year2023', header: '2023', width: '*', align: 'center', isReadOnly: true},
-                        {binding: 'year2024', header: '2024', width: '*', align: 'center', isReadOnly: true}
-                    ],
-                    itemsSource: tempData2
-                });
-
-                // Footer 행 추가
-                theGrid2.columnFooters.rows.push(new wijmo.grid.GroupRow());
-                theGrid2.bottomLeftCells.setCellData(0, 0, 'Σ');
-                theGrid2.columnFooters.setCellData(0, 0, '계');
-
-                theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
-
-            } else {
-                theGrid2.itemsSource = new wijmo.collections.CollectionView(tempData2);
-            }
-        }
-
 
         $(document).ready(function (e) {
-
-            // 정보 저장
-            $('#btnSave').click(function (e) {
-                Alert.confirm('', '저장하시겠습니까?', function () {
-
-                    // theGrid1의 데이터를 data1 배열에 업데이트
-                    var updatedData1 = theGrid1.collectionView.items;
-
-                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
-                    console.log("Updated data1:", updatedData1);
-
-                    let formData = new FormData();
-
-                    formData.append('spworkcd', $('#spworkcd').val());
-                    formData.append('spworknm', $('#spworknm').val());
-                    formData.append('spcompcd', $('#spcompcd').val());
-                    formData.append('spcompnm', $('#spcompnm').val());
-                    formData.append('spplancd', $('#spplancd').val());
-                    formData.append('spplannm', $('#spplannm').val());
-                    formData.append('checkdt', $('#checkdt').val());
-                    formData.append('checknm', $('#checknm').val());
-                    formData.append('checkusr', $('#checkusr').val());
-                    formData.append('checkresult', $('#checkresult').val());
-                    formData.append('checkrem', $('#checkrem').val());
-                    formData.append('filelist', $('#filelist').val());
-                    formData.append('_csrf', $('[name=_csrf]').val());
-                    // 점검리스트 데이터 추가
-                    formData.append('inspectlist', JSON.stringify(updatedData1));
-
-                    // $.ajax({
-                    //     url: "/api/inspec/hap/save",
-                    //     type: 'POST',
-                    //     data: formData,
-                    //     processData: false,
-                    //     contentType: false,
-                    //     success: function (response) {
-                    //         if (response.success) {
-                    //             Alert.alert('', response.message, function () {
-                    //                 $('#listTabLink').click();
-                    //                 fetchListData();
-                    //
-                    //             });
-                    //
-                    //         } else {
-                    //             Alert.alert('', '저장에 실패했습니다. ');
-                    //         }
-                    //     },
-                    //     error: function (jqXHR, textStatus, errorThrown) {
-                    //         Alert.alert('', '에러가 발생하였습니다.');
-                    //     }
-                    // });
-                })
-            })
-            // select 아이디에 따라 히든 input 설정
-            const selects = [
-                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
-                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
-                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
-            ];
-            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
-
+            init();
         });
 
-        //  select 바뀌면 hidden input 변경
-        function updateSelect(selectId, hiddenInputId) {
-            var selectElement = document.getElementById(selectId);
-            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
-            document.getElementById(hiddenInputId).value = selectedOptionText;
+        // 월별 데이터
+        function loadMonthlyData() {
+            const generator = 'all';  // 기본적으로 전체 발전기명에 대해 로드
+
+            // 최소/최대 날짜를 서버에서 받아오는 API 호출
+            fetch('/api/gene/upload/dateRange')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(dateRange => {
+                    const startDate = dateRange.startdt;  // 서버에서 받은 최소 날짜
+                    const endDate = dateRange.enddt;      // 서버에서 받은 최대 날짜
+
+                    let query = `/api/gene/upload/periodSearch?periodType=monthly&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+
+                    return fetch(query);
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Received data:', data); // 데이터 확인
+
+                    if (!data || data.length === 0) {
+                        console.warn('No data received.');
+                        alert('조회된 데이터가 없습니다.');
+                        return;
+                    }
+
+                    initChart("chart1", "chartHolder1", data); // 차트 업데이트
+                    updateGrid(theGrid, data); // 그리드 업데이트
+                })
+                .catch(error => console.error('Error fetching initial monthly data:', error));
         }
 
-    </script>
 
+        // 발전기명
+        function loadGeneratorNames() {
+            fetch('/api/gene/upload/generatornames') // API endpoint는 예시입니다.
+                .then(response => response.json())
+                .then(generatorNames => {
+                    const selectElement = document.getElementById('genename');
+                    if (selectElement) {
+                        selectElement.innerHTML = ''; // 기존 옵션들을 지움
+                        selectElement.appendChild(new Option('전체', 'all')); // '전체' 옵션 추가
+                        generatorNames.forEach(name => {
+                            selectElement.appendChild(new Option(name, name)); // 각 발전기명에 대한 옵션 추가
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading generator names:', error));
+        }
+
+        function updatePeriodInputs() {
+            const periodType = document.getElementById("periodType").value;
+            const startDateContainer = document.getElementById("startDateContainer");
+            const endDateContainer = document.getElementById("endDateContainer");
+
+            startDateContainer.innerHTML = "";
+            endDateContainer.innerHTML = "";
+
+            if (periodType === "hourly") {
+                // 날짜 선택을 위한 입력 필드 생성
+                startDateContainer.innerHTML = `
+            <input type="date" id="startDate" name="startDate" value="${new Date().toISOString().slice(0, 10)}">
+        `;
+
+                // 시간 선택을 위한 드롭다운 생성
+                endDateContainer.innerHTML = `
+            <select id="startHour" name="startHour" style="width: 60px;">
+                ${generateHourOptions()}
+            </select>
+            -
+            <select id="endHour" name="endHour" style="width: 60px;">
+                ${generateHourOptions(true)}
+            </select>
+        `;
+            } else if (periodType === "monthly") {
+                startDateContainer.innerHTML = '<input type="month" id="startDate" name="startDate">';
+                endDateContainer.innerHTML = '<input type="month" id="endDate" name="endDate">';
+            } else if (periodType === "quarterly")
+            {
+                startDateContainer.innerHTML = '<select id="startQuarter" name="startQuarter">'
+                    +
+                    '<option value="ALLQ">전체분기</option>' +
+                    '<option value="Q1">1분기</option>' +
+                    '<option value="Q2">2분기</option>' +
+                    '<option value="Q3">3분기</option>' +
+                    '<option value="Q4">4분기</option>'
+                    +
+                    '</select>';
+            } else if (periodType === "halfyearly") {
+                startDateContainer.innerHTML
+                    = '<select id="startHalf" name="startHalf">'
+                    +
+                    '<option value="ALLH">전체반기</option>' +
+                    '<option value="H1">상반기</option>' +
+                    '<option value="H2">하반기</option>' +
+                    '</select>';
+            } else if (periodType === "yearly") {
+                // 초기 UI: 전체년도만 표시
+                startDateContainer.innerHTML = '<select id="startYear" name="startYear">'
+                    + '<option value="ALLY">전체년도</option>'
+                    + '</select>';
+
+                // 비동기로 데이터를 로드하고 UI 업데이트
+                loadYearsAndUpdateUI('startYear');
+            }
+        }
+
+        // 비동기로 연도를 로드하고 기존 UI를 업데이트하는 함수
+        function loadYearsAndUpdateUI(selectId) {
+            fetch('/api/gene/upload/distinctYears')
+                .then(response => response.json())
+                .then(years => {
+                    const selectElement = document.getElementById(selectId);
+
+                    // 기존 옵션 삭제
+                    selectElement.innerHTML = '';
+
+                    // "전체년도" 옵션 추가
+                    const allOption = document.createElement('option');
+                    allOption.value = "ALLY";
+                    allOption.textContent = "전체년도";
+                    selectElement.appendChild(allOption);
+
+                    // 서버에서 가져온 연도 목록을 <option>으로 추가
+                    years.forEach(year => {
+                        const option = document.createElement('option');
+                        option.value = year;
+                        option.textContent = year + "년";
+                        selectElement.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error loading years:', error));
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            let options = '';
+            for (let i = 0; i < 24; i++) {
+                const hour = i.toString().padStart(2, '0');
+                options += `<option value="${hour}">${hour}</option>`;
+            }
+            // 시작 시간과 종료 시간을 기본 선택값으로 설정
+            if (isEnd) {
+                options = options.replace(`value="24"`, `value="24" selected`);
+            } else {
+                options = options.replace(`value="00"`, `value="00" selected`);
+            }
+            return options;
+        }
+
+        /*function updateCondition(periodType) {
+            let str = "";
+            if (periodType === "quarterly") {
+                str = `<select name="condition">${['Q1', 'Q2', 'Q3', 'Q4'].map(q => `<option value="${q}">${q}</option>`).join('')}</select>`;
+            } else if (periodType === "monthly") {
+                str = `<select name="condition">${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}월">${i + 1}월</option>`).join('')}</select>`;
+            } else if (periodType === "halfyearly") {
+                str = `<select name="condition">${['H1', 'H2'].map(h => `<option value="${h}">${h}</option>`).join('')}</select>`;
+            } else if (periodType === "yearly") {
+                str = `<select name="condition">${['2023', '2024'].map(y => `<option value="${y}">${y}</option>`).join('')}</select>`;
+
+            }
+            // document.getElementById('조건').innerHTML = `<div id="조건">` + str + `</div>`;
+        }*/
+    </script>
 </th:block>
 </html>
-
