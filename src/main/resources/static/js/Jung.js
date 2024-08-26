@@ -128,9 +128,20 @@ function getCurrentYear() {
 
 // 날짜 초기화 함수
 function setDefaultDates(startDateId, endDateId) {
-    const currentYear = getCurrentYear();
-    document.getElementById(startDateId).value = `${currentYear}-01-01`;
-    document.getElementById(endDateId).value = `${currentYear}-12-31`;
+
+    let checkdt = $('#checkdtParam').val().trim();
+
+    if(checkdt !== null && checkdt !== ''){
+        let searchdate = checkdt.slice(0, 4) + "-" + checkdt.slice(4, 6) + "-" + checkdt.slice(6, 8);
+        document.getElementById("startDate").value = searchdate;
+        document.getElementById("endDate").value = searchdate;
+
+    }else{
+        const currentYear = getCurrentYear();
+        document.getElementById(startDateId).value = `${currentYear}-01-01`;
+        document.getElementById(endDateId).value = `${currentYear}-12-31`;
+    }
+
 }
 
 // 파일 다운로드
