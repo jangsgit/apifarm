@@ -375,31 +375,51 @@
         }
 
         // 데이터 변환 + 그리드 업데이트
-        function transformDataForGrid(data) {
+        function transformDataForGrid(data, periodType) {
             const gridData = {};
 
             data.forEach(row => {
-                const period = row.period;
-                const powernm = row.powernm;
+                const period = row.period ? row.period.toString() : ''; // 기간 데이터가 없는 경우 빈 문자열로 설정
+                const powernm = row.powernm ? row.powernm.toString() : ''; // 발전기명이 없는 경우 빈 문자열로 설정
 
-                if (!gridData[period]) {
-                    gridData[period] = { period: period };
+                if (periodType === 'hourly') {
+                    // 시간별 데이터를 처리하는 로직
+                    for (let i = 1; i <= 24; i++) {
+                        const hourKey = `hour${i.toString().padStart(2, '0')}`;
+                        if (row[hourKey] !== undefined) {
+                            const periodWithHour = `${period} ${i.toString().padStart(2, '0')}시`;
+                            if (!gridData[periodWithHour]) {
+                                gridData[periodWithHour] = { period: periodWithHour };
+                            }
+                            gridData[periodWithHour][powernm] = row[hourKey] ? parseFloat(row[hourKey].toString().replace(/,/g, '')) : 0;
+                        }
+                    }
+                } else {
+                    // 월별, 분기별, 반기별, 연도별 데이터를 처리하는 로직
+                    if (!gridData[period]) {
+                        gridData[period] = { period: period };
+                    }
+                    Object.keys(row).forEach(key => {
+                        if (key !== 'period' && key !== 'powernm') {
+                            // 쉼표 제거 후 숫자로 변환
+                            gridData[period][powernm] = row[key] ? parseFloat(row[key].toString().replace(/,/g, '')) : 0;
+                        }
+                    });
                 }
-                // gridData[period][powernm] = row.total.toLocaleString(); // total 값을 천단위 콤마 포함해서 저장
-                // 쉼표 제거 후 숫자로 변환
-                gridData[period][powernm] = parseFloat(row.total.toString().replace(/,/g, ''));
             });
 
             return Object.values(gridData);
         }
 
-
         // 그리드 생성
-        function updateGrid(grid, data) {
+        function updateGrid(grid, data, periodType) {
             console.log("Updating grid with data:", data); // 디버깅을 위한 로그 추가
+            console.log("Period Type:", periodType); // periodType이 올바르게 전달되었는지 확인
 
             const columns = buildGridColumns(data); // 그리드의 컬럼을 동적으로 생성
-            const transformedData = transformDataForGrid(data); // 데이터를 그리드에 맞게 변환
+            const transformedData = transformDataForGrid(data, periodType); // 데이터를 그리드에 맞게 변환
+
+            // console.log("Transformed Data:", transformedData); // 변환된 데이터 확인!
 
             grid.initialize({
                 autoGenerateColumns: false,
@@ -409,6 +429,10 @@
                 isReadOnly: true,
                 headersVisibility: wijmo.grid.HeadersVisibility.Column // 컬럼 헤더만 보이도록 설정 (행 헤더는 숨김)
             });
+
+            // 이전 데이터를 완전히 초기화 후 새 데이터 적용
+            grid.itemsSource = new wijmo.collections.CollectionView(transformedData);
+
 
             // 헤더 중앙 정렬을 위해 formatItem 이벤트 핸들러 추가
             grid.formatItem.addHandler((s, e) => {
@@ -469,30 +493,27 @@
 
 
 
-
-
         // 검색
         function searchData() {
             const periodType = document.getElementById("periodType").value;
             let startDate, endDate, startHour, endHour;
 
-            if (periodType === "hourly") {
+            if (periodType === "hourly") { // 시간별 조회가 선택된 경우
                 startDate = document.getElementById("startDate").value;
                 startHour = document.getElementById("startHour").value;
                 endHour = document.getElementById("endHour").value;
+                endDate = startDate;
 
                 const generator = document.getElementById("genename").value;
-                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&powerid=${generator}`;
+                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&powerid=${generator}&startHour=${startHour}&endHour=${endHour}`;
 
-                // `fetch` 요청 실행
                 fetch(query)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length === 0) {
                             alert('데이터가 존재하지 않습니다.');
                         } else {
-                            const filteredData = filterDataByHourRange(data, startHour, endHour);
-                            updateGrid(theGrid, filteredData);
+                            updateGrid(theGrid, data, periodType); // periodType 전달
                         }
                     })
                     .catch(error => console.error('Error fetching search data:', error));
@@ -547,9 +568,10 @@
 
         function filterDataByHourRange(data, startHour, endHour) {
             return data.map(row => {
-                const filteredRow = { period: row.period, powernm: row.powernm, values: [] };
+                const filteredRow = { period: row.period, powernm: row.powernm };
                 for (let i = parseInt(startHour); i <= parseInt(endHour); i++) {
-                    filteredRow.values.push(row[`mevalue${i.toString().padStart(2, '0')}`]);
+                    const hourKey = `hour${i.toString().padStart(2, '0')}`;
+                    filteredRow[hourKey] = row[hourKey];
                 }
                 return filteredRow;
             });
@@ -730,13 +752,11 @@
             startDateContainer.innerHTML = "";
             endDateContainer.innerHTML = "";
 
-            if (periodType === "hourly") {
-                // 날짜 선택을 위한 입력 필드 생성
+            if (periodType === "hourly") { // 시간별 조회가 선택된 경우
                 startDateContainer.innerHTML = `
             <input type="date" id="startDate" name="startDate" value="${new Date().toISOString().slice(0, 10)}">
         `;
 
-                // 시간 선택을 위한 드롭다운 생성
                 endDateContainer.innerHTML = `
             <select id="startHour" name="startHour" style="width: 60px;">
                 ${generateHourOptions()}
@@ -809,7 +829,7 @@
         // 시간 옵션 생성 함수
         function generateHourOptions(isEnd = false) {
             let options = '';
-            for (let i = 0; i < 24; i++) {
+            for (let i = 1; i < 25; i++) { // 01~24
                 const hour = i.toString().padStart(2, '0');
                 options += `<option value="${hour}">${hour}</option>`;
             }
@@ -817,25 +837,10 @@
             if (isEnd) {
                 options = options.replace(`value="24"`, `value="24" selected`);
             } else {
-                options = options.replace(`value="00"`, `value="00" selected`);
+                options = options.replace(`value="01"`, `value="01" selected`);
             }
             return options;
         }
-
-        /*function updateCondition(periodType) {
-            let str = "";
-            if (periodType === "quarterly") {
-                str = `<select name="condition">${['Q1', 'Q2', 'Q3', 'Q4'].map(q => `<option value="${q}">${q}</option>`).join('')}</select>`;
-            } else if (periodType === "monthly") {
-                str = `<select name="condition">${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}월">${i + 1}월</option>`).join('')}</select>`;
-            } else if (periodType === "halfyearly") {
-                str = `<select name="condition">${['H1', 'H2'].map(h => `<option value="${h}">${h}</option>`).join('')}</select>`;
-            } else if (periodType === "yearly") {
-                str = `<select name="condition">${['2023', '2024'].map(y => `<option value="${y}">${y}</option>`).join('')}</select>`;
-
-            }
-            // document.getElementById('조건').innerHTML = `<div id="조건">` + str + `</div>`;
-        }*/
     </script>
 </th:block>
 </html>

@@ -31,7 +31,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 	// 기간별 발전량 조회
 	
 	// 시간별 조회
-	@Query(value = "SELECT t.standdt AS period, t.powerid, t.powernm, " +
+	@Query(value = "SELECT t.standdt AS period, t.powernm, " +
 			"t.mevalue01 AS hour01, t.mevalue02 AS hour02, t.mevalue03 AS hour03, t.mevalue04 AS hour04, " +
 			"t.mevalue05 AS hour05, t.mevalue06 AS hour06, t.mevalue07 AS hour07, t.mevalue08 AS hour08, " +
 			"t.mevalue09 AS hour09, t.mevalue10 AS hour10, t.mevalue11 AS hour11, t.mevalue12 AS hour12, " +
@@ -39,10 +39,11 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.mevalue17 AS hour17, t.mevalue18 AS hour18, t.mevalue19 AS hour19, t.mevalue20 AS hour20, " +
 			"t.mevalue21 AS hour21, t.mevalue22 AS hour22, t.mevalue23 AS hour23, t.mevalue24 AS hour24 " +
 			"FROM TB_RP320 t " +
-			"WHERE t.standdt = :date AND (:powerid IS NULL OR t.powerid = :powerid)", nativeQuery = true)
+			"WHERE t.standdt = :date " +
+			"AND (:powerid IS NULL OR :powerid = 'all' OR t.powerid = :powerid)", nativeQuery = true)
 	List<Map<String, Object>> searchHourlyData(@Param("date") String date, @Param("powerid") String powerid);
 	
-
+	
 	// 월별 조회
 	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
 			"TO_CHAR(DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), 'YYYY-MM'), " +
@@ -103,8 +104,6 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"FROM TB_RP320 t " +
 			"ORDER BY TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY') DESC")
 	List<String> findDistinctYears();
-	
-	
 	
 	
 	
