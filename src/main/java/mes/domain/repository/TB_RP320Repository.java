@@ -40,7 +40,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.mevalue21 AS hour21, t.mevalue22 AS hour22, t.mevalue23 AS hour23, t.mevalue24 AS hour24 " +
 			"FROM TB_RP320 t " +
 			"WHERE t.standdt = :date " +
-			"AND (:powerid IS NULL OR :powerid = 'all' OR t.powerid = :powerid)", nativeQuery = true)
+			"AND (:powerid IS NULL OR :powerid = 'all' OR t.powernm = :powerid)", nativeQuery = true)
 	List<Map<String, Object>> searchHourlyData(@Param("date") String date, @Param("powerid") String powerid);
 	
 	
@@ -50,7 +50,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powerid = :powerid) " +
+			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
 			"GROUP BY DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
 	List<TB_RP320Dto> searchMonthlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
 	
@@ -66,7 +66,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powerid = :powerid) " +
+			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
 			"GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
 	List<TB_RP320Dto> searchQuarterlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
 	
@@ -81,7 +81,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powerid = :powerid) " +
+			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
 			"GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), " +
 			"CASE WHEN EXTRACT(MONTH FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) <= 6 THEN '상반기' ELSE '하반기' END, " +
 			"t.powerid, t.powernm")
@@ -94,7 +94,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powerid = :powerid) " +
+			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
 			"GROUP BY TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY'), t.powerid, t.powernm")
 	List<TB_RP320Dto> searchYearlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
 	

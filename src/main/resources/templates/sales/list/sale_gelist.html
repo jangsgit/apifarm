@@ -448,55 +448,13 @@
             });
         }
 
-        // 차트 데이터 설정 및 업데이트
-        /*function updateChart(chartId, data) {
-            // 데이터 시리즈 구성
-            const powerNames = [...new Set(data.map(item => item.powernm))];
-            let seriesStr = '';
-
-            powerNames.forEach(powerName => {
-                seriesStr +=
-                    `<Column3DSeries labelPosition="outside" yField="${powerName}" displayName="${powerName}"/>`;
-            });
-
-            // 데이터 시리즈 설정 및 레이아웃 적용
-            rMateChartH5.call(chartId, "setLayout", layoutStr);
-            /!*!// 데이터 시리즈 설정
-            rMateChartH5.call(chartId, "setLayout",
-                '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-                +'<Options>'
-                +'<Caption text="발전량 차트" fontSize="20"/>'
-                +'<Legend/>'
-                +'</Options>'
-                +'<Column2DChart showDataTips="true">'
-                +'<horizontalAxis>'
-                +'<CategoryAxis categoryField="period"/>'
-                +'</horizontalAxis>'
-                +'<verticalAxis>'
-                +'<LinearAxis/>'
-                +'</verticalAxis>'
-                +'<series>'
-                + seriesStr
-                +'</series>'
-                +'</Column2DChart>'
-                +'</rMateChart>');*!/
-
-            // 데이터 업데이트
-            const chartData = data.map(item => {
-                const obj = { period: item.period };
-                obj[item.powernm] = item.total;
-                return obj;
-            });
-
-            rMateChartH5.call(chartId, "setData", chartData);
-        }*/
-
-
-
         // 검색
         function searchData() {
             const periodType = document.getElementById("periodType").value;
             let startDate, endDate, startHour, endHour;
+            const generator = document.getElementById("genename").value; // 발전기명 선택
+
+            // console.log("Selected powerid:", document.getElementById("genename").value);
 
             if (periodType === "hourly") { // 시간별 조회가 선택된 경우
                 startDate = document.getElementById("startDate").value;
@@ -504,8 +462,7 @@
                 endHour = document.getElementById("endHour").value;
                 endDate = startDate;
 
-                const generator = document.getElementById("genename").value;
-                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&powerid=${generator}&startHour=${startHour}&endHour=${endHour}`;
+                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}&startHour=${startHour}&endHour=${endHour}`;
 
                 fetch(query)
                     .then(response => response.json())
@@ -549,16 +506,15 @@
                 endDate = document.getElementById("endDate").value;
             }
 
-            const generator = document.getElementById("genename").value;
             let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
 
             fetch(query)
                 .then(response => response.json())
                 .then(data => {
                     if (data.length === 0) {
-                        Alert.alert('', '데이터가 존재하지 않습니다.');
+                        alert('데이터가 존재하지 않습니다.');
                     } else {
-                        updateGrid(theGrid, data); // 가져온 데이터로 그리드를 업데이트
+                        updateGrid(theGrid, data);
                     }
                 })
                 .catch(error => console.error('Error fetching search data:', error));
