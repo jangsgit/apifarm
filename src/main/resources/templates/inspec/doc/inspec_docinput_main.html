@@ -49,6 +49,7 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <input type="hidden" id="checkseq" name="checkseq"/>
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
@@ -473,7 +474,11 @@
             // 초기화된 파일 개수 업데이트
             updateFileCount();
             resetFileInput($('.fileInput'));
-            $('#text-count1').text('0/100'); // 글자 수 0으로 초기화
+            $('.text-count').text('0/100'); // 글자 수 0으로 초기화
+            // 특정 필드에 대한 btn-clear 숨김 처리
+            $('#doctitle').each(function() {
+                $(this).siblings('.btn-clear').hide();
+            });
         }
 
         // 탭 수정/등록으로 업데이트

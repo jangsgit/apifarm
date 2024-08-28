@@ -182,6 +182,7 @@ public class ElecSafeController {
         TBRP750.setDocdv(params.get("docdv"));
         TBRP750.setCheckarea(params.get("checkarea"));
         TBRP750.setBfconsres(params.get("bfconsres"));
+        TBRP750.setCheckusr(params.get("checkusr"));
         TBRP750.setEndresult(Integer.parseInt(params.get("endresult")));
         TBRP750.setIndatem(now);
         TBRP750.setInusernm(user.getFirst_name());

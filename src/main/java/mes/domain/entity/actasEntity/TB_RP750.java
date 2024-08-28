@@ -35,7 +35,7 @@ public class TB_RP750 {
     String checktitle;  // 제목
 
     @Column(name="\"checkusr\"")
-    String checkusr;   // 점검자
+    String checkusr;   // 전기안전관리자
 
     @Column(name="\"checkarea\"")
     String checkarea;   // 점검장소

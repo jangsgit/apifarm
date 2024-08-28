@@ -18,7 +18,7 @@ import java.util.Date;
 public class TB_RP725 {
 
     @EmbeddedId
-    private TB_RP725_PK pk;
+    private TB_RP725_PK id;
 
     @Column(name="\"spworknm\"")
     String spworknm;    // 관할지역명
@@ -29,11 +29,29 @@ public class TB_RP725 {
     @Column(name="\"spplannm\"")
     String spplannm;    // 발전소명
 
-    @Column(name="\"checkobj\"")
-    String checkobj;  // 점검대상
+    @Column(name="\"filepath\"")
+    String filepath;  // 파일경로
 
-    @Column(name="\"checkitem\"")
-    String checkitem;   // 점검항목
+    @Column(name="\"filesvnm\"")
+    String filesvnm;   // 저장파일
+
+    @Column(name="\"fileextns\"")
+    String fileextns;   // 파일확장자
+
+    @Column(name="\"fileurl\"")
+    String fileurl;   // 파일url주소
+
+    @Column(name="\"fileornm\"")
+    String fileornm;    // 원본파일명
+
+    @Column(name="\"filesize\"")
+    float filesize;   // 파일크기
+
+    @Column(name="\"filerem\"")
+    String filerem;   // 파일내용
+
+    @Column(name="\"repyn\"")
+    String repyn;   // 대표파일여부
 
     @Column(name="\"indatem\"")
     Date indatem;    // 입력일시

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,5 +22,8 @@ public interface TB_RP720Repository extends JpaRepository<TB_RP720, TB_RP720_PK>
                                     @Param("checkdt") String checkdt);
 
     Optional<TB_RP720> findById(TB_RP720_PK pk);
+
+    @Query("SELECT DISTINCT t.chkaddres FROM TB_RP720 t WHERE LOWER(t.chkaddres) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findCheckareasByQuery(@Param("query") String query);
 
 }

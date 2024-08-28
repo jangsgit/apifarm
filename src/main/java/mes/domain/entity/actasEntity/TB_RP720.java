@@ -18,7 +18,7 @@ import java.util.Date;
 public class TB_RP720 {
 
     @EmbeddedId
-    private TB_RP720_PK pk;
+    private TB_RP720_PK id;
 
     @Column(name="\"spworknm\"")
     String spworknm;    // 관할지역명
@@ -33,37 +33,13 @@ public class TB_RP720 {
     String checknm;  // 점검명
 
     @Column(name="\"checkusr\"")
-    String checkusr;   // 점검자
-
-    @Column(name="\"checkresult\"")
-    String checkresult;   // 점검결과
+    Integer checkusr;   // 점검자
 
     @Column(name="\"checkrem\"")
     String checkrem;   // 점검의견
 
-    @Column(name="\"checkarea\"")
-    String checkarea;   // 점검의견
-
-    @Column(name="\"filepath\"")
-    String filepath;    // 파일경로
-
-    @Column(name="\"filesvnm\"")
-    String filesvnm;    // 저장파일
-
-    @Column(name="\"fileextns\"")
-    String fileextns;    // 파일확장자
-
-    @Column(name="\"fileurl\"")
-    String fileurl;    // 파일url주소
-
-    @Column(name="\"fileornm\"")
-    String fileornm;    // 원본파일명
-
-    @Column(name="\"filesize\"")
-    Float filesize;    // 파일크기
-
-    @Column(name="\"filerem\"")
-    String filerem;    // 파일내용
+    @Column(name="\"chkaddres\"")
+    String chkaddres;   // 점검장소
 
     @Column(name="\"indatem\"")
     Date indatem;    // 입력일시
