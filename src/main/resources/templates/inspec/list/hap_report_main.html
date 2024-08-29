@@ -852,7 +852,7 @@
 
                         if (data2.inspectorlist && Array.isArray(data2.inspectorlist)) {
                             data2.inspectorlist.forEach((inspector, index) => {
-                                console.log('inspector', inspector);
+
                                 let wrapperClass = inspector.chkflag === "0" ? 'checkusr1' : 'checkusr2';
                                 let isFirst = false;
 
@@ -1083,6 +1083,14 @@
 
             for (let i = 0; i < requiredFields.length; i++) {
                 let field = requiredFields[i];
+                let $element = $(field.id);
+                // 필드가 존재하는지 확인
+                if ($element.length === 0) {
+                    console.error(`Element with ID ${field.id} not found.`);
+                    Alert.alert('', `필드 ${field.id}가 존재하지 않습니다.`);
+                    return;
+                }
+
                 if ($(field.id).val().trim() === '') {
                     Alert.alert('', field.label);
                     return;
