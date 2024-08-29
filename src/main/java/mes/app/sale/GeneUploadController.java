@@ -255,14 +255,8 @@ public class GeneUploadController {
 				int end = endHour != null ? Integer.parseInt(endHour) : 24;
 				results = getHourlyData(startdt, powerid, start, end);
 				break;
-			case "monthly":
+			case "monthly", "quarterly", "halfyearly":
 				results = TB_RP320Repository.searchMonthlyData(startdt, enddt, powerid);
-				break;
-			case "quarterly":
-				results = TB_RP320Repository.searchQuarterlyData(startdt, enddt, powerid);
-				break;
-			case "halfyearly":
-				results = TB_RP320Repository.searchHalfYearlyData(startdt, enddt, powerid);
 				break;
 			case "yearly":
 				results = TB_RP320Repository.searchYearlyData(startdt, enddt, powerid);

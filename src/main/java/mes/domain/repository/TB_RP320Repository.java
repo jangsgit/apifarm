@@ -44,7 +44,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 	List<Map<String, Object>> searchHourlyData(@Param("date") String date, @Param("powerid") String powerid);
 	
 	
-	// 월별 조회
+	// 월별 조회, 분기별 조회, 반기별 조회
 	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
 			"TO_CHAR(DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), 'YYYY-MM'), " +
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
@@ -55,48 +55,28 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 	List<TB_RP320Dto> searchMonthlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
 	
 	
+	
 	// 분기별 조회
-	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
-			"CASE " +
-			"   WHEN EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) = 1 THEN '1분기' " +
-			"   WHEN EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) = 2 THEN '2분기' " +
-			"   WHEN EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) = 3 THEN '3분기' " +
-			"   WHEN EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) = 4 THEN '4분기' " +
-			"END, " +
+	/*@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
+			"TO_CHAR(DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), 'YYYY-MM'), " +
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
 			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
-			"GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), EXTRACT(QUARTER FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
-	List<TB_RP320Dto> searchQuarterlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
-	
-	
-	
-	// 반기별 조회
-	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
-			"CASE " +
-			"   WHEN EXTRACT(MONTH FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) <= 6 THEN '상반기' " +
-			"   ELSE '하반기' " +
-			"END, " +
-			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
-			"FROM TB_RP320 t " +
-			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
-			"GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYY-MM-DD')), " +
-			"CASE WHEN EXTRACT(MONTH FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) <= 6 THEN '상반기' ELSE '하반기' END, " +
-			"t.powerid, t.powernm")
-	List<TB_RP320Dto> searchHalfYearlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
+			"GROUP BY DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
+	List<TB_RP320Dto> searchQuarterlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);*/
 	
 	
 	// 연도별 조회
 	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
-			"TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY') AS period, " +
+			"TO_CHAR(DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), 'YYYY-MM'), " +
 			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
 			"FROM TB_RP320 t " +
 			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
 			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
-			"GROUP BY TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY'), t.powerid, t.powernm")
+			"GROUP BY DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
 	List<TB_RP320Dto> searchYearlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
+	
 	
 	
 	// 연도 목록 가져오기

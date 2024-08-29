@@ -328,24 +328,48 @@
             document.getElementById(id).setSlideDataSet(dataSet);
         }
 
+        // 차트 디자인 가이드 색상 코드
+        const chartColors = [
+            "#62b2fd",
+            "#01dbab",
+            "#ffa336",
+            "#f99bab",
+            "#55667f",
+            "#82e8e8",
+            "#909bff",
+            "#f36f40"
+        ];
+
         // 차트마다 형식이 다르기 때문에 다른 레이아웃 함수를 만들어야 합니다.
         // 다른 유형의 차트 이용시, layout 함수 추가해서 사용하세요.
 
         // Cartesian 차트 레이아웃 정의
         function getCartesianLayout(type, title, dataFields, itemRenderers = []) {
             var layout = "<rMateChart borderStyle='none'>"
-                + "<Options><Caption text='" + title + "' fontFamily='Malgun Gothic'/>" // 차트 제목을 입력하세요
-                + "<SubCaption text=\"\" textAlign=\"center\" paddingBottom=\"20\"/>" // 차트 부제목을 입력하세요
-                + "<Legend defaultMouseOverAction=\"true\" useVisibleCheck=\"true\"/>" // 범례
+                + "<Options><Caption text='" + title + "' fontFamily='Malgun Gothic'/>" // 차트 제목
+                + "<SubCaption text='' textAlign='center' paddingBottom='20'/>" // 차트 부제목
+                + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/></Options>"
                 + "<" + type + "Chart showDataTips='true'>"
                 + "<series>";
 
             for (var i = 0; i < dataFields.length; ++i) {
                 var itemRenderer = itemRenderers[i] ? " itemRenderer='" + itemRenderers[i] + "'" : "";
-                layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "'" + itemRenderer + ">"
-                    + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
-                    + "</" + type + "Series>";
+                var color = chartColors[i % chartColors.length]; // 색상을 순서대로 할당
+
+                if (type === "Line2D") {
+                    layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+                        + "<showDataEffect><SeriesInterpolate duration='700'/></showDataEffect>"
+                        + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
+                        + "</" + type + "Series>";
+                } else {
+                    layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+                        + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
+                        + "<fill>"
+                        + "<SolidColor color='" + color + "'/>" // 색상 적용
+                        + "</fill>"
+                        + "</" + type + "Series>";
+                }
             }
 
             layout += "</series>"
@@ -360,6 +384,7 @@
 
             return layout;
         }
+
 
         // Radar 차트 레이아웃 정의
         function getRadarLayout(dataFields) {
@@ -387,10 +412,13 @@
                 + "<series>";
 
             for (var i = 0; i < dataFields.length; ++i) {
+                var color = chartColors[i % chartColors.length]; // 색상 순서대로 적용
+
                 radarLayout += "<RadarSeries field='" + dataFields[i] + "' displayName='" + dataFields[i] + "' fillLineArea='false'>"
                     + "<showDataEffect>"
                     + "<SeriesInterpolate duration='700'/>"
                     + "</showDataEffect>"
+                    + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
                     + "</RadarSeries>";
             }
 
@@ -400,6 +428,8 @@
 
             return radarLayout;
         }
+
+
 
         // 그리드 데이터를 차트에 맞게 변환
         function transformDataForChart(gridData) {
@@ -539,141 +569,90 @@
 
             // console.log("Selected powerid:", document.getElementById("genename").value);
 
-            if (periodType === "hourly") { // 시간별 조회가 선택된 경우
+            if (periodType === "hourly") {
                 startDate = document.getElementById("startDate").value;
                 startHour = document.getElementById("startHour").value;
                 endHour = document.getElementById("endHour").value;
-                endDate = startDate;
+                endDate = startDate; // 시간별 조회에서는 시작 날짜와 종료 날짜가 동일
 
-                let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}&startHour=${startHour}&endHour=${endHour}`;
-
-                fetch(query)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length === 0) {
-                            alert('데이터가 존재하지 않습니다.');
-                        } else {
-                            updateGrid(theGrid, data, periodType); // periodType 전달
-                        }
-                    })
-                    .catch(error => console.error('Error fetching search data:', error));
-
-
-            } else if (periodType === "quarterly" || periodType === "halfyearly" || periodType === "yearly") {
-                const periodValue = periodType === "quarterly" ? document.getElementById("startQuarter").value :
-                    periodType === "halfyearly" ? document.getElementById("startHalf").value :
-                        document.getElementById("startYear").value;
-                const generator = document.getElementById("genename").value; // 여기에서 generator 변수를 선언하고 초기화
-
-                if (periodValue === "ALLQ" || periodValue === "ALLH") {
-                    getFullYearRangeFromData().then(([startDate, endDate]) => {
-                        let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
-                        fetch(query)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.length === 0) {
-                                    Alert.alert('', '데이터가 존재하지 않습니다.');
-                                } else {
-                                    updateGrid(theGrid, data); // 가져온 데이터로 그리드를 업데이트
-                                }
-                            })
-                            .catch(error => console.error('Error fetching search data:', error));
-                    });
-                    return;
-
-                } else {
-                    [startDate, endDate] = convertPeriodToDateRange(periodType, periodValue);
-                }
-            } else if (document.getElementById("startDate")) {
+            } else if (periodType === "monthly") {
                 startDate = document.getElementById("startDate").value;
                 endDate = document.getElementById("endDate").value;
+
+            } else if (periodType === "quarterly") {
+                const startQuarter = document.getElementById("startQuarter").value;
+                const endQuarter = document.getElementById("endQuarter").value;
+                const selectedYear = document.getElementById("yearSelectTab1").value;
+
+                // 분기 값을 연도와 함께 날짜 범위로 변환
+                [startDate, endDate] = convertQuarterToDateRange(startQuarter, endQuarter, selectedYear);
+
+            } else if (periodType === "halfyearly"){
+                const startHalf = document.getElementById("startHalf").value;
+                const endHalf = document.getElementById("endHalf").value;
+                const selectedYear = document.getElementById("yearSelectTab1").value;
+
+                // 반기 값을 연도와 함께 날짜 범위로 변환
+                [startDate, endDate] = convertHalfYearToDateRange(startHalf, endHalf, selectedYear);
+            } else  if (periodType === "yearly") {
+                const startYear = document.getElementById("startYear").value;
+                const endYear = document.getElementById("endYear").value;
+
+                startDate = `${startYear}-01-01`; // 시작 연도의 1월 1일
+                endDate = `${endYear}-12-31`; // 종료 연도의 12월 31일
             }
 
             let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+
+            if (periodType === "hourly") {
+                query += `&startHour=${startHour}&endHour=${endHour}`;
+            }
 
             fetch(query)
                 .then(response => response.json())
                 .then(data => {
                     if (data.length === 0) {
-                        alert('데이터가 존재하지 않습니다.');
+                        Alert.alert("", "데이터가 존재하지 않습니다.");
                     } else {
-                        updateGrid(theGrid, data);
+                        updateGrid(theGrid, data, periodType); // periodType 전달
                     }
                 })
                 .catch(error => console.error('Error fetching search data:', error));
         }
 
-        /*function filterDataByHourRange(data, startHour, endHour) {
-            return data.map(row => {
-                const filteredRow = { period: row.period, powernm: row.powernm };
-                for (let i = parseInt(startHour); i <= parseInt(endHour); i++) {
-                    const hourKey = `hour${i.toString().padStart(2, '0')}`;
-                    filteredRow[hourKey] = row[hourKey];
-                }
-                return filteredRow;
-            });
-        }*/
 
-        function getFullYearRangeFromData() {
-            return fetch('/api/gene/upload/dateRange')
-                .then(response => response.json())
-                .then(dateRange => {
-                    const startDate = dateRange.startdt;  // 데이터베이스에서 가져온 최소 날짜
-                    const endDate = dateRange.enddt;      // 데이터베이스에서 가져온 최대 날짜
-                    return [startDate, endDate];
-                });
+        // 분기별 기간을 날짜 범위로 변환
+        function convertQuarterToDateRange(startQuarter, endQuarter, year) {
+            const quarterToMonth = {
+                Q1: ['01', '03'],
+                Q2: ['04', '06'],
+                Q3: ['07', '09'],
+                Q4: ['10', '12']
+            };
+
+            const startMonth = quarterToMonth[startQuarter][0];
+            const endMonth = quarterToMonth[endQuarter][1];
+
+            const startDate = `${year}-${startMonth}-01`;
+            const endDate = new Date(year, parseInt(endMonth), 0).toISOString().split('T')[0]; // 해당 월의 마지막 날짜 계산
+
+            return [startDate, endDate];
         }
 
+        // 반기별 기간을 날짜 범위로 변환
+        function convertHalfYearToDateRange(startHalf, endHalf, year) {
+            const halfToMonth = {
+                H1: ['01', '06'],  // 상반기: 1월 ~ 6월
+                H2: ['07', '12']   // 하반기: 7월 ~ 12월
+            };
 
-        function convertPeriodToDateRange(periodType, periodValue, selectedYear) {
-            // const year = new Date().getFullYear(); // 기본적으로 현재 연도 사용, 필요시 다른 연도를 사용 가능
-            const year = selectedYear; // 선택된 연도 사용
-            let startMonth, endMonth;
+            const startMonth = halfToMonth[startHalf][0];
+            const endMonth = halfToMonth[endHalf][1];
 
-            switch (periodType) {
-                case "quarterly":
-                    switch (periodValue) {
-                        case "Q1":
-                            startMonth = "01";
-                            endMonth = "03";
-                            break;
-                        case "Q2":
-                            startMonth = "04";
-                            endMonth = "06";
-                            break;
-                        case "Q3":
-                            startMonth = "07";
-                            endMonth = "09";
-                            break;
-                        case "Q4":
-                            startMonth = "10";
-                            endMonth = "12";
-                            break;
-                    }
-                    break;
-                case "halfyearly":
-                    switch (periodValue) {
-                        case "H1":
-                            startMonth = "01";
-                            endMonth = "06";
-                            break;
-                        case "H2":
-                            startMonth = "07";
-                            endMonth = "12";
-                            break;
-                    }
-                    break;
-                case "yearly":
-                    startMonth = "01";
-                    endMonth = "12";
-                    break;
-                default:
-                    throw new Error(`Unknown period type: ${periodType}`);
-            }
+            const startDate = `${year}-${startMonth}-01`;
+            const endDate = new Date(year, parseInt(endMonth), 0).toISOString().split('T')[0]; // 해당 월의 마지막 날짜 계산
 
-            const startDate = `${year}-${startMonth}-01`; // 기간의 시작 날짜
-            const endDate = new Date(year, parseInt(endMonth), 0); // 해당 월의 마지막 날짜 계산
-            return [startDate, `${year}-${endMonth}-${endDate.getDate()}`]; // 시작 날짜와 끝 날짜 반환
+            return [startDate, endDate];
         }
 
 
@@ -794,7 +773,7 @@
             // 기존 내용을 초기화
             startDateContainer.innerHTML = "";
             endDateContainer.innerHTML = "";
-
+            
             if (periodType === "hourly") { // 시간별 조회가 선택된 경우
                 const currentDate = new Date();
                 const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
@@ -819,25 +798,29 @@
 
                 startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
                 endDateContainer.innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
-            }
-            else if (periodType === "quarterly" || periodType === "halfyearly" || periodType === "yearly") {
-                const options = periodType === "quarterly" ? `
+            } else if (periodType === "quarterly") { // 분기별 조회가 선택된 경우
+                const options = `
             <option value="Q1">1분기</option>
             <option value="Q2">2분기</option>
             <option value="Q3">3분기</option>
             <option value="Q4">4분기</option>
-        ` : periodType === "halfyearly" ? `
+        `;
+                startDateContainer.innerHTML = `<select id="startQuarter">${options}</select>`;
+                endDateContainer.innerHTML = `<select id="endQuarter">${options}</select>`;
+            } else if(periodType === "halfyearly") { // 반기별 조회가 선택된 경우
+                const options = `
             <option value="H1">상반기</option>
             <option value="H2">하반기</option>
-        ` : '';
+        `;
+                startDateContainer.innerHTML = `<select id="startHalf">${options}</select>`;
+                endDateContainer.innerHTML = `<select id="endHalf">${options}</select>`;
+            } else if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                // 조회연도에서 연도 목록을 가져와서 사용
+                const yearSelectTab1 = document.getElementById("yearSelectTab1");
+                const yearOptions = yearSelectTab1.innerHTML; // 이미 로드된 연도 옵션을 그대로 사용
 
-                startDateContainer.innerHTML = `<select id="startSelect">${options}</select>`;
-                endDateContainer.innerHTML = `<select id="endSelect">${options}</select>`;
-
-                if (periodType === "yearly") {
-                    // 연도별일 경우 연도를 동적으로 로드하여 추가
-                    loadYearlyData();
-                }
+                startDateContainer.innerHTML = `<select id="startYear">${yearOptions}</select>`;
+                endDateContainer.innerHTML = `<select id="endYear">${yearOptions}</select>`;
             }
         }
 
@@ -917,7 +900,7 @@
             return options;
         }*/
         function generateHourOptions(isEnd = false) {
-            return Array.from({ length: 24 }, (_, i) => {
+            return Array.from({length: 24}, (_, i) => {
                 const hour = (i + 1).toString().padStart(2, '0');
                 return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
             }).join('');
