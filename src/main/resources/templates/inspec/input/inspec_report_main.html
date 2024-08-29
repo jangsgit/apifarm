@@ -508,7 +508,13 @@
 
                         },
                         dateClick: function(info) {
-                            // 날짜 클릭 시 해당 날짜를 alert 창으로 표시
+
+                            document.querySelectorAll('.fc-daygrid-day').forEach(function(cell) {
+                                cell.classList.remove('selected-date');
+                            });
+
+                            // 클릭한 날짜 셀에 'selected-date' 클래스 추가
+                            info.dayEl.classList.add('selected-date');
                             let date = info.dateStr;
 
                             $('#InspectionDetails').text(date.substring(8,10) + '일 점검현황');

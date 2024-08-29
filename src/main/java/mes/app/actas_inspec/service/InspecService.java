@@ -242,7 +242,9 @@ public class InspecService {
         return this.sqlRunner.getRows(sql, dicParam);
     }
 
-    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate, String spuncode, String searchflag) {
+    public List<Map<String, Object>> getInspecList(String searchusr, String searchfrdate, String searchtodate, String spuncode, String searchflag,
+                                                   String spworkcd, String spcompcd, String spplancd
+    ) {
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
@@ -254,7 +256,7 @@ public class InspecService {
 
             sql = """
                 select
-                supplier, checkdt, checkusr, checkarea, 'Y' as downloads, 'Y' upload, spuncode, checkno 
+                spworkcd, spworknm, spcompcd, spcompnm, spplannm, spplancd, supplier, checkdt, checkusr, checkarea, 'Y' as downloads, 'Y' upload, spuncode, checkno 
                 from tb_rp710
                 where 1 = 1
                and "spuncode" like :spuncode
@@ -267,11 +269,15 @@ public class InspecService {
             dicParam.addValue("searchfrdate", searchfrdate.replaceAll("-", ""));
             dicParam.addValue("searchtodate", searchtodate.replaceAll("-", ""));
             dicParam.addValue("searchflag", "%" +searchflag+ "%");
+            dicParam.addValue("spplancd",  spplancd);
+            dicParam.addValue("spworkcd", spworkcd);
+            dicParam.addValue("spcompcd", spcompcd);
+
 
             sql = """
                      select
                       sb.*,
-                      TO_CHAR(CAST("checkstdt" AS TIMESTAMP), 'YYYY-MM-DD HH24:MI') || ' ~ ' || TO_CHAR(CAST("checkendt" AS TIMESTAMP), 'YYYY-MM-DD HH24:MI') AS checktmdt,
+                      checkstdt || ' ~ ' || checkendt as checktmdt,
                       'Y' as downloads,
                       'Y' as upload,
                       coalesce(
@@ -283,9 +289,18 @@ public class InspecService {
                           AND "checkusr" LIKE :paramusr
                           AND "checkdt" BETWEEN :searchfrdate AND :searchtodate
                           AND "flag" LIKE :searchflag
-                      ORDER BY
-                          sb.indatem DESC;
                      """;
+            if(spworkcd != null){
+                sql += " AND \"spworkcd\" = :spworkcd";
+            }
+            if(spcompcd != null){
+                sql += " AND \"spcompcd\" = :spcompcd";
+            }
+            if(spplancd != null){
+                sql += " AND \"spplancd\" = :spplancd";
+            }
+            sql += " ORDER BY sb.indatem DESC;";
+
         }
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
         return items;

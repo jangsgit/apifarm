@@ -374,6 +374,40 @@ function fetchAndPopulateData(userid, dataListId, active) {
     });
 }
 
+
+
+//서버에서 데이터 가져오기  (type이 rmate인것이랑 wijmo랑 succ함수 다름.)
+function DataLoad(url, dataSet, type){
+
+    let data2;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: dataSet,
+        async: false,
+        success: function(data){
+
+            if(type === 'wijmo'){
+                let DataLength = 10 - data.data.length;
+
+                if(data.data.length < 10){
+
+                    for(let i=0; i < DataLength; i++){
+                        data.data.push('empty');
+                    }
+                }
+                data2 = data.data;
+            }
+            else if(type === 'rmate'){
+                data2 = data.data;
+            }
+
+        }
+    })
+    return data2;
+}
+
 $(document).ready(function (e) {
     //점검결과 클릭시 텍스트 순환
     $('.checkbox-cell').click(function() {

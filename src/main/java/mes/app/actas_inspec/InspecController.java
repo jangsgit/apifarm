@@ -90,9 +90,11 @@ public class InspecController {
     public AjaxResult getList(@RequestParam(value = "searchusr", required = false) String searchusr,
                               @RequestParam(value = "searchfrdate", required = false) String searchfrdate,
                               @RequestParam(value = "searchtodate", required = false) String searchtodate,
-                              @RequestParam(value = "searchflag", required = false) String flag
-
-    ){
+                              @RequestParam(value = "searchflag", required = false) String flag,
+                              @RequestParam(value = "spworkcd") String spworkcd,
+                              @RequestParam(value = "spcompcd") String spcompcd,
+                              @RequestParam(value = "spplancd") String spplancd
+                              ){
         List<Map<String, Object>> items = new ArrayList<>();
 
         searchusr = Optional.ofNullable(searchusr).orElse("");
@@ -109,7 +111,7 @@ public class InspecController {
         }
 
 
-        items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate, "", flag);
+        items = this.inspecService.getInspecList(searchusr, searchfrdate, searchtodate, "", flag, spworkcd, spcompcd, spplancd);
 
 
 
@@ -132,6 +134,12 @@ public class InspecController {
             @RequestParam(value = "checkusr", required = false) String checkusr,
             @RequestParam(value = "checkarea", required = false) String checkarea,
             @RequestParam(value = "randomuuid", required = false) String randomuuid,
+            @RequestParam(value = "spworkcd", required = false) String spworkcd,
+            @RequestParam(value = "spworknm", required = false) String spworknm,
+            @RequestParam(value = "spcompcd", required = false) String spcompcd,
+            @RequestParam(value = "spcompnm", required = false) String spcompnm,
+            @RequestParam(value = "spplannm", required = false) String spplannm,
+            @RequestParam(value = "spplancd", required = false) String spplancd,
             @RequestParam(value = "doc-list", required = false) List<String> doc_list,
             @RequestParam(value = "filelist", required = false) MultipartFile[] files,
             @RequestPart(value = "deletedFiles", required = false) MultipartFile[] deletedFiles
@@ -146,7 +154,7 @@ public class InspecController {
 
         String checkdtconvertvalue = checkdt.replaceAll("-","");
 
-        List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", randomuuid, "");
+        List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", randomuuid, "", null, null, null);
 
         String formattedValue;
 
@@ -154,6 +162,12 @@ public class InspecController {
         //수정
         if(!rp710items.isEmpty()){
 
+            tbRp710dto.setSpworkcd(rp710items.get(0).get("spworkcd").toString());
+            tbRp710dto.setSpworknm(rp710items.get(0).get("spworknm").toString());
+            tbRp710dto.setSpcompcd(rp710items.get(0).get("spcompcd").toString());
+            tbRp710dto.setSpcompnm(rp710items.get(0).get("spcompnm").toString());
+            tbRp710dto.setSpplancd(rp710items.get(0).get("spplancd").toString());
+            tbRp710dto.setSpplannm(rp710items.get(0).get("spplannm").toString());
             tbRp710dto.setSpuncode(rp710items.get(0).get("spuncode").toString());
             tbRp710dto.setCheckdt(rp710items.get(0).get("checkdt").toString());
             tbRp710dto.setCheckno(rp710items.get(0).get("checkno").toString());
@@ -174,18 +188,19 @@ public class InspecController {
                 formattedValue = "01";
             }
 
+            tbRp710dto.setSpworkcd(spworkcd);
+            tbRp710dto.setSpworknm(spworknm);
+            tbRp710dto.setSpcompcd(spcompcd);
+            tbRp710dto.setSpcompnm(spcompnm);
+            tbRp710dto.setSpplancd(spplancd);
+            tbRp710dto.setSpplannm(spplannm);
             tbRp710dto.setCheckno(formattedValue);
             tbRp710dto.setSpuncode(randomuuid);
             tbRp710dto.setCheckdt(checkdtconvertvalue);
 
         }
 
-        tbRp710dto.setSpworkcd("001");
-        tbRp710dto.setSpworknm("대구");
-        tbRp710dto.setSpcompcd("001");
-        tbRp710dto.setSpcompnm("대구성서공단");
-        tbRp710dto.setSpplancd("001");
-        tbRp710dto.setSpplannm("KT대구물류센터 연료전지발전소");
+
         tbRp710dto.setFlag("N");
 
 
@@ -386,7 +401,7 @@ public class InspecController {
             XWPFDocument document = new XWPFDocument(fis);
             List<XWPFTable> tables = document.getTables();
 
-            List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", selectedList.get(i), "");
+            List<Map<String, Object>> rp710items = this.inspecService.getInspecList("", "", "", selectedList.get(i), "", null, null, null);
             List<Map<String, Object>> items = this.inspecService.getInspecDocList(selectedList.get(i));
             List<Map<String, Object>> FileItems = this.inspecService.getFileList(selectedList.get(i));
 

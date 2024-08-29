@@ -25,19 +25,24 @@
         <div class="search-wrap">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -700,8 +705,17 @@
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
+        document.getElementById('spworkcd').addEventListener('change', searchData);
+        document.getElementById('spcompcd').addEventListener('change', searchData);
+        document.getElementById('spplancd').addEventListener('change', searchData);
+
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+
+            initializeSelections();
+
+
             let data2 = [];
 
             let checkdt = $('#checkdtParam').val().trim();
@@ -725,14 +739,15 @@
             }
 
 
-            console.log('발류: ', checkdt);
-
             let searchusr = $('#searchusr').val();
 
             $.ajax({
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
+                    'spplancd' : $('#spplancd').val(),
+                    'spcompcd' : $('#spcompcd').val(),
+                    'spworkcd' : $('#spworkcd').val(),
                     'searchusr' : searchusr,
                     'searchfrdate' : $('#searchfrdate').val(),
                     'searchtodate' : $('#searchtodate').val()
@@ -909,7 +924,10 @@
                 'searchusr' : $('#searchusr').val(),
                 'searchfrdate': $('#searchfrdate').val(),
                 'searchtodate': $('#searchtodate').val(),
-                'searchflag' : $('#flag').val()
+                'searchflag' : $('#flag').val(),
+                'spplancd' : $('#spplancd').val(),
+                'spcompcd' : $('#spcompcd').val(),
+                'spworkcd' : $('#spworkcd').val()
             }
             let data2 = [];
             let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
@@ -1154,6 +1172,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             updateTabLink('spuncode');
+
         });
 
         let fnSuccess = function (res){
@@ -1306,9 +1325,17 @@
                         formData.append('ReformList', $('#inspecreform3').val());
                         formData.append('ReformList', $('#inspecreform4').val());
                         formData.append('ReformList', $('#inspecreform5').val());
+                        formData.append('spworkcd', $('#spworkcd').val());
+                        formData.append('spworknm', $('#spworknm').val());
+                        formData.append('spcompcd', $('#spcompcd').val());
+                        formData.append('spcompnm', $('#spcompnm').val());
+                        formData.append('spplancd', $('#spplancd').val());
+                        formData.append('spplannm', $('#spplannm').val());
 
 
-                        // 삭제된 파일 목록 추가
+
+
+                    // 삭제된 파일 목록 추가
                         deletedFiles.forEach((file, index) => {
                             formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
                         });

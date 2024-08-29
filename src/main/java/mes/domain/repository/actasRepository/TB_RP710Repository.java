@@ -15,7 +15,13 @@ import java.util.Optional;
 public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> {
 
 
-  @Query(value = "SELECT t.checkno FROM TB_RP710 t WHERE t.checkdt = :checkdtconvertvalue ORDER BY t.checkno DESC limit 1", nativeQuery = true)
+    // 연도 목록 가져오기
+    @Query("SELECT DISTINCT TO_CHAR(TO_DATE(t.checkdt, 'YYYYMMDD'), 'YYYY') AS year " +
+            "from TB_RP710 t " +
+            "ORDER BY TO_CHAR(TO_DATE(t.checkdt, 'YYYYMMDD'), 'YYYY') DESC")
+    List<String> findDistinctYears();
+
+    @Query(value = "SELECT t.checkno FROM TB_RP710 t WHERE t.checkdt = :checkdtconvertvalue ORDER BY t.checkno DESC limit 1", nativeQuery = true)
   Optional<String> findMaxChecknoByCheckdt(@Param("checkdtconvertvalue") String checkdtconvertvalue);
 
   void deleteBySpuncode(String spuncode);

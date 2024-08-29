@@ -62,22 +62,39 @@ public class InspecReportService {
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
 
         dicParam.addValue("date", date);
-
+        //순회점검
         String sql = """
                    SELECT checkdt, 'wm_inspec_month_list' AS inspectypeCode, '순회점검' AS inspectype, checkarea as inspecarea, checkusr\s
                    FROM tb_rp710
                    where checkdt = :date
                 """;
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
-
+        //전기안전
         String sql2 = """
                     SELECT checkdt, 'wm_elecsafe_input' AS inspectypeCode, '전기안전점검' AS inspectype, checkarea as inspecarea, checkusr
                     FROM tb_rp750
                     where checkdt = :date  
                 """;
         List<Map<String, Object>> items2 = this.sqlRunner.getRows(sql2, dicParam);
+        //합동안전
+        String sql3 = """
+                    SELECT  rp720.checkdt as checkdt, rp720.chkaddres as inspecarea, 'wm_hap_input' AS inspectypeCode, '합동안전점검' AS inspectype, STRING_AGG(rp726.checkusr, ', ') AS checkusr
+                    FROM tb_rp720 rp720
+                    JOIN tb_rp726 rp726
+                    ON rp720.spworkcd = rp726.spworkcd
+                           AND rp720.spplancd = rp726.spplancd
+                           AND rp720.spcompcd = rp726.spcompcd
+                           AND rp720.checkno = rp726.checkno
+                           AND rp720.checkdt = rp726.checkdt
+                    where rp720.checkdt = :date       
+                    GROUP BY rp720.checkdt, rp720.chkaddres       
+                """;
+        List<Map<String, Object>> items3 = this.sqlRunner.getRows(sql3, dicParam);
+
 
         items.addAll(items2);
+        items.addAll(items3);
+
 
         return items;
     }
@@ -100,7 +117,7 @@ public class InspecReportService {
                     FROM tb_rp750
                     where checkdt between :frdate and :todate
                     UNION ALL
-                    SELECT 'wm_hap_list' as  inspectypeCode,
+                    SELECT 'wm_hap_input' as  inspectypeCode,
                     checkdt, '합동안전점검' AS inspectype, chkaddres as inspecarea, '' as checkhour
                     FROM tb_rp720
                     where checkdt between :frdate and :todate
