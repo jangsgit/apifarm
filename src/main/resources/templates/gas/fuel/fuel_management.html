@@ -43,18 +43,26 @@
         </div>
         <div class="tab-wrap" style="margin-bottom: 80px">
             <ul class="tab-links">
+                <!--                <li>-->
+                <!--                    <a href="#tab1" title="실시간가스 공급유량">실시간가스 공급유량</a>-->
+                <!--                </li>-->
+                <!--                <li>-->
+                <!--                    <a href="#tab2" title="누적 발전량" id="runrmate2">누적 발전량</a>-->
+                <!--                </li>-->
+                <!--                <li>-->
+                <!--                    <a href="#tab3" title="누적가스 소모량" id="runrmate">누적가스 소모량</a>-->
+                <!--                </li>-->
+                <!--                <li>-->
+                <!--                    <a href="#tab9" title="도시가스 공급열량 실적" id="runrmate3">도시가스 공급열량 실적</a>-->
+                <!--                </li>-->
+
                 <li>
-                    <a href="#tab1" title="실시간가스 공급유량">실시간가스 공급유량</a>
+                    <a href="#tab1" title="기간별조회">기간별조회</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="누적 발전량" id="runrmate2">누적 발전량</a>
+                    <a href="#tab2" title="기간별대비" id="runrmate2">기간별대비</a>
                 </li>
-                <li>
-                    <a href="#tab3" title="누적가스 소모량" id="runrmate">누적가스 소모량</a>
-                </li>
-                <li>
-                    <a href="#tab9" title="도시가스 공급열량 실적" id="runrmate3">도시가스 공급열량 실적</a>
-                </li>
+
 
             </ul>
             <div class="tab-contents">
@@ -62,6 +70,26 @@
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
+
+                            <dl>
+                                <dt>
+                                    <label>
+                                        구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li>
+                                            <select>
+                                                <option>실시간가스 공급유량</option>
+                                                <option>누적 발전량</option>
+                                                <option>누적가스 소모량</option>
+                                                <option>도시가스 공급열량 실적</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
                             <dl>
                                 <dt>
                                     <label for="text1">
@@ -75,24 +103,31 @@
                                             <label for="searchfrdate" class="hide"></label>
                                         </li>
                                         <li style="cursor: default; list-style-image: none;">
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide"></label>
+                                            <div class="srch-box">
+                                                    <input type="date" id="searchtodate" name="searchtodate">
+                                                    <label for="searchtodate" class="hide"></label>
+
+                                                <div class="input-clear"></div>
+                                                    <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                                       onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                            </div>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
-                            <dl>
-                                <dt>
-                                    <label for="text1">
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
+<!--                            <dl>-->
+<!--                                <dt>-->
+<!--                                    <label for="text1">-->
+<!--                                    </label>-->
+<!--                                </dt>-->
+<!--                                <dd>-->
+<!--                                    <div class="srch-box">-->
+<!--                                        <div class="input-clear"></div>-->
+<!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"-->
+<!--                                           onkeyup="searchData()" style="border-radius: 7px;"></a>-->
+<!--                                    </div>-->
+<!--                                </dd>-->
+<!--                            </dl>-->
                         </div>
 
                     </div> <!--//section-top end -->
@@ -120,7 +155,7 @@
                         <section class="wp48" style="height: 530px">
                             <div class="container-fluid">
                                 <p id="selectedItem"></p>
-                                <div id="theGrid" ></div>
+                                <div id="theGrid"></div>
                             </div>
                         </section>
                     </div>
@@ -129,6 +164,27 @@
                 <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="search-wrap">
+
+                            <dl>
+                                <dt>
+                                    <label>
+                                        구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li>
+                                            <select>
+                                                <option>실시간가스 공급유량</option>
+                                                <option>누적 발전량</option>
+                                                <option>누적가스 소모량</option>
+                                                <option>도시가스 공급열량 실적</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
                             <dl>
                                 <dt>
                                     <label for="text1">
@@ -138,28 +194,35 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li style="cursor: default; list-style-image: none;">
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <input type="date" id="searchfrdate2" name="searchfrdate2">
                                             <label for="searchfrdate" class="hide"></label>
                                         </li>
                                         <li style="cursor: default; list-style-image: none;">
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide"></label>
+                                            <div class="srch-box">
+                                                <input type="date" id="searchtodate2" name="searchtodate2">
+                                                    <label for="searchtodate" class="hide"></label>
+                                                <div class="input-clear"></div>
+                                                    <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                                       onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                            </div>
                                         </li>
+
                                     </ul>
                                 </dd>
                             </dl>
-                            <dl>
-                                <dt>
-                                    <label for="text1">
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
+<!--                            <dl>-->
+<!--                                <dt>-->
+<!--                                    <label for="text1">-->
+<!--                                    </label>-->
+<!--                                </dt>-->
+<!--                                <dd>-->
+<!--                                    <div class="srch-box">-->
+<!--                                        <div class="input-clear"></div>-->
+<!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"-->
+<!--                                           onkeyup="searchData()" style="border-radius: 7px;"></a>-->
+<!--                                    </div>-->
+<!--                                </dd>-->
+<!--                            </dl>-->
                         </div>
 
                         <!--<div class="row">
@@ -186,11 +249,11 @@
                             <section class="wp48" style="height: 530px">
                                 <div class="container-fluid">
                                     <p id="selectedItem"></p>
-                                    <div id="theGrid2" ></div>
+                                    <div id="theGrid2"></div>
                                 </div>
                             </section>
                         </div>
-                        </div>
+                    </div>
                 </section>
                 <!-- Section -->
                 <section class="tab-item" id="tab3">
@@ -223,7 +286,8 @@
                                 <dd>
                                     <div class="srch-box">
                                         <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                           onkeyup="searchData()" style="border-radius: 7px;"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -254,7 +318,7 @@
                             <section class="wp48" style="height: 530px">
                                 <div class="container-fluid">
                                     <p id="selectedItem"></p>
-                                    <div id="theGrid3" ></div>
+                                    <div id="theGrid3"></div>
                                 </div>
                             </section>
                         </div>
@@ -291,7 +355,8 @@
                                 <dd>
                                     <div class="srch-box">
                                         <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()"
+                                           onkeyup="searchData()" style="border-radius: 7px;"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -338,8 +403,8 @@
 </th:block>
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
@@ -349,58 +414,58 @@
         // 스트링 형식으로 레이아웃 정의.
         var layoutStr =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="실시간 유량"/>'
-            +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true" />'
-            +'</Options>'
-            +'<NumberFormatter id="numfmt" useThousandsSeparator="true"/>'
-            +'<Combination2DChart seriesMouseOverAction="series" showDataTips="true" paddingBottom="25">'
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis formatter="{numfmt}"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Area2DSeries yField="phone" displayName="Cell Phone">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Area2DSeries>'
-            +'<Area2DSeries yField="tv" displayName="TV">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Area2DSeries>'
-            +'<Area2DSeries yField="tablet" displayName="Tablet">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Area2DSeries>'
-            +'<Line2DSeries yField="total" displayName="Total">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'</series>'
-            +'</Combination2DChart>'
-            +'</rMateChart>';
+            + '<Options>'
+            + '<Caption text="실시간 유량"/>'
+            + '<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
+            + '<Legend defaultMouseOverAction="true" useVisibleCheck="true" />'
+            + '</Options>'
+            + '<NumberFormatter id="numfmt" useThousandsSeparator="true"/>'
+            + '<Combination2DChart seriesMouseOverAction="series" showDataTips="true" paddingBottom="25">'
+            + '<horizontalAxis>'
+            + '<CategoryAxis categoryField="Month" padding="0.5"/>'
+            + '</horizontalAxis>'
+            + '<verticalAxis>'
+            + '<LinearAxis formatter="{numfmt}"/>'
+            + '</verticalAxis>'
+            + '<series>'
+            + '<Area2DSeries yField="phone" displayName="Cell Phone">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Area2DSeries>'
+            + '<Area2DSeries yField="tv" displayName="TV">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Area2DSeries>'
+            + '<Area2DSeries yField="tablet" displayName="Tablet">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Area2DSeries>'
+            + '<Line2DSeries yField="total" displayName="Total">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '</series>'
+            + '</Combination2DChart>'
+            + '</rMateChart>';
 
         // 차트 데이터
         var chartData =
-            [{"Month":"Jan","phone":510,"tv":320,"tablet":180,"total":1010},
-                {"Month":"Feb","phone":440,"tv":600,"tablet":240,"total":1280},
-                {"Month":"Mar","phone":110,"tv":430,"tablet":180,"total":720},
-                {"Month":"Apr","phone":190,"tv":330,"tablet":260,"total":780},
-                {"Month":"May","phone":140,"tv":500,"tablet":220,"total":860},
-                {"Month":"Jun","phone":200,"tv":580,"tablet":340,"total":1120},
-                {"Month":"Jul","phone":260,"tv":510,"tablet":330,"total":1100},
-                {"Month":"Aug","phone":190,"tv":660,"tablet":500,"total":1350},
-                {"Month":"Sep","phone":250,"tv":580,"tablet":440,"total":1270},
-                {"Month":"Oct","phone":190,"tv":500,"tablet":380,"total":1070},
-                {"Month":"Nov","phone":320,"tv":590,"tablet":440,"total":1350},
-                {"Month":"Dec","phone":400,"tv":680,"tablet":360,"total":1440}];
+            [{"Month": "Jan", "phone": 510, "tv": 320, "tablet": 180, "total": 1010},
+                {"Month": "Feb", "phone": 440, "tv": 600, "tablet": 240, "total": 1280},
+                {"Month": "Mar", "phone": 110, "tv": 430, "tablet": 180, "total": 720},
+                {"Month": "Apr", "phone": 190, "tv": 330, "tablet": 260, "total": 780},
+                {"Month": "May", "phone": 140, "tv": 500, "tablet": 220, "total": 860},
+                {"Month": "Jun", "phone": 200, "tv": 580, "tablet": 340, "total": 1120},
+                {"Month": "Jul", "phone": 260, "tv": 510, "tablet": 330, "total": 1100},
+                {"Month": "Aug", "phone": 190, "tv": 660, "tablet": 500, "total": 1350},
+                {"Month": "Sep", "phone": 250, "tv": 580, "tablet": 440, "total": 1270},
+                {"Month": "Oct", "phone": 190, "tv": 500, "tablet": 380, "total": 1070},
+                {"Month": "Nov", "phone": 320, "tv": 590, "tablet": 440, "total": 1350},
+                {"Month": "Dec", "phone": 400, "tv": 680, "tablet": 360, "total": 1440}];
 
         // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
         //
@@ -411,8 +476,8 @@
         // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
         // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
         rMateChartH5.calls("chart", {
-            "setLayout" : layoutStr,
-            "setData" : chartData
+            "setLayout": layoutStr,
+            "setData": chartData
         });
 
         /**
@@ -444,7 +509,7 @@
          *
          * default : 테마를 적용하기 전 기본 형태를 출력합니다.
          */
-        function rMateChartH5ChangeTheme(theme){
+        function rMateChartH5ChangeTheme(theme) {
             document.getElementById("chart").setTheme(theme);
         }
 
@@ -463,30 +528,30 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '일자', align: 'center', width: '*' },
-            { binding: '', header: '시간', align: 'center', width: '*' },
-            { binding: '', header: 'FC #1', align: 'center', width: '*' },
-            { binding: '', header: 'FC #1', align: 'center', width: '*' },
-            { binding: '', header: 'FC #1', align: 'center', width: '*' },
-            { binding: '', header: '계', align: 'center', width: '*' },
+            {binding: '', header: '일자', align: 'center', width: '*'},
+            {binding: '', header: '시간', align: 'center', width: '*'},
+            {binding: '', header: 'FC #1', align: 'center', width: '*'},
+            {binding: '', header: 'FC #1', align: 'center', width: '*'},
+            {binding: '', header: 'FC #1', align: 'center', width: '*'},
+            {binding: '', header: '계', align: 'center', width: '*'},
         ];
 
         var columns2 = [
-            { binding: '', header: '일자', align: 'center', width: '*' },
-            { binding: '', header: '발전량', align: 'center', width: '*' },
+            {binding: '', header: '일자', align: 'center', width: '*'},
+            {binding: '', header: '발전량', align: 'center', width: '*'},
         ];
         var columns3 = [
-            { binding: '', header: '일자', align: 'center', width: 120 },
-            { binding: '', header: '발전량', align: 'center', width: 120 },
-            { binding: '', header: '블룸검침량', align: 'center', width: '*', minWidth: 120 },
-            { binding: '', header: '청구서', align: 'center', width: '*', minWidth: 120 },
-            { binding: '', header: 'PLC', align: 'center', width: '*', minWidth: 120 },
+            {binding: '', header: '일자', align: 'center', width: 120},
+            {binding: '', header: '발전량', align: 'center', width: 120},
+            {binding: '', header: '블룸검침량', align: 'center', width: '*', minWidth: 120},
+            {binding: '', header: '청구서', align: 'center', width: '*', minWidth: 120},
+            {binding: '', header: 'PLC', align: 'center', width: '*', minWidth: 120},
         ];
         var columns4 = [
-            { binding: '월', header: '월', align: 'center', width: 120, allowMerging: true },
-            { binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true  },
-            { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
-            { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
+            {binding: '월', header: '월', align: 'center', width: 120, allowMerging: true},
+            {binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true},
+            {binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2'},
+            {binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2'},
 
 
         ];
@@ -503,17 +568,17 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : searchusr,
+                    'searchusr': searchusr,
 
                 },
                 async: false,
-                success: function(data){
+                success: function (data) {
 
                     let DataLength = 10 - data.data.length;
 
-                    if(data.data.length < 10){
+                    if (data.data.length < 10) {
                         console.log('길이2: ', data.data.length)
-                        for(let i=0; i < DataLength; i++){
+                        for (let i = 0; i < DataLength; i++) {
                             data.data.push('empty');
                         }
                     }
@@ -558,18 +623,17 @@
             theGrid3.rowHeaders.columns.splice(0, 1);
 
             // 병합된 머리글을 가진 그리드
-                theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
                 allowMerging: 'ColumnHeaders',
                 alternatingRowStep: 0,
                 autoGenerateColumns: false,
                 columns: [
-                    { binding: '월', header: '월', align: 'center', width: 120, allowMerging: true },
-                    { binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true  },
-                    { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
-                    { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
-                    { binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2' },
-                    { binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2' },
-
+                    {binding: '월', header: '월', align: 'center', width: 120, allowMerging: true},
+                    {binding: '도시가스', header: '도시가스회사', align: 'center', width: 120, allowMerging: true},
+                    {binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2'},
+                    {binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2'},
+                    {binding: 'MJ/Nm3', header: 'MJ/Nm3', align: 'center', width: 120, format: 'n2'},
+                    {binding: 'kcal/Nm3', header: 'kcal/Nm3', align: 'center', width: 120, format: 'n2'},
 
 
                 ],
@@ -606,7 +670,6 @@
             });
 
 
-
             //여분의 헤더 행 생성
             var extraRow2 = new wijmo.grid.Row();
             extraRow2.allowMerging = true;
@@ -638,6 +701,7 @@
             }
             return data;
         }
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
 
@@ -646,24 +710,23 @@
         let filelist = [];
 
 
-
         //검색
-        function searchData(){
+        function searchData() {
             let data = {
-                'searchusr' : $('#searchusr').val(),
+                'searchusr': $('#searchusr').val(),
                 'searchfrdate': $('#searchfrdate').val(),
                 'searchtodate': $('#searchtodate').val()
             }
 
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+            let result = AjaxUtil.getSyncData('/api/inspec_report/read', data);
 
-            if(result.success){
+            if (result.success) {
                 console.log(result.data);
                 grid_binding(result.data);
             }
         }
 
-        function grid_binding(data){
+        function grid_binding(data) {
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
@@ -693,27 +756,57 @@
 
 
         }
-        function SelectItemPush(){
+
+        function SelectItemPush() {
 
             let selectedList = [];
-            for(let i = 0; i < SelectItem.length; i++){
+            for (let i = 0; i < SelectItem.length; i++) {
                 selectedList.push(SelectItem[i]._data.spuncode);
             }
             return selectedList;
         }
 
 
-
         $(document).ready(function (e) {
+
+            // 화면 날짜 보여주기 코드 ( 가독성이 떨어짐 수정해야함 )
+            // 현재 연도를 가져옴
+            const currentYear = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate = `${currentYear}-01-01`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            // 현재 연도를 가져옴
+            const currentYear2 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate2 = `${currentYear2}-12-31`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchtodate').value = defaultDate2;
+
+
+            // 현재 연도를 가져옴
+            const currentYear3 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate3= `${currentYear3}-01-01`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchfrdate2').value = defaultDate3;
+
+            // 현재 연도를 가져옴
+            const currentYear4 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate4 = `${currentYear4}-12-31`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchtodate2').value = defaultDate4;
 
             let LoadingCheck = false;
             let LoadingCheck2 = false;
             let LoadingCheck3 = false;
 
-            $('#runrmate').click(function() {
+            $('#runrmate').click(function () {
 
-                if(LoadingCheck === false){
-                    setTimeout(function() {
+                if (LoadingCheck === false) {
+                    setTimeout(function () {
                         //$('#runf').trigger('click');
                         let con = "chart1"
                         rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "120%", "120%");
@@ -725,10 +818,10 @@
                 }
             });
 
-            $('#runrmate2').click(function() {
+            $('#runrmate2').click(function () {
 
-                if(LoadingCheck2 === false){
-                    setTimeout(function() {
+                if (LoadingCheck2 === false) {
+                    setTimeout(function () {
                         //$('#runf').trigger('click');
                         let con = "chart2"
                         rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "120%", "120%");
@@ -737,10 +830,10 @@
                 }
             });
 
-            $('#runrmate3').click(function() {
+            $('#runrmate3').click(function () {
 
-                if(LoadingCheck3 === false){
-                    setTimeout(function() {
+                if (LoadingCheck3 === false) {
+                    setTimeout(function () {
                         //$('#runf').trigger('click');
                         let con = "chart4"
                         rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars4, "120%", "120%");
@@ -785,242 +878,241 @@
 
 
         var layoutStr1 = '<rMateChart  backgroundColor="#ffffff" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="누적가스소모량"/>'
-            +'<SubCaption text="World Bank Commodity Price Data in 2024" textAlign="center" />'
-            +'<Legend/>'
-            +'</Options>'
-            +'<NumberFormatter id="numFmt" precision="0"/>'
-            +'<Line2DChart showDataTips="true" dataTipDisplayMode="axis" >'
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month" padding="0.2"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis maximum="100"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Line2DSeries yField="Sheep" radius="5" displayName="Sheep" itemRenderer="RectangleItemRenderer">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'<Line2DSeries yField="Beef" radius="5" displayName="Beef" itemRenderer="CircleItemRenderer">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'<Line2DSeries yField="Chicken" radius="6" displayName="Chicken" itemRenderer="TriangleItemRenderer">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'</series>'
-            +'</Line2DChart>'
-            +'</rMateChart>';
+            + '<Options>'
+            + '<Caption text="실시간가스 공급유량"/>'
+            + '<SubCaption text="World Bank Commodity Price Data in 2024" textAlign="center" />'
+            + '<Legend/>'
+            + '</Options>'
+            + '<NumberFormatter id="numFmt" precision="0"/>'
+            + '<Line2DChart showDataTips="true" dataTipDisplayMode="axis" >'
+            + '<horizontalAxis>'
+            + '<CategoryAxis categoryField="Month" padding="0.2"/>'
+            + '</horizontalAxis>'
+            + '<verticalAxis>'
+            + '<LinearAxis maximum="100"/>'
+            + '</verticalAxis>'
+            + '<series>'
+            + '<Line2DSeries yField="Sheep" radius="5" displayName="Sheep" itemRenderer="RectangleItemRenderer">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '<Line2DSeries yField="Beef" radius="5" displayName="Beef" itemRenderer="CircleItemRenderer">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '<Line2DSeries yField="Chicken" radius="6" displayName="Chicken" itemRenderer="TriangleItemRenderer">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '</series>'
+            + '</Line2DChart>'
+            + '</rMateChart>';
 
         var layoutStr2 =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="누적발전량" />'
-            +'<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
-            +'</Options>'
-            +'<Column3DChart showDataTips="true" columnWidthRatio="0.4">'
-            +'<horizontalAxis>'
-            +'<CategoryAxis id="hAxis" categoryField="Country"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis" maximum="100" interval="10"/>'
-            +'</verticalAxis>'
-            +'<horizontalAxisRenderers>'
-            +'<Axis3DEdgeRenderer axis="{hAxis}" showOuterStroke="false">'
-            +'<axisStroke>'
-            +'<Stroke color="#bbbbbbb"/>'
-            +'</axisStroke>'
-            +'</Axis3DEdgeRenderer>'
-            +'</horizontalAxisRenderers>'
-            +'<verticalAxisRenderers>'
-            +'<Axis3DEdgeRenderer axis="{vAxis}" showOuterStroke="false">'
-            +'<axisStroke>'
-            +'<Stroke color="#bbbbbbb"/>'
-            +'</axisStroke>'
-            +'</Axis3DEdgeRenderer>'
-            +'</verticalAxisRenderers>'
-            +'<series>'
-            +'<Column3DSeries labelPosition="outside" yField="GDP" displayName="Debt (% of GDP)" outsideLabelYOffset="-14" outsideLabelXOffset="7" showValueLabels="[4,5]">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column3DSeries>'
-            +'</series>'
-            +'<backgroundElements>'
-            +'<GridLines showBorderStroke="false"/>'
-            +'</backgroundElements>'
-            +'</Column3DChart>'
-            +'</rMateChart>'
+            + '<Options>'
+            + '<Caption text="누적발전량" />'
+            + '<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
+            + '</Options>'
+            + '<Column3DChart showDataTips="true" columnWidthRatio="0.4">'
+            + '<horizontalAxis>'
+            + '<CategoryAxis id="hAxis" categoryField="Country"/>'
+            + '</horizontalAxis>'
+            + '<verticalAxis>'
+            + '<LinearAxis id="vAxis" maximum="100" interval="10"/>'
+            + '</verticalAxis>'
+            + '<horizontalAxisRenderers>'
+            + '<Axis3DEdgeRenderer axis="{hAxis}" showOuterStroke="false">'
+            + '<axisStroke>'
+            + '<Stroke color="#bbbbbbb"/>'
+            + '</axisStroke>'
+            + '</Axis3DEdgeRenderer>'
+            + '</horizontalAxisRenderers>'
+            + '<verticalAxisRenderers>'
+            + '<Axis3DEdgeRenderer axis="{vAxis}" showOuterStroke="false">'
+            + '<axisStroke>'
+            + '<Stroke color="#bbbbbbb"/>'
+            + '</axisStroke>'
+            + '</Axis3DEdgeRenderer>'
+            + '</verticalAxisRenderers>'
+            + '<series>'
+            + '<Column3DSeries labelPosition="outside" yField="GDP" displayName="Debt (% of GDP)" outsideLabelYOffset="-14" outsideLabelXOffset="7" showValueLabels="[4,5]">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Column3DSeries>'
+            + '</series>'
+            + '<backgroundElements>'
+            + '<GridLines showBorderStroke="false"/>'
+            + '</backgroundElements>'
+            + '</Column3DChart>'
+            + '</rMateChart>'
 
 
         var layoutStr3 =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="누적가스 소모량" paddingBottom="45"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            +'</Options>'
-            +'<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
-            +'<CurrencyFormatter id="numFmt" precision="0" currencySymbol="%" alignSymbol="right"/>'
-            +'<Combination3DChart seriesMouseOverAction="series" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
+            + '<Options>'
+            + '<Caption text="누적가스 소모량" paddingBottom="45"/>'
+            + '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            + '</Options>'
+            + '<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
+            + '<CurrencyFormatter id="numFmt" precision="0" currencySymbol="%" alignSymbol="right"/>'
+            + '<Combination3DChart seriesMouseOverAction="series" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
             /*
             Combination3D 차트 생성시에 필요한 Combination3DChart 정의합니다
             showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다
             */
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
-            +'</verticalAxis>'
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
-            +'</horizontalAxis>'
-            +'<series>'
-            +'<Column3DSeries selectable="true" yField="sales" displayName="Sales">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column3DSeries>'
-            +'<Line2DSeries itemRenderer="CircleItemRenderer" radius="6" labelPosition="up" selectable="true" yField="roi" displayName="ROI" styleName="lineSeriesLabel" showValueLabels="[10]">'
-            +'<lineStroke>'
-            +'<Stroke color="#01dbab" weight="4"/>'
-            +'</lineStroke>'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis2" formatter="{numFmt}"/>'
-            +'</verticalAxis>'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'</series>'
-            +'<verticalAxisRenderers>'
-            +'<Axis3DRenderer axis="{vAxis1}" showLine="true"/>'
-            +'<Axis3DRenderer axis="{vAxis2}" showLine="true"/>'
-            +'</verticalAxisRenderers>'
-            +'</Combination3DChart>'
-            +'<Style>'
-            +'.lineSeriesLabel{'
-            +'color:#777777;'
-            +'fontWeight:normal;'
-            +'}'
-            +'</Style>'
-            +'</rMateChart>';
+            + '<verticalAxis>'
+            + '<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
+            + '</verticalAxis>'
+            + '<horizontalAxis>'
+            + '<CategoryAxis categoryField="Month" padding="0.5"/>'
+            + '</horizontalAxis>'
+            + '<series>'
+            + '<Column3DSeries selectable="true" yField="sales" displayName="Sales">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Column3DSeries>'
+            + '<Line2DSeries itemRenderer="CircleItemRenderer" radius="6" labelPosition="up" selectable="true" yField="roi" displayName="ROI" styleName="lineSeriesLabel" showValueLabels="[10]">'
+            + '<lineStroke>'
+            + '<Stroke color="#01dbab" weight="4"/>'
+            + '</lineStroke>'
+            + '<verticalAxis>'
+            + '<LinearAxis id="vAxis2" formatter="{numFmt}"/>'
+            + '</verticalAxis>'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '</series>'
+            + '<verticalAxisRenderers>'
+            + '<Axis3DRenderer axis="{vAxis1}" showLine="true"/>'
+            + '<Axis3DRenderer axis="{vAxis2}" showLine="true"/>'
+            + '</verticalAxisRenderers>'
+            + '</Combination3DChart>'
+            + '<Style>'
+            + '.lineSeriesLabel{'
+            + 'color:#777777;'
+            + 'fontWeight:normal;'
+            + '}'
+            + '</Style>'
+            + '</rMateChart>';
 
 
         var layoutStr4 =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="도시가스 공급열량실적" paddingBottom="45"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            +'</Options>'
-            +'<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
-            +'<CurrencyFormatter id="numFmt2" precision="0" currencySymbol="%" alignSymbol="right"/>'
-            +'<Combination2DChart seriesMouseOverAction="none" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
+            + '<Options>'
+            + '<Caption text="도시가스 공급열량실적" paddingBottom="45"/>'
+            + '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            + '</Options>'
+            + '<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
+            + '<CurrencyFormatter id="numFmt2" precision="0" currencySymbol="%" alignSymbol="right"/>'
+            + '<Combination2DChart seriesMouseOverAction="none" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
             /*
             Combination2D 차트 생성시에 필요한 Combination2DChart 정의합니다
             showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다
              */
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Column2DSet type="clustered">'
+            + '<horizontalAxis>'
+            + '<CategoryAxis categoryField="Month" padding="0.5"/>'
+            + '</horizontalAxis>'
+            + '<verticalAxis>'
+            + '<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
+            + '</verticalAxis>'
+            + '<series>'
+            + '<Column2DSet type="clustered">'
             /*
            Combination 차트에서는 Column차트와 Bar차트를 사용할때 Column2DSet(Colum2DSet),Bar2DSet(Bar2DSet)을 사용합니다
            예제로 Column2DSeries를 사용하려 할 때는 Column2DSet을 정의 후 +'<series>'와+'<Column2DSet>'을 정의합니다
            Column2DSet(Colum2DSet),Bar2DSet(Bar2DSet)의 Type은 일반 Type과 동일 합니다
            그러나 기본 Type은 overlaid입니다
              */
-            +'<series>'
-            +'<Column2DSeries yField="sales" displayName="Sales" labelPosition="outside" showValueLabels="[2]">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column2DSeries>'
-            +'<Column2DSeries yField="cost" displayName="Cost" labelPosition="outside" showValueLabels="[2]">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column2DSeries>'
-            +'<Column2DSeries yField="profit" displayName="Profit" labelPosition="outside" showValueLabels="[2]">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column2DSeries>'
-            +'</series>'
-            +'</Column2DSet>'
-            +'<Line2DSeries selectable="true" yField="roi" displayName="ROI" radius="4.5" form="curve" itemRenderer="CircleItemRenderer">'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis2" formatter="{numFmt2}"/>'
-            +'</verticalAxis>'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'</series>'
-            +'<verticalAxisRenderers>'
-            +'<Axis2DRenderer axis="{vAxis1}" showLine="false"/>'
-            +'<Axis2DRenderer axis="{vAxis2}" showLine="false"/>'
-            +'</verticalAxisRenderers>'
-            +'</Combination2DChart>'
-            +'</rMateChart>';
+            + '<series>'
+            + '<Column2DSeries yField="sales" displayName="Sales" labelPosition="outside" showValueLabels="[2]">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Column2DSeries>'
+            + '<Column2DSeries yField="cost" displayName="Cost" labelPosition="outside" showValueLabels="[2]">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Column2DSeries>'
+            + '<Column2DSeries yField="profit" displayName="Profit" labelPosition="outside" showValueLabels="[2]">'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Column2DSeries>'
+            + '</series>'
+            + '</Column2DSet>'
+            + '<Line2DSeries selectable="true" yField="roi" displayName="ROI" radius="4.5" form="curve" itemRenderer="CircleItemRenderer">'
+            + '<verticalAxis>'
+            + '<LinearAxis id="vAxis2" formatter="{numFmt2}"/>'
+            + '</verticalAxis>'
+            + '<showDataEffect>'
+            + '<SeriesInterpolate/>'
+            + '</showDataEffect>'
+            + '</Line2DSeries>'
+            + '</series>'
+            + '<verticalAxisRenderers>'
+            + '<Axis2DRenderer axis="{vAxis1}" showLine="false"/>'
+            + '<Axis2DRenderer axis="{vAxis2}" showLine="false"/>'
+            + '</verticalAxisRenderers>'
+            + '</Combination2DChart>'
+            + '</rMateChart>';
 
 
-
-        var chartData = [{"Month":"Jan", "Beef":38.5, "Chicken":20, "Sheep":50},
-            {"Month":"Feb", "Beef":56.57, "Chicken":27.52, "Sheep":42},
-            {"Month":"Mar", "Beef":58.57, "Chicken":23.65, "Sheep":40},
-            {"Month":"Apr", "Beef":41.13, "Chicken":29.54, "Sheep":60},
-            {"Month":"May", "Beef":40.58, "Chicken":24.21, "Sheep":50},
-            {"Month":"Jun", "Beef":60.79, "Chicken":39.12, "Sheep":52.5},
-            {"Month":"Jul", "Beef":49.14, "Chicken":32.56, "Sheep":70.64},
-            {"Month":"Aug", "Beef":89.35, "Chicken":39.24, "Sheep":68.57},
-            {"Month":"Sep", "Beef":65.21, "Chicken":32.12, "Sheep":54.14},
-            {"Month":"Oct", "Beef":75.15, "Chicken":42.12, "Sheep":57.58},
-            {"Month":"Nov", "Beef":69.12, "Chicken":35.54, "Sheep":54.47},
-            {"Month":"Dec", "Beef":73.24, "Chicken":40.45, "Sheep":62.47}];
+        var chartData = [{"Month": "Jan", "Beef": 38.5, "Chicken": 20, "Sheep": 50},
+            {"Month": "Feb", "Beef": 56.57, "Chicken": 27.52, "Sheep": 42},
+            {"Month": "Mar", "Beef": 58.57, "Chicken": 23.65, "Sheep": 40},
+            {"Month": "Apr", "Beef": 41.13, "Chicken": 29.54, "Sheep": 60},
+            {"Month": "May", "Beef": 40.58, "Chicken": 24.21, "Sheep": 50},
+            {"Month": "Jun", "Beef": 60.79, "Chicken": 39.12, "Sheep": 52.5},
+            {"Month": "Jul", "Beef": 49.14, "Chicken": 32.56, "Sheep": 70.64},
+            {"Month": "Aug", "Beef": 89.35, "Chicken": 39.24, "Sheep": 68.57},
+            {"Month": "Sep", "Beef": 65.21, "Chicken": 32.12, "Sheep": 54.14},
+            {"Month": "Oct", "Beef": 75.15, "Chicken": 42.12, "Sheep": 57.58},
+            {"Month": "Nov", "Beef": 69.12, "Chicken": 35.54, "Sheep": 54.47},
+            {"Month": "Dec", "Beef": 73.24, "Chicken": 40.45, "Sheep": 62.47}];
 
         // 차트 데이터
-        var chartData2 = [{"Country":"SouthSudan", "GDP":20},
-            {"Country":"Libya", "GDP":30},
-            {"Country":"SierraLeone", "GDP":51.2},
-            {"Country":"Mongolia", "GDP":44.5},
-            {"Country":"Paraguay", "GDP":62.35},
-            {"Country":"TimorLeste", "GDP":84.46},
-            {"Country":"Iraq", "GDP":48.9},
-            {"Country":"Panama", "GDP":38},
-            {"Country":"Gambia", "GDP":60.5},
-            {"Country":"Mozam-bique", "GDP":40.1}];
+        var chartData2 = [{"Country": "SouthSudan", "GDP": 20},
+            {"Country": "Libya", "GDP": 30},
+            {"Country": "SierraLeone", "GDP": 51.2},
+            {"Country": "Mongolia", "GDP": 44.5},
+            {"Country": "Paraguay", "GDP": 62.35},
+            {"Country": "TimorLeste", "GDP": 84.46},
+            {"Country": "Iraq", "GDP": 48.9},
+            {"Country": "Panama", "GDP": 38},
+            {"Country": "Gambia", "GDP": 60.5},
+            {"Country": "Mozam-bique", "GDP": 40.1}];
 
         // 차트 데이터
         var chartData3 =
-            [{"Month":"Jan","sales":200,"roi":61},
-                {"Month":"Feb","sales":300,"roi":35},
-                {"Month":"Mar","sales":420,"roi":30},
-                {"Month":"Apr","sales":550,"roi":32},
-                {"Month":"May","sales":620,"roi":29},
-                {"Month":"Jun","sales":720,"roi":22},
-                {"Month":"Jul","sales":880,"roi":20},
-                {"Month":"Aug","sales":990,"roi":25},
-                {"Month":"Sep","sales":1000,"roi":19},
-                {"Month":"Oct","sales":1100,"roi":18},
-                {"Month":"Nov","sales":1220,"roi":16},
-                {"Month":"Dec","sales":1440,"roi":15}];
+            [{"Month": "Jan", "sales": 200, "roi": 61},
+                {"Month": "Feb", "sales": 300, "roi": 35},
+                {"Month": "Mar", "sales": 420, "roi": 30},
+                {"Month": "Apr", "sales": 550, "roi": 32},
+                {"Month": "May", "sales": 620, "roi": 29},
+                {"Month": "Jun", "sales": 720, "roi": 22},
+                {"Month": "Jul", "sales": 880, "roi": 20},
+                {"Month": "Aug", "sales": 990, "roi": 25},
+                {"Month": "Sep", "sales": 1000, "roi": 19},
+                {"Month": "Oct", "sales": 1100, "roi": 18},
+                {"Month": "Nov", "sales": 1220, "roi": 16},
+                {"Month": "Dec", "sales": 1440, "roi": 15}];
 
 
         var chartData4 =
-            [{"Month":"Jan","sales":2000, "cost":1300, "profit":700, "roi":20},
-                {"Month":"Feb","sales":3000, "cost":1800, "profit":1200, "roi":45},
-                {"Month":"Mar","sales":4200, "cost":2500, "profit":1700, "roi":83},
-                {"Month":"Apr","sales":5500, "cost":3500, "profit":2000, "roi":45},
-                {"Month":"May","sales":6200, "cost":4000, "profit":2200, "roi":20},
-                {"Month":"Jun","sales":7200, "cost":4500, "profit":2700, "roi":10}];
+            [{"Month": "Jan", "sales": 2000, "cost": 1300, "profit": 700, "roi": 20},
+                {"Month": "Feb", "sales": 3000, "cost": 1800, "profit": 1200, "roi": 45},
+                {"Month": "Mar", "sales": 4200, "cost": 2500, "profit": 1700, "roi": 83},
+                {"Month": "Apr", "sales": 5500, "cost": 3500, "profit": 2000, "roi": 45},
+                {"Month": "May", "sales": 6200, "cost": 4000, "profit": 2200, "roi": 20},
+                {"Month": "Jun", "sales": 7200, "cost": 4500, "profit": 2700, "roi": 10}];
     </script>
 </th:block>
 
