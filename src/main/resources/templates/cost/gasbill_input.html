@@ -227,11 +227,20 @@
                             <th>첨부파일</th>
                             <td>
                                 <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox" id="dropZone">
+                                    <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2"  class="fileInput2">
-                                        <p id="fileNameDisplay">Maximun upload file size 1GiB</p>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <span> * 업로드시 PDF 파일이어야 합니다.</span>
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
                                     </div>
                                 </div>
                             </td>
@@ -242,7 +251,7 @@
             </div>
             <div class="popup-button">
                 <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                <button onclick="uploadFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
             </div>
         </div>
     </div>
@@ -270,31 +279,31 @@
                         <tbody>
                         <tr>
                             <th>
-                                <label for="">
+                                <label for="standym">
                                     청구년월
                                 </label>
                             </th>
                             <td>
-                                <input type="text" id="" name="" class="wp100" readonly >
+                                <input type="text" id="standym" name="standym" class="wp100" readonly >
                             </td>
                             <th>
-                                <label for="">
+                                <label for="smuseqty">
                                     사용량
                                 </label>
                             </th>
                             <td>
-                                <input type="text" id="" name="" class="wp100" readonly>
+                                <input type="text" id="smuseqty" name="smuseqty" class="wp100" readonly>
                             </td>
                         </tr>
 
                         <tr>
                             <th>
-                                <label for="">
+                                <label for="askamt">
                                     청구금액
                                 </label>
                             </th>
                             <td>
-                                <input type="text" id="" name="" class="wp100" readonly>
+                                <input type="text" id="askamt" name="askamt" class="wp100" readonly>
                             </td>
                             <th>
                                 <label for="">
@@ -302,7 +311,7 @@
                                 </label>
                             </th>
                             <td>
-                                <input type="text" id="" name="" class="wp100" readonly>
+                                <input type="text" id="smusehqty" name="smusehqty" class="wp100" readonly>
                             </td>
                         </tr>
 
@@ -443,7 +452,7 @@
             let searchusr = $('#searchusr').val();
 
             $.ajax({
-                url: '/api/gas/input/read',
+                url: '/api/cost/upload/gas_read',
                 type: 'GET',
                 // data: {
                 //     'searchusr': searchusr
