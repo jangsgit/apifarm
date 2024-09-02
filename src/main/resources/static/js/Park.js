@@ -428,12 +428,12 @@ function toggleSearchWrap(){
     let toggleButton = document.getElementById('toggleButton').querySelector('img');
 
 
-    if(searchWrap.style.visibility === 'hidden' || searchWrap.style.visibility === ''){
-        searchWrap.style.visibility = 'visible';
+    if(searchWrap.style.display === 'none' || searchWrap.style.display === ''){
+        searchWrap.style.display = 'block';
         toggleButton.src = '/images/icon/ico-up.png';
 
     } else {
-        searchWrap.style.visibility = 'hidden';
+        searchWrap.style.display = 'none';
         toggleButton.src = '/images/icon/ico-down.png';
     }
 }

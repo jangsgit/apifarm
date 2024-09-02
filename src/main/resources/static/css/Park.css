@@ -34,39 +34,6 @@
 }
 /*모달 팝업 끝**/
 
-.modal999 {
-    display: none; /* 평소에는 보이지 않도록 */
-    position: fixed; /* fixed로 변경하여 화면 전체를 덮도록 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 999;
-    opacity: 0; /* 애니메이션을 위한 초기 투명도 */
-    transition: opacity 0.3s ease; /* 투명도 변경에 대한 애니메이션 */
-}
-
-.modal999.show {
-    display: block;
-    opacity: 1; /* 보여질 때의 투명도 */
-}
-
-.popup-wrapper999 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* 화면 중앙으로 이동 및 초기 크기 설정 */
-    width: 70%;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    transition: transform 0.3s ease; /* 크기 변경에 대한 애니메이션 */
-}
-
-.popup-wrapper999.show {
-    transform: translate(-50%, -50%) scale(1); /* 보여질 때의 크기 */
-}
 
 
 /**순회점검일지 추가*/
@@ -292,3 +259,39 @@
     background-color: #ffcc00; /* 원하는 배경 색상으로 변경 */
     color: #ffffff; /* 텍스트 색상도 변경 가능 */
 }
+
+
+
+/* 브라우저 마진과 패딩 리셋 */
+* {margin:0;padding:0;}
+
+/* INPUT 가리기 */
+.section [id*="slide"] {display:none;}
+
+/* 슬라이드 영역 - max-width 크기를 조절해주면 됩니다*/
+.section .slidewrap {max-width:1200px;margin:0 auto;overflow:hidden;position:relative;}
+.section .slidelist {white-space:nowrap;font-size:0;}
+.section .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
+.section .slidelist > li > a {display:block;position:relative;}
+
+/* 좌우로 넘기는 LABEL버튼에 대한 스타일 */
+.section .slide-control {position:absolute;top:0;left:0;z-index:10;width:100%;height:100%;}
+.section .slide-control label {position:absolute;z-index:1;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
+.section .slide-control .left {
+    left: 30px;
+    background: url('/images/sample/left.png') center center / 100% no-repeat;
+}.section .slide-control .right {right:30px;background:url('/images/sample/right.png') center center / 100% no-repeat;}
+.section .slide-control [class*="control"] {display:none;}
+
+/* INPUT이 체크되면 변화값이 li까지 전달되는 스타일 */
+.section [id="slide01"]:checked ~ .slidewrap .slidelist > li {transform:translateX(0%);}
+.section [id="slide02"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-100%);}
+.section [id="slide03"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-200%);}
+.section [id="slide04"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-300%);}
+
+
+/*  INPUT이 체크되면 변화값이 좌우 슬라이드 버튼을 담고 있는 div 까지 전달되는 스타일 */
+.section [id="slide01"]:checked ~ .slidewrap .control01 {display:block;}
+.section [id="slide02"]:checked ~ .slidewrap .control02 {display:block;}
+.section [id="slide03"]:checked ~ .slidewrap .control03 {display:block;}
+.section [id="slide04"]:checked ~ .slidewrap .control04 {display:block;}
