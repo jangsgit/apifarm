@@ -31,7 +31,13 @@ public class InspecStaticController {
     @GetMapping("/RP710/read")
     public AjaxResult RP710List(@RequestParam(value = "searchfrdate", required = false) String searchfrdate,
                                 @RequestParam(value = "searchtodate", required = false) String searchtodate,
-                                @RequestParam(value = "searchQuarter", required = false) String searchQuarter,
+                                @RequestParam(value = "searchfrQuarter", required = false) String searchfrQuarter,
+                                @RequestParam(value = "searchtoQuarter", required = false) String searchtoQuarter,
+                                @RequestParam(value = "searchYear", required = false) String searchYear,
+                                @RequestParam(value = "searchfrHalfYear", required = false) String searchfrHalfYear,
+                                @RequestParam(value = "searchtoHalfYear", required = false) String searchtoHalfYear,
+                                @RequestParam(value = "searchfrYear", required = false) String searchfrYear,
+                                @RequestParam(value = "searchtoYear", required = false) String searchtoYear,
                                 @RequestParam(value = "searchType", required = true) String searchType
                                 ){
 
@@ -43,28 +49,42 @@ public class InspecStaticController {
 
         switch (searchType){
             //순회점검 월별 조회
-            case "monthly": if(searchfrdate.contains("-")){
-                startdate = searchfrdate.replaceAll("-","");
-                startdate = startdate + "01";
-            }else{
-                startdate = searchfrdate + "01";
-            }
+            case "monthly":
 
-                if(searchtodate.contains("-")){
-                    endDate = searchtodate.replaceAll("-", "");
-                }else{
-                    endDate = searchtodate;
-                }
-                endDate = new UtilClass().getLastDay(endDate);
+                startdate = getFirstDate(searchfrdate);
+
+                endDate = getLastDate(searchtodate);
 
                 items = inspecStaticService.getRP710List(startdate, endDate);
             break;
+
             //순회점검 분기별 조회
             case "quarterly":
 
+                startdate = getQuarterFirstDate(searchYear, searchfrQuarter);
 
+                endDate = getQuarterEndDate(searchYear, searchtoQuarter);
+
+            items = inspecStaticService.getRP710List(startdate, endDate);
+
+            break;
+
+            case "halfyearly":
+
+                startdate = getHalfYearFirstDate(searchYear, searchfrHalfYear);
+
+                endDate = getHalfYearEndDate(searchYear, searchtoHalfYear);
+
+                items = inspecStaticService.getRP710List(startdate, endDate);
+            break;
+
+
+            case "yearly":
+                startdate = searchfrYear + "0101";
+                endDate   = searchtoYear + "1231";
+
+                items = inspecStaticService.getRP710List(startdate, endDate);
                 break;
-
         }
 
 
@@ -75,6 +95,223 @@ public class InspecStaticController {
         result.success = true;
         result.data = items;
         return result;
+    }
+    
+    @GetMapping("/RP720/read")
+    public AjaxResult RP720List(@RequestParam(value = "searchfrdate", required = false) String searchfrdate,
+                                @RequestParam(value = "searchtodate", required = false) String searchtodate,
+                                @RequestParam(value = "searchfrQuarter", required = false) String searchfrQuarter,
+                                @RequestParam(value = "searchtoQuarter", required = false) String searchtoQuarter,
+                                @RequestParam(value = "searchYear", required = false) String searchYear,
+                                @RequestParam(value = "searchfrHalfYear", required = false) String searchfrHalfYear,
+                                @RequestParam(value = "searchtoHalfYear", required = false) String searchtoHalfYear,
+                                @RequestParam(value = "searchfrYear", required = false) String searchfrYear,
+                                @RequestParam(value = "searchtoYear", required = false) String searchtoYear,
+                                @RequestParam(value = "searchType", required = true) String searchType){
+
+        AjaxResult result = new AjaxResult();
+
+        String startdate = null;
+        String endDate = null;
+        List<Map<String, Object>> items = new ArrayList<>();
+
+        switch (searchType){
+            //순회점검 월별 조회
+            case "monthly":
+
+                startdate = getFirstDate(searchfrdate);
+
+                endDate = getLastDate(searchtodate);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+
+            //순회점검 분기별 조회
+            case "quarterly":
+
+                startdate = getQuarterFirstDate(searchYear, searchfrQuarter);
+
+                endDate = getQuarterEndDate(searchYear, searchtoQuarter);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+
+                break;
+
+            case "halfyearly":
+
+                startdate = getHalfYearFirstDate(searchYear, searchfrHalfYear);
+
+                endDate = getHalfYearEndDate(searchYear, searchtoHalfYear);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+
+
+            case "yearly":
+                startdate = searchfrYear + "0101";
+                endDate   = searchtoYear + "1231";
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+        }
+
+
+        System.out.println(startdate);
+        System.out.println(endDate);
+
+
+        result.success = true;
+        result.data = items;
+        return result;
+    }
+
+    @GetMapping("/RP750/read")
+    public AjaxResult RP750List(@RequestParam(value = "searchfrdate", required = false) String searchfrdate,
+                                @RequestParam(value = "searchtodate", required = false) String searchtodate,
+                                @RequestParam(value = "searchfrQuarter", required = false) String searchfrQuarter,
+                                @RequestParam(value = "searchtoQuarter", required = false) String searchtoQuarter,
+                                @RequestParam(value = "searchYear", required = false) String searchYear,
+                                @RequestParam(value = "searchfrHalfYear", required = false) String searchfrHalfYear,
+                                @RequestParam(value = "searchtoHalfYear", required = false) String searchtoHalfYear,
+                                @RequestParam(value = "searchfrYear", required = false) String searchfrYear,
+                                @RequestParam(value = "searchtoYear", required = false) String searchtoYear,
+                                @RequestParam(value = "searchType", required = true) String searchType
+    ){
+
+        AjaxResult result = new AjaxResult();
+
+        String startdate = null;
+        String endDate = null;
+        List<Map<String, Object>> items = new ArrayList<>();
+
+        switch (searchType){
+            //순회점검 월별 조회
+            case "monthly":
+
+                startdate = getFirstDate(searchfrdate);
+
+                endDate = getLastDate(searchtodate);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+
+            //순회점검 분기별 조회
+            case "quarterly":
+
+                startdate = getQuarterFirstDate(searchYear, searchfrQuarter);
+
+                endDate = getQuarterEndDate(searchYear, searchtoQuarter);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+
+                break;
+
+            case "halfyearly":
+
+                startdate = getHalfYearFirstDate(searchYear, searchfrHalfYear);
+
+                endDate = getHalfYearEndDate(searchYear, searchtoHalfYear);
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+
+
+            case "yearly":
+                startdate = searchfrYear + "0101";
+                endDate   = searchtoYear + "1231";
+
+                items = inspecStaticService.getRP750List(startdate, endDate);
+                break;
+        }
+
+
+        System.out.println(startdate);
+        System.out.println(endDate);
+
+
+        result.success = true;
+        result.data = items;
+        return result;
+    }
+
+
+
+    private String getHalfYearEndDate(String year, String halfyear){
+
+        String endDate = "";
+
+        endDate = switch (halfyear) {
+            case "H1" -> year + "0630";
+            case "H2" -> year + "1231";
+            default -> endDate;
+        };
+        return endDate;
+    }
+
+    private String getHalfYearFirstDate(String year, String halfyear){
+
+        String startdate = "";
+
+        startdate = switch (halfyear) {
+            case "H1" -> year + "0101";
+            case "H2" -> year + "0701";
+            default -> startdate;
+        };
+
+        return startdate;
+    }
+
+    private String getQuarterFirstDate(String year, String Quarter){
+
+        String startdate = "";
+        startdate = switch (Quarter) {
+            case "Q1" -> year + "0101";
+            case "Q2" -> year + "0401";
+            case "Q3" -> year + "0701";
+            case "Q4" -> year + "1001";
+            default -> startdate;
+        };
+
+        return startdate;
+    }
+
+    private String getQuarterEndDate(String year, String Quarter){
+        String endDate = "";
+        endDate = switch (Quarter){
+            case "Q1" -> year + "0331";
+            case "Q2" -> year + "0630";
+            case "Q3" -> year + "0930";
+            case "Q4" -> year + "1231";
+            default -> endDate;
+        };
+        return endDate;
+    }
+
+    //조회시작 날짜 구하기
+    private String getFirstDate(String date){
+
+        String dateValue;
+
+        if(date.contains("-")){
+            dateValue = date.replaceAll("-","") + "01";
+        }else{
+            dateValue = date + "01";
+        }
+        return dateValue;
+    }
+
+    //조회 종료날짜 구하기
+    private String getLastDate(String date){
+        String dateValue;
+
+        if(date.contains("-")){
+            dateValue = date.replaceAll("-", "");
+        }else{
+            dateValue = date;
+        }
+        dateValue = new UtilClass().getLastDay(dateValue);
+
+        return dateValue;
     }
 
     @GetMapping("/distinctYears")

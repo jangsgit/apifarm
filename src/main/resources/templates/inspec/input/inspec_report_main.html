@@ -5,7 +5,7 @@
 
 <th:block layout:fragment="content">
 
-
+    <!--<a><img src="/images/icon/ico-userdetail.svg" alt="알람 아이콘"></a>-->
     <div class="layout-contents" style="margin-bottom: 50px">
         <!-- Page Title -->
         <div class="page-title-wrap">
@@ -136,12 +136,65 @@
 
                         </div>
                     </div>
-                    <div class="thumb-wrap">
-                        <div>
+                    <div class="thumb-wrap" style="height: 300px;">
+                        <!--<div>
                             <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp105">
                         </div>
                         <div>
                             <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp105">
+                        </div>-->
+                        <!--<canvas style="width: 300px;"></canvas>-->
+                        <div class="section">
+                            <input type="radio" name="slide" id="slide01" checked>
+                            <input type="radio" name="slide" id="slide02">
+                            <input type="radio" name="slide" id="slide03">
+                            <input type="radio" name="slide" id="slide04">
+                            <div class="slidewrap">
+                                <ul class="slidelist">
+                                    <li>
+                                        <a>
+                                            <!--<img src="/images/sample/sample-cctv.svg" style="width: 100%">-->
+                                            <canvas id="canvas1" style="width: 100%; height: 360px"></canvas>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <!-- 두 번째 CCTV 스트림 -->
+                                            <!--<canvas id="canvas2" style="width: 300px;"></canvas>-->
+                                            <canvas id="canvas2" style="width: 100%; height: 360px;"></canvas>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <canvas id="canvas3" style="width: 100%; height: 360px;"></canvas>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a>
+                                            <canvas id="canvas4" style="width: 100%; height: 360px;"></canvas>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="slide-control">
+                                    <div class="control01">
+                                        <label for="slide04" class="left"></label>
+                                        <label for="slide02" class="right"></label>
+                                    </div>
+                                    <div class="control02">
+                                        <label for="slide01" class="left"></label>
+                                        <label for="slide03" class="right"></label>
+                                    </div>
+                                    <div class="control03">
+                                        <label for="slide02" class="left"></label>
+                                        <label for="slide04" class="right"></label>
+                                    </div>
+                                    <div class="control04">
+                                        <label for="slide03" class="left"></label>
+                                        <label for="slide01" class="right"></label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -156,7 +209,7 @@
                 <div class="table-wrap">
 
                     <div class="container-fluid">
-                        <div id="theGrid2" style="height: 700px"></div>
+                        <div id="theGrid2" style="height: 800px"></div>
                     </div>
                     <!--<table class="list-table">
                         <caption>당일 점검일지 현황 테이블</caption>
@@ -250,6 +303,36 @@
 
 
     <script>
+
+        // WebSocket 연결 설정
+        var client = new WebSocket('ws://localhost:9999');
+        var canvas = document.querySelector('canvas');
+        var player = new jsmpeg(client, {
+            canvas: canvas
+        });
+
+        // 두 번째 WebSocket 연결
+        var client2 = new WebSocket('ws://localhost:10000');
+        var canvas2 = document.getElementById('canvas2');
+        var player2 = new jsmpeg(client2, {
+            canvas: canvas2
+        });
+
+        // 두 번째 WebSocket 연결
+        var client3 = new WebSocket('ws://localhost:10001');
+        var canvas3 = document.getElementById('canvas3');
+        var player3 = new jsmpeg(client3, {
+            canvas: canvas3
+        });
+
+        // 두 번째 WebSocket 연결
+        var client4 = new WebSocket('ws://localhost:10002');
+        var canvas4 = document.getElementById('canvas4');
+        var player4 = new jsmpeg(client4, {
+            canvas: canvas4
+        });
+
+
         let theGrid;
         let theGrid2;
 
@@ -460,6 +543,7 @@
                             right: 'dayGridMonth,timeGridWeek,timeGridDay'
                         },
                         initialView: 'dayGridMonth',
+                        height: 800,
                         dayHeaderFormat: {weekday: 'short'}, // 요일 형식 설정
                         events: events,
                         views: {

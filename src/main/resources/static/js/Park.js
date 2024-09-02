@@ -401,6 +401,7 @@ function DataLoad(url, dataSet, type){
             }
             else if(type === 'rmate'){
                 data2 = data.data;
+
             }
 
         }
@@ -421,6 +422,21 @@ $(document).ready(function (e) {
 
 
 })
+
+function toggleSearchWrap(){
+    let searchWrap = document.getElementById('searchWrap');
+    let toggleButton = document.getElementById('toggleButton').querySelector('img');
+
+
+    if(searchWrap.style.visibility === 'hidden' || searchWrap.style.visibility === ''){
+        searchWrap.style.visibility = 'visible';
+        toggleButton.src = '/images/icon/ico-up.png';
+
+    } else {
+        searchWrap.style.visibility = 'hidden';
+        toggleButton.src = '/images/icon/ico-down.png';
+    }
+}
 
 
 

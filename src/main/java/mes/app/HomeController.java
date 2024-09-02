@@ -35,7 +35,15 @@ public class HomeController {
 
 	@Autowired
 	UserService userService;
-	
+
+	@RequestMapping(value = "/rtsp")
+	public String TestPage(){
+
+		return "/rtsp";
+
+	}
+
+
 	@RequestMapping(value= "/", method=RequestMethod.GET)
     public ModelAndView pageIndex(HttpServletRequest request, HttpSession session) {	
 		

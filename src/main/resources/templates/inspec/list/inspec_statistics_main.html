@@ -58,7 +58,7 @@
             </ul>
         </div>
 
-        <div class="tab-wrap">
+        <div class="tab-wrap" style="margin-bottom: 30px">
             <ul class="tab-links">
                 <li>
                     <a href="#tab1" title="기간별조회">기간별 조회</a>
@@ -73,14 +73,36 @@
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
-                            <dl>
+                            <dl id="searchYear" style="display: none">
                                 <dt>
                                     조회연도<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                            <select id="yearSelectTab1" name="yearSelectTab1" onchange="WijmoGrid()">
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="periodType">
+                                        점검구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="inspecType" name="inspecType" onchange="WijmoGrid()">
+                                                <option value="wm_inspec_month_list" selected>순회점검</option>
+                                                <option value="wm_hap_list">합동안전점검</option>
+                                                <option value="wm_elecsafe_list">전기안전점검</option>
+                                                <option value="wm_emergency_plan">비상훈련계획</option>
+                                                <option value="wm_emergency_result">비상훈련결과</option>
+                                                <option value="wm_safety_health">안전보건교육</option>
+                                                <option value="wm_inspec_field_list">Fieldservice</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -121,8 +143,11 @@
                                 </dd>
                             </dl>
 
-                            <dl>
 
+                            <dl>
+                                <dt style="visibility: hidden">
+                                    조회기간<span class="eq">*</span>
+                                </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
@@ -303,12 +328,12 @@
         var chartData3 = [
             {
                 "Year": "2024",
-                "Profit": 320,
+                "건수": 320,
                 "Cost": 250
             },
             {
                 "Year": "2025",
-                "Profit": 250,
+                "건수": 250,
                 "Cost": 150
             },
             {
@@ -318,17 +343,17 @@
             },
             {
                 "Year": "2027",
-                "Profit": 250,
+                "건수": 250,
                 "Cost": 130
             },
             {
                 "Year": "2028",
-                "Profit": 400,
+                "건수": 400,
                 "Cost": 230
             },
             {
                 "Year": "2029",
-                "Profit": 350,
+                "건수": 350,
                 "Cost": 140
             }
         ];
@@ -400,17 +425,17 @@
             +"</rMateChart>";
 
         //rMate 불러오기
-        function rMateCall(){
+        function rMateCall(RmaTeData){
 
             rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
 
             var layout1 = getCartesianLayout("Column2D","칼럼 차트로 표현",["Profit"]);
             var layout2 = getCartesianLayout("Line2D","라인 차트로 표현",["Profit"]);
-            var layout3 = getCartesianLayout("Column3D","칼럼 3D 멀티 데이터 표현",["Profit"]);
+            var layout3 = getCartesianLayout("Column3D","칼럼 3D 멀티 데이터 표현",["건수"]);
 
 
             var layoutSet = [layout3, layout2, radarLayout];
-            var dataSet = [chartData3, chartData2, chartData3,];
+            var dataSet = [RmaTeData, rmateData, RmaTeData];
 
             rMateChartH5.calls("chart1", {
                 "setSlideLayoutSet" : layoutSet,
@@ -423,17 +448,16 @@
 
         let theGrid;
 
-        let columns = [
-            { binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
-            { binding: 'hour', header: '시간', align: 'center', width: '*', minWidth: 200 },
-            { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 200 },
-        ]
 
         function WijmoGrid(){
 
             let dataSet = AjaxGetBodyParameter();
 
-            let data2 = DataLoad('/api/inspec_statics/RP710/read', dataSet, 'wijmo');
+            let url = getServerEndpoint();
+
+            let data2 = DataLoad(url, dataSet, 'wijmo');
+
+            let columns = getColumnsType();
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
@@ -450,10 +474,16 @@
                 });
 
                 theGrid.rowHeaders.columns.splice(0, 1);
-                rMateCall();
+                //rMateCall();
             }else{
+                theGrid.columns.clear();
+                theGrid.autoGenerateColumns = false;
+                for (var i = 0; i < columns.length; i++) {
+                    var col = new wijmo.grid.Column(columns[i]);
+                    theGrid.columns.push(col);
+                }
                 theGrid.itemsSource = viewdata;
-                rMateCall();
+                //rMateCall();
             }
 
         }
@@ -469,8 +499,54 @@
         })
 
 
+        function getColumnsType(){
+            let columnType = $('#inspecType').val();
+            let columns = [];
+
+
+            switch (columnType){
+                case 'wm_inspec_month_list':
+                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
+                        { binding: 'hour', header: '시간', align: 'center', width: '*', minWidth: 200 },
+                        { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 200 }]
+                    break;
+                case 'wm_hap_list':
+                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
+                        { binding: 'checkrem', header: '결과', align: 'center', width: '*', minWidth: 200 },
+                        { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 200 }]
+                    break;
+                case 'wm_elecsafe_list':
+                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
+                        { binding: 'checkresult', header: '결과', align: 'center', width: '*', minWidth: 200 },
+                        { binding: 'checktitle', header: '점검명', align: 'center', width: '0.5*', minWidth: 200 }]
+                    break;
+            }
+            return columns;
+        }
+
+        function getServerEndpoint(){
+            let type = $('#inspecType').val();
+            let url;
+
+            switch (type){
+                case 'wm_inspec_month_list':
+                    url = '/api/inspec_statics/RP710/read'
+                    break;
+                case 'wm_hap_list':
+                    url = '/api/inspec_statics/RP720/read'
+                    break;
+                case 'wm_elecsafe_list':
+                    url = '/api/inspec_statics/RP750/read'
+                    break;
+            }
+            return url;
+        }
+
         function searchData(){
-            rMateCall();
+            let dataSet = AjaxGetBodyParameter();
+
+            let data2 = DataLoad('/api/inspec_statics/RP710/read', dataSet, 'wijmo');
+            WijmoGrid();
         }
 
 
@@ -486,23 +562,33 @@
                 };
             }
             else if(periodType === 'quarterly'){
+
+
                 dataSet = {
-                    'searchQuarter' : $('#startQuarter').val(),
+                    'searchYear' : $('#yearSelectTab1').val(),
+                    'searchfrQuarter' : $('#startSelect').val(),
+                    'searchtoQuarter' : $('#endSelect').val(),
                     'searchType' : periodType
                 };
             }
-            else if(periodType === 'yearly'){
+            else if(periodType === 'halfyearly'){
+
                 dataSet = {
+                    'searchYear' : $('#yearSelectTab1').val(),
+                    'searchfrHalfYear' : $('#startSelect').val(),
+                    'searchtoHalfYear' : $('#endSelect').val(),
                     'searchType' : periodType
                 }
             }
-            else
+            else if(periodType === 'yearly')
             {
                 dataSet = {
-                    'searchfrdate' : $('#startDate').val(),
-                    'searchtodate' : $('#endDate').val(),
+                    'searchfrYear' : $('#startSelect').val(),
+                    'searchtoYear' : $('#endSelect').val(),
                     'searchType' : periodType
                 };
+
+
             }
             return dataSet;
         }
@@ -519,6 +605,13 @@
             // 기존 내용을 초기화
             startDateContainer.innerHTML = "";
             endDateContainer.innerHTML = "";
+
+            // 'searchYear' 요소의 표시 여부 제어
+            if (periodType === "monthly" || periodType === "yearly") {
+                $('#searchYear').hide();
+            } else if (periodType === "quarterly" || periodType === "halfyearly") {
+                $('#searchYear').show();
+            }
 
             if (periodType === "monthly") { // 월별 조회가 선택된 경우
                 const startDate = `${selectedYear}-01`; // 선택된 연도의 1월
@@ -538,8 +631,8 @@
             <option value="H2">하반기</option>
         ` : '';
 
-                startDateContainer.innerHTML = `<select id="startSelect">${options}</select>`;
-                endDateContainer.innerHTML = `<select id="endSelect">${options}</select>`;
+                startDateContainer.innerHTML = `<select id="startSelect" onchange="WijmoGrid()">${options}</select>`;
+                endDateContainer.innerHTML = `<select id="endSelect" onchange="WijmoGrid()">${options}</select>`;
 
                 if (periodType === "yearly") {
                     // 연도별일 경우 연도를 동적으로 로드하여 추가
@@ -563,8 +656,8 @@
 
         // 조회연도 선택 요소에 이벤트 리스너 추가
         document.getElementById("yearSelectTab1").addEventListener("change", function() {
-            updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
-            updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
+            //updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
+            //updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
         });
 
         // 연도를 로드하고 기존 UI를 업데이트
