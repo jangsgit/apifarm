@@ -234,18 +234,20 @@ let debounceTimeout;
 let selectedSuggestionIndex = -1;
 let suggestionsVisible = false;
 
-function fetchSuggestions(inputId, apiUrl) {
+function fetchSuggestions(inputId, apiUrl, suggestionId) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
         const inputField = document.getElementById(inputId);
-        let suggestionsList = document.getElementById('suggestions');
+        let suggestionsList = document.getElementById(suggestionId);
+
+        if (!inputField || !suggestionsList) return;
 
         const inputClearDiv = inputField.parentElement;
         inputClearDiv.appendChild(suggestionsList);
 
         const query = inputField.value;
         if (query.length > 0) {
-            fetch(`${apiUrl}?query=${encodeURIComponent(query)}`)
+            fetch(`${apiUrl}?query=${encodeURIComponent(query)}&field=${encodeURIComponent(inputId)}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -299,7 +301,14 @@ function fetchSuggestions(inputId, apiUrl) {
 function initializeAutoComplete(inputId, apiUrl) {
     const inputField = document.getElementById(inputId);
 
-    inputField.addEventListener('keyup', () => fetchSuggestions(inputId, apiUrl));
+    let preventFetchOnEnter = false;  // Enter 키로 선택했을 때 검색을 방지하기 위한 플래그
+
+    inputField.addEventListener('keyup', (event) => {
+        if (!preventFetchOnEnter) {  // Enter 키로 인한 검색 방지
+            fetchSuggestions(inputId, apiUrl);
+        }
+        preventFetchOnEnter = false;  // 플래그 초기화
+    });
 
     inputField.addEventListener('keydown', function (event) {
         const suggestionsList = document.getElementById('suggestions');
@@ -321,8 +330,9 @@ function initializeAutoComplete(inputId, apiUrl) {
                 if (selectedSuggestionIndex >= 0) {
                     event.preventDefault(); // 기본 동작 방지
                     items[selectedSuggestionIndex].click();
+                    preventFetchOnEnter = true;  // 엔터로 선택한 후 검색 방지
                     suggestionsVisible = false; // Enter 키를 누르면 선택을 확정하고 목록을 숨김
-                    inputField.blur(); // 입력 필드 포커스 해제
+                    // inputField.blur(); // 입력 필드 포커스 해제
                 }
             } else if (event.key === 'Escape') {
                 // Escape 키를 누르면
@@ -339,6 +349,13 @@ function initializeAutoComplete(inputId, apiUrl) {
             suggestionsList.style.display = 'none';
             suggestionsVisible = false;
         }, 300); // 300ms 지연 시간
+    });
+
+    // 마우스 클릭으로 선택 시에도 검색 방지
+    document.getElementById('suggestions').addEventListener('click', function (event) {
+        if (event.target.tagName === 'LI') {
+            preventFetchOnEnter = true;
+        }
     });
 }
 

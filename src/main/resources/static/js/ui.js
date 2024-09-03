@@ -43,6 +43,7 @@ $(document).ready(function () {
     // 예외 URL 리스트를 상대 경로로 정의합니다.
     var exceptionUrls = [
         "/gui/wm_equipment_search/default",
+        // "/gui/wm_equipment_alarm/default",
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
         "/gui/another_exception"
     ];
@@ -76,7 +77,22 @@ $(document).ready(function () {
         $(".tab-links li:first").addClass("active");
     }
 
-    if (!isException) {
+    // 예외 URL 리스트를 상대 경로로 정의합니다.
+    var exceptionUrls_sub = [
+        "/gui/wm_equipment_alarm/default",
+        // 추가 예외 URL을 여기에 추가할 수 있습니다.
+        "/gui/another_exception"
+    ];
+
+    // 현재 URL의 경로를 가져옵니다.
+    var currentPath_sub = window.location.pathname;
+
+    // 현재 경로가 예외 리스트에 포함되어 있는지 확인합니다.
+    var isException_sub = exceptionUrls_sub.some(function (url) {
+        return currentPath_sub === url;
+    });
+
+    if (!isException_sub) {
         $(".tab-links-sub a").click(function (event) {
             event.preventDefault();
 
