@@ -1,16 +1,31 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<style>
+<head>
+    <style>
+        .tab-item2.tab-content1 {
+            display: block;
+            padding-bottom: 0;
+            border-radius: 0 15px 0 0 !important;
+            border-bottom: 0;
+            border-bottom-style: none;
+        }
 
-</style>
+        .tab-contents > section, .tab-item > .row > section:first-child {
+            border-radius: 0 0 15px 15px;
+            border: 0 !important;
+            box-shadow: 0 0 !important;
+        }
 
+
+    </style>
+</head>
 <th:block layout:fragment="content">
-
 
     <div class="layout-contents">
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>알림이력</h2>
+                <h2>장비 알림 이력</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                        alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -19,101 +34,91 @@
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>모니터링</li>
                 <li>종합관제</li>
-                <li>장비알림이력</li>
+                <li>장비 알림 이력</li>
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="tab-wrap" id="jqueryTabs">
             <ul class="tab-links">
-                <li>
-                    <a href="#tab1" title="목록" class="tab-button">리스트</a>
-                </li>
-                <li>
-                    <a href="#tab2" title="등록" id="runrmate" class="tab-button">통계</a>
-                </li>
+                <li><a href="#tab1" title="통합" class="tab-button">통합</a></li>
+                <li><a href="#tab2" title="상세" class="tab-button">상세</a></li>
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
-                <!-- Section -->
 
-
-
-                <section class="tab-item tab-content" id="tab1">
+                <section class="tab-item2 tab-content1">
+                    <!-- 공통 검색 조건 -->
                     <div class="section-top">
                         <div class="search-wrap">
+                            <!-- 검색 조건 코드 -->
                             <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
+                                <dt><label for="division">구분<span class="eq">*</span></label></dt>
                                 <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select1323" class="w120">
+                                    <select id="division" class="w120">
+                                        <option selected>전체</option>
                                         <option>Fault</option>
                                         <option>Alarm</option>
                                         <option>통신이상</option>
                                         <option>가스누출</option>
                                         <option>연료전지 고온</option>
                                         <option>계통연계</option>
-
                                     </select>
                                 </dd>
                             </dl>
                             <dl>
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span></label></dt>
-
+                                <dt><label for="periodType">검색조건<span class="eq">*</span></label></dt>
                                 <dd>
-                                    <select id="select111" class="w120">
-                                        <option>일</option>
-                                        <option>주</option>
-                                        <option>월</option>
-                                        <option>년</option>
-                                    </select>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                <option value="byday" selected>일별</option>
+                                                <option value="byweek">주간별</option>
+                                                <option value="bymonth">월별</option>
+                                                <option value="byyear">연도별</option>
+                                            </select>
+                                        </li>
+                                    </ul>
                                 </dd>
                             </dl>
                             <dl>
-                                <dt>
-                                    <label for="select1">
-                                        확인여부</label></dt>
-
+                                <dt>조회기간<span class="eq">*</span></dt>
                                 <dd>
-                                    <select id="select134" class="w120">
+                                    <ul class="date-box">
+                                        <li id="startDateContainer">
+                                        </li>
+                                        <li id="endDateContainer">
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt><label for="confirm">확인여부</label></dt>
+                                <dd>
+                                    <select id="confirm" class="w120">
                                         <option>전체</option>
                                         <option>확인</option>
                                         <option>미확인</option>
@@ -121,284 +126,257 @@
                                 </dd>
                             </dl>
                             <dl>
-                                <dt>
-                                    <label for="text1">
-                                    </label>
-                                </dt>
+                                <dt><label for="btn-search"></label></dt>
                                 <dd>
-                                    <div class="srch-box">
-                                        <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                    </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
-                    </div>
-
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-
-                <section class="tab-item tab-content" id="tab2">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
+                                    <ul>
                                         <li>
-                                            <input type="date" id="searchfrdate2" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate12" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
+                                            <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchData()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select13" class="w120">
-                                        <option>Fault</option>
-                                        <option>Alarm</option>
-                                        <option>통신이상</option>
-                                        <option>가스누출</option>
-                                        <option>연료전지 고온</option>
-                                        <option>계통연계</option>
-
-                                    </select>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span></label></dt>
-
-                                <dd>
-                                    <select id="select12" class="w120">
-                                        <option>일</option>
-                                        <option>주</option>
-                                        <option>월</option>
-                                        <option>년</option>
-                                    </select>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <label for="text1">
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <div class="input-clear"></div>
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
                         </div>
-
                     </div> <!--//section-top end -->
-                    <div class="row">
+                </section>
 
-                    <div class="row row-2" style="width: 100%">
-                        <section class="wp48" style="height: 530px">
-                            <!-- 그래프 -->
-                            <div id="chartHolder1" style="width:600px; height:400px;">
-                            </div>
-                        </section>
-                        <section class="wp48" style="height: 530px">
-                            <!--<img src="/images/알림이력2.png" style="width: 100%"/>-->
-                            <div id="chartHolder2" style="width:600px; height:400px;"></div>
-                        </section>
-                    </div>
+                <!-- 통합 영역 -->
+                <section class="tab-item tab-content" id="tab1">
+                    <div class="row">
+                        <div class="row row-2" style="width: 100%">
+                            <section class="wp60" style="height: 680px">
+                                <!-- 그래프 -->
+                                <div class="chart-wrap">
+                                    <div id="chartHolder1" style="height:450px; width:100%;"></div>
+                                </div>
+                            </section>
+                            <section class="wp40" style="height: 680px">
+                                <div class="chart-wrap">
+                                    <div id="chartHolder2" style="height:450px; width:100%;"></div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </section>
 
-
-                <!-- Section -->
-
+                <!-- 상세 영역 -->
+                <section class="tab-item tab-content" id="tab2">
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 680px"></div>
+                    </div>
+                </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
+
+
     </div> <!--//layout-contents end -->
-
-
-
-
-
-
 
 
 </th:block>
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
 
     <script type="text/javascript">
 
 
-
         var theGrid;
-        var viewdata;
-        let selectedFiles = [];
-        let SelectItem;
-        let csrfToken = $("[name=_csrf]").val();
-
-        var columns = [
-            { binding: '', header: '발생일시', align: 'center', width: 190},
-            { binding: '', header: '장비', align: 'center', width: 190 },
-            { binding: '', header: '이벤트내용', align: 'center', minWidth: 270 , width: '*' },
-            { binding: '', header: '조치일시', align: 'center', minWidth: 170 , width: '*' },
-            { binding: '', header: '조치자', align: 'center', width: 210 },
-            { binding: '', header: '조치내용', align: 'center', minWidth: 210 , width: '*' },
-            { binding: '', header: '확인', align: 'center', width: 140 },
-        ];
-
-
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            fetchListData();
+            initializeSelections();
+            updatePeriodInputs();
+        }
+
+        var columns = [
+            {binding: 'occurDateTime', header: '발생일시', align: 'center', width: 190},
+            {binding: 'device', header: '장비', align: 'center', width: 190},
+            {binding: 'eventContent', header: '이벤트내용', align: 'center', minWidth: 270, width: '*'},
+            {binding: 'actionDateTime', header: '조치일시', align: 'center', minWidth: 170, width: '*'},
+            {binding: 'actionUser', header: '조치자', align: 'center', width: 210},
+            {binding: 'actionContent', header: '조치내용', align: 'center', minWidth: 210, width: '*'},
+            {binding: 'confirmed', header: '확인', align: 'center', width: 140},
+        ];
+
+        function fetchListData() {
             let data2 = [];
-            let searchusr = $('#searchusr').val();
+            const categories1 = ['Fault', 'Alarm', '통신이상', '가스누출', '연료전지 고온', '계통연계'];
+            const categories2 = ['Fault', 'Alarm', '통신이상', '가스누출', '연료전지 고온', '계통연계'];
+            // $.ajax({
+            //     url: '/api/inspec_report/read',
+            //     type: 'GET',
+            //     data: {
+            //         'searchusr': 'infinited',
+            //
+            //     },
+            //     async: false,
+            //     success: function (data) {
+            //         console.log('check1', data.data);
+            //         if (data.data.length === 0) {
+            //             for (let i = 0; i < 10; i++) {
+            //                 data.data.push('example');
+            //             }
+            //         }
+            //         console.log(data.data);
+            //         data2 = data.data;
+            //     }
+            // })
 
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : 'infinited',
-
-                },
-                async: false,
-                success: function(data){
-                    console.log('check1',data.data);
-                    if(data.data.length === 0){
-                        for(let i=0; i < 10; i++ ){
-                            data.data.push('example');
-                        }
-                    }
-                    console.log(data.data);
-                    data2 = data.data;
-                }
-            })
+            // 샘플 데이터 생성
+            for (let i = 0; i < 20; i++) {
+                const category1 = categories1[i % categories1.length];
+                data2.push({
+                    occurDateTime: `2023-09-${(i+1).toString().padStart(2, '0')} 12:34:56`,
+                    device: `FC#1`,
+                    eventContent: category1,
+                    actionDateTime: `2023-09-${(i+1).toString().padStart(2, '0')} 13:00:00`,
+                    actionUser: `관리자`,
+                    actionContent: `${category1} 확인`,
+                    confirmed: i % 2 === 0 ? 'Yes' : 'No'
+                });
+            }
 
             viewdata = new wijmo.collections.CollectionView(data2);
             // 데이터 그리드에 바인딩
-            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata
-            });
+            if (!theGrid) {
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: columns,
+                    itemsSource: viewdata
+                });
 
-            // 선택이 변경될 때, 현재 항목 업데이트
-
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+                // 선택이 변경될 때, 현재 항목 업데이트
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '장비알림이력';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
         }
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs() {
+            const periodType = document.getElementById("periodType").value;
+            const startDateContainer = document.getElementById("startDateContainer");
+            const endDateContainer = document.getElementById("endDateContainer");
+            const currentYear = new Date().getFullYear();
 
+            // 기존 내용을 초기화
+            startDateContainer.innerHTML = "";
+            endDateContainer.innerHTML = "";
 
+            if (periodType === "byday") { // 월별 조회가 선택된 경우
+                const startDate = `${currentYear}-01-01`; // 선택된 연도의 1월
+                const endDate = `${currentYear}-12-31`; // 선택된 연도의 12월
 
-        $(document).ready(function() {
+                startDateContainer.innerHTML = `<input type="date" id="startDate" name="startDate" value="${startDate}">`;
+                endDateContainer.innerHTML = `<input type="date" id="endDate" name="endDate" value="${endDate}">`;
+            } else if (periodType === "byweek") { // 주간별 조회가 선택된 경우
+                const firstDayOfYear = new Date(currentYear, 0, 1);
+                const lastWeekEndDate = getLastDayOfLastISOWeek(currentYear);
 
-                let LoadingCheck = false;
-            $('#runrmate').click(function() {
+                const firstWeek = getISOWeek(firstDayOfYear).toString().padStart(2, '0');
+                const startDate = `${currentYear}-W${firstWeek}`;
 
-                if(LoadingCheck === false){
-                setTimeout(function() {
-                    //$('#runf').trigger('click');
-                    let con = "chart1"
-                    rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
-                    let con2 = "chart2"
-                    rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars2, "120%", "120%");
+                const endDate = `${lastWeekEndDate.getFullYear()}-W${getISOWeek(lastWeekEndDate).toString().padStart(2, '0')}`;
 
-                    LoadingCheck = true;
-                }, 100); // 3000ms = 3초
+                startDateContainer.innerHTML = `<input type="week" id="startDate" name="startDate" value="${startDate}">`;
+                endDateContainer.innerHTML = `<input type="week" id="endDate" name="endDate" value="${endDate}">`;
+            } else if (periodType === "bymonth") { // 월별 조회가 선택된 경우
+                const startDate = `${currentYear}-01`; // 선택된 연도의 1월
+                const endDate = `${currentYear}-12`; // 선택된 연도의 12월
+
+                startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
+                endDateContainer.innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
+            } else if (periodType === "byyear") { // 연도별 조회가 선택된 경우
+                let yearOptions = '';
+                for (let i = 0; i < 5; i++) {
+                    const year = currentYear - i;
+                    yearOptions += `<option value="${year}">${year}년</option>`;
                 }
-            });
 
-            // Show the first tab by default
-
-
-            $("#test").click(function(event){
-                let con = "chart2"
-                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "120%", "120%");
-            })
-        });
-
-
-        let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
-        let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler2";
-
-        function chartReadyHandler2(id) {
-            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
-            document.getElementById(id).setData(chartData2);
-
-            //document.getElementById(id).resize();
-        }
-        function chartReadyHandler(id) {
-            document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
-            document.getElementById(id).setData(chartData);
-
-            document.getElementById(id).resize();
+                startDateContainer.innerHTML = `<select id="startYear" name="startYear" style="width: 100px">${yearOptions}</select>`;
+                endDateContainer.innerHTML = `<select id="endYear" name="endYear" style="width: 100px">${yearOptions}</select>`;
+            }
         }
 
+        function getISOWeek(date) {
+            const target = new Date(date);
+            const dayNumber = (date.getDay() + 6) % 7;
+            target.setDate(target.getDate() - dayNumber + 3);
+            const firstThursday = target.valueOf();
+            target.setMonth(0, 1);
+            if (target.getDay() !== 4) {
+                target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+            }
+            return 1 + Math.ceil((firstThursday - target) / 604800000);
+        }
 
+        function getLastDayOfLastISOWeek(year) {
+            const date = new Date(year, 11, 28); // 12월 28일은 항상 마지막 주에 포함됩니다.
+            const day = date.getDay() || 7;
+            if (day !== 7) date.setHours(24 * (7 - day)); // 일요일로 이동
+            return date;
+        }
+
+        rMateChartH5.create("chart1", "chartHolder1", "", "100%", "100%");
+
+        // 스트링 형식으로 레이아웃 정의.
         var layoutStr1 =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
             +'<Options>'
             +'<Caption text="유형별"/>'
-            +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
+            // +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
             +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
             +'</Options>'
             +'<Column2DChart seriesMouseOverAction="series" showDataTips="true" columnWidthRatio="0.4" paddingBottom="25">'
             +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month"/>'
+            +'<CategoryAxis categoryField="Date"/>'
             +'</horizontalAxis>'
             +'<verticalAxis>'
             +'<LinearAxis maximum="100" interval="10"/>'
             +'</verticalAxis>'
             +'<series>'
-            /*
-            type 속성을 stacked로 변경
-            type속성으로는
-            clustered : 일반적인 다중데이터(차트의 멀티시리즈)방식으로 데이터를 표현합니다.(Default)
-            stacked : 데이터를 위에 쌓아 올린 방식으로 표현 합니다.
-            overlaid : 수치 데이터 값을 겹쳐서 표현 합니다. 주로 목표 위치와 현재 위치를 나타낼 때 많이 쓰입니다.
-            100% : 차트의 수치 데이터를 퍼센티지로 계산 후 값을 퍼센티지로 나타냅니다.
-            */
-            +'<Column2DSet type="stacked" showTotalLabel="true" totalLabelJsFunction="totalFunc" paddingBottom="9" labelYOffset="-5">'
+            +'<Column2DSet type="stacked" showTotalLabel="true" totalLabelJsFunction="totalFunc" labelYOffset="-5">'
             +'<series>'
-            +'<Column2DSeries yField="tv" displayName="TV" lineToEachItems="true" showLinkLabels="true">'
-            /* lineToEachItems : True로 설정 하면 Series간에 선을 이어준다 */
+            +'<Column2DSeries yField="Fault" displayName="Fault" lineToEachItems="false" showLinkLabels="true">'
             +'<showDataEffect>'
             +'<SeriesInterpolate2/>'
             +'</showDataEffect>'
             +'</Column2DSeries>'
-            +'<Column2DSeries yField="tablet" displayName="Tablet" lineToEachItems="true" showLinkLabels="true" fill="#01dbab">'
+            +'<Column2DSeries yField="Alarm" displayName="Alarm" lineToEachItems="false" showLinkLabels="true" fill="#01dbab">'
             +'<showDataEffect>'
             +'<SeriesInterpolate2/>'
             +'</showDataEffect>'
             +'</Column2DSeries>'
-            +'<Column2DSeries yField="phone" displayName="Cell Phone" lineToEachItems="true" showLinkLabels="true" fill="#7d88ff">'
+            +'<Column2DSeries yField="통신이상" displayName="통신이상" lineToEachItems="false" showLinkLabels="true" fill="#7d88ff">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="가스누출" displayName="가스누출" lineToEachItems="false" showLinkLabels="true">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="연료전지 고온" displayName="연료전지 고온" lineToEachItems="false" showLinkLabels="true">'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate2/>'
+            +'</showDataEffect>'
+            +'</Column2DSeries>'
+            +'<Column2DSeries yField="계통연계" displayName="계통연계" lineToEachItems="false" showLinkLabels="true">'
             +'<showDataEffect>'
             +'<SeriesInterpolate2/>'
             +'</showDataEffect>'
@@ -409,76 +387,33 @@
             +'</Column2DChart>'
             +'</rMateChart>';
 
+        // 차트 데이터
+        var chartData1 = [
+            {"Date": "1", "Fault": 10, "Alarm": 15, "통신이상": 8, "가스누출": 12, "연료전지 고온": 7, "계통연계": 5}, // 합계 57
+            {"Date": "2", "Fault": 20, "Alarm": 15, "통신이상": 5, "가스누출": 20, "연료전지 고온": 10, "계통연계": 5}, // 합계 75
+            {"Date": "3", "Fault": 15, "Alarm": 10, "통신이상": 10, "가스누출": 15, "연료전지 고온": 10, "계통연계": 20}, // 합계 80
+            {"Date": "4", "Fault": 10, "Alarm": 5, "통신이상": 15, "가스누출": 20, "연료전지 고온": 10, "계통연계": 15}, // 합계 75
+            {"Date": "5", "Fault": 25, "Alarm": 20, "통신이상": 10, "가스누출": 15, "연료전지 고온": 10, "계통연계": 5}, // 합계 85
+            {"Date": "6", "Fault": 10, "Alarm": 15, "통신이상": 8, "가스누출": 10, "연료전지 고온": 5, "계통연계": 12}, // 합계 60
+            {"Date": "7", "Fault": 15, "Alarm": 20, "통신이상": 10, "가스누출": 15, "연료전지 고온": 10, "계통연계": 5}, // 합계 75
+            {"Date": "8", "Fault": 10, "Alarm": 20, "통신이상": 15, "가스누출": 10, "연료전지 고온": 10, "계통연계": 15}, // 합계 80
+            {"Date": "9", "Fault": 20, "Alarm": 15, "통신이상": 15, "가스누출": 10, "연료전지 고온": 10, "계통연계": 5}, // 합계 75
+            {"Date": "10", "Fault": 25, "Alarm": 20, "통신이상": 15, "가스누출": 15, "연료전지 고온": 10, "계통연계": 5}, // 합계 90
+            {"Date": "11", "Fault": 15, "Alarm": 10, "통신이상": 10, "가스누출": 15, "연료전지 고온": 10, "계통연계": 15}, // 합계 75
+            {"Date": "12", "Fault": 20, "Alarm": 25, "통신이상": 15, "가스누출": 10, "연료전지 고온": 10, "계통연계": 5}, // 합계 85
+            {"Date": "13", "Fault": 10, "Alarm": 10, "통신이상": 5, "가스누출": 10, "연료전지 고온": 5, "계통연계": 10}, // 합계 50
+            {"Date": "14", "Fault": 15, "Alarm": 20, "통신이상": 15, "가스누출": 10, "연료전지 고온": 15, "계통연계": 10}, // 합계 85
+            {"Date": "15", "Fault": 20, "Alarm": 15, "통신이상": 20, "가스누출": 15, "연료전지 고온": 5, "계통연계": 10}, // 합계 85
+            {"Date": "16", "Fault": 10, "Alarm": 5, "통신이상": 10, "가스누출": 15, "연료전지 고온": 5, "계통연계": 10}, // 합계 55
+            {"Date": "17", "Fault": 15, "Alarm": 15, "통신이상": 15, "가스누출": 20, "연료전지 고온": 10, "계통연계": 10}  // 합계 85
+        ];
 
-        var layoutStr2 =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" paddingBottom="20">'
-            +'<Options>'
-            +'<Caption text="발생빈도별"/>'
-            +'<SubCaption text="August 2018" paddingBottom="90"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            +'</Options>'
-            +'<CurrencyFormatter id="numFmt" currencySymbol="%" alignSymbol="right"/>'
-            /*
-            Pie3D 차트 생성시에 필요한 Pie3DChart 정의합니다
-            showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다.
-            */
-            +'<Pie3DChart showDataTips="true" depth="50" elevation="50" paddingBottom="35">'
-            +'<series>'
-            +'<Pie3DSeries nameField="browser" field="share" labelPosition="inside" color="#ffffff" startAngle="240" itemRollOverEmphasize="true">'
-            /* Pie3DChart 정의 후 Pie3DSeries labelPosition="inside"정의합니다 */
-            +'<showDataEffect>'
-            /* 차트 생성시에 Effect를 주고 싶을 때 shoDataEffect정의합니다 */
-            +'<SeriesInterpolate duration="1000"/>'
-            /*
-            SeriesInterpolate 효과는 시리즈 데이터가 데이터로 표시될 때 데이터의 변화된 내용을 가지고 효과를 적용합니다
-            - 공통 -
-            elementOffset : effect를 지연시키는 시간을 지정합니다 default:20
-            minimumElementDuration : 각 엘리먼트의 최소 지속 시간을 설정합니다 default:0
-                         이 값보다 짧은 시간에 effect가 실행되지 않습니다
-            offset : effect개시의 지연시간을 설정합니다 default:0
-            perElementOffset : 각 엘리먼트의 개시 지연시간을 설정합니다
-            */
-            +'</showDataEffect>'
-            +'</Pie3DSeries>'
-            +'</series>'
-            +'</Pie3DChart>'
-            +'</rMateChart>';
+        rMateChartH5.calls("chart1", {
+            "setLayout" : layoutStr1,
+            "setData" : chartData1
+        });
 
-        var layoutStr3 =
-            '<rMateChart backgroundColor="#FFFFFF"  borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="Rainfall" />'
-            +'<SubCaption text="( mm )" textAlign="right" />'
-            +'</Options>'
-            +'<Pie2DChart showDataTips="true" padding="20">'
-            +'<series>'
-            +'<Pie2DSeries field="Vancouver" nameField="Month" labelPosition="inside" color="#FFFFFF">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Pie2DSeries>'
-            +'</series>'
-            +'</Pie2DChart>'
-            +'</rMateChart>';
-
-        var chartData =
-            [{"Month":"Jan", "phone":12, "tv":11, "tablet":12},
-                {"Month":"Feb", "phone":14, "tv":19, "tablet":17},
-                {"Month":"Mar", "phone":23, "tv":25, "tablet":20},
-                {"Month":"Apr", "phone":20, "tv":20, "tablet":18},
-                {"Month":"May", "phone":35, "tv":25, "tablet":25},
-                {"Month":"Jun", "phone":20, "tv":22, "tablet":23},
-                {"Month":"Jul", "phone":17, "tv":20, "tablet":17},
-                {"Month":"Aug", "phone":23, "tv":21, "tablet":21},
-                {"Month":"Sep", "phone":18, "tv":17, "tablet":10}];
-
-        var chartData2 =
-            [{"browser":"Chrome", "share":68},
-                {"browser":"Internet Explorer", "share":12},
-                {"browser":"Firefox", "share":11},
-                {"browser":"Safari", "share":6},
-                {"browser":"Opera", "share":3}];
-
+        // 스택 수치 합 사용자 정의 함수
         function totalFunc(index, data, value){
             if(index == 4)
                 return insertComma(value);
@@ -494,6 +429,57 @@
             return n;
         }
 
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart1").setTheme(theme);
+        }
+
+
+        rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr2 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="발생빈도별" paddingBottom="70"/>'
+            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<Pie2DChart innerRadius="0.5" showDataTips="true" selectionMode="single" paddingBottom="25">'
+            +'<series>'
+            +'<Pie2DSeries nameField="division" field="Profit" startAngle="20" renderDirection="clockwise" labelPosition="inside" color="#ffffff" itemRollOverEmphasize="true">'
+            /* Pie2DChart 정의 후 Pie2DSeries labelPosition="inside"정의합니다 */
+            +'<showDataEffect>'
+            /* 차트 생성시에 Effect를 주고 싶을 때 shoDataEffect정의합니다 */
+            +'<SeriesSlide previewColor="#eeeeee" duration="1000"/>'
+            +'</showDataEffect>'
+            +'</Pie2DSeries>'
+            +'</series>'
+            +'<backgroundElements>'
+            +'<CanvasElement>'
+            +'</CanvasElement>'
+            +'</backgroundElements>'
+            +'</Pie2DChart>'
+            +'</rMateChart>';
+
+        // 차트 데이터
+        var chartData2 = [{"division":"Fault", "Profit":40},
+            {"division":"Alarm", "Profit":30},
+            {"division":"통신이상", "Profit":10},
+            {"division":"가스누출", "Profit":15},
+            {"division":"연료전지 고온", "Profit":50},
+            {"division":"계통연계", "Profit":10}];
+
+        rMateChartH5.calls("chart2", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData2
+        });
+
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart2").setTheme(theme);
+        }
     </script>
 </th:block>
 
