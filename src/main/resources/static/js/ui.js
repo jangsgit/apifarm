@@ -35,7 +35,49 @@ $(document).ready(function () {
 });
 
 /*         TAB          */
+/*         TAB          */
+
+const ExceptionUrl = [];
+
 $(document).ready(function () {
+    // 예외 URL 리스트를 배열로 정의합니다.
+    var exceptionUrls = [
+        "http://localhost:8060/gui/wm_equipment_search/default",
+        // 추가 예외 URL을 여기에 추가할 수 있습니다.
+        "http://localhost:8060/gui/another_exception"
+    ];
+
+    // 현재 URL을 가져옵니다.
+    var currentUrl = window.location.href;
+
+    // 현재 URL이 예외 리스트에 포함되어 있는지 확인합니다.
+    var isException = exceptionUrls.some(function (url) {
+        return currentUrl === url;
+    });
+
+    if (!isException) {
+        $(".tab-links a").click(function (event) {
+            event.preventDefault();
+
+            // 클릭된 탭 링크의 href 속성 값을 가져옴
+            var tabId = $(this).attr("href");
+
+            // 해당 탭을 보여주고 활성화
+            $(".tab-item").hide();
+            $(tabId).show();
+
+            // 현재 활성화된 탭을 나타내기 위해 클래스 추가/제거
+            $(".tab-links li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        // 초기에 첫 번째 탭을 활성화
+        $(".tab-item:first").show();
+        $(".tab-links li:first").addClass("active");
+    }
+});
+//기존에는 아래인데 장비이력조회 등 복수의 섹션에서 탭을 활용해야해서 주석처리해놓았음
+/*$(document).ready(function () {
 
     $(".tab-links a").click(function (event) {
         event.preventDefault();
@@ -56,7 +98,7 @@ $(document).ready(function () {
     $(".tab-item:first").show();
     $(".tab-links li:first").addClass("active");
 
-});
+});*/
 
 /*         Popup          */
 $(document).ready(function () {

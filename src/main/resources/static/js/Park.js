@@ -420,6 +420,40 @@ $(document).ready(function (e) {
         }
     });
 
+    /**
+     * 탭 기능을 초기화하는 함수
+     * @param {string} containerSelector - 탭 기능을 적용할 컨테이너의 선택자
+     */
+    function initializeTabs(containerSelector) {
+        $(containerSelector).each(function() {
+            var $container = $(this);
+
+            // 탭 클릭 이벤트 처리
+            $container.find(".tab-links a").click(function(event) {
+                event.preventDefault();
+
+                // 클릭된 탭 링크의 href 속성 값을 가져옴
+                var tabId = $(this).attr("href");
+
+                // 해당 탭을 보여주고 활성화
+                $container.find(".tab-item").hide();
+                $container.find(tabId).show();
+
+                // 현재 활성화된 탭을 나타내기 위해 클래스 추가/제거
+                $container.find(".tab-links li").removeClass("active");
+                $(this).parent().addClass("active");
+            });
+
+            // 초기에 첫 번째 탭을 활성화
+            $container.find(".tab-item:first").show();
+            $container.find(".tab-links li:first").addClass("active");
+        });
+    }
+
+    // 페이지 내의 다양한 탭 컨테이너를 초기화
+    initializeTabs(".tab-section"); // 첫 번째 페이지의 탭
+    initializeTabs(".another-tab-section"); // 두 번째 페이지의 탭
+
 
 })
 
@@ -429,7 +463,7 @@ function toggleSearchWrap(){
 
 
     if(searchWrap.style.display === 'none' || searchWrap.style.display === ''){
-        searchWrap.style.display = 'block';
+        searchWrap.style.display = 'flex';
         toggleButton.src = '/images/icon/ico-up.png';
 
     } else {
@@ -437,6 +471,10 @@ function toggleSearchWrap(){
         toggleButton.src = '/images/icon/ico-down.png';
     }
 }
+
+
+
+
 
 
 
