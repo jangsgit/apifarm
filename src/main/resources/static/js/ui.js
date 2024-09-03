@@ -75,6 +75,26 @@ $(document).ready(function () {
         $(".tab-item:first").show();
         $(".tab-links li:first").addClass("active");
     }
+    if (!isException) {
+        $(".tab-links-sub a").click(function (event) {
+            event.preventDefault();
+
+            // 클릭된 탭 링크의 href 속성 값을 가져옴
+            var tabId = $(this).attr("href");
+
+            // 해당 탭을 보여주고 활성화
+            $(".tab-item-sub").hide();
+            $(tabId).show();
+
+            // 현재 활성화된 탭을 나타내기 위해 클래스 추가/제거
+            $(".tab-links-sub li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+
+        // 초기에 첫 번째 탭을 활성화
+        $(".tab-item-sub:first").show();
+        $(".tab-links-sub li:first").addClass("active");
+    }
 });
 //기존에는 아래인데 장비이력조회 등 복수의 섹션에서 탭을 활용해야해서 주석처리해놓았음
 /*$(document).ready(function () {
