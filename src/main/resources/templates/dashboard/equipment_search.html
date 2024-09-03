@@ -53,47 +53,64 @@
         <section style="background-color: #f0f1f2; border-radius: 0px; border: none; box-shadow: none; padding: 2px">
             <div class="section-top">
                 <div class="search-wrap">
-                    <dl>
-                        <!--<dt>
-                            조회기간<span class="eq">*</span>
-                        </dt>-->
+                    <dl id="searchYear" style="display: none">
                         <dd>
-                            <!--<label class="search-label">
-                                조회기간<span class="eq">*</span>
-                            </label>-->
-                            <ul class="date-box">
-                                <label class="search-label" style="
-    /* display: inline-block; */
-">
-                                    조회기간<span class="eq">*</span>
+                            <ul class="date-box" style="gap: 5px">
+                                <label class="search-label">
+                                    조회연도<span class="eq">*</span>
                                 </label>
-                                <li style="cursor: default; list-style-image: none;">
-                                    <input type="date" id="searchfrdate" name="searchfrdate" style="background-color: #fff">
-                                    <label for="searchfrdate" class="hide">시작일</label>
-                                </li>
-                                <li style="cursor: default; list-style-image: none;">
-                                    <input type="date" id="searchtodate" name="searchtodate" style="background-color: #fff">
-                                    <label for="searchtodate" class="hide">종료일</label>
+                                <li>
+                                    <select id="yearSelectTab1" name="yearSelectTab1">
+                                        <option>2023</option>
+                                        <option selected>2024</option>
+                                    </select>
                                 </li>
                             </ul>
                         </dd>
                     </dl>
-                    <!--<dl>
-                        <dt>
-                            <label for="select1">
-                                단위<span class="eq">*</span></label></dt>
-
-                        <dd>
-                            <select id="select1" class="w120">
-                                <option>Nm3</option>
-                            </select>
-                        </dd>
-                    </dl>-->
                     <dl>
-                        <!--<dt>
-                            <label for="select1">
-                                표출조건</label></dt>-->
+                        <dd>
+                            <ul class="date-box" style="gap: 5px">
+                                <label class="search-label" id="periodLabel">
+                                    기간유형<span class="eq">*</span>
+                                </label>
+                                <li>
+                                    <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                        <option value="hourly">시간별</option>
+                                        <option value="monthly" selected>월별</option>
+                                        <option value="quarterly">분기별</option>
+                                        <option value="halfyearly">반기별</option>
+                                        <option value="yearly">연도별</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dd>
+                            <ul class="date-box" style="gap: 10px" id="dateBoxContainer">
+                                <label class="search-label">
+                                    조회기간<span class="eq">*</span>
+                                </label>
+                                <!--<li style="cursor: default; list-style-image: none;">
+                                    <input type="date" id="searchfrdate" name="searchfrdate" style="background-color: #fff">
+                                    <label for="searchfrdate" class="hide">시작일</label>
+                                </li>-->
+                                <li id="startDateContainer">
+                                    <input type="month" id="startDate" name="startDate" value="2024-01" style="background-color: white">
+                                </li>
+                                <!--<li style="cursor: default; list-style-image: none;">
+                                    <input type="date" id="searchtodate" name="searchtodate" style="background-color: #fff">
+                                    <label for="searchtodate" class="hide">종료일</label>
+                                </li>-->
+                                <li id="endDateContainer">
+                                    <input type="month" id="endDate" name="endDate" value="2024-05">
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
 
+                    <dl>
                         <dd>
                             <label for="select1" class="search-label">
                                 표출조건
@@ -104,7 +121,6 @@
                         </dd>
                     </dl>
                     <dl>
-
                         <dd>
                             <ul class="date-box">
                                 <li style="cursor: default; list-style-image: none;">
@@ -121,11 +137,11 @@
             </div></section>
         <div class="row row-2" style="margin-bottom: 10px">
             <div class="col wp50" style="margin-right: 15px">
-                <section class="tab-section" style="height: 385px; padding: 11px; margin-bottom: 0px;">
+                <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>가스소비량</h3>
                         <ul class="tab-links">
-                            <li><a href="#tab1" title="가스소비량">가스소비량</a></li>
+                            <li><a href="#tab1" title="통계">통계</a></li>
                             <li><a href="#tab2" title="현황">현황</a></li>
                         </ul>
                     </div>
@@ -169,48 +185,61 @@
                                 <div id="theGrid" style="width: 100%; height: 230px"></div>
                             </div>
                         </div>
-                        <!-- tab3 -->
-                        <div class="tab-item" id="tab3">
-                            <div class="chart-wrap"></div>
-                        </div>
-                        <!-- tab4 -->
-                        <div class="tab-item" id="tab4">
-                            <div class="chart-wrap"></div>
-                        </div>
+
                     </div>
                 </section>
             </div>
 
             <div class="col wp50">
-                <section class="tab-section" style="height: 385px; padding: 11px; margin-bottom: 0px;">
+                <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>전기생산량</h3>
                         <ul class="tab-links">
-                            <li><a href="#tab5" title="Tab 5">Tab 5</a></li>
-                            <li><a href="#tab6" title="Tab 6">Tab 6</a></li>
-                            <li><a href="#tab7" title="Tab 7">Tab 7</a></li>
-                            <li><a href="#tab8" title="Tab 8">Tab 8</a></li>
+                            <li><a href="#tab3" title="통계">통계</a></li>
+                            <li><a href="#tab4" title="현황">현황</a></li>
+
                         </ul>
                     </div>
                     <div class="tab-contents">
                         <!-- tab5 -->
-                        <div class="tab-item h280" id="tab5">
-                            <div class="chart-wrap">
-                                <img src="/images/sample/sample-chart.svg" alt="">
+                        <div class="tab-item" id="tab3">
+                            <div>
+                                <div id="chartHolder2" style="width: 100%; height: 320px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab6 -->
-                        <div class="tab-item h280" id="tab6">
-                            <div class="chart-wrap"></div>
+                        <div class="tab-item" id="tab4">
+                            <div class="section-card-wrap" style="height: 88px">
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3 class="card-text-top">전기생산량(kWh)</h3><h3 class="card-text-top">2250</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="down"></span>
+                                            <span class="fs18 fw600">1.20</span>
+                                            <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3>예상수익(원)</h3><h3 class="card-text-top">195,000</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="up"></span> 1.20 <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                            </div>
+                            <div class="container-fluid">
+                                <div id="theGrid2" style="width: 100%; height: 230px"></div>
+                            </div>
                         </div>
-                        <!-- tab7 -->
-                        <div class="tab-item h280" id="tab7">
-                            <div class="chart-wrap"></div>
-                        </div>
-                        <!-- tab8 -->
-                        <div class="tab-item h280" id="tab8">
-                            <div class="chart-wrap"></div>
-                        </div>
+
                     </div>
                 </section>
             </div>
@@ -219,69 +248,109 @@
 
         <div class="row row-2" style="margin-bottom: 10px">
             <div class="col wp50" style="margin-right: 15px">
-                <section class="tab-section" style="height: 385px; padding: 11px; margin-bottom: 0px;">
+                <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>열공급량</h3>
                         <ul class="tab-links">
-                            <li><a href="#tab9" title="Tab 1">Tab 1</a></li>
-                            <li><a href="#tab10" title="Tab 2">Tab 2</a></li>
-                            <li><a href="#tab11" title="Tab 3">Tab 3</a></li>
-                            <li><a href="#tab12" title="Tab 4">Tab 4</a></li>
+                            <li><a href="#tab5" title="통계">통계</a></li>
+                            <li><a href="#tab6" title="현황">현황</a></li>
+
                         </ul>
                     </div>
                     <div class="tab-contents">
                         <!-- tab1 -->
-                        <div class="tab-item h280" id="tab9">
-                            <div class="chart-wrap">
-                                <img src="/images/sample/sample-chart.svg" alt="">
+                        <div class="tab-item" id="tab5">
+                            <div>
+                                <div id="chartHolder3" style="width: 100%; height: 320px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab2 -->
-                        <div class="tab-item h280" id="tab10">
-                            <div class="chart-wrap"></div>
+                        <div class="tab-item" id="tab6">
+                            <div class="section-card-wrap" style="height: 88px">
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3 class="card-text-top">열공급량(Mcal)</h3><h3 class="card-text-top">700</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="down"></span>
+                                            <span class="fs18 fw600">1.20</span>
+                                            <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3>예상수익(원)</h3><h3 class="card-text-top">1,000,000</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="up"></span> 1.20 <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                            </div>
+                            <div class="container-fluid">
+                                <div id="theGrid3" style="width: 100%; height: 230px"></div>
+                            </div>
                         </div>
-                        <!-- tab3 -->
-                        <div class="tab-item h280" id="tab11">
-                            <div class="chart-wrap"></div>
-                        </div>
-                        <!-- tab4 -->
-                        <div class="tab-item h280" id="tab12">
-                            <div class="chart-wrap"></div>
-                        </div>
+
                     </div>
                 </section>
             </div>
 
             <div class="col wp50">
-                <section class="tab-section" style="height: 385px; padding: 11px; margin-bottom: 0px;">
+                <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>효율</h3>
                         <ul class="tab-links">
-                            <li><a href="#tab13" title="Tab 5">Tab 5</a></li>
-                            <li><a href="#tab14" title="Tab 6">Tab 6</a></li>
-                            <li><a href="#tab15" title="Tab 7">Tab 7</a></li>
-                            <li><a href="#tab16" title="Tab 8">Tab 8</a></li>
+                            <li><a href="#tab7" title="통계">통계</a></li>
+                            <li><a href="#tab8" title="현황">현황</a></li>
+
                         </ul>
                     </div>
                     <div class="tab-contents">
-                        <!-- tab5 -->
-                        <div class="tab-item" id="tab13">
-                            <div class="chart-wrap">
-                                <img src="/images/sample/sample-chart.svg" alt="">
+                        <!-- tab7 -->
+                        <div class="tab-item" id="tab7">
+                            <div>
+                                <div id="chartHolder4" style="width: 100%; height: 320px; padding-top: 13px"></div>
                             </div>
                         </div>
-                        <!-- tab6 -->
-                        <div class="tab-item" id="tab14">
-                            <div class="chart-wrap"></div>
-                        </div>
-                        <!-- tab7 -->
-                        <div class="tab-item" id="tab15">
-                            <div class="chart-wrap"></div>
-                        </div>
                         <!-- tab8 -->
-                        <div class="tab-item" id="tab16">
-                            <div class="chart-wrap"></div>
+                        <div class="tab-item" id="tab8">
+                            <div class="section-card-wrap" style="height: 88px">
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3 class="card-text-top">총효율(%)</h3><h3 class="card-text-top">700</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="down"></span>
+                                            <span class="fs18 fw600">1.20</span>
+                                            <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                                <section class="card-section-top">
+                                    <div class="title card-section-title">
+                                        <h3>전기/효율(%)</h3><h3 class="card-text-top">35/0</h3>
+                                    </div>
+                                    <dl>
+                                        <dt>전일대비</dt>
+                                        <dd>
+                                            <span class="up"></span> 1.20 <span class="unit">%</span>
+                                        </dd>
+                                    </dl>
+                                </section>
+                            </div>
+                            <div class="container-fluid">
+                                <div id="theGrid4" style="width: 100%; height: 230px"></div>
+                            </div>
                         </div>
+
                     </div>
                 </section>
             </div>
@@ -462,141 +531,266 @@
 
         // -----------------------차트 설정 시작-----------------------
 
-        // rMateChart 를 생성합니다.
-        // 파라메터 (순서대로)
-        //  1. 차트의 id ( 임의로 지정하십시오. )
-        //  2. 차트가 위치할 div 의 id (즉, 차트의 부모 div 의 id 입니다.)
-        //  3. 차트 생성 시 필요한 환경 변수들의 묶음인 chartVars
-        //  4. 차트의 가로 사이즈 (생략 가능, 생략 시 100%)
-        //  5. 차트의 세로 사이즈 (생략 가능, 생략 시 100%)
         rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
 
+        rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
+
+        rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
+
+        rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
+
         // 스트링 형식으로 레이아웃 정의.
-        var layoutStr =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="Sales and ROI" paddingBottom="45"/>'
-            +'<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            +'</Options>'
-            +'<NumberFormatter id="numFmt1" useThousandsSeparator="true"/>'
-            +'<CurrencyFormatter id="numFmt2" precision="0" currencySymbol="%" alignSymbol="right"/>'
-            +'<Combination2DChart seriesMouseOverAction="series" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">'
-            /*
-                Combination2D 차트 생성시에 필요한 Combination2DChart 정의합니다
-                showDataTips : 데이터에 마우스를 가져갔을 때 나오는 Tip을 보이기/안보이기 속성입니다
-            */
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month" padding="0.5"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis1" formatter="{numFmt1}"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Column2DSeries labelPosition="outside" yField="sales" displayName="Sales" showValueLabels="[5]">'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Column2DSeries>'
-            +'<Line2DSeries radius="6" yField="roi" displayName="ROI" itemRenderer="CircleItemRenderer">'
-            +'<lineStroke>'
-            +'<Stroke color="#01dbab" weight="4"/>'
-            +'</lineStroke>'
-            +'<verticalAxis>'
-            +'<LinearAxis id="vAxis2" formatter="{numFmt2}"/>'
-            +'</verticalAxis>'
-            +'<showDataEffect>'
-            +'<SeriesInterpolate/>'
-            +'</showDataEffect>'
-            +'</Line2DSeries>'
-            +'</series>'
-            +'<verticalAxisRenderers>'
-            +'<Axis2DRenderer axis="{vAxis1}" showLine="false"/>'
-            +'<Axis2DRenderer axis="{vAxis2}" showLine="false"/>'
-            +'</verticalAxisRenderers>'
-            +'</Combination2DChart>'
-            +'</rMateChart>';
+        function layoutStrValue(yField, yFieldName, yField2, yFieldName2) {
+            return `
+        <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+            <Options>
+                <Caption text="" paddingBottom="45"/>
+                <Legend defaultMouseOverAction="true" useVisibleCheck="true"/>
+            </Options>
+            <NumberFormatter id="numFmt1" useThousandsSeparator="true" />
+            <CurrencyFormatter id="numFmt2" precision="0" currencySymbol="°C" alignSymbol="right"/>
+            <Combination2DChart seriesMouseOverAction="series" showDataTips="true" dataTipJsFunction="dataTipJsFunc" paddingBottom="25">
+                <horizontalAxis>
+                    <CategoryAxis categoryField="Hour" padding="0.5"/> <!-- categoryName을 사용 -->
+                </horizontalAxis>
+                <verticalAxis>
+                    <LinearAxis id="vAxis1" formatter="{numFmt1}"/>
+                </verticalAxis>
+                <series>
+                    <Column2DSeries labelPosition="outside" yField="${yField}" displayName="${yFieldName}" showValueLabels="[30]">
+                        <showDataEffect>
+                            <SeriesInterpolate/>
+                        </showDataEffect>
+                    </Column2DSeries>
+                    <Line2DSeries radius="6" yField="${yField2}" displayName="${yFieldName2}" itemRenderer="CircleItemRenderer">
+                        <lineStroke>
+                            <Stroke color="#01dbab" weight="4"/>
+                        </lineStroke>
+                        <verticalAxis>
+                            <LinearAxis id="vAxis2" formatter="{numFmt1}"/>
+                        </verticalAxis>
+                        <showDataEffect>
+                            <SeriesInterpolate/>
+                        </showDataEffect>
+                    </Line2DSeries>
+                </series>
+                <verticalAxisRenderers>
+                    <Axis2DRenderer axis="{vAxis1}" showLine="false"/>
+                    <Axis2DRenderer axis="{vAxis2}" showLine="false"/>
+                </verticalAxisRenderers>
+            </Combination2DChart>
+        </rMateChart>
+    `;
+        }
 
         // 차트 데이터
         var chartData =
-            [{"Month":"Jan","sales":200,"roi":61},
-                {"Month":"Feb","sales":300,"roi":35},
-                {"Month":"Mar","sales":420,"roi":30},
-                {"Month":"Apr","sales":550,"roi":32},
-                {"Month":"May","sales":620,"roi":29},
-                {"Month":"Jun","sales":720,"roi":22},
-                {"Month":"Jul","sales":880,"roi":20},
-                {"Month":"Aug","sales":990,"roi":25},
-                {"Month":"Sep","sales":1000,"roi":19},
-                {"Month":"Oct","sales":1100,"roi":18},
-                {"Month":"Nov","sales":1220,"roi":16},
-                {"Month":"Dec","sales":1440,"roi":15}];
+            [   {"Hour":"1시","gas":200,"temperature":20},
+                {"Hour":"2시","gas":300,"temperature":20},
+                {"Hour":"3시","gas":420,"temperature":18},
+                {"Hour":"4시","gas":550,"temperature":19},
+                {"Hour":"5시","gas":620,"temperature":20},
+                {"Hour":"6시","gas":720,"temperature":18},
+                {"Hour":"7시","gas":880,"temperature":19},
+                {"Hour":"8시","gas":990,"temperature":19},
+                {"Hour":"9시","gas":1000,"temperature":20},
+                {"Hour":"10시","gas":1100,"temperature":21},
+                {"Hour":"11시","gas":1220,"temperature":23},
+                {"Hour":"12시","gas":1440,"temperature":24},
+                {"Hour":"13시","gas":1500,"temperature":25},
+                {"Hour":"14시","gas":1100,"temperature":27},
+                {"Hour":"15시","gas":1300,"temperature":29},
+                {"Hour":"16시","gas":1200,"temperature":32},
+                {"Hour":"17시","gas":1400,"temperature":34},
+                {"Hour":"18시","gas":1500,"temperature":32},
+                {"Hour":"19시","gas":1500,"temperature":30},
+                {"Hour":"20시","gas":990,"temperature":27},
+                {"Hour":"21시","gas":1350,"temperature":26},
+                {"Hour":"22시","gas":1200,"temperature":24},
+                {"Hour":"23시","gas":1220,"temperature":23},
+                {"Hour":"24시","gas":1440,"temperature":21}
 
-        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
-        //
-        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
-        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
-        //
-        // 아래 내용은
-        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
-        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
+            ];
+        var chartData2 =
+            [   {"Hour":"1시","electronic":100,"temperature":20},
+                {"Hour":"2시","electronic":120,"temperature":20},
+                {"Hour":"3시","electronic":80,"temperature":18},
+                {"Hour":"4시","electronic":90,"temperature":19},
+                {"Hour":"5시","electronic":80,"temperature":20},
+                {"Hour":"6시","electronic":70,"temperature":18},
+                {"Hour":"7시","electronic":85,"temperature":19},
+                {"Hour":"8시","electronic":88,"temperature":19},
+                {"Hour":"9시","electronic":110,"temperature":20},
+                {"Hour":"10시","electronic":120,"temperature":21},
+                {"Hour":"11시","electronic":120,"temperature":23},
+                {"Hour":"12시","electronic":110,"temperature":24},
+                {"Hour":"13시","electronic":70,"temperature":25},
+                {"Hour":"14시","electronic":60,"temperature":27},
+                {"Hour":"15시","electronic":80,"temperature":29},
+                {"Hour":"16시","electronic":70,"temperature":32},
+                {"Hour":"17시","electronic":80,"temperature":34},
+                {"Hour":"18시","electronic":90,"temperature":32},
+                {"Hour":"19시","electronic":100,"temperature":30},
+                {"Hour":"20시","electronic":80,"temperature":27},
+                {"Hour":"21시","electronic":90,"temperature":26},
+                {"Hour":"22시","electronic":60,"temperature":24},
+                {"Hour":"23시","electronic":60,"temperature":23},
+                {"Hour":"24시","electronic":70,"temperature":21}
+
+            ];
+
+        var chartData3 =
+            [   {"Hour":"1시","heat":100,"temperature":20},
+                {"Hour":"2시","heat":90,"temperature":20},
+                {"Hour":"3시","heat":50,"temperature":18},
+                {"Hour":"4시","heat":40,"temperature":19},
+                {"Hour":"5시","heat":80,"temperature":20},
+                {"Hour":"6시","heat":70,"temperature":18},
+                {"Hour":"7시","heat":90,"temperature":19},
+                {"Hour":"8시","heat":70,"temperature":19},
+                {"Hour":"9시","heat":80,"temperature":20},
+                {"Hour":"10시","heat":90,"temperature":21},
+                {"Hour":"11시","heat":70,"temperature":23},
+                {"Hour":"12시","heat":50,"temperature":24},
+                {"Hour":"13시","heat":90,"temperature":25},
+                {"Hour":"14시","heat":90,"temperature":27},
+                {"Hour":"15시","heat":90,"temperature":29},
+                {"Hour":"16시","heat":80,"temperature":32},
+                {"Hour":"17시","heat":80,"temperature":34},
+                {"Hour":"18시","heat":90,"temperature":32},
+                {"Hour":"19시","heat":100,"temperature":30},
+                {"Hour":"20시","heat":80,"temperature":27},
+                {"Hour":"21시","heat":90,"temperature":26},
+                {"Hour":"22시","heat":60,"temperature":24},
+                {"Hour":"23시","heat":60,"temperature":23},
+                {"Hour":"24시","heat":70,"temperature":21}
+
+            ];
+
+        var chartData4 =
+            [   {"Hour":"1시","efficiency":70,"temperature":20},
+                {"Hour":"2시","efficiency":90,"temperature":20},
+                {"Hour":"3시","efficiency":80,"temperature":18},
+                {"Hour":"4시","efficiency":60,"temperature":19},
+                {"Hour":"5시","efficiency":80,"temperature":20},
+                {"Hour":"6시","efficiency":70,"temperature":18},
+                {"Hour":"7시","efficiency":90,"temperature":19},
+                {"Hour":"8시","efficiency":70,"temperature":19},
+                {"Hour":"9시","efficiency":80,"temperature":20},
+                {"Hour":"10시","efficiency":90,"temperature":21},
+                {"Hour":"11시","efficiency":70,"temperature":23},
+                {"Hour":"12시","efficiency":80,"temperature":24},
+                {"Hour":"13시","efficiency":90,"temperature":25},
+                {"Hour":"14시","efficiency":90,"temperature":27},
+                {"Hour":"15시","efficiency":90,"temperature":29},
+                {"Hour":"16시","efficiency":80,"temperature":32},
+                {"Hour":"17시","efficiency":80,"temperature":34},
+                {"Hour":"18시","efficiency":90,"temperature":32},
+                {"Hour":"19시","efficiency":80,"temperature":30},
+                {"Hour":"20시","efficiency":80,"temperature":27},
+                {"Hour":"21시","efficiency":90,"temperature":26},
+                {"Hour":"22시","efficiency":60,"temperature":24},
+                {"Hour":"23시","efficiency":60,"temperature":23},
+                {"Hour":"24시","efficiency":70,"temperature":21}
+
+            ];
+
         rMateChartH5.calls("chart1", {
-            "setLayout" : layoutStr,
+            "setLayout" : layoutStrValue("gas", "가스소비량", "temperature", "외기온도"),
             "setData" : chartData
         });
 
+        rMateChartH5.calls("chart2", {
+            "setLayout" : layoutStrValue("electronic", "전기생산량", "temperature", "외기온도"),
+            "setData" : chartData2
+        });
+
+        rMateChartH5.calls("chart3", {
+            "setLayout" : layoutStrValue("heat", "열 공급량", "temperature", "외기온도"),
+            "setData" : chartData3
+        });
+
+        rMateChartH5.calls("chart4", {
+            "setLayout" : layoutStrValue("efficiency", "효율", "temperature", "외기온도"),
+            "setData" : chartData4
+        });
+
         function dataTipJsFunc (seriesId, seriesName, index, xName, yName, data, values) {
-            if (seriesName == "ROI")
-                return data['Month'] + "ROI : " + "<b>" + data['roi'] + "%</b>";
-        else
-            return data['Month'] + "Sales : " + "<b>$" + data['sales'] + "M</b>";
+            if (seriesName == "외기온도")
+                return data['Hour'] + " 외기온도 : " + "<b>" + data['temperature'] + "°C</b>";
+            else if(seriesName == "가스소비량")
+            return data['Hour'] + " 가스소비량 : " + "<b>" + data['gas'] + "Nm³</b>";
+            else if(seriesName == "전기생산량")
+            return data['Hour'] + " 전기생산량 : " + "<b>" + data['electronic'] + "kWh</b>";
+            else if(seriesName == "열 공급량")
+            return data['Hour'] + " 열공급량 : " + "<b>" + data['heat'] + "Mcal</b>";
+            else if(seriesName == "효율")
+                return data['Hour'] + " 효율 : " + "<b>" + data['efficiency'] + "%</b>";
         }
 
-        /**
-         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
-         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
-         *
-         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * -------------------------------------------------
-         *
-         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
-         */
+
+
         rMateChartH5.registerTheme(rMateChartH5.themes);
 
-        /**
-         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
-         * 접근하는 차트 객체의 테마를 변경합니다.
-         * 파라메터로 넘어오는 값
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * - default
-         *
-         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
-         */
+
         function rMateChartH5ChangeTheme(theme){
             document.getElementById("chart1").setTheme(theme);
+            document.getElementById("chart2").setTheme(theme);
+            document.getElementById("chart3").setTheme(theme);
+            document.getElementById("chart4").setTheme(theme);
+
         }
 
 
         //===============================================================================================================
 
         let theGrid;
+        let theGrid2;
+        let theGrid3;
+        let theGrid4;
+
+        let viewdata;
+        let viewdata2;
+        let viewdata3;
+        let viewdata4;
+
 
 
         let columns = [
-            { binding: '', header: '시간', align: 'center', width: '*' },
-            { binding: '', header: '가스소비량(Nm³)', align: 'center', width: '*' },
-            { binding: '', header: '가스사용비용(원)', align: 'center', width: '*' },
-            { binding: '', header: '외기온도(°C)', align: 'center', width: '*' },
-
+            { binding: 'hour', header: '시간', align: 'center', width: '*' },
+            { binding: 'gas', header: '가스소비량(Nm³)', align: 'center', width: '*' },
+            { binding: 'won', header: '가스사용비용(원)', align: 'center', width: '*' },
+            { binding: 'temperature', header: '외기온도(°C)', align: 'center', width: '*' },
         ];
+
+        let columns2 = [
+            { binding: 'hour', header: '시간', align: 'center', width: '*' },
+            { binding: 'electronic', header: '전기생산량(kWh)', align: 'center', width: '*' },
+            { binding: 'smp', header: 'SMP', align: 'center', width: '*' },
+            { binding: 'income', header: '생산예상수익(원)', align: 'center', width: '*' },
+            { binding: 'temperature', header: '외기온도(°C)', align: 'center', width: '*' },
+        ];
+        let columns3 = [
+            { binding: 'hour', header: '시간', align: 'center', width: '*' },
+            { binding: 'heat', header: '열 공급량(Mcal)', align: 'center', width: '*' },
+            { binding: 'unitPrice', header: '열에너지단가', align: 'center', width: '*' },
+            { binding: 'earnings', header: '예상수익(원)', align: 'center', width: '*' },
+            { binding: 'temperature', header: '외기온도(°C)', align: 'center', width: '*' },
+        ];
+        let columns4 = [
+            { binding: 'hour', header: '시간', align: 'center', width: '*' },
+            { binding: 'efficiency', header: '효율(%)', align: 'center', width: '*' },
+            { binding: 'electronic_efficiency', header: '전기/효율(%)', align: 'center', width: '*' },
+            { binding: 'temperature', header: '외기온도(°C)', align: 'center', width: '*' },
+        ];
+
+        let dummyData = [
+            { hour: 12, gas: 1440, won: "2,000", temperature: "24" },
+            { hour: 13, gas: 1500, won: "3,000", temperature: "25" },
+            { hour: 14, gas: 1100, won: "1,000", temperature: "27" },
+            { hour: 15, gas: 1300, won: "1,500", temperature: "29" },
+            { hour: 16, gas: 1200, won: "1,250", temperature: "32" }
+        ]
 
         function init() {
             let data2 = [];
@@ -607,17 +801,34 @@
                 type: 'GET',
                 data: {
                     'searchusr' : 'infinited',
-
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
                 },
                 async: false,
                 success: function(data){
                     console.log('check1',data.data);
 
-                    data2 = data.data;
+                    let datalen = 5 - data.data.length;
+                    if(data.data < 5){
+                        for(let i=0; i < datalen; i++){
+                            data2.push({
+                                hour: dummyData[i]["hour"],
+                                gas: dummyData[i]["gas"],
+                                won: dummyData[i]["won"],
+                                temperature: dummyData[i]["temperature"]
+                            })//data.data.push(dummyData);
+                        }
+                    }else{
+                        data2 = data.data;
+                    }
+
+
                 }
             })
 
             viewdata = new wijmo.collections.CollectionView(data2);
+
             // 데이터 그리드에 바인딩
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
@@ -627,6 +838,83 @@
             });
             theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
 
+            let data3 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+                    data3 = data.data;
+                }
+            })
+            viewdata2 = new wijmo.collections.CollectionView(data3);
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns2,
+                itemsSource: viewdata2
+            });
+            theGrid2.rowHeaders.columns.splice(0,1);
+
+            let data4 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+                    data4 = data.data;
+                }
+            })
+
+            viewdata3 = new wijmo.collections.CollectionView(data4);
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                itemsSource: viewdata3
+            });
+            theGrid3.rowHeaders.columns.splice(0,1);
+
+
+            let data5 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+                    data5 = data.data;
+                }
+            })
+
+            viewdata4 = new wijmo.collections.CollectionView(data5);
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns4,
+                itemsSource: viewdata4
+            });
+            theGrid4.rowHeaders.columns.splice(0,1);
             /*theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
                 autoGenerateColumns: false,
                 showMarquee: true,
@@ -655,6 +943,100 @@
         /*document.getElementById('spworkcd').addEventListener('change', searchData);
         document.getElementById('spcompcd').addEventListener('change', searchData);
         document.getElementById('spplancd').addEventListener('change', searchData);*/
+
+
+        //==================================================================================================
+
+
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs() {
+            const periodType = document.getElementById("periodType").value;
+            const selectedYear = document.getElementById("yearSelectTab1").value; // 선택된 조회연도 가져오기
+            const dateBoxContainer = document.getElementById("dateBoxContainer");
+            const startDateContainer = document.getElementById("startDateContainer");
+            const endDateContainer = document.getElementById("endDateContainer");
+            const periodLabel = document.getElementById("dateBoxContainer") // <dl> 요소를 가져옴
+            let searchYear = document.getElementById('searchYear');
+
+            // 기존 내용을 초기화
+            // document.getElementById("startDateContainer").innerHTML = "";
+            // document.getElementById("endDateContainer").innerHTML = "";
+
+            if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                // 조회기간 글자 숨기기
+                periodLabel.style.display = "none";
+                // startDate와 endDate input 요소 숨기기
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+                searchYear.style.display = "block";
+            } else {
+                // 조회기간 글자 보이기
+                periodLabel.style.display = "block";
+                // startDate와 endDate input 요소 보이기
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
+
+                // 각 기간유형에 맞는 요소 설정
+                if (periodType === "hourly") {
+
+                    searchYear.style.display = "none";
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
+
+                    document.getElementById("startDateContainer").innerHTML = `
+                <input type="date" style="background-color: white" id="startDate" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
+
+                    document.getElementById("endDateContainer").innerHTML = `
+                <select id="startHour" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="endHour" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+
+
+                    searchYear.style.display = 'none';
+
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    document.getElementById("startDateContainer").innerHTML = `<input type="month" style="background-color: white" id="startDate" name="startDate" value="${startDate}">`;
+                    document.getElementById("endDateContainer").innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    searchYear.style.display = "block";
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startQuarter">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endQuarter">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    searchYear.style.display = "block";
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startHalf">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endHalf">${options}</select>`;
+                }
+            }
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
+        }
+
 
         $(document).ready(function () {
 
