@@ -40,19 +40,19 @@ $(document).ready(function () {
 const ExceptionUrl = [];
 
 $(document).ready(function () {
-    // 예외 URL 리스트를 배열로 정의합니다.
+    // 예외 URL 리스트를 상대 경로로 정의합니다.
     var exceptionUrls = [
-        "http://localhost:8060/gui/wm_equipment_search/default",
+        "/gui/wm_equipment_search/default",
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
-        "http://localhost:8060/gui/another_exception"
+        "/gui/another_exception"
     ];
 
-    // 현재 URL을 가져옵니다.
-    var currentUrl = window.location.href;
+    // 현재 URL의 경로를 가져옵니다.
+    var currentPath = window.location.pathname;
 
-    // 현재 URL이 예외 리스트에 포함되어 있는지 확인합니다.
+    // 현재 경로가 예외 리스트에 포함되어 있는지 확인합니다.
     var isException = exceptionUrls.some(function (url) {
-        return currentUrl === url;
+        return currentPath === url;
     });
 
     if (!isException) {
@@ -75,6 +75,7 @@ $(document).ready(function () {
         $(".tab-item:first").show();
         $(".tab-links li:first").addClass("active");
     }
+
     if (!isException) {
         $(".tab-links-sub a").click(function (event) {
             event.preventDefault();
