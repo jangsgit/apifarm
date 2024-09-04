@@ -1,0 +1,1187 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+
+<th:block layout:fragment="content">
+
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>비상훈련 계획서 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                           alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내 메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>전기안전관리</li>
+                <li>비상훈련 계획서 등록</li>
+            </ul>
+        </div>
+
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <input type="hidden" id="spuncode" name="spuncode"/>
+
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents" style="margin-bottom: 70px">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="trainnm">
+                                        훈련명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchtrainnm" name="searchtrainnm" class="input-srch">
+
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtraindv">
+                                        훈련구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select id="searchtraindv" class="w120">
+                                            <option value="">전체</option>
+                                            <option value="0">자체</option>
+                                            <option value="1">외부합동</option>
+                                        </select>
+                                        <a class="btn-srch" title="검색" id="btnSearch"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 490px"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>비상훈련 계획서 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <form id="emergency_plan">
+                            <table class="write-table">
+                                <caption>점검등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="trainnm">
+                                            훈련명 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="trainnm" name="trainnm" class="wp100" maxlength="50">
+                                    </td>
+
+                                    <th>
+                                        <label for="traindt">
+                                            등록일자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="date" id="traindt" name="traindt" readonly>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="trainst">
+                                            훈련시작일자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="datetime-local" id="trainst" name="trainst" autocomplete="off">
+                                    </td>
+                                    <th>
+                                        <label for="trainet">
+                                            훈련종료일자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="datetime-local" id="trainet" name="trainet" autocomplete="off">
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>
+                                        <label for="traindv">
+                                            훈련구분 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="select2" class="w120" name="traindv">
+                                            <option value="">전체</option>
+                                            <option value="0">자체</option>
+                                            <option value="1">외부합동</option>
+                                        </select>
+                                    </td>
+
+                                    <th>
+                                        <label for="trainarea">
+                                            참석장소 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="trainarea" name="trainarea" class="wp100" maxlength="50">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="trainusr">
+                                            훈련참가자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="trainusr" name="trainusr" maxlength="30" class="wp100">
+                                    </td>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>
+                                        <label for="trainpurp">
+                                            훈련목적 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <textarea class="text-count" id="trainpurp" name="trainpurp"></textarea>
+                                    </td>
+
+                                    <th>
+                                        <label for="trainplan">
+                                            훈련계획 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <textarea class="text-count" id="trainplan" name="trainplan"></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        상세계획 <span class="req"></span>
+                                        (첨부파일)
+                                    </th>
+                                    <td colspan="3" id="detailplan">
+                                        <div id="uploadComponent1" class="upload-component">
+                                            <div class="upload-filebox">
+                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <input type="file" id="fileInput1" class="fileInput" multiple>
+                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                            </div>
+                                            <div class="upload-filelist">
+                                                <div class="title">
+                                                    <h5>Files (0)</h5>
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete
+                                                        all</a>
+                                                </div>
+                                                <ul class="filelist" id="filelist">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <!--                            <tr>-->
+
+                                <!--                                <th>-->
+                                <!--                                    <label for="detailplan">-->
+                                <!--                                        상세계획-->
+                                <!--                                    </label>-->
+                                <!--                                </th>-->
+                                <!--                                <td>-->
+                                <!--                                     <textarea id="detailplan" name="detailplan">-->
+
+                                <!--                                     </textarea>-->
+                                <!--                                </td>-->
+                                <!--                            </tr>-->
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>비상훈련계획서 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <input type="hidden" id="popup-spuncode">
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">등록일자</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-date" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popup-checkusr">등록자</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="등록자">
+                                    <span class="btn-clear">×</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popuptext2">훈련장소</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="훈련장소">
+                                    <span class="btn-clear">×</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>첨부파일</th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()"
+                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
+                </button>
+                <button onclick="saveFile()"
+                        style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let selectedFiles = [];
+        let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
+        let filelist = [];
+
+        var columns = [
+            {binding: 'rownum', header: 'No', align: 'center', width: 100},
+            {binding: 'traindt', header: '훈련일자', align: 'center', width: 160},
+            {binding: 'trainusr', header: '등록자', align: 'center', width: 160},
+            {binding: 'traindv', header: '훈련구분', align: 'center', width: 160},
+            {binding: 'trainnm', header: '훈련명', align: 'center', width: "*"},
+            {binding: 'detailplan', header: '첨부파일', align: 'center', width: 160},
+            {binding: 'downloads', header: '다운로드', align: 'center', width: 160, minWidth: 200},
+            {binding: '', header: '비고', align: 'center', width: 160},
+        ];
+
+        /**점검일지 업로드(파일만 전송)**/
+        function saveFile() {
+            let file = document.getElementById('fileInput2');
+            let formData = new FormData();
+
+            if (file.files.length === 0) {
+                Alert.alert('', '파일을 첨부해주세요.');
+                return false;
+            }
+
+            formData.append('file', file.files[0]);
+            formData.append('_csrf', csrfToken);
+            formData.append('spuncode', $('#popup-spuncode').val());
+
+            AjaxFunction.PostAjaxRequest(
+                '/api/emergency_plan/filesave',
+                true, // async
+                false, // contentType
+                false, // processData
+                formData,
+                function (res) {
+                    Alert.alert('', res.message);
+                    closePopup();
+                    searchData();
+                },
+                fnFailure
+            );
+        }
+
+
+        function clearForm() {
+            ['trainnm', 'trainarea', 'traindv', 'trainusr', 'trainpurp', 'trainplan', 'detailplan'
+            ].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            $('#spuncode').val('');
+            $('.filelist').empty();
+
+
+            uploadedFiles = [];
+            deletedFiles = [];
+            updateTabLink('spuncode');
+            updateFileCount();
+            resetFileInput($('.fileInput'));
+        }
+
+        // 파일 인풋 초기화
+        function resetFileInput($input) {
+            $input.val('');
+        }
+
+        // function submitTextarea(event){
+        //     let key = event.key || event.keyCode;
+        //
+        //     if(key === 'Enter' || key == 13){
+        //         searchData();
+        //     }
+        // }
+
+        // let searchusrval = document.getElementById('searchusr');
+        // searchusrval.addEventListener('keyup', event => submitTextarea(event))
+
+
+        function closePopup() {
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup() {
+
+            // $('#popup-date').val(ctx.item.checkdt);
+            // $('#popup-checkusr').val(ctx.item.checkusr);
+            // $('#popup-checkarea').val(ctx.item.checkarea);
+            // $('#popup-spuncode').val(ctx.item.spuncode);
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+
+            //파일 다운로드
+            function FileDownload(rowIndex) {
+                //let spuncode = { spuncode: ctx.item.spuncode };
+
+                var item = theGrid.rows[rowIndex].dataItem;
+                // 다운로드 로직 처리
+
+
+                let spuncode = {spuncode: item.spuncode}
+
+                postFetchRequest('/api/emergency_plan/FileDownload', spuncode, function (blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'modified_documents.pdf'; // 다운로드 받을 zip 파일 이름
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                }, function (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                    Alert.alert('', error.message);
+                });
+            }
+
+        }
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : searchusr,
+
+                },
+                async: false,
+                success: function(data){
+
+                    let DataLength = 10 - data.data.length;
+
+                    if(data.data.length < 10){
+
+                        for(let i=0; i < DataLength; i++){
+                            data.data.push('empty');
+                        }
+                    }
+                    data2 = data.data;
+
+                }
+            })
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                allowSorting: 'MultiColumn',
+                isReadOnly: true,
+                selectionMode: wijmo.grid.SelectionMode.Row, // 행 단위 선택
+                itemsSource: viewdata,
+                formatItem: function(s, e) {
+                    if (e.panel.cellType === wijmo.grid.CellType.Cell) {
+                        var col = s.columns[e.col];
+                        var item = s.rows[e.row].dataItem;
+                        if (col.binding === 'downloads') {
+                            if (item && item.downloads) {
+                                e.cell.innerHTML = '<a class="btn-filedown" onclick="FileDownload(' + e.row + ')">다운로드</a>';
+                            } else {
+                                e.cell.innerHTML = ''; // 다운로드 버튼이 표시되지 않도록 빈 문자열 설정
+                            }
+                        }
+                    }
+                }
+            });
+
+            /*theGrid.formatItem.addHandler(function (s, e) {
+                console.log("s: ", s)
+
+                /!*if(s._rows)*!/
+            })*/
+
+            let selector = new wijmo.grid.selector.Selector(theGrid, {
+                itemChecked: (e, ctx) => {
+                    SelectItem = theGrid.rows.filter(r => r.isSelected);
+
+                }
+            })
+
+            theGrid.hostElement.addEventListener('dblclick', function(e){
+                let hitTest = theGrid.hitTest(e);
+                if (hitTest.cellType === wijmo.grid.CellType.Cell) {
+                    let row = hitTest.row;
+                    let item = theGrid.rows[row].dataItem;
+                    console.log('Row double-clicked:', item);
+                    console.log('Row double-clicked22:', SelectItem);
+
+                    if(item === 'empty' || item.checkdt === undefined){ return; }
+
+                    if(theGrid.rows.filter(r => r.isSelected).length > 0){
+                        console.log('선택값: ', theGrid.rows.filter(r => r.isSelected))
+                        Alert.alert('', '선택기에 선택된 값이 있습니다.');
+                        return false;
+                    }
+                    let spuncode = item.spuncode;
+                    let jsonSpunCode = JSON.stringify(spuncode);
+
+                    AjaxFunction.PostAjaxRequest('/api/emergency_plan/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
+
+                        let inputFields = document.querySelectorAll('.addusr');
+                        if (inputFields) {
+
+                            inputFields.forEach(r => {
+                                deleteInputField(r);
+                            })
+
+                        }
+
+                        let data2 = data.data;
+                        console.log('data2', data2);
+                        $('#inputTabLink').click();
+
+                        let str = data2.traindt;
+                        let year = str.substring(0, 4);
+                        let month = str.substring(4, 6);
+                        let day = str.substring(6, 8);
+
+                        let formattedDate = `${year}-${month}-${day}`;
+
+                        document.getElementById('spuncode').value = data2.spuncode;
+                        document.getElementById('trainnm').value = data2.trainnm;
+                        document.getElementById('traindt').value = formattedDate;
+                        document.getElementById('trainst').value = data2.trainst;
+                        document.getElementById('trainet').value = data2.trainet;
+                        document.getElementById('traindv').value = data2.traindv;
+                        document.getElementById('trainusr').value = data2.trainusr;
+                        document.getElementById('trainarea').value = data2.trainarea;
+                        document.getElementById('trainplan').value = data2.trainplan;
+                        // document.getElementById('detailplan').value = data2.detailplan;
+                        document.getElementById('trainpurp').value = data2.trainpurp;
+
+
+
+                        console.log()
+                        for (let i = 0; i < data2.trainitem.length; i++) {
+                            updateElementText('trainresult', i, data2.trainitem[i].trainresult);
+                            updateElementText('trainform', i, data2.trainitem[i].trainform);
+
+                            let str = "seq" + (i+1);
+                            document.getElementById(str).value = data2.trainitem[i].seq;
+
+                        }
+
+
+                        //탭 수정으로 업더이트
+                        updateTabLink('spuncode');
+
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                        deletedFiles = [];
+                        uploadedFiles = [];
+                        $('.filelist').empty(); // 파일 리스트 초기화
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                spuncode: file.spuncode,
+                                trainseq: file.trainseq,
+                                filepath: file.filepath,
+                                filesvnm: file.filesvnm
+
+                            };
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
+                        console.log('파일목록확인', uploadedFiles)
+                        updateFileListUI();
+                        updateFileCount();
+
+                    }, fnFailure)
+
+                }
+            })
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+
+            $('#btnSave').click(save);
+            // $('#btnSearch').click(searchDataBind);
+
+        }
+
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchtraindv' : $('#searchtraindv').val(),
+                'searchtrainnm': $('#searchtrainnm').val(),
+                'searchtodate': $('#searchtodate').val(),
+                'searchfrdate' : $('#searchfrdate').val()
+            }
+
+
+            let result =  AjaxUtil.getSyncData('/api/emergency_plan/read', data);
+            //선택기 그리드면 이거
+            if(result.success){
+                console.log(result.data);
+
+                let DataLength = 10 - result.data.length;
+
+                if(result.data.length < 10){
+                    for(let i=0; i < DataLength; i++){
+                        result.data.push('empty');
+                    }
+                }
+
+                grid_binding(result.data);
+            }
+
+        }
+
+        // 컬럼 바인딩 다시하고 반복문 다시 작성하기
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+            var cnt = 1;
+            for (let i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    spuncode: inspecDto[i]["spuncode"],
+                    spworknm: inspecDto[i]["spworknm"],
+                    spcompnm: inspecDto[i]["spcompnm"],
+                    spplannm: inspecDto[i]["spplannm"],
+                    checkdt: inspecDto[i]["checkdt"],
+                    checkusr: inspecDto[i]["checkusr"],
+                    checkarea: inspecDto[i]["checkarea"],
+                    checktmdt: inspecDto[i]["checktmdt"],
+                    downloads: inspecDto[i]["downloads"],
+                    upload:    inspecDto[i]["upload"],
+                    fileornm:  inspecDto[i]["fileornm"]
+
+                });
+                cnt++;
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+
+            for (var i = 0; i < columns.length; i++) {
+                var col = new wijmo.grid.Column(columns[i]);
+                theGrid.columns.push(col);
+            }
+            SelectItem = undefined;
+
+        }
+
+        // word 파일 다운받을때 db의 값들을 word에 넣어서 pdf파일로 다운로드
+        function DownloadDoc() {
+
+            if(SelectItem === undefined || SelectItem.length === 0){
+                Alert.alert('', '출력할 항목을 선택하세요.');
+                return;
+            }
+
+            if(!checkEmptySelectedItem(SelectItem, 'traindt')){
+                Alert.alert('', '빈 값은 불가능합니다.');
+                return;
+            }
+
+            // 로딩 바 표시
+            showLoadingBar();
+            let selectedList = SelectItemPush(SelectItem, '_data.spuncode');
+
+            postFetchRequest('/api/emergency_plan/download-docs', selectedList, function(blob) {
+
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url); // URL 객체 해제
+
+
+            }, function(error) {
+                console.error('There was a problem with the fetch operation:', error);
+                Alert.alert('', "File download failed!");
+
+            });
+        }
+
+
+        //리팩터링 코드
+        function updateElementText(elementIdPrefix, index, textContent) {
+            let elementId = elementIdPrefix + (index + 1);
+            let element = document.getElementById(elementId);
+            console.log('element: ', element);
+            console.log('textContent: ', textContent);
+
+            if (element) {
+                if (element.tagName.toLowerCase() === 'input' || element.tagName.toLowerCase() === 'textarea') {
+                    element.value = textContent;
+                } else {
+                    element.textContent = textContent;
+                }
+            } else {
+                console.warn(`Element with id ${elementId} not found.`);
+            }
+        }
+
+
+        // 수정코드 ( 수정코드는 저장 기능이 완성된 후에 다시 보는걸로 )
+        function modifyData(){
+
+            if(SelectItem === undefined || SelectItem.length === 0){
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }else if(SelectItem.length > 1){
+                Alert.alert('', '하나의 항목만 선택해주세요');
+                return;
+            }
+            let selectedItem = SelectItem[0];
+
+            console.log('현재', selectedItem);
+            console.log('현재2', SelectItem);
+
+            let spuncode = selectedItem._data.spuncode;
+
+            if(!selectedItem._data.spuncode){
+                Alert.alert('', '수정할 게시물이 없습니다.', function () {
+
+                });
+                return false;
+            }
+            let jsonSpunCode = JSON.stringify(spuncode);
+            AjaxFunction.PostAjaxRequest('/api/emergency_plan/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
+                let data2 = data.data;
+                console.log('data2', data2);
+                $('#inputTabLink').click();
+
+                let str = data2.traindt;
+                let year = str.substring(0, 4);
+                let month = str.substring(4, 6);
+                let day = str.substring(6, 8);
+
+                let formattedDate = `${year}-${month}-${day}`;
+
+//이부분은 위에서 다시 가져오자.
+                document.getElementById('spuncode').value = data2.spuncode;
+                document.getElementById('supplier').value = data2.supplier;
+                document.getElementById('checkdt').value = formattedDate;
+                document.getElementById('checkstdt').value = data2.checkstdt;
+                document.getElementById('checkendt').value = data2.checkendt;
+                document.getElementById('checkusr').value = data2.checkusr;
+                document.getElementById('checkusr').value = data2.checkusr;
+                document.getElementById('checkarea').value = data2.checkarea;
+
+
+
+                console.log()
+                for (let i = 0; i < data2.inspecitem.length; i++) {
+                    updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
+                    updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
+
+                    let str = "seq" + (i+1);
+                    document.getElementById(str).value = data2.inspecitem[i].seq;
+
+                }
+
+
+                //탭 수정으로 업더이트
+                updateTabLink('spuncode');
+
+                let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+                deletedFiles = [];
+                uploadedFiles = [];
+                $('.filelist').empty(); // 파일 리스트 초기화
+
+                fileList.forEach(file => {
+                    let newFile = {
+                        name: file.fileornm,
+                        size: file.filesize,
+                        type: file.fileextns,
+                        spuncode_id: file.spuncode_id,
+                        checkseq: file.checkseq,
+                        filepath: file.filepath,
+                        filesvnm: file.filesvnm
+
+                    };
+                    uploadedFiles.push(newFile); // 파일 리스트에 추가
+                });
+                console.log('파일목록확인', uploadedFiles)
+                updateFileListUI();
+                updateFileCount();
+
+            }, fnFailure)
+
+        }
+
+
+        function updateFileCount() {
+            const fileCount = uploadedFiles.length;
+            $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateTabLink('spuncode');
+        });
+
+
+        // addusr는 내가 알기로 점검차 추가 이벤트에서 발생하는 부분 이부분도 다시 확인 필요
+        let fnSuccess = function (res){
+            Alert.alert('', res.message, function(){
+                $('#listTabLink').click();
+                searchData();
+                clearForm();
+
+                let inputFields = document.querySelectorAll('.addusr');
+                if (inputFields) {
+
+                    inputFields.forEach(r => {
+                        deleteInputField(r);
+                    })
+
+                }
+            });
+        }
+
+
+        let fnFailure = function(){
+            Alert.alert('', '에러가발생하였습니다.');
+        }
+
+
+
+
+
+        // 정보 저장
+        // 이부분에서 데이터값을 저장하는데 여기서 저장하는 값들이 db에 저장되어서 word파일에 쓰기 당해야함.
+        function save() {
+
+            let url = '/api/emergency_plan/save';
+
+            let SpunCodeValue = $('#spuncode').val();
+            let randomString;
+
+            if(SpunCodeValue === ""){
+                randomString = generateRandomStringWithDate();
+            }else{
+                randomString = SpunCodeValue;
+            }
+
+            console.log(SpunCodeValue);
+
+            // FormData 객체 생성
+            let formData = new FormData();
+
+            // let data = FormUtil.extractForm($('#emergency_plan'));
+            //
+            // if (!data.trainnm || !data.trainarea || !data.traindv || !data.trainusr || !data.trainpurp || !data.trainplan
+            //     || !data.trainst || !data.trainet) {
+            //     Alert.alert('', '필수항목을 입력해주세요');
+            //     return;
+            // }
+
+            // 폼 데이터 추가
+            $('#emergency_plan').find('input, select, textarea').each(function() {
+                let name = $(this).attr('name');
+                let value = $(this).val();
+                if (name && value !== undefined) {
+                    formData.append(name, value);
+                }
+            });
+
+            formData.append('randomuuid', randomString);
+            formData.append('_csrf', csrfToken);
+
+
+            // // 새로 추가된 파일만 폼 데이터에 추가
+            // if (uploadedFiles && uploadedFiles.length > 0) {
+            //     data.filelist = uploadedFiles;
+            // }
+            //
+            // // 삭제된 파일 목록 추가
+            // if (deletedFiles && deletedFiles.length > 0) {
+            //     data.deletedFiles = JSON.stringify(deletedFiles);
+            // }
+
+
+
+            // 파일 입력에서 파일 추가
+            let fileInput = document.getElementById('fileInput1');
+            if (fileInput && fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('filelist', fileInput.files[i]);
+                }
+            }
+
+            // 삭제된 파일 목록 추가
+            if (deletedFiles && deletedFiles.length > 0) {
+                formData.append('deletedFiles', JSON.stringify(deletedFiles));
+            }
+
+            // AJAX 요청 보내기
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message, function () {
+                            clearForm();
+                        });
+                    } else {
+                        Alert.alert('', '저장에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+        }
+
+
+        $(document).ready(function (e) {
+
+            initializeSelections();
+            // 아래 코드는 date에 날짜 기본값 지정 코드
+            // 현재 연도를 가져옴
+            const currentYear = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate = `${currentYear}-01-01`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            // 현재 연도를 가져옴
+            const currentYear2 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate2 = `${currentYear2}-12-31`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchtodate').value = defaultDate2;
+
+
+            // tab2 등록 훈련시작일자 오늘날짜 기본값지정
+            const datetimeInput = document.getElementById('trainst');
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            datetimeInput.value = formattedDateTime;
+
+
+            //등록일자 기본값 설정
+            const dateInput2 = document.getElementById('traindt');
+            const today2 = new Date();
+            const year2 = today2.getFullYear();
+            const month2 = String(today2.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day2 = String(today2.getDate()).padStart(2, '0');
+            const dateValue2 = `${year2}-${month2}-${day2}`;
+            dateInput2.value = dateValue2;
+
+            // 아래 코드는 파일 설정 코드
+            const fileInput = document.getElementById('fileInput2');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+            const dropZone = document.getElementById('dropZone');
+
+            function updateFileName() {
+                const files = fileInput.files;
+                if (files.length > 0) {
+                    fileNameDisplay.textContent = files[0].name;
+                } else {
+                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
+                }
+            }
+
+            fileInput.addEventListener('change', updateFileName);
+
+            // 드래그 앤 드롭 이벤트 핸들러
+            dropZone.addEventListener('dragover', (event) => {
+                event.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (event) => {
+                event.preventDefault();
+                dropZone.classList.remove('dragover');
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files; // 파일 입력 요소에 파일 설정
+                    updateFileName(); // 파일명 업데이트
+                }
+            });
+
+
+
+
+
+
+        });
+
+    </script>
+</th:block>
+
+</html>
