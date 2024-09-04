@@ -1122,8 +1122,8 @@ public class HapReportController {
     }
 
     @GetMapping("/autocomplete")
-    public ResponseEntity<List<String>> autocomplete(@RequestParam String query) {
-        List<String> suggestions = hapReportService.getSuggestions(query);
+    public ResponseEntity<List<String>> autocomplete(@RequestParam String query, @RequestParam String field) {
+        List<String> suggestions = hapReportService.getSuggestions(query, field);
         return ResponseEntity.ok(suggestions);
     }
 }

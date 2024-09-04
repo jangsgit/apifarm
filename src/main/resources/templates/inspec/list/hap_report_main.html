@@ -188,6 +188,7 @@
                                 </th>
                                 <td colspan="3">
                                     <input type="text" id="checknm" class="wp100" autocomplete="off">
+                                    <ul id="suggestions-checknm" class="suggestions-list"></ul>
                                 </td>
                             </tr>
                             <tr>
@@ -221,12 +222,11 @@
                                         <div class="inspector-group">
                                             <input type="hidden" id="checkusr1_seq_1" name="checkusr1_seq_1" value="">
                                             <input type="text" id="checkusr1_company_1" name="checkusr1_company_1"
-                                                   placeholder="업체명" autocomplete="off">
+                                                   placeholder="업체명">
                                             <input type="text" id="checkusr1_position_1" name="checkusr1_position_1"
-                                                   placeholder="직급" autocomplete="off">
+                                                   placeholder="직급">
                                             <input type="text" id="checkusr1_name_1" name="checkusr1_name_1"
-                                                   placeholder="성명"
-                                                   autocomplete="off">
+                                                   placeholder="성명">
                                             <button onclick="addInspector('checkusr1', null, false)" class="mg-l8">점검자 추가
                                             </button>
                                         </div>
@@ -1246,9 +1246,14 @@
             });
 
             // 자동완성
-            const inputId = 'chkaddres';
-            const apiUrl = '/api/inspec/hap/autocomplete';
-            initializeAutoComplete(inputId, apiUrl);
+            const autoCompleteFields = [
+                { inputId: 'chkaddres', suggestionId: 'suggestions-chkaddres', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checknm', suggestionId: 'suggestions-checknm', apiUrl: '/api/inspec/hap/autocomplete' }
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
 
             // 수정 > 등록, 등록 > 수정
             updateTabLink();

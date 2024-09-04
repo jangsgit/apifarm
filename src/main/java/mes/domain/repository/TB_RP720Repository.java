@@ -24,6 +24,9 @@ public interface TB_RP720Repository extends JpaRepository<TB_RP720, TB_RP720_PK>
     Optional<TB_RP720> findById(TB_RP720_PK pk);
 
     @Query("SELECT DISTINCT t.chkaddres FROM TB_RP720 t WHERE LOWER(t.chkaddres) LIKE LOWER(CONCAT('%', :query, '%'))")
-    List<String> findCheckareasByQuery(@Param("query") String query);
+    List<String> findChkaddresByQuery(@Param("query") String query);
+
+    @Query("SELECT DISTINCT t.checknm FROM TB_RP720 t WHERE LOWER(t.checknm) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findChecknmByQuery(@Param("query") String query);
 
 }

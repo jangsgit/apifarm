@@ -300,7 +300,15 @@ public class HapReportService {
     }
 
     @Transactional
-    public List<String> getSuggestions(String query) {
-        return TBRP720Repository.findCheckareasByQuery(query);
+    public List<String> getSuggestions(String query, String field) {
+
+        return switch (field) {
+            case "chkaddres" -> TBRP720Repository.findChkaddresByQuery(query);
+            case "checknm" -> TBRP720Repository.findChecknmByQuery(query);
+
+            // 다른 필드에 대한 처리
+            default -> new ArrayList<>();
+        };
+
     }
 }
