@@ -36,7 +36,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>기간별 손익 조회</h2>
+                <h2>기간별 손익 조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -44,92 +45,103 @@
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스 분석</li>
+                <li>매출 관리</li>
                 <li>기간별 손익 조회</li>
             </ul>
         </div>
+
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
 
 
-                <section>
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    매출년월<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="month" id="date1" name="startDate" value="2024-01">
-                                            <label for="date1" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="month" id="date2" name="endDate" value="2024-12">
-                                            <label for="date2" class="hide">종료일</label>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
-                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                검색
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                        </div>
-                        <div class="button-wrap">
-                            <ul>
+        <section>
+            <div class="section-top">
+                <div class="search-wrap">
+                    <dl>
+                        <dt>
+                            매출년월<span class="eq">*</span>
+                        </dt>
+                        <dd>
+                            <ul class="date-box">
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
+                                    <input type="month" id="date1" name="startDate" value="2024-01">
+                                    <label for="date1" class="hide">시작일</label>
+                                </li>
+                                <li>
+                                    <input type="month" id="date2" name="endDate" value="2024-12">
+                                    <label for="date2" class="hide">종료일</label>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="검색" id="btn-srch">
+                                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                        검색
                                     </a>
                                 </li>
                             </ul>
-                        </div>
-                    </div> <!--//section-top end -->
+                        </dd>
+                    </dl>
 
-                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 530px"></div>
-                    </div>
-                </section>
+                </div>
+                <!--<div class="button-wrap">
+                    <ul>
+                        <li>
+                            <a class="btn btn-excell" title="엑셀다운로드">
+                                <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                엑셀다운로드
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+            </div> <!--//section-top end -->
 
+            <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                <p id="selectedItem"></p>
+                <div id="theGrid" style="max-height: 630px;"></div>
+            </div>
+        </section>
 
     </div> <!--//layout-contents end -->
-    </section>
-    </div>
-
 
 </th:block>
 
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
     <script type="text/javascript">
+
+        document.addEventListener('DOMContentLoaded', function(){
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+            // loadYearlyData();        //조회연도 항목 불러오기
+            // WijmoGrid();
+        })
+
 
         var theGrid;
         var viewdata;
@@ -139,18 +151,138 @@
             // let data2 = [];
             // 하드코딩된 데이터 (지워)
             let data2 = [
-                { galoym: '2024-01', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-02', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-03', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-04', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-05', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-06', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-07', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-08', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-09', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-10', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-11', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
-                { galoym: '2024-12', energyqty: '', smpamt: '', recamt: '', stotamt: '', etotamt: '', gainamt: '', ebitaamt: '', ebitamamt: '' },
+                {
+                    galoym: '2024-01',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-02',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-03',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-04',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-05',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-06',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-07',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-08',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-09',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-10',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-11',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
+                {
+                    galoym: '2024-12',
+                    energyqty: '',
+                    smpamt: '',
+                    recamt: '',
+                    stotamt: '',
+                    etotamt: '',
+                    gainamt: '',
+                    ebitaamt: '',
+                    ebitamamt: ''
+                },
             ];
 
             // $.ajax({
@@ -170,15 +302,15 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    { binding: 'galoym', header: '손익연월', width: "*", align: 'center'},
-                    { binding: 'energyqty', header: '발전량', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'smpamt', header: 'SMP 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'recamt', header: 'REC 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'stotamt', header: '총 매출', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'etotamt', header: '총 운용비', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'gainamt', header: '영업이익', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'ebitaamt', header: 'EBITA', width: 180, align: 'right', aggregate: 'Sum' },
-                    { binding: 'ebitamamt', header: 'EBITA 마진', width: 180, align: 'right', aggregate: 'Sum' }
+                    {binding: 'galoym', header: '손익연월', width: "*", align: 'center'},
+                    {binding: 'energyqty', header: '발전량', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'smpamt', header: 'SMP 매출', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'recamt', header: 'REC 매출', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'stotamt', header: '총 매출', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'etotamt', header: '총 운용비', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'gainamt', header: '영업이익', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'ebitaamt', header: 'EBITA', width: 180, align: 'right', aggregate: 'Sum'},
+                    {binding: 'ebitamamt', header: 'EBITA 마진', width: 180, align: 'right', aggregate: 'Sum'}
 
                 ],
                 // itemsSource: viewdata,
@@ -196,7 +328,7 @@
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
             // // cellClicked 이벤트 핸들러 추가
             // theGrid.cellClicked.addHandler(function(s, e) {
@@ -216,6 +348,7 @@
             //     switchTab('#tab2');
             // });
         }
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
         // 초기 그리드 설정
@@ -226,12 +359,12 @@
             $.ajax({
                 url: '/api/sales/fetch',
                 type: 'GET',
-                data: { startDate: startDate, endDate: endDate },
+                data: {startDate: startDate, endDate: endDate},
                 success: function (response) {
                     viewdata.sourceCollection = response;
                 },
                 error: function () {
-                    alert('데이터를 불러오는 데 실패했습니다.');
+                    // alert('데이터를 불러오는 데 실패했습니다.');
                 }
             });
         }
@@ -282,19 +415,17 @@
         });
 
 
-
-
         // 검색
-        function searchData(){
+        function searchData() {
             let data = {
-                'searchusr' : $('#searchusr').val(),
+                'searchusr': $('#searchusr').val(),
                 'searchfrdate': $('#searchfrdate').val(),
                 'searchtodate': $('#searchtodate').val()
             }
 
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+            let result = AjaxUtil.getSyncData('/api/inspec_report/read', data);
 
-            if(result.success){
+            if (result.success) {
                 console.log(result.data);
                 grid_binding(result.data);
             }
@@ -408,12 +539,6 @@
         $(document).ready(function (e) {
 
 
-
-
-
-
-
-
             // $('#btnSave').click(function (e){
             //
             //
@@ -477,9 +602,6 @@
             //
             //     )
             // })
-
-
-
 
 
         });
@@ -636,7 +758,7 @@
                     },
                     error: function (error) {
                         console.error('데이터 로드 실패:', error);
-                        alert('데이터를 불러오는 데 실패했습니다.');
+                        // alert('데이터를 불러오는 데 실패했습니다.');
                     }
                 });
             }

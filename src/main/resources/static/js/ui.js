@@ -80,6 +80,9 @@ $(document).ready(function () {
     // 예외 URL 리스트를 상대 경로로 정의합니다.
     var exceptionUrls_sub = [
         "/gui/wm_equipment_alarm/default",
+        "/gui/wm_sale_graph/default",
+        "/gui/wm_salesmp_graph/default",
+        "/gui/wm_salerec_graph/default",
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
         "/gui/another_exception"
     ];

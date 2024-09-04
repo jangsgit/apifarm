@@ -52,7 +52,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>손익 분석</h2>
+                <h2>손익 분석</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                     alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -65,22 +66,28 @@
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
 
@@ -91,336 +98,82 @@
             </div>-->
         </div>
 
-        <div>
-            <!-- Section 1-->
-            <section class="tab-item" id="tab1">
-                <div class="section-top">
-                    <div class="search-wrap">
-                        <dl>
-                            <dt>
-                                <label for="category1">
-                                    구분<span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <ul class="date-box">
-                                    <li>
-                                        <select id="category1" name="tabCategory">
-                                            <option value="매출 정보">매출 정보</option>
-                                            <option value="비용 정보">비용 정보</option>
-                                            <option value="손익 관리">손익 관리</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-
-                        <dl>
-                            <dt>
-                                조회기간<span class="eq">*</span>
-                            </dt>
-                            <dd>
-                                <ul class="date-box" id="dateBoxContainer">
-                                    <li id="startDateContainer">
-                                        <input type="month" id="startDate" name="startDate" value="2024-01">
-                                    </li>
-                                    <li id="endDateContainer">
-                                        <input type="month" id="endDate" name="endDate" value="2024-12">
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchDataTab1()">
-                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                            검색
-                                        </a>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-                    </div>
-                </div> <!--//section-top end -->
-
-                <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                    <p id="selectedItem1"></p>
-                    <div id="theGrid" style="max-height: 530px"></div>
+        <!-- 검색 Section-->
+        <section style="background-color: #f0f1f2; border-radius: 0px; border: none; box-shadow: none; padding: 2px">
+            <div class="section-top">
+                <div class="search-wrap">
+                    <dl>
+                        <dt>
+                            조회기간<span class="eq">*</span>
+                        </dt>
+                        <dd>
+                            <ul class="date-box" id="dateBoxContainer">
+                                <li id="startDateContainer">
+                                    <input type="month" id="startDate" name="startDate" value="2024-01">
+                                </li>
+                                <li id="endDateContainer">
+                                    <input type="month" id="endDate" name="endDate" value="2024-12">
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchDataTab1()">
+                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                        검색
+                                    </a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
                 </div>
-            </section>
+            </div> <!--//section-top end -->
+        </section>
+
+
+        <div class="row" style="margin-bottom: 10px">
+            <!-- Section 1-->
+            <div class="col wp50" style="margin-right: 10px">
+                <section class="tab-section section_top" style="height: 428px;">
+                    <div class="title-wrap">
+                        <h3>매출 정보</h3>
+                    </div>
+                    <div class="container-fluid">
+                        <p id="selectedItem1"></p>
+                        <div id="theGrid"></div>
+                    </div>
+                </section>
+            </div>
 
             <!-- Section 2-->
-            <section class="tab-item" id="tab2" style="display:none;">
-                <div class="section-top">
-                    <div class="search-wrap">
-                        <dl>
-                            <dt>
-                                <label for="category2">
-                                    구분<span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <ul class="date-box">
-                                    <li>
-                                        <select id="category2" name="tabCategory">
-                                            <option value="매출 정보">매출 정보</option>
-                                            <option value="비용 정보">비용 정보</option>
-                                            <option value="손익 관리">손익 관리</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-
-                        <dl>
-                            <dt>
-                                조회기간<span class="eq">*</span>
-                            </dt>
-                            <dd>
-                                <ul class="date-box" id="dateBoxContainer2">
-                                    <li id="startDateContainer2">
-                                        <input type="month" id="startDate2" name="startDate" value="2024-01">
-                                    </li>
-                                    <li id="endDateContainer2">
-                                        <input type="month" id="endDate2" name="endDate" value="2024-12">
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchDataTab1()">
-                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                            검색
-                                        </a>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
+            <div class="col wp50">
+                <section class="tab-section section_top" style="height: 428px;">
+                    <div class="title-wrap">
+                        <h3>비용 관리</h3>
                     </div>
-                </div> <!--//section-top end -->
-
-                <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                    <p id="selectedItem2"></p>
-                    <div id="theGrid2" style="max-height: 493px"></div>
-                </div>
-            </section>
-
-            <!-- Section 3-->
-            <section class="tab-item" id="tab3" style="display:none;">
-                <div class="section-top">
-                    <div class="search-wrap">
-                        <dl>
-                            <dt>
-                                <label for="category3">
-                                    구분<span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <ul class="date-box">
-                                    <li>
-                                        <select id="category3" name="tabCategory">
-                                            <option value="매출 정보">매출 정보</option>
-                                            <option value="비용 정보">비용 정보</option>
-                                            <option value="손익 관리">손익 관리</option>
-                                        </select>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-
-                        <dl>
-                            <dt>
-                                조회연도<span class="eq">*</span>
-                            </dt>
-                            <dd>
-                                <ul class="date-box">
-                                    <li>
-                                        <select id="year3" name="year3">
-                                            <option>2023</option>
-                                            <option selected>2024</option>
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-delete" title="검색" id="btn-srch3">
-                                            <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
-                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                            검색
-                                        </a>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-
+                    <div class="container-fluid">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid2"></div>
                     </div>
-                    <div class="button-wrap">
-                        <ul>
-                            <li>
-                                <a class="btn btn-print" title="보고서 출력" onclick="DownloadDoc()">
-                                    <img src="/images/icon/ico-print.svg" alt="출력 아이콘">
-                                    보고서 출력
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div> <!--//section-top end -->
-
-                <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                    <p id="selectedItem3"></p>
-                    <div id="theGrid3" style="max-height: 493px"></div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
+
+        <!-- Section 3-->
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col wp100">
+                <section class="tab-section section_top" style="height: 330px;">
+                    <div class="title-wrap">
+                        <h3>손익 관리</h3>
+                    </div>
+                    <div class="container-fluid">
+                        <p id="selectedItem3"></p>
+                        <div id="theGrid3"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
     </div> <!--//layout-contents end -->
 
     <!-- [대시보드] 팝업  -->
-    <div class="dashboard-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper w820" id="popup1">
-            <div class="popup-title">
-                <h3>탭 설정</h3>
-                <a title="팝업닫기" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap mg-b20">
-                    <table class="write-table">
-                        <caption>탭설정 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp30">
-                            <col class="wp20">
-                            <col class="wp30">
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="popuptext1">
-                                    탭ID
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext1" class="wp100" placeholder="tab01">
-                                </div>
-                            </td>
-                            <th>
-                                <label for="popuptext1">
-                                    라벨
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext1" class="wp100" placeholder="이벤트통계">
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="fl-sb">
-                    <div class="card-btn-wrap mg-b10">
-                        <a  class="btn" title="위로">
-                            <img src="/images/icon/ico-up.svg" alt="위로" class="mg-r0">
-                        </a>
-                        <a  class="btn" title="아래로">
-                            <img src="/images/icon/ico-down.svg" alt="아래로" class="mg-r0">
-                        </a>
-                    </div>
-                    <div class="button-wrap mg-b10">
-                        <ul>
-                            <li>
-                                <a class="btn" title="전체선택">
-                                    전체선택
-                                </a>
-                            </li>
-                            <li>
-                                <a class="btn" title="새로고침">
-                                    새로고침
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="table-wrap">
-                    <table class="list-table">
-                        <caption>탭 설정 테이블</caption>
-                        <colgroup>
-                            <col class="wp10">
-                            <col class="wp8">
-                            <col class="w20">
-                            <col class="wauto">
-                            <col class="wp12">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th><input type="checkbox" id="" name=""></th>
-                            <th>순서</th>
-                            <th>탭ID</th>
-                            <th>라벨</th>
-                            <th>감춤</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button class="btn-popup-close">취소</button>
-                <button class="btn-navy">저장</button>
-            </div>
-        </div>
-    </div> <!-- //dashboard-layout-popup end -->
 
 </th:block>
 
@@ -433,6 +186,9 @@
 
         // 탭 전환 로직
         document.addEventListener('DOMContentLoaded', function () {
+
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+
             // 모든 select 요소에 change 이벤트 리스너 추가
             document.querySelectorAll('select[name="tabCategory"]').forEach(function (selectElement) {
                 selectElement.addEventListener('change', function () {
@@ -574,10 +330,10 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    {binding: 'galoym', header: 'No', width: 140, align: 'center'},
+                    {binding: 'galoym', header: 'No', width: 50, align: 'center'},
                     {binding: 'energyqty', header: '구분', width: 180, align: 'center'},
-                    {binding: 'imsi', header: '수식', width: 250, align: 'center'},
-                    {binding: 'recamt', header: '금액', width: 180, align: 'right'},
+                    {binding: 'imsi', header: '수식', width: 110, align: 'center'},
+                    {binding: 'recamt', header: '금액', width: 250, align: 'right'},
                     {binding: 'stotamt', header: '비고', width: "*", align: 'left'}
 
                 ],
@@ -743,9 +499,9 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
-                    {binding: 'galoym', header: 'No', width: 140, align: 'center'},
+                    {binding: 'galoym', header: 'No', width: 50, align: 'center'},
                     {binding: 'energyqty', header: '구분', width: 180, align: 'center'},
-                    {binding: 'imsi', header: '수식', width: 250, align: 'center'},
+                    {binding: 'imsi', header: '수식', width: 230, align: 'center'},
                     {binding: 'recamt', header: '금액', width: 180, align: 'right'},
                     {binding: 'stotamt', header: '비고', width: "*", align: 'left'}
 
@@ -930,7 +686,7 @@
                     viewdata.sourceCollection = response;
                 },
                 error: function () {
-                    alert('데이터를 불러오는 데 실패했습니다.');
+                    // alert('데이터를 불러오는 데 실패했습니다.');
                 }
             });
         }
@@ -1324,7 +1080,7 @@
                     },
                     error: function (error) {
                         console.error('데이터 로드 실패:', error);
-                        alert('데이터를 불러오는 데 실패했습니다.');
+                        // alert('데이터를 불러오는 데 실패했습니다.');
                     }
                 });
             }

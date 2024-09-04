@@ -5,7 +5,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>SMP 등록</h2>
+                <h2>SMP 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -13,27 +13,33 @@
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스 분석</li>
+                <li>매출 관리</li>
                 <li>SMP 등록</li>
             </ul>
         </div>
 
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -69,7 +75,7 @@
                             </dl>
 
                         </div>
-                        <div class="button-wrap">
+                        <!--<div class="button-wrap">
                             <ul>
                                 <li>
                                     <a class="btn btn-excell" title="엑셀다운로드">
@@ -78,7 +84,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                     </div> <!--//section-top end -->
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
@@ -189,6 +195,12 @@
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
+
+        document.addEventListener('DOMContentLoaded', function(){
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+            // loadYearlyData();        //조회연도 항목 불러오기
+            // WijmoGrid();
+        })
 
         var theGrid;
         var viewdata;

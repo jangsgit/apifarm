@@ -47,7 +47,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>발전량 등록</h2>
+                <h2>발전량 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -59,29 +59,33 @@
                 <li>발전량 등록</li>
             </ul>
         </div>
+
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="산단" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">KT 대구물류센터 연료전지 발전소</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
+
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
@@ -158,7 +162,7 @@
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem1"></p>
-                        <div id="theGrid" style="max-height: 493px;"></div>
+                        <div id="theGrid" style="max-height: 681px;"></div>
                     </div>
                 </section>
 
@@ -232,7 +236,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem2"></p>
-                        <div id="theGrid2" style="max-height: 493px;"></div>
+                        <div id="theGrid2" style="max-height: 681px;"></div>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
@@ -523,6 +527,8 @@
         var viewdata2;
 
         document.addEventListener('DOMContentLoaded', function () {
+
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
 
             document.getElementById('searchButton1').addEventListener('click', function(event) {
                 synchronizeTabs('tab1', 'tab2');
