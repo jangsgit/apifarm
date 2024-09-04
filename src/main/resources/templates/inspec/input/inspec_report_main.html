@@ -219,7 +219,7 @@
                 <div class="table-wrap">
 
                     <div class="container-fluid">
-                        <div id="theGrid2"></div>
+                        <div id="theGrid2" style="height: 730px"></div>
                     </div>
                     <!--<table class="list-table">
                         <caption>당일 점검일지 현황 테이블</caption>
@@ -446,6 +446,9 @@
                             data.data.push('empty');
                         }
                     }
+
+
+
                     data2 = data.data;
                 }
             })
@@ -495,6 +498,9 @@
                 async: false,
                 success: function (data) {
                     let DataLength = 15 - data.data.length;
+                    console.log('까꿍: ', data.data);
+
+
 
                     if(data.data.length < 15){
                         for(let i=0; i < DataLength; i++){
@@ -502,6 +508,15 @@
                         }
                     }
                     data2 = data.data;
+
+                    console.log('슈퍼까꿍: ', data2);
+                    data2 = data2.map(item => {
+                        return{
+                          ...item,
+                          checkdt: formatDate(item.checkdt)
+                        };
+                    });
+
                 }
             })
 

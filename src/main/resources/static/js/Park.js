@@ -502,6 +502,15 @@ function toggleSearchWrap(){
     }
 }
 
+//날짜컬럼 짝대기 붙혀서 ex: 2024-01-01
+function formatDate(dateStr){
+    if(dateStr.length === 8){
+        return `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}`;
+
+    }
+    return dateStr;
+}
+
 
 
 
