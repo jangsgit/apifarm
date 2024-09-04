@@ -61,7 +61,7 @@ public class InspecStaticService {
         String sql;
 
         sql = """
-                SELECT  rp720.chkaddres as chkaddres, rp720.checkrem as checkrem, STRING_AGG(rp726.checkusr, ', ') AS checkusr
+                SELECT  rp720.chkaddres as checkarea, rp720.checkrem as checkrem, STRING_AGG(rp726.checkusr, ', ') AS checkusr
                 FROM tb_rp720 rp720
                 JOIN tb_rp726 rp726 ON rp720.spworkcd = rp726.spworkcd
                 AND rp720.spplancd = rp726.spplancd

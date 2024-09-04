@@ -299,7 +299,7 @@
 
     <script type="text/javascript">
 
-        // 배열 데이터로 정의
+        /*// 배열 데이터로 정의
         var chartData =
             [{"Month":"Jan","Profit":1100},
                 {"Month":"Feb","Profit":1400},
@@ -425,7 +425,7 @@
             +"</rMateChart>";
 
         //rMate 불러오기
-        function rMateCall(RmaTeData){
+        function rMateCall(){
 
             rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
 
@@ -434,15 +434,71 @@
             var layout3 = getCartesianLayout("Column3D","칼럼 3D 멀티 데이터 표현",["건수"]);
 
 
-            var layoutSet = [layout3, layout2, radarLayout];
-            var dataSet = [RmaTeData, rmateData, RmaTeData];
+            //            var layoutSet = [layout1, layout2, radarLayout];
+            var layoutSet = [layout1];
+
+            //            var dataSet = [chartData, chartData2, chartData3];
+            var dataSet = [chartData];
 
             rMateChartH5.calls("chart1", {
                 "setSlideLayoutSet" : layoutSet,
                 "setSlideDataSet" : dataSet
             });
+        }*/
+
+        rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="World Top 10 - Fastest Growing Economies (2024)" />'
+            +'<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
+            +'</Options>'
+            +'<SeriesInterpolate id="ss"/>'
+            +'<Column2DChart showDataTips="true" selectionMode="multiple" columnWidthRatio="0.48">'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Country"/>'
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis maximum="100" interval="10"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Column2DSeries labelPosition="outside" yField="GDP" displayName="GDP Growth (In %)" showDataEffect="{ss}" showValueLabels="[4]" strokeJsFunction="strokeFunction"/>'
+            +'</series>'
+            +'</Column2DChart>'
+            +'</rMateChart>';
+
+        // 차트 데이터
+        var chartData = [{"Country":"SouthSudan", "GDP":20},
+            {"Country":"Libya", "GDP":30},
+            {"Country":"SierraLeone", "GDP":51.2},
+            {"Country":"Mongolia", "GDP":44.5},
+            {"Country":"Paraguay", "GDP":62.35},
+            {"Country":"TimorLeste", "GDP":84.46},
+            {"Country":"Iraq", "GDP":48.9},
+            {"Country":"Panama", "GDP":38},
+            {"Country":"Gambia", "GDP":60.5},
+            {"Country":"Mozam-bique", "GDP":40.1}];
+
+        function strokeFunction(id, index, data, values){
+            if(values[0] == "Paraguay")
+                return {
+                    color : "#000",
+                    weight : 2
+                };
         }
 
+        rMateChartH5.calls("chart1", {
+            "setLayout" : layoutStr,
+            "setData" : chartData
+        });
+
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart1").setTheme(theme);
+        }
 
         // ===============================================================================Rmate
 
@@ -474,6 +530,10 @@
                 });
 
                 theGrid.rowHeaders.columns.splice(0, 1);
+                rMateChartH5.calls("chart1", {
+                    "setLayout" : layoutStr,
+                    "setData" : chartData
+                });
                 //rMateCall();
             }else{
                 theGrid.columns.clear();
@@ -483,6 +543,10 @@
                     theGrid.columns.push(col);
                 }
                 theGrid.itemsSource = viewdata;
+                rMateChartH5.calls("chart1", {
+                    "setLayout" : layoutStr,
+                    "setData" : chartData
+                });
                 //rMateCall();
             }
 

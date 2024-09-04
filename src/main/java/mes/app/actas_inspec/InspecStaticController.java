@@ -123,7 +123,7 @@ public class InspecStaticController {
 
                 endDate = getLastDate(searchtodate);
 
-                items = inspecStaticService.getRP750List(startdate, endDate);
+                items = inspecStaticService.getRP720List(startdate, endDate);
                 break;
 
             //순회점검 분기별 조회
@@ -133,7 +133,7 @@ public class InspecStaticController {
 
                 endDate = getQuarterEndDate(searchYear, searchtoQuarter);
 
-                items = inspecStaticService.getRP750List(startdate, endDate);
+                items = inspecStaticService.getRP720List(startdate, endDate);
 
                 break;
 
@@ -143,7 +143,7 @@ public class InspecStaticController {
 
                 endDate = getHalfYearEndDate(searchYear, searchtoHalfYear);
 
-                items = inspecStaticService.getRP750List(startdate, endDate);
+                items = inspecStaticService.getRP720List(startdate, endDate);
                 break;
 
 
@@ -151,7 +151,7 @@ public class InspecStaticController {
                 startdate = searchfrYear + "0101";
                 endDate   = searchtoYear + "1231";
 
-                items = inspecStaticService.getRP750List(startdate, endDate);
+                items = inspecStaticService.getRP720List(startdate, endDate);
                 break;
         }
 

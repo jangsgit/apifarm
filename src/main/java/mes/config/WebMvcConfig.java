@@ -21,6 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8060") // 모든 도메인 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
     
