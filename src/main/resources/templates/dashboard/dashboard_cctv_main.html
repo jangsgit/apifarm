@@ -43,15 +43,31 @@
             </ul>
         </div>
         <div class="row row-2">
-            <section class="wp48" style="height: 850px">
+            <section class="wp62" style="height: 850px">
                 <div class="title-wrap">
                     <h3>연료전지 실시간 CCTV</h3>
                 </div>
-                <div class="cctv-wrap" style="height: 500px">
-                    <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp100">
+                <div class="cctv-wrap-all" style="width: 730px; display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                    <div>
+                        <video id="video" class="video-js vjs-default-skin" width="461" height="260" controls autoplay></video>
+                        <h4 style="text-align: center; margin-top: 10px;">CCTV 1</h4>
+                    </div>
+                    <div>
+                        <video id="video2" class="video-js vjs-default-skin" width="461" height="260" controls autoplay></video>
+                        <h4 style="text-align: center; margin-top: 10px;">CCTV 2</h4>
+                    </div>
+                    <div style="margin-top: 40px">
+                        <video id="video3" class="video-js vjs-default-skin" width="461" height="260" controls autoplay></video>
+                        <h4 style="text-align: center; margin-top: 10px;">CCTV 3</h4>
+                    </div>
+                    <div style="margin-top: 40px">
+                        <video id="video4" class="video-js vjs-default-skin" width="461" height="260" controls autoplay></video>
+                        <h4 style="text-align: center; margin-top: 10px;">CCTV 4</h4>
+                    </div>
                 </div>
+
             </section>
-            <div class="col wp48" style="height: 850px">
+            <div class="col wp38" style="height: 850px">
                 <section>
                     <div class="title-wrap">
                         <h3>이벤트 발생 현황</h3>
@@ -77,7 +93,7 @@
                                     <dd>
                                         <ul class="date-box">
                                             <li>
-                                                <select title="점검상태" id="eventState">
+                                                <select title="점검상태" id="eventState" style="">
                                                     <option value="0">전체</option>
                                                 </select>
                                             </li>
@@ -147,6 +163,49 @@
 
 
     <script>
+        var player = videojs('video', {
+            autoplay: true,
+            controls: true,
+            muted: true,  // 비디오를 무음으로 설정
+            preload: 'auto'
+        });
+        player.src({
+            src: 'http://121.78.112.192:9000/hls/stream1.m3u8',
+            type: 'application/x-mpegURL'
+        });
+
+        var player2 = videojs('video2', {
+            autoplay: true,
+            controls: true,
+            muted: true,  // 비디오를 무음으로 설정
+            preload: 'auto'
+        });
+        player2.src({
+            src: 'http://121.78.112.192:9000/hls/streaming1.m3u8',
+            type: 'application/x-mpegURL'
+        });
+
+        var player3 = videojs('video3', {
+            autoplay: true,
+            controls: true,
+            muted: true,  // 비디오를 무음으로 설정
+            preload: 'auto'
+        });
+        player3.src({
+            src: 'http://121.78.112.192:9000/hls/streamer.m3u8',
+            type: 'application/x-mpegURL'
+        });
+
+        var player4 = videojs('video4', {
+            autoplay: true,
+            controls: true,
+            muted: true,  // 비디오를 무음으로 설정
+            preload: 'auto'
+        });
+        player4.src({
+            src: 'http://121.78.112.192:9000/hls/streamute.m3u8',
+            type: 'application/x-mpegURL'
+        });
 
         var theGrid;    // 이벤트 발생 현황
         var theGrid1;   // 적외선 감지 현황
