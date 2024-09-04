@@ -2,6 +2,8 @@
 
 <style>
 
+
+
 </style>
 
 
@@ -11,34 +13,43 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>도시가스청구서등록</h2>
-                <a  title="북마크" class="bookmark toggle">
-                    내메뉴
+                <h2>도시가스청구서등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내 메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스분석</li>
+                <li>비용관리</li>
                 <li>도시가스청구서등록</li>
             </ul>
         </div>
+
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -350,6 +361,7 @@
 
         var theGrid;
         var viewdata;
+        let csrfToken = $("[name=_csrf]").val();
 
         const modal2 = document.querySelector('.modal999');
         const modalOpen = document.querySelector('.modal_btn');
@@ -442,6 +454,59 @@
                 modalContent999.classList.add('show');
             });
         }
+
+
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput2');
+            const file = fileInput.files[0];
+
+            // 파일 유효성 검사
+            if (!file || file.type !== 'application/pdf') {
+                alert("PDF 파일만 업로드 가능합니다.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("_csrf",csrfToken);
+
+            fetch('/api/cost/gas_bill/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("파일 업로드 실패");
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    alert("파일이 성공적으로 업로드되었습니다.");
+                    // 추출된 텍스트를 두 번째 팝업에 표시하는 로직
+                    populateTextInModal(result);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(`파일 처리 중 오류가 발생했습니다: ${error.message}`);
+                });
+        }
+
+        function populateTextInModal(text) {
+            const billingDate = extractBillingDate(text);
+            if (billingDate) {
+                document.querySelector('#popup2 input[name="청구년월"]').value = billingDate;
+            } else {
+                alert("청구년월을 추출할 수 없습니다.");
+            }
+            // 다른 필드도 필요한 경우 여기에 추가
+            document.querySelector('.modal999').style.display = 'block';
+        }
+
+        function extractBillingDate(text) {
+            const match = text.match(/청구년월:\s*(\d{6})/);
+            return match ? match[1] : null;
+        }
+
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -536,91 +601,10 @@
             }
         }
 
-        // function grid_binding(data){
-        //     var inspecDto = data;
-        //     var inspecData = [];
-        //
-        //     for (var i = 0; i < inspecDto.length; i++) {
-        //         inspecData.push({
-        //             rownum: inspecDto[i]["rownum"],
-        //             spworknm: inspecDto[i]["spworknm"],
-        //             spcompnm: inspecDto[i]["spcompnm"],
-        //             spplannm: inspecDto[i]["spplannm"],
-        //             checkdt: inspecDto[i]["checkdt"],
-        //             checkusr: inspecDto[i]["checkusr"],
-        //             checkarea: inspecDto[i]["checkarea"],
-        //             checktmdt: inspecDto[i]["checktmdt"],
-        //
-        //         });
-        //
-        //     }
-        //
-        //     theGrid.columns.clear();
-        //     theGrid.autoGenerateColumns = false;
-        //     viewdata.sourceCollection = inspecData;
-        //
-        //     var cols = new wijmo.grid.Column();
-        //     cols.binding = 'rownum';
-        //     cols.header = '순번';
-        //     cols.align = "center";
-        //     cols.width = 60;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spworknm';
-        //     cols.header = '지역명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spcompnm';
-        //     cols.header = '산단명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spplannm';
-        //     cols.header = '발전소명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkdt';
-        //     cols.header = '등록일자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkusr';
-        //     cols.header = '점검자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkarea';
-        //     cols.header = '점검장소';
-        //     cols.align = "center";
-        //     cols.width = 200;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checktmdt';
-        //     cols.header = '점검시간';
-        //     cols.align = "center";
-        //     cols.width = 260;
-        //     theGrid.columns.push(cols);
-        //
-        //
-        //
-        // }
+
 
         $(document).ready(function (e) {
-
+            initializeSelections();
             // 현재 연도를 가져옴
             const currentYear = new Date().getFullYear();
             // 1월 1일 날짜 문자열 생성

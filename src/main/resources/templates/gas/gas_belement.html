@@ -8,34 +8,42 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>도시가스성분등록</h2>
+                <h2>도시가스성분등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                        alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
-                    내메뉴
+                    내 메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스분석</li>
+                <li>도시가스 성분</li>
                 <li>도시가스성분등록</li>
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -341,9 +349,7 @@
                     저장
                 </button>
             </div>
-
         </div>
-
     </div>
 
 
@@ -695,75 +701,7 @@
         // }
 
         $(document).ready(function (e) {
-
-
-            page = new CheckResultDiaryPage();
-
-
-            $('#btnSave').click(function (e) {
-
-
-                Alert.confirm('', '저장하시겠습니까?', function () {
-
-                        let fileInput = document.getElementById('fileInput1');
-                        let files = fileInput.files;
-                        let formData = new FormData();
-
-                        for (var i = 0; i < files.length; i++) {
-                            formData.append('filelist', files[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('checkitem', $('#checkitem').val());
-                        formData.append('checkplan', $('#checkplan').val());
-                        formData.append('randomuuid', randomString);
-                        formData.append('_csrf', $('[name=_csrf]').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
-                    }
-                )
-            })
-
-
-            page.setUploader();
+            initializeSelections();
 
 
         });

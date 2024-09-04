@@ -83,6 +83,10 @@ $(document).ready(function () {
         "/gui/wm_sale_graph/default",
         "/gui/wm_salesmp_graph/default",
         "/gui/wm_salerec_graph/default",
+        "/gui/wm_cost_graph/default",
+        "/gui/wm_gasamount_list/default",
+        "/gui/wm_gasbill_list/default",
+        "/gui/wm_fuel_management/default",
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
         "/gui/another_exception"
     ];

@@ -1,6 +1,35 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <style>
 
+
+    .tabs .tab_links:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    .tabs .tab_links li {
+        float: left;
+    }
+
+    .tabs .tab_links li:first-child {
+        margin-left: 0;
+    }
+
+    .tabs .tab_links button {
+        padding: 17px 12px 13px;
+        color: #a1a3b6
+    }
+
+    .tabs .tab_links li.on button {
+        color: #000
+    }
+
+
+    .theGrid1-cell {
+        padding: 12px;
+    }
+
 </style>
 
 <th:block layout:fragment="content">
@@ -10,34 +39,44 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>월별 비용 항목별 조회</h2>
+                <h2>월별비용항목별조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
-                    내메뉴
+                    내 메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
                 <li>비용관리</li>
                 <li>월별비용항목별조회</li>
             </ul>
         </div>
+
+
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -49,54 +88,43 @@
                 <li>
                     <a href="#tab2" title="기간별대비">기간별대비</a>
                 </li>
-                <!--                <li>-->
-                <!--                    <a href="#tab1" title="GIGAeyes">GIGAeyes</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab2" title="REC발급 수수료">REC발급수수료</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab3" title="LTSA서비스료">LTSA서비스료</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab4" title="전기안전검사료">전기안전검사료</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab5" title="감가상각비">감가상각비</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab6" title="IT비용">IT비용</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab7" title="총비용">총비용</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab8" title="연료-워런티">연료-워런티</a>-->
-                <!--                </li>-->
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회연도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
 
                             <dl>
                                 <dt>
-                                    <label>
-                                        구분<span class="eq">*</span>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
-                                    <ul>
+                                    <ul class="date-box">
                                         <li>
-                                            <select>
-                                                <option>GIGAeyes</option>
-                                                <option>REC발급수수료</option>
-                                                <option>LTSA서비스료</option>
-                                                <option>전기안전감사료</option>
-                                                <option>감가상각비</option>
-                                                <option>IT비용</option>
-                                                <option>총비용</option>
+                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -108,72 +136,233 @@
                                     조회기간<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
+                                    <ul class="date-box" id="dateBoxContainer">
+                                        <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
                                         </li>
+                                        <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-05">
+                                        </li>
+
                                         <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
-
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box" style="gap:5px;">
-                                        <select id="select1" class="w120" style="border-radius: 5px 5px 5px 5px;">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                    <select id="select2" class="w120" style="border-radius: 5px 5px 5px 5px;">
-                                        <option>월별</option>
-                                        <option>일별</option>
-                                        <option>년도별</option>
-
-                                    </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색" style="border-radius: 5px 5px 5px 5px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
                         </div>
 
-<!--                        <div class="button-wrap">-->
-<!--                            <ul>-->
-<!--                                <li>-->
-<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
-<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
-<!--                                        엑셀다운로드-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
+
                     </div> <!--//section-top end -->
 
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>GIGAeyes</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab01" title="통계">통계</a></li>
+                                        <li><a href="#tab02" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab01">
+                                        <div>
+                                            <div id="chartHolder"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab02" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid1" class="theGrid1" style="width: 100%; height: 280px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
 
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid1" style="max-height: 493px;"></div>
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>REC발급 수수료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab03" title="통계">통계</a></li>
+                                        <li><a href="#tab04" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab03">
+                                        <div>
+                                            <div id="chartHolder2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab04" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid2" class="theGrid2" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </div>
 
-                    <div class="btn-wrap">
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>LTSA서비스료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab05" title="통계">통계</a></li>
+                                        <li><a href="#tab06" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab05">
+                                        <div>
+                                            <div id="chartHolder3"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab06" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid3" class="theGrid3" style="width: 100%; height: 280px; padding: 12px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>전기안전감사료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab07" title="통계">통계</a></li>
+                                        <li><a href="#tab08" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab07">
+                                        <div>
+                                            <div id="chartHolder4"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab08"style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid4" class="theGrid4" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
+
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>감가상각비</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab09" title="통계">통계</a></li>
+                                        <li><a href="#tab10" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab09">
+                                        <div>
+                                            <div id="chartHolder5"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab10" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid5" class="theGrid5" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>IT비용</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab11" title="통계">통계</a></li>
+                                        <li><a href="#tab12" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab11" >
+                                        <div>
+                                            <div id="chartHolder6"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab12" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid6" class="theGrid6" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 24px; margin-right: 15px;">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>총비용</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab13" title="통계">통계</a></li>
+                                        <li><a href="#tab14" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab13" >
+                                        <div>
+                                            <div id="chartHolder7"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab14" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid7" class="theGrid7" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
                 </section>
 
 
@@ -181,557 +370,283 @@
                     <div class="section-top">
                         <div class="search-wrap">
 
-                            <dl>
-                                <dt>
-                                    <label>
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul>
-                                        <li>
-                                            <select>
-                                                <option>GIGAeyes</option>
-                                                <option>REC발급수수료</option>
-                                                <option>LTSA서비스료</option>
-                                                <option>전기안전감사료</option>
-                                                <option>감가상각비</option>
-                                                <option>IT비용</option>
-                                                <option>총비용</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        조회연도<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="yearSelectTab1" name="yearSelectTab1">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
 
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate2" name="searchfrdate2">
-                                            <label for="searchfrdate2" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate2" name="searchtodate2">
-                                            <label for="searchtodate2" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
+                                <dl>
+                                    <dt>
+                                        <label for="periodType">
+                                            기간유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                    <option value="hourly">시간별</option>
+                                                    <option value="monthly" selected>월별</option>
+                                                    <option value="quarterly">분기별</option>
+                                                    <option value="halfyearly">반기별</option>
+                                                    <option value="yearly">연도별</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
 
-                                <dt>
-                                    <label for="select1">
-                                        검색조건<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box" style="gap:5px;">
-                                        <select id="select1" class="w120" style="border-radius: 5px 5px 5px 5px;">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="dateBoxContainer">
+                                            <li id="startDateContainer">
+                                                <input type="month" id="startDate" name="startDate" value="2024-01">
+                                            </li>
+                                            <li id="endDateContainer">
+                                                <input type="month" id="endDate" name="endDate" value="2024-05">
+                                            </li>
 
-                                        <select id="select2" class="w120" style="border-radius: 5px 5px 5px 5px;">
-                                            <option>월별</option>
-                                            <option>일별</option>
-                                            <option>년도별</option>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="btn-search"
+                                                   onclick="searchDataTab1()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
 
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색" style="border-radius: 5px 5px 5px 5px;"></a>
-                                    </div>
-                                </dd>
-                            </dl>
                         </div>
 
-<!--                        <div class="button-wrap">-->
-<!--                            <ul>-->
-<!--                                <li>-->
-<!--                                    <a class="btn btn-excell" title="엑셀다운로드">-->
-<!--                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">-->
-<!--                                        엑셀다운로드-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
                     </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
+
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>GIGAeyes</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab15" title="통계">통계</a></li>
+                                        <li><a href="#tab16" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab15">
+                                        <div>
+                                            <div id="chartHolder1-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab16" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid1" class="theGrid1" style="width: 100%; height: 280px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
 
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid2" style="max-height: 493px;"></div>
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>REC발급 수수료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab17" title="통계">통계</a></li>
+                                        <li><a href="#tab18" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab17">
+                                        <div>
+                                            <div id="chartHolder2-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab18" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid2" class="theGrid2" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
                         </div>
                     </div>
 
-                    <div class="btn-wrap">
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>LTSA서비스료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab19" title="통계">통계</a></li>
+                                        <li><a href="#tab20" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab19">
+                                        <div>
+                                            <div id="chartHolder3-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab20" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid3" class="theGrid3" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>전기안전감사료</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab21" title="통계">통계</a></li>
+                                        <li><a href="#tab22" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab21">
+                                        <div>
+                                            <div id="chartHolder4-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab22"style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid4" class="theGrid4" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>감가상각비</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab23" title="통계">통계</a></li>
+                                        <li><a href="#tab24" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab23">
+                                        <div>
+                                            <div id="chartHolder5-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab24" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid5" class="theGrid5" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>IT비용</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab25" title="통계">통계</a></li>
+                                        <li><a href="#tab26" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab25" >
+                                        <div>
+                                            <div id="chartHolder6-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab26" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid6" class="theGrid6" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 24px; margin-right: 15px;">
+                        <div class="col wp50" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
+                                <div class="title-wrap" style="margin-bottom: 0px">
+                                    <h3>총비용</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab27" title="통계">통계</a></li>
+                                        <li><a href="#tab28" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1 -->
+                                    <div class="tab-item-sub" id="tab27" >
+                                        <div>
+                                            <div id="chartHolder7-2"
+                                                 style="width: 100%; height: 290px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2 -->
+                                    <div class="tab-item-sub" id="tab28" style="padding-top: 5px;">
+                                        <div class="container-fluid">
+                                            <p id="selectedItem"></p>
+                                            <div id="theGrid7" class="theGrid7" style="width: 100%; height: 280px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </section>
 
 
-                <section class="tab-item" id="tab3">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                        <select id="select2" class="w120">
-                                            <option>월별</option>
-                                            <option>1월</option>
-                                            <option>2월</option>
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
-                        </div>
-
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid3" style="max-height: 493px;"></div>
-                        </div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-
-
-                <section class="tab-item" id="tab4">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                        <select id="select2" class="w120">
-                                            <option>월별</option>
-                                            <option>1월</option>
-                                            <option>2월</option>
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
-                        </div>
-
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid4" style="max-height: 493px;"></div>
-                        </div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-
-
-                <section class="tab-item" id="tab5">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                        <select id="select2" class="w120">
-                                            <option>월별</option>
-                                            <option>1월</option>
-                                            <option>2월</option>
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
-                        </div>
-
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid5" style="max-height: 493px;"></div>
-                        </div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-
-
-                <section class="tab-item" id="tab6">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                        <select id="select2" class="w120">
-                                            <option>월별</option>
-                                            <option>1월</option>
-                                            <option>2월</option>
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
-                        </div>
-
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid6" style="max-height: 493px;"></div>
-                        </div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
-
-
-                <section class="tab-item" id="tab7">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="searchfrdate" name="searchfrdate">
-                                            <label for="searchfrdate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="searchtodate" name="searchtodate">
-                                            <label for="searchtodate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="select1">
-                                        구분<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>기간별</option>
-                                            <option>증감율</option>
-                                            <option>YOY기간</option>
-                                            <option>YOY증감율</option>
-                                        </select>
-
-                                        <select id="select2" class="w120">
-                                            <option>월별</option>
-                                            <option>1월</option>
-                                            <option>2월</option>
-                                        </select>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="row">
-                        <div class="mg-r20">
-                            <img src="/images/rMate_imsi_2.png" alt="도시가스사용량"
-                                 style="height: 493px; width: auto; vertical-align:middle;">
-                        </div>
-
-                        <div class="container-fluid col wp55">
-                            <p id="selectedItem"></p>
-                            <div id="theGrid7" style="max-height: 493px;"></div>
-                        </div>
-                    </div>
-                    <div class="btn-wrap">
-                    </div>
-                </section>
 
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-
-    <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
-            <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <table class="write-table">
-                    <div class="table-wrap">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <input type="hidden" id="popup-spuncode">
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">등록일자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-date" readonly>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popup-checkusr">점검자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">점검장소</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>첨부파일</th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
-                                    <div class="upload-filebox">
-                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                        <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
-                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                    </div>
-                                    <div class="upload-filelist">
-                                        <div class="title">
-                                            <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                        </div>
-                                        <ul class="filelist">
-                                        </ul>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="popup-button">
-            <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">
-                취소
-            </button>
-            <button onclick="saveFile()"
-                    style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
-                저장
-            </button>
-        </div>
-    </div>
-    </div>
 
 
 </th:block>
@@ -743,6 +658,417 @@
 
     <script type="text/javascript">
 
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs() {
+            const periodType = document.getElementById("periodType").value;
+            const selectedYear = document.getElementById("yearSelectTab1").value; // 선택된 조회연도 가져오기
+            const dateBoxContainer = document.getElementById("dateBoxContainer");
+            const startDateContainer = document.getElementById("startDateContainer");
+            const endDateContainer = document.getElementById("endDateContainer");
+            const periodLabel = dateBoxContainer.closest('dl').querySelector('dt'); // <dl> 요소를 가져옴
+
+            // 기존 내용을 초기화
+            // document.getElementById("startDateContainer").innerHTML = "";
+            // document.getElementById("endDateContainer").innerHTML = "";
+
+            if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                // 조회기간 글자 숨기기
+                periodLabel.style.visibility = "hidden";
+                // startDate와 endDate input 요소 숨기기
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+            } else {
+                // 조회기간 글자 보이기
+                periodLabel.style.visibility = "visible";
+                // startDate와 endDate input 요소 보이기
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
+
+                // 각 기간유형에 맞는 요소 설정
+                if (periodType === "hourly") {
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
+
+                    document.getElementById("startDateContainer").innerHTML = `
+                <input type="date" id="startDate" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
+
+                    document.getElementById("endDateContainer").innerHTML = `
+                <select id="startHour" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="endHour" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    document.getElementById("startDateContainer").innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
+                    document.getElementById("endDateContainer").innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startQuarter">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endQuarter">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startHalf">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endHalf">${options}</select>`;
+                }
+            }
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
+        }
+
+        // tab2 MoM 선택시, 월 선택 셀렉트 생성
+        function createMonthSelect(id) {
+            const monthSelect = document.createElement('select');
+            monthSelect.id = id;
+            monthSelect.name = id;
+            monthSelect.style.width = '70px';
+
+            const months = [
+                "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+            ];
+
+            months.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = `${month}월`;
+                monthSelect.appendChild(option);
+            });
+
+            return monthSelect;
+        }
+
+        // tab2 비교유형 변경시 실행될 함수
+        function updateComparisonType() {
+            const comparisonType = document.getElementById("comparisonType").value;
+            const startDateContainerTab2 = document.getElementById("startDateContainerTab2");
+            const endDateContainerTab2 = document.getElementById("endDateContainerTab2");
+
+            // 기존 월 선택 셀렉트를 제거
+            const existingStartMonthSelect = document.getElementById("startMonthTab2");
+            const existingEndMonthSelect = document.getElementById("endMonthTab2");
+
+            if (existingStartMonthSelect) startDateContainerTab2.removeChild(existingStartMonthSelect);
+            if (existingEndMonthSelect) endDateContainerTab2.removeChild(existingEndMonthSelect);
+
+            // "MoM"이 선택된 경우에만 새로운 월 셀렉트 추가
+            if (comparisonType === "MoM") {
+                const startMonthSelect = createMonthSelect("startMonthTab2");
+                const endMonthSelect = createMonthSelect("endMonthTab2");
+
+                // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
+                startMonthSelect.addEventListener("change", function() {
+                    endMonthSelect.value = startMonthSelect.value;
+                });
+
+                startDateContainerTab2.appendChild(startMonthSelect);
+                endDateContainerTab2.appendChild(endMonthSelect);
+            }
+        }
+
+
+        // -----------------------차트 설정 시작-----------------------
+
+
+        rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
+
+        rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
+
+        rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
+
+        rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
+
+        rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
+
+        rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
+
+        rMateChartH5.create("chart7", "chartHolder7", "", "100%", "100%");
+
+
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            + '<Column2DChart showDataTips="true">'
+            + '<horizontalAxis><CategoryAxis categoryField="EXPESYM"/></horizontalAxis>'
+            + '<series>'
+            + '<Column2DSeries yField="FUEAMT" fill="#62b2fd">'
+            + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
+            + '</Column2DSeries>'
+            + '</series>'
+            + '</Column2DChart>'
+            + '</rMateChart>';
+
+
+        var chartData = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData2 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData3 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData4 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData5 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData6 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+        var chartData7 = [
+            {"EXPESYM": "01월", "FUEAMT": 20},
+            {"EXPESYM": "02월","FUEAMT": 30},
+            {"EXPESYM": "03월", "FUEAMT": 51.2},
+            {"EXPESYM": "04월", "FUEAMT": 44.5},
+            {"EXPESYM": "05월", "FUEAMT": 62.35},
+            {"EXPESYM": "06월", "FUEAMT": 84.46},
+            {"EXPESYM": "07월", "FUEAMT": 48.9},
+            {"EXPESYM": "08월", "FUEAMT": 38},
+            {"EXPESYM": "09월", "FUEAMT": 60.5},
+            {"EXPESYM": "10월","FUEAMT": 40.1},
+            {"EXPESYM": "11월", "FUEAMT": 36.1},
+            {"EXPESYM": "12월", "FUEAMT": 26.8}
+        ];
+
+
+        rMateChartH5.calls("chart1", {
+            "setLayout" : layoutStr,
+            "setData" : chartData
+        });
+
+        rMateChartH5.calls("chart2", {
+            "setLayout" : layoutStr,
+            "setData" : chartData2
+        });
+        rMateChartH5.calls("chart3", {
+            "setLayout" : layoutStr,
+            "setData" : chartData3
+        });
+        rMateChartH5.calls("chart4", {
+            "setLayout" : layoutStr,
+            "setData" : chartData4
+        });
+        rMateChartH5.calls("chart5", {
+            "setLayout" : layoutStr,
+            "setData" : chartData5
+        });
+        rMateChartH5.calls("chart6", {
+            "setLayout" : layoutStr,
+            "setData" : chartData6
+        });
+        rMateChartH5.calls("chart7", {
+            "setLayout" : layoutStr,
+            "setData" : chartData7
+        });
+
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        function rMateChartH5ChangeTheme(theme){
+            document.getElementById("chart1").setTheme(theme);
+            document.getElementById("chart2").setTheme(theme);
+            document.getElementById("chart3").setTheme(theme);
+            document.getElementById("chart4").setTheme(theme);
+            document.getElementById("chart5").setTheme(theme);
+            document.getElementById("chart6").setTheme(theme);
+            document.getElementById("chart7").setTheme(theme);
+            document.getElementById("chart8").setTheme(theme);
+            document.getElementById("chart9").setTheme(theme);
+            document.getElementById("chart10").setTheme(theme);
+            document.getElementById("chart11").setTheme(theme);
+            document.getElementById("chart12").setTheme(theme);
+            document.getElementById("chart13").setTheme(theme);
+            document.getElementById("chart14").setTheme(theme);
+
+        }
+        // // 이벤트 리스너 - tab2 클릭 시 차트 생성
+        // document.querySelector('a[href="#tab2"]').addEventListener('click', function() {
+        //     if (!document.getElementById('chartHolder1-2').hasAttribute('data-chart-loaded')) {
+        //         setTimeout(loadTab2Chart, 100); // 탭이 보인 후에 차트가 렌더링되도록 약간의 지연을 줌
+        //     }
+        // });
+
+
+            rMateChartH5.create("chart8", "chartHolder1-2", "", "100%", "100%");
+            rMateChartH5.create("chart9", "chartHolder2-2", "", "100%", "100%");
+            rMateChartH5.create("chart10", "chartHolder3-2", "", "100%", "100%");
+            rMateChartH5.create("chart11", "chartHolder4-2", "", "100%", "100%");
+            rMateChartH5.create("chart12", "chartHolder5-2", "", "100%", "100%");
+            rMateChartH5.create("chart13", "chartHolder6-2", "", "100%", "100%");
+            rMateChartH5.create("chart14", "chartHolder7-2", "", "100%", "100%");
+
+
+
+        var layoutStr2 =
+            `<rMateChart borderStyle='none'>
+        <Options><Caption text='비용 대비 YoY (2023 vs 2024)'/>
+        <Legend defaultMouseOverAction='true' useVisibleCheck='true'/>
+        </Options>
+        <Line2DChart showDataTips='true'>
+            <series>
+                <Line2DSeries yField='2023' displayName='2023' itemRenderer='DiamondItemRenderer'>
+                    <showDataEffect><SeriesXYTransition offset='500'/></showDataEffect>
+                    <lineStroke><Stroke color='#ffa336' weight='2'/></lineStroke>
+                </Line2DSeries>
+                <Line2DSeries yField='2024' displayName='2024' itemRenderer='DiamondItemRenderer'>
+                    <showDataEffect><SeriesXYTransition offset='500'/></showDataEffect>
+                    <lineStroke><Stroke color='#f99bab' weight='2'/></lineStroke>
+                </Line2DSeries>
+            </series>
+            <horizontalAxis><CategoryAxis categoryField='Year'/></horizontalAxis>
+            <verticalAxis><LinearAxis interval='5'/></verticalAxis>
+        </Line2DChart>
+    </rMateChart>`;
+
+        // 차트 데이터
+        var chartData8 = [
+            {"Year":"1월", "2023":120, "2024":100},
+            {"Year":"2월", "2023":140, "2024":150},
+            {"Year":"3월", "2023":220, "2024":180},
+            {"Year":"4월", "2023":160, "2024":140},
+            {"Year":"5월", "2023":210, "2024":220},
+            {"Year":"6월", "2023":400, "2024":420},
+            {"Year":"7월", "2023":330, "2024":320},
+            {"Year":"8월", "2023":420, "2024":280},
+            {"Year":"9월", "2023":550, "2024":610},
+            {"Year":"10월", "2023":480, "2024":330},
+            {"Year":"11월", "2023":320, "2024":450},
+            {"Year":"12월", "2023":600, "2024":740},
+
+        ];
+
+        rMateChartH5.calls("chart8", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+        rMateChartH5.calls("chart9", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+        rMateChartH5.calls("chart10", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+
+        rMateChartH5.calls("chart11", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+        rMateChartH5.calls("chart12", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+        rMateChartH5.calls("chart13", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+
+        rMateChartH5.calls("chart14", {
+            "setLayout" : layoutStr2,
+            "setData" : chartData8
+        });
+
+
+
+
+
+        var theGrid;
         var theGrid1;
         var theGrid2;
         var theGrid3;
@@ -763,14 +1089,6 @@
         let selectedFiles = [];
         let SelectItem;
         let csrfToken = $("[name=_csrf]").val();
-
-        var columns = [
-            {binding: 'num', header: 'No', align: 'center', width: 140},
-            {binding: 'day', header: '기간', align: 'center', width: 200},
-            {binding: '', header: '금액', align: 'center', width: 200},
-            {binding: '', header: '비고', align: 'center', width: "*"},
-
-        ];
 
 
         function showPopup(ctx) {
@@ -796,6 +1114,7 @@
 
         }
 
+
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
@@ -819,167 +1138,140 @@
             })
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            if (data2.length === 0) {
-                let emptyRowsCount = 5;  // 원하는 빈 행의 수
-                for (let i = 0; i < emptyRowsCount; i++) {
-                    data2.push({});
+            // if (data2.length === 0) {
+            //     let emptyRowsCount = 5;  // 원하는 빈 행의 수
+            //     for (let i = 0; i < emptyRowsCount; i++) {
+            //         data2.push({});
+            //     }
+            //     console.log('Grid initialized with empty data.');
+            // }
+
+
+            var columns = [
+                {binding: 'num', header: 'No', align: 'center', width: 80},
+                {binding: 'day', header: '기간', align: 'center', width: "*"},
+                {binding: 'amount', header: '금액', align: 'center', width: "*"},
+
+            ];
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // Gird 설정
+            // .theGrid1 클래스를 가진 모든 요소를 선택
+            var theGrids = document.querySelectorAll('.theGrid1');
+            theGrids.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+
+                // 데이터가 한 번만 추가되도록 확인
+                if (grid.collectionView.items.length === 0) {  // 데이터가 비어있을 때만 추가
+                    data2.push({ num: '1', day: '2024-08-01', amount: 1000 });
+                    data2.push({ num: '2', day: '2024-08-02', amount: 1300 });
+                    data2.push({ num: '3', day: '2024-08-03', amount: 2400 });
+                    data2.push({ num: '4', day: '2024-08-04', amount: 3200 });
+                    data2.push({ num: '5', day: '2024-08-05', amount: 1500 });
+                    data2.push({ num: '6', day: '2024-08-06', amount: 1200 });
+                    data2.push({ num: '7', day: '2024-08-07', amount: 2000 });
+                    data2.push({ num: '8', day: '2024-08-08', amount: 1300 });
+                    data2.push({ num: '9', day: '2024-08-09', amount: 2500 });
+                    data2.push({ num: '10', day: '2024-08-10', amount: 1100 });
+                    data2.push({ num: '11', day: '2024-08-11', amount: 1500 });
+                    data2.push({ num: '12', day: '2024-08-12', amount: 1200 });
+                    data2.push({ num: '13', day: '2024-08-13', amount: 2000 });
+                    data2.push({ num: '14', day: '2024-08-14', amount: 1300 });
+                    data2.push({ num: '15', day: '2024-08-15', amount: 2500 });
+                    data2.push({ num: '16', day: '2024-08-16', amount: 1100 });
                 }
-                console.log('Grid initialized with empty data.');
-            }
 
-            viewdata1 = new wijmo.collections.CollectionView(data2);
-            viewdata2 = new wijmo.collections.CollectionView(data2);
-            viewdata3 = new wijmo.collections.CollectionView(data2);
-            viewdata4 = new wijmo.collections.CollectionView(data2);
-            viewdata5 = new wijmo.collections.CollectionView(data2);
-            viewdata6 = new wijmo.collections.CollectionView(data2);
-            viewdata7 = new wijmo.collections.CollectionView(data2);
-
-            // 데이터 그리드에 바인딩
-            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata1
-            });
-            // 데이터 그리드에 바인딩
-            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata2
-            });
-            // 데이터 그리드에 바인딩
-            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata3
-            });// 데이터 그리드에 바인딩
-            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata4
-            });// 데이터 그리드에 바인딩
-            theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata5
-            });// 데이터 그리드에 바인딩
-            theGrid6 = new wijmo.grid.FlexGrid('#theGrid6', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata6
-            });
-            // 데이터 그리드에 바인딩
-            theGrid7 = new wijmo.grid.FlexGrid('#theGrid7', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata7
+                // 그리드 업데이트
+                grid.collectionView.refresh();
             });
 
 
-            theGrid1.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
-            theGrid2.rowHeaders.columns.splice(0, 1);
-            theGrid3.rowHeaders.columns.splice(0, 1);
-            theGrid4.rowHeaders.columns.splice(0, 1);
-            theGrid5.rowHeaders.columns.splice(0, 1);
-            theGrid6.rowHeaders.columns.splice(0, 1);
-            theGrid7.rowHeaders.columns.splice(0, 1);
+            // .theGrid1 클래스를 가진 모든 요소를 선택
+            var theGrid2s = document.querySelectorAll('.theGrid2');
+            theGrid2s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
+
+            // .theGrid1 클래스를 가진 모든 요소를 선택
+            var theGrid3s = document.querySelectorAll('.theGrid3');
+            theGrid3s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
 
 
-            theGrid1.setCellData(0, 'num', '1');
-            theGrid1.setCellData(1, 'num', '2');
-            theGrid1.setCellData(2, 'num', '3');
-            theGrid1.setCellData(3, 'num', '4');
-            theGrid1.setCellData(4, 'num', '5');
+            var theGrid4s = document.querySelectorAll('.theGrid4');
+            theGrid4s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
 
-            theGrid1.setCellData(0, 'day', '2024-01-01');
-            theGrid1.setCellData(1, 'day', '2024-01-02');
-            theGrid1.setCellData(2, 'day', '2024-01-03');
-            theGrid1.setCellData(3, 'day', '2024-01-04');
-            theGrid1.setCellData(4, 'day', '2024-01-05');
-
-            theGrid2.setCellData(0, 'num', '1');
-            theGrid2.setCellData(1, 'num', '2');
-            theGrid2.setCellData(2, 'num', '3');
-            theGrid2.setCellData(3, 'num', '4');
-            theGrid2.setCellData(4, 'num', '5');
-
-            theGrid2.setCellData(0, 'day', '2024-01-01');
-            theGrid2.setCellData(1, 'day', '2024-01-02');
-            theGrid2.setCellData(2, 'day', '2024-01-03');
-            theGrid2.setCellData(3, 'day', '2024-01-04');
-            theGrid2.setCellData(4, 'day', '2024-01-05');
-
-
-            theGrid3.setCellData(0, 'num', '1');
-            theGrid3.setCellData(1, 'num', '2');
-            theGrid3.setCellData(2, 'num', '3');
-            theGrid3.setCellData(3, 'num', '4');
-            theGrid3.setCellData(4, 'num', '5');
-
-            theGrid3.setCellData(0, 'day', '2024-01-01');
-            theGrid3.setCellData(1, 'day', '2024-01-02');
-            theGrid3.setCellData(2, 'day', '2024-01-03');
-            theGrid3.setCellData(3, 'day', '2024-01-04');
-            theGrid3.setCellData(4, 'day', '2024-01-05');
+            var theGrid5s = document.querySelectorAll('.theGrid5');
+            theGrid5s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
 
 
-            theGrid4.setCellData(0, 'num', '1');
-            theGrid4.setCellData(1, 'num', '2');
-            theGrid4.setCellData(2, 'num', '3');
-            theGrid4.setCellData(3, 'num', '4');
-            theGrid4.setCellData(4, 'num', '5');
-
-            theGrid4.setCellData(0, 'day', '2024-01-01');
-            theGrid4.setCellData(1, 'day', '2024-01-02');
-            theGrid4.setCellData(2, 'day', '2024-01-03');
-            theGrid4.setCellData(3, 'day', '2024-01-04');
-            theGrid4.setCellData(4, 'day', '2024-01-05');
-
-
-            theGrid5.setCellData(0, 'num', '1');
-            theGrid5.setCellData(1, 'num', '2');
-            theGrid5.setCellData(2, 'num', '3');
-            theGrid5.setCellData(3, 'num', '4');
-            theGrid5.setCellData(4, 'num', '5');
-
-            theGrid5.setCellData(0, 'day', '2024-01-01');
-            theGrid5.setCellData(1, 'day', '2024-01-02');
-            theGrid5.setCellData(2, 'day', '2024-01-03');
-            theGrid5.setCellData(3, 'day', '2024-01-04');
-            theGrid5.setCellData(4, 'day', '2024-01-05');
+            var theGrid6s = document.querySelectorAll('.theGrid6');
+            theGrid6s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
 
 
-            theGrid6.setCellData(0, 'num', '1');
-            theGrid6.setCellData(1, 'num', '2');
-            theGrid6.setCellData(2, 'num', '3');
-            theGrid6.setCellData(3, 'num', '4');
-            theGrid6.setCellData(4, 'num', '5');
+            var theGrid7s = document.querySelectorAll('.theGrid7');
+            theGrid7s.forEach(function(element, index) {
+                // 각 요소에 대해 Wijmo FlexGrid 생성
+                var grid = new wijmo.grid.FlexGrid(element, {
+                    autoGenerateColumns: false, // 자동으로 컬럼 생성하지 않음
+                    columns: columns, // 컬럼 설정
+                    itemsSource: viewdata // 데이터 소스 설정
+                });
+                // rowHeaders의 첫 번째 컬럼을 제거
+                grid.rowHeaders.columns.splice(0, 1);
+            });
 
-            theGrid6.setCellData(0, 'day', '2024-01-01');
-            theGrid6.setCellData(1, 'day', '2024-01-02');
-            theGrid6.setCellData(2, 'day', '2024-01-03');
-            theGrid6.setCellData(3, 'day', '2024-01-04');
-            theGrid6.setCellData(4, 'day', '2024-01-05');
-
-
-            theGrid7.setCellData(0, 'num', '1');
-            theGrid7.setCellData(1, 'num', '2');
-            theGrid7.setCellData(2, 'num', '3');
-            theGrid7.setCellData(3, 'num', '4');
-            theGrid7.setCellData(4, 'num', '5');
-
-            theGrid7.setCellData(0, 'day', '2024-01-01');
-            theGrid7.setCellData(1, 'day', '2024-01-02');
-            theGrid7.setCellData(2, 'day', '2024-01-03');
-            theGrid7.setCellData(3, 'day', '2024-01-04');
-            theGrid7.setCellData(4, 'day', '2024-01-05');
 
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
@@ -989,18 +1281,10 @@
                 }
             })
 
-
-            // 선택이 변경될 때, 현재 항목 업데이트
-
-            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
-
-        let filelist = [];
 
 
         //검색
@@ -1050,54 +1334,12 @@
 
         }
 
-        function SelectItemPush() {
 
-            let selectedList = [];
-            for (let i = 0; i < SelectItem.length; i++) {
-                selectedList.push(SelectItem[i]._data.spuncode);
-            }
-            return selectedList;
-        }
-
-        function DownloadDoc() {
-
-            let selectedList = SelectItemPush();
-
-
-            console.log('selected', selectedList);
-
-            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
-            fetch('/api/inspec_report/download-docs', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url); // URL 객체 해제
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                    alert("File download failed!");
-                });
-        }
 
         $(document).ready(function (e) {
+            initializeSelections();
+            updatePeriodInputs();
+            updateComparisonType();
 
             // 현재 연도를 가져옴
             const currentYear = new Date().getFullYear();
