@@ -9,7 +9,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>순회점검 현황</h2>
+                <h2>순회점검 현황</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -21,27 +21,32 @@
             </ul>
         </div>
         <!-- Search -->
-        <div class="search-wrap" id="searchWrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="row row-1">
-            <section class="wp50">
+            <section class="wp50" style="height: 830px">
                 <div class="title-wrap">
                     <h3>점검캘린더</h3>
                     <div class="btn-wrap">
@@ -53,7 +58,7 @@
             </section>
             <div class="col wp30 mg-r24">
                 <!-- Section -->
-                <section>
+                <section style="margin-bottom: 5px">
                     <div class="title-wrap">
                         <h3 id="StatusTitle"></h3>
                         <div class="btn-wrap">
@@ -75,7 +80,7 @@
                     </div>
                 </section>
                 <!-- Section -->
-                <section>
+                <section style="margin-bottom: 5px">
                     <div class="title-wrap">
                         <h3 id="InspectionDetails">점검내역</h3>
                         <div class="btn-wrap">
@@ -130,12 +135,12 @@
                 <!-- Section -->
                 <section>
                     <div class="title-wrap">
-                        <h3>순찰 이벤트</h3>
+                        <h3>현장 실시간 CCTV</h3>
                         <div class="btn-wrap">
 
                         </div>
                     </div>
-                    <div class="thumb-wrap" style="height: 300px;">
+                    <div class="thumb-wrap">
                         <!--<div>
                             <img src="/images/sample/sample-cctv.svg" alt="cctv sample" class="wp105">
                         </div>
@@ -204,7 +209,7 @@
                     </div>
                 </section>
             </div>
-            <section class="wp25">
+            <section class="wp25" style="height: 830px">
                 <div class="title-wrap">
                     <h3 id="MonthInpsecTitle"></h3>
                     <div class="btn-wrap">
@@ -214,7 +219,7 @@
                 <div class="table-wrap">
 
                     <div class="container-fluid">
-                        <div id="theGrid2" style="height: 800px"></div>
+                        <div id="theGrid2"></div>
                     </div>
                     <!--<table class="list-table">
                         <caption>당일 점검일지 현황 테이블</caption>
@@ -535,6 +540,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
 
+            initializeSelections();
 
             init(getDateYYYYMMDD().replaceAll("-",""));  //TODO: 고치셈 ㅋ
             init2(getDateYYYYMMDD());
@@ -592,7 +598,7 @@
                             right: 'dayGridMonth,timeGridWeek,timeGridDay'
                         },
                         initialView: 'dayGridMonth',
-                        height: 800,
+                        height: 720,
                         dayHeaderFormat: {weekday: 'short'}, // 요일 형식 설정
                         events: events,
                         views: {
