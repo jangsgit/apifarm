@@ -9,32 +9,49 @@
                 <!-- Page Title -->
                 <div class="page-title-wrap">
                     <div class="left">
-                        <h2>연료전지 발전소 등록</h2>
+                        <h2>연료전지 발전소 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                         <a title="북마크" class="bookmark toggle">
                             내메뉴
                         </a>
                     </div>
                     <ul class="page-navi">
                         <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                        <li>운영 관리</li>
                         <li>발전소 관리</li>
                         <li>연료전지 발전소 등록</li>
                     </ul>
                 </div>
                 <!-- Select -->
-                <div class="search-wrap">
+                <div class="search-wrap" id="searchWrap" style="display: none">
                     <ul>
                         <li>
-                            <select title="지역">
-                                <option>대구</option>
+                            <select title="지역" id="spworkcd" name="spworkcd"
+                                    onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                                <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                             </select>
+                            <input type="hidden" id="spworknm" name="spworknm">
                         </li>
                         <li>
-                            <select title="구">
-                                <option>성서산단</option>
+                            <select title="산단" id="spcompcd" name="spcompcd"
+                                    onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                                <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                             </select>
+                            <input type="hidden" id="spcompnm" name="spcompnm">
+                        </li>
+                        <li>
+                            <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                                <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                            </select>
+                            <input type="hidden" id="spplannm" name="spplannm">
                         </li>
                     </ul>
+                   <!-- <div class="card-btn-wrap">
+                        <a title="탭설정" class="btn btn-popup-open" data-popup="popup1">
+                            <img src="/images/icon/btn-setting.svg" alt="설정아이콘">
+                        </a>
+                    </div>-->
                 </div>
+
                 <div class="tab-wrap">
                     <ul class="tab-links">
                         <li>
@@ -46,7 +63,7 @@
                     </ul>
                     <div class="tab-contents">
                         <!-- Section -->
-                        <section class="tab-item" id="tab1">
+                        <section class="tab-item" id="tab1" style="height: 800px;">
                             <div class="section-top">
                                 <div class="search-wrap">
                                     <dl>
@@ -75,10 +92,13 @@
                                                         <option value="비가동">비가동</option>
                                                     </select>
                                                 </li>
+
                                                 <li>
-                                                    <div style="margin-left: -20px" class="srch-box">
-                                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
-                                                    </div>
+                                                    <a class="btn btn-delete" title="검색" id="btn-search"
+                                                       onclick="searchDataTab1()">
+                                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                        검색
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </dd>
@@ -103,7 +123,7 @@
                             </div> <!--//section-top end -->
                             <div class="container-fluid">
                                 <p id="selectedItem"></p>
-                                <div id="theGrid" style="max-height: 490px"></div>
+                                <div id="theGrid" style="max-height: 680px;"></div>
                             </div>
                         </section>
                         <!-- Section -->
@@ -349,6 +369,7 @@
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
         function init(){
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
             fetchListData();
         }
 

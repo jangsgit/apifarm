@@ -10,7 +10,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>예상수익분석</h2>
+                <h2>예상수익분석</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                      alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -23,30 +24,37 @@
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
-            <div class="card-btn-wrap">
+            <!--<div class="card-btn-wrap">
                 <a title="탭설정" class="btn btn-popup-open" data-popup="popup1">
                     <img src="/images/icon/btn-setting.svg" alt="설정아이콘">
                 </a>
-            </div>
+            </div>-->
         </div>
+
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
@@ -55,58 +63,73 @@
                 <li>
                     <a href="#tab2" title="예상 실 수익">예상 실 수익</a>
                 </li>
-
             </ul>
+
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" id="tab1" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="date1">
-                                        조회기간<span class="eq">*</span>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="date" id="date1" name="">
-                                            <label for="date1" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="date2" name="">
-                                            <label for="date2" class="hide">종료일</label>
+                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
+                                            </select>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
+
                             <dl>
                                 <dt>
-                                    <label for="text1">
-                                        검색조건<span class="eq">*</span>
-                                    </label>
+                                    조회연도<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>월</option>
-                                            <option>일</option>
-                                        </select>
-                                        <a href="#a" class="btn-srch" title="검색"></a>
-                                    </div>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
                                 </dd>
                             </dl>
-                        </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a href="#" class="btn btn-save" title="저장">
-                                        <img src="/images/icon/ico-check.svg" alt="저장 아이콘">
-                                        저장
-                                    </a>
-                                </li>
-                            </ul>
+
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainer">
+                                        <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
+                                        </li>
+                                        <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-05">
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
@@ -201,8 +224,9 @@
                     </div>
                     <div class="row">
                         <div class="wp42 mg-r20">
-                            <div class="chart-wrap">
-                                <img src="/images/sample/sample-chart2.png" alt="차트 샘플">
+                            <div class="chart-wrap" style="padding: 20px;">
+                                <div id="chartHolder1" style="width:563px; height:475px;">
+                                </div>
                             </div>
                         </div>
                         <div class="wp58">
@@ -212,7 +236,7 @@
                             <div class="table-wrap">
                                 <div class="container-fluid">
                                     <p id="selectedItem"></p>
-                                    <div id="theGrid" style="height: 315px"></div>
+                                    <div id="theGrid" style="height: 475px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -238,56 +262,72 @@
                     </div>-->
                 </section>
                 <!-- Section -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item" id="tab2" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="date1">
-                                        조회기간<span class="eq">*</span>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="date" id="date1" name="">
-                                            <label for="date1" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="date2" name="">
-                                            <label for="date2" class="hide">종료일</label>
+                                            <select id="periodType2" name="periodType" onchange="updatePeriodInputs('tab2')">
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
+                                            </select>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
+
                             <dl>
                                 <dt>
-                                    <label for="text1">
-                                        검색조건<span class="eq">*</span>
-                                    </label>
+                                    조회연도<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <div class="srch-box">
-                                        <select id="select1" class="w120">
-                                            <option>월</option>
-                                            <option>일</option>
-                                        </select>
-                                        <a href="#a" class="btn-srch" title="검색"></a>
-                                    </div>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab2" name="yearSelectTab2">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainerTab2">
+                                        <li id="startDateContainerTab2">
+                                            <input type="month" id="startDate2" name="startDate" value="2024-01">
+                                        </li>
+                                        <li id="endDateContainerTab2">
+                                            <input type="month" id="endDate2" name="endDate" value="2024-05">
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </dd>
                             </dl>
                         </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a href="#" class="btn btn-save" title="저장">
-                                        <img src="/images/icon/ico-check.svg" alt="저장 아이콘">
-                                        저장
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div> <!--//section-top end -->
+
                     <div class="row">
                         <div class="section-card-wrap">
                             <section>
@@ -380,8 +420,9 @@
                     </div>
                     <div class="row">
                         <div class="wp42 mg-r20">
-                            <div class="chart-wrap">
-                                <img src="/images/sample/sample-chart2.png" alt="차트 샘플">
+                            <div class="chart-wrap" style="padding: 20px;">
+                                <div id="chartHolder2" style="width:563px; height:475px;">
+                                </div>
                             </div>
                         </div>
                         <div class="wp58">
@@ -391,7 +432,7 @@
                             <div class="table-wrap">
                                 <div class="container-fluid">
                                     <p id="selectedItem"></p>
-                                    <div id="theGrid2" style="height: 315px"></div>
+                                    <div id="theGrid2" style="height: 475px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -403,263 +444,113 @@
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
-    <!-- [대시보드] 팝업  -->
-    <div class="dashboard-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper w820" id="popup1">
-            <div class="popup-title">
-                <h3>탭 설정</h3>
-                <a title="팝업닫기" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap mg-b20">
-                    <table class="write-table">
-                        <caption>탭설정 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp30">
-                            <col class="wp20">
-                            <col class="wp30">
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="popuptext1">
-                                    탭ID
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext1" class="wp100" placeholder="tab01">
-                                </div>
-                            </td>
-                            <th>
-                                <label for="popuptext1">
-                                    라벨
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext1" class="wp100" placeholder="이벤트통계">
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="fl-sb">
-                    <div class="card-btn-wrap mg-b10">
-                        <a  class="btn" title="위로">
-                            <img src="/images/icon/ico-up.svg" alt="위로" class="mg-r0">
-                        </a>
-                        <a class="btn" title="아래로">
-                            <img src="/images/icon/ico-down.svg" alt="아래로" class="mg-r0">
-                        </a>
-                    </div>
-                    <div class="button-wrap mg-b10">
-                        <ul>
-                            <li>
-                                <a  class="btn" title="전체선택">
-                                    전체선택
-                                </a>
-                            </li>
-                            <li>
-                                <a  class="btn" title="새로고침">
-                                    새로고침
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="table-wrap">
-                    <table class="list-table">
-                        <caption>탭 설정 테이블</caption>
-                        <colgroup>
-                            <col class="wp10">
-                            <col class="wp8">
-                            <col class="w20">
-                            <col class="wauto">
-                            <col class="wp12">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th><input type="checkbox" id="" name=""></th>
-                            <th>순서</th>
-                            <th>탭ID</th>
-                            <th>라벨</th>
-                            <th>감춤</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" id="" name=""></td>
-                            <td>1</td>
-                            <td>tab01</td>
-                            <td>예상총수익</td>
-                            <td><input type="checkbox" id="" name=""></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button class="btn-popup-close">취소</button>
-                <button class="btn-navy">저장</button>
-            </div>
-        </div>
-    </div> <!-- //dashboard-layout-popup end -->
-
 </th:block>
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
 
-        rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
+        // 차트 ==========================================================================
+
+        // 차트 생성 및 초기화
+        var chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+
+        function initializeCharts() {
+            rMateChartH5.create("chart1", "chartHolder1", chartVars, "100%", "100%");
+            // rMateChartH5.create("chart2", "chartHolder2", chartVars, "100%", "100%");
+        }
+
+        function chartReadyHandler(id) {
+            // console.log("Chart ready: ", id);
+            var chart = document.getElementById(id);
+            if (chart) {
+                chart.setLayout(layoutStr);
+                chart.setData(chartData);
+            } else {
+                // console.error("Chart element not found: ", id);
+            }
+        }
 
         var layoutStr =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="예상수익분석" />'
-            +'<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
-            +'</Options>'
-            +'<SeriesInterpolate id="ss"/>'
-            +'<Column2DChart showDataTips="true" selectionMode="multiple" columnWidthRatio="0.48">'
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Country"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis maximum="100" interval="10"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Column2DSeries labelPosition="outside" yField="GDP" displayName="GDP Growth (In %)" showDataEffect="{ss}" showValueLabels="[4]" strokeJsFunction="strokeFunction"/>'
-            +'</series>'
-            +'</Column2DChart>'
-            +'</rMateChart>';
+            + '<Options>'
+            + '<Caption text="예상수익분석" />'
+            + '<SubCaption text="2024년" textAlign="center" />'
+            + '</Options>'
+            + '<SeriesInterpolate id="ss"/>'
+            + '<Column2DChart showDataTips="true">'
+            + '<horizontalAxis>'
+            + '<CategoryAxis categoryField="Month"/>'
+            + '</horizontalAxis>'
+            + '<verticalAxis>'
+            + '<LinearAxis maximum="500" interval="100"/>'
+            + '</verticalAxis>'
+            + '<series>'
+            + '<Column2DSeries labelPosition="outside" yField="Value" displayName="예상 수익" showDataEffect="{ss}" showValueLabels="[4]">'
+            + '<fill>'
+            + '<SolidColor color="#62b2fd"/>'
+            + '</fill>'
+            + '</Column2DSeries>'
+            + '</series>'
+            + '</Column2DChart>'
+            + '</rMateChart>';
 
-        // 차트 데이터
-        var chartData = [{"Country":"SouthSudan", "GDP":20},
-            {"Country":"Libya", "GDP":30},
-            {"Country":"SierraLeone", "GDP":51.2},
-            {"Country":"Mongolia", "GDP":44.5},
-            {"Country":"Paraguay", "GDP":62.35},
-            {"Country":"TimorLeste", "GDP":84.46},
-            {"Country":"Iraq", "GDP":48.9},
-            {"Country":"Panama", "GDP":38},
-            {"Country":"Gambia", "GDP":60.5},
-            {"Country":"Mozam-bique", "GDP":40.1}];
+        var chartData = [
+            {"Month": "1월", "Value": 80},
+            {"Month": "2월", "Value": 300},
+            {"Month": "3월", "Value": 150},
+            {"Month": "4월", "Value": 210},
+            {"Month": "5월", "Value": 300},
+            {"Month": "6월", "Value": 450},
+            {"Month": "7월", "Value": 290},
+            {"Month": "8월", "Value": 400},
+            {"Month": "9월", "Value": 250},
+            {"Month": "10월", "Value": 150},
+            {"Month": "11월", "Value": 300},
+            {"Month": "12월", "Value": 450}
+        ];
 
-                function strokeFunction(id, index, data, values){
-                if(values[0] == "Paraguay")
-        return {
-            color : "#000",
-            weight : 2
-        };
-        }
+        // 탭 전환 이벤트 리스너
+        $('ul.tab-links li a').on('click', function (e) {
+            e.preventDefault();
+            var currentAttrValue = $(this).attr('href');
 
-        // rMateChartH5.calls 함수를 이용하여 차트의 준비가 끝나면 실행할 함수를 등록합니다.
-        //
-        // argument 1 - rMateChartH5.create시 설정한 차트 객체 아이디 값
-        // argument 2 - 차트준비가 완료되면 실행할 함수 명(key)과 설정될 전달인자 값(value)
-        //
-        // 아래 내용은
-        // 1. 차트 준비가 완료되면 첫 전달인자 값을 가진 차트 객체에 접근하여
-        // 2. 두 번째 전달인자 값의 key 명으로 정의된 함수에 value값을 전달인자로 설정하여 실행합니다.
-        rMateChartH5.calls("chart1", {
-            "setLayout" : layoutStr,
-            "setData" : chartData
+            // Show/Hide Tabs
+            $('.tab-contents ' + currentAttrValue).show().siblings().hide();
+
+            // Change/remove current tab to active
+            $(this).parent('li').addClass('active').siblings().removeClass('active');
+
+            // 현재 탭에 해당하는 차트 업데이트 또는 생성
+            if (currentAttrValue === '#tab1') {
+                if (!document.getElementById('chart1')) {
+                    rMateChartH5.create("chart1", "chartHolder1", chartVars, "100%", "100%");
+                }
+            } else if (currentAttrValue === '#tab2') {
+                if (!document.getElementById('chart2')) {
+                    rMateChartH5.create("chart2", "chartHolder2", chartVars, "100%", "100%");
+                }
+            }
+
+            // 차트 컨테이너 크기 재조정
+            if (window.dispatchEvent) {
+                window.dispatchEvent(new Event('resize'));
+            } else if (window.fireEvent) {
+                window.fireEvent('onresize');
+            }
         });
 
-        /**
-         * rMateChartH5 3.0이후 버전에서 제공하고 있는 테마기능을 사용하시려면 아래 내용을 설정하여 주십시오.
-         * 테마 기능을 사용하지 않으시려면 아래 내용은 삭제 혹은 주석처리 하셔도 됩니다.
-         *
-         * -- rMateChartH5.themes에 등록되어있는 테마 목록 --
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * -------------------------------------------------
-         *
-         * rMateChartH5.themes 변수는 theme.js에서 정의하고 있습니다.
-         */
-        rMateChartH5.registerTheme(rMateChartH5.themes);
-
-        /**
-         * 샘플 내의 테마 버튼 클릭 시 호출되는 함수입니다.
-         * 접근하는 차트 객체의 테마를 변경합니다.
-         * 파라메터로 넘어오는 값
-         * - simple
-         * - cyber
-         * - modern
-         * - lovely
-         * - pastel
-         * - default
-         *
-         * default : 테마를 적용하기 전 기본 형태를 출력합니다.
-         */
-        function rMateChartH5ChangeTheme(theme){
-            document.getElementById("chart1").setTheme(theme);
+        function updateChart(chartId) {
+            if (document.getElementById(chartId)) {
+                document.getElementById(chartId).setData(chartData);
+            }
         }
 
-        // -----------------------차트 설정 끝 -----------------------
 
-
+        // 그리드 ==========================================================================
         let theGrid;
         let theGrid2;
 
@@ -669,30 +560,31 @@
         let csrfToken = $("[name=_csrf]").val();
 
         let columns = [
-            { binding: '', header: '발전수익', align: 'center', width: '*' },
-            { binding: '', header: '일수익', align: 'center', width: '*' },
-            { binding: '', header: '탄소배출권수익', align: 'center', width: '*' },
-            { binding: '', header: '전월비교', align: 'center', width: '*' },
-            { binding: '', header: '비고', align: 'center', width: '*' },
+            {binding: '', header: '발전수익', align: 'center', width: '*'},
+            {binding: '', header: '일수익', align: 'center', width: '*'},
+            {binding: '', header: '탄소배출권수익', align: 'center', width: '*'},
+            {binding: '', header: '전월비교', align: 'center', width: '*'},
+            {binding: '', header: '비고', align: 'center', width: '*'},
 
         ];
 
         let columns2 = [
-            { binding: '', header: '예상실수익(원)', align: 'center', width: '*' },
-            { binding: '', header: 'LNG소비비용(원)', align: 'center', width: '*' },
-            { binding: '', header: '전월비교', align: 'center', width: '*' },
-            { binding: '', header: '비고', align: 'center', width: '*' },
+            {binding: '', header: '예상실수익(원)', align: 'center', width: '*'},
+            {binding: '', header: 'LNG소비비용(원)', align: 'center', width: '*'},
+            {binding: '', header: '전월비교', align: 'center', width: '*'},
+            {binding: '', header: '비고', align: 'center', width: '*'},
 
         ];
 
 
-
-
         document.readyState === 'complete' ? init() : window.onload = init;
-
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+            updatePeriodInputs('tab1');
+            updatePeriodInputs('tab2');
+
             let data2 = [];
             let searchusr = $('#searchusr').val();
 
@@ -700,15 +592,15 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : searchusr,
+                    'searchusr': searchusr,
 
                 },
                 async: false,
-                success: function(data){
-                    console.log('check1',data.data);
+                success: function (data) {
+                    console.log('check1', data.data);
                     let count = 10 - data.data.length
-                    if(data.data.length < 10){
-                        for(let i=0; i < count; i++ ){
+                    if (data.data.length < 10) {
+                        for (let i = 0; i < count; i++) {
                             data.data.push('example');
                         }
                     }
@@ -724,7 +616,7 @@
                 columns: columns,
                 itemsSource: viewdata
             });
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
             theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
                 autoGenerateColumns: false,
@@ -732,8 +624,11 @@
                 columns: columns2,
                 itemsSource: viewdata
             });
-            theGrid2.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            initializeCharts();
         }
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
         <!-- 점검자 추가 버튼 이벤트-->
@@ -753,7 +648,7 @@
             // 삭제 버튼을 생성합니다.
             var deleteButton = document.createElement('button');
             deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
+            deleteButton.onclick = function () {
                 deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
             };
             deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
@@ -781,24 +676,23 @@
         let filelist = [];
 
 
-
         //검색
-        function searchData(){
+        function searchData() {
             let data = {
-                'searchusr' : $('#searchusr').val(),
+                'searchusr': $('#searchusr').val(),
                 'searchfrdate': $('#searchfrdate').val(),
                 'searchtodate': $('#searchtodate').val()
             }
 
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+            let result = AjaxUtil.getSyncData('/api/inspec_report/read', data);
 
-            if(result.success){
+            if (result.success) {
                 console.log(result.data);
                 grid_binding(result.data);
             }
         }
 
-        function grid_binding(data){
+        function grid_binding(data) {
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
@@ -828,10 +722,11 @@
 
 
         }
-        function SelectItemPush(){
+
+        function SelectItemPush() {
 
             let selectedList = [];
-            for(let i = 0; i < SelectItem.length; i++){
+            for (let i = 0; i < SelectItem.length; i++) {
                 selectedList.push(SelectItem[i]._data.spuncode);
             }
             return selectedList;
@@ -848,7 +743,7 @@
             fetch('/api/inspec_report/download-docs', {
                 method: 'POST',
                 headers: {
-                    "Content-Type" : "application/json",
+                    "Content-Type": "application/json",
                     "X-CSRF-TOKEN": csrfToken
                 },
                 body: JSON.stringify(selectedList)  //JSON으로 전송된다.
@@ -882,19 +777,18 @@
             const fileNameDisplay = document.getElementById('fileNameDisplay');
             const dropZone = document.getElementById('dropZone');
 
-            function updateFileName(){
+            function updateFileName() {
                 const files = fileInput.files;
-                if(files.length > 0){
+                if (files.length > 0) {
                     fileNameDisplay.textContent = files[0].name;
-                }else {
+                } else {
                     fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
                 }
             }
 
 
-
             //점검결과 클릭시 텍스트 순환
-            $('.checkbox-cell').click(function() {
+            $('.checkbox-cell').click(function () {
                 const span = $(this).find('span');
                 if (span.text() === 'X') {
                     span.text('O');
@@ -904,12 +798,11 @@
             });
 
 
-
             // 저장 시작
-            $('#btnSave').click(function (e){
+            $('#btnSave').click(function (e) {
 
 
-                Alert.confirm('', '저장하시겠습니까?', function() {
+                Alert.confirm('', '저장하시겠습니까?', function () {
 
                         let formData = new FormData();
 
@@ -1028,8 +921,92 @@
                 })
             })
 
-
         });
+
+        // ==================================================================================
+
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs(tabId) {
+            const periodType = document.getElementById(tabId === 'tab2' ? "periodType2" : "periodType").value;
+            const selectedYear = document.getElementById(tabId === 'tab2' ? "yearSelectTab2" : "yearSelectTab1").value;
+            const dateBoxContainer = document.getElementById(tabId === 'tab2' ? "dateBoxContainerTab2" : "dateBoxContainer");
+            const startDateContainer = document.getElementById(tabId === 'tab2' ? "startDateContainerTab2" : "startDateContainer");
+            const endDateContainer = document.getElementById(tabId === 'tab2' ? "endDateContainerTab2" : "endDateContainer");
+            const periodLabel = dateBoxContainer.closest('dl').querySelector('dt');
+
+            // 조회연도 필드를 가져옴
+            const yearSelectContainer = dateBoxContainer.closest('.search-wrap').querySelector('dl:nth-child(2)');
+
+            // 시간별, 월별일 경우 조회연도 필드를 숨기거나 표시
+            if (periodType === "hourly" || periodType === "monthly") {
+                if (yearSelectContainer) yearSelectContainer.style.display = "none";
+            } else {
+                if (yearSelectContainer) yearSelectContainer.style.display = "block";
+            }
+
+            if (periodType === "yearly") {
+                periodLabel.style.visibility = "hidden";
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+            } else {
+                periodLabel.style.visibility = "visible";
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
+
+                if (periodType === "hourly") {
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
+
+                    startDateContainer.innerHTML = `
+                <input type="date" id="${tabId === 'tab2' ? 'startDate2' : 'startDate'}" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
+
+                    endDateContainer.innerHTML = `
+                <select id="${tabId === 'tab2' ? 'startHour2' : 'startHour'}" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="${tabId === 'tab2' ? 'endHour2' : 'endHour'}" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    startDateContainer.innerHTML = `<input type="month" id="${tabId === 'tab2' ? 'startDate2' : 'startDate'}" name="startDate" value="${startDate}">`;
+                    endDateContainer.innerHTML = `<input type="month" id="${tabId === 'tab2' ? 'endDate2' : 'endDate'}" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    startDateContainer.innerHTML = `<select id="${tabId === 'tab2' ? 'startQuarter2' : 'startQuarter'}">${options}</select>`;
+                    endDateContainer.innerHTML = `<select id="${tabId === 'tab2' ? 'endQuarter2' : 'endQuarter'}">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    startDateContainer.innerHTML = `<select id="${tabId === 'tab2' ? 'startHalf2' : 'startHalf'}">${options}</select>`;
+                    endDateContainer.innerHTML = `<select id="${tabId === 'tab2' ? 'endHalf2' : 'endHalf'}">${options}</select>`;
+                }
+            }
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
+        }
+
+        document.getElementById("periodType").addEventListener('change', () => updatePeriodInputs('tab1'));
+        document.getElementById("periodType2").addEventListener('change', () => updatePeriodInputs('tab2'));
     </script>
 </th:block>
 

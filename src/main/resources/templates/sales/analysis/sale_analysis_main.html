@@ -284,7 +284,6 @@
                             <!-- 그래프 -->
                             <!--                            <div id="chartHolder2" style="width:600px; height:400px;"></div>-->
                             <div id="chartHolder2" style="width:600px; height:640px;">
-                                <!--                                <img src="/images/rMate_imsi_7.png" alt="그래프_삭제예정" style="width: 727px;">-->
                             </div>
                         </section>
                         <section class="wp50">
@@ -313,7 +312,59 @@
             updateComparisonType();
 
             document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
+
+            // 차트 초기화
+            initializeCharts();
+
+            // 탭 전환 이벤트 리스너 추가
+            const tabLinks = document.querySelectorAll('.tab-links a');
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('href').substring(1);
+                    switchTab(tabId);
+                });
+            });
+
+            // 초기 탭 설정 (첫 번째 탭 활성화)
+            switchTab('tab1');
         })
+
+        // 차트 초기화 함수
+        function initializeCharts() {
+            // 차트1 초기화
+            rMateChartH5.create("chart1", "chartHolder1", "", "120%", "100%");
+            rMateChartH5.calls("chart1", {
+                "setLayout": layoutStr,
+                "setData": chartData
+            });
+
+            // 차트2 초기화
+            rMateChartH5.create("chart2", "chartHolder2", "rMateOnLoadCallFunction=chartReadyHandler2", "120%", "100%");
+        }
+
+        // 탭 전환 함수
+        function switchTab(tabId) {
+            // 모든 탭 내용 숨기기
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.style.display = 'none';
+            });
+
+            // 선택된 탭 내용 표시
+            document.getElementById(tabId).style.display = 'block';
+
+            // 탭 전환 시 차트 리사이즈
+            if (tabId === 'tab1') {
+                if (document.getElementById('chart1')) {
+                    document.getElementById('chart1').resize();
+                }
+            } else if (tabId === 'tab2') {
+                if (document.getElementById('chart2')) {
+                    document.getElementById('chart2').resize();
+                }
+            }
+        }
+
 
         // -----------------------차트 설정 시작-----------------------
 
@@ -328,49 +379,52 @@
 
         // 스트링 형식으로 레이아웃 정의.
         var layoutStr =
-            '<rMateChart  backgroundColor="#ffffff" borderStyle="none">'
-            + '<Options>'
-            // +'<Caption text="Price Indices of Meats ($ Per Kilogram)"/>'
-            // +'<SubCaption text="World Bank Commodity Price Data in 2024" textAlign="center" paddingBottom="35"/>'
-            + '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
-            + '</Options>'
-            + '<Line2DChart showDataTips="true" dataTipDisplayMode="axis" paddingBottom="25">'
-            + '<horizontalAxis>'
-            + '<CategoryAxis categoryField="Month" padding="0.2"/>'
-            + '</horizontalAxis>'
-            + '<verticalAxis>'
-            + '<LinearAxis maximum="100"/>'
-            + '</verticalAxis>'
-            + '<series>'
-            /*
-            itemRenderer는 Tip이 보여지는 영역차트 부분에 ItemRenderer에서 제공하는 모양을 그려줍니다
-            이 예제에서는 Diamond입니다
-            사용할 수 있는 도형을 모두 표현한 예제는 Chart Samples 의 범례 예제를 참고하십시오.
-            */
-            + '<Line2DSeries yField="Sheep" fill="#ffffff" radius="5" displayName="매출" itemRenderer="RectangleItemRenderer">'
-            + '<showDataEffect>'
-            + '<SeriesXYTransition offset="500"/>'
-            + '</showDataEffect>'
-            + '</Line2DSeries>'
-            + '<Line2DSeries labelPosition="up" yField="Beef" fill="#ffffff" radius="5" displayName="비용" showValueLabels="[5]" itemRenderer="CircleItemRenderer">'
-            /* itemRenderer는 Circle입니다 */
-            + '<showDataEffect>'
-            + '<SeriesXYTransition offset="1000"/>'
-            + '</showDataEffect>'
-            + '</Line2DSeries>'
-            + '<Line2DSeries yField="Chicken" fill="#ffffff" radius="6" displayName="수익" itemRenderer="TriangleItemRenderer">'
-            /* itemRenderer는 Triangle입니다 */
-            + '<showDataEffect>'
-            + '<SeriesXYTransition offset="1500"/>'
-            + '</showDataEffect>'
-            + '</Line2DSeries>'
-            + '</series>'
-            + '<annotationElements>'
-            + '<CrossRangeZoomer zoomType="horizontal" fontSize="11" color="#FFFFFF" verticalLabelPlacement="bottom" horizontalLabelPlacement="left" enableZooming="false" enableCrossHair="true">'
-            + '</CrossRangeZoomer>'
-            + '</annotationElements>'
-            + '</Line2DChart>'
-            + '</rMateChart>';
+            '<rMateChart backgroundColor="#FFFFFF"  borderStyle="none">'
+            +'<Options>'
+            +'<Legend useVisibleCheck="true"/>'
+            +'</Options>'
+            +'<NumberFormatter id="numFmt" precision="0"/>'
+            +'<Line2DChart showDataTips="true" >'
+            +'<horizontalAxis> '
+            +'<CategoryAxis categoryField="Month" padding="1"/> '
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis minimum="0" maximum="100" interval="10" formatter="{numFmt}"/>'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Line2DSeries labelPosition="up" yField="Sheep" radius="5" itemRenderer="RectangleItemRenderer" displayName="매출" showValueLabels="[7]">'
+            +'<lineStroke>'
+            +'<Stroke color="#62b2fd" weight="2"/>'
+            +'</lineStroke>'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/> '
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries labelPosition="up" yField="Beef" radius="5" itemRenderer="CircleItemRenderer" displayName="비용" showValueLabels="[7]">'
+            +'<lineStroke>'
+            +'<Stroke color="#01dbab" weight="2"/>'
+            +'</lineStroke>'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/> '
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'<Line2DSeries labelPosition="up" yField="Chicken" radius="5" itemRenderer="TriangleItemRenderer" displayName="수익" showValueLabels="[7]">'
+            +'<lineStroke>'
+            +'<Stroke color="#ffa336" weight="2"/>'
+            +'</lineStroke>'
+            +'<showDataEffect>'
+            +'<SeriesInterpolate/> '
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'<backgroundElements>'
+            +'<GridLines horizontalShowOrigin="false"/>'
+            +'</backgroundElements>'
+            +'<annotationElements>'
+            +'<CrossRangeZoomer zoomType="both" verticalLabelFormatter="{numFmt}" horizontalLabelFormatter="{numFmt}"/>'
+            +'</annotationElements>'
+            +'</Line2DChart>'
+            +'</rMateChart>';
 
         // 차트 데이터
         var chartData = [
@@ -432,6 +486,155 @@
         function rMateChartH5ChangeTheme(theme) {
             document.getElementById("chart1").setTheme(theme);
         }
+
+
+        // 차트2
+        // rMateChart 생성
+        rMateChartH5.create("chart2", "chartHolder2", "rMateOnLoadCallFunction=chartReadyHandler2", "120%", "100%");
+
+        // 차트 데이터
+        var chartDataCombo = [
+            {"Month": "1월", "Sales2023": 500, "Sales2024": 700, "Profit2023": 10, "Profit2024": 20},
+            {"Month": "2월", "Sales2023": 750, "Sales2024": 950, "Profit2023": 20, "Profit2024": 30},
+            {"Month": "3월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 30, "Profit2024": 45},
+            {"Month": "4월", "Sales2023": 1250, "Sales2024": 1450, "Profit2023": 50, "Profit2024": 60},
+            {"Month": "5월", "Sales2023": 1500, "Sales2024": 1700, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "6월", "Sales2023": 2000, "Sales2024": 1900, "Profit2023": 85, "Profit2024": 95},
+            {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+            {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+            {"Month": "10월", "Sales2023": 2900, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+            {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "12월", "Sales2023": 2950, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+        ];
+
+        var chartDataRadar = [
+            {"Month": "1월", "Amount2023": 1200, "Amount2024": 2800},
+            {"Month": "2월", "Amount2023": 2500, "Amount2024": 1900},
+            {"Month": "3월", "Amount2023": 1800, "Amount2024": 3200},
+            {"Month": "4월", "Amount2023": 3100, "Amount2024": 2600},
+            {"Month": "5월", "Amount2023": 2200, "Amount2024": 3500},
+            {"Month": "6월", "Amount2023": 3800, "Amount2024": 2100},
+            {"Month": "7월", "Amount2023": 2700, "Amount2024": 3900},
+            {"Month": "8월", "Amount2023": 3500, "Amount2024": 2800},
+            {"Month": "9월", "Amount2023": 2900, "Amount2024": 3700},
+            {"Month": "10월", "Amount2023": 3200, "Amount2024": 2400},
+            {"Month": "11월", "Amount2023": 2400, "Amount2024": 3300},
+            {"Month": "12월", "Amount2023": 3600, "Amount2024": 2700}
+        ];
+
+        // 차트 레이아웃
+        function getCombinationChartLayout() {
+            return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Options>
+        <Caption text=""/>
+        <Legend defaultMouseOverAction="true"/>
+    </Options>
+    <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+    <Combination2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Month"/>
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}" maximum="3000"/>
+        </verticalAxis>
+        <series>
+            <Column2DSet type="clustered">
+                <series>
+                    <Column2DSeries yField="Sales2023" displayName="2023" fill="#62b2fd">
+                        <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    </Column2DSeries>
+                    <Column2DSeries yField="Sales2024" displayName="2024" fill="#01dbab">
+                        <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    </Column2DSeries>
+                </series>
+            </Column2DSet>
+            <Line2DSeries yField="Profit2023" displayName="2023 (%)" itemRenderer="DiamondItemRenderer">
+                <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                <showDataEffect><SeriesInterpolate/></showDataEffect>
+                <verticalAxis>
+                    <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+                </verticalAxis>
+            </Line2DSeries>
+            <Line2DSeries yField="Profit2024" displayName="2024 (%)" itemRenderer="DiamondItemRenderer">
+                <lineStroke><Stroke color="#f99bab" weight="2"/></lineStroke>
+                <showDataEffect><SeriesInterpolate/></showDataEffect>
+                <verticalAxis>
+                    <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+                </verticalAxis>
+            </Line2DSeries>
+        </series>
+        <verticalAxisRenderers>
+            <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+            <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+        </verticalAxisRenderers>
+    </Combination2DChart>
+</rMateChart>`;
+        }
+
+        function getRadarChartLayout() {
+            return `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+<Options>
+    <Caption text=""/>
+    <Legend useVisibleCheck="true"/>
+</Options>
+<RadarChart showDataTips="true" isSeriesOnAxis="true" type="polygon" paddingTop="25" paddingBottom="25">
+    <radialAxis>
+        <LinearAxis id="rAxis"/>
+    </radialAxis>
+    <angularAxis>
+        <CategoryAxis id="aAxis" categoryField="Month" displayName="Month"/>
+    </angularAxis>
+    <radialAxisRenderers>
+        <Axis2DRenderer axis="{rAxis}" horizontal="true" visible="false" tickPlacement="outside" tickLength="4">
+            <axisStroke>
+                <Stroke color="#555555" weight="1"/>
+            </axisStroke>
+        </Axis2DRenderer>
+        <Axis2DRenderer axis="{rAxis}" horizontal="false" visible="true" tickPlacement="outside" tickLength="4">
+            <axisStroke>
+                <Stroke color="#555555" weight="1"/>
+            </axisStroke>
+        </Axis2DRenderer>
+    </radialAxisRenderers>
+    <angularAxisRenderers>
+        <AngularAxisRenderer axis="{aAxis}"/>
+    </angularAxisRenderers>
+    <series>
+        <RadarSeries field="Amount2023" displayName="2023" fillLineArea="false" radius="4">
+            <fill>
+                <SolidColor color="#ffa336"/>
+            </fill>
+            <lineStroke>
+                <Stroke color="#ffa336" weight="2"/>
+            </lineStroke>
+            <showDataEffect>
+                <SeriesInterpolate/>
+            </showDataEffect>
+        </RadarSeries>
+        <RadarSeries field="Amount2024" displayName="2024" fillLineArea="false" radius="4">
+            <fill>
+                <SolidColor color="#f99bab"/>
+            </fill>
+            <lineStroke>
+                <Stroke color="#f99bab" weight="2"/>
+            </lineStroke>
+            <showDataEffect>
+                <SeriesInterpolate/>
+            </showDataEffect>
+        </RadarSeries>
+    </series>
+</RadarChart>
+</rMateChart>`;
+        }
+
+        // 차트 준비 핸들러
+        function chartReadyHandler2(id) {
+            document.getElementById(id).setSlideLayoutSet([getCombinationChartLayout(), getRadarChartLayout()]);
+            document.getElementById(id).setSlideDataSet([chartDataCombo, chartDataRadar]);
+        }
+
 
         // -----------------------차트 설정 끝 -----------------------
 
@@ -541,18 +744,18 @@
 
             // 임시 데이터 배열 정의
             var tempData = [
-                {month: '24.01', year2023: 200, year2024: 300},
-                {month: '24.02', year2023: 400, year2024: 500},
-                {month: '24.03', year2023: 500, year2024: 400},
-                {month: '24.04', year2023: 300, year2024: 300},
-                {month: '24.05', year2023: 700, year2024: 700},
-                {month: '24.06', year2023: 900, year2024: 600},
-                {month: '24.07', year2023: 400, year2024: 500},
-                {month: '24.08', year2023: 500, year2024: 400},
-                {month: '24.09', year2023: 600, year2024: 300},
-                {month: '24.10', year2023: 400, year2024: 700},
-                {month: '24.11', year2023: 200, year2024: 500},
-                {month: '24.12', year2023: 300, year2024: 400},
+                {month: '24-01', year2023: 200, year2024: 300},
+                {month: '24-02', year2023: 400, year2024: 500},
+                {month: '24-03', year2023: 500, year2024: 400},
+                {month: '24-04', year2023: 300, year2024: 300},
+                {month: '24-05', year2023: 700, year2024: 700},
+                {month: '24-06', year2023: 900, year2024: 600},
+                {month: '24-07', year2023: 400, year2024: 500},
+                {month: '24-08', year2023: 500, year2024: 400},
+                {month: '24-09', year2023: 600, year2024: 300},
+                {month: '24-10', year2023: 400, year2024: 700},
+                {month: '24-11', year2023: 200, year2024: 500},
+                {month: '24-12', year2023: 300, year2024: 400},
             ];
 
             if (!theGrid2) {
@@ -561,7 +764,7 @@
                     autoGenerateColumns: false,
                     showMarquee: true,
                     columns: [
-                        {binding: 'month', header: '월', width: 120, align: 'center', isReadOnly: true},
+                        {binding: 'month', header: '기간', width: 80, align: 'center', isReadOnly: true},
                         {binding: 'year2023', header: '2023', width: '*', align: 'center', isReadOnly: true},
                         {binding: 'year2024', header: '2024', width: '*', align: 'center', isReadOnly: true}
                     ],
