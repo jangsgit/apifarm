@@ -58,7 +58,7 @@
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" id="tab1" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -69,12 +69,18 @@
                                     <div class="srch-box">
                                         <ul class="date-box">
                                             <li>
-                                                <input type="month" id="date1" name="">
-                                                <label for="month1" class="hide">시작일</label>
+                                                <input type="month" id="searchfrdate" name="searchfrdate">
+                                                <label for="searchfrdate" class="hide">시작일</label>
 
                                             </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="btn-search">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
                                         </ul>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
+
                                     </div>
                                 </dd>
                             </dl>
@@ -92,7 +98,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="max-height: 650px;"></div>
                     </div>
                 </section>
 
@@ -108,12 +114,16 @@
                                     <div class="srch-box">
                                         <ul class="date-box">
                                             <li>
-                                                <input type="month" id="date1" name="">
-                                                <label for="month1" class="hide">시작일</label>
-
+                                                <input type="month" id="searchfrdate2" name="searchfrdate2">
+                                                <label for="searchfrdate2" class="hide">시작일</label>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="btn-search">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
                                             </li>
                                         </ul>
-                                        <a class="btn-srch" id="searchgrid" title="검색"></a>
                                     </div>
                                 </dd>
                             </dl>
@@ -447,7 +457,7 @@
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
             if (data2.length === 0) {
-                let emptyRowsCount = 31;  // 원하는 빈 행의 수
+                let emptyRowsCount = 15;  // 원하는 빈 행의 수
                 for (let i = 0; i < emptyRowsCount; i++) {
                     data2.push({});
                 }
@@ -521,21 +531,21 @@
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
             theGrid2.rowHeaders.columns.splice(0, 1);
 
-            theGrid.setCellData(0, 'y1', '2024.01');
-            theGrid.setCellData(0, 'y2', '중촌관리소');
-            theGrid.setCellData(0, 'y3', 'Daniel');
-            theGrid.setCellData(0, 'y4', '01');
-            theGrid.setCellData(0, 'y5', '42.4648');
-            theGrid.setCellData(0, 'y6', '0.5987');
-            theGrid.setCellData(0, 'y7', '93.4341');
-
-            theGrid.setCellData(1, 'y1', '2024.01');
-            theGrid.setCellData(1, 'y2', '중촌관리소');
-            theGrid.setCellData(1, 'y3', 'Daniel');
-            theGrid.setCellData(1, 'y4', '02');
-            theGrid.setCellData(1, 'y5', '42.4214');
-            theGrid.setCellData(1, 'y6', '0.5978');
-            theGrid.setCellData(1, 'y7', '93.5133');
+            // theGrid.setCellData(0, 'y1', '2024.01');
+            // theGrid.setCellData(0, 'y2', '중촌관리소');
+            // theGrid.setCellData(0, 'y3', 'Daniel');
+            // theGrid.setCellData(0, 'y4', '01');
+            // theGrid.setCellData(0, 'y5', '42.4648');
+            // theGrid.setCellData(0, 'y6', '0.5987');
+            // theGrid.setCellData(0, 'y7', '93.4341');
+            //
+            // theGrid.setCellData(1, 'y1', '2024.01');
+            // theGrid.setCellData(1, 'y2', '중촌관리소');
+            // theGrid.setCellData(1, 'y3', 'Daniel');
+            // theGrid.setCellData(1, 'y4', '02');
+            // theGrid.setCellData(1, 'y5', '42.4214');
+            // theGrid.setCellData(1, 'y6', '0.5978');
+            // theGrid.setCellData(1, 'y7', '93.5133');
 
 
             theGrid2.setCellData(0, 'category', 'C3H8(Propane)');
@@ -552,45 +562,6 @@
 
         }<!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
-        <!-- 점검자 추가 버튼 이벤트-->
-        // function addInputField(button) {
-        //     // 새로운 td 요소를 생성합니다.
-        //     var newTd = document.createElement('div');
-        //     newTd.className = 'input-btnbox';
-        //
-        //     // 새로운 input 요소를 생성합니다.
-        //     var newInput = document.createElement('input');
-        //     newInput.type = 'text';
-        //     newInput.className = 'wp100';
-        //     newInput.placeholder = '점검자';
-        //     newInput.name = 'checkusr'
-        //     newInput.maxLength = 5;
-        //
-        //     // 삭제 버튼을 생성합니다.
-        //     var deleteButton = document.createElement('button');
-        //     deleteButton.textContent = '점검자 삭제';
-        //     deleteButton.onclick = function() {
-        //         deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-        //     };
-        //     deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-        //     deleteButton.style.color = 'red';
-        //     deleteButton.style.marginTop = '5px';
-        //     // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-        //     newTd.appendChild(newInput);
-        //     newTd.appendChild(deleteButton);
-        //
-        //     // 클릭된 버튼의 부모 td 요소를 찾습니다.
-        //     var parentTd = button.parentElement;
-        //
-        //     // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-        //     parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        // }
-
-        // function deleteInputField(inputField) {
-        //     // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-        //     var tdToDelete = inputField.parentElement;
-        //     tdToDelete.parentElement.removeChild(tdToDelete);
-        // }
 
         <!-- 점검자 추가 버튼 이벤트 끝-->
 
@@ -617,91 +588,19 @@
             }
         }
 
-        // function grid_binding(data){
-        //     var inspecDto = data;
-        //     var inspecData = [];
-        //
-        //     for (var i = 0; i < inspecDto.length; i++) {
-        //         inspecData.push({
-        //             rownum: inspecDto[i]["rownum"],
-        //             spworknm: inspecDto[i]["spworknm"],
-        //             spcompnm: inspecDto[i]["spcompnm"],
-        //             spplannm: inspecDto[i]["spplannm"],
-        //             checkdt: inspecDto[i]["checkdt"],
-        //             checkusr: inspecDto[i]["checkusr"],
-        //             checkarea: inspecDto[i]["checkarea"],
-        //             checktmdt: inspecDto[i]["checktmdt"],
-        //
-        //         });
-        //
-        //     }
-        //
-        //     theGrid.columns.clear();
-        //     theGrid.autoGenerateColumns = false;
-        //     viewdata.sourceCollection = inspecData;
-        //
-        //     var cols = new wijmo.grid.Column();
-        //     cols.binding = 'rownum';
-        //     cols.header = '순번';
-        //     cols.align = "center";
-        //     cols.width = 60;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spworknm';
-        //     cols.header = '지역명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spcompnm';
-        //     cols.header = '산단명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'spplannm';
-        //     cols.header = '발전소명';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkdt';
-        //     cols.header = '등록일자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkusr';
-        //     cols.header = '점검자';
-        //     cols.align = "center";
-        //     cols.width = 140;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checkarea';
-        //     cols.header = '점검장소';
-        //     cols.align = "center";
-        //     cols.width = 200;
-        //     theGrid.columns.push(cols);
-        //
-        //     cols = new wijmo.grid.Column();
-        //     cols.binding = 'checktmdt';
-        //     cols.header = '점검시간';
-        //     cols.align = "center";
-        //     cols.width = 260;
-        //     theGrid.columns.push(cols);
-        //
-        //
-        //
-        // }
 
         $(document).ready(function (e) {
             initializeSelections();
+
+            const currentYear = new Date().getFullYear();
+            const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0'); // 현재 월을 두 자리 수로 포맷팅
+            const defaultDate = `${currentYear}-${currentMonth}`;
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            const currentYear2 = new Date().getFullYear();
+            const currentMonth2= String(new Date().getMonth() + 1).padStart(2, '0'); // 현재 월을 두 자리 수로 포맷팅
+            const defaultDate2 = `${currentYear2}-${currentMonth2}`;
+            document.getElementById('searchfrdate2').value = defaultDate2;
 
 
         });

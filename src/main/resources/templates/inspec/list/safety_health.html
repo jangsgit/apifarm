@@ -7,44 +7,45 @@
     <!--- (레이아웃) Contents 영역 -->
     <div class="layout-contents">
         <!-- Page Title -->
+
         <div class="page-title-wrap">
             <div class="left">
-                <h2>안전보건교육일지</h2>
+                <h2>안전보건교육일지</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
-                    내메뉴
+                    내 메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>점검관리</li>
+                <li>전기안전관리</li>
                 <li>안전보건교육일지</li>
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
-                </li>
-                <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplancd')">
-                        <option value="001">시설명</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
-                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
@@ -59,7 +60,7 @@
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" id="tab1" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -130,9 +131,9 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid">
+                    <div class="container-fluid"  style="height: 700px;">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 490px"></div>
+                        <div id="theGrid"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -370,7 +371,7 @@
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
             if (data2.length === 0) {
-                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                let emptyRowsCount = 17;  // 원하는 빈 행의 수
                 for (let i = 0; i < emptyRowsCount; i++) {
                     data2.push({});
                 }
@@ -503,6 +504,7 @@
         document.addEventListener('DOMContentLoaded', inputData);
 
         $(document).ready(function (e) {
+            initializeSelections();
 
             //점검결과 클릭시 텍스트 순환
             $('.checkbox-cell').click(function () {
