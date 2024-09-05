@@ -417,5 +417,16 @@ function fetchCommonCodes(parentId, selectElementId) {
             console.error('Error fetching options:', error);
         });
 
+
+
 }
 
+// 로딩바를 보여주는 함수
+function showLoader() {
+    document.getElementById('loader2').style.display = 'block';
+}
+
+// 로딩바를 숨기는 함수
+function hideLoader() {
+    document.getElementById('loader2').style.display = 'none';
+}
