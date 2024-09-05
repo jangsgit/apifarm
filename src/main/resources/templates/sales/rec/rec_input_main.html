@@ -5,7 +5,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>REC 현물 단가 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+                <h2>REC 현물 단가 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img
+                    src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -36,7 +37,8 @@
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
@@ -46,55 +48,10 @@
 
         <div class="row">
             <div class="col col-1 wp70 mg-r20">
+
+                <!-- section1 -->
                 <section>
                     <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    조회년월<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="month" id="date1" name="startDate" value="2024-01">
-                                            <label for="date1" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="month" id="date2" name="endDate" value="2024-08">
-                                            <label for="date2" class="hide">종료일</label>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
-                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                검색
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                        </div>
-                        <!--<div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>-->
-                    </div> <!--//section-top end -->
-
-                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 270px"></div>
-                    </div>
-                </section>
-
-                <section>
-                    <div class="section-top" >
                         <div class="title-wrap">
                             <h3>REC 현물 단가 등록</h3>
                         </div>
@@ -180,6 +137,55 @@
                         </div>
                     </form>
                 </section>
+
+                <!-- section2 -->
+                <section>
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회년월<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="date1" name="startDate" value="2024-01">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="date2" name="endDate" value="2024-12">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+                        <!--<div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>-->
+                    </div> <!--//section-top end -->
+
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 450px"></div>
+                    </div>
+                </section>
+
             </div>
         </div>
 
@@ -190,13 +196,13 @@
 
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
 
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('DOMContentLoaded', function () {
             initializeSelections();  //위에 산단, 발전소명 관련 함수
             // loadYearlyData();        //조회연도 항목 불러오기
             // WijmoGrid();
@@ -207,10 +213,10 @@
         let SelectItem;
 
         var columns = [
-            { binding: 'rownum', header: 'No', align: 'center', width: 140 },
-            { binding: 'standdt', header: '적용년월', align: 'center', width: 140 },
-            { binding: 'smpcost', header: '단가', align: 'center', width: 140 },
-            { binding: 'check', header: '적용', align: 'center', width: 140, dataType: wijmo.DataType.Boolean },
+            {binding: 'rownum', header: 'No', align: 'center', width: 140},
+            {binding: 'standdt', header: '적용년월', align: 'center', width: 140},
+            {binding: 'smpcost', header: '단가', align: 'center', width: 140},
+            {binding: 'check', header: '적용', align: 'center', width: 140, dataType: wijmo.DataType.Boolean},
         ];
 
 
@@ -226,14 +232,18 @@
             console.log("Initializing the grid..."); // 지워
             var data = [
                 // 필요시 check: false나 true 넣기
-                { rownum: '1', standdt: '2024-01', smpcost: '172.10', check: false},
-                { rownum: '2', standdt: '2024-02', smpcost: '172.20', check: false},
-                { rownum: '3', standdt: '2024-03', smpcost: '172.30', check: false},
-                { rownum: '4', standdt: '2024-04', smpcost: '172.40', check: false},
-                { rownum: '5', standdt: '2024-05', smpcost: '172.50', check: false},
-                { rownum: '6', standdt: '2024-06', smpcost: '172.60', check: false},
-                { rownum: '7', standdt: '2024-07', smpcost: '172.70', check: false},
-                { rownum: '8', standdt: '2024-08', smpcost: '172.80', check: false}
+                {rownum: '1', standdt: '2024-01', smpcost: '172.10', check: false},
+                {rownum: '2', standdt: '2024-02', smpcost: '172.20', check: false},
+                {rownum: '3', standdt: '2024-03', smpcost: '172.30', check: false},
+                {rownum: '4', standdt: '2024-04', smpcost: '172.40', check: false},
+                {rownum: '5', standdt: '2024-05', smpcost: '172.50', check: false},
+                {rownum: '6', standdt: '2024-06', smpcost: '172.60', check: false},
+                {rownum: '7', standdt: '2024-07', smpcost: '172.70', check: false},
+                {rownum: '8', standdt: '2024-08', smpcost: '172.80', check: false},
+                {rownum: '9', standdt: '2024-09', smpcost: '172.90', check: false},
+                {rownum: '10', standdt: '2024-10', smpcost: '172.10', check: false},
+                {rownum: '11', standdt: '2024-11', smpcost: '172.11', check: false},
+                {rownum: '12', standdt: '2024-12', smpcost: '172.12', check: false}
             ];
 
             viewdata = new wijmo.collections.CollectionView(data);
@@ -248,7 +258,7 @@
 
 
             // 그리드 내부에 있는 체크박스 클릭시
-            theGrid.cellEditEnding.addHandler(function(s, e) {
+            theGrid.cellEditEnding.addHandler(function (s, e) {
                 // 체크박스의 열 인덱스가 3인 경우 실행
                 if (e.col === 3) {
                     if (e.panel.grid.activeEditor.checked) {
@@ -262,7 +272,7 @@
                     }
 
                     // 모든 행에 대해 체크박스 상태 업데이트
-                    s.rows.forEach(function(row, index) {
+                    s.rows.forEach(function (row, index) {
                         if (index !== e.row) {
                             row.dataItem.check = false;  // 다른 모든 행의 체크 해제
                         }
@@ -314,32 +324,17 @@
             })*/
 
 
-
             // 선택이 변경될 때, 현재 항목 업데이트
 
-            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
         }
+
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
         // 기능 inspec_month_main.html 참고
 
         // backup 코드도 참고해
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     </script>
