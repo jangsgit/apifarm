@@ -20,4 +20,7 @@ public interface TB_RP870Repository extends JpaRepository<TB_RP870, TB_RP870_PK>
                                      @Param("spplancd") String spplancd,
                                      @Param("registdt") String registdt);
 
+    @Query("SELECT DISTINCT t.doctitle FROM TB_RP870 t WHERE LOWER(t.doctitle) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findDoctitlesByQuery(@Param("query") String query);
+
 }

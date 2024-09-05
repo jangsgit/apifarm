@@ -264,8 +264,16 @@ public class ElecSafeService {
     }
 
     @Transactional
-    public List<String> getSuggestions(String query) {
-        return TBRP750Repository.findCheckareasByQuery(query);
+    public List<String> getSuggestions(String query, String field) {
+
+        return switch (field) {
+            case "checktitle" -> TBRP750Repository.findChecktitlesByQuery(query);
+            case "checkusr" -> TBRP750Repository.findCheckusersByQuery(query);
+            case "checkarea" -> TBRP750Repository.findCheckareasByQuery(query);
+
+            // 다른 필드에 대한 처리
+            default -> new ArrayList<>();
+        };
     }
 
 }

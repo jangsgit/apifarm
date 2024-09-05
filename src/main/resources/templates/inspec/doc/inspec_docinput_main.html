@@ -183,7 +183,8 @@
                                     </label>
                                 </th>
                                 <td colspan="3">
-                                    <input type="text" id="doctitle" name="doctitle" class="wp100" maxlength="50" autocomplete="off">
+                                    <input type="text" id="doctitle" name="doctitle" class="wp100" maxlength="50">
+                                    <ul id="suggestions-doctitle" class="suggestions-list"></ul>
                                 </td>
 
                             </tr>
@@ -693,6 +694,20 @@
                 inputTabLink.textContent = '수정';
                 inputTabLink.title = '수정';
             }
+
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
+            // 자동완성
+            const autoCompleteFields = [
+                { inputId: 'doctitle', suggestionId: 'suggestions-doctitle', apiUrl: '/api/inspec_doc/autocomplete'}
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
 
             updateTabLink();
         })

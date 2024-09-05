@@ -266,4 +266,15 @@ public class DocService {
         result.put("filelist", filelist);
         return result;
     }
+
+    @Transactional
+    public List<String> getSuggestions(String query, String field) {
+
+        return switch (field) {
+            case "doctitle" -> TBRP870Repository.findDoctitlesByQuery(query);
+
+            // 다른 필드에 대한 처리
+            default -> new ArrayList<>();
+        };
+    }
 }

@@ -23,5 +23,11 @@ public interface TB_RP750Repository extends JpaRepository<TB_RP750, TB_RP750_PK>
     @Query("SELECT DISTINCT t.checkarea FROM TB_RP750 t WHERE LOWER(t.checkarea) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<String> findCheckareasByQuery(@Param("query") String query);
 
+    @Query("SELECT DISTINCT t.checkusr FROM TB_RP750 t WHERE LOWER(t.checkusr) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findCheckusersByQuery(@Param("query") String query);
+
+    @Query("SELECT DISTINCT t.checktitle FROM TB_RP750 t WHERE LOWER(t.checktitle) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findChecktitlesByQuery(@Param("query") String query);
+
 
 }

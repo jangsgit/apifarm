@@ -428,8 +428,8 @@ public class ElecSafeController {
     }
 
     @GetMapping("/autocomplete")
-    public ResponseEntity<List<String>> autocomplete(@RequestParam String query) {
-        List<String> suggestions = elecSafeService.getSuggestions(query);
+    public ResponseEntity<List<String>> autocomplete(@RequestParam String query, @RequestParam String field) {
+        List<String> suggestions = elecSafeService.getSuggestions(query, field);
         return ResponseEntity.ok(suggestions);
     }
 

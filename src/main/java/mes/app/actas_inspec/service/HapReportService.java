@@ -301,12 +301,37 @@ public class HapReportService {
 
     @Transactional
     public List<String> getSuggestions(String query, String field) {
+        String table = "tbRp720";
+        // 필드가 "checkusr"로 시작하는지 확인
+        if (field.startsWith("checkusr")) {
+            String[] parts = field.split("_");  // "checkusr1_company_1"을 "_로 분할"
+            if (parts.length >= 3) {
+                String checkusrType = parts[0]; // checkusr1, checkusr2
+                String fieldType = parts[1];    // company, position, name
+                String tableSuffix = parts[2];  // 1, 2, 3 (필드 구분용)
 
+                if (checkusrType.equals("checkusr1")) {
+                    return switch (fieldType) {
+                        case "company" -> TBRP726Repository.findCompany_doByQuery(query, table);
+                        case "position" -> TBRP726Repository.findPosition_doByQuery(query, table);
+                        case "name" -> TBRP726Repository.findName_doByQuery(query, table);
+                        default -> new ArrayList<>();
+                    };
+                } else if (checkusrType.equals("checkusr2")) {
+                    return switch (fieldType) {
+                        case "company" -> TBRP726Repository.findCompany_haByQuery(query, table);
+                        case "position" -> TBRP726Repository.findPosition_haByQuery(query, table);
+                        case "name" -> TBRP726Repository.findName_haByQuery(query, table);
+                        default -> new ArrayList<>();
+                    };
+                }
+            }
+        }
+
+        // 고정 필드에 대한 처리
         return switch (field) {
             case "chkaddres" -> TBRP720Repository.findChkaddresByQuery(query);
             case "checknm" -> TBRP720Repository.findChecknmByQuery(query);
-
-            // 다른 필드에 대한 처리
             default -> new ArrayList<>();
         };
 

@@ -160,7 +160,8 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="checktitle" class="wp100" autocomplete="off">
+                                    <input type="text" id="checktitle" class="wp100">
+                                    <ul id="suggestions-checktitle" class="suggestions-list"></ul>
                                 </td>
                                 <th>
                                     <label for="registdt">
@@ -187,6 +188,7 @@
                                 </th>
                                 <td>
                                     <input type="text" id="checkusr" autocomplete="off">
+                                    <ul id="suggestions-checkusr" class="suggestions-list"></ul>
                                 </td>
                                 <!--                                    <th>-->
                                 <!--                                        <label for="docdv">-->
@@ -209,7 +211,7 @@
                                 <td>
                                     <input type="text" id="checkarea" class="wp100" onkeyup="fetchSuggestions()"
                                            autocomplete="off">
-                                    <ul id="suggestions" class="suggestions-list"></ul>
+                                    <ul id="suggestions-checkarea" class="suggestions-list"></ul>
                                 </td>
                                 <th>
                                     <label for="endresult">
@@ -764,10 +766,21 @@
                 inputTabLink.title = '수정';
             }
 
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
             // 자동완성
-            const inputId = 'checkarea';
-            const apiUrl = '/api/inspec/elec_safe/autocomplete';
-            initializeAutoComplete(inputId, apiUrl);
+            const autoCompleteFields = [
+                { inputId: 'checkusr', suggestionId: 'suggestions-checkusr', apiUrl: '/api/inspec/elec_safe/autocomplete' },
+                { inputId: 'checktitle', suggestionId: 'suggestions-checktitle', apiUrl: '/api/inspec/elec_safe/autocomplete'},
+                { inputId: 'checkarea', suggestionId: 'suggestions-checkarea', apiUrl: '/api/inspec/elec_safe/autocomplete' }
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
 
             // 수정 > 등록, 등록 > 수정
             updateTabLink();

@@ -187,7 +187,7 @@
                                     </label>
                                 </th>
                                 <td colspan="3">
-                                    <input type="text" id="checknm" class="wp100">
+                                    <input type="text" id="checknm" class="wp100" onkeyup="fetchSuggestions()">
                                     <ul id="suggestions-checknm" class="suggestions-list"></ul>
                                 </td>
                             </tr>
@@ -221,12 +221,15 @@
                                     <div class="checkusr1">
                                         <div class="inspector-group">
                                             <input type="hidden" id="checkusr1_seq_1" name="checkusr1_seq_1" value="">
-                                            <input type="text" id="checkusr1_company_1" name="checkusr1_company_1"
-                                                   placeholder="업체명">
-                                            <input type="text" id="checkusr1_position_1" name="checkusr1_position_1"
-                                                   placeholder="직급">
-                                            <input type="text" id="checkusr1_name_1" name="checkusr1_name_1"
-                                                   placeholder="성명">
+                                            <label for="checkusr1_company_1"></label><input type="text" id="checkusr1_company_1" name="checkusr1_company_1"
+                                                                                            placeholder="업체명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-company-do-1" class="suggestions-list"></ul>
+                                            <label for="checkusr1_position_1"></label><input type="text" id="checkusr1_position_1" name="checkusr1_position_1"
+                                                                                             placeholder="직급" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-position-do-1" class="suggestions-list"></ul>
+                                            <label for="checkusr1_name_1"></label><input type="text" id="checkusr1_name_1" name="checkusr1_name_1"
+                                                                                         placeholder="성명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-name-do-1" class="suggestions-list"></ul>
                                             <button onclick="addInspector('checkusr1', null, false)" class="mg-l8">점검자 추가
                                             </button>
                                         </div>
@@ -242,11 +245,14 @@
                                         <div class="inspector-group">
                                             <input type="hidden" id="checkusr2_seq_1" name="checkusr2_seq_1" value="">
                                             <input type="text" id="checkusr2_company_1" name="checkusr2_company_1"
-                                                   placeholder="업체명" autocomplete="off">
+                                                   placeholder="업체명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-company-ha-1" class="suggestions-list"></ul>
                                             <input type="text" id="checkusr2_position_1" name="checkusr2_position_1"
-                                                   placeholder="직급" autocomplete="off">
+                                                   placeholder="직급" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-position-ha-1" class="suggestions-list"></ul>
                                             <input type="text" id="checkusr2_name_1" name="checkusr2_name_1"
-                                                   placeholder="성명" autocomplete="off">
+                                                   placeholder="성명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-name-ha-1" class="suggestions-list"></ul>
                                             <button onclick="addInspector('checkusr2', null, false)" class="mg-l8">점검자 추가
                                             </button>
                                         </div>
@@ -621,7 +627,7 @@
 
             const newInspectorGroup = document.createElement('div');
             newInspectorGroup.classList.add('inspector-group');
-            let seqInput;  // seqInput 변수를 선언
+            let seqInput;
 
             // seq hidden input 추가
             if (inspectorData && inspectorData.seq) {
@@ -629,29 +635,86 @@
                 seqInput.type = "hidden";
                 seqInput.name = `${wrapperClass}_seq_${index}`;
                 seqInput.value = inspectorData.seq;
-                newInspectorGroup.appendChild(seqInput);  // seq hidden input을 추가
+                newInspectorGroup.appendChild(seqInput);
             }
 
+            // Helper function to create input-clear structure
+            const createInputClear = (inputField) => {
+                const inputClearDiv = document.createElement('div');
+                inputClearDiv.classList.add('input-clear');
+
+                inputField.style.marginRight = '4px';
+
+                // Create the clear button (×)
+                const clearButton = document.createElement('span');
+                clearButton.classList.add('btn-clear');
+                clearButton.innerHTML = '×';
+                clearButton.style.display = 'none';  // Initially hidden
+
+                // Clear input value when clear button is clicked
+                clearButton.onclick = () => {
+                    inputField.value = '';  // Clear the input field
+                    clearButton.style.display = 'none';  // Hide clear button
+                    inputField.focus();     // Re-focus on the input field
+                };
+
+                // Show or hide the clear button based on input value
+                inputField.addEventListener('input', () => {
+                    clearButton.style.display = inputField.value ? 'inline' : 'none';  // Show when there's input
+                });
+
+                // Append input field and clear button to the div
+                inputClearDiv.appendChild(inputField);
+                inputClearDiv.appendChild(clearButton);
+
+                return inputClearDiv;
+            };
+
+            // 업체명 input
             const companyInput = document.createElement('input');
             companyInput.type = "text";
             companyInput.name = `${wrapperClass}_company_${index}`;
+            companyInput.id = `${wrapperClass}_company_${index}`;
             companyInput.placeholder = '업체명';
-            companyInput.style.marginRight = '4px';
+            companyInput.setAttribute('autocomplete', 'off');
             if (inspectorData) companyInput.value = inspectorData.company;
 
+            const companyInputClear = createInputClear(companyInput);
+            const companySuggestionId = wrapperClass === 'checkusr1' ? `suggestions-company-do-${index}` : `suggestions-company-ha-${index}`;
+            const companySuggestions = document.createElement('ul');
+            companySuggestions.id = companySuggestionId;
+            companySuggestions.classList.add('suggestions-list');
+            companySuggestions.style.display = 'none';
+
+            // 직급 input
             const positionInput = document.createElement('input');
             positionInput.type = "text";
             positionInput.name = `${wrapperClass}_position_${index}`;
+            positionInput.id = `${wrapperClass}_position_${index}`;
             positionInput.placeholder = '직급';
-            positionInput.style.marginRight = '4px';
+            positionInput.setAttribute('autocomplete', 'off');
             if (inspectorData) positionInput.value = inspectorData.jiggeub;
 
+            const positionInputClear = createInputClear(positionInput);
+            const positionSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-position-do-${index}` : `suggestions-position-ha-${index}`;
+            const positionSuggestions = document.createElement('ul');
+            positionSuggestions.id = positionSuggestionId;
+            positionSuggestions.classList.add('suggestions-list');
+
+            // 성명 input
             const nameInput = document.createElement('input');
             nameInput.type = "text";
             nameInput.name = `${wrapperClass}_name_${index}`;
+            nameInput.id = `${wrapperClass}_name_${index}`;
             nameInput.placeholder = '성명';
-            nameInput.style.marginRight = '4px';
+            nameInput.setAttribute('autocomplete', 'off');
             if (inspectorData) nameInput.value = inspectorData.checkusr;
+
+            const nameInputClear = createInputClear(nameInput);
+            const nameSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-name-do-${index}` : `suggestions-name-ha-${index}`;
+            const nameSuggestions = document.createElement('ul');
+            nameSuggestions.id = nameSuggestionId;
+            nameSuggestions.classList.add('suggestions-list');
 
             const actionButton = document.createElement('button');
             if (isFirst) {
@@ -665,7 +728,6 @@
                 actionButton.classList.add('mg-l8');
                 actionButton.style.color = 'red';
                 actionButton.onclick = function () {
-                    // seq 값이 있으면 삭제 배열에 추가
                     if (seqInput && seqInput.value) {
                         deletedSeqs.push(seqInput.value);
                     }
@@ -673,12 +735,20 @@
                 };
             }
 
-            newInspectorGroup.appendChild(companyInput);
-            newInspectorGroup.appendChild(positionInput);
-            newInspectorGroup.appendChild(nameInput);
+            newInspectorGroup.appendChild(companyInputClear);
+            newInspectorGroup.appendChild(companySuggestions);
+            newInspectorGroup.appendChild(positionInputClear);
+            newInspectorGroup.appendChild(positionSuggestions);
+            newInspectorGroup.appendChild(nameInputClear);
+            newInspectorGroup.appendChild(nameSuggestions);
             newInspectorGroup.appendChild(actionButton);
 
             wrapper.appendChild(newInspectorGroup);
+
+            // 동적으로 추가된 필드에 대해 자동완성 기능 적용
+            initializeAutoComplete(companyInput.id, '/api/inspec/hap/autocomplete', companySuggestionId);
+            initializeAutoComplete(positionInput.id, '/api/inspec/hap/autocomplete', positionSuggestionId);
+            initializeAutoComplete(nameInput.id, '/api/inspec/hap/autocomplete', nameSuggestionId);
         }
 
         // 신규등록 버튼 클릭
@@ -1248,7 +1318,13 @@
             // 자동완성
             const autoCompleteFields = [
                 { inputId: 'chkaddres', suggestionId: 'suggestions-chkaddres', apiUrl: '/api/inspec/hap/autocomplete' },
-                { inputId: 'checknm', suggestionId: 'suggestions-checknm', apiUrl: '/api/inspec/hap/autocomplete' }
+                { inputId: 'checknm', suggestionId: 'suggestions-checknm', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_company_1', suggestionId: 'suggestions-company-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_position_1', suggestionId: 'suggestions-position-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_name_1', suggestionId: 'suggestions-name-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_company_1', suggestionId: 'suggestions-company-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_position_1', suggestionId: 'suggestions-position-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_name_1', suggestionId: 'suggestions-name-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
             ];
 
             autoCompleteFields.forEach(field => {

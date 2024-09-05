@@ -298,20 +298,22 @@ function fetchSuggestions(inputId, apiUrl, suggestionId) {
     }, 300);  // 300ms의 디바운스 타임 적용
 }
 
-function initializeAutoComplete(inputId, apiUrl) {
+// 자동완성 기능
+function initializeAutoComplete(inputId, apiUrl, suggestionId) {
     const inputField = document.getElementById(inputId);
 
     let preventFetchOnEnter = false;  // Enter 키로 선택했을 때 검색을 방지하기 위한 플래그
 
     inputField.addEventListener('keyup', (event) => {
-        if (!preventFetchOnEnter) {  // Enter 키로 인한 검색 방지
-            fetchSuggestions(inputId, apiUrl);
+        if (event.key !== 'Enter' && event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && !preventFetchOnEnter) {
+            fetchSuggestions(inputId, apiUrl, suggestionId);
         }
+        // Enter 키가 눌렸을 경우에는 검색을 방지
         preventFetchOnEnter = false;  // 플래그 초기화
     });
 
     inputField.addEventListener('keydown', function (event) {
-        const suggestionsList = document.getElementById('suggestions');
+        const suggestionsList = document.getElementById(suggestionId);
         const items = suggestionsList.getElementsByTagName('li');
 
         if (suggestionsVisible) {
@@ -345,14 +347,14 @@ function initializeAutoComplete(inputId, apiUrl) {
     // 포커스 해제 시 자동 완성 목록 숨기기
     inputField.addEventListener('blur', function () {
         setTimeout(function () {
-            const suggestionsList = document.getElementById('suggestions');
+            const suggestionsList = document.getElementById(suggestionId);
             suggestionsList.style.display = 'none';
             suggestionsVisible = false;
         }, 300); // 300ms 지연 시간
     });
 
     // 마우스 클릭으로 선택 시에도 검색 방지
-    document.getElementById('suggestions').addEventListener('click', function (event) {
+    document.getElementById(suggestionId).addEventListener('click', function (event) {
         if (event.target.tagName === 'LI') {
             preventFetchOnEnter = true;
         }
