@@ -70,12 +70,12 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="date" id="startDate" name="startDate">
-                                            <label for="startDate" class="hide">시작일</label>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="date" id="endDate" name="endDate">
-                                            <label for="endDate" class="hide">종료일</label>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
                                         </li>
                                     </ul>
                                 </dd>
@@ -131,9 +131,9 @@
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
-                    <div class="container-fluid"  style="height: 700px;">
+                    <div class="container-fluid"  >
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
+                        <div id="theGrid" style="max-height: 700px;"></div>
                     </div>
                 </section>
                 <!-- Section -->
@@ -371,7 +371,7 @@
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
             if (data2.length === 0) {
-                let emptyRowsCount = 17;  // 원하는 빈 행의 수
+                let emptyRowsCount = 14;  // 원하는 빈 행의 수
                 for (let i = 0; i < emptyRowsCount; i++) {
                     data2.push({});
                 }
@@ -505,6 +505,20 @@
 
         $(document).ready(function (e) {
             initializeSelections();
+
+            // 현재 연도를 가져옴
+            const currentYear = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate = `${currentYear}-01-01`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            // 현재 연도를 가져옴
+            const currentYear2 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate2 = `${currentYear2}-12-31`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchtodate').value = defaultDate2;
 
             //점검결과 클릭시 텍스트 순환
             $('.checkbox-cell').click(function () {

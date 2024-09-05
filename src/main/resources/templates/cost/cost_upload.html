@@ -68,16 +68,15 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="month" id="startDt" name="startDt">
-                                            <label for="startDt" class="hide">시작일</label>
+                                            <input type="month" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="month" id="endDt" name="endDt">
-                                            <label for="endDt" class="hide">종료일</label>
+                                            <input type="month" id="searchfrdate2" name="searchfrdate2">
+                                            <label for="searchfrdate2" class="hide">종료일</label>
                                         </li>
                                         <a class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
                                     </ul>
-
                                 </dd>
                             </dl>
 
@@ -411,7 +410,7 @@
 
             // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
             if (data2.length === 0) {
-                let emptyRowsCount = 12;  // 원하는 빈 행의 수
+                let emptyRowsCount = 14;  // 원하는 빈 행의 수
                 for (let i = 0; i < emptyRowsCount; i++) {
                     data2.push({});
                 }
@@ -490,8 +489,14 @@
         $(document).ready(function (e) {
             initializeSelections();
 
-            page = new CheckResultDiaryPage();
 
+            const currentYear = new Date().getFullYear();
+            const defaultDate = `${currentYear}-01`; // 현재 년도의 1월로 설정
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            const currentYear2 = new Date().getFullYear();
+            const defaultDate2 = `${currentYear2}-12`; // 현재 년도의 12월로 설정
+            document.getElementById('searchfrdate2').value = defaultDate2;
 
             $('#btnSave').click(function (e) {
 
