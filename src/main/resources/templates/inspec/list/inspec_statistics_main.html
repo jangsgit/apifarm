@@ -1,37 +1,42 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-
 <head>
     <style>
-        #theGrid2.wj-flexgrid .wj-cell {
-            padding: 12px;
+        .tab-item2.tab-content1 {
+            display: block;
+            padding-bottom: 0;
+            border-radius: 0 15px 0 0 !important;
+            border-bottom: 0;
+            border-bottom-style: none;
         }
 
-        #theGrid2.wj-flexgrid .downloads {
-            padding-top: 0px;
+        .tab-contents > section, .tab-item > .row > section:first-child {
+            border-radius: 0 0 15px 15px;
+            border: 0 !important;
+            box-shadow: 0 0 !important;
         }
+
 
     </style>
 </head>
-
 <th:block layout:fragment="content">
 
-    <!--- (레이아웃) Contents 영역 -->
     <div class="layout-contents">
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>순회점검 통계</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+                <h2>순회점검 통계</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                        alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검 관리</li>
                 <li>순회점검 관리</li>
                 <li>순회점검 통계</li>
             </ul>
         </div>
-
         <!-- Select -->
         <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
@@ -50,43 +55,26 @@
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
-
-        <div class="tab-wrap" style="margin-bottom: 30px">
+        <div class="tab-wrap" id="jqueryTabs">
             <ul class="tab-links">
-                <li>
-                    <a href="#tab1" title="기간별조회">기간별 조회</a>
-                </li>
-                <li>
-                    <a href="#tab2" title="기간별대비">기간별 대비</a>
-                </li>
+                <li><a href="#tab1" title="기간별 조회" class="tab-button">기간별 조회</a></li>
+                <li><a href="#tab2" title="기간별 대비" class="tab-button" id="runrmate">기간별 대비</a></li>
             </ul>
+            <div class="tab-contents" style="height: 1400px">
 
-            <div class="tab-contents">
-                <!-- tab1 -->
-                <section class="tab-item" id="tab1">
+                <!-- 통합 영역 -->
+                <section class="tab-item tab-content" id="tab1" style="padding-top: 5px;">
                     <div class="section-top">
-                        <div class="search-wrap">
-                            <dl id="searchYear" style="display: none">
-                                <dt>
-                                    조회연도<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="yearSelectTab1" name="yearSelectTab1" onchange="WijmoGrid()">
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
+                        <div class="search-wrap" style="margin-top: 15px">
+                            <!--<dl>
                                 <dt>
                                     <label for="periodType">
                                         점검구분<span class="eq">*</span>
@@ -95,7 +83,7 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="inspecType" name="inspecType" onchange="WijmoGrid()">
+                                            <select id="inspecType" name="inspecType">
                                                 <option value="wm_inspec_month_list" selected>순회점검</option>
                                                 <option value="wm_hap_list">합동안전점검</option>
                                                 <option value="wm_elecsafe_list">전기안전점검</option>
@@ -107,7 +95,7 @@
                                         </li>
                                     </ul>
                                 </dd>
-                            </dl>
+                            </dl>-->
                             <dl>
                                 <dt>
                                     <label for="periodType">
@@ -127,6 +115,19 @@
                                     </ul>
                                 </dd>
                             </dl>
+                            <dl id="searchYear" style="display: none">
+                                <dt>
+                                    조회연도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
                             <dl>
                                 <dt>
                                     조회기간<span class="eq">*</span>
@@ -134,10 +135,10 @@
                                 <dd>
                                     <ul class="date-box" id="dateBoxContainer">
                                         <li id="startDateContainer">
-                                            <input type="month" id="startDate" name="startDate" value="2024-01" onchange="WijmoGrid()">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
                                         </li>
                                         <li id="endDateContainer">
-                                            <input type="month" id="endDate" name="endDate" value="2024-12" onchange="WijmoGrid()">
+                                            <input type="month" id="endDate" name="endDate" value="2024-12">
                                         </li>
                                     </ul>
                                 </dd>
@@ -163,121 +164,170 @@
 
                     </div> <!--//section-top end -->
 
-                    <!--<div class="row row-2">
-                        <section class="wp50" style="height: 530px; border-radius: 15px;">
-                            &lt;!&ndash; 그래프 &ndash;&gt;
-                            <div id="chartHolder1" style="width:600px; height:400px;">
-                            </div>
-                        </section>
-                        <section class="wp50" style="height: 530px">
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid" style="max-height: 485px;"></div>
-                            </div>
-                        </section>
-                    </div>-->
                     <div class="row row-2" style="margin-bottom: 10px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top2">
-                                <div class="title-wrap" style="margin-bottom: 0px">
-                                    <h3>가스소비량</h3>
-                                    <ul class="tab-links">
-                                        <li><a href="#tab1" title="통계">통계</a></li>
-                                        <li><a href="#tab2" title="현황">현황</a></li>
-                                    </ul>
-                                </div>
-                                <div class="tab-contents">
-                                    <!-- tab1 -->
-                                    <div class="tab-item" id="tab1">
-                                        <div>
-                                            <div id="chartHolder" style="width: 100%; height: 320px; padding-top: 13px"></div>
-                                        </div>
-                                    </div>
-                                    <!-- tab2 -->
-                                    <div class="tab-item" id="tab2">
-                                        <div class="section-card-wrap" style="height: 88px">
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3 class="card-text-top">가스소비량(Nm3)</h3><h3 class="card-text-top">700</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="down"></span>
-                                                        <span class="fs18 fw600">1.20</span>
-                                                        <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3>가스비용(원)</h3><h3 class="card-text-top">1,000,000</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="up"></span> 1.20 <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                        </div>
-                                        <div class="container-fluid">
-                                            <p id="selectedItem"></p>
-                                            <div id="theGrid" style="width: 100%; height: 230px"></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </section>
-                        </div>
-
-                        <div class="col wp50">
-                            <section class="tab-section section_top2">
-                                <div class="title-wrap" style="margin-bottom: 0px">
-                                    <h3>전기생산량</h3>
-                                    <ul class="tab-links">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>순회점검</h3>
+                                    <ul class="tab-links-sub">
                                         <li><a href="#tab3" title="통계">통계</a></li>
                                         <li><a href="#tab4" title="현황">현황</a></li>
 
                                     </ul>
                                 </div>
                                 <div class="tab-contents">
-                                    <!-- tab5 -->
-                                    <div class="tab-item" id="tab3">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub" id="tab3">
                                         <div>
-                                            <div id="chartHolder2" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                            <div id="chartHolder"
+                                                 style="width: 100%; height: 235px; padding-top: 5px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4 -->
+                                    <div class="tab-item-sub" id="tab4">
+                                        <div class="container-fluid">
+                                            <div id="theGrid" style="width: 100%; height: 235px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>합동안전점검</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab5" title="통계">통계</a></li>
+                                        <li><a href="#tab6" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab5">
+                                        <div>
+                                            <div id="chartHolder2" style="width: 100%; height: 235px; padding-top: 5px"></div>
                                         </div>
                                     </div>
                                     <!-- tab6 -->
-                                    <div class="tab-item" id="tab4">
-                                        <div class="section-card-wrap" style="height: 88px">
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3 class="card-text-top">전기생산량(kWh)</h3><h3 class="card-text-top">2250</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="down"></span>
-                                                        <span class="fs18 fw600">1.20</span>
-                                                        <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3>예상수익(원)</h3><h3 class="card-text-top">195,000</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="up"></span> 1.20 <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                        </div>
+                                    <div class="tab-item-sub" id="tab6">
                                         <div class="container-fluid">
-                                            <div id="theGrid2" style="width: 100%; height: 230px"></div>
+                                            <div id="theGrid2" style="width: 100%; height: 235px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>전기안전점검</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab7" title="통계">통계</a></li>
+                                        <li><a href="#tab8" title="현황">현황</a></li>
+
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub" id="tab7">
+                                        <div>
+                                            <div id="chartHolder3" style="width: 100%; height: 235px; padding-top: 5px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4 -->
+                                    <div class="tab-item-sub" id="tab8">
+                                        <div class="container-fluid">
+                                            <div id="theGrid3" style="width: 100%; height: 235px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>비상훈련계획</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab9" title="통계">통계</a></li>
+                                        <li><a href="#tab10" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab9">
+                                        <div>
+                                            <div id="chartHolder4" style="width: 100%; height: 235px; padding-top: 5px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab10">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4" style="width: 100%; height: 235px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>비상훈련결과</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab11" title="통계">통계</a></li>
+                                        <li><a href="#tab12" title="현황">현황</a></li>
+
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub" id="tab11">
+                                        <div>
+                                            <div id="chartHolder5" style="width: 100%; height: 235px; padding-top: 5px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4 -->
+                                    <div class="tab-item-sub" id="tab12">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5" style="width: 100%; height: 235px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>안전보건교육</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab13" title="통계">통계</a></li>
+                                        <li><a href="#tab14" title="현황">현황</a></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" id="tab13">
+                                        <div>
+                                            <div id="chartHolder6" style="width: 100%; height: 235px; padding-top: 5px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab6 -->
+                                    <div class="tab-item-sub" id="tab14">
+                                        <div class="container-fluid">
+                                            <div id="theGrid6" style="width: 100%; height: 235px"></div>
                                         </div>
                                     </div>
 
@@ -289,52 +339,27 @@
 
                     <div class="row row-2" style="margin-bottom: 10px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top2">
-                                <div class="title-wrap" style="margin-bottom: 0px">
-                                    <h3>열공급량</h3>
-                                    <ul class="tab-links">
-                                        <li><a href="#tab5" title="통계">통계</a></li>
-                                        <li><a href="#tab6" title="현황">현황</a></li>
+                            <section class="tab-section section_top" style="height: 300px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>FieldService</h3>
+                                    <ul class="tab-links-sub">
+                                        <li><a href="#tab15" title="통계">통계</a></li>
+                                        <li><a href="#tab16" title="현황">현황</a></li>
 
                                     </ul>
                                 </div>
                                 <div class="tab-contents">
-                                    <!-- tab1 -->
-                                    <div class="tab-item" id="tab5">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub" id="tab15">
                                         <div>
-                                            <div id="chartHolder3" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                            <div id="chartHolder7" style="width: 100%; height: 235px; padding-top: 5px"></div>
+
                                         </div>
                                     </div>
-                                    <!-- tab2 -->
-                                    <div class="tab-item" id="tab6">
-                                        <div class="section-card-wrap" style="height: 88px">
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3 class="card-text-top">열공급량(Mcal)</h3><h3 class="card-text-top">700</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="down"></span>
-                                                        <span class="fs18 fw600">1.20</span>
-                                                        <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3>예상수익(원)</h3><h3 class="card-text-top">1,000,000</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="up"></span> 1.20 <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                        </div>
+                                    <!-- tab4 -->
+                                    <div class="tab-item-sub" id="tab16">
                                         <div class="container-fluid">
-                                            <div id="theGrid3" style="width: 100%; height: 230px"></div>
+                                            <div id="theGrid7" style="width: 100%; height: 235px"></div>
                                         </div>
                                     </div>
 
@@ -342,66 +367,14 @@
                             </section>
                         </div>
 
-                        <div class="col wp50">
-                            <section class="tab-section section_top2">
-                                <div class="title-wrap" style="margin-bottom: 0px">
-                                    <h3>효율</h3>
-                                    <ul class="tab-links">
-                                        <li><a href="#tab7" title="통계">통계</a></li>
-                                        <li><a href="#tab8" title="현황">현황</a></li>
 
-                                    </ul>
-                                </div>
-                                <div class="tab-contents">
-                                    <!-- tab7 -->
-                                    <div class="tab-item" id="tab7">
-                                        <div>
-                                            <div id="chartHolder4" style="width: 100%; height: 320px; padding-top: 13px"></div>
-                                        </div>
-                                    </div>
-                                    <!-- tab8 -->
-                                    <div class="tab-item" id="tab8">
-                                        <div class="section-card-wrap" style="height: 88px">
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3 class="card-text-top">총효율(%)</h3><h3 class="card-text-top">700</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="down"></span>
-                                                        <span class="fs18 fw600">1.20</span>
-                                                        <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                            <section class="card-section-top">
-                                                <div class="title card-section-title">
-                                                    <h3>전기/효율(%)</h3><h3 class="card-text-top">35/0</h3>
-                                                </div>
-                                                <dl>
-                                                    <dt>전일대비</dt>
-                                                    <dd>
-                                                        <span class="up"></span> 1.20 <span class="unit">%</span>
-                                                    </dd>
-                                                </dl>
-                                            </section>
-                                        </div>
-                                        <div class="container-fluid">
-                                            <div id="theGrid4" style="width: 100%; height: 230px"></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </section>
-                        </div>
                     </div>
                 </section>
-
-                <!-- tab2 -->
-                <section class="tab-item" id="tab2">
+<!-- ********************************************************************************************************** -->
+                <!-- 상세 영역 -->
+                <section class="tab-item tab-content" id="tab2" style="padding-top: 5px;">
                     <div class="section-top">
-                        <div class="search-wrap">
+                        <div class="search-wrap" style="margin-top: 15px">
                             <dl>
                                 <dt>
                                     조회연도<span class="eq">*</span>
@@ -417,50 +390,20 @@
                                 </dd>
                             </dl>
 
-                            <dl>
-                                <dt>
-                                    <label for="generatorSelect">
-                                        발전기명<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="generatorSelect" name="generatorSelect">
-                                                <option value="all">전체</option>
-                                                <option value="AJ380">AJ380</option>
-                                                <option value="AJ390">AJ390</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
+
 
                             <dl>
                                 <dt>
-                                    <label for="comparisonType">
+                                    <label for="comparisonType" style="visibility: hidden">
                                         비교 유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
-                                        <li>
-                                            <select id="comparisonType" name="comparisonType">
-                                                <option value="YoY">YoY</option>
-                                                <option value="QoQ">QoQ</option>
-                                                <option value="MoM">MoM</option>
-                                                <option value="YTD">YTD</option>
-                                            </select>
-                                        </li>
+
 
                                         <li>
-                                            <a class="btn btn-navy" title="차트설정초기화" id="btn-reset-chart2">
-                                                차트설정 초기화
-                                            </a>
-                                        </li>
-
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchComparisonData()">
+                                            <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchData()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -469,404 +412,615 @@
                                 </dd>
                             </dl>
                         </div>
-
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
                     </div> <!--//section-top end -->
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="height: 340px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>YoY Energy Production Comparison</h3>
 
-                    <div class="row row-2">
-                        <section class="wp50" style="height: 530px; border-radius: 15px;">
-                            <div id="chartHolder2" style="width:600px; height:400px;"></div>
-                        </section>
-                        <section class="wp50" style="height: 530px;">
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid2" style="max-height: 485px;"></div>
-                            </div>
-                        </section>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub">
+                                        <div>
+                                            <div id="chartHolder10" style="width: 100%; height: 285px; padding-top: 10px"></div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 340px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>QoQ Energy Production Comparison</h3>
+
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" >
+                                        <div>
+                                            <div id="chartHolder20" style="width: 100%; height: 285px; padding-top: 10px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="height: 340px;">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>MoM Energy Production</h3>
+
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab3 -->
+                                    <div class="tab-item-sub">
+                                        <div>
+                                            <div id="chartHolder30" style="width: 100%; height: 285px; padding-top: 10px"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4 -->
+
+
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 340px">
+                                <div class="title-wrap" style="margin-bottom: 2px">
+                                    <h3>YTD Energy Production Comparison</h3>
+
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab5 -->
+                                    <div class="tab-item-sub" >
+                                        <div>
+                                            <div id="chartHolder40" style="width: 100%; height: 285px; padding-top: 10px"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </section>
-            </div><!--//tab-contents end -->
-        </div>
+
+
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+
+
     </div> <!--//layout-contents end -->
 
-</th:block>
 
+</th:block>
 <th:block layout:fragment="scripts">
-    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
 
     <script type="text/javascript">
 
-        /*// 배열 데이터로 정의
-        var chartData =
-            [{"Month":"Jan","Profit":1100},
-                {"Month":"Feb","Profit":1400},
-                {"Month":"Mar","Profit":1450},
-                {"Month":"Apr","Profit":2300},
-                {"Month":"May","Profit":2100},
-                {"Month":"Jun","Profit":1520},
-                {"Month":"Jul","Profit":1360},
-                {"Month":"Aug","Profit":1420},
-                {"Month":"Sep","Profit":1150},
-                {"Month":"Oct","Profit":1300},
-                {"Month":"Nov","Profit":1300},
-                {"Month":"Dec","Profit":1650}];
+        rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
 
-        // 배열 데이터로 정의
-        var chartData2 =
-            [{"Month":"Jan", "Profit":5000, "Cost":1700},
-                {"Month":"Feb", "Profit":8000, "Cost":1600},
-                {"Month":"Mar", "Profit":6000, "Cost":1200},
-                {"Month":"Apr", "Profit":6000, "Cost":1400},
-                {"Month":"May", "Profit":4800, "Cost":1700},
-                {"Month":"Jun", "Profit":7000, "Cost":1400},
-                {"Month":"Jul", "Profit":5200, "Cost":1600}];
+        rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
 
-        // XML 구조의 스트링으로 정의
-        var chartData3 = [
-            {
-                "Year": "2024",
-                "건수": 320,
-                "Cost": 250
-            },
-            {
-                "Year": "2025",
-                "건수": 250,
-                "Cost": 150
-            },
-            {
-                "Year": "2026",
-                "Profit": 350,
-                "Cost": 140
-            },
-            {
-                "Year": "2027",
-                "건수": 250,
-                "Cost": 130
-            },
-            {
-                "Year": "2028",
-                "건수": 400,
-                "Cost": 230
-            },
-            {
-                "Year": "2029",
-                "건수": 350,
-                "Cost": 140
-            }
-        ];
+        rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
 
-        //3D막대, 라인차트 레이아웃 정의
-        function getCartesianLayout(type, title, dataField)
-        {
-            var layout="<rMateChart borderStyle='none'>"
-                +"<Options><Caption text='" + title +"' paddingBottom='50'/></Options>"
-                +"<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
-                +"<" + type + "Chart showDataTips='true'>"
-                +"<series>";
+        rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
 
-            var category = type == "Column3D" ? 'Year' : 'Month';
+        rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
 
-            for(var i=0; i<dataField.length; ++i)
-            {
-                layout += "<" + type +"Series yField='" + dataField[i] + "' displayName='" + dataField[i] + "'>"
-                    +"<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
-                    +"</" + type +"Series>"
-            }
+        rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
 
-            layout +="</series>"
-                +"<horizontalAxis>"
-                +    "<CategoryAxis categoryField='" + category + "'/>"
-                +"</horizontalAxis>"
-                +"<verticalAxis>"
-                +"<LinearAxis formatter='{numfmt}'/>"
-                +"</verticalAxis>"
-                +"</" + type + "Chart>"
-                +"</rMateChart>";
-            return layout;
-        }
-
-        // 레이더 차트 레이아웃.
-        var radarLayout =
-            "<rMateChart borderStyle='none'>"
-            +"<Options>"
-            +"<Caption text='레이더 차트 표현' fontFamily='맑은 고딕' paddingBottom='50'/>"
-            +"</Options>"
-            +"<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
-            +"<RadarChart type='polygon' paddingTop='20' paddingBottom='20' showDataTips='true'>"
-            +"<radialAxis>"
-            +"<LinearAxis id='rAxis' formatter='{numfmt}'/>"
-            +"</radialAxis>"
-            +"<radialAxisRenderers>"
-            +"<Axis2DRenderer axis='{rAxis}' horizontal='true' tickPlacement='outside' tickLength='4'>"
-            +'<axisStroke>'
-            +'<Stroke color="#555555"/>'
-            +'</axisStroke>'
-            +'</Axis2DRenderer>'
-            +"</radialAxisRenderers>"
-            +"<angularAxis>"
-            +"<CategoryAxis categoryField='Year' displayName='Year'/>"
-            +"</angularAxis>"
-            +"<series>"
-            +"<RadarSeries field='Profit' displayName='Profit' fillLineArea='false'>"
-            +"<showDataEffect>"
-            +"<SeriesInterpolate duration='700'/>"
-            +"</showDataEffect>"
-            +"</RadarSeries>"
-            +"<RadarSeries field='Cost' displayName='Cost' fillLineArea='false'>"
-            +"<showDataEffect>"
-            +"<SeriesInterpolate duration='700'/>"
-            +"</showDataEffect>"
-            +"</RadarSeries>"
-            +"</series>"
-            +"</RadarChart>"
-            +"</rMateChart>";
-
-        //rMate 불러오기
-        function rMateCall(){
-
-            rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
-
-            var layout1 = getCartesianLayout("Column2D","칼럼 차트로 표현",["Profit"]);
-            var layout2 = getCartesianLayout("Line2D","라인 차트로 표현",["Profit"]);
-            var layout3 = getCartesianLayout("Column3D","칼럼 3D 멀티 데이터 표현",["건수"]);
-
-
-            //            var layoutSet = [layout1, layout2, radarLayout];
-            var layoutSet = [layout1];
-
-            //            var dataSet = [chartData, chartData2, chartData3];
-            var dataSet = [chartData];
-
-            rMateChartH5.calls("chart1", {
-                "setSlideLayoutSet" : layoutSet,
-                "setSlideDataSet" : dataSet
-            });
-        }*/
-
-        rMateChartH5.create("chart1", "chartHolder1", "", "120%", "120%");
+        rMateChartH5.create("chart7", "chartHolder7", "", "100%", "100%");
 
         // 스트링 형식으로 레이아웃 정의.
-        var layoutStr =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-            +'<Options>'
-            +'<Caption text="World Top 10 - Fastest Growing Economies (2024)" />'
-            +'<SubCaption text="GDP Growth (In %)" textAlign="center" paddingBottom="35"/>'
-            +'</Options>'
-            +'<SeriesInterpolate id="ss"/>'
-            +'<Column2DChart showDataTips="true" selectionMode="multiple" columnWidthRatio="0.48">'
-            +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Country"/>'
-            +'</horizontalAxis>'
-            +'<verticalAxis>'
-            +'<LinearAxis maximum="100" interval="10"/>'
-            +'</verticalAxis>'
-            +'<series>'
-            +'<Column2DSeries labelPosition="outside" yField="GDP" displayName="GDP Growth (In %)" showDataEffect="{ss}" showValueLabels="[4]" strokeJsFunction="strokeFunction"/>'
-            +'</series>'
-            +'</Column2DChart>'
-            +'</rMateChart>';
+        function returnLayoutStr(category, yField){
+            return `
+            <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+            <Options>
+            <Caption text="" />
+            <SubCaption text="" textAlign="center" paddingBottom="0"/>
+            </Options>
+            <SeriesInterpolate id="ss"/>
+            <Column2DChart showDataTips="true" selectionMode="multiple" columnWidthRatio="0.48">
+            <horizontalAxis>
+            <CategoryAxis categoryField="${category}"/>
+            </horizontalAxis>
+            <verticalAxis>
+            <LinearAxis interval="5"/>
+            </verticalAxis>
+            <series>
+            <Column2DSeries labelPosition="outside" yField="${yField}" displayName="등록건수" showDataEffect="{ss}" showValueLabels="[40]" />
+            </series>
+            </Column2DChart>
+            </rMateChart>
+            `;
 
-        // 차트 데이터
-        var chartData = [{"Country":"SouthSudan", "GDP":20},
-            {"Country":"Libya", "GDP":30},
-            {"Country":"SierraLeone", "GDP":51.2},
-            {"Country":"Mongolia", "GDP":44.5},
-            {"Country":"Paraguay", "GDP":62.35},
-            {"Country":"TimorLeste", "GDP":84.46},
-            {"Country":"Iraq", "GDP":48.9},
-            {"Country":"Panama", "GDP":38},
-            {"Country":"Gambia", "GDP":60.5},
-            {"Country":"Mozam-bique", "GDP":40.1}];
-
-        function strokeFunction(id, index, data, values){
-            if(values[0] == "Paraguay")
-                return {
-                    color : "#000",
-                    weight : 2
-                };
         }
 
+        // 차트 데이터
+        var chartData = [{"Country":"1월", "GDP":5},
+            {"Country":"2월", "GDP":6},
+            {"Country":"3월", "GDP":8},
+            {"Country":"4월", "GDP":4},
+            {"Country":"5월", "GDP":6},
+            {"Country":"6월", "GDP":5},
+            {"Country":"7월", "GDP":4},
+            {"Country":"8월", "GDP":8},
+            {"Country":"9월", "GDP":6},
+            {"Country":"10월", "GDP":7},
+            {"Country":"11월", "GDP":3},
+            {"Country":"12월", "GDP":6}
+        ]
+
+        // 차트 데이터
+        var chartData2 = [{"Month":"1월", "CNT":5},
+            {"Month":"2월", "CNT":3},
+            {"Month":"3월", "CNT":1},
+            {"Month":"4월", "CNT":8},
+            {"Month":"5월", "CNT":9},
+            {"Month":"6월", "CNT":3},
+            {"Month":"7월", "CNT":9},
+            {"Month":"8월", "CNT":2},
+            {"Month":"9월", "CNT":5},
+            {"Month":"10월", "CNT":2},
+            {"Month":"11월", "CNT":8},
+            {"Month":"12월", "CNT":1}
+        ]
+
+
+        // 차트 데이터
+        var chartData3 = [{"Month":"1월", "CNT":5},
+            {"Month":"2월", "CNT":5},
+            {"Month":"3월", "CNT":2},
+            {"Month":"4월", "CNT":1},
+            {"Month":"5월", "CNT":3},
+            {"Month":"6월", "CNT":8},
+            {"Month":"7월", "CNT":7},
+            {"Month":"8월", "CNT":9},
+            {"Month":"9월", "CNT":7},
+            {"Month":"10월", "CNT":9},
+            {"Month":"11월", "CNT":10},
+            {"Month":"12월", "CNT":1}
+        ]
+
+
         rMateChartH5.calls("chart1", {
-            "setLayout" : layoutStr,
+            "setLayout" : returnLayoutStr('Country', 'GDP'),
             "setData" : chartData
         });
+
+        rMateChartH5.calls("chart2", {
+            "setLayout" : returnLayoutStr('Month', 'CNT'),
+            "setData" : chartData2
+        });
+
+        rMateChartH5.calls("chart3", {
+            "setLayout" : returnLayoutStr('Country', 'GDP'),
+            "setData" : chartData
+        });
+
+        rMateChartH5.calls("chart4", {
+            "setLayout" : returnLayoutStr('Month', 'CNT'),
+            "setData" : chartData2
+        });
+
+        rMateChartH5.calls("chart5", {
+            "setLayout" : returnLayoutStr('Country', 'GDP'),
+            "setData" : chartData
+        });
+
+        rMateChartH5.calls("chart6", {
+            "setLayout" : returnLayoutStr('Month', 'CNT'),
+            "setData" : chartData3
+        });
+
+        rMateChartH5.calls("chart7", {
+            "setLayout" : returnLayoutStr('Country', 'GDP'),
+            "setData" : chartData
+        });
+
 
         rMateChartH5.registerTheme(rMateChartH5.themes);
 
         function rMateChartH5ChangeTheme(theme){
             document.getElementById("chart1").setTheme(theme);
+            document.getElementById("chart2").setTheme(theme);
+            document.getElementById("chart3").setTheme(theme);
+            document.getElementById("chart4").setTheme(theme);
+            document.getElementById("chart5").setTheme(theme);
+            document.getElementById("chart6").setTheme(theme);
+            document.getElementById("chart7").setTheme(theme);
         }
 
         // ===============================================================================Rmate
 
-        let theGrid;
-
-
-        function WijmoGrid(){
-
-            let dataSet = AjaxGetBodyParameter();
-
-            let url = getServerEndpoint();
-
-            let data2 = DataLoad(url, dataSet, 'wijmo');
-
-            let columns = getColumnsType();
-
-            viewdata = new wijmo.collections.CollectionView(data2);
-            // 데이터 그리드에 바인딩
-
-            if(!theGrid){
-                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                    autoGenerateColumns: false,
-                    showMarquee: true,
-                    isReadOnly: true,
-                    columns: columns,
-                    allowSorting: 'MultiColumn',
-                    selectionMode: 'ListBox',
-                    itemsSource: viewdata
-                });
-
-                theGrid.rowHeaders.columns.splice(0, 1);
-                rMateChartH5.calls("chart1", {
-                    "setLayout" : layoutStr,
-                    "setData" : chartData
-                });
-                //rMateCall();
-            }else{
-                theGrid.columns.clear();
-                theGrid.autoGenerateColumns = false;
-                for (var i = 0; i < columns.length; i++) {
-                    var col = new wijmo.grid.Column(columns[i]);
-                    theGrid.columns.push(col);
-                }
-                theGrid.itemsSource = viewdata;
-                rMateChartH5.calls("chart1", {
-                    "setLayout" : layoutStr,
-                    "setData" : chartData
-                });
-                //rMateCall();
-            }
-
-        }
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////// Wijmo
-
-
-        document.addEventListener('DOMContentLoaded', function(){
-            initializeSelections();  //위에 산단, 발전소명 관련 함수
-            loadYearlyData();        //조회연도 항목 불러오기
-            WijmoGrid();
-        })
-
-
-        function getColumnsType(){
-            let columnType = $('#inspecType').val();
-            let columns = [];
-
-
-            switch (columnType){
-                case 'wm_inspec_month_list':
-                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
-                        { binding: 'hour', header: '시간', align: 'center', width: '*', minWidth: 200 },
-                        { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 200 }]
-                    break;
-                case 'wm_hap_list':
-                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
-                        { binding: 'checkrem', header: '결과', align: 'center', width: '*', minWidth: 200 },
-                        { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 200 }]
-                    break;
-                case 'wm_elecsafe_list':
-                    columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 200},
-                        { binding: 'checkresult', header: '결과', align: 'center', width: '*', minWidth: 200 },
-                        { binding: 'checktitle', header: '점검명', align: 'center', width: '0.5*', minWidth: 200 }]
-                    break;
-            }
-            return columns;
-        }
-
-        function getServerEndpoint(){
-            let type = $('#inspecType').val();
-            let url;
-
-            switch (type){
-                case 'wm_inspec_month_list':
-                    url = '/api/inspec_statics/RP710/read'
-                    break;
-                case 'wm_hap_list':
-                    url = '/api/inspec_statics/RP720/read'
-                    break;
-                case 'wm_elecsafe_list':
-                    url = '/api/inspec_statics/RP750/read'
-                    break;
-            }
-            return url;
-        }
 
         function searchData(){
-            let dataSet = AjaxGetBodyParameter();
-
-            let data2 = DataLoad('/api/inspec_statics/RP710/read', dataSet, 'wijmo');
-            WijmoGrid();
+            rMateChartH5.calls("chart8", {
+                "setLayout" : layoutStr,
+                "setData" : chartData_Curve
+            });
         }
 
+        var theGrid;
+        let theGrid2;
+        let theGrid3;
+        let theGrid4;
+        let theGrid5;
+        let theGrid6;
+        let theGrid7;
 
-        function AjaxGetBodyParameter(){
-            let dataSet;
-            let periodType = $('#periodType').val();
-
-            if(periodType === 'monthly'){
-                dataSet = {
-                    'searchfrdate' : $('#startDate').val(),
-                    'searchtodate' : $('#endDate').val(),
-                    'searchType' : periodType
-                };
-            }
-            else if(periodType === 'quarterly'){
+        let viewdata;
+        let viewdata2;
+        let viewdata3;
+        let viewdata4;
+        let viewdata5;
+        let viewdata6;
+        let viewdata7;
 
 
-                dataSet = {
-                    'searchYear' : $('#yearSelectTab1').val(),
-                    'searchfrQuarter' : $('#startSelect').val(),
-                    'searchtoQuarter' : $('#endSelect').val(),
-                    'searchType' : periodType
-                };
-            }
-            else if(periodType === 'halfyearly'){
+        let columns = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'hour', header: '시간', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 100 }]
 
-                dataSet = {
-                    'searchYear' : $('#yearSelectTab1').val(),
-                    'searchfrHalfYear' : $('#startSelect').val(),
-                    'searchtoHalfYear' : $('#endSelect').val(),
-                    'searchType' : periodType
+        let columns2 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '결과', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '점검자', align: 'center', width: '0.5*', minWidth: 100 }]
+
+        let columns3 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '결과', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '점검명', align: 'center', width: '0.5*', minWidth: 100 }]
+
+        let columns4 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '참가자', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '훈련명', align: 'center', width: '0.5*', minWidth: 100 }]
+
+        let columns5 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '참가자', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '훈련명', align: 'center', width: '0.5*', minWidth: 100 }]
+
+        let columns6 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '공사명', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '공사명', align: 'center', width: '0.5*', minWidth: 100 }]
+
+        let columns7 = [{ binding: 'checkarea', header: '사이트명', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'result', header: '방문목적', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'checkusr', header: '담당자', align: 'center', width: '0.5*', minWidth: 100 }]
+
+
+        function init() {
+            let data2 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+
+                    data2 = data.data;
+
                 }
-            }
-            else if(periodType === 'yearly')
-            {
-                dataSet = {
-                    'searchfrYear' : $('#startSelect').val(),
-                    'searchtoYear' : $('#endSelect').val(),
-                    'searchType' : periodType
-                };
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+            let data3 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+                    data3 = data.data;
+                }
+            })
+            viewdata2 = new wijmo.collections.CollectionView(data3);
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns2,
+                itemsSource: viewdata2
+            });
+            theGrid2.rowHeaders.columns.splice(0,1);
+
+            viewdata3 = new wijmo.collections.CollectionView(data3);
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                itemsSource: viewdata2
+            });
+            theGrid3.rowHeaders.columns.splice(0,1);
+
+            /*let data4 = [];
+            $.ajax({
+                url: '/api/inspec_report/read',
+                type: 'GET',
+                data: {
+                    'searchusr' : 'infinited',
+                    'spworkcd' : '',
+                    'spcompcd' : '',
+                    'spplancd' : ''
+                },
+                async: false,
+                success: function(data){
+                    console.log('check1',data.data);
+                    data4 = data.data;
+                }
+            })
+
+            viewdata3 = new wijmo.collections.CollectionView(data4);
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                itemsSource: viewdata3
+            });
+            theGrid3.rowHeaders.columns.splice(0,1);
+*/
 
 
-            }
-            return dataSet;
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns4,
+                itemsSource: viewdata
+            });
+            theGrid4.rowHeaders.columns.splice(0,1);
+
+            theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns5,
+                itemsSource: viewdata
+            });
+            theGrid5.rowHeaders.columns.splice(0,1);
+
+            theGrid6 = new wijmo.grid.FlexGrid('#theGrid6', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns6,
+                itemsSource: viewdata
+            });
+            theGrid6.rowHeaders.columns.splice(0,1);
+
+            theGrid7 = new wijmo.grid.FlexGrid('#theGrid7', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns7,
+                itemsSource: viewdata
+            });
+            theGrid7.rowHeaders.columns.splice(0,1);
+
         }
 
+        //=============================================================================================================
+
+
+        $(document).ready(function (){
+
+            initializeSelections();
+            init();
+            loadYearlyData();
+
+            let LoadingCheck = false;
+            $('#runrmate').click(function(){
+
+                if(LoadingCheck === false){
+                    setTimeout(function() {
+                        //$('#runf').trigger('click');
+                        let con = "chart10"
+                        rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
+
+                        let con2 = "chart20"
+                        rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars, "100%", "100%");
+
+                        let con3 = "chart30"
+                        rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars, "100%", "100%");
+
+                        let con4 = "chart40"
+                        rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars, "100%", "100%");
+
+
+                        LoadingCheck = true;
+                    }, 100); // 3000ms = 3초
+                }
+            });
+
+            /*$("#test").click(function(event){
+                let con = "chart2"
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "120%", "120%");
+            })
+            */
+        })
+
+        /***Rmate*********************************************************************************************/
+
+        let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+
+        function chartReadyHandler(id) {
+            //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            if(id === 'chart10'){
+                document.getElementById(id).setLayout(layoutStrValue("Profit2023", "2023 (%)", "Profit2024", "2024 (%)", "Month"))
+            } else if(id === 'chart20'){
+                document.getElementById(id).setLayout(layoutStrValue("CNT2023", "2023 (%)", "CNT2024", "2024 (%)", "Quarter"))
+            } else if(id === 'chart30'){
+                document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            } else if(id === 'chart40'){
+                document.getElementById(id).setLayout(layoutStrValue("Profit2023", "2023 (%)", "Profit2024", "2024 (%)", "Month"))
+            }
+            document.getElementById(id).setData(window["chartData" + id.replace(/\D/g, "")]);
+
+            document.getElementById(id).resize();
+        }
+
+        function layoutStrValue(yField, displayName, yField2, displayName2, categoryField){
+            return `
+            <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+                <Options>
+                    <Caption text=""/>
+                    <Legend defaultMouseOverAction="true"/>
+                </Options>
+                <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+                <Combination2DChart showDataTips="true">
+                    <horizontalAxis>
+                        <CategoryAxis categoryField="${categoryField}"/>
+                    </horizontalAxis>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis1" formatter="{numFmt}"/>
+                    </verticalAxis>
+                    <series>
+                        <Line2DSeries yField="${yField}" displayName="${displayName}" itemRenderer="DiamondItemRenderer">
+                            <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            <verticalAxis>
+
+                            </verticalAxis>
+                        </Line2DSeries>
+                        <Line2DSeries yField="${yField2}" displayName="${displayName2}" itemRenderer="DiamondItemRenderer">
+                            <lineStroke><Stroke color="#f99bab" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+
+                        </Line2DSeries>
+                    </series>
+                    <verticalAxisRenderers>
+                        <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+
+                   </verticalAxisRenderers>
+                </Combination2DChart>
+            </rMateChart>`;
+        }
+
+        var layoutStr30 =
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            +'<Options>'
+            +'<Caption text="" paddingBottom="0"/>'
+            +'</Options>'
+            +'<Line2DChart showDataTips="true" >'
+            +'<horizontalAxis>'
+            +'<CategoryAxis categoryField="Month"/> '
+            +'</horizontalAxis>'
+            +'<verticalAxis>'
+            +'<LinearAxis />'
+            +'</verticalAxis>'
+            +'<series>'
+            +'<Line2DSeries yField="Profit2023" displayName="Profit2023" itemRenderer="DiamondItemRenderer">'
+            +'<lineStroke><Stroke color="#ffa336" weight="2" /></lineStroke>'
+            +'<showDataEffect>'
+            +'<SeriesClip duration="1500"/>'
+            +'</showDataEffect>'
+            +'</Line2DSeries>'
+            +'</series>'
+            +'</Line2DChart>'
+            +'</rMateChart>';
+
+
+        // 차트 데이터
+        var chartData10 = [
+            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
+            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
+            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
+            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
+            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
+            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
+            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
+            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
+            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
+            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
+            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
+            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
+        ];
+
+        // 차트 데이터
+        var chartData20 = [
+            {"Quarter": "1Q", "CNT2023": 2, "CNT2024": 1},
+            {"Quarter": "2Q", "CNT2023": 5, "CNT2024": 4},
+            {"Quarter": "3Q", "CNT2023": 6, "CNT2024": 5},
+            {"Quarter": "4Q", "CNT2023": 9, "CNT2024": 8},
+
+        ];
+
+
+        // 차트 데이터
+        var chartData30 = [
+            {"Month": "2023.1", "Profit2023": 1,},
+            {"Month": "2023.2", "Profit2023": 2,},
+            {"Month": "2023.3", "Profit2023": 3,},
+            {"Month": "2023.4", "Profit2023": 4,},
+            {"Month": "2023.5", "Profit2023": 6,},
+            {"Month": "2023.6", "Profit2023": 8,},
+            {"Month": "2023.7", "Profit2023": 1,},
+            {"Month": "2023.8", "Profit2023": 2,},
+            {"Month": "2023.9", "Profit2023": 3,},
+            {"Month": "2023.10", "Profit2023": 4},
+            {"Month": "2023.11", "Profit2023": 5},
+            {"Month": "2023.12", "Profit2023": 6},
+            {"Month": "2024.1", "Profit2023": 2},
+            {"Month": "2024.2", "Profit2023": 7},
+            {"Month": "2024.3", "Profit2023": 3},
+            {"Month": "2024.4", "Profit2023": 6},
+            {"Month": "2024.5", "Profit2023": 1},
+            {"Month": "2024.6", "Profit2023": 6},
+            {"Month": "2024.7", "Profit2023": 2},
+            {"Month": "2024.8", "Profit2023": 3},
+            {"Month": "2024.9", "Profit2023": 5},
+            {"Month": "2024.10", "Profit2023": 7},
+            {"Month": "2024.11", "Profit2023": 3},
+            {"Month": "2024.12", "Profit2023": 8},
+        ];
+
+        // 차트 데이터
+        var chartData40 = [
+            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
+            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
+            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
+            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
+            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
+            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
+            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
+            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
+            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
+            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
+            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
+            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
+        ];
+        /***Rmate*********************************************************************************************/
 
 
         // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
@@ -891,8 +1045,8 @@
                 const startDate = `${selectedYear}-01`; // 선택된 연도의 1월
                 const endDate = `${selectedYear}-12`; // 선택된 연도의 12월
 
-                startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}" onchange="WijmoGrid()">`;
-                endDateContainer.innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}" onchange="WijmoGrid()">`;
+                startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
+                endDateContainer.innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
             }
             else if (periodType === "quarterly" || periodType === "halfyearly" || periodType === "yearly") {
                 const options = periodType === "quarterly" ? `
@@ -905,8 +1059,8 @@
             <option value="H2">하반기</option>
         ` : '';
 
-                startDateContainer.innerHTML = `<select id="startSelect" onchange="WijmoGrid()">${options}</select>`;
-                endDateContainer.innerHTML = `<select id="endSelect" onchange="WijmoGrid()">${options}</select>`;
+                startDateContainer.innerHTML = `<select id="startSelect" onchange="">${options}</select>`;
+                endDateContainer.innerHTML = `<select id="endSelect" onchange="">${options}</select>`;
 
                 if (periodType === "yearly") {
                     // 연도별일 경우 연도를 동적으로 로드하여 추가
@@ -973,6 +1127,9 @@
                 })
                 .catch(error => console.error('Error loading years:', error));
         }
+
+
     </script>
 </th:block>
+
 </html>
