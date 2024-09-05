@@ -10,7 +10,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>도시가스 성분 분석</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                <h2>도시가스성분분석</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                          alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내 메뉴
@@ -81,22 +81,6 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    조회연도<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="yearSelectTab1" name="yearSelectTab1">
-                                                <option>2023</option>
-                                                <option selected>2024</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
                                     <label for="periodType">
                                         기간유형<span class="eq">*</span>
                                     </label>
@@ -110,6 +94,22 @@
                                                 <option value="quarterly">분기별</option>
                                                 <option value="halfyearly">반기별</option>
                                                 <option value="yearly">연도별</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    조회연도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -140,8 +140,6 @@
                                 </dd>
                             </dl>
                         </div>
-
-
                     </div> <!--//section-top end -->
 
                     <div class="row row-2">
@@ -528,6 +526,7 @@
 
     <script type="text/javascript">
 
+
         //  select 바뀌면 hidden input 변경
         function updateSelect(selectId, hiddenInputId) {
             var selectElement = document.getElementById(selectId);
@@ -548,6 +547,19 @@
             // 기존 내용을 초기화
             // document.getElementById("startDateContainer").innerHTML = "";
             // document.getElementById("endDateContainer").innerHTML = "";
+
+            // 조회연도 필드를 가져옴
+            const yearSelectContainer = Array.from(document.querySelectorAll('dl')).find(dl => {
+                const dt = dl.querySelector('dt');
+                return dt && dt.textContent.includes("조회연도");
+            });
+
+            // 시간별, 월별일 경우 조회연도 필드를 숨기거나 표시
+            if (periodType === "hourly" || periodType === "monthly") {
+                if (yearSelectContainer) yearSelectContainer.style.display = "none"; // 조회연도 숨기기
+            } else {
+                if (yearSelectContainer) yearSelectContainer.style.display = "block"; // 조회연도 표시
+            }
 
             if (periodType === "yearly") { // 연도별 조회가 선택된 경우
                 // 조회기간 글자 숨기기
@@ -656,7 +668,7 @@
                 const endMonthSelect = createMonthSelect("endMonthTab2");
 
                 // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
-                startMonthSelect.addEventListener("change", function() {
+                startMonthSelect.addEventListener("change", function () {
                     endMonthSelect.value = startMonthSelect.value;
                 });
 
@@ -664,7 +676,6 @@
                 endDateContainerTab2.appendChild(endMonthSelect);
             }
         }
-
 
 
 
