@@ -14,7 +14,21 @@
             border: 0 !important;
             box-shadow: 0 0 !important;
         }
+        #theGrid1.wj-flexgrid .wj-cell,
+        #theGrid2.wj-flexgrid .wj-cell,
+        #theGrid3.wj-flexgrid .wj-cell,
+        #theGrid4.wj-flexgrid .wj-cell,
+        #theGrid5.wj-flexgrid .wj-cell,
+        #theGrid6.wj-flexgrid .wj-cell,
+        #theGrid7.wj-flexgrid .wj-cell,
+        #theGrid8.wj-flexgrid .wj-cell,
+        #theGrid9.wj-flexgrid .wj-cell,
+        #theGrid10.wj-flexgrid .wj-cell,
+        #theGrid11.wj-flexgrid .wj-cell,
+        #theGrid12.wj-flexgrid .wj-cell{
+            padding: 12px;
 
+        }
 
     </style>
 </head>
@@ -75,7 +89,7 @@
                     <div class="section-top">
                         <div class="search-wrap">
                             <!-- 검색 조건 코드 -->
-                            <dl>
+                            <dl id="division-wrapper">
                                 <dt><label for="division">구분<span class="eq">*</span></label></dt>
                                 <dd>
                                     <select id="division" class="w120">
@@ -90,27 +104,52 @@
                                 </dd>
                             </dl>
                             <dl>
-                                <dt><label for="periodType">검색조건<span class="eq">*</span></label></dt>
+                                <dt>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
+                                    </label>
+                                </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
                                             <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
-                                                <option value="byday" selected>일별</option>
-                                                <option value="byweek">주간별</option>
-                                                <option value="bymonth">월별</option>
-                                                <option value="byyear">연도별</option>
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
                                             </select>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
                             <dl>
-                                <dt>조회기간<span class="eq">*</span></dt>
+                                <dt>
+                                    조회연도<span class="eq">*</span>
+                                </dt>
                                 <dd>
                                     <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainer">
                                         <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
                                         </li>
                                         <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-05">
                                         </li>
                                     </ul>
                                 </dd>
@@ -378,9 +417,18 @@
 
         }
 
+        // 탭 버튼 클릭 이벤트
         $('.tab-button').click(function () {
+            var targetTab = $(this).attr('href'); // 클릭한 탭의 href를 가져옴
+
             setTimeout(function () {
-                createTab2Charts();
+                if (targetTab === '#tab1') {
+                    createTab1Charts(); // 탭 1 클릭 시 차트 생성
+                    $('#division-wrapper').show();
+                } else if (targetTab === '#tab2') {
+                    createTab2Charts(); // 탭 2 클릭 시 차트 생성
+                    $('#division-wrapper').hide();
+                }
             }, 100);
         });
 
@@ -775,49 +823,97 @@
             theGrid7.rowHeaders.columns.splice(0, 1);
         }
 
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
         // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
         function updatePeriodInputs() {
             const periodType = document.getElementById("periodType").value;
+            const selectedYear = document.getElementById("yearSelectTab1").value; // 선택된 조회연도 가져오기
+            const dateBoxContainer = document.getElementById("dateBoxContainer");
             const startDateContainer = document.getElementById("startDateContainer");
             const endDateContainer = document.getElementById("endDateContainer");
-            const currentYear = new Date().getFullYear();
+            const periodLabel = dateBoxContainer.closest('dl').querySelector('dt'); // <dl> 요소를 가져옴
+            const periodDl = dateBoxContainer.closest('dl');
 
             // 기존 내용을 초기화
-            startDateContainer.innerHTML = "";
-            endDateContainer.innerHTML = "";
+            // document.getElementById("startDateContainer").innerHTML = "";
+            // document.getElementById("endDateContainer").innerHTML = "";
 
-            if (periodType === "byday") { // 월별 조회가 선택된 경우
-                const startDate = `${currentYear}-01-01`; // 선택된 연도의 1월
-                const endDate = `${currentYear}-12-31`; // 선택된 연도의 12월
+            // 조회연도 필드를 가져옴
+            const yearSelectContainer = Array.from(document.querySelectorAll('dl')).find(dl => {
+                const dt = dl.querySelector('dt');
+                return dt && dt.textContent.includes("조회연도");
+            });
 
-                startDateContainer.innerHTML = `<input type="date" id="startDate" name="startDate" value="${startDate}">`;
-                endDateContainer.innerHTML = `<input type="date" id="endDate" name="endDate" value="${endDate}">`;
-            } else if (periodType === "byweek") { // 주간별 조회가 선택된 경우
-                const firstDayOfYear = new Date(currentYear, 0, 1);
-                const lastWeekEndDate = getLastDayOfLastISOWeek(currentYear);
+            // 시간별, 월별일 경우 조회연도 필드를 숨기거나 표시
+            if (periodType === "hourly" || periodType === "monthly") {
+                if (yearSelectContainer) yearSelectContainer.style.display = "none"; // 조회연도 숨기기
+            } else {
+                if (yearSelectContainer) yearSelectContainer.style.display = "block"; // 조회연도 표시
+            }
 
-                const firstWeek = getISOWeek(firstDayOfYear).toString().padStart(2, '0');
-                const startDate = `${currentYear}-W${firstWeek}`;
+            if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                if (periodDl) periodDl.style.display = "none";
+                // 조회기간 글자 숨기기
+                periodLabel.style.visibility = "hidden";
+                // startDate와 endDate input 요소 숨기기
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+            } else {
+                // 조회기간 글자 보이기
+                if (periodDl) periodDl.style.display = "block"; // 조회기간 전체 dl 보이기
+                periodLabel.style.visibility = "visible";
+                // startDate와 endDate input 요소 보이기
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
 
-                const endDate = `${lastWeekEndDate.getFullYear()}-W${getISOWeek(lastWeekEndDate).toString().padStart(2, '0')}`;
+                // 각 기간유형에 맞는 요소 설정
+                if (periodType === "hourly") {
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
 
-                startDateContainer.innerHTML = `<input type="week" id="startDate" name="startDate" value="${startDate}">`;
-                endDateContainer.innerHTML = `<input type="week" id="endDate" name="endDate" value="${endDate}">`;
-            } else if (periodType === "bymonth") { // 월별 조회가 선택된 경우
-                const startDate = `${currentYear}-01`; // 선택된 연도의 1월
-                const endDate = `${currentYear}-12`; // 선택된 연도의 12월
+                    document.getElementById("startDateContainer").innerHTML = `
+                <input type="date" id="startDate" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
 
-                startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
-                endDateContainer.innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
-            } else if (periodType === "byyear") { // 연도별 조회가 선택된 경우
-                let yearOptions = '';
-                for (let i = 0; i < 5; i++) {
-                    const year = currentYear - i;
-                    yearOptions += `<option value="${year}">${year}년</option>`;
+                    document.getElementById("endDateContainer").innerHTML = `
+                <select id="startHour" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="endHour" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    document.getElementById("startDateContainer").innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
+                    document.getElementById("endDateContainer").innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startQuarter">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endQuarter">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startHalf">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endHalf">${options}</select>`;
                 }
-
-                startDateContainer.innerHTML = `<select id="startYear" name="startYear" style="width: 100px">${yearOptions}</select>`;
-                endDateContainer.innerHTML = `<select id="endYear" name="endYear" style="width: 100px">${yearOptions}</select>`;
             }
         }
 
@@ -833,11 +929,12 @@
             return 1 + Math.ceil((firstThursday - target) / 604800000);
         }
 
-        function getLastDayOfLastISOWeek(year) {
-            const date = new Date(year, 11, 28); // 12월 28일은 항상 마지막 주에 포함됩니다.
-            const day = date.getDay() || 7;
-            if (day !== 7) date.setHours(24 * (7 - day)); // 일요일로 이동
-            return date;
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
         }
 
         // 스트링 형식으로 레이아웃 정의.

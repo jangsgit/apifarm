@@ -88,6 +88,7 @@ $(document).ready(function () {
         "/gui/wm_gasbill_list/default",
         "/gui/wm_fuel_management/default",
         "/gui/wm_gasele_analysis/default",
+        "/gui/wm_robot_analysis/default",
 
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
         "/gui/another_exception"
