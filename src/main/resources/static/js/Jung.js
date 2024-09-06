@@ -129,6 +129,7 @@ function getCurrentYear() {
 // 날짜 초기화 함수
 function setDefaultDates(startDateId, endDateId) {
 
+    // 순회점검 현황에서 더블클릭해서 새창으로 띄운다음 그 날짜 설정하기 위해서
     let checkdt = $('#checkdtParam').val().trim();
 
     if(checkdt !== null && checkdt !== ''){

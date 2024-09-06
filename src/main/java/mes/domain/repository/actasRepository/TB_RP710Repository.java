@@ -22,12 +22,20 @@ public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> 
     List<String> findDistinctYears();
 
     @Query(value = "SELECT t.checkno FROM TB_RP710 t WHERE t.checkdt = :checkdtconvertvalue ORDER BY t.checkno DESC limit 1", nativeQuery = true)
-  Optional<String> findMaxChecknoByCheckdt(@Param("checkdtconvertvalue") String checkdtconvertvalue);
+    Optional<String> findMaxChecknoByCheckdt(@Param("checkdtconvertvalue") String checkdtconvertvalue);
 
-  void deleteBySpuncode(String spuncode);
+    void deleteBySpuncode(String spuncode);
 
-  @Modifying
-  @Query("UPDATE TB_RP710 t SET t.flag = 'Y' WHERE t.spuncode = :spuncode")
-  void updateFlagToYBySpuncode(@Param("spuncode") String spuncode);
+    @Modifying
+    @Query("UPDATE TB_RP710 t SET t.flag = 'Y' WHERE t.spuncode = :spuncode")
+    void updateFlagToYBySpuncode(@Param("spuncode") String spuncode);
 
+    @Query("SELECT DISTINCT t.checkarea FROM TB_RP710 t WHERE LOWER(t.checkarea) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findCheckareasByQuery(@Param("query") String query);
+
+    @Query("SELECT DISTINCT t.supplier FROM TB_RP710 t WHERE LOWER(t.supplier) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findSuppliersByQuery(@Param("query") String query);
+
+    @Query("SELECT DISTINCT t.checkusr FROM TB_RP710 t WHERE LOWER(t.checkusr) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<String> findCheckusrsByQuery(@Param("query") String query);
 }

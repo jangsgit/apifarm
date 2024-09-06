@@ -200,6 +200,7 @@
                                 </th>
                                 <td>
                                     <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="도급계약명">
+                                    <ul id="suggestions-supplier" class="suggestions-list"></ul>
                                 </td>
                                 <th>
                                     <label for="checkdt">
@@ -237,6 +238,7 @@
                                 <td>
                                     <div class="input-btnbox">
                                         <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="40">
+                                        <ul id="suggestions-checkusr" class="suggestions-list" style="top:100%"></ul>
                                         <button onclick="addInputField(this)" class="mg-l8">점검자 추가</button>
                                     </div>
                                 </td>
@@ -247,6 +249,7 @@
                                 </th>
                                 <td>
                                     <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="점검장소">
+                                    <ul id="suggestions-checkarea" class="suggestions-list"></ul>
                                 </td>
                             </tr>
 
@@ -1411,6 +1414,24 @@
                     AjaxUtil.postAsyncData('/api/inspec_report/delete', data, fnSuccess);
                 })
             })
+
+            // 자동완성
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
+            const autoCompleteFields = [
+                { inputId: 'checkarea', suggestionId: 'suggestions-checkarea' },
+                { inputId: 'supplier', suggestionId: 'suggestions-supplier' },
+                { inputId: 'checkusr', suggestionId: 'suggestions-checkusr' },
+            ];
+            let apiUrl = '/api/inspec_report/autocomplete';
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, apiUrl, field.suggestionId);
+            });
+
         });
     </script>
 </th:block>

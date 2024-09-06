@@ -685,7 +685,11 @@ public class InspecController {
         }
     }
 
-
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<String>> autocomplete(@RequestParam String query, @RequestParam String field) {
+        List<String> suggestions = inspecService.getSuggestions(query, field);
+        return ResponseEntity.ok(suggestions);
+    }
 
 
 

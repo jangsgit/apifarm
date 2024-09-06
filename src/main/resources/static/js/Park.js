@@ -34,6 +34,7 @@ function hideLoadingBar() {
 }
 
 
+let checkusrCounter = 1; // ID 카운터 초기값 설정
 function addInputField(button) {
     // 새로운 td 요소를 생성합니다.
     var newTd = document.createElement('div');
@@ -46,6 +47,12 @@ function addInputField(button) {
     newInput.className = 'wp100 addusr';
     newInput.placeholder = '점검자';
     newInput.name = 'checkusr';
+    newInput.setAttribute('autocomplete', 'off');
+
+    // 동적으로 생성된 입력 필드에 고유한 ID를 부여합니다.
+    const uniqueId = `checkusr-${checkusrCounter}`;
+    newInput.id = uniqueId;
+    checkusrCounter++; // 카운터 증가
 
     newInput.maxLength = 5;
 
@@ -63,11 +70,19 @@ function addInputField(button) {
     newTd.appendChild(newInput);
     newTd.appendChild(deleteButton);
 
+    // 담을 ul 요소를 생성합니다.
+    const nameSuggestions = document.createElement('ul');
+    const nameSuggestionId = `suggestions-checkusr-${checkusrCounter - 1}`;
+    nameSuggestions.id = nameSuggestionId;
+    nameSuggestions.classList.add('suggestions-list');
+
     // 클릭된 버튼의 부모 td 요소를 찾습니다.
     var parentTd = button.parentElement;
 
     // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
     parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+
+    initializeAutoComplete(uniqueId, '/api/inspec_report/autocomplete', nameSuggestionId);
 }
 
 

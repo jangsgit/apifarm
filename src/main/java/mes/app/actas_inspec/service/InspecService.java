@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -361,5 +362,31 @@ public class InspecService {
         result.put("filelist", filelist);
         return result;
 
+    }
+
+    @Transactional
+    public List<String> getSuggestions(String query, String field) {
+
+        List<String> rawResults = switch (field) {
+            case "supplier" -> tb_rp710Repository.findSuppliersByQuery(query);
+            case "checkarea" -> tb_rp710Repository.findCheckareasByQuery(query);
+            case "checkusr" -> tb_rp710Repository.findCheckusrsByQuery(query);
+            default -> new ArrayList<>();
+        };
+
+        // checkusr 필드일 경우에만 쉼표로 분리하고 중복을 제거하는 로직을 적용
+        if ("checkusr".equals(field)) {
+            return rawResults.stream()
+                    .flatMap(result -> Arrays.stream(result.split(",")))  // 쉼표로 분리
+                    .map(String::trim)  // 각 이름의 앞뒤 공백을 제거
+                    .filter(name -> name.toLowerCase().contains(query.toLowerCase()))  // 검색어를 포함한 결과만 필터링
+                    .distinct()  // 중복된 이름 제거
+                    .collect(Collectors.toList());  // 최종 리스트로 변환
+        } else {
+            // 다른 필드일 경우 기존 결과 반환 (필터링 없이 그대로)
+            return rawResults.stream()
+                    .filter(result -> result.toLowerCase().contains(query.toLowerCase()))  // 검색어를 포함한 결과만 필터링
+                    .collect(Collectors.toList());
+        }
     }
 }
