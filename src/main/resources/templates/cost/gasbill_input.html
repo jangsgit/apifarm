@@ -595,7 +595,6 @@
                             <col class="wp20">
                             <col class="wp80">
                         </colgroup>
-                        <input type="hidden" id="popup-spuncode">
                         <tbody>
                         <tr>
                             <th>
@@ -787,7 +786,7 @@
                             </verticalAxis>
                         </Line2DSeries>
                         <Line2DSeries yField="SMUSEHQTY" displayName="사용열량" itemRenderer="DiamondItemRenderer">
-                            <lineStroke><Stroke color="#f99bab" weight="2"/></lineStroke>
+                            <lineStroke><Stroke color='#909BFF' weight="2"/></lineStroke>
                             <showDataEffect><SeriesInterpolate/></showDataEffect>
                             <verticalAxis>
                                 <LinearAxis id="vAxis2" interval="10" maximum="100"/>  <!-- 오른쪽 축 최대값 100 -->
@@ -847,7 +846,6 @@
         var viewdata;
         let csrfToken = $("[name=_csrf]").val();
 
-        const modal2 = document.querySelector('.modal999');
         const modalOpen = document.querySelector('.modal_btn');
         const modalClose = document.querySelector('.close_btn');
 
@@ -859,6 +857,8 @@
         const dateValue2 = `${year2}-${month2}-${day2}`;
         dateInput2.value = dateValue2;
 
+
+        // 팝업 함수
         function closePopup() {
 
             const modal = document.querySelector('.modal');
@@ -875,37 +875,9 @@
             }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
-        function closePopup2() {
-
-            const modal999 = document.querySelector('.modal999');
-            const modalContent999 = document.querySelector('.popup-wrapper999');
-
-            // 애니메이션을 위한 클래스 제거
-            modal999.classList.remove('show');
-            modalContent999.classList.remove('show');
-
-            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
-            setTimeout(() => {
-                modal999.style.display = 'none';
-                modalContent999.style.display = 'none';
-            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
-        }
-
         function showPopup() {
-
-            // let item = theGrid.rows[rowIndex].dataItem;
             let fileNameDisplay = document.getElementById('fileNameDisplay');
 
-            // $('#popup-date').val(item.checkdt);
-            // $('#popup-checkusr').val(item.checkusr);
-            // $('#popup-checkarea').val(item.checkarea);
-            // $('#popup-spuncode').val(item.spuncode);
-
-            // if(item.fileornm){
-            //     fileNameDisplay.textContent = item.fileornm;
-            // }else{
-            //     fileNameDisplay.textContent = 'Maxium upload file size 1GiB';
-            // }
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');
 
@@ -920,26 +892,8 @@
             });
         }
 
-        function showPopup2() {
 
-
-            let fileNameDisplay = document.getElementById('fileNameDisplay');
-
-            const modal999 = document.querySelector('.modal999');
-            const modalContent999 = document.querySelector('.popup-wrapper999');
-
-            // 모달과 콘텐츠를 표시
-            modal999.style.display = 'block';
-            modalContent999.style.display = 'block';
-
-            // 애니메이션을 위한 클래스 추가
-            requestAnimationFrame(() => {
-                modal999.classList.add('show');
-                modalContent999.classList.add('show');
-            });
-        }
-
-
+        // 파일 업로드 함수
         function uploadFile() {
             const fileInput = document.getElementById('fileInput2');
             const file = fileInput.files[0];
@@ -962,15 +916,17 @@
                     if (!response.ok) {
                         throw new Error("파일 업로드 실패");
                     }
-                    return response.text();
+                    return response.json();  // 서버에서 JSON 응답을 기대
                 })
                 .then(result => {
-                    alert("파일이 성공적으로 업로드되었습니다.");
-                    // 추출된 텍스트를 두 번째 팝업에 표시하는 로직
-                    populateTextInModal(result);
+                    if (result.success) {
+                        alert("파일이 성공적으로 업로드되었습니다.");
+                    } else {
+                        alert(result.message);  // 오류 메시지 표시
+                    }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('오류:', error);
                     alert(`파일 처리 중 오류가 발생했습니다: ${error.message}`);
                 });
         }
