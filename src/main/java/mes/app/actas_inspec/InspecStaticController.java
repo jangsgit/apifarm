@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/inspec_statics")
@@ -40,7 +40,7 @@ public class InspecStaticController {
                                 @RequestParam(value = "searchtoYear", required = false) String searchtoYear,
                                 @RequestParam(value = "searchType", required = true) String searchType,
                                 @RequestParam(value = "wm_flag", required = true) String wm_flag
-    ){
+    ) throws ParseException {
 
         AjaxResult result = new AjaxResult();
 
@@ -59,7 +59,8 @@ public class InspecStaticController {
                 if(wm_flag.equals("wm_inspec_month_list")){
                     items = inspecStaticService.getRP710List(startdate, endDate);
 
-
+                    result.data = items;
+                    result.subData = this.getRmaTeGraphData_Month(items);
 
                 }else if(wm_flag.equals("wm_hap_input")){
                     items = inspecStaticService.getRP720List(startdate, endDate);
@@ -115,7 +116,6 @@ public class InspecStaticController {
 
 
         result.success = true;
-        result.data = items;
         return result;
     }
 
@@ -327,6 +327,24 @@ public class InspecStaticController {
     }
 
 
+    private Map<String, Integer> getRmaTeGraphData_Month(List<Map<String, Object>> items) throws ParseException {
+
+        Map<String, Integer> countByMonth = new HashMap<>();
+
+        SimpleDateFormat yearMonthFormat = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        for(Map<String, Object> item : items){
+            String hourStr = (String) item.get("hour");
+
+            Date hourDate = inputFormat.parse(hourStr);
+            String yearMonth = yearMonthFormat.format(hourDate);
+
+            countByMonth.put(yearMonth, countByMonth.getOrDefault(yearMonth, 0)+1);
+
+        }
+        return countByMonth;
+    }
 
     private String getHalfYearEndDate(String year, String halfyear){
 
