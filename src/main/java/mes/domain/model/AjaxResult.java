@@ -9,7 +9,7 @@ public class AjaxResult {
 	public boolean success = true;
 	public String message = "";
 	public Object data = null;
-	public Object subData = null;
+//	public Object subData = null;
 	public String code="";
 	public String StateName= "";
 	

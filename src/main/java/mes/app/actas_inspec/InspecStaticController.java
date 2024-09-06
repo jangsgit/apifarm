@@ -60,7 +60,7 @@ public class InspecStaticController {
                     items = inspecStaticService.getRP710List(startdate, endDate);
 
                     result.data = items;
-                    result.subData = this.getRmaTeGraphData_Month(items);
+//                    result.subData = this.getRmaTeGraphData_Month(items);
 
                 }else if(wm_flag.equals("wm_hap_input")){
                     items = inspecStaticService.getRP720List(startdate, endDate);
