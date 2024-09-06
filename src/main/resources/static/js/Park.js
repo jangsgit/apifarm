@@ -377,7 +377,7 @@ function fetchAndPopulateData(userid, dataListId, active) {
 
 
 //서버에서 데이터 가져오기  (type이 rmate인것이랑 wijmo랑 succ함수 다름.)
-function DataLoad(url, dataSet, type){
+function DataLoad(url, dataSet){
 
     let data2;
 
@@ -388,21 +388,7 @@ function DataLoad(url, dataSet, type){
         async: false,
         success: function(data){
 
-            if(type === 'wijmo'){
-                let DataLength = 10 - data.data.length;
-
-                if(data.data.length < 10){
-
-                    for(let i=0; i < DataLength; i++){
-                        data.data.push('empty');
-                    }
-                }
                 data2 = data.data;
-            }
-            else if(type === 'rmate'){
-                data2 = data.data;
-
-            }
 
         }
     })

@@ -65,7 +65,7 @@
         </div>
         <div class="tab-wrap" id="jqueryTabs">
             <ul class="tab-links">
-                <li><a href="#tab1" title="기간별 조회" class="tab-button">기간별 조회</a></li>
+                <li><a href="#tab1" title="기간별 조회" class="tab-button" id="runWijmo">기간별 조회</a></li>
                 <li><a href="#tab2" title="기간별 대비" class="tab-button" id="runrmate">기간별 대비</a></li>
             </ul>
             <div class="tab-contents" style="height: 1400px">
@@ -179,7 +179,7 @@
                                     <!-- tab3 -->
                                     <div class="tab-item-sub" id="tab3">
                                         <div>
-                                            <div id="chartHolder"
+                                            <div id="chartHolder1"
                                                  style="width: 100%; height: 235px; padding-top: 5px"></div>
                                         </div>
                                     </div>
@@ -377,14 +377,15 @@
                         <div class="search-wrap" style="margin-top: 15px">
                             <dl>
                                 <dt>
-                                    조회연도<span class="eq">*</span>
+                                    조회기간<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="yearSelectTab2" name="yearSelectTab2">
-                                                <!-- 연도 목록이 동적으로 추가될 것입니다 -->
-                                            </select>
+                                    <ul class="date-box" id="dateBoxContainer2">
+                                        <li id="startDateContainer2">
+                                            <input type="month" id="startDate2" name="startDate2" value="2024-01">
+                                        </li>
+                                        <li id="endDateContainer2">
+                                            <input type="month" id="endDate2" name="endDate2" value="2024-12">
                                         </li>
                                     </ul>
                                 </dd>
@@ -394,14 +395,12 @@
 
                             <dl>
                                 <dt>
-                                    <label for="comparisonType" style="visibility: hidden">
+                                    <label style="visibility: hidden">
                                         비교 유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
-
-
                                         <li>
                                             <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchData()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
@@ -417,7 +416,7 @@
                         <div class="col wp50" style="margin-right: 15px">
                             <section class="tab-section section_top" style="height: 340px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
-                                    <h3>YoY Energy Production Comparison</h3>
+                                    <h3>YoY</h3>
 
                                 </div>
                                 <div class="tab-contents">
@@ -436,7 +435,7 @@
                         <div class="col wp50">
                             <section class="tab-section section_top" style="height: 340px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
-                                    <h3>QoQ Energy Production Comparison</h3>
+                                    <h3>QoQ</h3>
 
                                 </div>
                                 <div class="tab-contents">
@@ -458,7 +457,7 @@
                         <div class="col wp50" style="margin-right: 15px">
                             <section class="tab-section section_top" style="height: 340px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
-                                    <h3>MoM Energy Production</h3>
+                                    <h3>MoM</h3>
 
                                 </div>
                                 <div class="tab-contents">
@@ -478,7 +477,7 @@
                         <div class="col wp50">
                             <section class="tab-section section_top" style="height: 340px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
-                                    <h3>YTD Energy Production Comparison</h3>
+                                    <h3>YTD</h3>
 
                                 </div>
                                 <div class="tab-contents">
@@ -513,19 +512,6 @@
 
     <script type="text/javascript">
 
-        rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
-
-        rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
-
-        rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
-
-        rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
-
-        rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
-
-        rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
-
-        rMateChartH5.create("chart7", "chartHolder7", "", "100%", "100%");
 
         // 스트링 형식으로 레이아웃 정의.
         function returnLayoutStr(category, yField){
@@ -544,7 +530,7 @@
             <LinearAxis interval="5"/>
             </verticalAxis>
             <series>
-            <Column2DSeries labelPosition="outside" yField="${yField}" displayName="등록건수" showDataEffect="{ss}" showValueLabels="[40]" />
+            <Column2DSeries labelPosition="outside" yField="${yField}" displayName="등록건수" showDataEffect="{ss}" showValueLabels="[40]" fill="#62b2fd"/>
             </series>
             </Column2DChart>
             </rMateChart>
@@ -554,6 +540,20 @@
 
         // 차트 데이터
         var chartData = [{"Country":"1월", "GDP":5},
+            {"Country":"2월", "GDP":6},
+            {"Country":"3월", "GDP":8},
+            {"Country":"4월", "GDP":4},
+            {"Country":"5월", "GDP":6},
+            {"Country":"6월", "GDP":5},
+            {"Country":"7월", "GDP":4},
+            {"Country":"8월", "GDP":8},
+            {"Country":"9월", "GDP":6},
+            {"Country":"10월", "GDP":7},
+            {"Country":"11월", "GDP":3},
+            {"Country":"12월", "GDP":6}
+        ]
+
+        var chartData1 = [{"Country":"1월", "GDP":5},
             {"Country":"2월", "GDP":6},
             {"Country":"3월", "GDP":8},
             {"Country":"4월", "GDP":4},
@@ -598,64 +598,9 @@
             {"Month":"12월", "CNT":1}
         ]
 
-
-        rMateChartH5.calls("chart1", {
-            "setLayout" : returnLayoutStr('Country', 'GDP'),
-            "setData" : chartData
-        });
-
-        rMateChartH5.calls("chart2", {
-            "setLayout" : returnLayoutStr('Month', 'CNT'),
-            "setData" : chartData2
-        });
-
-        rMateChartH5.calls("chart3", {
-            "setLayout" : returnLayoutStr('Country', 'GDP'),
-            "setData" : chartData
-        });
-
-        rMateChartH5.calls("chart4", {
-            "setLayout" : returnLayoutStr('Month', 'CNT'),
-            "setData" : chartData2
-        });
-
-        rMateChartH5.calls("chart5", {
-            "setLayout" : returnLayoutStr('Country', 'GDP'),
-            "setData" : chartData
-        });
-
-        rMateChartH5.calls("chart6", {
-            "setLayout" : returnLayoutStr('Month', 'CNT'),
-            "setData" : chartData3
-        });
-
-        rMateChartH5.calls("chart7", {
-            "setLayout" : returnLayoutStr('Country', 'GDP'),
-            "setData" : chartData
-        });
-
-
-        rMateChartH5.registerTheme(rMateChartH5.themes);
-
-        function rMateChartH5ChangeTheme(theme){
-            document.getElementById("chart1").setTheme(theme);
-            document.getElementById("chart2").setTheme(theme);
-            document.getElementById("chart3").setTheme(theme);
-            document.getElementById("chart4").setTheme(theme);
-            document.getElementById("chart5").setTheme(theme);
-            document.getElementById("chart6").setTheme(theme);
-            document.getElementById("chart7").setTheme(theme);
-        }
-
         // ===============================================================================Rmate
 
 
-        function searchData(){
-            rMateChartH5.calls("chart8", {
-                "setLayout" : layoutStr,
-                "setData" : chartData_Curve
-            });
-        }
 
         var theGrid;
         let theGrid2;
@@ -702,6 +647,17 @@
             { binding: 'result', header: '방문목적', align: 'center', width: '*', minWidth: 100 },
             { binding: 'checkusr', header: '담당자', align: 'center', width: '0.5*', minWidth: 100 }]
 
+
+        function searchData(){
+            let data2= [];
+
+            let dataSet = AjaxGetBodyParameter('wm_inspec_month_list');
+
+
+            data2 = DataLoad('/api/inspec_statics/read', dataSet);
+            console.log('체크용: ', data2);
+
+        }
 
         function init() {
             let data2 = [];
@@ -833,16 +789,126 @@
         //=============================================================================================================
 
 
+        function AjaxGetBodyParameter(wm_flag){
+            let dataSet;
+            let periodType = $('#periodType').val();
+
+            if(periodType === 'monthly'){
+                dataSet = {
+                    'searchfrdate' : $('#startDate').val(),
+                    'searchtodate' : $('#endDate').val(),
+                    'searchType' : periodType,
+                    'wm_flag' : wm_flag
+                };
+            }
+            else if(periodType === 'quarterly'){
+
+
+                dataSet = {
+                    'searchYear' : $('#yearSelectTab1').val(),
+                    'searchfrQuarter' : $('#startSelect').val(),
+                    'searchtoQuarter' : $('#endSelect').val(),
+                    'searchType' : periodType,
+                    'wm_flag' : wm_flag
+                };
+            }
+            else if(periodType === 'halfyearly'){
+
+                dataSet = {
+                    'searchYear' : $('#yearSelectTab1').val(),
+                    'searchfrHalfYear' : $('#startSelect').val(),
+                    'searchtoHalfYear' : $('#endSelect').val(),
+                    'searchType' : periodType,
+                    'wm_flag' : wm_flag
+                }
+            }
+            else if(periodType === 'yearly')
+            {
+                dataSet = {
+                    'searchfrYear' : $('#startSelect').val(),
+                    'searchtoYear' : $('#endSelect').val(),
+                    'searchType' : periodType,
+                    'wm_flag' : wm_flag
+                };
+            }
+            return dataSet;
+        }
+
+
+        document.addEventListener('fullscreenchange', function() {
+            if (document.fullscreenElement) {
+                // 전체 화면 모드로 진입했을 때
+                console.log('전체 화면 모드로 진입');
+            } else {
+                // 전체 화면 모드에서 나왔을 때
+                console.log('전체 화면 모드 종료');
+            }
+        });
+
         $(document).ready(function (){
 
             initializeSelections();
             init();
             loadYearlyData();
 
+            let con = "chart1"
+            rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            let con2 = "chart2"
+            rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            let con3 = "chart3"
+            rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            let con4 = "chart4"
+            rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            let con5 = "chart5"
+            rMateChartH5.create(con5, "chartHolder" + con5.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            let con6 = "chart6"
+            rMateChartH5.create(con6, "chartHolder" + con6.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+
+            let con7 = "chart7"
+            rMateChartH5.create(con7, "chartHolder" + con7.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+
             let LoadingCheck = false;
+
+            $('#runWijmo').click(function(){
+                setTimeout(function(){
+                    let con = "chart1"
+                    rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+                    let con2 = "chart2"
+                    rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+                    let con3 = "chart3"
+                    rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+                    let con4 = "chart4"
+                    rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+                    let con5 = "chart5"
+                    rMateChartH5.create(con5, "chartHolder" + con5.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+                    let con6 = "chart6"
+                    rMateChartH5.create(con6, "chartHolder" + con6.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+
+                    let con7 = "chart7"
+                    rMateChartH5.create(con7, "chartHolder" + con7.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+
+
+                }, 100);
+            })
+
+
             $('#runrmate').click(function(){
 
-                if(LoadingCheck === false){
+
                     setTimeout(function() {
                         //$('#runf').trigger('click');
                         let con = "chart10"
@@ -860,7 +926,7 @@
 
                         LoadingCheck = true;
                     }, 100); // 3000ms = 3초
-                }
+
             });
 
             /*$("#test").click(function(event){
@@ -873,6 +939,9 @@
         /***Rmate*********************************************************************************************/
 
         let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+        let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler2";
+
+
 
         function chartReadyHandler(id) {
             //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
@@ -886,6 +955,35 @@
                 document.getElementById(id).setLayout(layoutStrValue("Profit2023", "2023 (%)", "Profit2024", "2024 (%)", "Month"))
             }
             document.getElementById(id).setData(window["chartData" + id.replace(/\D/g, "")]);
+
+            document.getElementById(id).resize();
+        }
+
+        function chartReadyHandler2(id) {
+            //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            if(id === 'chart1'){
+                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
+                document.getElementById(id).setData(chartData1);
+            } else if(id === 'chart2'){
+                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
+                document.getElementById(id).setData(chartData2);
+            } else if(id === 'chart3'){
+                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
+                document.getElementById(id).setData(chartData);
+            } else if(id === 'chart4'){
+                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
+                document.getElementById(id).setData(chartData2);
+            } else if(id === 'chart5'){
+                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
+                document.getElementById(id).setData(chartData);
+            } else if(id === 'chart6'){
+                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
+                document.getElementById(id).setData(chartData3);
+            } else if(id === 'chart7'){
+                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
+                document.getElementById(id).setData(chartData);
+            }
+
 
             document.getElementById(id).resize();
         }
