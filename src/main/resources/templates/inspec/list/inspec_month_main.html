@@ -616,7 +616,7 @@
             updateTabLink('spuncode');
             updateFileCount();
             resetFileInput($('.fileInput'));
-
+            resetAddedInputFields();
         }
         // 파일 인풋 초기화
         function resetFileInput($input) {
@@ -717,7 +717,6 @@
         function init() {
 
             initializeSelections();
-
 
             let data2 = [];
 
@@ -1198,6 +1197,116 @@
 
         let fnFailure = function(){
             Alert.alert('', '에러가발생하였습니다.');
+        }
+
+        let checkusrCounter = 1; // ID 카운터 초기값 설정
+        function addInputField(button) {
+            // 새로운 div 요소를 생성합니다.
+            var newTd = document.createElement('div');
+            newTd.className = 'input-btnbox';
+            newTd.name = 'newusrbox';
+
+            // 새로운 input 요소를 생성합니다.
+            var newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.className = 'wp100 addusr';
+            newInput.placeholder = '점검자';
+            newInput.name = 'checkusr';
+            newInput.setAttribute('autocomplete', 'off');
+
+            // 동적으로 생성된 입력 필드에 고유한 ID를 부여합니다.
+            const uniqueId = `checkusr-${checkusrCounter}`;
+            newInput.id = uniqueId;
+            newInput.maxLength = 5;
+
+            // clear 버튼과 input을 감쌀 div 요소 생성
+            const inputClearDiv = document.createElement('div');
+            inputClearDiv.classList.add('input-clear');
+
+            newInput.style.marginRight = '4px'; // input의 오른쪽에 마진 추가
+
+            // Create the clear button (×)
+            const clearButton = document.createElement('span');
+            clearButton.classList.add('btn-clear');
+            clearButton.innerHTML = '×';
+            clearButton.style.display = 'none';  // Initially hidden
+
+            // Clear input value when clear button is clicked
+            clearButton.onclick = () => {
+                newInput.value = '';  // Clear the input field
+                clearButton.style.display = 'none';  // Hide clear button
+                newInput.focus();     // Re-focus on the input field
+            };
+
+            // Show or hide the clear button based on input value
+            newInput.addEventListener('input', () => {
+                clearButton.style.display = newInput.value ? 'inline' : 'none';  // Show when there's input
+            });
+
+            // Append input field and clear button to the div
+            inputClearDiv.appendChild(newInput);
+            inputClearDiv.appendChild(clearButton);
+
+            // 삭제 버튼을 생성합니다.
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = '점검자 삭제';
+            deleteButton.onclick = function () {
+                deleteInputField(newTd); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+            };
+            deleteButton.style.marginLeft = '8px';
+            deleteButton.style.color = 'red';
+            deleteButton.style.marginTop = '5px';
+
+            // 새로운 td에 inputClearDiv와 삭제 버튼을 추가합니다.
+            newTd.appendChild(inputClearDiv); // inputClearDiv는 input과 clear 버튼을 감싼 div입니다.
+            newTd.appendChild(deleteButton);
+
+            // 담을 ul 요소를 생성합니다.
+            const nameSuggestions = document.createElement('ul');
+            const nameSuggestionId = `suggestions-checkusr-${checkusrCounter}`;
+            nameSuggestions.id = nameSuggestionId;
+            nameSuggestions.classList.add('suggestions-list');
+            nameSuggestions.style.top = '100%';
+
+            // 카운터 증가 (ul 생성 후)
+            checkusrCounter++;
+
+            // 새로운 td에 자동완성 ul 요소를 추가합니다.
+            newTd.appendChild(nameSuggestions);
+
+            // 클릭된 버튼의 부모 td 요소를 찾습니다.
+            var parentTd = button.parentElement;
+
+            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+
+            // setTimeout을 사용하여 DOM에 완전히 추가된 후 initializeAutoComplete 함수 호출
+            setTimeout(function () {
+                initializeAutoComplete(uniqueId, '/api/inspec_report/autocomplete', nameSuggestionId);
+            }, 0);  // 0ms의 지연을 사용하여 비동기적으로 처리
+        }
+
+
+        //하나씩만 삭제
+        function deleteInputField(inputField) {
+            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+            inputField.remove();
+        }
+
+        // 점검자 초기화
+        function resetAddedInputFields() {
+            // 모든 .input-btnbox 클래스를 가진 요소들을 선택 (동적으로 추가된 요소 포함)
+            const inputBoxes = document.querySelectorAll('.input-btnbox');
+
+            // 첫 번째 요소는 기본으로 남기고, 나머지 요소들을 삭제
+            inputBoxes.forEach((inputBox, index) => {
+                if (index > 0) {  // 첫 번째 요소는 남겨둠
+                    inputBox.remove();
+                }
+            });
+
+            // ID 카운터를 초기화
+            checkusrCounter = 1;
         }
 
         $(document).ready(function (e) {

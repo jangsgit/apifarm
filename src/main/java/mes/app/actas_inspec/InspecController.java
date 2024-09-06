@@ -687,7 +687,10 @@ public class InspecController {
 
     @GetMapping("/autocomplete")
     public ResponseEntity<List<String>> autocomplete(@RequestParam String query, @RequestParam String field) {
-        List<String> suggestions = inspecService.getSuggestions(query, field);
+        // field 값에서 숫자(- 이후의 숫자)를 제거
+        String cleanField = field.replaceAll("-\\d+$", "");  // -뒤의 숫자 제거
+
+        List<String> suggestions = inspecService.getSuggestions(query, cleanField);
         return ResponseEntity.ok(suggestions);
     }
 

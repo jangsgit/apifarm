@@ -34,64 +34,7 @@ function hideLoadingBar() {
 }
 
 
-let checkusrCounter = 1; // ID 카운터 초기값 설정
-function addInputField(button) {
-    // 새로운 td 요소를 생성합니다.
-    var newTd = document.createElement('div');
-    newTd.className = 'input-btnbox';
-    newTd.name = 'newusrbox';
 
-    // 새로운 input 요소를 생성합니다.
-    var newInput = document.createElement('input');
-    newInput.type = 'text';
-    newInput.className = 'wp100 addusr';
-    newInput.placeholder = '점검자';
-    newInput.name = 'checkusr';
-    newInput.setAttribute('autocomplete', 'off');
-
-    // 동적으로 생성된 입력 필드에 고유한 ID를 부여합니다.
-    const uniqueId = `checkusr-${checkusrCounter}`;
-    newInput.id = uniqueId;
-    checkusrCounter++; // 카운터 증가
-
-    newInput.maxLength = 5;
-
-    // 삭제 버튼을 생성합니다.
-    var deleteButton = document.createElement('button');
-    deleteButton.textContent = '점검자 삭제';
-    deleteButton.onclick = function() {
-        deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-    };
-    deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-    deleteButton.style.color = 'red';
-    deleteButton.style.marginTop = '5px';
-
-    // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-    newTd.appendChild(newInput);
-    newTd.appendChild(deleteButton);
-
-    // 담을 ul 요소를 생성합니다.
-    const nameSuggestions = document.createElement('ul');
-    const nameSuggestionId = `suggestions-checkusr-${checkusrCounter - 1}`;
-    nameSuggestions.id = nameSuggestionId;
-    nameSuggestions.classList.add('suggestions-list');
-
-    // 클릭된 버튼의 부모 td 요소를 찾습니다.
-    var parentTd = button.parentElement;
-
-    // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-    parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-
-    initializeAutoComplete(uniqueId, '/api/inspec_report/autocomplete', nameSuggestionId);
-}
-
-
-//하나씩만 삭제
-function deleteInputField(inputField) {
-    // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-    var tdToDelete = inputField.parentElement;
-    tdToDelete.parentElement.removeChild(tdToDelete);
-}
 
 
 
