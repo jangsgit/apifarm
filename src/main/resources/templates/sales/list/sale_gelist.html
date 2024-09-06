@@ -20,7 +20,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>기간별 발전량 조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+                <h2>기간별 발전량 조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img
+                    src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -51,7 +52,8 @@
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
@@ -136,7 +138,8 @@
                                             </select>
                                         </li>
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchDataTab1()">
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -228,7 +231,8 @@
                                             </select>
                                         </li>
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-searchTab2" onclick="searchDataTab2()">
+                                            <a class="btn btn-delete" title="검색" id="btn-searchTab2"
+                                               onclick="searchDataTab2()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -273,14 +277,15 @@
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
-    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
-    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
 
         // 페이지 로드 시
         function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
 
             document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
 
@@ -295,8 +300,6 @@
             // 슬라이드 차트 초기화
             chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
             chartReadyHandler2("chart2", "chartHolder2", []);
-
-
 
             // chartReadyHandler2("chart2", "chartHolder2", []);
 
@@ -327,8 +330,6 @@
         $(document).ready(function (e) {
             init();
 
-            initializeSelections();  //위에 산단, 발전소명 관련 함수
-
             // 초기 활성화된 탭에 대해서만 차트를 초기화
             rMateChartH5.create("chart1", "chartHolder1", "rMateOnLoadCallFunction=chartReadyHandler", "120%", "100%");
             $('#chartHolder1').data('initialized', true);
@@ -358,7 +359,6 @@
             });
 
 
-
             document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
 
             loadInitialDataTab2();
@@ -367,8 +367,7 @@
 
 
         // ===============================================================================
-        //  =====================================차트=====================================
-
+        // ======================================차트======================================
 
         // tab1 차트
         function chartReadyHandler(id, chartHolderId, gridData) {
@@ -399,8 +398,10 @@
             var dataSet = [transformedData.data, transformedData.data, transformedData.data];
 
             // 슬라이드 차트 레이아웃 및 데이터 설정
-            document.getElementById(id).setSlideLayoutSet(layoutSet);
-            document.getElementById(id).setSlideDataSet(dataSet);
+            chart.setSlideLayoutSet(layoutSet);
+            chart.setSlideDataSet(dataSet);
+            // document.getElementById(id).setSlideLayoutSet(layoutSet);
+            // document.getElementById(id).setSlideDataSet(dataSet);
         }
 
         // tab2 차트
@@ -427,13 +428,11 @@
             var layoutSet = [layout1, layout2];
             var dataSet = [transformedData.data, transformedData.data];
 
-            // chart.setSlideLayoutSet(layoutSet);
-            // chart.setSlideDataSet(dataSet);
-            document.getElementById(id).setSlideLayoutSet(layoutSet);
-            document.getElementById(id).setSlideDataSet(dataSet);
+            chart.setSlideLayoutSet(layoutSet);
+            chart.setSlideDataSet(dataSet);
+            // document.getElementById(id).setSlideLayoutSet(layoutSet);
+            // document.getElementById(id).setSlideDataSet(dataSet);
         }
-
-
 
 
         function updateChart(id, holderId) {
@@ -630,7 +629,7 @@
 
             // 데이터를 변환하여 차트에 사용할 수 있도록 변환
             gridData.forEach(row => {
-                const dataItem = { period: row.period };
+                const dataItem = {period: row.period};
                 for (const key in row) {
                     if (key !== 'period' && key !== 'powernm') {
                         if (!dataFields.includes(key)) {
@@ -652,7 +651,7 @@
         function transformDataForChartTab2(gridData) {
             if (!gridData) {
                 // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
-                return { fields: [], data: [] };
+                return {fields: [], data: []};
             }
 
             // 조회기간에 들어간 년도를 기반으로 필드명을 설정
@@ -663,7 +662,7 @@
 
             // 데이터를 변환하여 차트에 사용할 수 있도록 변환
             gridData.forEach(row => {
-                const dataItem = { period: row.period || `${row.month}월` };
+                const dataItem = {period: row.period || `${row.month}월`};
                 dataItem[firstYear] = parseFloat(row.value1) || 0;
                 dataItem[secondYear] = parseFloat(row.value2) || 0;
                 chartData.push(dataItem);
@@ -740,7 +739,7 @@
                         if (row[hourKey] !== undefined) {
                             const periodWithHour = `${period} ${i.toString().padStart(2, '0')}시`;
                             if (!gridData[periodWithHour]) {
-                                gridData[periodWithHour] = { period: periodWithHour };
+                                gridData[periodWithHour] = {period: periodWithHour};
                             }
                             gridData[periodWithHour][powernm] = row[hourKey] ? parseFloat(row[hourKey].toString().replace(/,/g, '')) : 0;
                         }
@@ -748,7 +747,7 @@
                 } else {
                     // 월별, 분기별, 반기별, 연도별 데이터를 처리하는 로직
                     if (!gridData[period]) {
-                        gridData[period] = { period: period };
+                        gridData[period] = {period: period};
                     }
                     Object.keys(row).forEach(key => {
                         if (key !== 'period' && key !== 'powernm') {
@@ -842,14 +841,14 @@
                 // 분기 값을 연도와 함께 날짜 범위로 변환
                 [startDate, endDate] = convertQuarterToDateRange(startQuarter, endQuarter, selectedYear);
 
-            } else if (periodType === "halfyearly"){
+            } else if (periodType === "halfyearly") {
                 const startHalf = document.getElementById("startHalf").value;
                 const endHalf = document.getElementById("endHalf").value;
                 const selectedYear = document.getElementById("yearSelectTab1").value;
 
                 // 반기 값을 연도와 함께 날짜 범위로 변환
                 [startDate, endDate] = convertHalfYearToDateRange(startHalf, endHalf, selectedYear);
-            } else  if (periodType === "yearly") {
+            } else if (periodType === "yearly") {
                 const startYear = document.getElementById("startYear").value;
                 const endYear = document.getElementById("endYear").value;
 
@@ -1058,7 +1057,6 @@
         }
 
 
-
         // 조회연도 변경 시 조회기간의 연도도 동기화
         function updateYearInPeriod() {
             const selectedYear = document.getElementById("yearSelectTab1").value;
@@ -1073,7 +1071,7 @@
         }
 
         // 조회연도 선택 요소에 이벤트 리스너 추가
-        document.getElementById("yearSelectTab1").addEventListener("change", function() {
+        document.getElementById("yearSelectTab1").addEventListener("change", function () {
             updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
             updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
         });
@@ -1135,7 +1133,7 @@
         }*/
         function loadInitialDataTab2() {
             // 발전기명 목록을 로드한 후 초기 값 설정
-            loadGeneratorNames(function() {
+            loadGeneratorNames(function () {
                 const generatorSelect = document.getElementById("genename2");
                 if (generatorSelect.options.length > 0) {
                     // kt대구물류센터 연료전지를 기본값으로 설정
@@ -1230,7 +1228,7 @@
                 const endMonthSelect = createMonthSelect("endMonthTab2");
 
                 // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
-                startMonthSelect.addEventListener("change", function() {
+                startMonthSelect.addEventListener("change", function () {
                     endMonthSelect.value = startMonthSelect.value;
                 });
 
@@ -1259,7 +1257,6 @@
                 endDate = endDate.split("-")[0]; // 연도만 추출
                 query = `/api/genesearch/comparison/qoq?powerid=${generator}&startYear=${startDate}&endYear=${endDate}`;
             } else if (comparisonType === "MoM") {
-            } else if (comparisonType === "MoM") {
                 // MoM의 경우, startDate와 endDate는 월 형식이어야 함
                 startDate = startDate.split("-")[1]; // 월만 추출
                 endDate = endDate.split("-")[1]; // 월만 추출
@@ -1281,9 +1278,9 @@
                 .catch(error => console.error('Error fetching search data:', error));
         }
 
-        function updateChartTab2(data) {
-            chartReadyHandler2("chart2", "chartHolder2", data);
-        }
+        // function updateChartTab2(data) {
+        //     chartReadyHandler2("chart2", "chartHolder2", data);
+        // }
 
         // Tab2 그리드 업데이트
         function updateGridTab2(grid, data, comparisonType) {

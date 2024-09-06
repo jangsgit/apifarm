@@ -36,17 +36,16 @@ public class GeneSearchController {
 	@GetMapping("comparison/qoq")
 	public List<Map<String, Object>> getQuarterOverQuarterData(@RequestParam String powerid,
 															   @RequestParam String startYear,
-															   @RequestParam String startQuarter,
-															   @RequestParam String endQuarter) {
-		return geneSearchService.getQoQComparisonData(powerid, startYear, startQuarter, endQuarter);
+															   @RequestParam String endYear) {
+		return geneSearchService.getQoQComparisonData(powerid, startYear, endYear);
 	}
 	
 	// MoM
 	@GetMapping("comparison/mom")
 	public List<Map<String, Object>> getMonthOverMonthData(@RequestParam String powerid,
-														   @RequestParam String startMonth,
-														   @RequestParam String endMonth) {
-		return geneSearchService.getMoMComparisonData(powerid, startMonth, endMonth);
+														   @RequestParam String startYear,
+														   @RequestParam String endYear) {
+		return geneSearchService.getMoMComparisonData(powerid, startYear, endYear);
 	}
 	
 	// YTD
