@@ -25,7 +25,7 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>순회점검 통계</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
-                                                                                        alt="알람 아이콘"></a>
+                                                                                       alt="알람 아이콘"></a>
                 <a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>
@@ -150,8 +150,8 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>순회점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab3" title="통계">통계</a></li>
-                                        <li><a href="#tab4" title="현황">현황</a></li>
+                                        <li><a href="#tab3" title="통계" onclick="RunRmateGraph('chart1')">통계</a></li>
+                                        <li><a href="#tab4" title="현황" >현황</a></li>
 
                                     </ul>
                                 </div>
@@ -179,7 +179,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>합동안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab5" title="통계">통계</a></li>
+                                        <li><a href="#tab5" title="통계" onclick="RunRmateGraph('chart2')">통계</a></li>
                                         <li><a href="#tab6" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -208,7 +208,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>전기안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab7" title="통계">통계</a></li>
+                                        <li><a href="#tab7" title="통계" onclick="RunRmateGraph('chart3')">통계</a></li>
                                         <li><a href="#tab8" title="현황">현황</a></li>
 
                                     </ul>
@@ -236,7 +236,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab9" title="통계">통계</a></li>
+                                        <li><a href="#tab9" title="통계" onclick="RunRmateGraph('chart4')">통계</a></li>
                                         <li><a href="#tab10" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -265,7 +265,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련결과</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab11" title="통계">통계</a></li>
+                                        <li><a href="#tab11" title="통계" onclick="RunRmateGraph('chart5')">통계</a></li>
                                         <li><a href="#tab12" title="현황">현황</a></li>
 
                                     </ul>
@@ -293,7 +293,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>안전보건교육</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab13" title="통계">통계</a></li>
+                                        <li><a href="#tab13" title="통계" onclick="RunRmateGraph('chart6')">통계</a></li>
                                         <li><a href="#tab14" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -323,7 +323,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>FieldService</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab15" title="통계">통계</a></li>
+                                        <li><a href="#tab15" title="통계" onclick="RunRmateGraph('chart7')">통계</a></li>
                                         <li><a href="#tab16" title="현황">현황</a></li>
 
                                     </ul>
@@ -349,40 +349,25 @@
 
                     </div>
                 </section>
-<!-- ********************************************************************************************************** -->
+                <!-- ********************************************************************************************************** -->
                 <!-- 상세 영역 -->
                 <section class="tab-item tab-content" id="tab2" style="padding-top: 5px;">
                     <div class="section-top">
-                        <div class="search-wrap" style="margin-top: 15px">
-
+                        <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="periodType">
-                                        기간유형<span class="eq">*</span>
+                                    <label for="comparisonType">
+                                        비교유형<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <select id="periodType2" name="periodType" onchange="updatePeriodInputs2()">
-                                                <option value="hourly">시간별</option>
-                                                <option value="monthly" selected>월별</option>
-                                                <option value="quarterly">분기별</option>
-                                                <option value="halfyearly">반기별</option>
-                                                <option value="yearly">연도별</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl id="searchYear2" style="display: none">
-                                <dt>
-                                    조회연도<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="yearSelectTab2" name="yearSelectTab1">
+                                            <select id="comparisonType" name="comparisonType">
+                                                <option value="YoY">YoY</option>
+                                                <option value="QoQ">QoQ</option>
+                                                <option value="MoM">MoM</option>
+                                                <option value="YTD">YTD</option>
                                             </select>
                                         </li>
                                     </ul>
@@ -393,26 +378,22 @@
                                     조회기간<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box" id="dateBoxContainer2">
-                                        <li id="startDateContainer2">
-                                            <input type="month" id="startDate2" name="startDate" value="2024-01">
+                                    <ul class="date-box" id="dateBoxContainerTab2">
+                                        <li id="startDateContainerTab2">
+                                            <select id="startDateTab2" name="startDateTab2">
+                                                <option selected>2023</option>
+                                                <option>2024</option>
+                                            </select>
                                         </li>
-                                        <li id="endDateContainer2">
-                                            <input type="month" id="endDate2" name="endDate" value="2024-12">
+                                        <li id="endDateContainerTab2">
+                                            <select id="endDateTab2" name="endDateTab2">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
                                         </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-
-                            <dl>
-                                <dt style="visibility: hidden">
-                                    조회기간<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search2" onclick="searchData()">
+                                            <a class="btn btn-delete" title="검색" id="btn-searchTab2"
+                                               onclick="">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -423,17 +404,17 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row row-2" style="margin-bottom: 10px">
-                        <div class="col wp50" style="margin-right: 15px">
+                        <div class="col wp50" style="margin-right: 15px" id="section1">
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>순회점검</h3>
-                                    <ul class="tab-links-sub">
-                                        <li><a href="#YoY1" title="YoY" onclick="RunRmateGraph2('chart10')">YoY</a></li>
-                                        <li><a href="#QoQ1" title="QoQ" onclick="RunRmateGraph2('chart20')">QoQ</a></li>
-                                        <li><a href="#MoM1" title="MoM" onclick="RunRmateGraph2('chart30')">MoM</a></li>
-                                        <li><a href="#YTD1" title="YTD" onclick="RunRmateGraph2('chart40')">YTD</a></li>
+                                    <!--<ul class="tab-links-sub">
+                                        <li><a href="#YoY1" title="YoY" data-id="chart10" onclick="RunRmateGraph2('chart10')">YoY</a></li>
+                                        <li><a href="#QoQ1" title="QoQ" data-id="chart20" onclick="RunRmateGraph2('chart20')">QoQ</a></li>
+                                        <li><a href="#MoM1" title="MoM" data-id="chart30" onclick="RunRmateGraph2('chart30')">MoM</a></li>
+                                        <li><a href="#YTD1" title="YTD" data-id="chart40" onclick="RunRmateGraph2('chart40')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab3 -->
@@ -442,7 +423,7 @@
                                             <div id="chartHolder10" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-item-sub" id="QoQ1">
+                                    <!--<div class="tab-item-sub" id="QoQ1">
                                         <div>
                                             <div id="chartHolder20" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
@@ -456,21 +437,21 @@
                                         <div>
                                             <div id="chartHolder40" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                 </div>
                             </section>
                         </div>
 
-                        <div class="col wp50">
+                        <div class="col wp50" id="section2">
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>합동안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY2" title="YoY" onclick="RunRmateGraph2('chart11')">YoY</a></li>
-                                        <li><a href="#QoQ2" title="QoQ" onclick="RunRmateGraph2('chart21')">QoQ</a></li>
-                                        <li><a href="#MoM2" title="MoM" onclick="RunRmateGraph2('chart31')">MoM</a></li>
-                                        <li><a href="#YTD2" title="YTD" onclick="RunRmateGraph2('chart41')">YTD</a></li>
+                                        <li><a href="#YoY2" title="YoY" data-id="chart11" onclick="RunRmateGraph2('chart11')">YoY</a></li>
+                                        <li><a href="#QoQ2" title="QoQ" data-id="chart21" onclick="RunRmateGraph2('chart21')">QoQ</a></li>
+                                        <li><a href="#MoM2" title="MoM" data-id="chart31" onclick="RunRmateGraph2('chart31')">MoM</a></li>
+                                        <li><a href="#YTD2" title="YTD" data-id="chart41" onclick="RunRmateGraph2('chart41')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -505,15 +486,15 @@
 
 
                     <div class="row row-2" style="margin-bottom: 10px">
-                        <div class="col wp50" style="margin-right: 15px">
+                        <div class="col wp50" style="margin-right: 15px" id="section3">
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>전기안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY3" title="YoY" onclick="RunRmateGraph2('chart12')">YoY</a></li>
-                                        <li><a href="#QoQ3" title="QoQ" onclick="RunRmateGraph2('chart22')">QoQ</a></li>
-                                        <li><a href="#MoM3" title="MoM" onclick="RunRmateGraph2('chart32')">MoM</a></li>
-                                        <li><a href="#YTD3" title="YTD" onclick="RunRmateGraph2('chart42')">YTD</a></li>
+                                        <li><a href="#YoY3" title="YoY" data-id="chart12" onclick="RunRmateGraph2('chart12')">YoY</a></li>
+                                        <li><a href="#QoQ3" title="QoQ" data-id="chart22" onclick="RunRmateGraph2('chart22')">QoQ</a></li>
+                                        <li><a href="#MoM3" title="MoM" data-id="chart32" onclick="RunRmateGraph2('chart32')">MoM</a></li>
+                                        <li><a href="#YTD3" title="YTD" data-id="chart42" onclick="RunRmateGraph2('chart42')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -546,15 +527,15 @@
                             </section>
                         </div>
 
-                        <div class="col wp50">
+                        <div class="col wp50" id="section4">
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY4" title="YoY" onclick="RunRmateGraph2('chart13')">YoY</a></li>
-                                        <li><a href="#QoQ4" title="QoQ" onclick="RunRmateGraph2('chart23')">QoQ</a></li>
-                                        <li><a href="#MoM4" title="MoM" onclick="RunRmateGraph2('chart33')">MoM</a></li>
-                                        <li><a href="#YTD4" title="YTD" onclick="RunRmateGraph2('chart43')">YTD</a></li>
+                                        <li><a href="#YoY4" title="YoY" data-id="chart13" onclick="RunRmateGraph2('chart13')">YoY</a></li>
+                                        <li><a href="#QoQ4" title="QoQ" data-id="chart23" onclick="RunRmateGraph2('chart23')">QoQ</a></li>
+                                        <li><a href="#MoM4" title="MoM" data-id="chart33" onclick="RunRmateGraph2('chart33')">MoM</a></li>
+                                        <li><a href="#YTD4" title="YTD" data-id="chart43" onclick="RunRmateGraph2('chart43')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -592,15 +573,15 @@
 
 
                     <div class="row row-2" style="margin-bottom: 10px">
-                        <div class="col wp50" style="margin-right: 15px">
+                        <div class="col wp50" style="margin-right: 15px" id="section5">
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY5" title="YoY" onclick="RunRmateGraph2('chart14')">YoY</a></li>
-                                        <li><a href="#QoQ5" title="QoQ" onclick="RunRmateGraph2('chart24')">QoQ</a></li>
-                                        <li><a href="#MoM5" title="MoM" onclick="RunRmateGraph2('chart34')">MoM</a></li>
-                                        <li><a href="#YTD5" title="YTD" onclick="RunRmateGraph2('chart44')">YTD</a></li>
+                                        <li><a href="#YoY5" title="YoY" data-id="chart14" onclick="RunRmateGraph2('chart14')">YoY</a></li>
+                                        <li><a href="#QoQ5" title="QoQ" data-id="chart24" onclick="RunRmateGraph2('chart24')">QoQ</a></li>
+                                        <li><a href="#MoM5" title="MoM" data-id="chart34"  onclick="RunRmateGraph2('chart34')">MoM</a></li>
+                                        <li><a href="#YTD5" title="YTD" data-id="chart44" onclick="RunRmateGraph2('chart44')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -633,15 +614,15 @@
                             </section>
                         </div>
 
-                        <div class="col wp50">
+                        <div class="col wp50" id="section6">
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>안전보건교육</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY6" title="YoY" onclick="RunRmateGraph2('chart15')">YoY</a></li>
-                                        <li><a href="#QoQ6" title="QoQ" onclick="RunRmateGraph2('chart25')">QoQ</a></li>
-                                        <li><a href="#MoM6" title="MoM" onclick="RunRmateGraph2('chart35')">MoM</a></li>
-                                        <li><a href="#YTD6" title="YTD" onclick="RunRmateGraph2('chart45')">YTD</a></li>
+                                        <li><a href="#YoY6" title="YoY" data-id="chart15" onclick="RunRmateGraph2('chart15')">YoY</a></li>
+                                        <li><a href="#QoQ6" title="QoQ" data-id="chart25" onclick="RunRmateGraph2('chart25')">QoQ</a></li>
+                                        <li><a href="#MoM6" title="MoM" data-id="chart35" onclick="RunRmateGraph2('chart35')">MoM</a></li>
+                                        <li><a href="#YTD6" title="YTD" data-id="chart45" onclick="RunRmateGraph2('chart45')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -679,15 +660,15 @@
 
 
                     <div class="row row-2" style="margin-bottom: 10px">
-                        <div class="col wp50" style="margin-right: 15px">
+                        <div class="col wp50" style="margin-right: 15px" id="section7">
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>FieldService</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#YoY7" title="YoY" onclick="RunRmateGraph2('chart16')">YoY</a></li>
-                                        <li><a href="#QoQ7" title="QoQ" onclick="RunRmateGraph2('chart26')">QoQ</a></li>
-                                        <li><a href="#MoM7" title="MoM" onclick="RunRmateGraph2('chart36')">MoM</a></li>
-                                        <li><a href="#YTD7" title="YTD" onclick="RunRmateGraph2('chart46')">YTD</a></li>
+                                        <li><a href="#YoY7" title="YoY" data-id="chart16" onclick="RunRmateGraph2('chart16')">YoY</a></li>
+                                        <li><a href="#QoQ7" title="QoQ" data-id="chart26" onclick="RunRmateGraph2('chart26')">QoQ</a></li>
+                                        <li><a href="#MoM7" title="MoM" data-id="chart36" onclick="RunRmateGraph2('chart36')">MoM</a></li>
+                                        <li><a href="#YTD7" title="YTD" data-id="chart46" onclick="RunRmateGraph2('chart46')">YTD</a></li>
 
                                     </ul>
                                 </div>
@@ -741,6 +722,8 @@
 
 
     <script type="text/javascript">
+
+        document.getElementById('comparisonType').addEventListener("change", updateComparisonType);
 
 
         // 스트링 형식으로 레이아웃 정의.
@@ -798,34 +781,34 @@
         ]
 
         // 차트 데이터
-        var chartData2 = [{"Month":"1월", "CNT":5},
-            {"Month":"2월", "CNT":3},
-            {"Month":"3월", "CNT":1},
-            {"Month":"4월", "CNT":8},
-            {"Month":"5월", "CNT":9},
-            {"Month":"6월", "CNT":3},
-            {"Month":"7월", "CNT":9},
-            {"Month":"8월", "CNT":2},
-            {"Month":"9월", "CNT":5},
-            {"Month":"10월", "CNT":2},
-            {"Month":"11월", "CNT":8},
-            {"Month":"12월", "CNT":1}
+        var chartData2 = [{"Month":"1월", "Count":5},
+            {"Month":"2월", "Count":3},
+            {"Month":"3월", "Count":1},
+            {"Month":"4월", "Count":8},
+            {"Month":"5월", "Count":9},
+            {"Month":"6월", "Count":3},
+            {"Month":"7월", "Count":9},
+            {"Month":"8월", "Count":2},
+            {"Month":"9월", "Count":5},
+            {"Month":"10월", "Count":2},
+            {"Month":"11월", "Count":8},
+            {"Month":"12월", "Count":1}
         ]
 
 
         // 차트 데이터
-        var chartData3 = [{"Month":"1월", "CNT":5},
-            {"Month":"2월", "CNT":5},
-            {"Month":"3월", "CNT":2},
-            {"Month":"4월", "CNT":1},
-            {"Month":"5월", "CNT":3},
-            {"Month":"6월", "CNT":8},
-            {"Month":"7월", "CNT":7},
-            {"Month":"8월", "CNT":9},
-            {"Month":"9월", "CNT":7},
-            {"Month":"10월", "CNT":9},
-            {"Month":"11월", "CNT":10},
-            {"Month":"12월", "CNT":1}
+        var chartData3 = [{"Month":"1월", "Count":5},
+            {"Month":"2월", "Count":5},
+            {"Month":"3월", "Count":2},
+            {"Month":"4월", "Count":1},
+            {"Month":"5월", "Count":3},
+            {"Month":"6월", "Count":8},
+            {"Month":"7월", "Count":7},
+            {"Month":"8월", "Count":9},
+            {"Month":"9월", "Count":7},
+            {"Month":"10월", "Count":9},
+            {"Month":"11월", "Count":10},
+            {"Month":"12월", "Count":1}
         ]
 
 
@@ -838,8 +821,8 @@
 
         function chartReadyHandler(id) {
             //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
-            if(id === 'chart10' || id === 'chart11' || id === 'chart12'|| id === 'chart13' || id === 'chart14' || id === 'chart15' || id === 'chart15' || id === 'chart16'){
-                document.getElementById(id).setLayout(layoutStrValue("Profit2023", "2023 (%)", "Profit2024", "2024 (%)", "Month"))
+            if(id === 'chart10' || id === 'chart11' || id === 'chart12'|| id === 'chart13' || id === 'chart14' || id === 'chart15' ||  id === 'chart16'){
+                document.getElementById(id).setLayout(layoutStrValue("Count", "2023 (%)", "Count2", "2024 (%)", "Month"))
                 document.getElementById(id).setData(chartData10);
             } else if(id === 'chart20' || id === 'chart21' || id === 'chart22'|| id === 'chart23' || id === 'chart24' || id === 'chart25' || id === 'chart26'){
                 document.getElementById(id).setLayout(layoutStrValue("CNT2023", "2023 (%)", "CNT2024", "2024 (%)", "Quarter"))
@@ -858,30 +841,22 @@
 
         function chartReadyHandler2(id) {
             //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
+            document.getElementById(id).setLayout(returnLayoutStr('Month', 'Count'))
             if(id === 'chart1'){
-                document.getElementById(id).setLayout(returnLayoutStr('Month', 'Count'))
                 document.getElementById(id).setData(chartData1);
             } else if(id === 'chart2'){
-                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
                 document.getElementById(id).setData(chartData2);
             } else if(id === 'chart3'){
-                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
-                document.getElementById(id).setData(chartData);
+                document.getElementById(id).setData(chartData3);
             } else if(id === 'chart4'){
-                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
-                document.getElementById(id).setData(chartData2);
+                document.getElementById(id).setData(chartData3);
             } else if(id === 'chart5'){
-                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
-                document.getElementById(id).setData(chartData);
+                document.getElementById(id).setData(chartData3);
             } else if(id === 'chart6'){
-                document.getElementById(id).setLayout(returnLayoutStr('Month', 'CNT'))
                 document.getElementById(id).setData(chartData3);
             } else if(id === 'chart7'){
-                document.getElementById(id).setLayout(returnLayoutStr('Country', 'GDP'))
-                document.getElementById(id).setData(chartData);
+                document.getElementById(id).setData(chartData3);
             }
-
-
             document.getElementById(id).resize();
         }
 
@@ -948,18 +923,18 @@
 
         // 차트 데이터
         var chartData10 = [
-            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
-            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
-            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
-            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
-            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
-            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
+            {"Month": "1월", "Count": 1, "Count2": 2},
+            {"Month": "2월", "Count": 2, "Count2": 3},
+            {"Month": "3월", "Count": 3, "Count2": 4},
+            {"Month": "4월", "Count": 4, "Count2": 6},
+            {"Month": "5월", "Count": 6, "Count2": 6},
+            {"Month": "6월", "Count": 8, "Count2": 5},
+            {"Month": "7월", "Count": 1, "Count2": 2},
+            {"Month": "8월", "Count": 2, "Count2": 3},
+            {"Month": "9월", "Count": 3, "Count2": 4},
+            {"Month": "10월", "Count": 4, "Count2": 5},
+            {"Month": "11월", "Count": 5, "Count2": 5},
+            {"Month": "12월", "Count": 6, "Count2": 7}
         ];
 
         // 차트 데이터
@@ -1017,8 +992,12 @@
         ];
 
         function RunRmateGraph(param){
-            let con = param
-            rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "100%", "100%");
+
+            setTimeout(function(){
+                let con = param
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "100%", "100%");
+            }, 50)
+
 
         }
 
@@ -1027,14 +1006,14 @@
             setTimeout(function(){
                 let con = param
                 rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
-            }, 100)
+            }, 50)
 
         }
         /***Rmate*********************************************************************************************/
 
 
 
-        // ===============================================================================Rmate
+            // ===============================================================================Rmate
 
 
 
@@ -1065,7 +1044,7 @@
 
         let columns3 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
             { binding: 'result', header: '결과', align: 'center', width: '*', minWidth: 100 },
-            { binding: 'checkusr', header: '점검명', align: 'center', width: '0.5*', minWidth: 100 }]
+            { binding: 'title', header: '점검명', align: 'center', width: '0.5*', minWidth: 100 }]
 
         let columns4 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
             { binding: 'result', header: '참가자', align: 'center', width: '*', minWidth: 100 },
@@ -1086,34 +1065,122 @@
 
         function searchData(){
 
-            let graphData = [];
-            let data2= [];
-
-            let dataSet = AjaxGetBodyParameter('wm_inspec_month_list');
-
-            //ajax태워서 서버로 요청해서 데이터받아온다.
-            data2 = DataLoad('/api/inspec_statics/read', dataSet).subData;
-
-            //rmate 데이터로 변환해서 가져온다
-            chartData1 = rMateDataLoad(data2);
-            //가쟈왔으니 뿌려준다.
-            RunRmateGraph("chart1");
+            let searchtypeList = ['wm_inspec_month_list', 'wm_hap_input', 'wm_elecsafe_input', 'wm_emergency_plan', 'wm_emergency_result', 'wm_safety_health', 'wm_inspec_field_report'];
 
 
+            for(let i=0; i < searchtypeList.length; i++){
+                let dataSet = AjaxGetBodyParameter(searchtypeList[i], 'Original');
 
+                let rowData = DataLoad('/api/inspec_statics/read', dataSet);
+                let wijmoData = rowData.data;
+                let rmateData = rowData.subData;
+
+                if (i === 0) {
+                    chartData1 = rMateDataLoad(rmateData);
+                    viewdata = new wijmo.collections.CollectionView(wijmoData);
+                    theGrid.itemsSource = viewdata;
+
+                } else if (i === 1) {
+                    chartData2 = rMateDataLoad(rmateData);
+                    viewdata = new wijmo.collections.CollectionView(wijmoData);
+                    theGrid2.itemsSource = viewdata;
+
+                } else if (i === 2) {
+                    chartData3 = rMateDataLoad(rmateData);
+                    viewdata = new wijmo.collections.CollectionView(wijmoData);
+                    theGrid3.itemsSource = viewdata;
+
+                } else {
+                    chartData3 = rMateDataLoad(rmateData);
+                }
+
+                RunRmateGraph(`chart${i+1}`);
+
+
+
+            }
+        }
+
+        let mergeData = (data, mergedData, countField) => {
+            data.forEach(item => {
+                if (mergedData[item.Month]) {
+                    mergedData[item.Month][countField] = item.Count;
+                } else {
+                    mergedData[item.Month] = {
+                        Month: item.Month,
+                        Count: countField === 'Count' ? item.Count : 0,
+                        Count2: countField === 'Count2' ? item.Count : 0
+                    };
+                }
+            });
+        };
+
+        function searchData2() {
+            const searchtypeList = ['wm_inspec_month_list', 'wm_hap_input', 'wm_elecsafe_input', 'wm_emergency_plan', 'wm_emergency_result', 'wm_safety_health', 'wm_inspec_field_report'];
+
+            // 데이터를 병합하는 함수
+
+
+            searchtypeList.forEach((searchType, index) => {
+                const mergedData = {};
+                const dataSet = AjaxGetBodyParameter(searchType, 'YoY');
+                const rowData = DataLoad('/api/inspec_statics/read', dataSet);
+
+                const { data: rmateData, subData: rmateData2 } = rowData;
+
+                // 서브 데이터 병합
+                if (rmateData2) {
+                    const subData = rMateDataLoad(rmateData2);
+                    mergeData(subData, mergedData, 'Count2');
+                    console.log('chartData9', subData);
+                }
+
+                // 메인 데이터 병합
+                if (rmateData) {
+                    const mainData = rMateDataLoad(rmateData);
+                    mergeData(mainData, mergedData, 'Count');
+                    console.log('chartData10', mainData);
+                }
+
+                const finalData = Object.values(mergedData);
+                console.log('mergedData:', finalData);
+
+                chartData10 = finalData;
+                //RunRmateGraph2(`chart${index + 10}`);
+            });
+
+            RunRmateGraph2('chart10');
+
+
+            // 클래스가 active인 요소를 찾고 첫 번째 자식 요소의 title과 id 값을 가져오기
+            const activeElements = document.querySelectorAll('#tab2 .active');
+            activeElements.forEach(activeElement => {
+                const firstChild = activeElement.children[0]; // 첫 번째 자식 요소 선택
+
+                if (firstChild) {
+                    const title = firstChild.getAttribute('title');
+                    const id = firstChild.getAttribute('data-id');
+
+                    if (title || id) {
+                        console.log('Title:', title, 'ID:', id);
+                    }
+                }
+            });
         }
 
         //서버에서 가져온데이터를 rmate가 조회할수 있게 변환
         function rMateDataLoad(arr){
             let data = [];
-            Object.keys(arr).forEach(function(key, index){
+            Object.keys(arr).sort().forEach(function(key, index) {
+
                 data.push({
-                    "Month" : key,
-                    "Count" : arr[key]
+                    "Month": key,
+                    "Count": arr[key]
                 });
             });
             return data;
         }
+
 
         function init() {
             let data2 = [];
@@ -1128,7 +1195,7 @@
                 },
                 async: false,
                 success: function(data){
-                    console.log('check1',data.data);
+
 
                     data2 = data.data;
 
@@ -1158,7 +1225,7 @@
                 },
                 async: false,
                 success: function(data){
-                    console.log('check1',data.data);
+
                     data3 = data.data;
                 }
             })
@@ -1179,34 +1246,6 @@
                 itemsSource: viewdata2
             });
             theGrid3.rowHeaders.columns.splice(0,1);
-
-            /*let data4 = [];
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : 'infinited',
-                    'spworkcd' : '',
-                    'spcompcd' : '',
-                    'spplancd' : ''
-                },
-                async: false,
-                success: function(data){
-                    console.log('check1',data.data);
-                    data4 = data.data;
-                }
-            })
-
-            viewdata3 = new wijmo.collections.CollectionView(data4);
-            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns3,
-                itemsSource: viewdata3
-            });
-            theGrid3.rowHeaders.columns.splice(0,1);
-*/
-
 
             theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
                 autoGenerateColumns: false,
@@ -1245,16 +1284,26 @@
         //=============================================================================================================
 
 
-        function AjaxGetBodyParameter(wm_flag){
+        function AjaxGetBodyParameter(wm_flag, read_flag){
             let dataSet;
             let periodType = $('#periodType').val();
 
-            if(periodType === 'monthly'){
+            if(periodType === 'hourly'){
+                dataSet = {
+                    'searchfrdate' : $('#startDate').val(),
+                    'startHour'    : $('#startHour').val(),
+                    'endHour'      : $('#endHour').val(),
+                    'searchType'   : periodType,
+                    'wm_flag'       : wm_flag,
+                    'read_flag'     : read_flag,
+                };
+            }else if(periodType === 'monthly'){
                 dataSet = {
                     'searchfrdate' : $('#startDate').val(),
                     'searchtodate' : $('#endDate').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag
+                    'wm_flag' : wm_flag,
+                    'read_flag'     : read_flag
                 };
             }
             else if(periodType === 'quarterly'){
@@ -1265,7 +1314,8 @@
                     'searchfrQuarter' : $('#startSelect').val(),
                     'searchtoQuarter' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag
+                    'wm_flag' : wm_flag,
+                    'read_flag'     : read_flag
                 };
             }
             else if(periodType === 'halfyearly'){
@@ -1275,7 +1325,8 @@
                     'searchfrHalfYear' : $('#startSelect').val(),
                     'searchtoHalfYear' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag
+                    'wm_flag' : wm_flag,
+                    'read_flag'     : read_flag
                 }
             }
             else if(periodType === 'yearly')
@@ -1284,22 +1335,12 @@
                     'searchfrYear' : $('#startSelect').val(),
                     'searchtoYear' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag
+                    'wm_flag' : wm_flag,
+                    'read_flag'     : read_flag
                 };
             }
             return dataSet;
         }
-
-
-        document.addEventListener('fullscreenchange', function() {
-            if (document.fullscreenElement) {
-                // 전체 화면 모드로 진입했을 때
-                console.log('전체 화면 모드로 진입');
-            } else {
-                // 전체 화면 모드에서 나왔을 때
-                console.log('전체 화면 모드 종료');
-            }
-        });
 
         $(document).ready(function (){
 
@@ -1307,10 +1348,11 @@
             init();
             loadYearlyData();
 
-            //그래프 실행
+            searchData();
+            /*//그래프 실행
             for(let i=0; i < 7; i++){
                 RunRmateGraph(`chart${i+1}`);
-            }
+            }*/
 
 
             /*let con = "chart1"
@@ -1374,32 +1416,32 @@
             $('#runrmate').click(function(){
 
 
-                    setTimeout(function() {
-                        //$('#runf').trigger('click');
-                        let con = "chart10"
-                        rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
+                setTimeout(function() {
+                    //$('#runf').trigger('click');
+                    let con = "chart10"
+                    rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con2 = "chart11"
-                        rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con2 = "chart11"
+                    rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con3 = "chart12"
-                        rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con3 = "chart12"
+                    rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con4 = "chart13"
-                        rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con4 = "chart13"
+                    rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con5 = "chart14"
-                        rMateChartH5.create(con5, "chartHolder" + con5.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con5 = "chart14"
+                    rMateChartH5.create(con5, "chartHolder" + con5.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con6 = "chart15"
-                        rMateChartH5.create(con6, "chartHolder" + con6.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con6 = "chart15"
+                    rMateChartH5.create(con6, "chartHolder" + con6.replace(/\D/g, ""), chartVars, "100%", "100%");
 
-                        let con7 = "chart16"
-                        rMateChartH5.create(con7, "chartHolder" + con7.replace(/\D/g, ""), chartVars, "100%", "100%");
+                    let con7 = "chart16"
+                    rMateChartH5.create(con7, "chartHolder" + con7.replace(/\D/g, ""), chartVars, "100%", "100%");
 
 
-                        LoadingCheck = true;
-                    }, 100); // 3000ms = 3초
+                    LoadingCheck = true;
+                }, 100); // 3000ms = 3초
 
             });
 
@@ -1659,8 +1701,56 @@
                 .catch(error => console.error('Error loading years:', error));
         }
 
+        // tab2 비교유형 변경시 실행될 함수
+        function updateComparisonType() {
+            const comparisonType = document.getElementById("comparisonType").value;
+            const startDateContainerTab2 = document.getElementById("startDateContainerTab2");
+            const endDateContainerTab2 = document.getElementById("endDateContainerTab2");
+
+            // 기존 월 선택 셀렉트를 제거
+            const existingStartMonthSelect = document.getElementById("startMonthTab2");
+            const existingEndMonthSelect = document.getElementById("endMonthTab2");
+
+            if (existingStartMonthSelect) startDateContainerTab2.removeChild(existingStartMonthSelect);
+            if (existingEndMonthSelect) endDateContainerTab2.removeChild(existingEndMonthSelect);
+
+            // "MoM"이 선택된 경우에만 새로운 월 셀렉트 추가
+            if (comparisonType === "MoM") {
+                const startMonthSelect = createMonthSelect("startMonthTab2");
+                const endMonthSelect = createMonthSelect("endMonthTab2");
+
+                // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
+                startMonthSelect.addEventListener("change", function () {
+                    endMonthSelect.value = startMonthSelect.value;
+                });
+
+                startDateContainerTab2.appendChild(startMonthSelect);
+                endDateContainerTab2.appendChild(endMonthSelect);
+            }
+        }
 
 
+        // tab2 MoM 선택시, 월 선택 셀렉트 생성
+        function createMonthSelect(id) {
+            const monthSelect = document.createElement('select');
+            monthSelect.id = id;
+            monthSelect.name = id;
+            monthSelect.style.width = '70px';
+
+            const months = [
+                "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+            ];
+
+            months.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = `${month}월`;
+                monthSelect.appendChild(option);
+            });
+
+            return monthSelect;
+        }
 
         var chartData11 = [
             {"Month": "1월", "Profit2023": 1, "Profit2024": 2},

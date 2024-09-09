@@ -59,7 +59,7 @@
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
                 </li>
             </ul>
-            <div class="tab-contents" style="margin-bottom: 70px">
+            <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
@@ -161,6 +161,12 @@
                         </div>
                         <div class="button-wrap">
                             <ul>
+                                <li>
+                                    <a class="btn file_btn" title="파일첨부" onclick="showPopup2()">
+
+                                        파일첨부<span>(0)</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
@@ -270,7 +276,7 @@
                                 <tbody>
                                 <tr>
                                     <td rowspan="4"><span id="inspecdivision1">일반 점검 사항</span></td>
-                                    <td>
+                                    <td class="left-text">
                                         <span id="inspeccont1">ㅇ 작업환경 일반 사항<br>- 작업장 내부 적절한 조도 확보 여부<br>- 밀폐공간일 경우 유해가스 등 환기 여부</span>
                                         <input type="hidden" id="seq1" name="seq1" />
                                     </td>
@@ -284,7 +290,7 @@
 
                                 </tr>
                                 <tr>
-                                    <td><span id="inspeccont2">ㅇ 발전소 주변 유해위험 환경요소 점검<br>- 작업 또는 통행에 방해되는 폐기물 또는 적치물 방치 상태, 위험물/인화성물질 방치 상태 등</span>
+                                    <td  class="left-text"><span id="inspeccont2">ㅇ 발전소 주변 유해위험 환경요소 점검<br>- 작업 또는 통행에 방해되는 폐기물 또는 적치물 방치 상태, 위험물/인화성물질 방치 상태 등</span>
                                         <input type="hidden" id="seq2" name="seq2" />
                                     </td>
                                     <td class="checkbox-cell"><span id="inspecresult2">O</span></td>
@@ -296,7 +302,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td  class="left-text">
                                         <span id="inspeccont3">ㅇ 화재 등 위험상황 대비 관련 사항<br>- 소화기 등 비치 상태<br>- 화재 등 비상상황시 비상문, 비상대피로 확보</span>
                                         <input type="hidden" id="seq3" name="seq3" />
                                     </td>
@@ -309,7 +315,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td  class="left-text">
                                         <span id="inspeccont4">ㅇ 작업 전/후 정리정돈 등 환경정리 상태<br>- 작업전 작업환경 사전점검 실시<br>- 작업후 작업부산물 정리, 청소, 정리정돈 실시</span>
                                         <input type="hidden" id="seq4" name="seq4" />
                                     </td>
@@ -324,7 +330,7 @@
 
                                 <tr>
                                     <td rowspan="2"><span id="inspecdivision2">중점 점검 사항</span></td>
-                                    <td>
+                                    <td class="left-text">
                                         <span id="inspeccont5">ㅇ 전기작업 위험요소 점검<br>- 전기기기의 접지 상태 확인<br>- 작업 전 차단기 OFF 조치 등 전원 통전 확인</span>
                                         <input type="hidden" id="seq5" name="seq5" />
                                     </td>
@@ -338,7 +344,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td  class="left-text">
                                         <span id="inspeccont6">ㅇ 고소작업 위험요소 점검<br>- 작업전 사다리 상태 점검<br>- 사다리 활용 작업시 2인 1조 작업 및 최상단  발판 금지</span>
                                         <input type="hidden" id="seq6" name="seq6" />
                                     </td>
@@ -353,35 +359,15 @@
 
                                 </tbody>
                             </table>
-                            <tr>
-                                <th>
-                                    첨부파일
-                                </th>
-                                <td colspan="3">
-                                    <div id="uploadComponent1" class="upload-component">
-                                        <div class="upload-filebox">
-                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                            <a class="btn" title="파일업로드">파일업로드</a>
-                                            <input type="file" id="fileInput1" class="fileInput" multiple>
-                                            <p>Maximun upload file size <span>1GiB</span></p>
-                                        </div>
-                                        <div class="upload-filelist">
-                                            <div class="title">
-                                                <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete
-                                                    all</a>
-                                            </div>
-                                            <ul class="filelist" id="filelist">
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+
                             </tbody>
                         </table>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
+            <div style="height: 50px">
+
+            </div>
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
@@ -494,6 +480,62 @@
         </div>
     </div>
 
+    <!-- 파일 첨부 팝업 -->
+
+    <div class="modal3">
+        <div class="popup-wrapper3 w700" id="popup2">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closeFilePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td colspan="3">
+                                <div id="uploadComponent1" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput1" class="fileInput" multiple>
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete
+                                                all</a>
+                                        </div>
+                                        <ul class="filelist" id="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closeFilePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">닫기</button>
+
+            </div>
+        </div>
+    </div>
+
+
+
 </th:block>
 <th:block layout:fragment="scripts">
     <th:block th:replace="/common/approve_box :: approve_box"></th:block>
@@ -509,6 +551,10 @@
         const modalOpen = document.querySelector('.modal_btn');
         const modalClose = document.querySelector('.close_btn');
 
+        const Filemodal = document.querySelector('.modal3');
+        const modalFileOpen = document.querySelector('.file_btn');
+
+
         //열기 버튼을 눌렀을 때 모달팝업이 열림
         modalOpen.addEventListener('click',function(){
             //display 속성을 block로 변경
@@ -519,6 +565,11 @@
             //display 속성을 none으로 변경
             modal2.style.display = 'none';
         });
+
+        modalFileOpen.addEventListener('click', function(){
+            Filemodal.style.display = 'block';
+        });
+
 
 
         var theGrid;
@@ -651,6 +702,12 @@
             }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
+        function closeFilePopup(){
+            const modal = document.querySelector('.modal3');
+
+            modal.style.display = 'none';
+        }
+
         function showPopup(rowIndex){
 
             let item = theGrid.rows[rowIndex].dataItem;
@@ -668,6 +725,22 @@
             }
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+        }
+
+        function showPopup2(){
+
+            const modal = document.querySelector('.modal3');
+            const modalContent = document.querySelector('.popup-wrapper3');
 
             // 모달과 콘텐츠를 표시
             modal.style.display = 'block';
@@ -758,14 +831,14 @@
                 async: false,
                 success: function(data){
 
-                    let DataLength = 15 - data.data.length;
+                    /*let DataLength = 15 - data.data.length;
 
                     if(data.data.length < 15){
 
                         for(let i=0; i < DataLength; i++){
                             data.data.push('empty');
                         }
-                    }
+                    }*/
                     data2 = data.data;
 
                 }
@@ -1169,6 +1242,8 @@
         function updateFileCount() {
             const fileCount = uploadedFiles.length;
             $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+            $('.file_btn span').text(`(${fileCount})`);
+
         }
 
 

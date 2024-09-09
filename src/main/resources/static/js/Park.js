@@ -346,7 +346,8 @@ function DataLoad(url, dataSet){
         async: false,
         success: function(data){
 
-                data2 = data.data;
+                console.log('data', data)
+                data2 = data;
 
         }
     })
