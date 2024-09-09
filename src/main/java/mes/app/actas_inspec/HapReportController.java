@@ -338,84 +338,103 @@ public class HapReportController {
 
         }
 
-        // 점검자 처리
-        for (int i = 1; ; i++) {
-            // checkusr1 데이터 처리
-            String seq1 = params.get("checkusr1_seq_" + i);
-            String company1 = params.get("checkusr1_company_" + i);
-            String position1 = params.get("checkusr1_position_" + i);
-            String name1 = params.get("checkusr1_name_" + i);
+        // 점검자 처리 (checkusr1)
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey();
 
-            // 값이 null이거나 빈 문자열인 경우 종료
-            if (company1 == null || company1.isEmpty() ||
-                    position1 == null || position1.isEmpty() ||
-                    name1 == null || name1.isEmpty()) {
-                break;  // 더 이상 데이터가 없으면 종료
-            }
+            // checkusr1_company_로 시작하는 키들만 처리
+            if (key.startsWith("checkusr1_company_")) {
+                // 인덱스 추출 (checkusr1_company_ 뒤에 숫자 부분)
+                String indexStr = key.substring("checkusr1_company_".length());
+                int index = Integer.parseInt(indexStr);
 
-            TB_RP726 inspector1;
-            if (seq1 != null && !seq1.isEmpty()) {
-                inspector1 = TBRP726Repository.findById(Integer.parseInt(seq1)).orElse(new TB_RP726());
-            } else {
-                inspector1 = new TB_RP726();
-            }
-            inspector1.setSpworkcd(pk.getSpworkcd());
-            inspector1.setSpcompcd(pk.getSpcompcd());
-            inspector1.setSpplancd(pk.getSpplancd());
-            inspector1.setSpmenu("tbRp720");
-            inspector1.setCheckdt(pk.getCheckdt());
-            inspector1.setCheckno(pk.getCheckno());
-            inspector1.setChkflag("0");
-            inspector1.setCompany(company1);
-            inspector1.setJiggeub(position1);
-            inspector1.setCheckusr(name1);
+                // 해당 인덱스에 있는 다른 값들도 가져옴
+                String seq1 = params.get("checkusr1_seq_" + index);
+                String company1 = params.get("checkusr1_company_" + index);
+                String position1 = params.get("checkusr1_position_" + index);
+                String name1 = params.get("checkusr1_name_" + index);
 
-            try {
-                TBRP726Repository.save(inspector1);
-            } catch (Exception e) {
-                result.success = false;
-                result.message = "도급인 저장에 실패하였습니다: " + e.getMessage();
-                return result;
+                // 값이 있는 경우에만 처리
+                if (company1 != null && !company1.isEmpty() &&
+                        position1 != null && !position1.isEmpty() &&
+                        name1 != null && !name1.isEmpty()) {
+
+                    TB_RP726 inspector1;
+                    if (seq1 != null && !seq1.isEmpty()) {
+                        inspector1 = TBRP726Repository.findById(Integer.parseInt(seq1)).orElse(new TB_RP726());
+                    } else {
+                        inspector1 = new TB_RP726();
+                    }
+
+                    inspector1.setSpworkcd(pk.getSpworkcd());
+                    inspector1.setSpcompcd(pk.getSpcompcd());
+                    inspector1.setSpplancd(pk.getSpplancd());
+                    inspector1.setSpmenu("tbRp720");
+                    inspector1.setCheckdt(pk.getCheckdt());
+                    inspector1.setCheckno(pk.getCheckno());
+                    inspector1.setChkflag("0");
+                    inspector1.setCompany(company1);
+                    inspector1.setJiggeub(position1);
+                    inspector1.setCheckusr(name1);
+
+                    try {
+                        TBRP726Repository.save(inspector1);
+                    } catch (Exception e) {
+                        result.success = false;
+                        result.message = "도급인 저장에 실패하였습니다: " + e.getMessage();
+                        return result;
+                    }
+                }
             }
         }
 
-        for (int i = 1; ; i++) {
-            // checkusr2 데이터 처리
-            String seq2 = params.get("checkusr2_seq_" + i);
-            String company2 = params.get("checkusr2_company_" + i);
-            String position2 = params.get("checkusr2_position_" + i);
-            String name2 = params.get("checkusr2_name_" + i);
+        // 점검자 처리 (checkusr2)도 동일한 방식으로 처리
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey();
 
-            // 값이 null이거나 빈 문자열인 경우 종료
-            if (company2 == null || company2.isEmpty() ||
-                    position2 == null || position2.isEmpty() ||
-                    name2 == null || name2.isEmpty()) {
-                break;  // 더 이상 데이터가 없으면 종료
-            }
+            // checkusr2_company_로 시작하는 키들만 처리
+            if (key.startsWith("checkusr2_company_")) {
+                // 인덱스 추출 (checkusr2_company_ 뒤에 숫자 부분)
+                String indexStr = key.substring("checkusr2_company_".length());
+                int index = Integer.parseInt(indexStr);
 
-            TB_RP726 inspector2;
-            if (seq2 != null && !seq2.isEmpty()) {
-                inspector2 = TBRP726Repository.findById(Integer.parseInt(seq2)).orElse(new TB_RP726());
-            } else {
-                inspector2 = new TB_RP726();
-            }
-            inspector2.setSpworkcd(pk.getSpworkcd());
-            inspector2.setSpcompcd(pk.getSpcompcd());
-            inspector2.setSpplancd(pk.getSpplancd());
-            inspector2.setSpmenu("tbRp720");
-            inspector2.setCheckdt(pk.getCheckdt());
-            inspector2.setCheckno(pk.getCheckno());
-            inspector2.setChkflag("1");
-            inspector2.setCompany(company2);
-            inspector2.setJiggeub(position2);
-            inspector2.setCheckusr(name2);
+                // 해당 인덱스에 있는 다른 값들도 가져옴
+                String seq2 = params.get("checkusr2_seq_" + index);
+                String company2 = params.get("checkusr2_company_" + index);
+                String position2 = params.get("checkusr2_position_" + index);
+                String name2 = params.get("checkusr2_name_" + index);
 
-            try {
-                TBRP726Repository.save(inspector2);
-            } catch (Exception e) {
-                result.success = false;
-                result.message = "관계수급인 저장에 실패하였습니다: " + e.getMessage();
-                return result;
+                // 값이 있는 경우에만 처리
+                if (company2 != null && !company2.isEmpty() &&
+                        position2 != null && !position2.isEmpty() &&
+                        name2 != null && !name2.isEmpty()) {
+
+                    TB_RP726 inspector2;
+                    if (seq2 != null && !seq2.isEmpty()) {
+                        inspector2 = TBRP726Repository.findById(Integer.parseInt(seq2)).orElse(new TB_RP726());
+                    } else {
+                        inspector2 = new TB_RP726();
+                    }
+
+                    inspector2.setSpworkcd(pk.getSpworkcd());
+                    inspector2.setSpcompcd(pk.getSpcompcd());
+                    inspector2.setSpplancd(pk.getSpplancd());
+                    inspector2.setSpmenu("tbRp720");
+                    inspector2.setCheckdt(pk.getCheckdt());
+                    inspector2.setCheckno(pk.getCheckno());
+                    inspector2.setChkflag("1");
+                    inspector2.setCompany(company2);
+                    inspector2.setJiggeub(position2);
+                    inspector2.setCheckusr(name2);
+
+                    try {
+                        TBRP726Repository.save(inspector2);
+                    } catch (Exception e) {
+                        result.success = false;
+                        result.message = "관계수급인 저장에 실패하였습니다: " + e.getMessage();
+                        return result;
+                    }
+                }
             }
         }
 

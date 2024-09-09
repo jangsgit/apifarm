@@ -680,13 +680,25 @@
         }
 
         let deletedSeqs = []; // 삭제된 점검자의 seq 값을 저장할 배열
+        let inspectorIdCounterCheckusr1 = 2; // checkusr1의 ID 카운터
+        let inspectorIdCounterCheckusr2 = 2; // checkusr2의 ID 카운터
         // 점검자 추가
         function addInspector(wrapperClass, inspectorData = null, isFirst = false) {
             const wrapper = document.querySelector(`.${wrapperClass}`);
             const index = wrapper.querySelectorAll('.inspector-group').length + 1;
 
+            // checkusr1, checkusr2에 따라 각각의 카운터를 사용
+            let dataId;
+            if (wrapperClass === 'checkusr1') {
+                dataId = inspectorIdCounterCheckusr1++;
+            } else if (wrapperClass === 'checkusr2') {
+                dataId = inspectorIdCounterCheckusr2++;
+            }
+
             const newInspectorGroup = document.createElement('div');
             newInspectorGroup.classList.add('inspector-group');
+            newInspectorGroup.setAttribute('data-id', dataId.toString());
+
             let seqInput;
 
             // seq hidden input 추가
@@ -698,32 +710,29 @@
                 newInspectorGroup.appendChild(seqInput);
             }
 
-            // Helper function to create input-clear structure
+            // input-clear 구조 추가
             const createInputClear = (inputField) => {
                 const inputClearDiv = document.createElement('div');
                 inputClearDiv.classList.add('input-clear');
 
                 inputField.style.marginRight = '4px';
 
-                // Create the clear button (×)
                 const clearButton = document.createElement('span');
                 clearButton.classList.add('btn-clear');
                 clearButton.innerHTML = '×';
-                clearButton.style.display = 'none';  // Initially hidden
+                clearButton.style.display = 'none';
 
-                // Clear input value when clear button is clicked
+                // x 버튼 누르면 지우기
                 clearButton.onclick = () => {
-                    inputField.value = '';  // Clear the input field
-                    clearButton.style.display = 'none';  // Hide clear button
-                    inputField.focus();     // Re-focus on the input field
+                    inputField.value = '';
+                    clearButton.style.display = 'none';
+                    inputField.focus();
                 };
 
-                // Show or hide the clear button based on input value
                 inputField.addEventListener('input', () => {
-                    clearButton.style.display = inputField.value ? 'inline' : 'none';  // Show when there's input
+                    clearButton.style.display = inputField.value ? 'inline' : 'none';
                 });
 
-                // Append input field and clear button to the div
                 inputClearDiv.appendChild(inputField);
                 inputClearDiv.appendChild(clearButton);
 
@@ -821,6 +830,10 @@
             uploadedFiles = []; // 업로드된 파일 리스트 초기화
             deletedFiles = [];
             deletedSeqs=[];
+
+            // inspectorIdCounter 초기화
+            inspectorIdCounterCheckusr1 = 1; // checkusr1 카운터 초기화
+            inspectorIdCounterCheckusr2 = 1; // checkusr2 카운터 초기화
 
             // 탭 수정/등록 변경
             updateTabLink();
@@ -977,6 +990,9 @@
                         const checkusr2Wrapper = document.querySelector('.checkusr2');
                         checkusr1Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
                         checkusr2Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+
+                        inspectorIdCounterCheckusr1 = 1;
+                        inspectorIdCounterCheckusr2 = 1;
 
                         let firstCheckusr1 = true; // checkusr1의 첫 번째 여부
                         let firstCheckusr2 = true; // checkusr2의 첫 번째 여부
@@ -1266,36 +1282,56 @@
                 const checkusr1Wrapper = document.querySelector('.checkusr1');
                 const checkusr1Groups = checkusr1Wrapper.querySelectorAll('.inspector-group');
 
-                checkusr1Groups.forEach((group, index) => {
-                    const company = group.querySelector(`input[name="checkusr1_company_${index + 1}"]`).value.trim();
-                    const position = group.querySelector(`input[name="checkusr1_position_${index + 1}"]`).value.trim();
-                    const name = group.querySelector(`input[name="checkusr1_name_${index + 1}"]`).value.trim();
-                    const seq = group.querySelector(`input[name="checkusr1_seq_${index + 1}"]`)
-                        ? group.querySelector(`input[name="checkusr1_seq_${index + 1}"]`).value.trim()
-                        : '';
+                checkusr1Groups.forEach((group) => {
+                    // 삭제된 그룹을 제외하고 남아있는 점검자들의 정보를 저장
+                    const dataId = group.getAttribute('data-id');  // 고유 data-id 사용
+                    const companyInput = group.querySelector(`input[name="checkusr1_company_${dataId}"]`);
+                    const company = companyInput ? companyInput.value.trim() : '';
 
-                    formData.append(`checkusr1_company_${index + 1}`, company);
-                    formData.append(`checkusr1_position_${index + 1}`, position);
-                    formData.append(`checkusr1_name_${index + 1}`, name);
-                    formData.append(`checkusr1_seq_${index + 1}`, seq);
+                    const positionInput = group.querySelector(`input[name="checkusr1_position_${dataId}"]`);
+                    const position = positionInput ? positionInput.value.trim() : '';
+
+                    const nameInput = group.querySelector(`input[name="checkusr1_name_${dataId}"]`);
+                    const name = nameInput ? nameInput.value.trim() : '';
+
+                    // seq는 새로 추가된 점검자는 없으므로 빈 값으로 처리
+                    const seqInput = group.querySelector(`input[name="checkusr1_seq_${dataId}"]`);
+                    const seq = seqInput ? seqInput.value.trim() : '';
+
+                    // 값이 있는 경우만 formData에 추가
+                    if (company && position && name) {
+                        formData.append(`checkusr1_company_${dataId}`, company);
+                        formData.append(`checkusr1_position_${dataId}`, position);
+                        formData.append(`checkusr1_name_${dataId}`, name);
+                        formData.append(`checkusr1_seq_${dataId}`, seq);  // seq가 있으면 추가
+                    }
                 });
 
                 // checkusr2 정보를 수집하여 formData에 추가 (관계수급인)
                 const checkusr2Wrapper = document.querySelector('.checkusr2');
                 const checkusr2Groups = checkusr2Wrapper.querySelectorAll('.inspector-group');
 
-                checkusr2Groups.forEach((group, index) => {
-                    const company = group.querySelector(`input[name="checkusr2_company_${index + 1}"]`).value.trim();
-                    const position = group.querySelector(`input[name="checkusr2_position_${index + 1}"]`).value.trim();
-                    const name = group.querySelector(`input[name="checkusr2_name_${index + 1}"]`).value.trim();
-                    const seq = group.querySelector(`input[name="checkusr2_seq_${index + 1}"]`)
-                        ? group.querySelector(`input[name="checkusr2_seq_${index + 1}"]`).value.trim()
-                        : '';
+                checkusr2Groups.forEach((group) => {
+                    const dataId = group.getAttribute('data-id');  // 고유 data-id 사용
+                    const companyInput = group.querySelector(`input[name="checkusr2_company_${dataId}"]`);
+                    const company = companyInput ? companyInput.value.trim() : '';
 
-                    formData.append(`checkusr2_company_${index + 1}`, company);
-                    formData.append(`checkusr2_position_${index + 1}`, position);
-                    formData.append(`checkusr2_name_${index + 1}`, name);
-                    formData.append(`checkusr2_seq_${index + 1}`, seq);
+                    const positionInput = group.querySelector(`input[name="checkusr2_position_${dataId}"]`);
+                    const position = positionInput ? positionInput.value.trim() : '';
+
+                    const nameInput = group.querySelector(`input[name="checkusr2_name_${dataId}"]`);
+                    const name = nameInput ? nameInput.value.trim() : '';
+
+                    const seqInput = group.querySelector(`input[name="checkusr2_seq_${dataId}"]`);
+                    const seq = seqInput ? seqInput.value.trim() : '';
+
+                    // 값이 있는 경우만 formData에 추가
+                    if (company && position && name) {
+                        formData.append(`checkusr2_company_${dataId}`, company);
+                        formData.append(`checkusr2_position_${dataId}`, position);
+                        formData.append(`checkusr2_name_${dataId}`, name);
+                        formData.append(`checkusr2_seq_${dataId}`, seq);
+                    }
                 });
                 // 삭제된 seq 값들을 formData에 추가
                 if (deletedSeqs.length > 0) {
