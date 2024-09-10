@@ -10,49 +10,62 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>메뉴로그</h2>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+                <h2>로그현황</h2>
+                <!--                <a title="북마크" class="bookmark toggle">-->
+                <!--                    내메뉴-->
+                <!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>시스템설정</li>
-                <li>메뉴로그</li>
+                <li>시스템정보</li>
+                <li>로그현황</li>
             </ul>
         </div>
         <!-- Select -->
-        <div class="search-wrap">
+        <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="메뉴카운트">메뉴 카운트</a>
+                    <a href="#tab1" title="메뉴카운트">메뉴카운트</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="메뉴로그">메뉴 로그</a>
+                    <a href="#tab2" title="메뉴로그">메뉴로그</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="로그인로그">로그인로그</a>
+                </li>
+                <li>
+                    <a href="#tab4" title="시스템로그">시스템로그</a>
                 </li>
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" id="tab1" style="height: 820px;">
                     <div class="section-top">
                         <form id="searchForm">
                             <div class="search-wrap">
@@ -82,7 +95,7 @@
                                     </dt>
                                     <dd>
                                         <div class="srch-box">
-                                        <select class="form-control2 w300" id="cboMenu" name="cboMenu"></select>
+                                            <select class="form-control2 w300" id="cboMenu" name="cboMenu"></select>
                                             <a class="btn-srch" id="btnSearch1" title="검색"></a>
                                         </div>
                                     </dd>
@@ -98,7 +111,7 @@
                                     <dd>
                                         <div class="srch-box">
                                             <select class="form-control2" id="cboUser" name="cboUser"></select>
-                                            <a class="btn-srch" id="btnSearch3" title="검색"></a>
+                                            <a class="btn-srch" id="btnSearch" title="검색"></a>
                                         </div>
                                     </dd>
                                 </dl>
@@ -106,12 +119,9 @@
                         </form>
 
                     </div> <!--//section-top end -->
-                    <div class="container-fluid" id="theGridContainer">
+                    <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid"></div>
-
-                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
-                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold; ">조회된 데이터가 없습니다</div>
+                        <div id="theGrid" style="max-height: 700px;"></div>
                     </div>
 
                     <div class="btn-wrap">
@@ -120,7 +130,7 @@
 
 
                 <!-- Section -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item" id="tab2" style="height: 820px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -167,11 +177,137 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="container-fluid">
+                    <div class="container-fluid" id="theGridContainer">
                         <p id="selectedItem"></p>
-                        <div id="theGrid2" style="max-height: 493px;"></div>
+                        <div id="theGrid2" style="max-height: 700px;"></div>
+
+                        <div id="emptyMessage" class="empty-message " style="display:none; height: 400px; border: 1px solid rgba(0,0,0, .2);
+                         text-align: center; line-height: 400px; border-collapse: collapse; border-radius:4px; color: black; font-weight: bold; ">
+                            조회된 데이터가 없습니다
+                        </div>
                     </div>
 
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+
+
+                <section class="tab-item" id="tab3" style="height: 820px;">
+                    <div class="section-top">
+                        <form id="searchForm3" autocomplete="off">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        발생일<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <input class="tac w150 logfrdate" type="text" id="srchStartDt3"
+                                                       name="srchStartDt"/>
+                                                <label for="srchStartDt3" class="hide">시작일</label>
+                                            </li>
+                                            <li>
+                                                <input class="tac w150 logtodate" type="text" id="srchEndDt3"
+                                                       name="srchEndDt"/>
+                                                <label for="srchEndDt3" class="hide">종료일</label>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="text1">
+                                            이름<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="srch-box">
+                                            <input class="form-control2" id="keyword" name="keyword"/>
+                                            <a class="btn-srch" id="btnSearch3" title="검색"></a>
+                                        </div>
+                                    </dd>
+                                </dl>
+
+                            </div>
+                        </form>
+
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid3" style="max-height: 700px;"></div>
+                    </div>
+
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+
+
+                <section class="tab-item" id="tab4" style="height: 820px;">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    생성일<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input class="tac w150 logfrdate" type="text" id="srchStartDt4"
+                                                   name="srchStartDt4"/>
+                                            <label for="srchStartDt4" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input class="tac w150 logtodate" type="text" id="srchEndDt4"
+                                                   name="srchEndDt4"/>
+                                            <label for="srchEndDt4" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input class="form-control2" id="srchType" name="srchType"/>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        에러위치<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input class="form-control2" id="srchSource" name="srchSource"/>
+                                        <a class="btn-srch" id="btnSearch4" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                        </div>
+                       <!-- <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-edit" id="detail" title="상세정보보기">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        상세정보보기
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>-->
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid4" style="max-height: 700px;"></div>
+                    </div>
                     <div class="btn-wrap">
                     </div>
                 </section>
@@ -194,6 +330,9 @@
         var theGrid;
         var viewdata;
 
+        var theGrid4;
+        var viewdata4;
+
         // tab2의 date에 기본값 지정
 
         // 현재 연도를 가져옴
@@ -210,15 +349,13 @@
         // input 요소에 기본값 설정
         document.getElementById('date_to2').value = defaultDate2;
 
-
-
+        /*메뉴로그 컬럼들*/
         var columns = [
             {binding: 'folder_name', header: '메뉴폴더', width: 200, align: 'center'},
             {binding: 'menu_name', header: '메뉴', width: 200, align: 'center'},
             {binding: 'use_count', header: '사용횟수', width: 200, align: 'center', format: 'n0'},
             {binding: '', header: '', width: "*", align: 'center'},
         ];
-
         var columns2 = [
             {binding: 'row_number', header: 'No', width: 160, align: 'center'},
             {binding: 'folder_name', header: '메뉴폴더', width: 160, align: 'center'},
@@ -229,12 +366,41 @@
             {binding: '', header: '', width: "*", align: 'center'},
         ];
 
+        /*로그인로그 컬럼*/
+        var columns3 = [
+            {binding: 'row_number', header: 'No', width: 150, align: 'center'},
+            {binding: 'type', header: '구분', width: 160, align: 'center'},
+            {binding: 'addr', header: 'IP Address', width: 200, align: 'center'},
+            {binding: 'login_id', header: '사번', width: 160, align: 'center'},
+            {binding: 'name', header: '이름', width: 160, align: 'center'},
+            {binding: 'created', header: '일시', width: 260, align: 'center'},
+            {binding: '', header: '', width: "*", align: 'center'},
+            ];
+
+        /*시스템로그 컬럼*/
+        let columns4 = [
+            { binding: 'row_num', header: 'No', width: 140, align: 'center' },
+            { binding: 'type', header: '구분', width: 140, align: 'center' },
+            { binding: 'source', header: '에러위치', width: 220, align: 'center' },
+            { binding: 'message', header: '설명', width: 300, align: 'center' },
+            { binding: 'created', header: '생성일', width: 260, align: 'center' },
+            { binding: '', header: '', width: "*", align: 'center' },
+        ];
+
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+
+            menu_read();
+            system_read();
+            login_read();
+        }
+
+        function menu_read(){
+
             let data2 = [];
             let data3 = [];
             let param = FormUtil.extractForm($('#searchForm'));
@@ -288,8 +454,9 @@
             viewdata = new wijmo.collections.CollectionView(data2);
             viewdata2 = new wijmo.collections.CollectionView(data3);
 
-            // 데이터 그리드에 바인딩
 
+
+            // 데이터 그리드에 바인딩
 
             theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
@@ -319,10 +486,6 @@
                 }
             })
 
-            // 그리드 초기화
-            // new wijmo.grid.FlexGrid('#theGrid', theGrid);
-            // new wijmo.grid.FlexGrid('#theGrid2', theGrid2);
-
 
             theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
             theGrid2.rowHeaders.columns.splice(0, 1);
@@ -334,11 +497,271 @@
             new FlexGridContextMenu(theGrid2);
             window.downloadFileName = '메뉴로그';
 
+        }
+
+
+        function login_read(){
+            let data2 = [];
+            let param = $('#searchForm3').serialize();
+            let srchStartDt = $('#srchStartDt3').val();
+            let srchEndDt = $('#srchEndDt3').val();
+            let keyword = $('#keyword').val();
+
+
+            $.ajax({
+                url: '/api/system/loginlog/read',
+                type: 'GET',
+                data: {
+                    'param': param,
+                    'srchStartDt': srchStartDt,
+                    'srchEndDt': srchEndDt,
+                    'keyword': keyword,
+                },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data);
+                    data2 = data.data;
+                    // `addr` 필드를 변형하여 `value`만 추출
+                    data2.forEach(item => {
+                        if (item.addr && item.addr.value) {
+                            item.addr = item.addr.value;
+                        }
+                    });
+
+                    console.log('First item:', data2[0]);
+                    console.log('Second item:', data2[1]);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata3 = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                isReadOnly: true,
+                itemsSource: viewdata3
+            });
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid3.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            theGrid3.refresh();
+
+
+            new FlexGridContextMenu(theGrid3);
+
+
+            // 검색
+            $('#btnSearch3').click(searchDataBind3);
+        }
+
+        function searchDataBind3() {
+            console.log("searchDataBind called");
+
+            let data = {
+                'keyword' : $('#keyword').val(),
+                'srchStartDt': $('#srchStartDt3').val(),
+                'srchEndDt': $('#srchEndDt3').val()
+            }
+
+            console.log("Data to send:", data);
+
+            $.ajax({
+                url: '/api/system/loginlog/read',
+                type: 'GET',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding3(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        function grid_binding3(data){
+
+            let formattedData = data.map(item=>({
+                row_number: item.row_number,
+                type: item.type,
+                addr: item.addr,
+                login_id: item.login_id,
+                name: item.name,
+                created: item.created,
+            }));
+
+            theGrid3.columns.clear();
+            theGrid3.autoGenerateColumns = false;
+
+            columns3.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid3.columns.push(col);
+            });
+
+            viewdata3 = new wijmo.collections.CollectionView(formattedData);
+
+            theGrid3.itemsSource = viewdata3;
+            theGrid3.refresh();
+        }
+
+        function system_read(){
+            let data2 = [];
+
+            let srchStartDt = $('#srchStartDt4').val();
+            let srchEndDt = $('#srchEndDt4').val();
+            let srchType= $('#srchType').val();
+            let srchSource = $('#srchSource').val();
+
+
+            $.ajax({
+                url: '/api/system/systemlog/read',
+                type: 'GET',
+                data: {
+                    'srchStartDt' : srchStartDt,
+                    'srchEndDt' : srchEndDt,
+                    'srchType' : srchType,
+                    'srchSource' : srchSource,
+
+                },
+                async: false,
+                success: function(data){
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata4 = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns4,
+                isReadOnly: true,
+                itemsSource: viewdata4
+            });
+
+            // if (data2.length == 0 ){
+            //     console.log('Grid initialized with empty data.');
+            // }
+
+            let selector = new wijmo.grid.selector.Selector(theGrid4, {
+                itemChecked: () => {
+
+                }
+            })
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid4.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+            new FlexGridContextMenu(theGrid);
+
+            $('#btnSearch4').click(searchData4);
+
+        }
+
+        function searchData4(){
+
+            let data = {
+                'srchStartDt' : $('#srchStartDt4').val(),
+                'srchEndDt' : $('#srchEndDt4').val(),
+                'srchType' : $('#srchType').val(),
+                'srchSource' : $('#srchSource').val()
+            }
+
+            console.log("Data to send:", data);
+
+            // let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            $.ajax({
+                url: '/api/system/systemlog/read',
+                type: 'GET',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding4(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
 
 
         }
 
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function grid_binding4(data){
+
+            let formattedData = data.map(item=>({
+                row_num:item.row_num,
+                id : item.id,
+                type : item.type,
+                source:item.source,
+                message : item.message,
+                created : item.created
+            }));
+
+            theGrid4.columns.clear();
+            theGrid4.autoGenerateColumns = false;
+
+            columns4.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid4.columns.push(col);
+            });
+
+            viewdata4 = new wijmo.collections.CollectionView(formattedData);
+
+            theGrid4.itemsSource = viewdata4;
+            theGrid4.refresh();
+        }
+
 
 
         let filelist = [];
@@ -361,6 +784,7 @@
 
             console.log("검색 파라미터:", {cboMenu, date_from, date_to});
 
+
             $.ajax({
                 url: '/api/system/menulog/read',
                 type: 'GET',
@@ -378,13 +802,10 @@
                     if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
                         console.log(data.data);
                         grid_binding(data.data); // 필터링된 데이터만 그리드에 바인딩
-                        $('#emptyMessage').hide(); // 데이터가 있으므로 메시지 숨기기
                     } else {
                         console.warn('서버에서 반환된 데이터가 없습니다.');
                         console.log("응답 데이터 형식 확인:", data);
-                        $('#emptyMessage').show(); // 데이터가 없으므로 메시지 표시
                         clearGridData(); // 그리드의 데이터를 지우고 헤더는 유지
-
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -401,6 +822,14 @@
                 theGrid.refresh(); // 그리드를 새로고침하여 데이터 지운 것을 반영
             }
         }
+
+        function clearGridData2() {
+            if (typeof viewdata2 !== 'undefined') {
+                viewdata2.sourceCollection = []; // 그리드의 데이터만 지움
+                theGrid2.refresh(); // 그리드를 새로고침하여 데이터 지운 것을 반영
+            }
+        }
+
 
         function grid_binding(data) {
             console.log("바인딩 데이터", data);
@@ -451,6 +880,9 @@
 
             console.log("검색 파라미터:", {cboMenu, cboUser, date_from, date_to});
 
+
+
+
             $.ajax({
                 url: '/api/system/menulog/read2',
                 type: 'GET',
@@ -467,16 +899,22 @@
                     if (data && data.success && Array.isArray(data.data)) {
                         console.log(data.data);
                         grid_binding2(data.data)
-
+                        // $('#emptyMessage').hide(); // 데이터가 있으므로 메시지 숨기기
                     } else {
                         console.warn('서버에서 반환된 데이터가 없습니다.');
                         console.log("응답 데이터 형식 확인:", data);
-
+                        // $('#emptyMessage').show(); // 데이터가 없으므로 메시지 표시
+                        // clearGridData2(); // 그리드의 데이터를 지우고 헤더는 유지
+                        // let gridContainer = $('#theGridContainer');
+                        // $('#theGrid2').remove();  // 기존 그리드를 제거합니다.
+                        // gridContainer.prepend('<div id="theGrid2"></div>');  // 새로운 그리드 요소를 추가합니다.
                     }
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching log_list data:', textStatus, errorThrown);
+                    $('#emptyMessage').show(); // 데이터가 없으므로 메시지 표시
+                    clearGridData2(); // 그리드의 데이터를 지우고 헤더는 유지
                 }
             });
         }
@@ -498,7 +936,7 @@
                 menu_name: item.menu_name,
                 username: item.username,
                 user_name: item.user_name,
-                click_date:item.click_date
+                click_date: item.click_date
             }));
 
             // theGrid와 viewdata가 접근 가능하고 올바르게 초기화되었는지 확인
@@ -525,9 +963,8 @@
         $(document).ready(function (e) {
 
             // tab1 시작일과 종료일을 지정
-            // $('#date_from').val(CommonUtil.getYYYYMMDD(-7));
-            // $('#date_to').val(CommonUtil.getYYYYMMDD());
-
+            $('#date_from').val(CommonUtil.getYYYYMMDD(-7));
+            $('#date_to').val(CommonUtil.getYYYYMMDD());
 
             // 현재 연도를 가져옴
             const currentYear = new Date().getFullYear();
@@ -535,7 +972,6 @@
             const defaultDate = `${currentYear}-01-01`;
             // input 요소에 기본값 설정
             document.getElementById('date_from').value = defaultDate;
-
 
             // 현재 연도를 가져옴
             const currentYear2 = new Date().getFullYear();
@@ -545,7 +981,19 @@
             document.getElementById('date_to').value = defaultDate2;
 
 
+            // 현재 연도를 가져옴
+            const currentYear3 = new Date().getFullYear();
+            const startDate = `${currentYear3}-01-01`;
+            const endDate = `${currentYear3}-12-31`;
 
+            // logfrdate 클래스를 가진 모든 input 요소에 1월 1일 값 설정
+            document.querySelectorAll('.logfrdate').forEach(input => {
+                input.value = startDate;
+            });
+            // logtodate 클래스를 가진 모든 input 요소에 12월 31일 값 설정
+            document.querySelectorAll('.logtodate').forEach(input => {
+                input.value = endDate;
+            });
 
 
             // tab1과 tab2의 그룹 select에 값을 부여

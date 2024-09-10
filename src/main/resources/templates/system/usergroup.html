@@ -11,14 +11,15 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>사용자그룹</h2>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내메뉴-->
+<!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>시스템설정</li>
-                <li>사용자정보</li>
+                <li>시스템정보</li>
+                <li>사용자그룹</li>
             </ul>
         </div>
         <!-- Select -->
@@ -30,6 +31,9 @@
                 </li>
                 <li>
                     <a href="#tab2" title="등록" id="inputTabLink">등록</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="메뉴권한">메뉴권한</a>
                 </li>
             </ul>
             <div class="tab-contents">
@@ -133,6 +137,76 @@
                         </table>
                     </div>
                 </section>
+
+                <!--section 3-->
+
+                <section class="tab-item" id="tab3" style="height: 820px;">
+                    <div class="section-top">
+                        <form id="searchForm" autocomplete="off">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="cboUserGroup2">
+                                            사용자그룹<span class="eq"></span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <select class="form-control2" id="cboUserGroup2" name="cboUserGroup"></select>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        <label for="cboMenuFolder">
+                                            메뉴폴더<span class="eq"></span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <select class="form-control2" id="cboMenuFolder" name="cboMenuFolder"></select>
+                                    </dd>
+                                </dl>
+
+                                </br>
+
+                                <dl>
+
+                                    <dd>
+                                        <div class="srch-box" style="margin-top: 20px">
+                                            읽기<input type="checkbox" id="AllcheckRead">
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dd>
+                                        <div class="srch-box" style="margin-top: 20px;">
+                                            쓰기<input type="checkbox" id="AllcheckWrite" >
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </form>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave2" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="엑셀 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--//section-top end -->
+
+                    <!--grid 영역-->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid2" style="max-height: 700px;"></div>
+                    </div>
+                    <div class="btn-wrap"></div>
+                </section>
+
+
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
@@ -151,6 +225,8 @@
 
         var theGrid;
         var viewdata;
+        var theGrid2;
+        var viewdata2;
         let selectedFiles = [];
         let SelectItem;
         let csrfToken = $("[name=_csrf]").val();
@@ -238,6 +314,105 @@
                     $("#inputTabLink").parent().addClass("active");
                 }
             });
+
+            let data3 = [];
+            let group_id = $('#cboUserGroup2').val();
+            let folder_id = $('#cboMenuFolder').val();
+
+
+            $.ajax({
+                url: '/api/system/usergroupmenu/read',
+                type: 'GET',
+                data: {
+                    'group_id': group_id,
+                    'folder_id': folder_id
+                },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data3 = data.data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
+
+            viewdata2 = new wijmo.collections.CollectionView(data3, {
+                groupDescriptions: [
+                    menuGroupName
+                ]
+            });
+
+
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {
+                        binding: 'name',
+                        header: '코드명',
+                        width: 250,
+                        align: 'center',
+                    },
+                    {
+                        binding: 'r',
+                        header: '읽기',
+                        width: 200,
+                        align: 'center',
+                        dataType: wijmo.DataType.Boolean,
+                        isReadOnly: false,
+                    },
+                    {
+                        binding: 'w',
+                        header: '쓰기',
+                        width: 200,
+                        align: 'center',
+                        dataType: wijmo.DataType.Boolean,
+                        isReadOnly: false,
+                    },
+                    {binding: '', header: '', width: "*", align: 'center'},
+
+                ],
+                itemsSource: viewdata2,
+                formatItem: function (s, e) {
+                    // 특정 컬럼과 행에 대해 readonly 속성을 부여
+                    if (e.panel.cellType == wijmo.grid.CellType.Cell) {
+                        var col = s.columns[e.col];
+                        var item = s.rows[e.row].dataItem;
+
+                        // 예: 첫 번째 컬럼의 셀을 읽기 전용으로 설정
+                        if (col.binding == 'name') {
+                            e.cell.style.pointerEvents = 'none';  // 마우스 클릭 비활성화
+                            e.cell.style.userSelect = 'none';  // 텍스트 선택 비활성화
+                        }
+                    }
+                }
+            });
+
+
+            theGrid2.rowHeaders.columns.splice(0, 1);
+
+            // "읽기" 체크박스 클릭 이벤트 핸들러
+            document.getElementById('AllcheckRead').addEventListener('change', function () {
+                var checked = this.checked;
+                for (var i = 0; i < theGrid2.rows.length; i++) {
+                    theGrid2.setCellData(i, 'r', checked);
+                }
+            });
+
+            // "쓰기" 체크박스 클릭 이벤트 핸들러
+            document.getElementById('AllcheckWrite').addEventListener('change', function () {
+                var checked = this.checked;
+                for (var i = 0; i < theGrid2.rows.length; i++) {
+                    theGrid2.setCellData(i, 'w', checked);
+                }
+            });
+
+            // $('#btnSearch').click(searchData2);
+            $('#btnSave2').click(saveUserGroupMenu);
+            new FlexGridContextMenu(theGrid2);
+
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
@@ -342,9 +517,160 @@
 
             updateTabLink('id');
 
+        }
 
+
+        // 초기 콤보박스 채우기
+        AjaxUtil.fillSelectOptions($('#cboUserGroup2'), 'user_group', '', '');
+        AjaxUtil.fillSelectOptions($('#cboMenuFolder'), 'menu_folder', 'all', '');
+
+        function searchData2() {
+            let group_id = $('#cboUserGroup2').val();
+            let folder_id = $('#cboMenuFolder').val();
+            console.log(group_id+" 선택된 값들 "+folder_id);
+
+            $.ajax({
+                url: '/api/system/usergroupmenu/read',
+                type: 'GET',
+                data: {
+                    'group_id': group_id,
+                    'folder_id': folder_id
+                },
+                async: false,
+                success: function (data) {
+                    console.log("서버 응답 데이터:", data); //서버에서 반환된 데이터 로그 출력
+
+                    if(data && data.success&& Array.isArray(data.data) && data.data.length > 0){
+                        let filteredData = filterDataByFolder(data.data, data.folder_id);
+                        grid_binding2(filteredData);    // 서버에서 반환된 데이터
+                    } else{
+                        console.warn('서버에서 반환된 데이터가 없습니다.');
+                        console.log("응답 데이터 형식 확인:", data);
+
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        function filterDataByFolder(data, folderId) {
+            // folderId에 해당하는 데이터만 필터링
+            return data.filter(item => item.folder_id === folderId);
+        }
+
+        let menuGroupName = new wijmo.collections.PropertyGroupDescription('메뉴명', function (item) {
+            return item.gpname;
+        })
+        function grid_binding2(data){
+            console.log("바인딩 데이터:",data);
+
+            let UserMenuData = data.map(item=>({
+                name: item.name,
+                r: item.r,
+                w: item.w,
+                gpname: item.gpname,  // 그룹화를 위한 속성 추가
+                menu_code: item.menu_code, // 추가: menu_code 필드 포함
+                ugm_id: item.ugm_id // 추가: ugm_id 필드 포함
+            }));
+
+            console.log("UserMenuData:",UserMenuData);
+            console.log("바인딩 이후 데이터");
+
+
+            theGrid2.columns.clear();
+            theGrid2.autoGenerateColumns = false;
+
+            var columns = [
+                {binding: 'name',header: '코드명',width: 250,align: 'center',},
+                {binding: 'r',header: '읽기',width: 200,align: 'center',dataType: wijmo.DataType.Boolean,isReadOnly: false,},
+                {binding: 'w',header: '쓰기',width: 200,align: 'center',dataType: wijmo.DataType.Boolean,isReadOnly: false,},
+                {binding: '', header: '', width: "*", align: 'center'},
+            ];
+
+
+            columns.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid2.columns.push(col);
+            });
+
+
+            // CollectionView를 생성하여 그리드에 설정
+            viewdata2 = new wijmo.collections.CollectionView(UserMenuData);
+
+            // 그룹화 설정 추가
+            viewdata2.groupDescriptions.push(menuGroupName);
+
+            // 그리드에 바인딩
+            theGrid2.itemsSource = viewdata2;
 
         }
+
+
+        function saveUserGroupMenu() {
+
+            let group_id = $('#cboUserGroup2').val();
+            let folder_id = $('#cboMenuFolder').val();
+
+            let url = '/api/system/usergroupmenu/save';
+            let data = {group_id: group_id, Q : ''};
+            let items = [];
+
+
+            // itemsSource의 sourceCollection을 사용하여 데이터 순회
+            let sourceCollection = theGrid2.itemsSource.sourceCollection || [];
+            console.log("Source Collection Length:", sourceCollection.length);
+            console.log("Source Collection:", JSON.stringify(sourceCollection, null, 2));
+
+
+
+            sourceCollection.forEach(item => {
+                let menu_code = item.menu_code;
+                let ugm_id = item.ugm_id; // 추가
+                if (menu_code) {
+                    items.push({
+                        menu_code: menu_code,
+                        r: item.r === true ? true : false,  // Boolean 값으로 변환
+                        w: item.w === true ? true : false,  // Boolean 값으로 변환
+                        ugm_id: ugm_id, // 추가
+                    });
+                }
+            });
+
+
+            // 데이터 확인을 위한 콘솔 출력
+            console.log("Items to be sent:", JSON.stringify(items, null, 2)); // 전송할 데이터 출력
+
+
+            data.Q = JSON.stringify(items);
+            console.log("Final data object:", JSON.stringify(data, null, 2)); // 최종 데이터 객체 출력
+            //데이터입력체크루틴 누락
+            //_this.grid.sel
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+                let fnSuccess = function (result) {
+                    if(result.success){
+                        Alert.alert('','저장되었습니다');
+                        searchData2(); // 저장 후 새 데이터로 그리드 갱신
+                    }else {
+                        console.error('저장 실패:', result.message);  // 실패 시 에러 로그
+                    }
+                };
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            }, function () { });
+
+        }
+
+
+        $('#cboUserGroup2, #cboMenuFolder').change(function() {
+            // 값이 변경되었을 때 searchData 함수를 호출
+            searchData2();
+        });
+
+
+
 
         $(document).ready(function (e) {
 
