@@ -11,9 +11,9 @@
             <div class="left">
                 <h2>로봇 점검 현황</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                         alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+                <!--                <a title="북마크" class="bookmark toggle">-->
+                <!--                    내메뉴-->
+                <!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -25,30 +25,42 @@
         <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">시설명</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="tab-wrap">
+            <ul class="tab-links">
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}"/>
+                <li>
+                    <a href="#tab1" title="로봇 점검 현황" id="InspecTabLink">로봇 점검 현황</a>
+                </li>
+                <!-- write_flag가 true일 때만 '등록' 탭을 보여줍니다. -->
+                <li>
+                    <a href="#tab2" title="로봇 이벤트 현황" id="EventTabLink">로봇 이벤트 현황</a>
+                </li>
+            </ul>
             <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
-                    <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -103,77 +115,69 @@
                         <div id="theGrid" style="max-height: 730px; height: 730px"></div>
                     </div>
                 </section>
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    점검일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate2" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate2" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    점검상태<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select title="점검상태" id="searchcom2">
+                                                <option value="0">전체</option>
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <div style="margin-left: -20px" class="srch-box">
+                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-navy" style="width: 180px" id=""
+                                       menuurl="/gui/wm_dashboard_robot">
+                                        로봇 관제 연결
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid2" style="max-height: 730px; height: 730px"></div>
+                    </div>
+                </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
     </div> <!-- //dashboard-layout-right end-->
 
     </div> <!-- //dashboard-layout-contents end-->
-    <!-- [대시보드] 팝업  -->
-    <div class="dashboard-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup1">
-            <div class="popup-title">
-                <h3>상세조치등록</h3>
-                <a title="팝업닫기" class="btn-popup-close">
-                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <table class="write-table">
-                        <caption>점검등록 테이블</caption>
-                        <colgroup>
-                            <col class="wp20">
-                            <col class="wp80">
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <th>
-                                <label for="date6">
-                                    조치일자
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="date" id="date6" name="">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext1">
-                                    담당자
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext1" class="wp60" placeholder="담당자">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">
-                                    조치내역
-                                </label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popuptext2" class="wp100" placeholder="0.5kw 제어">
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="popup-button">
-                <button class="btn-popup-close">취소</button>
-                <button class="btn-navy">저장</button>
-            </div>
-        </div>
-    </div> <!-- //dashboard-layout-popup end -->
+
 
 </th:block>
 
@@ -194,37 +198,13 @@
             fetchListData();
             // inputData();
             setDefaultDates('startDate', 'endDate');
+            setDefaultDates('startDate2', 'endDate2');
         }
 
         function fetchListData() {
-            let data2 = [];
+            let data1 = [];
 
-            $.ajax({
-                url: '',
-                type: 'GET',
-                async: false,
-                success: function (data) {
-                    data2 = data.data;
-                }
-            })
-
-            viewdata = new wijmo.collections.CollectionView(data2);
-
-            // 임시 데이터 배열 정의
-            var tempData = [];
-            for (var i = 0; i < 20; i++) {
-                tempData.push({
-                    checkno: i + 1,
-                    inpledt: '',
-                    checkdt: '',
-                    spworknm: '',
-                    spcompnm: '',
-                    spplannm: '',
-                    checkusr: '',
-                    checkresult: '',
-                    checkrem: ''
-                });
-            }
+            viewdata = new wijmo.collections.CollectionView(data1);
 
             if (!theGrid) {
                 // 데이터 그리드에 바인딩
@@ -233,25 +213,103 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'inpledt', header: '점검일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '로봇ID',width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '점검결과', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spcompnm', header: '상태설명', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spplannm', header: '점검시작시간', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkusr', header: '점검완료시간', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkresult', header: '이동거리', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {
+                            binding: 'inpledt',
+                            header: '점검일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkdt',
+                            header: '로봇ID',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spworknm',
+                            header: '점검결과',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spcompnm',
+                            header: '상태설명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spplannm',
+                            header: '점검시작시간',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkusr',
+                            header: '점검완료시간',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkresult',
+                            header: '이동거리',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
 
                     ],
-                    itemsSource: tempData
+                    itemsSource: viewdata
                 });
                 theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
                 new FlexGridContextMenu(theGrid);
-                window.downloadFileName = '제어이행현황';
+                window.downloadFileName = '로봇 점검 현황';
             } else {
                 // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
                 theGrid.itemsSource = viewdata;
             }
+
+            let data2 = [];
+            viewdata2 = new wijmo.collections.CollectionView(data2);
+
+
+            // 데이터 그리드에 바인딩
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                    {binding: 'inpledt', header: '발생일자', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'checkdt', header: '로봇ID', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'spworknm', header: '이벤트종류', width: 250, align: 'center', isReadOnly: true},
+                    {binding: 'spcompnm', header: '현재위치', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'spplannm', header: '이벤트내용', width: 250, align: 'center', isReadOnly: true},
+                    {binding: 'checkusr', header: '온도값', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'checkresult', header: '사람수', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'checkrem', header: '인식된얼굴이름', width: 160, align: 'center', isReadOnly: true},
+                    {binding: 'pic', header: '사진', width: 200, align: 'center', isReadOnly: true},
+
+                ],
+                itemsSource: viewdata2
+            });
+            theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+            new FlexGridContextMenu(theGrid2);
+            window.downloadFileName = '로봇 이벤트 현황';
+
         }
+
 
         $(document).ready(function (e) {
 

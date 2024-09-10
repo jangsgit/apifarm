@@ -28,7 +28,8 @@
         <header>
             <div class="left">
                 <div class="logo">
-                    <h1><img src="/images/logo/logo.svg" alt="로고"></h1>
+                    <img src="/images/logo/logo-only.svg" alt="로고">
+                    <h1>FOMS</h1>
                 </div>
             </div>
             <div class="right">
@@ -248,14 +249,14 @@
             <div class="dashboard-layout-left menu_wrap">
                 <!-- (레이아웃) 사이드바  -->
                 <div class="dashboard-layout-sidebar tabs" data-tab="tabWrap">
-                    <ul class="layout-sidebar-tab">
-                        <li class="active">
-                            <a href="#menu" title="전체메뉴">전체 메뉴</a>
-                        </li>
-                        <li>
-                            <a href="#bookmark" title="내메뉴">내 메뉴</a>
-                        </li>
-                    </ul>
+<!--                    <ul class="layout-sidebar-tab">-->
+<!--                        <li class="active">-->
+<!--                            <a href="#menu" title="전체메뉴">전체 메뉴</a>-->
+<!--                        </li>-->
+<!--                        <li>-->
+<!--                            <a href="#bookmark" title="내메뉴">내 메뉴</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
                     <div class="layout-sidebar-tabcont">
                         <nav class="layout-nav sidebar-tabcont" id="menu">
                             <ul class="dep1">
@@ -301,11 +302,11 @@
                                 </li>
                             </ul>
                         </nav> <!-- // nav end -->
-                        <div class="layout-bookmark sidebar-tabcont" id="bookmark">
-                            <ul class="bookmark-list" id="bookmark-menu">
+<!--                        <div class="layout-bookmark sidebar-tabcont" id="bookmark">-->
+<!--                            <ul class="bookmark-list" id="bookmark-menu">-->
 
-                            </ul>
-                        </div> <!-- // bookmark end -->
+<!--                            </ul>-->
+<!--                        </div> &lt;!&ndash; // bookmark end &ndash;&gt;-->
                     </div>
                     <div class="layout-sidebar-bottom">
                         <img src="/images/logo/logo-kt.svg" alt="kt logo">
@@ -324,13 +325,14 @@
 <!--        </div>-->
     </div>
 </div>
-<div class="footer">
-    <!--footer [S]-->
-    <span class="footer-left" id="link_privatepolicy" data-commonCd="개인정보 처리방침">개인정보 처리방침</span>
-    <span class="footer-left" id="link_emailreject" data-commonCd="이메일 무단수집 거부">이메일 무단수집 거부</span>
-    <span class="footer-right">Copyright ⓒ (주)레플러스. All Rights Reserved.</span>
-    <!--footer [E]-->
-</div>
+
+<!--<div class="footer">-->
+<!--    &lt;!&ndash;footer [S]&ndash;&gt;-->
+<!--&lt;!&ndash;    <span class="footer-left" id="link_privatepolicy" data-commonCd="개인정보 처리방침">개인정보 처리방침</span>&ndash;&gt;-->
+<!--&lt;!&ndash;    <span class="footer-left" id="link_emailreject" data-commonCd="이메일 무단수집 거부">이메일 무단수집 거부</span>&ndash;&gt;-->
+<!--    <span class="footer-right">Copyright ⓒ (주)레플러스. All Rights Reserved.</span>-->
+<!--    &lt;!&ndash;footer [E]&ndash;&gt;-->
+<!--</div>-->
 
 <!-- [사용자권한] 팝업  -->
 <div class="dashboard-layout-popup">
@@ -531,39 +533,82 @@
                         $FrontFolderElement.closest('.dep1-1').css('display', 'block');
 
                         folders.forEach(function (folder) {
-                            let $li = $('<li></li>');
+                            let $li = $('<li class="dep2-1"></li>');
                             let $a = $('<a href="#"></a>').text(folder.folder_name);
                             $li.append($a);
 
-                            let $subUl = $('<ul class="dep3 documents"></ul>');
+                            let $subUl = $('<ul class="dep3 documents" style="display: none;"></ul>');
                             $li.append($subUl);
 
                             // 해당 폴더의 하위 메뉴 항목 추가
                             folder.nodes.forEach(function (item) {
-                                let $itemLi = $('<li></li>');
+                                let $itemLi = $('<li class="dep3-custom-list-style"></li>');
                                 let $itemA = $('<a href="#" menuurl="' + item.url + '" data-bookmark="' + item.isbookmark + '" data-objid="' + item.objId + '" title="' + item.objNm + '"></a>').text(item.objNm);
+
                                 $itemLi.append($itemA);
                                 $subUl.append($itemLi);
                             });
 
                             $FrontFolderElement.append($li);
+
+                            // dep2 클릭 시 dep3 항목이 1개면 바로 탭 추가하고 dep3 숨김
+                            $a.on('click', function (e) {
+                                e.preventDefault();
+
+                                // dep3 항목 찾기
+                                var $dep3 = $li.find('.dep3 li');
+
+                                if ($dep3.length > 1) {
+
+                                } else if ($dep3.length === 1) {
+                                    $('.dep2-1').removeClass('on');
+                                    $('.dep3 li').removeClass('on');
+                                    $li.addClass('on');
+
+                                    var $a = $dep3.find('a');
+                                    var val = $a.text();
+                                    var menuurl = $a.attr('menuurl');
+                                    var objid = $a.attr('data-objid');
+                                    var _bookmark = $a.attr('data-bookmark');
+
+                                    if (nthTabs.isExistsTab('#' + objid)) {
+                                        nthTabs.toggleTab('#' + objid);
+                                    } else {
+                                        nthTabs.addTab({
+                                            id: objid,
+                                            title: val,
+                                            url: '/gui/' + objid + '/default',
+                                            active: true,
+                                            allowClose: true,
+                                            isbookmark: _bookmark
+                                        });
+                                        nthTabs.bindBookmarkEvent(objid, _bookmark);
+                                    }
+
+                                    // dep3 리스트 숨김
+                                    $subUl.hide(); // dep3 항목이 1개일 때 숨김
+                                    return false;
+                                }
+                            });
                         });
 
-                        // 하위 메뉴가 완전히 로드된 후에 이벤트 리스너 등록
                         $FrontFolderElement.find('.dep3').on('click', 'a', function (e) {
                             e.preventDefault();
-                            var $li = $(this).parent('li');
-                            if (!$li.hasClass('on')) {
-                                $li.siblings('li').removeClass('on');
-                                $li.addClass('on');
-                            }
+
+                            // 모든 dep3의 li에서 on 클래스 제거
+                            $('.dep3 li').removeClass('on');
+
+                            // 현재 클릭한 li에 on 클래스 추가
+                            var $clickedDep3 = $(this).parent('li');
+                            $clickedDep3.addClass('on');
+
+                            // dep3가 1개인 dep2에서 on 클래스 제거
+                            $('.dep2-1.on').removeClass('on');
 
                             var val = $(this).text();
                             var menuurl = $(this).attr('menuurl');
                             var objid = $(this).attr('data-objid');
                             var _bookmark = $(this).attr('data-bookmark');
-                            // var _manual = $(this).attr('data-manual');
-
 
                             if (nthTabs.isExistsTab('#' + objid)) {
                                 nthTabs.toggleTab('#' + objid);
@@ -574,10 +619,8 @@
                                     url: '/gui/' + objid + '/default',
                                     active: true,
                                     allowClose: true,
-                                    // ismanual: _manual,
                                     isbookmark: _bookmark
                                 });
-                                // 추가된 탭에 대한 북마크 초기화
                                 nthTabs.bindBookmarkEvent(objid, _bookmark);
                             }
                         });
