@@ -1,6 +1,17 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <style>
 
+    #theGird6.wj-flexgrid .wj-cell{
+        padding: 12px;
+        height: 45px;
+    }
+
+    #theGird7.wj-flexgrid .wj-cell{
+        padding: 12px;
+        height: 45px;
+    }
+
+
 </style>
 
 <th:block layout:fragment="content">
@@ -72,6 +83,12 @@
                 </li>
                 <li>
                     <a href="#tab2" title="기간별대비">기간별대비</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="성분등록">성분등록</a>
+                </li>
+                <li>
+                    <a href="#tab4" title="성분분석">성분분석</a>
                 </li>
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
@@ -488,11 +505,230 @@
                                 </div>
                             </section>
                         </div>
-
                     </div>
+                </section>
 
 
 
+                <section class="tab-item" id="tab3" style="height: 820px;">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        조회기간<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide"></label>
+                                        </li>
+                                        <li style="cursor: default; list-style-image: none;">
+                                            <div class="srch-box">
+                                                <input type="date" id="searchtodate" name="searchtodate">
+                                                <label for="searchtodate" class="hide"></label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="searchbtn">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">
+                                        <img src="/images/icon/ico-plus.svg" alt="엑셀 아이콘">
+                                        등록
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid6" style="max-height: 720px;"></div>
+                    </div>
+                </section>
+
+                <!-- Section -->
+                <section class="tab-item" id="tab4" style="height: 820px;">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록년도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="yearSelect" style="border-radius: 5px 5px 5px 5px;">
+                                                    <option value="2024" selected>2024</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2021">2021</option>
+                                                    <option value="2020">2020</option>
+                                                </select>
+
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="searchbtn">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a title="삭제" class="btn btn-delete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp15">
+                                <col class="wp12">
+                                <col class="wp15">
+                                <col class="wp12">
+                                <col class="wp15">
+                                <col class="wp12">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        C3H8 (propane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        I-C4H10 (I-Butane)
+                                    </label>
+                                </th>
+
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        N-C4H10 (N-Butance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="supplier">
+                                        I-C5H12 (I-Pentance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        N-C5H12 (N-Pentance)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                        N2 (Nitrogen)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+
+                                <th>
+                                    <label for="checkstdt">
+                                        CH4(Methane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                        CO2 (Carbon dioxide)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        C2H6 (Ethane)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkarea">
+
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" readonly>
+                                </td>
+
+                                <th>
+                                    <label for="checkstdt">
+
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" readonly>
+                                </td>
+                                <th>
+                                    <label for="checkplan">
+                                        총 합
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="" name="" class="wp100" placeholder="10" readonly>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div class="container-fluid">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid7" style="max-height: 493px"></div>
+                    </div>
                 </section>
 
 
@@ -500,6 +736,78 @@
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
+
+
+
+    <div class="modal">
+
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>공급가스 분석결과 업로드 </h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>공급가스 분석결과 업로드 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">
+                                    등록일자
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="date" id="date6" name="" value="2024-06-27">
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <span> * 업로드시 PDF 파일이어야 합니다.</span>
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()"
+                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
+                </button>
+                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
 
 
 </th:block>
@@ -869,6 +1177,8 @@
         var theGrid3;
         var theGrid4;
         var theGrid5;
+        var theGrid6;
+        var theGrid7;
 
         var viewdata;
         var viewdata1;
@@ -876,6 +1186,8 @@
         var viewdata3;
         var viewdata4;
         var viewdata5;
+        var viewdata6;
+        var viewdata7;
 
         let selectedFiles = [];
         let SelectItem;
@@ -907,6 +1219,8 @@
         function init() {
             let data2 = [];
             let data3 = [];
+            let data6 = [];
+            let data7 = [];
             let searchusr = $('#searchusr').val();
 
             $.ajax({
@@ -920,6 +1234,8 @@
                 success: function (data) {
                     console.log('wijmo', data.data);
                     data2 = data.data;
+                    data6 = data.data;
+                    data7 = data.data;
                 }
             })
 
@@ -937,66 +1253,150 @@
                 }
             })
 
-            // // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            // if (data2.length === 0) {
-            //     let emptyRowsCount = 5;  // 원하는 빈 행의 수
-            //     for (let i = 0; i < emptyRowsCount; i++) {
-            //         data2.push({});
-            //     }
-            //     console.log('Grid initialized with empty data.');
-            // }
-            //
-            // // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
-            // if (data3.length === 0) {
-            //     let emptyRowsCount = 10;  // 원하는 빈 행의 수
-            //     for (let i = 0; i < emptyRowsCount; i++) {
-            //         data3.push({});
-            //     }
-            //     console.log('Grid initialized with empty data.');
-            // }
-            //
-            // viewdata1 = new wijmo.collections.CollectionView(data2);
-            // viewdata2 = new wijmo.collections.CollectionView(data2);
-            // viewdata3 = new wijmo.collections.CollectionView(data2);
-            // viewdata4 = new wijmo.collections.CollectionView(data3);
-            // viewdata5 = new wijmo.collections.CollectionView(data3);
-            //
-            //
-            // // 데이터 그리드에 바인딩
-            // theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata1
-            // });
-            //
-            // theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata2
-            // });
-            //
-            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata3
-            // });
-            //
-            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns2,
-            //     itemsSource: viewdata4
-            // });
-            //
-            // theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns2,
-            //     itemsSource: viewdata5
-            // });
+         /*   // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 5;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data3.length === 0) {
+                let emptyRowsCount = 10;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data3.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata1 = new wijmo.collections.CollectionView(data2);
+            viewdata2 = new wijmo.collections.CollectionView(data2);
+            viewdata3 = new wijmo.collections.CollectionView(data2);
+            viewdata4 = new wijmo.collections.CollectionView(data3);
+            viewdata5 = new wijmo.collections.CollectionView(data3);
+
+
+            // 데이터 그리드에 바인딩
+            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata1
+            });
+
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata2
+            });
+
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: viewdata3
+            });;*/
+
+
+
+
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data6.length === 0) {
+                let emptyRowsCount = 14;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data6.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data7.length === 0) {
+                let emptyRowsCount = 10;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data7.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+
+            viewdata6 = new wijmo.collections.CollectionView(data6);
+            viewdata7 = new wijmo.collections.CollectionView(data7);
+
+            theGrid6 = new wijmo.grid.FlexGrid('#theGrid6', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'y1', header: '년월', width: 170, align: 'center'},
+                    {binding: 'y2', header: '관리소명', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y3', header: '분석기기', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y4', header: '일자', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y5', header: '발열량', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y6', header: '비중', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y7', header: 'CH4농도', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y8', header: '가중평균', width: 170, align: 'center', aggregate: 'Sum'},
+                    {binding: 'y9', header: '비고', width: "*", align: 'center', aggregate: 'Sum'},
+                ],
+                //홀짝 로우 음영주기
+
+                itemsSource: viewdata6
+
+            });
+
+            theGrid7 = new wijmo.grid.FlexGrid('#theGrid7', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'category', header: '구분', width: 104, align: 'center', isReadOnly: true},
+                    {binding: 'january', header: '1월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'february', header: '2월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'march', header: '3월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'april', header: '4월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'may', header: '5월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'june', header: '6월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'july', header: '7월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'august', header: '8월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'september', header: '9월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'october', header: '10월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'november', header: '11월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'december', header: '12월', width: 110, align: 'center', aggregate: 'Sum'},
+                    {binding: 'total', header: '계', width: "*", align: 'center', isReadOnly: true}
+                ],
+
+                itemsSource: viewdata7
+
+            });
+
+            theGrid6.rowHeaders.columns.splice(0, 1);
+            theGrid7.rowHeaders.columns.splice(0, 1);
+
+
+
+
+
+            theGrid7.setCellData(0, 'category', 'C3H8(Propane)');
+            theGrid7.setCellData(1, 'category', 'I-C4H10(I-Butance)');
+            theGrid7.setCellData(2, 'category', 'N-C4H10(N-Butance)');
+            theGrid7.setCellData(3, 'category', 'I-C5H12(I-Pentane)');
+            theGrid7.setCellData(4, 'category', 'N_C5H12(N-Pentane)');
+            theGrid7.setCellData(5, 'category', 'N2(Nitrogen)');
+            theGrid7.setCellData(6, 'category', 'CH4(Methane)');
+            theGrid7.setCellData(7, 'category', 'CO2(Carbon dioxide)');
+            theGrid7.setCellData(8, 'category', 'C2H6(Ethane)');
+            theGrid7.setCellData(9, 'category', '계');
+
+
+
+
+
+
+
+
+
+
             var columns = [
                 {binding: 'num', header: 'No', align: 'center', width: 80},
                 {binding: 'day', header: '기간', align: 'center', width:"*" },
@@ -1040,6 +1440,7 @@
             ];
 
             viewdata = new wijmo.collections.CollectionView(data2);
+            viewdata2 = new wijmo.collections.CollectionView(data3);
             // .theGrid1 클래스를 가진 모든 요소를 선택
             var theGrids = document.querySelectorAll('.theGrid1');
             theGrids.forEach(function(element, index) {
@@ -1128,6 +1529,8 @@
                 // rowHeaders의 첫 번째 컬럼을 제거
                 grid.rowHeaders.columns.splice(0, 1);
             });
+
+
 
 
             // //특정 헤더 부분 숨기기

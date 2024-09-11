@@ -39,17 +39,17 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>월별비용항목별조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                <h2>비용관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                          alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내 메뉴
-                </a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내 메뉴-->
+<!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>서비스분석</li>
                 <li>비용관리</li>
-                <li>월별비용항목별조회</li>
+                <li>비용관리</li>
             </ul>
         </div>
 
@@ -87,6 +87,9 @@
                 </li>
                 <li>
                     <a href="#tab2" title="기간별대비">기간별대비</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="비용등록">비용등록</a>
                 </li>
             </ul>
             <div class="tab-contents" style="margin-bottom: 70px">
@@ -624,6 +627,218 @@
 
 
 
+                <section class="tab-item" id="tab3" style="height: 820px;">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>비용 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a  class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <form id ="cost_form">
+                            <table class="write-table">
+                                <caption>비용등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="expesym">
+                                            매출년월
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <input type="month" id="expesym" maxlength="7" name="expesym" class="wp15 Costfrdate" >
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="fueamt">
+                                            연료비 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="fueamt" name="fueamt" maxlength="100" class="wp100" placeholder="10">
+                                    </td>
+                                    <th>
+                                        <label for="depramt">
+                                            감가상각비 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="depramt" name="depramt" maxlength="100" class="wp100" placeholder="10">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <label for="psqcamt">
+                                            전기안전검사
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <div class="checkstdt">
+                                            <input type="text" id="psqcamt" name="psqcamt" maxlength="100" class="wp100" placeholder="10">
+                                            <!--                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="점검자" maxlength="5">-->
+                                            <!--                                        <button onclick="addInputField(this)" class="mg-l8">점검자 추가</button>-->
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <label for="ltsaamt">
+                                            LTSA <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <!--                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="점검장소">-->
+                                        <input type="text" id="ltsaamt" name="ltsaamt" maxlength="100" class="wp100" placeholder="10">
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <th>
+                                        <label for="reccamt">
+                                            REC 수수료
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <!--                                    <div class="textarea-box">-->
+                                        <input type="text" id="reccamt" name="reccamt" maxlength="100" class="wp100" placeholder="10">
+                                        <!--                                        <textarea id="checkplan" name="checkplan" maxlength="200" placeholder="개선방향"></textarea>-->
+                                        <!--                                        <p class="text-count" id="text-count2" name="checkplan">0/200</p>-->
+                                        <!--                                    </div>-->
+                                    </td>
+
+                                    <th>
+                                        <label for="iotlamt">
+                                            IoT회선료 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="iotlamt" name="iotlamt" maxlength="100" class="wp100" placeholder="10">
+                                        <!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
+                                    </td>
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+                                        <label for="gigaamt">
+                                            GIGAeyes <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="gigaamt" name="gigaamt" maxlength="100" class="wp100" placeholder="10">
+                                        <!--                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">-->
+                                    </td>
+                                    <th>
+                                        <label for="checkstdt">
+                                            IT비용 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="" name="" maxlength="100" class="wp100" placeholder="10">
+                                        <!--                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">-->
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <th>
+                                        <label for="otheamt">
+                                            기타 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <input type="text" id="otheamt" name="otheamt" maxlength="100" class="wp100" placeholder="10">
+                                        <!--                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">-->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+
+
+                    <div class="section-top" style="margin-top: 24px;">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    매출년월<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="searchfrdate" name="searchfrdate" class="Costfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="month" id="searchfrdate2" name="searchfrdate2" class="Costtodate">
+                                            <label for="searchfrdate2" class="hide">종료일</label>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="asad"
+                                               onclick="searchDataTab2()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid8" style="max-height:300px; "></div>
+                    </div>
+
+
+
+                </section>
+
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
@@ -669,11 +884,13 @@
             // 시간별, 월별일 경우 조회연도 필드를 숨기거나 표시
             if (periodType === "hourly" || periodType === "monthly") {
                 if (yearSelectContainer) yearSelectContainer.style.display = "none"; // 조회연도 숨기기
+                document.getElementById("comparisonType").value = "MoM";
             } else {
                 if (yearSelectContainer) yearSelectContainer.style.display = "block"; // 조회연도 표시
             }
 
             if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                document.getElementById("comparisonType").value = "YoY";
                 // 조회기간 글자 숨기기
                 periodLabel.style.visibility = "hidden";
                 // startDate와 endDate input 요소 숨기기
@@ -1078,6 +1295,7 @@
         var theGrid5;
         var theGrid6;
         var theGrid7;
+        var theGrid8;
 
         var viewdata1;
         var viewdata2;
@@ -1086,6 +1304,7 @@
         var viewdata5;
         var viewdata6;
         var viewdata7;
+        var viewdata8;
 
 
         let selectedFiles = [];
@@ -1122,6 +1341,10 @@
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            cost_graph();
+            cost_upload();
+        }
+        function cost_graph(){
 
             let data2 = [];
             let searchusr = $('#searchusr').val();
@@ -1284,13 +1507,85 @@
                 }
             })
 
-
         }
 
+
+        function cost_upload(){
+
+
+            let data2 = [];
+
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/gas/gas_belement/read',
+                type: 'GET',
+                // data: {
+                //     'searchusr': searchusr
+                // },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 14;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata8 = new wijmo.collections.CollectionView(data2);
+            //데이터 그리드에 바인딩
+            theGrid8 = new wijmo.grid.FlexGrid('#theGrid8', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'expesym', header: '비용연월', width: 140, align: 'center'},
+                    {binding: 'fueamt', header: '연료비', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'depramt', header: '감가상각비', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'ltsaamt', header: 'LTSA', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'psqcamt', header: '전기안전검사', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'reccamt', header: 'REC수수료', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'iotlamt', header: 'IoT회선료', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'gigaamt', header: 'GIGAeyes', width: 140, align: 'center', aggregate: 'Sum'},
+                    // {binding: '', header: 'IT비용', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'otheamt', header: '기타', width: 140, align: 'center', aggregate: 'Sum'},
+                    {binding: 'etotamt', header: '총계', width: "*", align: 'center', aggregate: 'Sum'},
+                ],
+                itemsSource: viewdata8
+            });
+
+            // theGrid.columnFooters.rows.push(new wijmo.grid.GroupRow());
+            // theGrid.bottomLeftCells.setCellData(0,0,'Σ');
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid8.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+
+
+        }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
 
 
+        function searchData2() {
+            let data = {
+                'searchusr': $('#searchusr').val()
+            }
+
+            let result = AjaxUtil.getSyncData('/api/cost_upload/read', data);
+
+            if (result.success) {
+                console.log(result.data);
+                grid_binding2(result.data);
+            }
+        }
 
         //검색
         function searchData() {
@@ -1347,34 +1642,19 @@
             updateComparisonType();
 
 
-
             // 현재 연도를 가져옴
             const currentYear = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate = `${currentYear}-01-01`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchfrdate').value = defaultDate;
+            const startMonth = `${currentYear}-01`;
+            const endMonth  = `${currentYear}-12`;
 
-            // 현재 연도를 가져옴
-            const currentYear2 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate2 = `${currentYear2}-12-31`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchtodate').value = defaultDate2;
-
-            // 현재 연도를 가져옴
-            const currentYear3 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate3 = `${currentYear3}-01-01`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchfrdate2').value = defaultDate3;
-
-            // 현재 연도를 가져옴
-            const currentYear4 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate4 = `${currentYear4}-12-31`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchtodate2').value = defaultDate4;
+            // logfrdate 클래스를 가진 모든 input 요소에 1월 1일 값 설정
+            document.querySelectorAll('.Costfrdate').forEach(input => {
+                input.value = startMonth;
+            });
+            // logtodate 클래스를 가진 모든 input 요소에 12월 31일 값 설정
+            document.querySelectorAll('.Costtodate').forEach(input => {
+                input.value = endMonth ;
+            });
 
         });
     </script>
