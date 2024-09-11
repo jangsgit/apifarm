@@ -11,9 +11,9 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>LTSA 보고서</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
+                <!--<a title="북마크" class="bookmark toggle">
                     내메뉴
-                </a>
+                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -25,25 +25,34 @@
         <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역">
-                        <option>대구</option>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구">
-                        <option>성서산단</option>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="동">
-                        <option>성서</option>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="tab-wrap" style="margin-bottom: 80px">
             <ul class="tab-links">
                 <!--/*@thymesVar id="userid" type=""*/-->
+                <li>
+                    <a href="#tab0" title="리스트">리스트</a>
+                </li>
                 <li th:unless="${userid} == 'B001'">
                     <a href="#tab1" title="개요">개요</a>
                 </li>
@@ -74,6 +83,51 @@
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
+                <section class="tab-item" id="tab0">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    보고분기<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>2024.1Q</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"></div>
+                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()" style="border-radius: 7px;"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장" onclick="showPopup()">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        보고서 업로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="height: 700px; max-height: 700px"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
                 <section class="tab-item" id="tab1">
                     <div class="section-top">
                         <div class="search-wrap">
@@ -107,8 +161,8 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-                            <div class="table-wrap">
+                        <div class="wp100 mg-r20">
+                            <!--<div class="table-wrap">
                                 <table class="list-table">
                                     <caption>보증조건 및 요약 테이블</caption>
                                     <colgroup>
@@ -141,9 +195,71 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                            </div>-->
+                            <div class="container-fluid">
+                                <div id="theGrid2" style="height: 300px; max-height: 300px"></div>
                             </div>
                         </div>
-                        <div class="col wp40">
+                        <!--<div class="col wp40">
+                            <div class="section">
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>보고분기 상세 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th><label for="">보고분기</label></th>
+                                            <td>
+                                                <select>
+                                                    <option>2024</option>
+                                                </select>
+                                                <a href="#" title="수정" class="btn">수정</a>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <th><label for="">목적</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">프로젝트명</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">설비 현황</label></th>
+                                            <td>
+                                                <div class="textarea-box">
+                                                    <textarea id="inspecreform1" name="inspecreform1" maxlength="100" style="height: 60px;"></textarea>
+                                                    <p class="text-count" name="checkplan">0/100</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">보고서 개요</label></th>
+                                            <td>
+                                                <div class="textarea-box">
+                                                    <textarea id="inspecreform1" name="inspecreform1" maxlength="100" style="height: 60px;"></textarea>
+                                                    <p class="text-count" name="checkplan">0/100</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col wp100">
                             <div class="section">
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -236,8 +352,8 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-                            <div class="table-wrap">
+                        <div class="wp100 mg-r20">
+                            <!--<div class="table-wrap">
                                 <table class="list-table">
                                     <caption>보증조건 및 요약 테이블</caption>
                                     <colgroup>
@@ -287,9 +403,12 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                            </div>-->
+                            <div class="container-fluid">
+                                <div id="theGrid4" class="animated" style="height: 350px"></div>
                             </div>
                         </div>
-                        <div class="col wp40">
+                        <!--<div class="wp40">
                             <div class="section">
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -419,13 +538,146 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="wp60 mg-r20">
+                            <div class="table-wrap">
+                                <table class="view-table">
+                                    <caption>보고분기 상세 테이블</caption>
+                                    <colgroup>
+                                        <col class="wp20">
+                                        <col class="wauto">
+                                    </colgroup>
+                                    <tbody>
+                                    <tr>
+                                        <th><label for="">보고 분기</label></th>
+                                        <td>
+                                            <select>
+                                                <option>2024</option>
+                                            </select>
+                                            <a href="#" title="수정" class="btn">수정</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="">실적 기간</label></th>
+                                        <td>
+                                            <ul class="date-box">
+                                                <li class="mg-r10">
+                                                    <input type="date" id="date1" name="">
+                                                    <label for="date1" class="hide">시작일</label>
+                                                </li>
+                                                <li>
+                                                    <input type="date" id="date2" name="">
+                                                    <label for="date2" class="hide">종료일</label>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="">목적</label></th>
+                                        <td>
+                                            <input type="text" id="" class="wp100">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="">프로젝트명</label></th>
+                                        <td>
+                                            <input type="text" id="" class="wp100">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="">설비 현황</label></th>
+                                        <td>
+                                            <input type="text" id="" class="wp100">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label for="">보고서 개요</label></th>
+                                        <td>
+                                            <input type="text" id="" class="wp100">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col wp40">
+                            <div class="section">
+                                <div class="title-wrap mg-b10">
+                                    <h3>연간누적 이욜율(%)</h3>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>보고분기 상세 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th><label for="">보증 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                            <th><label for="">워런티 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">비고</label></th>
+                                            <td colspan="3">
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <div class="title-wrap mg-b10">
+                                    <h3>연간누적 효율(kcal/kWh)</h3>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>보고분기 상세 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th><label for="">보증 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                            <th><label for="">워런티 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">비고</label></th>
+                                            <td colspan="3">
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
                 <!-- Section -->
                 <section class="tab-item" id="tab3">
                     <div class="section-top">
-                        <div class="search-wrap">
+                        <div class="search-wrap" style="width: 93%">
                             <dl>
                                 <dt>
                                     <label for="text1">
@@ -443,6 +695,21 @@
                                     </div>
                                 </dd>
                             </dl>
+                            <dl style="float: right">
+                                <dt>
+                                    <label for="text1">
+                                        보고분기<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select style="margin-right: 5px">
+                                            <option>2024</option>
+                                        </select>
+                                        <a href="#" title="수정" class="btn">수정</a>
+                                    </div>
+                                </dd>
+                            </dl>
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -456,8 +723,8 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-                            <div class="table-wrap">
+                        <div class="wp100 mg-r20">
+                            <!--<div class="table-wrap">
                                 <table class="list-table">
                                     <caption>보증조건 및 요약 테이블</caption>
                                     <colgroup>
@@ -507,35 +774,57 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                            </div>-->
+                            <div class="container-fluid">
+                                <div id="theGrid3" class="animated" style="height: 500px"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="wp60 mg-r20">
+
+                            <div class="section">
+                                <div class="title-wrap mg-b10">
+                                    <h3>연간누적 이용률(%)</h3>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table">
+                                        <caption>보고분기 상세 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th><label for="">보증 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                            <th><label for="">워런티 조건</label></th>
+                                            <td>
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">비고</label></th>
+                                            <td colspan="3">
+                                                <input type="text" id="" class="wp100">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="col wp40">
-                            <div class="section">
-                                <div class="table-wrap">
-                                    <table class="view-table">
-                                        <caption>보고분기 상세 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp20">
-                                            <col class="wauto">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th><label for="">보고분기</label></th>
-                                            <td>
-                                                <select>
-                                                    <option>2024</option>
-                                                </select>
-                                                <a href="#" title="수정" class="btn">수정</a>
-                                            </td>
-                                        </tr>
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                             <div class="section">
                                 <div class="title-wrap mg-b10">
-                                    <h3>연간 누적 이용율(%)</h3>
+                                    <h3>연간누적 효율(kcal/kWh)</h3>
                                 </div>
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -548,63 +837,19 @@
                                         </colgroup>
                                         <tbody>
                                         <tr>
-                                            <th><label for="">워런티 보증조건</label></th>
-                                            <td colspan="3">
+                                            <th><label for="">보증 조건</label></th>
+                                            <td>
                                                 <input type="text" id="" class="wp100">
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">실적</label></th>
-                                            <td colspan="3">
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">비고</label></th>
-                                            <td colspan="3">
-                                                <div class="textarea-box">
-                                                    <textarea id="inspecreform1" name="inspecreform1" maxlength="100" style="height: 60px;"></textarea>
-                                                    <p class="text-count" name="checkplan">0/100</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="section">
-                                <div class="title-wrap mg-b10">
-                                    <h3>연간 누적 효율(kcal/kWh)</h3>
-                                </div>
-                                <div class="table-wrap">
-                                    <table class="view-table">
-                                        <caption>보고분기 상세 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp20">
-                                            <col class="wauto">
-                                            <col class="wp20">
-                                            <col class="wauto">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th><label for="">워런티 보증 조건</label></th>
-                                            <td colspan="3">
-                                                <input type="text" id="" class="wp100">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><label for="">실적</label></th>
-                                            <td colspan="3">
+                                            <th><label for="">워런티 조건</label></th>
+                                            <td>
                                                 <input type="text" id="" class="wp100">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><label for="">비고</label></th>
                                             <td colspan="3">
-                                                <div class="textarea-box">
-                                                    <textarea id="inspecreform1" name="inspecreform1" maxlength="100" style="height: 60px;"></textarea>
-                                                    <p class="text-count" name="checkplan">0/100</p>
-                                                </div>
+                                                <input type="text" id="" class="wp100">
                                             </td>
                                         </tr>
                                         </tbody>
@@ -614,7 +859,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="tab-item" id="tab9">
+                <section class="tab-item" id="tab9" style="padding-bottom: 10px">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -638,7 +883,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a href="#" class="btn btn-save" title="저장">
+                                    <a class="btn btn-save" title="저장">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
                                     </a>
@@ -647,82 +892,16 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-                            <div class="table-wrap">
-                                <table class="list-table">
-                                    <caption>보증조건 및 요약 테이블</caption>
-                                    <colgroup>
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th>기간</th>
-                                        <th>일수</th>
-                                        <th>발전실적</th>
-                                        <th>발전량보전</th>
-                                        <th>확정실적발전량</th>
-                                        <th>실적이용률</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>이전누계</td>
-                                        <td>699</td>
-                                        <td>12,026,066</td>
-                                        <td>-</td>
-                                        <td>15,051,322</td>
-                                        <td>101.60%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.01</td>
-                                        <td>31</td>
-                                        <td>227,272</td>
-                                        <td>-</td>
-                                        <td>667,272</td>
-                                        <td>99.70%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.02</td>
-                                        <td>28</td>
-                                        <td>642,333</td>
-                                        <td>-</td>
-                                        <td>642,333</td>
-                                        <td>99.10%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.03</td>
-                                        <td>31</td>
-                                        <td>656,695</td>
-                                        <td>-</td>
-                                        <td>656,696</td>
-                                        <td>98.10%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>분기누계</td>
-                                        <td>91</td>
-                                        <td>1,966,299</td>
-                                        <td>-</td>
-                                        <td>1,966,299</td>
-                                        <td>98.90%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>누계</td>
-                                        <td>-</td>
-                                        <td>14,985,365</td>
-                                        <td>-</td>
-                                        <td>17,017,622</td>
-                                        <td>101.30%</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div class="wp100 mg-r20">
+
+                            <div class="container-fluid">
+                                <div id="theGrid5" style="height: 290px; max-height: 290px"></div>
                             </div>
                         </div>
-                        <div class="col wp40">
+
+                    </div>
+                    <div class="row">
+                        <div class="col wp100">
                             <div class="section">
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -789,7 +968,7 @@
                         </div>
                     </div>
                 </section>
-                <section class="tab-item" id="tab4">
+                <section class="tab-item" id="tab4" style="padding-bottom: 10px">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -813,7 +992,7 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a href="#" class="btn btn-save" title="저장">
+                                    <a class="btn btn-save" title="저장">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
                                     </a>
@@ -822,98 +1001,16 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="row">
-                        <div class="wp60 mg-r20">
-                            <div class="table-wrap">
-                                <table class="list-table">
-                                    <caption>보증조건 및 요약 테이블</caption>
-                                    <colgroup>
-                                        <col style="width: 10%">
-                                        <col style="width: 10%">
-                                        <col style="width: 10%">
-                                        <col style="width: 10%">
-                                        <col style="width: 10%">
-                                        <col style="width: 10%">
-                                        <col class="wp20">
-                                        <col class="wp20">
-                                    </colgroup>
-                                    <thead>
-                                    <tr>
-                                        <th>기간</th>
-                                        <th>발전량</th>
-                                        <th>불산입일수</th>
-                                        <th>불산입보증량</th>
-                                        <th>확정보증량</th>
-                                        <th>이용률</th>
-                                        <th>pass/fail</th>
-                                        <th>보증량</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>이전누계</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.01</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.02</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2024.03</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>분기누계</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>누계</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                        <div class="wp100 mg-r20">
+
+                            <div class="container-fluid">
+                                <div id="theGrid6" style="height: 400px; max-height: 400px"></div>
                             </div>
                         </div>
-                        <div class="col wp40">
+
+                    </div>
+                    <div class="row">
+                        <div class="col wp100">
                             <div class="section">
                                 <div class="table-wrap">
                                     <table class="view-table">
@@ -925,7 +1022,7 @@
                                         <tbody>
                                         <tr>
                                             <th><label for="">기간</label></th>
-                                            <td>
+                                            <td colspan="3">
                                                 <select>
                                                     <option>2024</option>
                                                 </select>
@@ -937,20 +1034,22 @@
                                             <td>
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th><label for="">불산입 기간(시간)</label></th>
                                             <td>
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
                                             </td>
                                         </tr>
+                                        <!--<tr>
+                                            <th><label for="">불산입 기간(시간)</label></th>
+                                            <td>
+                                                <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
+                                            </td>
+                                        </tr>-->
                                         <tr>
                                             <th><label for="">불산입 보증량(kWh)</label></th>
                                             <td>
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th><label for="">확정보증량(kWh)</label></th>
                                             <td>
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
@@ -961,8 +1060,6 @@
                                             <td>
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
                                             </td>
-                                        </tr>
-                                        <tr>
                                             <th><label for="">PASS or FAIL</label></th>
                                             <td>
                                                 <div class="">
@@ -974,7 +1071,7 @@
                                         </tr>
                                         <tr>
                                             <th><label for="">보증량 Banking</label></th>
-                                            <td>
+                                            <td colspan="3">
                                                 <div class="input-clear"><input type="text" id="" class="wp100"><span class="btn-clear">×</span></div>
                                             </td>
                                         </tr>
@@ -1947,71 +2044,57 @@
     <script type="text/javascript">
 
         var theGrid;
+        var theGrid2;
+
+        var theGrid3;
+        var theGrid4;
+        var theGrid5;
+        var theGrid6;
+
+
+
+
+
         var viewdata;
         let selectedFiles = [];
         let SelectItem;
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: 'spworknm', header: '지역명', align: 'center', width: 140 },
-            { binding: 'spcompnm', header: '산단명', align: 'center', width: 140 },
-            { binding: 'spplannm', header: '발전소명', align: 'center', width: 140 },
-            { binding: 'checkdt', header: '등록일자', align: 'center', width: 140 },
-            { binding: 'checkusr', header: '점검자', align: 'center', width: 140 },
-            { binding: 'checkarea', header: '점검장소', align: 'center', width: 200 },
-            { binding: 'checktmdt', header: '점검시간', align: 'center', width: 260 },
-            { binding: 'downloads', header: '다운로드', align: 'center', width: 160, cellTemplate: '<a title="다운로드" class="btn-filedown">다운로드</a>' },
-            {
-                header: '점검일지 업로드', binding: 'downloads', width: 160, align: 'center',
-                cellTemplate: /*'<a title="업로드" onclick="showPopup()" class="btn btn-popup-open" data-popup="popup1">업로드</a>'*/
-                    wijmo.grid.cellmaker.CellMaker.makeButton({
-                        text: '<a title="업로드" class="btn btn-popup-open" data-popup="popup1">업로드</a>',
-                        cssClass: 'fileuploaders',
-                        click: (e, ctx) => {
-                            showPopup(ctx);
-                        }
-                    })
-
-
-            }
+            { binding: '', header: '보고분기', align: 'center', width: 150, minWidth: 150 },
+            { binding: '', header: '월', align: 'center', width: 150, minWidth: 150 },
+            { binding: '', header: '발전실적', align: 'center', width: '*', minWidth: 250 },
+            { binding: '', header: '불산입발전량보정', align: 'center', width: '*', minWidth: 290 },
+            { binding: '', header: '확정실적발전량', align: 'center', width: '*', minWidth: 250 },
+            { binding: '', header: '실적이용율', align: 'center', width: 240, minWidth: 240 },
         ];
 
+        let columns2 = [
+            { binding: '', header: '보고분기', align: 'center', width: '*'},
+            { binding: '', header: '목적', align: 'center', width: '*'},
+            { binding: '', header: '프로젝트명', align: 'center', width: '*'},
+        ]
 
+        let columns5 = [
+            { binding: '기간', header: '기간', align: 'center', width: '*'},
+            { binding: '일수', header: '일수', align: 'center', width: '*'},
+            { binding: '발전실적', header: '발전실적', align: 'center', width: '*', format: 'n2' },
+            { binding: '발전량보전', header: '발전량보전', align: 'center', width: '*', format: 'n2' },
+            { binding: '확정실적발전량', header: '확정실적발전량', align: 'center', width: '*', format: 'n2' },
+            { binding: '실적이용률', header: '실적이용률', align: 'center', width: '*', format: 'n2' },
+        ]
 
-        /**점검일지 업로드(파일만 전송)**/
-        function saveFile(){
-            let file = document.getElementById('fileInput2');
-            let formData = new FormData();
+        let columns6 = [
+            { binding: '기간', header: '기간', align: 'center', width: '*'},
+            { binding: '발전량', header: '발전량', align: 'center', width: '*'},
+            { binding: '불산입일수', header: '불산입일수', align: 'center', width: '*', format: 'n2' },
+            { binding: '불산입보증량', header: '불산입보증량', align: 'center', width: '*', format: 'n2' },
+            { binding: '확정보증량', header: '확정보증량', align: 'center', width: '*', format: 'n2' },
+            { binding: '이용률', header: '이용률', align: 'center', width: '*', format: 'n2' },
+            { binding: 'pass/fail', header: 'pass/fail', align: 'center', width: '*', format: 'n2' },
+            { binding: '보증량', header: '보증량', align: 'center', width: '*', format: 'n2' },
 
-            console.log('file123', file.files);
-
-            if(file.files.length === 0){
-                Alert.alert('', '파일을 첨부해주세요.');
-                return false;
-            }
-
-            formData.append('file', file.files[0]);
-            //formData.append('_csrf', $('[name=_csrf]').val());
-            formData.append('_csrf', csrfToken);
-            formData.append('spuncode', $('#popup-spuncode').val());
-
-            $.ajax({
-                url: '/api/inspec_report/filesave',
-                type: 'POST',
-                data: formData,
-                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                success: function (response) {
-                    if (response.success) {
-                        Alert.alert('', response.message);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    Alert.alert('', '에러가발생하였습니다.');
-                }
-            });
-        }
-
+        ]
 
 
 
@@ -2023,53 +2106,6 @@
             }
         }
 
-        let searchusrval = document.getElementById('searchusr');
-        searchusrval.addEventListener('keyup', event => submitTextarea(event))
-
-
-        function closePopup(){
-            /*const modal2 = document.querySelector('.modal');
-            const modalOpen = document.querySelector('.popup-wrapper');
-            modal2.style.display = 'none';
-            modalOpen.style.display = 'none';*/
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
-
-            // 애니메이션을 위한 클래스 제거
-            modal.classList.remove('show');
-            modalContent.classList.remove('show');
-
-            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
-            setTimeout(() => {
-                modal.style.display = 'none';
-                modalContent.style.display = 'none';
-            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
-        }
-
-        function showPopup(ctx){
-
-            $('#popup-date').val(ctx.item.checkdt);
-            $('#popup-checkusr').val(ctx.item.checkusr);
-            $('#popup-checkarea').val(ctx.item.checkarea);
-            $('#popup-spuncode').val(ctx.item.spuncode);
-
-            const modal = document.querySelector('.modal');
-            const modalContent = document.querySelector('.popup-wrapper');
-
-            // 모달과 콘텐츠를 표시
-            modal.style.display = 'block';
-            modalContent.style.display = 'block';
-
-            // 애니메이션을 위한 클래스 추가
-            requestAnimationFrame(() => {
-                modal.classList.add('show');
-                modalContent.classList.add('show');
-            });
-
-
-
-        }
-
         document.readyState === 'complete' ? init() : window.onload = init;
 
 
@@ -2078,6 +2114,7 @@
 
             initializeSelections();
 
+
             let data2 = [];
             let searchusr = $('#searchusr').val();
 
@@ -2085,12 +2122,18 @@
                 url: '/api/inspec_report/read',
                 type: 'GET',
                 data: {
-                    'searchusr' : searchusr,
+                    'searchusr' : 'infinited',
 
                 },
                 async: false,
                 success: function(data){
-                    console.log('wijmo', data.data);
+                    console.log('check1',data.data);
+                    if(data.data.length === 0){
+                        for(let i=0; i < 10; i++ ){
+                            data.data.push('example');
+                        }
+                    }
+                    console.log(data.data);
                     data2 = data.data;
                 }
             })
@@ -2104,21 +2147,186 @@
                 itemsSource: viewdata
             });
 
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns2,
+                itemsSource: viewdata
+            });
 
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
 
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+
+            // 병합된 머리글을 가진 그리드
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                allowMerging: 'ColumnHeaders',
+                alternatingRowStep: 0,
+                autoGenerateColumns: false,
+                columns: [
+                    { binding: '보고분기', header: '보고분기', align: 'center', width: '*', allowMerging: true },
+
+                    { binding: '보증조건', header: '보증조건', align: 'center', width: '*', format: 'n2' },
+                    { binding: '실적', header: '실적', align: 'center', width: '*', format: 'n2' },
+                    { binding: '보증조건', header: '보증조건', align: 'center', width: '*', format: 'n2' },
+                    { binding: '실적', header: '실적', align: 'center', width: '*', format: 'n2' },
+
+
+
+                ],
+                itemsSource: getData()
+            });
+            theGrid3.rowHeaders.columns.splice(0, 1);
+            //
+            //여분의 헤더 행 생성
+            var extraRow = new wijmo.grid.Row();
+            extraRow.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel = theGrid3.columnHeaders;
+            panel.rows.splice(0, 0, extraRow);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 1; colIndex <= 2; colIndex++) {
+                panel.setCellData(0, colIndex, '누적이용률');
+            }
+            //
+            // "Country" 및 "Active" 헤더를 수직으로 병합
+            ['보고분기'].forEach(function (binding) {
+                let col = theGrid3.getColumn(binding);
+                col.allowMerging = true;
+                panel.setCellData(0, col.index, col.header);
+            });
+            //
+            // 병합된 헤더 셀의 중심 정렬
+            theGrid3.formatItem.addHandler(function (s, e) {
+                if (e.panel == s.columnHeaders && e.range.rowSpan > 1) {
+                    var html = e.cell.innerHTML;
+                    e.cell.innerHTML = '<div class="v-center" style="margin-top: 20px">' + html + '</div>';
                 }
-            })
+            });
 
 
 
-            // 선택이 변경될 때, 현재 항목 업데이트
+            //여분의 헤더 행 생성
+            var extraRow2 = new wijmo.grid.Row();
+            extraRow2.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel2 = theGrid3.columnHeaders;
+            panel2.rows.splice(1, 1, extraRow2);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 3; colIndex <= 4; colIndex++) {
+                panel2.setCellData(0, colIndex, '연간누적효율');
+            }
+            //
 
-            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+
+            // 병합된 머리글을 가진 그리드
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                allowMerging: 'ColumnHeaders',
+                alternatingRowStep: 0,
+                autoGenerateColumns: false,
+                columns: [
+                    { binding: '보고분기', header: '보고분기', align: 'center', width: '*', allowMerging: true },
+
+                    { binding: '보증조건', header: '보증조건', align: 'center', width: '*', format: 'n2' },
+                    { binding: '실적', header: '실적', align: 'center', width: '*', format: 'n2' },
+                    { binding: '보증조건', header: '보증조건', align: 'center', width: '*', format: 'n2' },
+                    { binding: '실적', header: '실적', align: 'center', width: '*', format: 'n2' },
+
+
+
+                ],
+                itemsSource: getData()
+            });
+            theGrid4.rowHeaders.columns.splice(0, 1);
+            //
+            //여분의 헤더 행 생성
+            var extraRow = new wijmo.grid.Row();
+            extraRow.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel = theGrid4.columnHeaders;
+            panel.rows.splice(0, 0, extraRow);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 1; colIndex <= 2; colIndex++) {
+                panel.setCellData(0, colIndex, '누적이용률');
+            }
+            //
+            // "Country" 및 "Active" 헤더를 수직으로 병합
+            ['보고분기'].forEach(function (binding) {
+                let col = theGrid4.getColumn(binding);
+                col.allowMerging = true;
+                panel.setCellData(0, col.index, col.header);
+            });
+            //
+            // 병합된 헤더 셀의 중심 정렬
+            theGrid4.formatItem.addHandler(function (s, e) {
+                if (e.panel == s.columnHeaders && e.range.rowSpan > 1) {
+                    var html = e.cell.innerHTML;
+                    e.cell.innerHTML = '<div class="v-center" style="margin-top: 20px">' + html + '</div>';
+                }
+            });
+
+
+
+            //여분의 헤더 행 생성
+            var extraRow2 = new wijmo.grid.Row();
+            extraRow2.allowMerging = true;
+            //
+            // 그리드에 헤더 행 추가
+            var panel2 = theGrid4.columnHeaders;
+            panel2.rows.splice(1, 1, extraRow2);
+            //
+            //추가 헤더 행을 채우기
+            for (let colIndex = 3; colIndex <= 4; colIndex++) {
+                panel2.setCellData(0, colIndex, '연간누적효율');
+            }
+            //
+
+
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns5,
+                itemsSource: viewdata
+            });
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid6 = new wijmo.grid.FlexGrid('#theGrid6', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns6,
+                itemsSource: viewdata
+            });
         }
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        function getData() {
+            var countries = 'US,Germany,UK,Japan'.split(',');
+            var data = [];
+            for (var i = 0; i < 10; i++) {
+                data.push({
+                    id: i,
+                    country: countries[i % countries.length],
+                    active: i % 5 != 0,
+                    downloads: Math.round(Math.random() * 200000),
+                    sales: Math.random() * 100000,
+                    expenses: Math.random() * 50000
+                });
+            }
+            return data;
+        }
 
         <!-- 점검자 추가 버튼 이벤트-->
         function addInputField(button) {
@@ -2165,7 +2373,6 @@
         let filelist = [];
 
 
-
         //검색
         function searchData(){
             let data = {
@@ -2186,7 +2393,7 @@
             var inspecDto = data;
             var inspecData = [];
             var cnt = 1;
-            for (var i = 0; i < inspecDto.length; i++) {
+            for (let i = 0; i < inspecDto.length; i++) {
                 inspecData.push({
                     spuncode: inspecDto[i]["spuncode"],
                     spworknm: inspecDto[i]["spworknm"],
@@ -2212,199 +2419,50 @@
 
 
         }
-        function SelectItemPush(){
 
-            let selectedList = [];
-            for(let i = 0; i < SelectItem.length; i++){
-                selectedList.push(SelectItem[i]._data.spuncode);
-            }
-            return selectedList;
+        function closePopup(){
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
-        function DownloadDoc() {
-
-            let selectedList = SelectItemPush();
+        function showPopup(rowIndex){
 
 
-            console.log('selected', selectedList);
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
 
-            //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
-            fetch('/api/inspec_report/download-docs', {
-                method: 'POST',
-                headers: {
-                    "Content-Type" : "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify(selectedList)  //JSON으로 전송된다.
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url); // URL 객체 해제
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                    alert("File download failed!");
-                });
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+
+
         }
 
 
         $(document).ready(function (e) {
 
-            const fileInput = document.getElementById('fileInput2');
-            const fileNameDisplay = document.getElementById('fileNameDisplay');
-            const dropZone = document.getElementById('dropZone');
-
-            function updateFileName(){
-                const files = fileInput.files;
-                if(files.length > 0){
-                    fileNameDisplay.textContent = files[0].name;
-                }else {
-                    fileNameDisplay.textContent = 'Maximum upload file size 1GiB';
-                }
-            }
-            fileInput.addEventListener('change', updateFileName);
-
-            // 드래그 앤 드롭 이벤트 핸들러
-            dropZone.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-
-            dropZone.addEventListener('dragleave', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-            });
-
-            dropZone.addEventListener('drop', (event) => {
-                event.preventDefault();
-                dropZone.classList.remove('dragover');
-
-                const files = event.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput.files = files; // 파일 입력 요소에 파일 설정
-                    updateFileName(); // 파일명 업데이트
-                }
-            });
-
-
-            //점검결과 클릭시 텍스트 순환
-            $('.checkbox-cell').click(function() {
-                const span = $(this).find('span');
-                if (span.text() === 'X') {
-                    span.text('O');
-                } else if (span.text() === 'O') {
-                    span.text('X');
-                }
-            });
-
-
-
-            // 저장 시작
-            $('#btnSave').click(function (e){
-
-
-                Alert.confirm('', '저장하시겠습니까?', function() {
-
-                        let formData = new FormData();
-
-                        // 점검항목 값 가져오기
-                        const table = document.querySelector('table.doc-table');
-                        const rows = table.querySelectorAll('tbody tr');
-                        let results = [];
-                        let currentDivision = '';
-
-                        rows.forEach(row => {
-                            let cells = row.querySelectorAll('td');
-
-                            // Check if the first cell has rowspan attribute, indicating a new division
-                            if (cells[0].hasAttribute('rowspan')) {
-                                currentDivision = cells[0].innerText.trim();
-                            } else {
-                                cells = Array.from(cells);
-                                cells.unshift(document.createElement('td')); // Insert a placeholder cell
-                            }
-
-                            const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
-                            const inspectionResult = cells[2].innerText.trim();
-                            const improvement = cells[3].querySelector('textarea').value.trim();
-
-                            const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
-                            console.log('combinedText: ', combinedText);
-                            formData.append('doc-list', combinedText);
-
-                            results.push(combinedText);
-                        });
-                        // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
-
-                        for (let i = 0; i < uploadedFiles.length; i++) {
-                            formData.append('filelist', uploadedFiles[i]);
-                        }
-
-                        const randomString = generateRandomStringWithDate();
-
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
-
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
-
-                        })
-
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('randomuuid', randomString);
-                        //formData.append('_csrf', $('[name=_csrf]').val());
-                        formData.append('_csrf', csrfToken);
-                        formData.append('ReformList', $('#inspecreform1').val());
-                        formData.append('ReformList', $('#inspecreform2').val());
-                        formData.append('ReformList', $('#inspecreform3').val());
-                        formData.append('ReformList', $('#inspecreform4').val());
-                        formData.append('ReformList', $('#inspecreform5').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
-                    }
-                )
-            })
-
+            initializeSelections();
 
             //삭제
             $('#btnDelete').click(function (e) {
@@ -2413,7 +2471,7 @@
 
                 delList = SelectItemPush();
 
-                console.log('삭제확인', delList);
+
                 Alert.confirm('', '삭제하시겠습니까?', function () {
 
                     let data = {
