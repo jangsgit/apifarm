@@ -9,55 +9,172 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>제어이행 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                <h2>제어이행 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                        alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+                <!--                <a title="북마크" class="bookmark toggle">-->
+                <!--                    내메뉴-->
+                <!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
                 <li>제어이행 관리</li>
-                <li>제어이행 등록</li>
+                <!--                <li>제어이행 등록</li>-->
             </ul>
         </div>
         <!-- Select -->
         <div class="search-wrap" id="searchWrap" style="display: none">
             <ul>
                 <li>
-                    <select title="지역" id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                        <option value="001">대구</option>
-                        <input type="hidden" id="spworknm" name="spworknm">
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
                 </li>
                 <li>
-                    <select title="구" id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                        <option value="001">성서산단</option>
-                        <input type="hidden" id="spcompnm" name="spcompnm">
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updateSelect('spplancd', 'spplannm')">
-                        <option value="001">시설명</option>
-                        <input type="hidden" id="spplannm" name="spplannm">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
                 </li>
             </ul>
         </div>
         <div class="tab-wrap">
-            <ul class="tab-links">
-                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
-                <li>
-                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
-                </li>
-                <li>
-                    <a href="#tab2" title="등록">등록</a>
-                </li>
-            </ul>
+            <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}"/>
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item">
                     <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>제어이행 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+<!--                                <li>-->
+<!--                                    <a class="btn btn-delete" title="삭제">-->
+<!--                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </li>-->
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>제어이행등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="checknm">
+                                        작성일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="checknm">
+                                </td>
+                                <th>
+                                    <label for="writer">
+                                        작성자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="writer">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkdt">
+                                        제어일자
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="date" id="checkdt">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkarea">
+                                        시행일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="checkarea">
+                                </td>
+                                <th>
+                                    <label for="end_date">
+                                        종료일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="end_date">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="controlarea">
+                                        대상
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="controlarea" placeholder="KT 대덕2연구센터 연료전지">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="controlmethod">
+                                        이행방법
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="controlmethod" placeholder="최소출력(0.855MW) 운전">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="implement">
+                                        조치
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div style="display: flex">
+                                        <input type="text" id="implement" placeholder="0.5">
+                                        <a class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">
+                                            <img src="/images/icon/ico-plus.svg" style="margin: 0">
+                                        </a>
+                                    </div>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-top" style="margin-top:40px;">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
@@ -73,12 +190,25 @@
                                             <input type="date" id="endDate" name="endDate">
                                             <label for="endDate" class="hide">종료일</label>
                                         </li>
-                                        <li>
-                                            <div style="margin-left: -20px" class="srch-box">
-                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
-                                            </div>
-                                        </li>
+<!--                                        <li>-->
+<!--                                            <div style="margin-left: -20px" class="srch-box">-->
+<!--                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()"-->
+<!--                                                   onkeyup="searchData()"></a>-->
+<!--                                            </div>-->
+<!--                                        </li>-->
                                     </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton1" onclick="searchData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
                                 </dd>
                             </dl>
                         </div>
@@ -101,142 +231,16 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 700px"></div>
-                    </div>
-                </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
-                    <div class="section-top">
-                        <div class="title-wrap">
-                            <h3>제어이행 등록</h3>
-                        </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="신규등록">
-                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                        신규등록
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-delete" title="삭제">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                        삭제
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="btn btn-edit" id="btnSave" title="저장">
-                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                        저장
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="table-wrap">
-                        <table class="write-table">
-                            <form id="customForm">
-                                <caption>제어이행등록 테이블</caption>
-                                <colgroup>
-                                    <col class="wp12">
-                                    <col class="wp40">
-                                    <col class="wp12">
-                                    <col class="wp40">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th>
-                                        <label for="checknm">
-                                            작성일자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="date" id="checknm">
-                                    </td>
-                                    <th>
-                                        <label for="writer">
-                                            작성자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="text" id="writer">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="checkdt">
-                                            제어일자
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <input type="date" id="checkdt">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="checkarea">
-                                            시행일자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="datetime-local" id="checkarea">
-                                    </td>
-                                    <th>
-                                        <label for="end_date">
-                                            종료일자
-                                        </label>
-                                    </th>
-                                    <td>
-                                        <input type="datetime-local" id="end_date">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="controlarea">
-                                            대상
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <input type="text" id="controlarea" placeholder="KT 대덕2연구센터 연료전지">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="controlmethod">
-                                            이행방법
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <input type="text" id="controlmethod" placeholder="최소출력(0.855MW) 운전">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <label for="implement">
-                                            조치
-                                        </label>
-                                    </th>
-                                    <td colspan="3">
-                                        <div style="display: flex">
-                                            <input type="text" id="implement" placeholder="0.5">
-                                            <a class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">
-                                                <img src="/images/icon/ico-plus.svg" style="margin: 0">
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                </tr>
-                                </tbody>
-                            </form>
-                        </table>
+                        <div id="theGrid" style="height: 360px"></div>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-    </div> <!-- //dashboard-layout-right end-->
-
-    </div> <!-- //dashboard-layout-contents end-->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
     <!-- [대시보드] 팝업  -->
     <div class="modal">
         <div class="popup-wrapper w700" id="popup1">
@@ -360,14 +364,70 @@
                     showMarquee: true,
                     columns: [
                         {binding: 'checkno', header: '순번', width: 80, align: 'center', isReadOnly: true},
-                        {binding: 'inpledt', header: '제어일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkdt', header: '시행일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spworknm', header: '종료일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spcompnm', header: '대상', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'spplannm', header: '이행방법', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkresult', header: '조치', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkrem', header: '작성자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
-                        {binding: 'checkrem', header: '작성일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true},
+                        {
+                            binding: 'inpledt',
+                            header: '제어일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkdt',
+                            header: '시행일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spworknm',
+                            header: '종료일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spcompnm',
+                            header: '대상',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spplannm',
+                            header: '이행방법',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkresult',
+                            header: '조치',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkrem',
+                            header: '작성자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkrem',
+                            header: '작성일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
 
                     ],
                     itemsSource: tempData
@@ -381,7 +441,7 @@
             }
         }
 
-        function closePopup(){
+        function closePopup() {
             /*const modal2 = document.querySelector('.modal');
             const modalOpen = document.querySelector('.popup-wrapper');
             modal2.style.display = 'none';
@@ -400,7 +460,7 @@
             }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
         }
 
-        function showPopup(){
+        function showPopup() {
 
             const modal = document.querySelector('.modal');
             const modalContent = document.querySelector('.popup-wrapper');

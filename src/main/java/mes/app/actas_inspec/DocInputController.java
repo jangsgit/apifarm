@@ -420,4 +420,15 @@ public class DocInputController {
         return ResponseEntity.ok(suggestions);
     }
 
+    @GetMapping("/newform")
+    public AjaxResult getByIdforNew(@RequestParam(value = "spworkcd") String spworkcd,
+                                    @RequestParam(value = "spcompcd") String spcompcd,
+                                    @RequestParam(value = "spplancd") String spplancd) throws IOException {
+        AjaxResult result = new AjaxResult();
+
+        Map<String, Object> item = this.docService.getFirst(spworkcd, spcompcd, spplancd);
+        result.data = item;
+        return result;
+    }
+
 }

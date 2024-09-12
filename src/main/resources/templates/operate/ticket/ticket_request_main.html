@@ -11,9 +11,9 @@
             <div class="left">
                 <h2>티켓 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                      alt="알람 아이콘"></a>
-                <a href="#" title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+<!--                <a href="#" title="북마크" class="bookmark toggle">-->
+<!--                    내메뉴-->
+<!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -48,7 +48,7 @@
             <ul class="tab-links">
                 <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
                 <li>
-                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                    <a href="#tab1" title="목록" id="listTabLink">현황</a>
                 </li>
                 <li>
                     <a href="#tab2" title="등록">등록</a>
@@ -85,9 +85,21 @@
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="searchtketnm" name="searchtketnm" class="input-srch"
-                                               placeholder="Ticket명 검색">
-                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>
+                                               placeholder="Ticket명 검색" style="border-radius: 5px;">
+<!--                                        <a href="#a" class="btn-srch" title="검색" onclick="searchData()"></a>-->
                                     </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton1" onclick="">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
                                 </dd>
                             </dl>
                         </div>
@@ -114,7 +126,7 @@
                     </div>
                 </section>
                 <!-- Section -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item" id="tab2" style="height: 820px;">
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>티켓 등록</h3>
@@ -125,6 +137,12 @@
                                     <a class="btn btn-excell" title="신규등록">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
                                     </a>
                                 </li>
                                 <li>
@@ -156,7 +174,7 @@
                                 <tr>
                                     <th>
                                         <label for="requester">
-                                            Requester
+                                            요청자
                                         </label>
                                     </th>
                                     <td>
@@ -282,30 +300,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <th>
-                                        첨부파일
-                                    </th>
-                                    <td colspan="3">
-                                        <div id="uploadComponent1" class="upload-component">
-                                            <div class="upload-filebox">
-                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                <a class="btn" title="파일업로드">파일업로드</a>
-                                                <input type="file" id="fileInput1" class="fileInput" multiple>
-                                                <p>Maximun upload file size <span>1GiB</span></p>
-                                            </div>
-                                            <div class="upload-filelist">
-                                                <div class="title">
-                                                    <h5>Files (0)</h5>
-                                                    <a title="Delete all" class="btn-file-deleteall">Delete
-                                                        all</a>
-                                                </div>
-                                                <ul class="filelist" id="filelist">
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
                                 </tbody>
                             </form>
                         </table>
@@ -314,9 +308,61 @@
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
-    </div> <!-- //dashboard-layout-right end-->
+    <footer style="margin-top:5px;">
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
 
-    </div> <!-- //dashboard-layout-contents end-->
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup('popup1')" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>전기안전 점검 첨부파일</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component2">
+                                    <div class="upload-filebox2">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일 업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput2" multiple>
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+
+                                    <div class="upload-filelist2">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall2">Delete all</a>
+                                        </div>
+                                        <ul class="filelist2" id="filelist2">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="popup-button">
+                    <button type="button" onclick="closePopup('popup1')" class="btn-navy">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </th:block>
 

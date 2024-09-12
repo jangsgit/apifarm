@@ -146,7 +146,7 @@
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="searchusr" class="input-srch"
-                                               placeholder="점검자 검색" autocomplete="off">
+                                               placeholder="점검자 검색" style="border-radius: 5px;">
                                     </div>
                                 </dd>
                             </dl>
@@ -159,9 +159,21 @@
                                 <dd>
                                     <div class="srch-box">
                                         <input type="text" id="searchcom" class="input-srch"
-                                               placeholder="협력사 검색" autocomplete="off">
-                                        <a class="btn-srch" title="검색" onclick="fetchListData()"></a>
+                                               placeholder="협력사 검색" style="border-radius: 5px;">
+<!--                                        <a class="btn-srch" title="검색" onclick="fetchListData()"></a>-->
                                     </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" onclick="fetchListData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
                                 </dd>
                             </dl>
                         </div>
@@ -206,9 +218,15 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
+                                    <a class="btn btn-excell" title="신규등록" onclick="newForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
                                     </a>
                                 </li>
                                 <li>
@@ -331,7 +349,7 @@
                                 <td rowspan="2">
                                     <span id="inspecdivision1">안전보건 일반사항</span>
                                 </td>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont1_1">ㅇ 작업장 출입/이동경로 상태 : 출입문 및 이동통로 주변 통행방해 적치 여부<br></span>
                                     <span id="inspeccont1_2">ㅇ 기타 출입 및 이동 방해 요소</span>
                                 </td>
@@ -346,7 +364,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont2">ㅇ 작업장 실내 유해가스 등 환기 상태<br>ㅇ 자재 적재, 작업개소 등에 대한 구획정리를 통한 안전 이동통로 확보</span>
                                 </td>
                                 <td class="checkbox-cell">
@@ -365,7 +383,7 @@
                                 <td rowspan="2">
                                     <span id="inspecdivision2">비상상황</span>
                                 </td>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont3">ㅇ 화재 대비 소화기 등 비치 상태<br>ㅇ 비상상황시 비상문, 비상대피로 확보<br>ㅇ 비상시 연락체계 등 관리체계 공지 및 교육 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
@@ -381,7 +399,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont4">ㅇ 비상상황 발생시 대응방안 관련<br>- 비상상황시 연락체계, 역할, 대피로 등 관리체계 수립 및 게시<br>- 업무 참여자 공지 및 교육 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
@@ -398,7 +416,7 @@
                             </tr>
                             <tr>
                                 <td rowspan="2"><span id="inspecdivision3">기타사항</span></td>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont5">ㅇ 위험물 또는 인화성 물질 관리상태 및 존치 여부</span>
                                 </td>
                                 <td class="checkbox-cell">
@@ -414,7 +432,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td style="text-align: left;">
                                     <span id="inspeccont6">ㅇ 작업부산물, 폐기물 처리 상태 등 작업장 및 그 주변 정리정돈 상태</span>
                                 </td>
                                 <td class="checkbox-cell">
@@ -453,23 +471,53 @@
                                     </div>
                                 </td>
                             </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup('popup1')" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form id="file-upload-form" enctype="multipart/form-data">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>전기안전 점검 첨부파일</caption>
+                            <colgroup>
+                                <col class="wp20">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
                             <tr>
                                 <th>
                                     첨부파일
                                 </th>
-                                <td colspan="3">
+                                <td>
                                     <div id="uploadComponent1" class="upload-component">
                                         <div class="upload-filebox">
                                             <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                            <a class="btn" title="파일업로드">파일업로드</a>
-                                            <input type="file" id="fileInput1" class="fileInput" multiple>
+                                            <a class="btn" title="파일업로드">파일 업로드</a>
+                                            <input type="file" id="fileInput" class="fileInput" multiple>
                                             <p>Maximun upload file size <span>1GiB</span></p>
                                         </div>
+
                                         <div class="upload-filelist">
                                             <div class="title">
                                                 <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete
-                                                    all</a>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
                                             </div>
                                             <ul class="filelist" id="filelist">
                                             </ul>
@@ -480,10 +528,15 @@
                             </tbody>
                         </table>
                     </div>
-                </section>
-            </div> <!--//tab-contens end-->
-        </div> <!--//tab-wrap end-->
-    </div> <!--//layout-contents end -->
+                    <div class="popup-button">
+                        <button type="button" onclick="closePopup('popup1')" class="btn-navy">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div id="loader2">
         <div class="loader">
             <span></span>
@@ -800,6 +853,129 @@
                     if (seqInput && seqInput.value) {
                         deletedSeqs.push(seqInput.value);
                     }
+                    wrapper.removeChild(newInspectorGroup);
+                };
+            }
+
+            newInspectorGroup.appendChild(companyInputClear);
+            newInspectorGroup.appendChild(companySuggestions);
+            newInspectorGroup.appendChild(positionInputClear);
+            newInspectorGroup.appendChild(positionSuggestions);
+            newInspectorGroup.appendChild(nameInputClear);
+            newInspectorGroup.appendChild(nameSuggestions);
+            newInspectorGroup.appendChild(actionButton);
+
+            wrapper.appendChild(newInspectorGroup);
+
+            // 동적으로 추가된 필드에 대해 자동완성 기능 적용
+            initializeAutoComplete(companyInput.id, '/api/inspec/hap/autocomplete', companySuggestionId);
+            initializeAutoComplete(positionInput.id, '/api/inspec/hap/autocomplete', positionSuggestionId);
+            initializeAutoComplete(nameInput.id, '/api/inspec/hap/autocomplete', nameSuggestionId);
+        }
+
+        function addInspector2(wrapperClass, inspectorData = null, isFirst = false) {
+            const wrapper = document.querySelector(`.${wrapperClass}`);
+            const index = wrapper.querySelectorAll('.inspector-group').length + 1;
+
+            // checkusr1, checkusr2에 따라 각각의 카운터를 사용
+            let dataId;
+            if (wrapperClass === 'checkusr1') {
+                dataId = inspectorIdCounterCheckusr1++;
+            } else if (wrapperClass === 'checkusr2') {
+                dataId = inspectorIdCounterCheckusr2++;
+            }
+
+            const newInspectorGroup = document.createElement('div');
+            newInspectorGroup.classList.add('inspector-group');
+            newInspectorGroup.setAttribute('data-id', dataId.toString());
+
+            // input-clear 구조 추가
+            const createInputClear = (inputField) => {
+                const inputClearDiv = document.createElement('div');
+                inputClearDiv.classList.add('input-clear');
+
+                inputField.style.marginRight = '4px';
+
+                const clearButton = document.createElement('span');
+                clearButton.classList.add('btn-clear');
+                clearButton.innerHTML = '×';
+                clearButton.style.display = 'none';
+
+                // x 버튼 누르면 지우기
+                clearButton.onclick = () => {
+                    inputField.value = '';
+                    clearButton.style.display = 'none';
+                    inputField.focus();
+                };
+
+                inputField.addEventListener('input', () => {
+                    clearButton.style.display = inputField.value ? 'inline' : 'none';
+                });
+
+                inputClearDiv.appendChild(inputField);
+                inputClearDiv.appendChild(clearButton);
+
+                return inputClearDiv;
+            };
+
+            // 업체명 input
+            const companyInput = document.createElement('input');
+            companyInput.type = "text";
+            companyInput.name = `${wrapperClass}_company_${index}`;
+            companyInput.id = `${wrapperClass}_company_${index}`;
+            companyInput.placeholder = '업체명';
+            companyInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) companyInput.value = inspectorData.company;
+
+            const companyInputClear = createInputClear(companyInput);
+            const companySuggestionId = wrapperClass === 'checkusr1' ? `suggestions-company-do-${index}` : `suggestions-company-ha-${index}`;
+            const companySuggestions = document.createElement('ul');
+            companySuggestions.id = companySuggestionId;
+            companySuggestions.classList.add('suggestions-list');
+            companySuggestions.style.display = 'none';
+
+            // 직급 input
+            const positionInput = document.createElement('input');
+            positionInput.type = "text";
+            positionInput.name = `${wrapperClass}_position_${index}`;
+            positionInput.id = `${wrapperClass}_position_${index}`;
+            positionInput.placeholder = '직급';
+            positionInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) positionInput.value = inspectorData.jiggeub;
+
+            const positionInputClear = createInputClear(positionInput);
+            const positionSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-position-do-${index}` : `suggestions-position-ha-${index}`;
+            const positionSuggestions = document.createElement('ul');
+            positionSuggestions.id = positionSuggestionId;
+            positionSuggestions.classList.add('suggestions-list');
+
+            // 성명 input
+            const nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.name = `${wrapperClass}_name_${index}`;
+            nameInput.id = `${wrapperClass}_name_${index}`;
+            nameInput.placeholder = '성명';
+            nameInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) nameInput.value = inspectorData.checkusr;
+
+            const nameInputClear = createInputClear(nameInput);
+            const nameSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-name-do-${index}` : `suggestions-name-ha-${index}`;
+            const nameSuggestions = document.createElement('ul');
+            nameSuggestions.id = nameSuggestionId;
+            nameSuggestions.classList.add('suggestions-list');
+
+            const actionButton = document.createElement('button');
+            if (isFirst) {
+                actionButton.innerText = '점검자 추가';
+                actionButton.classList.add('mg-l8');
+                actionButton.onclick = function () {
+                    addInspector(wrapperClass, null, false);
+                };
+            } else {
+                actionButton.innerText = '점검자 삭제';
+                actionButton.classList.add('mg-l8');
+                actionButton.style.color = 'red';
+                actionButton.onclick = function () {
                     wrapper.removeChild(newInspectorGroup);
                 };
             }
@@ -1396,6 +1572,67 @@
                     }
                 });
             })
+        }
+
+        // 신규등록 버튼
+        function newForm() {
+            clearForm();
+            // updateButton();
+            $.ajax({
+                url: '/api/inspec/hap/newform',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    'spworkcd': $('#spworkcd').val(),
+                    'spcompcd': $('#spcompcd').val(),
+                    'spplancd': $('#spplancd').val(),
+                },
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('checknm').value = data2.checknm;
+                        document.getElementById('chkaddres').value = data2.chkaddres;
+
+                        // 점검자 리스트 처리
+                        const checkusr1Wrapper = document.querySelector('.checkusr1');
+                        const checkusr2Wrapper = document.querySelector('.checkusr2');
+                        checkusr1Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+                        checkusr2Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+
+                        inspectorIdCounterCheckusr1 = 1;
+                        inspectorIdCounterCheckusr2 = 1;
+
+                        let firstCheckusr1 = true; // checkusr1의 첫 번째 여부
+                        let firstCheckusr2 = true; // checkusr2의 첫 번째 여부
+
+                        if (data2.inspectorlist && Array.isArray(data2.inspectorlist)) {
+                            data2.inspectorlist.forEach((inspector, index) => {
+
+                                let wrapperClass = inspector.chkflag === "0" ? 'checkusr1' : 'checkusr2';
+                                let isFirst = false;
+
+                                if (inspector.chkflag === "0" && firstCheckusr1) {
+                                    isFirst = true;
+                                    firstCheckusr1 = false; // 첫 번째 이후는 false로 설정
+                                } else if (inspector.chkflag === "1" && firstCheckusr2) {
+                                    isFirst = true;
+                                    firstCheckusr2 = false; // 첫 번째 이후는 false로 설정
+                                }
+
+                                addInspector2(wrapperClass, inspector, isFirst);
+
+                            });
+                        }
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '불러오기에 실패했습니다.');
+                }
+            });
         }
 
         $(document).ready(function (e) {

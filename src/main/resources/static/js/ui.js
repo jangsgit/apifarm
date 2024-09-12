@@ -342,6 +342,7 @@ $(document).ready(function () {
         function updateFileCount() {
             const fileCount = uploadedFiles.length;
             $fileCountTitle.text(`Files (${fileCount})`);
+            $('.btn-file span').text(`(${fileCount})`);
         }
 
         function resetFileInput($input) {

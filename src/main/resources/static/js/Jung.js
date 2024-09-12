@@ -211,6 +211,22 @@ function updateFileListUI() {
     });
 }
 
+// 파일 리스트 UI 업데이트 함수
+function updateFileListUI2() {
+    const $fileList = $('#filelist2');
+
+    uploadedFiles2.forEach(file => {
+        const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
+        const li = $('<li>').html(`
+                    <p>${file.name} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete2">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
+        $fileList.append(li);
+    });
+}
+
 // 날짜 형식을 변환하는 함수
 function formatDate(dateString) {
     if (dateString && dateString.length === 8) {
@@ -219,10 +235,21 @@ function formatDate(dateString) {
     return dateString;
 }
 
+
+
+
 // 파일 개수 업데이트 함수
 function updateFileCount() {
     const fileCount = uploadedFiles.length;
     $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+    $('.btn-file span').text(`(${fileCount})`);
+}
+
+// 파일 개수 업데이트 함수
+function updateFileCount2() {
+    const fileCount = uploadedFiles2.length;
+    $('.upload-filelist2 .title h5').text(`Files (${fileCount})`);
+    $('.btn-file2 span').text(`(${fileCount})`);
 }
 
 // 파일 인풋 초기화
@@ -430,4 +457,158 @@ function showLoader() {
 // 로딩바를 숨기는 함수
 function hideLoader() {
     document.getElementById('loader2').style.display = 'none';
+}
+
+// 파일업로드 변수설정
+let uploadedFiles2 = [];
+// 삭제할 파일 목록
+let deletedFiles2 = [];
+$(document).ready(function () {
+    function initializeUploadComponent2(component) {
+
+        const $fileInput = $(component).find('.fileInput2');
+        const $fileList = $(component).find('.filelist2');
+        const $fileCountTitle = $(component).find('.upload-filelist2 .title h5');
+
+        $fileInput.on('change', function (event) {
+            const files = event.target.files;
+            handleFileSelect2(files);
+        });
+
+        $(component).find('.upload-filebox2').on('dragover', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).addClass('dragging');
+        });
+
+        $(component).find('.upload-filebox2').on('dragleave', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).removeClass('dragging');
+        });
+
+        $(component).find('.upload-filebox2').on('drop', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            $(this).removeClass('dragging');
+            // handleFileSelect(event.originalEvent.dataTransfer.files);
+
+            const files = event.originalEvent.dataTransfer.files;
+
+            handleFileSelect2(files);
+            // 드래그 앤 드롭 후 파일 입력 요소 초기화
+            resetFileInput($fileInput);
+        });
+
+        function handleFileSelect2(files) {
+            $.each(files, function (index, file) {
+                if (file.size > MAX_FILE_SIZE) {
+                    Alert.alert('', '파일 크기는 1GB를 초과할 수 없습니다.');
+                    resetFileInput($fileInput);
+                } else if(!uploadedFiles2.some(f => f.name === file.name && f.size === file.size)) {
+                    uploadedFiles2.push(file);
+                    const fileSize = (file.size / 1024).toFixed(2) + ' KiB';
+                    const li = $('<li>').html(`
+                    <p>${file.name} <span>(${fileSize})</span></p>
+                    <a href="#" title="삭제" class="btn-file-delete2">
+                        <img src="/images/icon/ico-filedelete.svg" alt="삭제아이콘">
+                    </a>
+                `);
+                    $fileList.append(li);
+                }
+            });
+            updateFileCount2();
+        }
+
+        $(component).on('click', '.btn-file-delete2', function (event) {
+            event.preventDefault();
+            const li = $(this).closest('li');
+            const fileName = li.find('p').text().split(' (')[0];
+
+            // 파일 이름과 일치하지 않는 파일들로 필터링하여 uploadedFiles 업데이트
+            const removedFile = uploadedFiles2.find(file => file.name === fileName);
+            uploadedFiles2 = uploadedFiles2.filter(file => file.name !== fileName);
+
+            // 삭제된 파일을 deletedFiles에 추가
+            if (removedFile) {
+                deletedFiles2.push(removedFile);
+            }
+            li.remove();
+            updateFileCount2();
+
+            // 파일 선택 후 파일 입력 요소 초기화
+            resetFileInput2($fileInput);
+        });
+
+        $(component).find('.btn-file-deleteall2').on('click', function (event) {
+            event.preventDefault();
+            // 모든 업로드된 파일을 삭제된 파일 리스트에 추가
+            deletedFiles2 = deletedFiles2.concat(uploadedFiles2);
+
+            $fileList.empty();
+            uploadedFiles2 = [];
+            updateFileCount2();
+            resetFileInput2($fileInput);
+        });
+
+        function updateFileCount2() {
+            const fileCount = uploadedFiles2.length;
+            $fileCountTitle.text(`Files (${fileCount})`);
+            $('.btn-file2 span').text(`(${fileCount})`);
+        }
+
+        function resetFileInput2($input) {
+            $input.val('');
+        }
+    }
+
+    $('.upload-component2').each(function () {
+        initializeUploadComponent2(this);
+    });
+});
+
+function closePopup(popupId) {
+    // 해당 ID의 팝업 요소를 찾음
+    const popup = document.getElementById(popupId);
+
+    if (popup) {
+        // 팝업을 포함한 모달 숨기기
+        const modal = popup.closest('.modal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
+
+        // 팝업 숨기기
+        popup.style.display = 'none';
+        popup.classList.remove('show');
+    }
+}
+
+
+function showPopup(element) {
+    // 클릭된 요소의 data-popup 속성 값 가져오기
+    const popupId = element.getAttribute('data-popup');
+
+    // 해당 ID의 팝업 요소를 찾음
+    const popup = document.getElementById(popupId);
+
+    if (popup) {
+        // 팝업을 포함한 모달을 표시
+        const modal = popup.closest('.modal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+
+        // 팝업을 표시
+        popup.style.display = 'block';
+
+        // 애니메이션을 위한 클래스 추가
+        requestAnimationFrame(() => {
+            popup.classList.add('show');
+            if (modal) {
+                modal.classList.add('show');
+            }
+        });
+    }
 }

@@ -135,13 +135,14 @@ public class HapReportService {
             sql.append(" AND t1.checkdt <= :endDate ");
         }
 
+
         // 마지막으로 order by 절 추가
         sql.append("""
                 GROUP BY
                     t1.spworkcd, t1.spcompcd, t1.spplancd, t1.checkdt, t1.checkno, t1.checknm, uc1."Value", uc2."Value", uc3."Value"
                 HAVING
-                    (:searchusr IS NULL OR STRING_AGG(CAST(t3.checkusr AS TEXT), ',') LIKE :searchusr)
-                    AND (:searchcom IS NULL OR STRING_AGG(CAST(t3.company AS TEXT), ',') LIKE :searchcom)
+                     (:searchusr IS NULL OR :searchusr = '' OR STRING_AGG(CAST(t3.checkusr AS TEXT), ',') LIKE :searchusr)
+                     AND (:searchcom IS NULL OR :searchcom = '' OR STRING_AGG(CAST(t3.company AS TEXT), ',') LIKE :searchcom)
                 ORDER BY
                     t1.checkdt DESC, t1.indatem DESC
                 """);
@@ -165,11 +166,11 @@ public class HapReportService {
         String sql1 = """
         select *
         from tb_rp720
-        where spworkcd like :spworkcd
-        and spcompcd like :spcompcd
-        and spplancd like :spplancd
-        and checkdt like :checkdt
-        and checkno like :checkno
+        where spworkcd = :spworkcd
+        and spcompcd = :spcompcd
+        and spplancd = :spplancd
+        and checkdt = :checkdt
+        and checkno = :checkno
         """;
         Map<String, Object> tbrp720 = this.sqlRunner.getRow(sql1, dicParam);
 
@@ -181,11 +182,11 @@ public class HapReportService {
         String sql2 = """
         select *
         from tb_inspec
-        where spworkcd like :spworkcd
-        and spcompcd like :spcompcd
-        and spplancd like :spplancd
-        and checkdt like :checkdt
-        and checkno like :checkno
+        where spworkcd = :spworkcd
+        and spcompcd = :spcompcd
+        and spplancd = :spplancd
+        and checkdt = :checkdt
+        and checkno = :checkno
         """;
         List<Map<String, Object>> inspectionItems = this.sqlRunner.getRows(sql2, dicParam);
 
@@ -195,11 +196,11 @@ public class HapReportService {
         String sql3 = """
         select *
         from tb_rp725
-        where spworkcd like :spworkcd
-        and spcompcd like :spcompcd
-        and spplancd like :spplancd
-        and checkdt like :checkdt
-        and checkno like :checkno
+        where spworkcd = :spworkcd
+        and spcompcd = :spcompcd
+        and spplancd = :spplancd
+        and checkdt = :checkdt
+        and checkno = :checkno
         """;
 
         List<Map<String, Object>> filelist = this.sqlRunner.getRows(sql3, dicParam);
@@ -209,11 +210,11 @@ public class HapReportService {
         String sql4 = """
         select *
         from tb_rp726
-        where spworkcd like :spworkcd
-        and spcompcd like :spcompcd
-        and spplancd like :spplancd
-        and checkdt like :checkdt
-        and checkno like :checkno
+        where spworkcd = :spworkcd
+        and spcompcd = :spcompcd
+        and spplancd = :spplancd
+        and checkdt = :checkdt
+        and checkno = :checkno
         order by seq
         """;
 
@@ -335,5 +336,59 @@ public class HapReportService {
             default -> new ArrayList<>();
         };
 
+    }
+
+    // 최신 데이터 가져오기
+    public Map<String, Object> getFirst(String spworkcd, String spcompcd, String spplancd) {
+
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+        Map<String, Object> result = new HashMap<>();
+
+        StringBuilder sql = new StringBuilder();
+        dicParam.addValue("spworkcd", spworkcd);
+        dicParam.addValue("spcompcd", spcompcd);
+        dicParam.addValue("spplancd", spplancd);
+
+        String sql1 = """
+                SELECT
+                    *
+                FROM
+                    tb_rp720
+                WHERE
+                    spworkcd = :spworkcd AND
+                    spcompcd = :spcompcd AND
+                    spplancd = :spplancd
+                ORDER BY
+                    indatem DESC
+                LIMIT 1;
+                """;
+
+        Map<String, Object> tbrp720 = this.sqlRunner.getRow(sql1, dicParam);
+
+        if (tbrp720 != null) {
+            result.putAll(tbrp720);
+        }
+
+        String checkno = (String) tbrp720.get("checkno");
+        String checkdt = (String) tbrp720.get("checkdt");
+        dicParam.addValue("checkno", checkno);
+        dicParam.addValue("checkdt", checkdt);
+
+        // 점검자 리스트
+        String sql4 = """
+        select *
+        from tb_rp726
+        where spworkcd = :spworkcd
+        and spcompcd = :spcompcd
+        and spplancd = :spplancd
+        and checkdt = :checkdt
+        and checkno = :checkno
+        order by seq
+        """;
+
+        List<Map<String, Object>> inspectorlist = this.sqlRunner.getRows(sql4, dicParam);
+        result.put("inspectorlist", inspectorlist);
+
+        return result;
     }
 }

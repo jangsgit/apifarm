@@ -277,4 +277,31 @@ public class DocService {
             default -> new ArrayList<>();
         };
     }
+
+    // 최신 데이터 가져오기
+    public Map<String, Object> getFirst(String spworkcd, String spcompcd, String spplancd) {
+
+        MapSqlParameterSource dicParam = new MapSqlParameterSource();
+
+        StringBuilder sql = new StringBuilder();
+        dicParam.addValue("spworkcd", spworkcd);
+        dicParam.addValue("spcompcd", spcompcd);
+        dicParam.addValue("spplancd", spplancd);
+
+        sql.append("""
+                SELECT
+                    *
+                FROM
+                    tb_rp870
+                WHERE
+                    spworkcd = :spworkcd AND
+                    spcompcd = :spcompcd AND
+                    spplancd = :spplancd
+                ORDER BY
+                    indatem DESC
+                LIMIT 1;
+                """);
+
+        return this.sqlRunner.getRow(sql.toString(), dicParam);
+    }
 }

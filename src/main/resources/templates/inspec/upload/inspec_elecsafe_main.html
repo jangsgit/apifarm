@@ -8,11 +8,12 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>전기안전 점검 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
-                                                                                          alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내 메뉴
-                </a>
+                <h2>전기안전 점검 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img
+                    src="/images/icon/ico-down.png"
+                    alt="알람 아이콘"></a>
+                <!--                <a title="북마크" class="bookmark toggle">-->
+                <!--                    내 메뉴-->
+                <!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -38,7 +39,8 @@
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
@@ -48,74 +50,17 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <input type="hidden" id="checkseq" name="checkseq"/>
-                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}"/>
                 <li>
-                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                    <a href="#tab1" title="전기안전 점검">전기안전 점검</a>
                 </li>
-                <li th:if="${write_flag}">
-                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
+                <li>
+                    <a href="#tab2" title="문서 관리">문서 관리</a>
                 </li>
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
-                    <div class="section-top">
-                        <div class="search-wrap">
-                            <dl>
-                                <dt>
-                                    등록일자<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <input type="date" id="startDate" name="startDate">
-                                            <label for="startDate" class="hide">시작일</label>
-                                        </li>
-                                        <li>
-                                            <input type="date" id="endDate" name="endDate">
-                                            <label for="endDate" class="hide">종료일</label>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="searchtitle">
-                                        점검명<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="srch-box">
-                                        <input type="text" id="searchtitle" name="searchtitle" class="input-srch">
-                                        <a href="#a" class="btn-srch" title="검색" onclick="fetchListData()"></a>
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-                        <div class="button-wrap">
-                            <ul>
-                                <li th:if="${write_flag}">
-                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
-                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
-                                        삭제
-                                    </a>
-                                </li>
-                                <li th:if="${write_flag}">
-                                    <a class="btn btn-edit" title="수정" onclick="modifyData()">
-                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                        수정
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="max-height: 700px;height: 700px;"></div>
-                    </div>
-                </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>전기안전 점검 등록</h3>
@@ -123,21 +68,27 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                    <a class="btn btn-excell" title="신규등록" onclick="newForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm()">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                        삭제
+                                    <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
                                     </a>
                                 </li>
+<!--                                <li>-->
+<!--                                    <a class="btn btn-delete" title="삭제" onclick="clearForm()">-->
+<!--                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </li>-->
                                 <li>
                                     <a class="btn btn-edit" title="저장" onclick="saveForm()">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                        저장
+                                        <span id="save-button-text">저장</span>
                                     </a>
                                 </li>
                             </ul>
@@ -235,11 +186,288 @@
                                     </div>
                                 </td>
                             </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-top" style="margin-top:40px;">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtitle">
+                                        점검명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchtitle" name="searchtitle" class="input-srch" style="border-radius: 5px;">
+<!--                                        <a href="#a" class="btn-srch" title="검색" onclick="fetchListData()"></a>-->
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton1" onclick="fetchListData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 330px;height: 330px;"></div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>문서 등록</h3>
+                        </div>
+                        <input type="hidden" id="checkseq_doc" name="checkseq_doc"/>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="newForm_doc()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-file2" title="파일 첨부" data-popup="popup2"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
+                                    </a>
+                                </li>
+<!--                                <li>-->
+<!--                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm_doc()">-->
+<!--                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">-->
+<!--                                        삭제-->
+<!--                                    </a>-->
+<!--                                </li>-->
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장" onclick="saveForm_doc()">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>문서등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="doctitle">
+                                        제목
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="doctitle" name="doctitle" class="wp100" maxlength="50">
+                                    <ul id="suggestions-doctitle" class="suggestions-list"></ul>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="registdt2">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id=registdt2 name="registdt2">
+                                </td>
+                                <th>
+                                    <label for="docdv">
+                                        문서구분 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <select title="문서구분" name="docdv" id="docdv">
+                                        <option value="" disabled selected hidden>선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    문서정보
+                                </th>
+                                <td colspan="3">
+                                    <div class="textarea-box">
+                                        <textarea id="docrem" name="docrem" maxlength="200"></textarea>
+                                        <p class="text-count" id="text-count2">0/200</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-top" style="margin-top:40px;">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate2" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate2" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtitle2">
+                                        제목<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchtitle2" name="searchtitle2" class="input-srch" style="border-radius: 5px;">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="finddocdv">
+                                        문서구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="finddocdv">
+                                                <option value="" selected>전체</option>
+                                            </select>
+                                        </li>
+<!--                                        <li>-->
+<!--                                            <div style="margin-left: -20px" class="srch-box">-->
+<!--                                                <a class="btn-srch" title="검색" onclick="fetchListData_doc()"></a>-->
+<!--                                            </div>-->
+<!--                                        </li>-->
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" onclick="fetchListData_doc()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid_doc()">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정" onclick="modifyData_doc()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid2" style="max-height: 380px; height: 380px"></div>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup('popup1')" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form id="file-upload-form" enctype="multipart/form-data">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>전기안전 점검 첨부파일</caption>
+                            <colgroup>
+                                <col class="wp20">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
                             <tr>
                                 <th>
                                     첨부파일
                                 </th>
-                                <td colspan="3">
+                                <td>
                                     <div id="uploadComponent1" class="upload-component">
                                         <div class="upload-filebox">
                                             <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
@@ -247,11 +475,11 @@
                                             <input type="file" id="fileInput" class="fileInput" multiple>
                                             <p>Maximun upload file size <span>1GiB</span></p>
                                         </div>
+
                                         <div class="upload-filelist">
                                             <div class="title">
                                                 <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete
-                                                    all</a>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
                                             </div>
                                             <ul class="filelist" id="filelist">
                                             </ul>
@@ -262,10 +490,65 @@
                             </tbody>
                         </table>
                     </div>
-                </section>
-            </div> <!--//tab-contens end-->
-        </div> <!--//tab-wrap end-->
-    </div> <!--//layout-contents end -->
+                    <div class="popup-button">
+                        <button type="button" onclick="closePopup('popup1')" class="btn-navy">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup2">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup('popup2')" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>전기안전 점검 첨부파일</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component2">
+                                    <div class="upload-filebox2">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일 업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput2" multiple>
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+
+                                    <div class="upload-filelist2">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall2">Delete all</a>
+                                        </div>
+                                        <ul class="filelist2" id="filelist2">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="popup-button">
+                    <button type="button" onclick="closePopup('popup2')" class="btn-navy">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </th:block>
 
@@ -274,6 +557,7 @@
     <script type="text/javascript">
 
         var theGrid;
+        var theGrid2;
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -281,6 +565,7 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('registdt').value = today;
         document.getElementById('checkdt').value = today;
+        document.getElementById('registdt2').value = today;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 -->
         function init() {
@@ -289,14 +574,22 @@
 
             // 검색 초기 날짜
             setDefaultDates('startDate', 'endDate');
+            setDefaultDates('startDate2', 'endDate2');
 
             // read 초기화
             fetchListData();
+            fetchListData_doc();
 
             // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
             document.getElementById('spworkcd').addEventListener('change', fetchListData);
             document.getElementById('spcompcd').addEventListener('change', fetchListData);
             document.getElementById('spplancd').addEventListener('change', fetchListData);
+            document.getElementById('spworkcd').addEventListener('change', fetchListData_doc);
+            document.getElementById('spcompcd').addEventListener('change', fetchListData_doc);
+            document.getElementById('spplancd').addEventListener('change', fetchListData_doc);
+            document.getElementById('spworkcd').addEventListener('change', clearForm);
+            document.getElementById('spcompcd').addEventListener('change', clearForm);
+            document.getElementById('spplancd').addEventListener('change', clearForm);
         }
 
         function fetchListData() {
@@ -449,19 +742,6 @@
             downloadFiles(downloadList, downloadUrl);
         }
 
-        // 탭 수정/등록으로 업데이트
-        function updateTabLink() {
-            const checkseq = document.getElementById('checkseq').value;
-            const inputTabLink = document.getElementById('inputTabLink');
-
-            if (checkseq) {
-                inputTabLink.textContent = '수정';
-                inputTabLink.title = '수정';
-            } else {
-                inputTabLink.textContent = '등록';
-                inputTabLink.title = '등록';
-            }
-        }
 
         // 수정하기
         function modifyData() {
@@ -494,7 +774,6 @@
                 success: function (data) {
                     if (data.success) {
                         let data2 = data.data;
-                        $('#inputTabLink').click();
                         document.getElementById('spworkcd').value = data2.spworkcd;
                         document.getElementById('spcompcd').value = data2.spcompcd;
                         document.getElementById('spplancd').value = data2.spplancd;
@@ -507,9 +786,6 @@
                         document.getElementById('checkarea').value = data2.checkarea;
                         document.getElementById('bfconsres').value = data2.bfconsres;
                         document.getElementById('checkseq').value = data2.checkseq;
-
-                        // 탭 수정으로 업데이트
-                        updateTabLink();
 
                         // filelist 처리
                         let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
@@ -537,6 +813,7 @@
 
                         updateFileListUI();
                         updateFileCount();
+                        // updateButton();
 
                     } else {
                         Alert.alert('', '불러오기에 실패했습니다. ');
@@ -592,47 +869,106 @@
         }
 
         // 수정에서 삭제 버튼
-        function deleteForm() {
+        // function deleteForm() {
+        //
+        //     let data = [{
+        //         'spworkcd': $('#spworkcd').val(),
+        //         'spcompcd': $('#spcompcd').val(),
+        //         'spplancd': $('#spplancd').val(),
+        //         'checkdt': $('#checkdt').val(),
+        //         'checkseq': $('#checkseq').val()
+        //     }];
+        //     Alert.confirm('', '삭제하시겠습니까?', function () {
+        //
+        //         if ($('#checkseq').val() === '') {
+        //             Alert.alert('', '삭제할 내용이 없습니다.');
+        //             return;
+        //         }
+        //
+        //         $.ajax({
+        //             url: '/api/inspec/elec_safe/delete',
+        //             type: 'DELETE',
+        //             contentType: 'application/json',
+        //             data: JSON.stringify(data),
+        //             headers: {
+        //                 'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+        //             },
+        //             async: false,
+        //             success: function (res) {
+        //                 if (res.success) {
+        //                     Alert.alert('', '삭제되었습니다.');
+        //                     fetchListData();
+        //                     clearForm();
+        //                 }
+        //             },
+        //             error: function (jqXHR, textStatus, errorThrown) {
+        //                 Alert.alert('', '삭제에 실패했습니다.');
+        //             }
+        //         });
+        //     });
+        // }
 
-            let data = [{
-                'spworkcd': $('#spworkcd').val(),
-                'spcompcd': $('#spcompcd').val(),
-                'spplancd': $('#spplancd').val(),
-                'checkdt': $('#checkdt').val(),
-                'checkseq': $('#checkseq').val()
-            }];
-            Alert.confirm('', '삭제하시겠습니까?', function () {
-
-                if ($('#checkseq').val() === '') {
-                    Alert.alert('', '삭제할 내용이 없습니다.');
-                    return;
-                }
-
-                $.ajax({
-                    url: '/api/inspec/elec_safe/delete',
-                    type: 'DELETE',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
-                    headers: {
-                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
-                    },
-                    async: false,
-                    success: function (res) {
-                        if (res.success) {
-                            Alert.alert('', '삭제되었습니다.');
-                            $('#listTabLink').click();
-                            fetchListData();
-                            clearForm();
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        Alert.alert('', '삭제에 실패했습니다.');
+        // 신규등록 버튼
+        function newForm() {
+            clearForm();
+            // updateButton();
+            $.ajax({
+                url: '/api/inspec/elec_safe/newform',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    'spworkcd': $('#spworkcd').val(),
+                    'spcompcd': $('#spcompcd').val(),
+                    'spplancd': $('#spplancd').val(),
+                },
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('checktitle').value = data2.checktitle;
+                        document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkarea').value = data2.checkarea;
                     }
-                });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '불러오기에 실패했습니다.');
+                }
             });
         }
 
-        // 신규등록 버튼 클릭
+        // 신규등록 버튼
+        function newForm_doc() {
+            clearForm_doc();
+            // updateButton();
+            $.ajax({
+                url: '/api/inspec_doc/newform',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    'spworkcd': $('#spworkcd').val(),
+                    'spcompcd': $('#spcompcd').val(),
+                    'spplancd': $('#spplancd').val(),
+                },
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('doctitle').value = data2.doctitle;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '불러오기에 실패했습니다.');
+                }
+            });
+        }
+
+        // 초기화
         function clearForm() {
             ['checktitle', 'checkarea', 'bfconsres', 'checkseq', 'checkusr'].forEach(id => {
                 document.getElementById(id).value = '';
@@ -642,11 +978,11 @@
             $('.filelist').empty(); // 파일 리스트 초기화
             uploadedFiles = []; // 업로드된 파일 리스트 초기화
             deletedFiles = [];
-            // 탭 수정/등록 변경
-            updateTabLink();
+
             // 초기화된 파일 개수 업데이트
             updateFileCount();
             resetFileInput($('.fileInput'));
+            // updateButton();
 
             // endresult의 첫 번째 옵션을 선택
             const endresultSelect = document.getElementById('endresult');
@@ -656,7 +992,7 @@
             $('.text-count').text('0/100'); // 글자 수 0으로 초기화
 
             // 특정 필드에 대한 btn-clear 숨김 처리
-            $('#checktitle, #checkusr, #checkarea').each(function() {
+            $('#checktitle, #checkusr, #checkarea').each(function () {
                 $(this).siblings('.btn-clear').hide();
             });
         }
@@ -727,7 +1063,6 @@
                     success: function (response) {
                         if (response.success) {
                             Alert.alert('', response.message, function () {
-                                $('#listTabLink').click();
                                 fetchListData();
                                 clearForm();
                             });
@@ -743,9 +1078,416 @@
             })
         }
 
+        // 문서 관리
+        function fetchListData_doc() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/inspec_doc/read',
+                type: 'GET',
+                data: {
+                    'startDate': $('#startDate2').val(),
+                    'endDate': $('#endDate2').val(),
+                    'searchtitle': $('#searchtitle2').val(),
+                    'finddocdv': $('#finddocdv').val(),
+                    spworkcd: spworkcd,
+                    spcompcd: spcompcd,
+                    spplancd: spplancd
+                },
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid2) {
+                // 데이터 그리드에 바인딩
+                theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    allowSorting: 'MultiColumn',
+                    columns: [
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {
+                            binding: 'registdt',
+                            header: '등록일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'inusernm',
+                            header: '등록자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'docdv',
+                            header: '문서구분',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'doctitle',
+                            header: '제목',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {binding: 'downloads', header: '첨부파일', width: '*', minWidth: 100, align: 'center'},
+                        {
+                            binding: 'docrem',
+                            header: '문서정보',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        }
+                    ],
+                    itemsSource: viewdata,
+                    itemFormatter: function (panel, r, c, cell) {
+                        if (panel.cellType === wijmo.grid.CellType.Cell) {
+                            var item = panel.rows[r].dataItem; // 현재 행의 데이터 항목
+                            if (panel.columns[c].binding === 'downloads') {
+                                cell.innerHTML = ''; // 셀 내용 초기화
+                                if (item.isdownload) {
+                                    cell.innerHTML = '<a title="다운로드" class="btn-filedown" onclick="downloadFile_doc()">다운로드</a>';
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 그리드의 더블클릭 이벤트 추가
+                let lastClickTime = 0;
+                theGrid2.hostElement.addEventListener('click', function (e) {
+                    const now = new Date().getTime();
+                    if (now - lastClickTime < 300) { // 300ms 이내의 두 번 클릭은 더블클릭으로 인식
+                        modifyData_doc(); // 더블클릭 시 modifyData 함수 실행
+                    }
+                    lastClickTime = now;
+                });
+
+                theGrid2.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid2);
+                window.downloadFileName = '문서관리';
+
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid2.itemsSource = viewdata;
+            }
+        }
+
+        // 다운로드
+        function downloadFile_doc() {
+            let selectedItems = theGrid2.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                let registdtFormatted = item.registdt.replace(/-/g, '');
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    registdt: registdtFormatted,
+                    checkseq: item.checkseq
+                });
+            });
+
+            // 다운로드 URL 지정
+            let downloadUrl = '/api/inspec_doc/downloader';
+
+            // Jung.js에서 정의한 downloadFiles 함수 호출
+            downloadFiles(downloadList, downloadUrl);
+        }
+
+        // 정보 저장
+        function saveForm_doc() {
+
+            // 필수 입력 필드 검사
+            let requiredFields = [
+                {id: '#doctitle', label: '제목을 입력해주세요'},
+                {id: '#registdt2', label: '등록 일자를 입력해주세요'},
+                {id: '#docdv', label: '문서 구분을 선택해주세요'}
+            ];
+
+            for (let i = 0; i < requiredFields.length; i++) {
+                let field = requiredFields[i];
+                let $element = $(field.id);
+                let value = $element.val();
+
+                // 요소가 존재하지 않거나, 값이 빈 문자열(선택되지 않은 경우)인 경우 경고
+                if ($element.length === 0 || value === null || value.trim() === '') {
+                    Alert.alert('', field.label);
+                    return;
+                }
+            }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+                formData.append('registdt', $('#registdt2').val());
+                formData.append('checkseq', $('#checkseq_doc').val());
+
+                formData.append('spworknm', $('#spworknm').val());
+                formData.append('spcompnm', $('#spcompnm').val());
+                formData.append('spplannm', $('#spplannm').val());
+                formData.append('docdv', $('#docdv').val());
+                formData.append('doctitle', $('#doctitle').val());
+                formData.append('docrem', $('#docrem').val());
+
+                // 새로 추가된 파일만 폼 데이터에 추가
+                uploadedFiles2.forEach((file, index) => {
+                    formData.append('filelist', file);
+                });
+
+                // 삭제된 파일 목록 추가
+                deletedFiles2.forEach((file, index) => {
+                    formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
+                });
+
+                $.ajax({
+                    url: "/api/inspec_doc/save",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                fetchListData_doc();
+                                clearForm_doc();
+                            });
+
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        // 신규등록 버튼 클릭
+        function clearForm_doc() {
+            ['doctitle', 'docdv', 'docrem', 'checkseq_doc'].forEach(id => {
+                document.getElementById(id).value = '';
+                document.getElementById('registdt2').value = today;
+            });
+            $('.filelist2').empty(); // 파일 리스트 초기화
+            uploadedFiles2 = []; // 업로드된 파일 리스트 초기화
+            deletedFiles2 = [];
+
+            // 초기화된 파일 개수 업데이트
+            updateFileCount2();
+            resetFileInput($('.fileInput2'));
+            $('.text-count').text('0/100'); // 글자 수 0으로 초기화
+            // 특정 필드에 대한 btn-clear 숨김 처리
+            $('#doctitle').each(function () {
+                $(this).siblings('.btn-clear').hide();
+            });
+        }
+
+        // 수정하기
+        function modifyData_doc() {
+
+            let selectedItem = theGrid2.selectedItems[0]; // 선택된 항목 가져오기
+            let registdtFormatted = selectedItem.registdt.replace(/-/g, '');
+
+            let data = {
+                spworkcd: selectedItem.spworkcd,
+                spcompcd: selectedItem.spcompcd,
+                spplancd: selectedItem.spplancd,
+                registdt: registdtFormatted,
+                checkseq: selectedItem.checkseq
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }
+
+            $.ajax({
+                url: "/api/inspec_doc/modfind",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('spworkcd').value = data2.spworkcd;
+                        document.getElementById('spcompcd').value = data2.spcompcd;
+                        document.getElementById('spplancd').value = data2.spplancd;
+                        document.getElementById('doctitle').value = data2.doctitle;
+                        document.getElementById('registdt2').value = formatDate(data2.registdt);
+                        document.getElementById('docdv').value = data2.docdv;
+                        document.getElementById('docrem').value = data2.docrem;
+                        document.getElementById('checkseq_doc').value = data2.checkseq;
+
+                        // filelist 처리
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+
+                        deletedFiles2 = [];
+                        uploadedFiles2 = [];
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                lastModified: new Date().getTime(),
+                                spcompcd: file.spcompcd,
+                                spplancd: file.spplancd,
+                                spworkcd: file.spworkcd,
+                                registdt: file.registdt,
+                                checkseq: file.checkseq,
+                                docseq: file.docseq,
+
+                            };
+                            uploadedFiles2.push(newFile); // 파일 리스트에 추가
+                        });
+
+
+                        $('.filelist2').empty(); // 파일 리스트 초기화
+                        updateFileCount2();
+                        updateFileListUI2();
+
+
+                    } else {
+                        Alert.alert('', '불러오기에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid_doc() {
+
+            let delList = [];
+            let selectedItems = theGrid2.selectedItems; // 선택된 항목 가져오기
+
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                let registdtFormatted = selectedItems[i].registdt.replace(/-/g, '');
+                delList.push({
+                    spworkcd: selectedItems[i].spworkcd,
+                    spcompcd: selectedItems[i].spcompcd,
+                    spplancd: selectedItems[i].spplancd,
+                    registdt: registdtFormatted,
+                    checkseq: selectedItems[i].checkseq
+                });
+            }
+
+            if (delList.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/inspec_doc/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(delList),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData_doc();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 수정에서 삭제 버튼
+        // function deleteForm_doc() {
+        //
+        //     let data = [{
+        //         'spworkcd': $('#spworkcd').val(),
+        //         'spcompcd': $('#spcompcd').val(),
+        //         'spplancd': $('#spplancd').val(),
+        //         'registdt': $('#registdt2').val(),
+        //         'checkseq': $('#checkseq').val()
+        //     }];
+        //     Alert.confirm('', '삭제하시겠습니까?', function () {
+        //
+        //         if ($('#checkseq').val() === '') {
+        //             Alert.alert('', '삭제할 내용이 없습니다.');
+        //             return;
+        //         }
+        //
+        //         $.ajax({
+        //             url: '/api/inspec_doc/delete',
+        //             type: 'DELETE',
+        //             contentType: 'application/json',
+        //             data: JSON.stringify(data),
+        //             headers: {
+        //                 'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+        //             },
+        //             async: false,
+        //             success: function (res) {
+        //                 if (res.success) {
+        //                     Alert.alert('', '삭제되었습니다.');
+        //                     fetchListData_doc();
+        //                     clearForm_doc();
+        //                 }
+        //             },
+        //             error: function (jqXHR, textStatus, errorThrown) {
+        //                 Alert.alert('', '삭제에 실패했습니다.');
+        //             }
+        //         });
+        //     });
+        // }
+
+
+        // function updateButton() {
+        //     // checkseq 값 있으면 수정 탭으로 변경
+        //     const checkseq = document.getElementById('checkseq').value;
+        //     const saveButtonText = document.getElementById('save-button-text');
+        //     if (checkseq) {
+        //         saveButtonText.textContent = '수정';
+        //     } else{
+        //         saveButtonText.textContent = '저장';
+        //     }
+        // }
+
         $(document).ready(function (e) {
+
             // 글자수 제한
-            $('#bfconsres').on('input', function () {
+            $('#bfconsres, #docrem').on('input', function () {
                 let value = $(this).val();
                 if (value.length > 100) {
                     $(this).val(value.substring(0, 100));  // 초과된 글자 제거
@@ -757,33 +1499,42 @@
             const selectElementId = 'endresult';
             fetchCommonCodes(parentId, selectElementId);
 
-            // checkseq 값 있으면 수정 탭으로 변경
-            const checkseq = document.getElementById('checkseq').value;
-            const inputTabLink = document.getElementById('inputTabLink');
+            const parentId2 = 236;
+            const selectElementId2 = 'finddocdv';
+            fetchCommonCodes(parentId2, selectElementId2);
 
-            if (checkseq) {
-                inputTabLink.textContent = '수정';
-                inputTabLink.title = '수정';
-            }
+            const parentId1 = 236;
+            const selectElementId1 = 'docdv';
+            fetchCommonCodes(parentId1, selectElementId1);
 
             // 크롬에서 제공해주는 자동완성 비활성화
-            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+            document.querySelectorAll('input[type="text"]').forEach(function (input) {
                 input.setAttribute('autocomplete', 'off');
             });
 
             // 자동완성
             const autoCompleteFields = [
-                { inputId: 'checkusr', suggestionId: 'suggestions-checkusr', apiUrl: '/api/inspec/elec_safe/autocomplete' },
-                { inputId: 'checktitle', suggestionId: 'suggestions-checktitle', apiUrl: '/api/inspec/elec_safe/autocomplete'},
-                { inputId: 'checkarea', suggestionId: 'suggestions-checkarea', apiUrl: '/api/inspec/elec_safe/autocomplete' }
+                {
+                    inputId: 'checkusr',
+                    suggestionId: 'suggestions-checkusr',
+                    apiUrl: '/api/inspec/elec_safe/autocomplete'
+                },
+                {
+                    inputId: 'checktitle',
+                    suggestionId: 'suggestions-checktitle',
+                    apiUrl: '/api/inspec/elec_safe/autocomplete'
+                },
+                {
+                    inputId: 'checkarea',
+                    suggestionId: 'suggestions-checkarea',
+                    apiUrl: '/api/inspec/elec_safe/autocomplete'
+                },
+                {inputId: 'doctitle', suggestionId: 'suggestions-doctitle', apiUrl: '/api/inspec_doc/autocomplete'}
             ];
 
             autoCompleteFields.forEach(field => {
                 initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
             });
-
-            // 수정 > 등록, 등록 > 수정
-            updateTabLink();
 
         })
 
