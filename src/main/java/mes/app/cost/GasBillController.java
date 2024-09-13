@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -120,12 +121,19 @@ public class GasBillController {
                     }
                 }
 
-
                 // ASKAMT 값 처리
                 BigDecimal askamt = extractAskamt(parsedText);
                 if (askamt != null) {
                     rp410.setAskamt(askamt);
                 }
+
+                // 사용량 및 사용열량 값을 추출
+                List<BigDecimal> usageValues = extractUsageValues(text);
+                if (usageValues != null && usageValues.size() == 2) {
+                    rp410.setSmuseqty(usageValues.get(0));  // 첫 번째 값: smuseqty
+                    rp410.setSmusehqty(usageValues.get(1)); // 두 번째 값: smusehqty
+                }
+
             }
 
 
@@ -196,8 +204,7 @@ public class GasBillController {
 
     //  ASKAMT 값을 추출하는 메서드
     private BigDecimal extractAskamt(String text) {
-        // ASKAMT에 해당하는 값을 추출하는 로직을 작성합니다.
-        // 예를 들어, "금액은 92,412,820원 입니다."에서 금액을 추출합니다.
+        // ASKAMT에 해당하는 값을 추출하는 로직
         Pattern pattern = Pattern.compile("금액은\\s*(\\d{1,3}(,\\d{3})*)원"); // 금액 추출을 위한 정규식
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
@@ -206,36 +213,34 @@ public class GasBillController {
             String cleanedAmountString = amountString.replaceAll(",", ""); // 쉼표 제거
             return new BigDecimal(cleanedAmountString); // 문자열을 BigDecimal로 변환
         }
+
+        return null;
+    }
+
+    private List<BigDecimal> extractUsageValues(String text) {
+        // 마지막 사용열량(MJ) 다음에 나오는 두 개의 값을 추출하는 정규식
+        Pattern pattern = Pattern.compile("사용열량\\(MJ\\)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)");
+        Matcher matcher = pattern.matcher(text);
+
+        if (matcher.find()) {
+            String smuseqtyString = matcher.group(1); // 첫 번째 값 (smuseqty)
+            String smusehqtyString = matcher.group(4); // 두 번째 값 (smusehqty)
+
+            // 쉼표 제거 후 BigDecimal로 변환
+            String cleanedSmuseqtyString = smuseqtyString.replaceAll(",", "");
+            String cleanedSmusehqtyString = smusehqtyString.replaceAll(",", "");
+
+            BigDecimal smuseqty = new BigDecimal(cleanedSmuseqtyString);
+            BigDecimal smusehqty = new BigDecimal(cleanedSmusehqtyString);
+
+            return Arrays.asList(smuseqty, smusehqty); // 두 값을 리스트로 반환
+        }
+
         return null; // 값이 없거나 변환 실패 시 null 반환
     }
 
 
 }
-
-
-
-
-
-
-
-
-/*  rp410.setStandym(extractedTexts.get(0));
-            rp410.setGasuseamt(extractedTexts.get(1));
-            rp410.setMetermgamt(extractedTexts.get(2));
-            rp410.setImtarramt(extractedTexts.get(3));
-            rp410.setSafemgamt(extractedTexts.get(4));
-            rp410.setSuppamt(extractedTexts.get(5));
-            rp410.setTaxamt(extractedTexts.get(6));
-            rp410.setTrunamt(extractedTexts.get(7));
-            rp410.setAskamt(extractedTexts.get(8));
-            rp410.setUseuamt(extractedTexts.get(9));
-            rp410.setSmuseqty(extractedTexts.get(10));
-            rp410.setSmusehqty(extractedTexts.get(11));
-            // 전월 사용량, 전월 사용열량, 전년 사용량 , 전년 사용열량의 대한 값이 없을수도 있으니 없다면 null 값으로 들어가게 로직 구현
-            rp410.setLmuseqty(extractedTexts.size() > 12 ? extractedTexts.get(12) : null);
-            rp410.setLmusehqty(extractedTexts.size() > 13 ? extractedTexts.get(13) : null);
-            rp410.setLyuseqty(extractedTexts.size() > 14 ? extractedTexts.get(14) : null);
-            rp410.setLyusehqty(extractedTexts.size() > 15 ? extractedTexts.get(15) : null);*/
 
 //            String standym = extractedTexts.get(0);    // 년월 저장.
 //            String gasuseamt = extractedTexts.get(1); // 가스사용료 저장

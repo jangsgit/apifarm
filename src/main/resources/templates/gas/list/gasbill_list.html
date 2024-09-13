@@ -1297,6 +1297,8 @@
                 .then(result => {
                     if (result.success) {
                         alert("파일이 성공적으로 업로드되었습니다.");
+                        closeModal();  // 모달창 닫기
+
                     } else {
                         alert(result.message);  // 오류 메시지 표시
                     }
@@ -1307,6 +1309,9 @@
                 });
         }
 
+        function closeModal() {
+            document.getElementById('popup1').style.display = 'none';
+        }
 
         document.readyState === 'complete' ? init() : window.onload = init;
 
@@ -1622,19 +1627,19 @@
                             autoGenerateColumns: false,
                             showMarquee: true,
                             columns: [
-                                { binding: 'category', header: '구분', width: 120, align: 'center' },
-                                { binding: 'Jan', header: '1월', width: 120, align: 'center' },
-                                { binding: 'Feb', header: '2월', width: 120, align: 'center' },
-                                { binding: 'Mar', header: '3월', width: 120, align: 'center' },
-                                { binding: 'Apr', header: '4월', width: 120, align: 'center' },
-                                { binding: 'May', header: '5월', width: 120, align: 'center' },
-                                { binding: 'Jun', header: '6월', width: 120, align: 'center' },
-                                { binding: 'Jul', header: '7월', width: 120, align: 'center' },
-                                { binding: 'Aug', header: '8월', width: 120, align: 'center' },
-                                { binding: 'Sep', header: '9월', width: 120, align: 'center' },
-                                { binding: 'Oct', header: '10월', width: 120, align: 'center' },
-                                { binding: 'Nov', header: '11월', width: 120, align: 'center' },
-                                { binding: 'Dec', header: '12월', width: '*', align: 'center' }
+                                { binding: 'category', header: '구분', width: 80, align: 'center' },
+                                { binding: 'Jan', header: '1월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Feb', header: '2월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Mar', header: '3월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Apr', header: '4월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'May', header: '5월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Jun', header: '6월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Jul', header: '7월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Aug', header: '8월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Sep', header: '9월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Oct', header: '10월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Nov', header: '11월', width: 120, align: 'center', format: 'n4'},
+                                { binding: 'Dec', header: '12월', width: '*', align: 'center', format: 'n4'}
                             ]
                         });
 
@@ -1658,12 +1663,6 @@
 
             // 월별 데이터 가공 함수
             function getMonthlyData(data, field) {
-
-               /* // 데이터가 배열인지 확인
-                if (!Array.isArray(data)) {
-                    console.error('Expected data to be an array but got:', data);
-                    return {};
-                }*/
 
                 const monthlyData = {
                     Jan: '', Feb: '', Mar: '', Apr: '', May: '', Jun: '',
