@@ -24,6 +24,7 @@
 
 <th:block layout:fragment="content">
 
+
     <div class="layout-contents">
         <!-- Page Title -->
         <div class="page-title-wrap">
@@ -74,6 +75,8 @@
              </div>-->
         </div>
 
+        <!-- SMP 매출 조회 -->
+        <div id="smpSalesContent" class="dynamic-content" style="display: none;">
         <div class="tab-wrap" id="jqueryTabs">
             <ul class="tab-links">
                 <li>
@@ -87,9 +90,28 @@
             <div class="tab-contents">
 
                 <!-- tab1 -->
-                <section class="tab-item tab-content" id="tab1" style="height: 800px;">
+                <section class="tab-item" id="tab1" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="categoryType">
+                                        목록<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="">
+                                        <li>
+                                            <select id="categoryType" name="categoryType" onchange="loadContent()">
+                                                <option value="sales" selected>매출조회</option>
+                                                <option value="smpsales" >SMP 매출조회</option>
+                                                <option value="recsales">REC 매출조회</option>
+                                                <option value="serviceanalysis">서비스 분석현황</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
                             <dl>
                                 <dt>
                                     <label for="periodType">
@@ -151,24 +173,13 @@
                                 </dd>
                             </dl>
                         </div>
-
-                       <!-- <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>-->
                     </div> <!--//section-top end -->
 
 
                     <!-- 3분할 레이아웃 -->
-                    <div class="row">
-                        <div class="col wp33" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 680px; ">
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
                                 <div class="title-wrap">
                                     <h3>SMP 매출액</h3>
                                     <ul class="tab-links-sub">
@@ -184,21 +195,21 @@
                                     <!-- tab1_1 -->
                                     <div class="tab-item-sub" id="tab1_1">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder1" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder1" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab1_2 -->
                                     <div class="tab-item-sub" id="tab1_2">
                                         <div class="container-fluid">
-                                            <div id="theGrid1" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid1" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
 
-                        <div class="col wp33" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="height: 680px;">
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
                                 <div class="title-wrap">
                                     <h3>SMP 단가</h3>
                                     <ul class="tab-links-sub">
@@ -214,21 +225,23 @@
                                     <!-- tab1_3 -->
                                     <div class="tab-item-sub" id="tab1_3">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder2" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder2" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab1_4 -->
                                     <div class="tab-item-sub" id="tab1_4">
                                         <div class="container-fluid">
-                                            <div id="theGrid2" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid2" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
+                    </div>
 
-                        <div class="col wp33">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 680px; ">
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
                                 <div class="title-wrap">
                                     <h3>SMP 평균단가</h3>
                                     <ul class="tab-links-sub">
@@ -244,25 +257,28 @@
                                     <!-- tab1_5 -->
                                     <div class="tab-item-sub" id="tab1_5">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder3" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder3" style="height:230px; width:100%;"></div>
 
                                         </div>
                                     </div>
                                     <!-- tab1_6 -->
                                     <div class="tab-item-sub" id="tab1_6">
                                         <div class="container-fluid">
-                                            <div id="theGrid3" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid3" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
+
+                        <div class="col wp50"></div>
                     </div>
+
                 </section>
                 <!-- Section -->
 
                 <!-- tab2 -->
-                <section class="tab-item tab-content" id="tab2" style="height: 800px;">
+                <section class="tab-item" id="tab2" style="height: 800px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -313,22 +329,11 @@
                                 </dd>
                             </dl>
                         </div>
-
-                        <!--<div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>-->
                     </div> <!--//section-top end -->
 
-                    <div class="row">
-                        <div class="col wp33" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 680px; ">
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
                                 <div class="title-wrap">
                                     <h3>SMP 매출액</h3>
                                     <ul class="tab-links-sub">
@@ -344,21 +349,21 @@
                                     <!-- tab2_1 -->
                                     <div class="tab-item-sub" id="tab2_1">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder4" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder4" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab2_2 -->
                                     <div class="tab-item-sub" id="tab2_2">
                                         <div class="container-fluid">
-                                            <div id="theGrid4" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid4" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
 
-                        <div class="col wp33" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="height: 680px;">
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
                                 <div class="title-wrap">
                                     <h3>SMP 단가</h3>
                                     <ul class="tab-links-sub">
@@ -374,21 +379,23 @@
                                     <!-- tab2_3 -->
                                     <div class="tab-item-sub" id="tab2_3">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder5" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder5" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab2_4 -->
                                     <div class="tab-item-sub" id="tab2_4">
                                         <div class="container-fluid">
-                                            <div id="theGrid5" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid5" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
+                    </div>
 
-                        <div class="col wp33">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 680px; ">
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
                                 <div class="title-wrap">
                                     <h3>SMP 평균단가</h3>
                                     <ul class="tab-links-sub">
@@ -404,25 +411,28 @@
                                     <!-- tab2_5 -->
                                     <div class="tab-item-sub" id="tab2_5">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder6" style="height:595px; width:100%;"></div>
+                                            <div id="chartHolder6" style="height:230px; width:100%;"></div>
 
                                         </div>
                                     </div>
                                     <!-- tab2_6 -->
                                     <div class="tab-item-sub" id="tab2_6">
                                         <div class="container-fluid">
-                                            <div id="theGrid6" style="height:590px; width:100%;"></div>
+                                            <div id="theGrid6" style="height:230px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </div>
+
+                        <div class="col wp50"></div>
                     </div>
                 </section>
                 <!-- Section -->
 
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
+        </div>
     </div> <!--//layout-contents end -->
 
 </th:block>
@@ -490,7 +500,7 @@
         }
 
         // 해당 탭에서 현황 탭 누른 상태에서 다른 탭 이동 후 다시 해당 탭 돌아와서 통계 탭 클릭 시 차트 안나타날때
-        $(".tab-links-sub a").click(function(event) {
+        $(".tab-links-sub a").click(function (event) {
             event.preventDefault();
             var tabId = $(this).attr("href");
             $(this).closest('.tab-section').find('.tab-item-sub').hide();

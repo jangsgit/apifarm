@@ -307,13 +307,13 @@
             // chart2 = rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
 
             // tab1 그리드 초기화
-            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
                 autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
                 columns: [] // 초기 열 설정
             });
 
             // tab2 그리드 초기화
-            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
                 autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
                 columns: [] // 초기 열 설정
             });
@@ -405,33 +405,20 @@
         }
 
         // tab2 차트
-        function chartReadyHandler2(id, chartHolderId, gridData) {
-            var chart = document.getElementById(id);
-            if (!chart) {
-                // console.error("차트가 생성되지 않았습니다: " + id);
-                return;
-            }
+        function chartReadyHandler2(id, chartHolderId, gridData, comparisonType) {
+            const chart = document.getElementById(id);
+            if (!chart || !gridData) return;
 
-            if (!gridData) {
-                // console.error("그리드 데이터가 정의되지 않았습니다.");
-                return;
-            }
+            const {data, fields} = transformDataForChartTab2(gridData, comparisonType);
 
-            // 데이터 변환
-            var transformedData = transformDataForChartTab2(gridData);
+            const layout1 = getCartesianLayout("Column2D", "2D Column Chart", fields);
+            const layout2 = getCartesianLayout("Line2D", "Line Chart", fields, ["CircleItemRenderer"]);
 
-            // 레이아웃
-            var layout1 = getCartesianLayout("Column2D", "2D Column Chart - MultiSeries", transformedData.fields);
-            var layout2 = getCartesianLayout("Line2D", "Line Chart - Comparison", transformedData.fields, ["CircleItemRenderer", "TriangleItemRenderer", "RectangleItemRenderer"]);
-
-            // 슬라이드 차트에 적용할 레이아웃과 데이터 배열 설정
-            var layoutSet = [layout1, layout2];
-            var dataSet = [transformedData.data, transformedData.data];
+            const layoutSet = [layout1, layout2];
+            const dataSet = [data, data];
 
             chart.setSlideLayoutSet(layoutSet);
             chart.setSlideDataSet(dataSet);
-            // document.getElementById(id).setSlideLayoutSet(layoutSet);
-            // document.getElementById(id).setSlideDataSet(dataSet);
         }
 
 
@@ -648,30 +635,84 @@
         }
 
         // 그리드 데이터를 차트에 맞게 변환 (tab2)
-        function transformDataForChartTab2(gridData) {
-            if (!gridData) {
-                // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
-                return {fields: [], data: []};
+        function transformDataForChartTab2(gridData, comparisonType) {
+            let chartData = [];
+            let dataFields = [];
+            let firstYear, secondYear;
+
+            switch (comparisonType) {
+                case "YoY":
+                    // 연도 기반 데이터 처리
+                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+                    dataFields = [firstYear, secondYear];
+
+                    gridData.forEach(row => {
+                        const dataItem = {
+                            period: row.period || `${row.month}월`,
+                            [firstYear]: parseFloat(row.value1) || 0,
+                            [secondYear]: parseFloat(row.value2) || 0
+                        };
+                        chartData.push(dataItem);
+                    });
+                    break;
+
+                case "QoQ":
+                    // 분기별 데이터 처리
+                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+                    dataFields = [firstYear, secondYear];
+
+                    gridData.forEach(row => {
+                        const quarter = `Q${row.quarter}`;  // 분기를 'Q1', 'Q2', 등으로 표시
+                        const dataItem = {
+                            period: quarter,
+                            [firstYear]: parseFloat(row.value1) || 0,
+                            [secondYear]: parseFloat(row.value2) || 0
+                        };
+                        chartData.push(dataItem);
+                    });
+                    break;
+
+                case "MoM":
+                    // 월 기반 데이터 처리
+                    const month = document.getElementById("startDateTab2").value.split("-")[1]; // MoM의 경우 시작 월과 종료 월이 같다고 가정
+                    dataFields = [month];
+
+                    gridData.forEach(row => {
+                        const dataItem = {
+                            period: `${row.month}월`,
+                            [month]: parseFloat(row.value1) || 0
+                        };
+                        chartData.push(dataItem);
+                    });
+                    break;
+
+                case "YTD":
+                    // YTD일 경우, startYear와 endYear에서 누적 발전량을 가져옴
+                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+                    dataFields = [firstYear, secondYear]; // 두 연도의 누적 발전량 필드를 설정
+
+                    // 중복된 월을 제거하기 위한 Set 객체
+                    let seenMonths = new Set();
+
+                    // 데이터를 월별로 그룹화 및 중복 월 제거
+                    chartData = gridData.filter(row => {
+                        if (seenMonths.has(row.month)) {
+                            return false;  // 중복된 월이면 필터링하여 제외
+                        }
+                        seenMonths.add(row.month);  // 중복 방지를 위해 Set에 추가
+                        return true;  // 중복이 아닌 경우 유지
+                    }).map(row => ({
+                        period: `${row.month}월`,  // 월별 데이터
+                        [firstYear]: parseFloat(row.cumulative_start_year) || 0, // 첫 번째 연도의 누적 발전량
+                        [secondYear]: parseFloat(row.cumulative_end_year) || 0  // 두 번째 연도의 누적 발전량
+                    }));
+                    break;
             }
 
-            // 조회기간에 들어간 년도를 기반으로 필드명을 설정
-            const firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-            const secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-            const dataFields = [firstYear, secondYear];
-            const chartData = [];
-
-            // 데이터를 변환하여 차트에 사용할 수 있도록 변환
-            gridData.forEach(row => {
-                const dataItem = {period: row.period || `${row.month}월`};
-                dataItem[firstYear] = parseFloat(row.value1) || 0;
-                dataItem[secondYear] = parseFloat(row.value2) || 0;
-                chartData.push(dataItem);
-            });
-
-            return {
-                fields: dataFields,
-                data: chartData
-            };
+            return { data: chartData, fields: dataFields };
         }
 
 
@@ -705,21 +746,26 @@
                 {binding: 'period', header: '기간', width: 180, align: 'center'},
             ];
 
-            // mom, ytd 때 수정
             const firstYear = document.getElementById("startDateTab2").value;
             const secondYear = document.getElementById("endDateTab2").value;
-            const valueColums = ['value1', 'value2']; // 비교할 값들을 바인딩할 필드명
 
-            valueColums.forEach((col, index) => {
-                const header = index === 0 ? `${firstYear}년` : `${secondYear}년`;
-                columns.push({
-                    binding: col,
-                    header: header,
-                    width: "*",
-                    align: 'right',
-                    format: 'n0'
-                });
-            });
+            if (comparisonType === "YTD") {
+                columns.push(
+                    {
+                        binding: 'cumulative_start_year',
+                        header: `${firstYear}년`,
+                        width: "*",
+                        align: 'right',
+                        format: 'n0'
+                    },
+                    {binding: 'cumulative_end_year', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
+                );
+            } else {
+                columns.push(
+                    {binding: 'value1', header: `${firstYear}년`, width: "*", align: 'right', format: 'n0'},
+                    {binding: 'value2', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
+                );
+            }
 
             return columns;
         }
@@ -763,18 +809,28 @@
 
         // 데이터 변환 + 그리드 업데이트 (tab2)
         function transformDataForGridTab2(data, comparisonType) {
-            return data.map(row => {
-                // QoQ일 경우 '월' 대신 '분기'로 표시
-                const period = (comparisonType === "QoQ") ? `Q${row.quarter}` : `${row.month}월`;
+            if (comparisonType === "YTD") {
+                const months = [...new Set(data.map(item => parseInt(item.month)))].sort((a, b) => a - b);
 
-                return {
-                    period: period,
-                    value1: parseFloat(row.value1) || 0,
-                    value2: parseFloat(row.value2) || 0,
-                    value1_year: row.value1_year,
-                    value2_year: row.value2_year
-                };
-            });
+                const result = months.map(month => {
+                    const monthData = data.find(item => parseInt(item.month) === month);
+                    return {
+                        period: `${month}월`,
+                        cumulative_start_year: monthData ? parseFloat(monthData.cumulative_start_year) || 0 : 0,
+                        cumulative_end_year: monthData ? parseFloat(monthData.cumulative_end_year) || 0 : 0
+                    };
+                });
+                return result;
+            } else {
+                return data.map(row => {
+                    const period = (comparisonType === "QoQ") ? `Q${row.quarter}` : `${row.month}월`;
+                    return {
+                        period: period,
+                        value1: parseFloat(row.value1) || 0,
+                        value2: parseFloat(row.value2) || 0
+                    };
+                });
+            }
         }
 
         // 그리드 생성
@@ -830,8 +886,11 @@
                 endDate = startDate; // 시간별 조회에서는 시작 날짜와 종료 날짜가 동일
 
             } else if (periodType === "monthly") {
-                startDate = document.getElementById("startDate").value;
-                endDate = document.getElementById("endDate").value;
+                startDate = document.getElementById("startDate").value + "-01";
+                let endDateInput = document.getElementById("endDate").value;
+                let [endYear, endMonth] = endDateInput.split('-');
+                let lastDay = new Date(endYear, endMonth, 0).getDate();
+                endDate = `${endDateInput}-${lastDay}`;
 
             } else if (periodType === "quarterly") {
                 const startQuarter = document.getElementById("startQuarter").value;
@@ -848,12 +907,11 @@
 
                 // 반기 값을 연도와 함께 날짜 범위로 변환
                 [startDate, endDate] = convertHalfYearToDateRange(startHalf, endHalf, selectedYear);
-            } else if (periodType === "yearly") {
-                const startYear = document.getElementById("startYear").value;
-                const endYear = document.getElementById("endYear").value;
 
-                startDate = `${startYear}-01-01`; // 시작 연도의 1월 1일
-                endDate = `${endYear}-12-31`; // 종료 연도의 12월 31일
+            } else if (periodType === "yearly") {
+                const selectedYear = document.getElementById("yearSelectTab1").value;
+                startDate = `${selectedYear}-01-01`;
+                endDate = `${selectedYear}-12-31`;
             }
 
             let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
@@ -1002,8 +1060,9 @@
             dateBoxContainer.style.display = "block";
 
             if (periodType === "yearly") {
-                // 연도별 선택 시 조회기간 필드를 완전히 제거
+                // 연도별 선택 시 조회기간 필드를 숨기고 조회연도 필드를 보이게 함
                 dateBoxContainer.style.display = "none";
+                if (yearSelectContainer) yearSelectContainer.style.display = "block";
             } else if (periodType === "hourly" || periodType === "monthly") {
                 // 시간별, 월별 선택 시 조회연도 필드 숨김
                 if (yearSelectContainer) yearSelectContainer.style.display = "none";
@@ -1018,10 +1077,10 @@
 
                     startDateContainer.innerHTML = `<input type="date" id="startDate" name="startDate" value="${currentDate.getFullYear()}-${defaultMonth}-${defaultDay}">`;
                     endDateContainer.innerHTML = `
-                <select id="startHour" name="startHour" style="width: 60px;">${generateHourOptions()}</select>
-                -
-                <select id="endHour" name="endHour" style="width: 60px;">${generateHourOptions(true)}</select>
-            `;
+        <select id="startHour" name="startHour" style="width: 60px;">${generateHourOptions()}</select>
+        -
+        <select id="endHour" name="endHour" style="width: 60px;">${generateHourOptions(true)}</select>
+    `;
                 } else if (periodType === "monthly") {
                     const currentYear = new Date().getFullYear();
                     startDateContainer.innerHTML = `<input type="month" id="startDate" name="startDate" value="${currentYear}-01">`;
@@ -1034,18 +1093,18 @@
 
                 if (periodType === "quarterly") {
                     const options = `
-                <option value="Q1">1분기</option>
-                <option value="Q2">2분기</option>
-                <option value="Q3">3분기</option>
-                <option value="Q4">4분기</option>
-            `;
+        <option value="Q1">1분기</option>
+        <option value="Q2">2분기</option>
+        <option value="Q3">3분기</option>
+        <option value="Q4">4분기</option>
+    `;
                     startDateContainer.innerHTML = `<select id="startQuarter">${options}</select>`;
                     endDateContainer.innerHTML = `<select id="endQuarter">${options}</select>`;
                 } else if (periodType === "halfyearly") {
                     const options = `
-                <option value="H1">상반기</option>
-                <option value="H2">하반기</option>
-            `;
+        <option value="H1">상반기</option>
+        <option value="H2">하반기</option>
+    `;
                     startDateContainer.innerHTML = `<select id="startHalf">${options}</select>`;
                     endDateContainer.innerHTML = `<select id="endHalf">${options}</select>`;
                 }
@@ -1262,8 +1321,7 @@
                 endDate = endDate.split("-")[1]; // 월만 추출
                 query = `/api/genesearch/comparison/mom?powerid=${generator}&startMonth=${startDate}&endMonth=${endDate}`;
             } else if (comparisonType === "YTD") {
-                // YTD의 경우, startDate와 endDate는 날짜 형식이어야 함
-                query = `/api/genesearch/comparison/ytd?powerid=${generator}&startDate=${startDate}&endDate=${endDate}`;
+                query = `/api/genesearch/comparison/ytd?powerid=${generator}&startYear=${startDate}&endYear=${endDate}`;
             }
 
             fetch(query)
@@ -1273,6 +1331,7 @@
                         Alert.alert("", "데이터가 존재하지 않습니다.");
                     } else {
                         updateGridTab2(theGrid2, data, comparisonType);
+                        chartReadyHandler2("chart2", "chartHolder2", data, comparisonType); // 비교 유형 전달
                     }
                 })
                 .catch(error => console.error('Error fetching search data:', error));
@@ -1284,7 +1343,7 @@
 
         // Tab2 그리드 업데이트
         function updateGridTab2(grid, data, comparisonType) {
-            const columns = buildGridColumnsTab2(data);
+            const columns = buildGridColumnsTab2(data, comparisonType);
             const transformedData = transformDataForGridTab2(data, comparisonType);
 
             grid.initialize({

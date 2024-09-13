@@ -259,7 +259,8 @@ public class GeneUploadController {
 				results = TB_RP320Repository.searchMonthlyData(startdt, enddt, powerid);
 				break;
 			case "yearly":
-				results = TB_RP320Repository.searchYearlyData(startdt, enddt, powerid);
+				int year = Integer.parseInt(startdt.substring(0, 4)); // 연도만 추출하여 정수로 변환
+				results = TB_RP320Repository.searchYearlyData(year, powerid);
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid period type: " + periodType);

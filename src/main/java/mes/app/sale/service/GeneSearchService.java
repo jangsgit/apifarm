@@ -57,8 +57,8 @@ public class GeneSearchService {
 		
 //		return this.sqlRunner.getRows(sql, params);
 		List<Map<String, Object>> result = this.sqlRunner.getRows(sql, params);
-		// 디버깅을 위한 로그 추가
-//		System.out.println("Executed SQL: " + sql);
+
+		//		System.out.println("Executed SQL: " + sql);
 //		System.out.println("Parameters: " + params);
 //		System.out.println("Result: " + result);
 		return result;
@@ -141,28 +141,41 @@ public class GeneSearchService {
 	
 	
 	// ytd 올해의 누적 발전량과 작년과 비교 (ex 2023년과 2024년의 누적 발전량 비교)
-	public List<Map<String, Object>> getYTDComparisonData(String powernm, String startDate, String endDate){
+	public List<Map<String, Object>> getYTDComparisonData(String powernm, String startYear, String endYear) {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("powernm", powernm);
-		params.addValue("startDate", startDate);
-		params.addValue("endDate", endDate);
+		params.addValue("startYear", Integer.parseInt(startYear));
+		params.addValue("endYear", Integer.parseInt(endYear));
 		
 		String sql = """
-    SELECT
-        to_char(to_date(t.standdt, 'yyyy-mm-dd'), 'YYYY-MM-DD') AS date,
-        SUM(t.mevaluet) AS total_value
-    FROM
-        TB_RP320 t
-    WHERE
-        t.powernm = :powernm
-        AND to_date(t.standdt, 'yyyy-mm-dd') BETWEEN to_date(:startDate, 'yyyy-mm-dd') AND to_date(:endDate, 'yyyy-mm-dd')
-    GROUP BY
-        to_char(to_date(t.standdt, 'yyyy-mm-dd'), 'YYYY-MM-DD')
-    ORDER BY
-        date
-    """;
+    	with monthly_data as (
+    		select
+    			extract(year from to_date(t.standdt, 'yyyy-mm-dd')) as year,
+    			extract(month from to_date(t.standdt, 'yyyy-mm-dd')) as month,
+    			sum(t.mevaluet) as monthly_value
+    		from
+    			TB_RP320 t
+    		where
+    			t.powernm = :powernm
+    			and extract(year from to_date(t.standdt, 'yyyy-mm-dd')) in (:startYear, :endYear)
+    		group by
+    			extract(year from to_date(t.standdt, 'yyyy-mm-dd')),
+    			extract(month from to_date(t.standdt, 'yyyy-mm-dd'))
+    	)
+    	select
+    		md.month,
+			sum(case when md.year = :startYear then md.monthly_value else 0 end) over (order by md.month) as cumulative_start_year,
+			sum(case when md.year = :endYear then md.monthly_value else 0 end) over (order by md.month) as cumulative_end_year
+		from
+			monthly_data md
+		order by
+			md.month
+  """;
 		
-		return this.sqlRunner.getRows(sql, params);
+		List<Map<String, Object>> result = this.sqlRunner.getRows(sql, params);
+		
+		return result;
+		
 	}
 	
 }

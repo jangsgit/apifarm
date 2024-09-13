@@ -51,9 +51,9 @@ public class GeneSearchController {
 	// YTD
 	@GetMapping("comparison/ytd")
 	public List<Map<String, Object>> getYearToDateData(@RequestParam String powerid,
-													   @RequestParam String startDate,
-													   @RequestParam String endDate) {
-		return geneSearchService.getYTDComparisonData(powerid, startDate, endDate);
+													   @RequestParam String startYear,
+													   @RequestParam String endYear) {
+		return geneSearchService.getYTDComparisonData(powerid, startYear, endYear);
 	}
 	
 }

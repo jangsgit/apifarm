@@ -69,13 +69,14 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 	
 	// 연도별 조회
 	@Query("SELECT new mes.domain.DTO.TB_RP320Dto(" +
-			"TO_CHAR(DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), 'YYYY-MM'), " +
-			"t.powerid, t.powernm, SUM(t.mevaluet)) " +
-			"FROM TB_RP320 t " +
-			"WHERE TO_DATE(t.standdt, 'YYYY-MM-DD') BETWEEN TO_DATE(:startdt, 'YYYY-MM-DD') AND TO_DATE(:enddt, 'YYYY-MM-DD') " +
-			"AND (:powerid = 'all' OR t.powernm = :powerid) " +
-			"GROUP BY DATE_TRUNC('month', TO_DATE(t.standdt, 'YYYY-MM-DD')), t.powerid, t.powernm")
-	List<TB_RP320Dto> searchYearlyData(@Param("startdt") String startdt, @Param("enddt") String enddt, @Param("powerid") String powerid);
+		   "TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY-MM'), " +
+		   "t.powerid, t.powernm, SUM(t.mevaluet)) " +
+		   "FROM TB_RP320 t " +
+		   "WHERE EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYY-MM-DD')) = :year " +
+		   "AND (:powerid = 'all' OR t.powernm = :powerid) " +
+		   "GROUP BY TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY-MM'), t.powerid, t.powernm " +
+		   "ORDER BY TO_CHAR(TO_DATE(t.standdt, 'YYYY-MM-DD'), 'YYYY-MM')")
+	List<TB_RP320Dto> searchYearlyData(@Param("year") int year, @Param("powerid") String powerid);
 	
 	
 	
