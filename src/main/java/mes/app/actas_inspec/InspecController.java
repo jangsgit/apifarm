@@ -694,6 +694,16 @@ public class InspecController {
         return ResponseEntity.ok(suggestions);
     }
 
+    @GetMapping("/recentData")
+    public AjaxResult recentData(){
+
+        AjaxResult result = new AjaxResult();
+
+        result.data = tb_rp710Repository.findTopByOrderByINDATEMDesc();
+
+        return result;
+    }
+
 
 
 

@@ -38,4 +38,9 @@ public interface TB_RP710Repository extends JpaRepository<TB_RP710, TB_RP710Id> 
 
     @Query("SELECT DISTINCT t.checkusr FROM TB_RP710 t WHERE LOWER(t.checkusr) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<String> findCheckusrsByQuery(@Param("query") String query);
+
+    @Query("SELECT t from TB_RP710 t ORDER BY t.INDATEM DESC")
+    List<TB_RP710> findAllDesc();
+
+    TB_RP710 findTopByOrderByINDATEMDesc();
 }

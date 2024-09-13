@@ -716,7 +716,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>순회점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab3" title="통계" onclick="RunRmateGraph('chart1')">통계</a></li>
+                                        <li><a href="#tab3" title="통계" onclick="reload('chart1')">통계</a></li>
                                         <li><a href="#tab4" title="현황" >현황</a></li>
 
                                     </ul>
@@ -745,7 +745,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>합동안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab5" title="통계" onclick="RunRmateGraph('chart2')">통계</a></li>
+                                        <li><a href="#tab5" title="통계" onclick="reload('chart2')">통계</a></li>
                                         <li><a href="#tab6" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -774,7 +774,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>전기안전점검</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab7" title="통계" onclick="RunRmateGraph('chart3')">통계</a></li>
+                                        <li><a href="#tab7" title="통계" onclick="reload('chart3')">통계</a></li>
                                         <li><a href="#tab8" title="현황">현황</a></li>
 
                                     </ul>
@@ -802,7 +802,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab9" title="통계" onclick="RunRmateGraph('chart4')">통계</a></li>
+                                        <li><a href="#tab9" title="통계" onclick="reload('chart4')">통계</a></li>
                                         <li><a href="#tab10" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -831,7 +831,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련결과</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab11" title="통계" onclick="RunRmateGraph('chart5')">통계</a></li>
+                                        <li><a href="#tab11" title="통계" onclick="reload('chart5')">통계</a></li>
                                         <li><a href="#tab12" title="현황">현황</a></li>
 
                                     </ul>
@@ -859,7 +859,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>안전보건교육</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab13" title="통계" onclick="RunRmateGraph('chart6')">통계</a></li>
+                                        <li><a href="#tab13" title="통계" onclick="reload('chart6')">통계</a></li>
                                         <li><a href="#tab14" title="현황">현황</a></li>
                                     </ul>
                                 </div>
@@ -889,7 +889,7 @@
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>FieldService</h3>
                                     <ul class="tab-links-sub">
-                                        <li><a href="#tab15" title="통계" onclick="RunRmateGraph('chart7')">통계</a></li>
+                                        <li><a href="#tab15" title="통계" onclick="reload('chart7')">통계</a></li>
                                         <li><a href="#tab16" title="현황">현황</a></li>
 
                                     </ul>
@@ -944,19 +944,21 @@
                                     <ul class="date-box" id="dateBoxContainerTab2">
                                         <li id="startDateContainerTab2">
                                             <select id="startDateTab2" name="startDateTab2">
-                                                <option selected>2023</option>
-                                                <option>2024</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023" selected>2023</option>
+                                                <option value="2024">2024</option>
                                             </select>
                                         </li>
                                         <li id="endDateContainerTab2">
                                             <select id="endDateTab2" name="endDateTab2">
-                                                <option>2023</option>
-                                                <option selected>2024</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024" selected>2024</option>
                                             </select>
                                         </li>
                                         <li>
                                             <a class="btn btn-delete" title="검색" id="btn-searchTab2"
-                                               onclick="">
+                                               onclick="searchData2()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -968,7 +970,7 @@
                     </div> <!--//section-top end -->
                     <div class="row row-2" style="margin-bottom: 10px">
                         <div class="col wp50" style="margin-right: 15px" id="section1">
-                            <section class="tab-section section_top" style="height: 300px">
+                            <section class="tab-section section_top" style="height: 300px" onclick="clickfunction()">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>순회점검</h3>
                                     <!--<ul class="tab-links-sub">
@@ -981,9 +983,9 @@
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab3 -->
-                                    <div class="tab-item-sub" id="YoY1">
+                                    <div class="tab-item-sub" id="YoY1" >
                                         <div>
-                                            <div id="chartHolder10" style="width: 100%; height: 235px; padding-top: 10px"></div>
+                                            <div id="chartHolder10" style="width: 100%; height: 235px; padding-top: 10px" ></div>
                                         </div>
                                     </div>
                                     <!--<div class="tab-item-sub" id="QoQ1">
@@ -1010,13 +1012,13 @@
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>합동안전점검</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY2" title="YoY" data-id="chart11" onclick="RunRmateGraph2('chart11')">YoY</a></li>
                                         <li><a href="#QoQ2" title="QoQ" data-id="chart21" onclick="RunRmateGraph2('chart21')">QoQ</a></li>
                                         <li><a href="#MoM2" title="MoM" data-id="chart31" onclick="RunRmateGraph2('chart31')">MoM</a></li>
                                         <li><a href="#YTD2" title="YTD" data-id="chart41" onclick="RunRmateGraph2('chart41')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab5 -->
@@ -1025,7 +1027,7 @@
                                             <div id="chartHolder11" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-item-sub" id="QoQ2">
+                                    <!--<div class="tab-item-sub" id="QoQ2">
                                         <div>
                                             <div id="chartHolder21" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
@@ -1039,7 +1041,7 @@
                                         <div>
                                             <div id="chartHolder41" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                 </div>
                             </section>
@@ -1053,13 +1055,13 @@
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>전기안전점검</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY3" title="YoY" data-id="chart12" onclick="RunRmateGraph2('chart12')">YoY</a></li>
                                         <li><a href="#QoQ3" title="QoQ" data-id="chart22" onclick="RunRmateGraph2('chart22')">QoQ</a></li>
                                         <li><a href="#MoM3" title="MoM" data-id="chart32" onclick="RunRmateGraph2('chart32')">MoM</a></li>
                                         <li><a href="#YTD3" title="YTD" data-id="chart42" onclick="RunRmateGraph2('chart42')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab3 -->
@@ -1068,7 +1070,7 @@
                                             <div id="chartHolder12" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-item-sub" id="QoQ3">
+                                    <!--<div class="tab-item-sub" id="QoQ3">
                                         <div>
                                             <div id="chartHolder22" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
@@ -1082,7 +1084,7 @@
                                         <div>
                                             <div id="chartHolder42" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <!-- tab4 -->
 
 
@@ -1094,13 +1096,13 @@
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY4" title="YoY" data-id="chart13" onclick="RunRmateGraph2('chart13')">YoY</a></li>
                                         <li><a href="#QoQ4" title="QoQ" data-id="chart23" onclick="RunRmateGraph2('chart23')">QoQ</a></li>
                                         <li><a href="#MoM4" title="MoM" data-id="chart33" onclick="RunRmateGraph2('chart33')">MoM</a></li>
                                         <li><a href="#YTD4" title="YTD" data-id="chart43" onclick="RunRmateGraph2('chart43')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab5 -->
@@ -1111,7 +1113,7 @@
                                                 <div id="chartHolder13" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
                                         </div>
-                                        <div class="tab-item-sub" id="QoQ4">
+                                        <!--<div class="tab-item-sub" id="QoQ4">
                                             <div>
                                                 <div id="chartHolder23" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
@@ -1125,7 +1127,7 @@
                                             <div>
                                                 <div id="chartHolder43" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
-                                        </div>
+                                        </div>-->
 
                                     </div>
 
@@ -1140,13 +1142,13 @@
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>비상훈련계획</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY5" title="YoY" data-id="chart14" onclick="RunRmateGraph2('chart14')">YoY</a></li>
                                         <li><a href="#QoQ5" title="QoQ" data-id="chart24" onclick="RunRmateGraph2('chart24')">QoQ</a></li>
                                         <li><a href="#MoM5" title="MoM" data-id="chart34"  onclick="RunRmateGraph2('chart34')">MoM</a></li>
                                         <li><a href="#YTD5" title="YTD" data-id="chart44" onclick="RunRmateGraph2('chart44')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab3 -->
@@ -1155,7 +1157,7 @@
                                             <div id="chartHolder14" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-item-sub" id="QoQ5">
+                                    <!--<div class="tab-item-sub" id="QoQ5">
                                         <div>
                                             <div id="chartHolder24" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
@@ -1169,7 +1171,7 @@
                                         <div>
                                             <div id="chartHolder44" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <!-- tab4 -->
 
 
@@ -1181,13 +1183,13 @@
                             <section class="tab-section section_top" style="height: 300px">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>안전보건교육</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY6" title="YoY" data-id="chart15" onclick="RunRmateGraph2('chart15')">YoY</a></li>
                                         <li><a href="#QoQ6" title="QoQ" data-id="chart25" onclick="RunRmateGraph2('chart25')">QoQ</a></li>
                                         <li><a href="#MoM6" title="MoM" data-id="chart35" onclick="RunRmateGraph2('chart35')">MoM</a></li>
                                         <li><a href="#YTD6" title="YTD" data-id="chart45" onclick="RunRmateGraph2('chart45')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab5 -->
@@ -1198,7 +1200,7 @@
                                                 <div id="chartHolder15" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
                                         </div>
-                                        <div class="tab-item-sub" id="QoQ6">
+                                        <!--<div class="tab-item-sub" id="QoQ6">
                                             <div>
                                                 <div id="chartHolder25" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
@@ -1212,7 +1214,7 @@
                                             <div>
                                                 <div id="chartHolder45" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                             </div>
-                                        </div>
+                                        </div>-->
 
                                     </div>
 
@@ -1227,13 +1229,13 @@
                             <section class="tab-section section_top" style="height: 300px;">
                                 <div class="title-wrap" style="margin-bottom: 2px">
                                     <h3>FieldService</h3>
-                                    <ul class="tab-links-sub">
+                                    <!--<ul class="tab-links-sub">
                                         <li><a href="#YoY7" title="YoY" data-id="chart16" onclick="RunRmateGraph2('chart16')">YoY</a></li>
                                         <li><a href="#QoQ7" title="QoQ" data-id="chart26" onclick="RunRmateGraph2('chart26')">QoQ</a></li>
                                         <li><a href="#MoM7" title="MoM" data-id="chart36" onclick="RunRmateGraph2('chart36')">MoM</a></li>
                                         <li><a href="#YTD7" title="YTD" data-id="chart46" onclick="RunRmateGraph2('chart46')">YTD</a></li>
 
-                                    </ul>
+                                    </ul>-->
                                 </div>
                                 <div class="tab-contents">
                                     <!-- tab3 -->
@@ -1242,7 +1244,7 @@
                                             <div id="chartHolder16" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-item-sub" id="QoQ7">
+                                    <!--<div class="tab-item-sub" id="QoQ7">
                                         <div>
                                             <div id="chartHolder26" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
@@ -1256,7 +1258,7 @@
                                         <div>
                                             <div id="chartHolder46" style="width: 100%; height: 235px; padding-top: 10px"></div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <!-- tab4 -->
 
 
@@ -1627,7 +1629,7 @@
                 async: false,
                 success: function (data) {
                     let DataLength = 15 - data.data.length;
-                    console.log('까꿍: ', data.data);
+
 
 
 
@@ -1638,7 +1640,7 @@
                     }
                     data2 = data.data;
 
-                    console.log('슈퍼까꿍: ', data2);
+
                     data2 = data2.map(item => {
                         return{
                             ...item,
@@ -1930,11 +1932,20 @@
         }
 
         function clearForm(){
-            ['supplier', 'checkdt', 'checkstdt', 'checkendt', 'checkusr', 'checkarea',
+
+            let dataset = DataLoad('/api/inspec_report/recentData', '').data;
+
+            console.log('zzzzzz', dataset);
+
+            ['checkdt', 'checkstdt', 'checkendt',
                 'inspecreform1', 'inspecreform2', 'inspecreform3', 'inspecreform4', 'inspecreform5', 'inspecreform6'
             ].forEach(id => {
                 document.getElementById(id).value = '';
             });
+
+            document.getElementById('checkarea').value = dataset.checkarea;
+            document.getElementById('checkusr').value = dataset.checkusr;
+            document.getElementById('supplier').value = dataset.supplier;
 
             ['inspecresult1', 'inspecresult2', 'inspecresult3', 'inspecresult4', 'inspecresult5', 'inspecresult6'
             ].forEach(id => {
@@ -2080,17 +2091,15 @@
 
             if(checkdt !== null && checkdt !== ''){
 
-                console.log('??: ', checkdt);
 
 
                 let searchdate = checkdt.slice(0, 4) + "-" + checkdt.slice(4, 6) + "-" + checkdt.slice(6, 8);
-                console.log('???: ', searchdate);
+
                 document.getElementById("searchfrdate").value = searchdate;
                 document.getElementById("searchtodate").value = searchdate;
 
             }else{
-                console.log('chk: ', getDateYYYYMMDD().slice(0, 7) + "-" + "01");
-                console.log('chk2: ', getLastDayOfCurrentMonth());
+
 
                 document.getElementById("searchfrdate").value = getDateYYYYMMDD().slice(0, 7) + "-" + "01";
                 document.getElementById("searchtodate").value = getLastDayOfCurrentMonth();
@@ -2179,13 +2188,12 @@
                 if (hitTest.cellType === wijmo.grid.CellType.Cell) {
                     let row = hitTest.row;
                     let item = theGrid.rows[row].dataItem;
-                    console.log('Row double-clicked:', item);
-                    console.log('Row double-clicked22:', SelectItem);
+
 
                     if(item === 'empty' || item.checkdt === undefined){ return; }
 
                     if(theGrid.rows.filter(r => r.isSelected).length > 0){
-                        console.log('선택값: ', theGrid.rows.filter(r => r.isSelected))
+
                         Alert.alert('', '선택기에 선택된 값이 있습니다.');
                         return false;
                     }
@@ -2204,7 +2212,7 @@
                         }
 
                         let data2 = data.data;
-                        console.log('data2', data2);
+
                         $('#inputTabLink').click();
 
                         let str = data2.checkdt;
@@ -2225,7 +2233,7 @@
 
 
 
-                        console.log()
+
                         for (let i = 0; i < data2.inspecitem.length; i++) {
                             updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
                             updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
@@ -2291,7 +2299,7 @@
             let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
             //선택기 그리드면 이거
             if(result.success){
-                console.log(result.data);
+
 
                 let DataLength = 10 - result.data.length;
 
@@ -2365,17 +2373,6 @@
 
 
         }
-        /*function SelectItemPush(){
-
-            let selectedList = [];
-            for(let i = 0; i < SelectItem.length; i++){
-                selectedList.push(SelectItem[i]._data.spuncode);
-            }
-            return selectedList;
-        }*/
-
-
-
         function DownloadDoc() {
 
             if(SelectItem === undefined || SelectItem.length === 0){
@@ -2420,8 +2417,7 @@
         function updateElementText(elementIdPrefix, index, textContent) {
             let elementId = elementIdPrefix + (index + 1);
             let element = document.getElementById(elementId);
-            console.log('element: ', element);
-            console.log('textContent: ', textContent);
+
 
             if (element) {
                 if (element.tagName.toLowerCase() === 'input' || element.tagName.toLowerCase() === 'textarea') {
@@ -2446,8 +2442,6 @@
             }
             let selectedItem = SelectItem[0];
 
-            console.log('현재', selectedItem);
-            console.log('현재2', SelectItem);
 
             let spuncode = selectedItem._data.spuncode;
 
@@ -2460,7 +2454,7 @@
             let jsonSpunCode = JSON.stringify(spuncode);
             AjaxFunction.PostAjaxRequest('/api/inspec_report/modfind', false, 'application/json', true, jsonSpunCode, function (data) {
                 let data2 = data.data;
-                console.log('data2', data2);
+
                 $('#inputTabLink').click();
 
                 let str = data2.checkdt;
@@ -2481,7 +2475,6 @@
 
 
 
-                console.log()
                 for (let i = 0; i < data2.inspecitem.length; i++) {
                     updateElementText('inspecresult', i, data2.inspecitem[i].inspecresult);
                     updateElementText('inspecreform', i, data2.inspecitem[i].inspecreform);
@@ -2746,7 +2739,7 @@
                             }
 
                             const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}@ ${seqValue}`;
-                            console.log('combinedText: ', combinedText);
+
                             formData.append('doc-list', combinedText);
 
 
@@ -2754,7 +2747,7 @@
                             results.push(combinedText);
                         });
                         // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
-                        console.log('파일확인2', uploadedFiles)
+
                         for (let i = 0; i < uploadedFiles.length; i++) {
                             formData.append('filelist', uploadedFiles[i]);
                         }
@@ -2851,7 +2844,7 @@
 
             //삭제
             $('#btnDelete').click(function (e) {
-                console.log('z', SelectItem);
+
                 if(SelectItem === undefined || SelectItem.length === 0){
                     Alert.alert('', '삭제할 항목을 선택하세요.');
                     return;
@@ -2866,7 +2859,7 @@
 
                 delList = SelectItemPush(SelectItem, '_data.spuncode');
 
-                console.log('삭제확인', delList);
+
                 Alert.confirm('', '삭제하시겠습니까?', function () {
                     let data = {
                         'spuncode': JSON.stringify(delList),
@@ -2906,7 +2899,6 @@
 
         document.getElementById('runWijmo').addEventListener('click', function(){
             loadYearlyData();
-            init_ByPeriod();
             searchData_Byperid();
 
         })
@@ -2937,113 +2929,18 @@
         }
 
         // 차트 데이터
-        var chartData = [{"Country":"1월", "GDP":5},
-            {"Country":"2월", "GDP":6},
-            {"Country":"3월", "GDP":8},
-            {"Country":"4월", "GDP":4},
-            {"Country":"5월", "GDP":6},
-            {"Country":"6월", "GDP":5},
-            {"Country":"7월", "GDP":4},
-            {"Country":"8월", "GDP":8},
-            {"Country":"9월", "GDP":6},
-            {"Country":"10월", "GDP":7},
-            {"Country":"11월", "GDP":3},
-            {"Country":"12월", "GDP":6}
+        var chartData = [
         ]
 
-        var chartData1 = [{"Month":"1월", "Count":5},
-            {"Month":"2월", "Count":6},
-            {"Month":"3월", "Count":8},
-            {"Month":"4월", "Count":4},
-            {"Month":"5월", "Count":6},
-            {"Month":"6월", "Count":5},
-            {"Month":"7월", "Count":4},
-            {"Month":"8월", "Count":8},
-            {"Month":"9월", "Count":6},
-            {"Month":"10월", "Count":7},
-            {"Month":"11월", "Count":3},
-            {"Month":"12월", "Count":6}
+        var chartData1 = [
         ]
 
         // 차트 데이터
-        var chartData2 = [{"Month":"1월", "Count":5},
-            {"Month":"2월", "Count":3},
-            {"Month":"3월", "Count":1},
-            {"Month":"4월", "Count":8},
-            {"Month":"5월", "Count":9},
-            {"Month":"6월", "Count":3},
-            {"Month":"7월", "Count":9},
-            {"Month":"8월", "Count":2},
-            {"Month":"9월", "Count":5},
-            {"Month":"10월", "Count":2},
-            {"Month":"11월", "Count":8},
-            {"Month":"12월", "Count":1}
+        var chartData2 = [
+
         ]
-
-
-        // 차트 데이터
-        var chartData3 = [{"Month":"1월", "Count":5},
-            {"Month":"2월", "Count":5},
-            {"Month":"3월", "Count":2},
-            {"Month":"4월", "Count":1},
-            {"Month":"5월", "Count":3},
-            {"Month":"6월", "Count":8},
-            {"Month":"7월", "Count":7},
-            {"Month":"8월", "Count":9},
-            {"Month":"9월", "Count":7},
-            {"Month":"10월", "Count":9},
-            {"Month":"11월", "Count":10},
-            {"Month":"12월", "Count":1}
-        ]
-
 
         /***Rmate*********************************************************************************************/
-
-        let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
-        let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler2";
-
-
-
-        function chartReadyHandler(id) {
-            //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
-            if(id === 'chart10' || id === 'chart11' || id === 'chart12'|| id === 'chart13' || id === 'chart14' || id === 'chart15' ||  id === 'chart16'){
-                document.getElementById(id).setLayout(layoutStrValue("Count", "2023 (%)", "Count2", "2024 (%)", "Month"))
-                document.getElementById(id).setData(chartData10);
-            } else if(id === 'chart20' || id === 'chart21' || id === 'chart22'|| id === 'chart23' || id === 'chart24' || id === 'chart25' || id === 'chart26'){
-                document.getElementById(id).setLayout(layoutStrValue("CNT2023", "2023 (%)", "CNT2024", "2024 (%)", "Quarter"))
-                document.getElementById(id).setData(chartData20);
-            } else if(id === 'chart30' || id === 'chart31' || id === 'chart32'|| id === 'chart33' || id === 'chart34'|| id === 'chart35' || id === 'chart36'){
-                document.getElementById(id).setLayout(layoutStr30);
-                document.getElementById(id).setData(chartData30);
-            } else if(id === 'chart40' || id === 'chart41' || id === 'chart42'|| id === 'chart43' || id === 'chart44'|| id === 'chart45' || id === 'chart46'){
-                document.getElementById(id).setLayout(layoutStrValue("Profit2023", "2023 (%)", "Profit2024", "2024 (%)", "Month"))
-                document.getElementById(id).setData(chartData40);
-            }
-            //document.getElementById(id).setData(window["chartData" + id.replace(/\D/g, "")]);
-
-            document.getElementById(id).resize();
-        }
-
-        function chartReadyHandler2(id) {
-            //document.getElementById(id).setLayout(window["layoutStr" + id.replace(/\D/g, "")]);
-            document.getElementById(id).setLayout(returnLayoutStr('Month', 'Count'))
-            if(id === 'chart1'){
-                document.getElementById(id).setData(chartData1);
-            } else if(id === 'chart2'){
-                document.getElementById(id).setData(chartData2);
-            } else if(id === 'chart3'){
-                document.getElementById(id).setData(chartData3);
-            } else if(id === 'chart4'){
-                document.getElementById(id).setData(chartData3);
-            } else if(id === 'chart5'){
-                document.getElementById(id).setData(chartData3);
-            } else if(id === 'chart6'){
-                document.getElementById(id).setData(chartData3);
-            } else if(id === 'chart7'){
-                document.getElementById(id).setData(chartData3);
-            }
-            document.getElementById(id).resize();
-        }
 
         function layoutStrValue(yField, displayName, yField2, displayName2, categoryField){
             return `
@@ -3053,7 +2950,7 @@
                     <Legend defaultMouseOverAction="true"/>
                 </Options>
                 <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
-                <Combination2DChart showDataTips="true">
+                <Combination2DChart showDataTips="true" itemClickJsFunction="chartClickHandler">
                     <horizontalAxis>
                         <CategoryAxis categoryField="${categoryField}"/>
                     </horizontalAxis>
@@ -3082,6 +2979,31 @@
             </rMateChart>`;
         }
 
+
+        function layoutStr_MoM(categoryFiled, yField, displayName){
+            return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+            <Options>
+            <Caption text="" paddingBottom="0"/>
+            </Options>
+            <Line2DChart showDataTips="true" >
+            <horizontalAxis>
+            <CategoryAxis categoryField="${categoryFiled}"/>
+            </horizontalAxis>
+            <verticalAxis>
+            <LinearAxis />
+            </verticalAxis>
+            <series>
+            <Line2DSeries yField="${yField}" displayName="${displayName}" itemRenderer="DiamondItemRenderer">
+            <lineStroke><Stroke color="#ffa336" weight="2" /></lineStroke>
+            <showDataEffect>
+            <SeriesClip duration="1500"/>
+            </showDataEffect>
+            </Line2DSeries>
+            </series>
+            </Line2DChart>
+            </rMateChart>`;
+        }
+
         var layoutStr30 =
             '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
             +'<Options>'
@@ -3089,7 +3011,7 @@
             +'</Options>'
             +'<Line2DChart showDataTips="true" >'
             +'<horizontalAxis>'
-            +'<CategoryAxis categoryField="Month"/> '
+            +'<CategoryAxis categoryField=""/> '
             +'</horizontalAxis>'
             +'<verticalAxis>'
             +'<LinearAxis />'
@@ -3108,89 +3030,54 @@
 
         // 차트 데이터
         var chartData10 = [
-            {"Month": "1월", "Count": 1, "Count2": 2},
-            {"Month": "2월", "Count": 2, "Count2": 3},
-            {"Month": "3월", "Count": 3, "Count2": 4},
-            {"Month": "4월", "Count": 4, "Count2": 6},
-            {"Month": "5월", "Count": 6, "Count2": 6},
-            {"Month": "6월", "Count": 8, "Count2": 5},
-            {"Month": "7월", "Count": 1, "Count2": 2},
-            {"Month": "8월", "Count": 2, "Count2": 3},
-            {"Month": "9월", "Count": 3, "Count2": 4},
-            {"Month": "10월", "Count": 4, "Count2": 5},
-            {"Month": "11월", "Count": 5, "Count2": 5},
-            {"Month": "12월", "Count": 6, "Count2": 7}
-        ];
-
-        // 차트 데이터
-        var chartData20 = [
-            {"Quarter": "1Q", "CNT2023": 2, "CNT2024": 1},
-            {"Quarter": "2Q", "CNT2023": 5, "CNT2024": 4},
-            {"Quarter": "3Q", "CNT2023": 6, "CNT2024": 5},
-            {"Quarter": "4Q", "CNT2023": 9, "CNT2024": 8},
-
         ];
 
 
-        // 차트 데이터
-        var chartData30 = [
-            {"Month": "2023.1", "Profit2023": 1,},
-            {"Month": "2023.2", "Profit2023": 2,},
-            {"Month": "2023.3", "Profit2023": 3,},
-            {"Month": "2023.4", "Profit2023": 4,},
-            {"Month": "2023.5", "Profit2023": 6,},
-            {"Month": "2023.6", "Profit2023": 8,},
-            {"Month": "2023.7", "Profit2023": 1,},
-            {"Month": "2023.8", "Profit2023": 2,},
-            {"Month": "2023.9", "Profit2023": 3,},
-            {"Month": "2023.10", "Profit2023": 4},
-            {"Month": "2023.11", "Profit2023": 5},
-            {"Month": "2023.12", "Profit2023": 6},
-            {"Month": "2024.1", "Profit2023": 2},
-            {"Month": "2024.2", "Profit2023": 7},
-            {"Month": "2024.3", "Profit2023": 3},
-            {"Month": "2024.4", "Profit2023": 6},
-            {"Month": "2024.5", "Profit2023": 1},
-            {"Month": "2024.6", "Profit2023": 6},
-            {"Month": "2024.7", "Profit2023": 2},
-            {"Month": "2024.8", "Profit2023": 3},
-            {"Month": "2024.9", "Profit2023": 5},
-            {"Month": "2024.10", "Profit2023": 7},
-            {"Month": "2024.11", "Profit2023": 3},
-            {"Month": "2024.12", "Profit2023": 8},
-        ];
-
-        // 차트 데이터
-        var chartData40 = [
-            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
-            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
-            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
-            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
-            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
-            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
-        ];
-
-        function RunRmateGraph(param){
+        function RunRmateGraph(param, data){
 
             setTimeout(function(){
                 let con = param
-                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars2, "100%", "100%");
-            }, 50)
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), "100%", "100%");
+
+                document.getElementById(param).setLayout(returnLayoutStr('Month', 'Count'));
+
+                document.getElementById(param).setData(data);
+                document.getElementById(param).resize();
+
+            }, 60)
 
 
         }
 
-        function RunRmateGraph2(param){
+        function reload(param){
 
             setTimeout(function(){
+                document.getElementById(param).resize();
+            }, 100)
+        }
+
+        function RunRmateGraph2(param, data, category1, category2, flag){
+
+
+
+            setTimeout(function(){
+
                 let con = param
-                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), "100%", "100%");
+
+                if(flag === 'N'){
+                    document.getElementById(param).setLayout(layoutStr_MoM("Month", "Count", "Profit"));
+
+                }else{
+                    document.getElementById(param).setLayout(layoutStrValue("Count", `${category1} (%)`, "Count2", `${category2} (%)`, "Month"));
+
+                }
+
+                document.getElementById(param).setData(data);
+
+
+                document.getElementById(param).resize();
+
             }, 50)
 
         }
@@ -3209,13 +3096,10 @@
         let theGrid71;
 
 
-        var viewdata11;
+        let viewdata11;
         let viewdata21;
         let viewdata31;
-        let viewdata41;
-        let viewdata51;
-        let viewdata61;
-        let viewdata71;
+
 
         let columns11 = [{ binding: 'checkarea', header: '장소', align: 'center', width: '0.5*', minWidth: 100},
             { binding: 'hour', header: '시간', align: 'center', width: '*', minWidth: 100 },
@@ -3252,109 +3136,246 @@
 
 
             for(let i=0; i < searchtypeList.length; i++){
-                let dataSet = AjaxGetBodyParameter(searchtypeList[i], 'Original');
+                let dataSet = AjaxGetBodyParameter(searchtypeList[i]);
 
                 let rowData = DataLoad('/api/inspec_statics/read', dataSet);
                 let wijmoData = rowData.data;
                 let rmateData = rowData.subData;
 
                 if (i === 0) {
-                    chartData1 = rMateDataLoad(rmateData);
-                    viewdata = new wijmo.collections.CollectionView(wijmoData);
 
-                    theGrid11.itemsSource = viewdata;
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
 
+                    if(!theGrid11){
+                        console.log('dadssadsadsadasdsadsadsada')
+                        theGrid11 = new wijmo.grid.FlexGrid('#theGrid11', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns11,
+                            itemsSource: viewdata11
+                        });
+                        theGrid11.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+                        console.log('있는지 없는지 체크', viewdata11);
+
+                    }else{
+                        theGrid11.itemsSource = viewdata11;
+                        console.log('그리드 존재함');
+
+                    }
+
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    console.log('check1', chartData1);
+
+                    RunRmateGraph('chart1', chartData1);
                 } else if (i === 1) {
-                    chartData2 = rMateDataLoad(rmateData);
-                    viewdata = new wijmo.collections.CollectionView(wijmoData);
-                    theGrid21.itemsSource = viewdata;
 
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid21){
+                        theGrid21 = new wijmo.grid.FlexGrid('#theGrid21', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns21,
+                            itemsSource: viewdata11
+                        });
+                        theGrid21.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크1', viewdata11);
+                    }else{
+                        theGrid21.itemsSource = viewdata11;
+                    }
+
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    console.log('check2', chartData1);
+                    RunRmateGraph('chart2', chartData1);
                 } else if (i === 2) {
-                    chartData3 = rMateDataLoad(rmateData);
-                    viewdata = new wijmo.collections.CollectionView(wijmoData);
-                    theGrid31.itemsSource = viewdata;
 
-                } else {
-                    chartData3 = rMateDataLoad(rmateData);
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid31){
+                        theGrid31 = new wijmo.grid.FlexGrid('#theGrid31', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns31,
+                            itemsSource: viewdata11
+                        });
+                        theGrid31.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크2', viewdata11);
+                    }else{
+                        theGrid31.itemsSource = viewdata11;
+                    }
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    console.log('check3', chartData1);
+                    RunRmateGraph('chart3', chartData1);
+                }else if(i === 3){
+
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid41){
+                        theGrid41 = new wijmo.grid.FlexGrid('#theGrid41', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns41,
+                            itemsSource: viewdata11
+                        });
+                        theGrid41.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크3', viewdata11);
+                    }else{
+                        theGrid41.itemsSource = viewdata11;
+                    }
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    RunRmateGraph('chart4',chartData1);
+                }else if(i === 4){
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid51){
+                        theGrid51 = new wijmo.grid.FlexGrid('#theGrid51', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns51,
+                            itemsSource: viewdata11
+                        });
+                        theGrid51.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크4', viewdata11);
+                    }else{
+                        theGrid51.itemsSource = viewdata11;
+                    }
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    RunRmateGraph('chart5',chartData1);
+                }else if(i === 5){
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid61){
+                        theGrid61 = new wijmo.grid.FlexGrid('#theGrid61', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns61,
+                            itemsSource: viewdata11
+                        });
+                        theGrid61.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크4', viewdata11);
+                    }else{
+                        theGrid61.itemsSource = viewdata11;
+                    }
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    RunRmateGraph('chart6',chartData1);
+                }else if(i===6){
+                    viewdata11 = new wijmo.collections.CollectionView(wijmoData);
+
+                    if(!theGrid71){
+                        theGrid71 = new wijmo.grid.FlexGrid('#theGrid71', {
+                            autoGenerateColumns: false,
+                            showMarquee: true,
+                            columns: columns71,
+                            itemsSource: viewdata11
+                        });
+                        theGrid71.rowHeaders.columns.splice(0,1);
+                        console.log('있는지 없는지 체크4', viewdata11);
+                    }else{
+                        theGrid71.itemsSource = viewdata11;
+                    }
+                    chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+                    RunRmateGraph('chart7',chartData1);
                 }
 
-                RunRmateGraph(`chart${i+1}`);
+                //chartData1 = rMateDataLoad_ColumnsGraph(rmateData);
+
+                //RunRmateGraph(`chart${i+1}`);
 
 
 
             }
         }
 
-        let mergeData = (data, mergedData, countField) => {
-            data.forEach(item => {
-                if (mergedData[item.Month]) {
-                    mergedData[item.Month][countField] = item.Count;
-                } else {
-                    mergedData[item.Month] = {
-                        Month: item.Month,
-                        Count: countField === 'Count' ? item.Count : 0,
-                        Count2: countField === 'Count2' ? item.Count : 0
-                    };
-                }
-            });
-        };
-
 
         function searchData2() {
             const searchtypeList = ['wm_inspec_month_list', 'wm_hap_input', 'wm_elecsafe_input', 'wm_emergency_plan', 'wm_emergency_result', 'wm_safety_health', 'wm_inspec_field_report'];
 
-            // 데이터를 병합하는 함수
+            let bindingList;
+            let comparisonType = $('#comparisonType').val();
 
+            if(comparisonType === 'YoY' || comparisonType === 'YTD'){
+                bindingList = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+            }else if(comparisonType === 'QoQ'){
+                bindingList = ['Q1', 'Q2', 'Q3', 'Q4']
+            }
 
             searchtypeList.forEach((searchType, index) => {
-                const mergedData = {};
-                const dataSet = AjaxGetBodyParameter(searchType, 'YoY');
+
+                const dataSet = AjaxGetBodyParameter_RmateLineGraph(searchType);
+
+
                 const rowData = DataLoad('/api/inspec_statics/read', dataSet);
 
-                const { data: rmateData, subData: rmateData2 } = rowData;
 
-                // 서브 데이터 병합
-                if (rmateData2) {
-                    const subData = rMateDataLoad(rmateData2);
-                    mergeData(subData, mergedData, 'Count2');
-                    console.log('chartData9', subData);
-                }
+                if(comparisonType === 'MoM')
+                {
+                    let rmateData1 = rowData.data;
 
-                // 메인 데이터 병합
-                if (rmateData) {
-                    const mainData = rMateDataLoad(rmateData);
-                    mergeData(mainData, mergedData, 'Count');
-                    console.log('chartData10', mainData);
-                }
+                    console.log('test', rmateData1);
 
-                const finalData = Object.values(mergedData);
-                console.log('mergedData:', finalData);
+                    let rmateData2 = rMateDataLoad_ColumnsGraph(rowData.data);
 
-                chartData10 = finalData;
-                //RunRmateGraph2(`chart${index + 10}`);
-            });
+                    console.log('test2', rmateData2);
 
-            RunRmateGraph2('chart10');
+                    if(index === 0){
+                        chartData10 = rmateData2;
+                        RunRmateGraph2('chart10', chartData10, null, null, 'N');
 
+                    }else if(index === 1){
+                        chartData10 = rmateData2;
+                        RunRmateGraph2('chart11', chartData10,null, null,  'N');
+                    }else if(index === 2){
+                        chartData10 = rmateData2;
+                        RunRmateGraph2('chart12', chartData10, null, null,  'N');
+                    }else{
+                        chartData10 = rmateData2;
+                        RunRmateGraph2('chart13', chartData10, null, null,  'N');
+                        RunRmateGraph2('chart14', chartData10, null, null,  'N');
+                        RunRmateGraph2('chart15', chartData10, null, null,  'N');
+                        RunRmateGraph2('chart16', chartData10, null, null,  'N');
 
-            // 클래스가 active인 요소를 찾고 첫 번째 자식 요소의 title과 id 값을 가져오기
-            const activeElements = document.querySelectorAll('#tab2 .active');
-            activeElements.forEach(activeElement => {
-                const firstChild = activeElement.children[0]; // 첫 번째 자식 요소 선택
-
-                if (firstChild) {
-                    const title = firstChild.getAttribute('title');
-                    const id = firstChild.getAttribute('data-id');
-
-                    if (title || id) {
-                        console.log('Title:', title, 'ID:', id);
                     }
+
+                }
+                else
+                {
+                let rmateData1 = rMateDataLoad(rowData.data);
+                let rmateData2 = rMateDataLoad(rowData.subData);
+
+
+                //chartData10 = mergeData(bindingList, rmateData1, rmateData2);
+
+                if(index === 0){
+                    chartData10 = mergeData(bindingList, rmateData1, rmateData2);
+                    RunRmateGraph2('chart10', chartData10, rmateData1[0], rmateData2[0], 'Y');
+
+                    console.log('chartDataValue', chartData10);
+
+                }else if(index === 1){
+                    console.log('rmateData1', rmateData1);
+                    console.log('rmateData2', rmateData2);
+
+                    chartData10 = mergeData(bindingList, rmateData1, rmateData2);
+                    RunRmateGraph2('chart11', chartData10, rmateData1[0], rmateData2[0]);
+                }else if(index === 2){
+                    chartData10 = mergeData(bindingList, rmateData1, rmateData2);
+                    RunRmateGraph2('chart12', chartData10, rmateData1[0], rmateData2[0]);
+                }else{
+                    chartData10 = mergeData(bindingList, rmateData1, rmateData2);
+                    RunRmateGraph2('chart13', chartData10, rmateData1[0], rmateData2[0]);
+                    RunRmateGraph2('chart14', chartData10, rmateData1[0], rmateData2[0]);
+                    RunRmateGraph2('chart15', chartData10, rmateData1[0], rmateData2[0]);
+                    RunRmateGraph2('chart16', chartData10, rmateData1[0], rmateData2[0]);
+
+
+                }
                 }
             });
+
         }
 
         //서버에서 가져온데이터를 rmate가 조회할수 있게 변환
-        function rMateDataLoad(arr){
+        function rMateDataLoad_ColumnsGraph(arr){
             let data = [];
             Object.keys(arr).sort().forEach(function(key, index) {
 
@@ -3366,113 +3387,79 @@
             return data;
         }
 
+        //서버에서 가져온데이터를 rmate가 조회할수 있게 변환
+        function rMateDataLoad(arr){
 
+            const resultList = [];
 
-        function init_ByPeriod() {
-            let data2 = [];
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : 'infinited',
-                    'spworkcd' : '',
-                    'spcompcd' : '',
-                    'spplancd' : ''
-                },
-                async: false,
-                success: function(data){
+            // 연도와 그 하위의 월별 카운트를 리스트로 변환
+            Object.entries(arr).forEach(([year, months]) => {
+                resultList.push(year); // 연도를 리스트에 추가
 
+                // 월별 데이터에서 카운트 값만 추출해 리스트에 추가
+                Object.values(months).forEach((count) => {
+                    resultList.push(String(count)); // 카운트 값 추가 (숫자를 문자열로 변환)
+                });
+            });
 
-                    data2 = data.data;
+            return resultList;
+        }
 
+        function mergeData(bind, data1, data2){
+            const mergedResult = [];
+
+            for(let i=0; i < data1.length; i++){
+
+                if(!bind[i]){
+                    continue;
                 }
-            })
 
-            viewdata11 = new wijmo.collections.CollectionView(data2);
+                mergedResult.push({
+                    Month: bind[i],
+                    Count: Number(data1[i+1]),
+                    Count2: Number(data2[i+1])
+                });
 
-            // 데이터 그리드에 바인딩
-            theGrid11 = new wijmo.grid.FlexGrid('#theGrid11', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns11,
-                itemsSource: viewdata11
-            });
-            theGrid11.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
-
-            let data3 = [];
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : 'infinited',
-                    'spworkcd' : '',
-                    'spcompcd' : '',
-                    'spplancd' : ''
-                },
-                async: false,
-                success: function(data){
-
-                    data3 = data.data;
-                }
-            })
-            viewdata21 = new wijmo.collections.CollectionView(data3);
-            theGrid21 = new wijmo.grid.FlexGrid('#theGrid21', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns21,
-                itemsSource: viewdata21
-            });
-            theGrid21.rowHeaders.columns.splice(0,1);
-
-            viewdata31 = new wijmo.collections.CollectionView(data3);
-            theGrid31 = new wijmo.grid.FlexGrid('#theGrid31', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns31,
-                itemsSource: viewdata31
-            });
-            theGrid31.rowHeaders.columns.splice(0,1);
-            console.log('1132')
-
-            theGrid41 = new wijmo.grid.FlexGrid('#theGrid41', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns41,
-                itemsSource: viewdata11
-            });
-            theGrid41.rowHeaders.columns.splice(0,1);
-
-            theGrid51 = new wijmo.grid.FlexGrid('#theGrid51', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns51,
-                itemsSource: viewdata11
-            });
-            theGrid51.rowHeaders.columns.splice(0,1);
-            console.log('112')
-
-            theGrid61 = new wijmo.grid.FlexGrid('#theGrid61', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns61,
-                itemsSource: viewdata11
-            });
-            theGrid61.rowHeaders.columns.splice(0,1);
-
-            theGrid71 = new wijmo.grid.FlexGrid('#theGrid71', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns71,
-                itemsSource: viewdata11
-            });
-            theGrid71.rowHeaders.columns.splice(0,1);
-            console.log('11')
-
+            }
+            return mergedResult;
         }
 
         //=============================================================================================================
 
-        function AjaxGetBodyParameter(wm_flag, read_flag){
+        function AjaxGetBodyParameter_RmateLineGraph(wm_flag){
+            let dataSet;
+            let ComparisonPeriodType = $('#comparisonType').val();
+            let startDateTab2 = $('#startDateTab2');
+            let endDateTab2 = $('#endDateTab2');
+
+            let startMonthTab2 = $('#startMonthTab2').val();
+            let endMonthTab2 = $('#endMonthTab2').val();
+
+
+            if(ComparisonPeriodType === 'YoY' || ComparisonPeriodType === 'QoQ' || ComparisonPeriodType === 'YTD'){
+                dataSet = {
+                    'searchType': ComparisonPeriodType,
+                    'wm_flag' : wm_flag,
+                    'searchfrYear' : startDateTab2.val(),
+                    'searchtoYear' : endDateTab2.val()
+
+                };
+            }else if(ComparisonPeriodType === 'MoM'){
+                dataSet = {
+                    'searchType': ComparisonPeriodType,
+                    'wm_flag' : wm_flag,
+                    'searchfrYear' : startDateTab2.val(),
+                    'searchtoYear' : endDateTab2.val(),
+                    'searchfrMonth': startMonthTab2,
+                    'searchtoMonth': endMonthTab2
+                };
+            }
+
+            return dataSet;
+
+        }
+
+        function AjaxGetBodyParameter(wm_flag){
             let dataSet;
             let periodType = $('#periodType').val();
 
@@ -3482,16 +3469,14 @@
                     'startHour'    : $('#startHour').val(),
                     'endHour'      : $('#endHour').val(),
                     'searchType'   : periodType,
-                    'wm_flag'       : wm_flag,
-                    'read_flag'     : read_flag,
+                    'wm_flag'       : wm_flag
                 };
             }else if(periodType === 'monthly'){
                 dataSet = {
                     'searchfrdate' : $('#startDate').val(),
                     'searchtodate' : $('#endDate').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag,
-                    'read_flag'     : read_flag
+                    'wm_flag' : wm_flag
                 };
             }
             else if(periodType === 'quarterly'){
@@ -3502,8 +3487,7 @@
                     'searchfrQuarter' : $('#startSelect').val(),
                     'searchtoQuarter' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag,
-                    'read_flag'     : read_flag
+                    'wm_flag' : wm_flag
                 };
             }
             else if(periodType === 'halfyearly'){
@@ -3513,8 +3497,7 @@
                     'searchfrHalfYear' : $('#startSelect').val(),
                     'searchtoHalfYear' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag,
-                    'read_flag'     : read_flag
+                    'wm_flag' : wm_flag
                 }
             }
             else if(periodType === 'yearly')
@@ -3523,51 +3506,14 @@
                     'searchfrYear' : $('#startSelect').val(),
                     'searchtoYear' : $('#endSelect').val(),
                     'searchType' : periodType,
-                    'wm_flag' : wm_flag,
-                    'read_flag'     : read_flag
+                    'wm_flag' : wm_flag
                 };
             }
             return dataSet;
         }
 
-        $('#runWijmo').click(function(){
-            setTimeout(function(){
-                for(let i=0; i < 7; i++){
-                    RunRmateGraph(`chart${i+1}`);
-                }
-            }, 100);
-        });
-
         $('#runrmate').click(function(){
-
-
-            setTimeout(function() {
-                //$('#runf').trigger('click');
-                let con = "chart10"
-                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con2 = "chart11"
-                rMateChartH5.create(con2, "chartHolder" + con2.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con3 = "chart12"
-                rMateChartH5.create(con3, "chartHolder" + con3.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con4 = "chart13"
-                rMateChartH5.create(con4, "chartHolder" + con4.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con5 = "chart14"
-                rMateChartH5.create(con5, "chartHolder" + con5.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con6 = "chart15"
-                rMateChartH5.create(con6, "chartHolder" + con6.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-                let con7 = "chart16"
-                rMateChartH5.create(con7, "chartHolder" + con7.replace(/\D/g, ""), chartVars, "100%", "100%");
-
-
-                LoadingCheck = true;
-            }, 100); // 3000ms = 3초
-
+            searchData2();
         });
 
         // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
@@ -3585,7 +3531,7 @@
             if (periodType === "monthly" || periodType === "yearly") {
                 $('#searchYear').hide();
             } else if (periodType === "quarterly" || periodType === "halfyearly") {
-                console.log("1");
+
                 $('#searchYear').show();
             }
 
@@ -3624,7 +3570,7 @@
             <option value="H1">상반기</option>
             <option value="H2">하반기</option>
         ` : '';
-                console.log("2");
+
                  startDateContainer.innerHTML = `<select id="startSelect" onchange="">${options}</select>`;
                 endDateContainer.innerHTML = `<select id="endSelect" onchange="">${options}</select>`;
 
@@ -3635,84 +3581,6 @@
             }
         }
 
-
-        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
-        function updatePeriodInputs2() {
-            const periodType = document.getElementById("periodType2").value;
-            const selectedYear = document.getElementById("yearSelectTab2").value; // 선택된 조회연도 가져오기
-            const startDateContainer = document.getElementById("startDateContainer2");
-            const endDateContainer = document.getElementById("endDateContainer2");
-
-            // 기존 내용을 초기화
-            startDateContainer.innerHTML = "";
-            endDateContainer.innerHTML = "";
-
-            // 'searchYear' 요소의 표시 여부 제어
-            if (periodType === "monthly" || periodType === "yearly") {
-                $('#searchYear2').hide();
-            } else if (periodType === "quarterly" || periodType === "halfyearly") {
-                $('#searchYear2').show();
-            }
-
-            if (periodType === "monthly") { // 월별 조회가 선택된 경우
-                const startDate = `${selectedYear}-01`; // 선택된 연도의 1월
-                const endDate = `${selectedYear}-12`; // 선택된 연도의 12월
-
-                startDateContainer.innerHTML = `<input type="month" id="startDate2" name="startDate" value="${startDate}">`;
-                endDateContainer.innerHTML = `<input type="month" id="endDate2" name="endDate" value="${endDate}">`;
-            }else if(periodType === "hourly"){
-                const currentDate = new Date();
-                const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-                const defaultDay = currentDate.getDate().toString().padStart(2, '0');
-
-                document.getElementById("startDateContainer2").innerHTML = `
-                <input type="date" id="startDate2" name="startDate2" value="${selectedYear}-${defaultMonth}-${defaultDay}">
-            `;
-
-                document.getElementById("endDateContainer2").innerHTML = `
-                <select id="startHour2" name="startHour2" style="width: 60px;">
-                    ${generateHourOptions()}
-                </select>
-                -
-                <select id="endHour2" name="endHour2" style="width: 60px;">
-                    ${generateHourOptions(true)}
-                </select>
-            `;
-            }
-            else if (periodType === "quarterly" || periodType === "halfyearly" || periodType === "yearly") {
-                const options = periodType === "quarterly" ? `
-            <option value="Q1">1분기</option>
-            <option value="Q2">2분기</option>
-            <option value="Q3">3분기</option>
-            <option value="Q4">4분기</option>
-        ` : periodType === "halfyearly" ? `
-            <option value="H1">상반기</option>
-            <option value="H2">하반기</option>
-        ` : '';
-
-                startDateContainer.innerHTML = `<select id="startSelect2" onchange="">${options}</select>`;
-                endDateContainer.innerHTML = `<select id="endSelect2" onchange="">${options}</select>`;
-
-                if (periodType === "yearly") {
-                    // 연도별일 경우 연도를 동적으로 로드하여 추가
-                    loadYearlyData2();
-                }
-            }
-        }
-
-
-        // 조회연도 변경 시 조회기간의 연도도 동기화
-        function updateYearInPeriod() {
-            const selectedYear = document.getElementById("yearSelectTab1").value;
-
-            const startDateInput = document.getElementById("startDate");
-            const endDateInput = document.getElementById("endDate");
-
-            if (startDateInput && endDateInput) {
-                startDateInput.value = `${selectedYear}-01`;
-                endDateInput.value = `${selectedYear}-12`;
-            }
-        }
 
         // 시간 옵션 생성 함수
         function generateHourOptions(isEnd = false) {
@@ -3727,6 +3595,9 @@
             //updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
             //updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
         });
+
+        document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
+
 
         // 연도를 로드하고 기존 UI를 업데이트
         function loadYearlyData() {
@@ -3768,48 +3639,6 @@
                 .catch(error => console.error('Error loading years:', error));
         }
 
-
-
-
-        // 연도를 로드하고 기존 UI를 업데이트
-        function loadYearlyData2() {
-            fetch('/api/inspec_statics/distinctYears')
-                .then(response => response.json())
-                .then(years => {
-                    const yearSelectTab1 = document.getElementById("yearSelectTab1");
-                    const yearSelectTab2 = document.getElementById("yearSelectTab2");
-
-                    // 기간유형이 연도별일 때 조회기간에 사용될 startSelect와 endSelect
-                    const startSelect = document.getElementById("startSelect2");
-                    const endSelect = document.getElementById("endSelect2");
-
-                    // 기존 옵션 삭제
-                    yearSelectTab1.innerHTML = '';
-                    yearSelectTab2.innerHTML = '';
-                    if (startSelect) startSelect.innerHTML = '';
-                    if (endSelect) endSelect.innerHTML = '';
-
-                    // 서버에서 가져온 연도 목록을 <option>으로 추가
-                    years.forEach(year => {
-                        const option1 = document.createElement('option');
-                        option1.value = year;
-                        option1.textContent = year;
-
-                        yearSelectTab1.appendChild(option1);
-                        yearSelectTab2.appendChild(option1.cloneNode(true));
-
-                        if (startSelect && endSelect) {
-                            const option2 = document.createElement('option');
-                            option2.value = year;
-                            option2.textContent = year;
-
-                            startSelect.appendChild(option2);
-                            endSelect.appendChild(option2.cloneNode(true));
-                        }
-                    });
-                })
-                .catch(error => console.error('Error loading years:', error));
-        }
 
         // tab2 비교유형 변경시 실행될 함수
         function updateComparisonType() {
@@ -3861,76 +3690,6 @@
 
             return monthSelect;
         }
-
-        var chartData11 = [
-            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
-            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
-            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
-            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
-            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
-            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
-        ];
-
-        // 차트 데이터
-        var chartData21 = [
-            {"Quarter": "1Q", "CNT2023": 2, "CNT2024": 1},
-            {"Quarter": "2Q", "CNT2023": 5, "CNT2024": 4},
-            {"Quarter": "3Q", "CNT2023": 6, "CNT2024": 5},
-            {"Quarter": "4Q", "CNT2023": 9, "CNT2024": 8},
-
-        ];
-
-
-        // 차트 데이터
-        var chartData31 = [
-            {"Month": "2023.1", "Profit2023": 1,},
-            {"Month": "2023.2", "Profit2023": 2,},
-            {"Month": "2023.3", "Profit2023": 3,},
-            {"Month": "2023.4", "Profit2023": 4,},
-            {"Month": "2023.5", "Profit2023": 6,},
-            {"Month": "2023.6", "Profit2023": 8,},
-            {"Month": "2023.7", "Profit2023": 1,},
-            {"Month": "2023.8", "Profit2023": 2,},
-            {"Month": "2023.9", "Profit2023": 3,},
-            {"Month": "2023.10", "Profit2023": 4},
-            {"Month": "2023.11", "Profit2023": 5},
-            {"Month": "2023.12", "Profit2023": 6},
-            {"Month": "2024.1", "Profit2023": 2},
-            {"Month": "2024.2", "Profit2023": 7},
-            {"Month": "2024.3", "Profit2023": 3},
-            {"Month": "2024.4", "Profit2023": 6},
-            {"Month": "2024.5", "Profit2023": 1},
-            {"Month": "2024.6", "Profit2023": 6},
-            {"Month": "2024.7", "Profit2023": 2},
-            {"Month": "2024.8", "Profit2023": 3},
-            {"Month": "2024.9", "Profit2023": 5},
-            {"Month": "2024.10", "Profit2023": 7},
-            {"Month": "2024.11", "Profit2023": 3},
-            {"Month": "2024.12", "Profit2023": 8},
-        ];
-
-        // 차트 데이터
-        var chartData41 = [
-            {"Month": "1월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "2월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "3월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "4월", "Profit2023": 4, "Profit2024": 6},
-            {"Month": "5월", "Profit2023": 6, "Profit2024": 6},
-            {"Month": "6월", "Profit2023": 8, "Profit2024": 5},
-            {"Month": "7월", "Profit2023": 1, "Profit2024": 2},
-            {"Month": "8월", "Profit2023": 2, "Profit2024": 3},
-            {"Month": "9월", "Profit2023": 3, "Profit2024": 4},
-            {"Month": "10월", "Profit2023": 4, "Profit2024": 5},
-            {"Month": "11월", "Profit2023": 5, "Profit2024": 5},
-            {"Month": "12월", "Profit2023": 6, "Profit2024": 7}
-        ];
-
 
 
     </script>
