@@ -1370,10 +1370,10 @@
             <div class="tab-wrap">
                 <ul class="tab-links">
                     <li>
-                        <a href="#service-tab1" title="기간별조회">기간별 조회</a>
+                        <a href="#service-tab1" title="기간별조회" class="tab-button">기간별 조회</a>
                     </li>
                     <li>
-                        <a href="#service-tab2" title="기간별대비">기간별 대비</a>
+                        <a href="#service-tab2" title="기간별대비" class="tab-button">기간별 대비</a>
                     </li>
                 </ul>
 
@@ -1683,7 +1683,7 @@
                     activateTab('service-tab1');
                     break;
                 default:
-                    console.log('유효하지 않은 카테고리입니다:', selectedType);
+                    // console.log('유효하지 않은 카테고리입니다:', selectedType);
                     return;
             }
 
@@ -1860,7 +1860,6 @@
             for (let i = 1; i <= 2; i++) {
                 rMateChartH5.create("service-chart" + i, "service-chartHolder" + i, chartVars, "100%", "100%");
             }
-
         }
 
         function showTab1Charts() {
@@ -1911,18 +1910,18 @@
             for (let i = start; i <= end; i++) {
                 let chartElement = document.getElementById(prefix + '-chart' + i);
                 if (chartElement && typeof chartElement.resize === 'function') {
-                    console.log(`Resizing chart: ${prefix}-chart${i}`);
+                    // console.log(`Resizing chart: ${prefix}-chart${i}`);
                     chartElement.resize();
 
                     // 서비스 분석 현황 차트의 경우 데이터와 레이아웃 재설정
                     if (prefix === 'service') {
-                        console.log(`Updating data for service chart: ${i}`);
+                        // console.log(`Updating data for service chart: ${i}`);
                         let [chartData, layoutStr] = getServiceChartConfig(prefix + '-chart' + i);
                         chartElement.setData(chartData);
                         chartElement.setLayout(layoutStr);
                     }
                 } else {
-                    console.log(`Chart not found or resize not available: ${prefix}-chart${i}`);
+                    // console.log(`Chart not found or resize not available: ${prefix}-chart${i}`);
                 }
             }
         }
