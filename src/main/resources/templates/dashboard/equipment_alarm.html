@@ -483,7 +483,6 @@
             // 숫자만 추출하여 해당 레이아웃 및 데이터를 설정
             let chartIndex = id.replace(/\D/g, "");
 
-            var layoutStr;
             var chartData;
 
             switch (chartIndex) {
@@ -617,9 +616,9 @@
             }
 
             var layoutStr = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-                + '<Column2DChart showDataTips="true">'
+                + '<Column2DChart showDataTips="true" >'
                 + '<horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>'
-                + '<series>'
+                + '<series >'
                 + '<Column2DSeries yField="Profit" fill="#62b2fd">'
                 + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
                 + '</Column2DSeries>'
@@ -952,13 +951,13 @@
 
         // 스트링 형식으로 레이아웃 정의.
         var layoutStr1 =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" >'
             + '<Options>'
             + '<Caption text="유형별"/>'
             // +'<SubCaption text="( $M )" textAlign="right" paddingBottom="35"/>'
             + '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
             + '</Options>'
-            + '<Column2DChart seriesMouseOverAction="series" showDataTips="true" columnWidthRatio="0.4" paddingBottom="25">'
+            + '<Column2DChart seriesMouseOverAction="series" showDataTips="true" columnWidthRatio="0.4" paddingBottom="25" >'
             + '<horizontalAxis>'
             + '<CategoryAxis categoryField="Date"/>'
             + '</horizontalAxis>'
@@ -1028,12 +1027,12 @@
 
         // 스트링 형식으로 레이아웃 정의.
         var layoutStr2 =
-            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" >'
             + '<Options>'
             + '<Caption text="발생빈도별" paddingBottom="70"/>'
             + '<Legend defaultMouseOverAction="true" useVisibleCheck="true"/>'
             + '</Options>'
-            + '<Pie2DChart innerRadius="0.5" showDataTips="true" selectionMode="single" paddingBottom="25">'
+            + '<Pie2DChart innerRadius="0.5" showDataTips="true" selectionMode="single" paddingBottom="25" >'
             + '<series>'
             + '<Pie2DSeries nameField="division" field="Profit" startAngle="20" renderDirection="clockwise" labelPosition="inside" color="#ffffff" itemRollOverEmphasize="true">'
             /* Pie2DChart 정의 후 Pie2DSeries labelPosition="inside"정의합니다 */
@@ -1112,7 +1111,65 @@
         //         }
         //     });
         // });
+        $(document).ready(function() {
 
+            // 공통 모달 HTML을 body 태그에 추가
+            const modalHTML = `
+        <div id="chartModal" class="modal" style="opacity:100">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+    `;
+
+            // body 태그의 끝에 모달을 추가
+            $('body').append(modalHTML);
+
+            // 모달 닫기 이벤트
+            $(document).on('click', '.close', function () {
+                $('#chartModal').hide();
+                $('#modalChartHolder').html('');  // 모달 내용 초기화
+            });
+
+            $('div[id^="chartHolder"]').on('dblclick', function(event) {
+                clickfunc(event);
+            });
+
+        });
+
+        // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+        function clickfunc(event){
+            console.log(event);
+            // 클릭한 div의 id 가져오기
+            let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
+
+            // ID가 제대로 추출되었는지 확인
+            console.log("Clicked chartHolder ID: " + chartHolderId);
+
+            // 모달 열기
+            let modal = document.getElementById("chartModal");
+            let modalChartHolder = document.getElementById("modalChartHolder");
+            modal.style.display = "block";
+
+            // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+            rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+            // 모달 닫기 버튼 클릭 시 모달 닫기
+            let closeModal = document.getElementsByClassName("close")[0];
+            closeModal.onclick = function() {
+                modal.style.display = "none";
+                modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+            }
+
+            // 모달 외부를 클릭하면 모달 닫기
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                }
+            }
+        }
 
     </script>
 </th:block>

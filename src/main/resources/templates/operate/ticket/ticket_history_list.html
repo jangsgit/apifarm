@@ -138,7 +138,7 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
                         <div>
-                            <div id="chartHolder" style="width:600px; height:400px; margin-left: 20px">
+                            <div id="chartHolder1" style="width:600px; height:400px; margin-left: 20px">
                             </div>
                         </div>
                         <div>
@@ -223,7 +223,7 @@
                         <div class="section wp60">
                             <div class="chart-wrap">
                                 <!-- 그래프 -->
-                                <div id="chartHolder2" style="width:100%; height:700px;">
+                                <div id="chartHolder2" style="width:100%; height:500px;">
                                 </div>
                             </div>
                         </div>
@@ -263,30 +263,57 @@
             // inputData();
             setDefaultDates('startDate', 'endDate');
             setDefaultDates('startDate2', 'endDate2');
-            rMateChartH5.create("chart1", "chartHolder", "", "250%", "100%");
-            chartReadyHandler("chart1");
+            createTab1Charts();
         }
 
         // 탭 버튼 클릭 이벤트
         $('.tab-button').click(function () {
             var targetTab = $(this).attr('href'); // 클릭한 탭의 href를 가져옴
 
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
             setTimeout(function () {
                 if (targetTab === '#tab1') {
-                    rMateChartH5.create("chart1", "chartHolder", chartVars, "250%", "100%");
+                    createTab1Charts();
                 } else if (targetTab === '#tab2') {
-                    rMateChartH5.create("chart2", "chartHolder2", chartVars, "100%", "100%");
+                    createTab2Charts();
                 }
             }, 100);
         });
 
+
+        function createTab1Charts() {
+            let chartVars = "rMateOnLoadCallFunction=chartReadyHandler"; // 필요시 사용될 변수
+
+            let chartsTab1 = [
+                {name: "chart1", vars: chartVars}
+            ];
+
+            chartsTab1.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "250%", "100%");
+            });
+        }
+
+        function createTab2Charts() {
+            let chartVars1 = "rMateOnLoadCallFunction=chartReadyHandler";
+
+            let chartsTab2 = [
+                {name: "chart2", vars: chartVars1},
+            ];
+
+            chartsTab2.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+
+        }
+
         // 콜백 함수 정의
         function chartReadyHandler(id) {
+            let chartIndex = id.replace(/\D/g, "");
             // chart1에 대한 레이아웃과 데이터 설정
-            if (id === "chart1") {
+            if (chartIndex === "1") {
                 var layoutStr =
-                    '<rMateChart >'
+                    '<rMateChart>'
                     + '<DateFormatter id="dateFmt" formatString="M월"/>'
                     + '<Bar3DChart showDataTips="true">'
                     + '<verticalAxis>'
@@ -332,13 +359,10 @@
                     {"cat": "G 티켓", "date1": "2032/09/01", "date2": "2032/10/30"},
                     {"cat": "H 티켓", "date1": "2032/10/15", "date2": "2032/11/30"}
                 ];
+                document.getElementById(id).setLayout(layoutStr);
+                document.getElementById(id).setData(chartData);
 
-                rMateChartH5.calls("chart1", {
-                    "setLayout": layoutStr,
-                    "setData": chartData
-                });
-
-            } else if (id === "chart2") {
+            } else if (chartIndex === "2") {
                 // chart2에 대한 레이아웃과 데이터 설정
                 var layoutStr2 =
                     '<rMateChart backgroundColor="#FFFFFF" borderStyle="none" paddingBottom="20">'
@@ -366,10 +390,8 @@
                     {"browser": "E ticket", "share": 3}
                 ];
 
-                rMateChartH5.calls("chart2", {
-                    "setLayout": layoutStr2,
-                    "setData": chartData2
-                });
+                document.getElementById(id).setLayout(layoutStr2);
+                document.getElementById(id).setData(chartData2);
             }
         }
 
@@ -505,6 +527,66 @@
             var selectElement = document.getElementById(selectId);
             var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
             document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+        $(document).ready(function() {
+
+            // 공통 모달 HTML을 body 태그에 추가
+            const modalHTML = `
+        <div id="chartModal" class="modal" style="opacity:100">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+    `;
+
+            // body 태그의 끝에 모달을 추가
+            $('body').append(modalHTML);
+
+            // 모달 닫기 이벤트
+            $(document).on('click', '.close', function () {
+                $('#chartModal').hide();
+                $('#modalChartHolder').html('');  // 모달 내용 초기화
+            });
+
+            $('div[id^="chartHolder"]').on('dblclick', function(event) {
+                clickfunc(event);
+            });
+
+        });
+
+        // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+        function clickfunc(event){
+            console.log(event);
+            // 클릭한 div의 id 가져오기
+            let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
+
+            // ID가 제대로 추출되었는지 확인
+            console.log("Clicked chartHolder ID: " + chartHolderId);
+
+            // 모달 열기
+            let modal = document.getElementById("chartModal");
+            let modalChartHolder = document.getElementById("modalChartHolder");
+            modal.style.display = "block";
+
+            // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+            rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+            // 모달 닫기 버튼 클릭 시 모달 닫기
+            let closeModal = document.getElementsByClassName("close")[0];
+            closeModal.onclick = function() {
+                modal.style.display = "none";
+                modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+            }
+
+            // 모달 외부를 클릭하면 모달 닫기
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                }
+            }
         }
 
     </script>
