@@ -2,363 +2,347 @@
 <style>
 
 </style>
+
 <th:block layout:fragment="content">
 
-            <!--- (레이아웃) Contents 영역 -->
-            <div class="layout-contents">
-                <!-- Page Title -->
-                <div class="page-title-wrap">
-                    <div class="left">
-                        <h2>발전소 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
-                        <!--<a title="북마크" class="bookmark toggle">
-                            내메뉴
-                        </a>-->
+
+    <div class="layout-contents" style="margin-bottom: 1%">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>발전소 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>운영 관리</li>
+                <li>발전소 관리</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <!--<ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="승인" id="inputTabLink">승인</a>
+                </li>
+            </ul>-->
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" style="border-radius: 15px">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    제조사<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="11" name="">
+                                                <option value="블룸에너지">블룸에너지</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+
+                            <dl>
+                                <dt>
+                                    가동유무
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        <li>
+                                            <select id="searchworkyn" name="">
+                                                <option value="가동">가동</option>
+                                                <option value="비가동">비가동</option>
+                                            </select>
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+
+
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <div id="theGrid" style="height: 320px"></div>
                     </div>
-                    <ul class="page-navi">
-                        <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
-                        <li>운영 관리</li>
-                        <li>발전소 관리</li>
-                    </ul>
-                </div>
-                <!-- Select -->
-                <div class="search-wrap" id="searchWrap" style="display: none">
-                    <ul>
-                        <li>
-                            <select title="지역" id="spworkcd" name="spworkcd"
-                                    onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
-                                <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
-                            </select>
-                            <input type="hidden" id="spworknm" name="spworknm">
-                        </li>
-                        <li>
-                            <select title="산단" id="spcompcd" name="spcompcd"
-                                    onchange="updatePlancdOptions(); saveSelectedSandanData();">
-                                <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
-                            </select>
-                            <input type="hidden" id="spcompnm" name="spcompnm">
-                        </li>
-                        <li>
-                            <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
-                                <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
-                            </select>
-                            <input type="hidden" id="spplannm" name="spplannm">
-                        </li>
-                    </ul>
-                   <!-- <div class="card-btn-wrap">
-                        <a title="탭설정" class="btn btn-popup-open" data-popup="popup1">
-                            <img src="/images/icon/btn-setting.svg" alt="설정아이콘">
-                        </a>
-                    </div>-->
-                </div>
+                    <div class="btn-wrap">
+                    </div>
 
-                <div class="tab-wrap">
-                    <ul class="tab-links">
-                        <li>
-                            <a href="#tab1" title="목록" id="listTabLink">목록</a>
-                        </li>
-                        <li>
-                            <a href="#tab2" title="등록">등록</a>
-                        </li>
-                    </ul>
-                    <div class="tab-contents">
-                        <!-- Section -->
-                        <section class="tab-item" id="tab1" style="height: 830px;">
-                            <div class="section-top">
-                                <div class="search-wrap">
-                                    <dl>
-                                        <dt>
-                                            제조사<span class="eq">*</span>
-                                        </dt>
-                                        <dd>
-                                            <ul class="date-box">
-                                                <li>
-                                                    <select id="11" name="">
-                                                        <option value="블룸에너지">블룸에너지</option>
-                                                    </select>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>
-                                            가동유무
-                                        </dt>
-                                        <dd>
-                                            <ul>
-                                                <li>
-                                                    <select id="searchworkyn" name="">
-                                                        <option value="가동">가동</option>
-                                                        <option value="비가동">비가동</option>
-                                                    </select>
-                                                </li>
 
-                                                <li>
-                                                    <a class="btn btn-delete" title="검색" id="btn-search"
-                                                       onclick="searchDataTab1()">
-                                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                        검색
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-delete" title="삭제">
-                                                <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-edit" title="수정">
-                                                <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div> <!--//section-top end -->
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid" style="max-height: 680px;"></div>
-                            </div>
-                        </section>
-                        <!-- Section -->
-                        <section class="tab-item" id="tab2" style="height: 830px;">
-                            <div class="section-top">
-                                <div class="title-wrap">
-                                    <h3>발전소 관리</h3>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-excell" title="신규등록">
-                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                                신규등록
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
-                                               onclick="showPopup(this)">
-                                                파일 첨부<span>(0)</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="삭제">
-                                                <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-edit" id="btnSave" title="저장">
-                                                <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                                저장
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="table-wrap">
-                                <table class="write-table">
-                                    <form id="customForm">
-                                        <caption>연료전지발전소 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th>
-                                                <label for="spworkcd">
-                                                    관할산단공
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')">
-                                                    <option value="001">대구</option>
-                                                    <option value="002">경기</option>
-                                                </select>
-                                                <input type="hidden" id="spworknm" name="spworknm">
-                                            </td>
+                </section>
 
-                                            <th>
-                                                <label for="spcompcd">
-                                                    산단명
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
-                                                    <option value="001">성서산단</option>
-                                                    <option value="002">성남산단</option>
-                                                </select>
-                                                <input type="hidden" id="spcompnm" name="spcompnm">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="spplannm">
-                                                    발전소명
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="spplannm" name="spplannm" placeholder="대구물류센터">
-                                            </td>
-                                            <th>
-                                                <label for="spwtycd">
-                                                    발전유형
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="spwtycd" name="spwtycd" onchange="updateSelect('spwtycd', 'spwtynm')">
-                                                    <option value="01">전지발전</option>
-                                                    <option value="02">전지발전2</option>
-                                                </select>
-                                                <input type="hidden" id="spwtynm" name="spwtynm">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="makercd">
-                                                    제조사
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="makercd" name="makercd" onchange="updateSelect('makercd', 'makernm')">
-                                                    <option value="001">블룸에너지</option>
-                                                    <option value="002">블룸에너지2</option>
-                                                </select>
-                                                <input type="hidden" id="makernm" name="makernm">
-                                            </td>
-                                            <th>
-                                                <label for="setupdt">
-                                                    설립년월일
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="setupdt" name="setupdt" placeholder="20.01.01">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="pwcapa">
-                                                    발전용량
-                                                </label>
-                                            </th>
-                                            <td colspan="3">
-                                                <input type="number" id="pwcapa" name="pwcapa" step="0.0001" placeholder="10" oninput="validateDecimal(this)">
-                                                <span style="font-weight: bold">kw</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="postno">
-                                                    주소
-                                                </label>
-                                            </th>
-                                            <td colspan="3">
-                                                <input type="text" id="postno" name="postno" placeholder="00000">
-                                                <input type="text" id="address1" name="address1" placeholder="대구">
-                                                <input type="text" id="address2" name="address2" placeholder="성서">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="workyn">
-                                                    가동유무
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select id="workyn" name="workyn">
-                                                    <option value="1">가동</option>
-                                                    <option value="2">비가동</option>
-                                                </select>
-                                            </td>
-                                            <th>
-                                                <label for="mcltcd">
-                                                    유지보수사
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <select type="text" id="mcltcd" name="mcltcd" onchange="updateSelect('mcltcd','mcltnm')">
-                                                    <option value="001">블룸에너지</option>
-                                                    <option value="002">블룸에너지2</option>
-                                                </select>
-                                                <input type="hidden" id="mcltnm" name="mcltnm">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="mcltusrnm">
-                                                    관리자
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="mcltusrnm" name="mcltusrnm" placeholder="홍길동">
-                                            </td>
-                                            <th>
-                                                <label for="mcltusrhp">
-                                                    관리자 연락처
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <input type="text" id="mcltusrhp" name="mcltusrhp" placeholder="010-0000-0000">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="remark">
-                                                    비고
-                                                </label>
-                                            </th>
-                                            <td colspan="3">
-                                                <div class="textarea-box">
-                                                    <textarea id="remark" placeholder="비고"></textarea>
-                                                    <p class="text-count" id="text-count1">0/100</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!--<tr>
-                                            <th>
-                                                첨부파일
-                                            </th>
-                                            <td colspan="3">
-                                                <div id="uploadComponent1" class="upload-component">
-                                                    <div class="upload-filebox">
-                                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                                        <a href="#" class="btn" title="파일업로드">파일업로드</a>
-                                                        <input type="file" id="fileInput1" class="fileInput" multiple>
-                                                        <p>Maximun upload file size <span>1GiB</span></p>
-                                                    </div>
-                                                    <div class="upload-filelist">
-                                                        <div class="title">
-                                                            <h5>Files (0)</h5>
-                                                            <a href="#" title="Delete all" class="btn-file-deleteall">Delete
-                                                                all</a>
-                                                        </div>
-                                                        <ul class="filelist" id="filelist">
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>-->
-                                        </tbody>
-                                    </form>
-                                </table>
-                            </div>
-                        </section>
-                    </div> <!--//tab-contens end-->
-                </div> <!--//tab-wrap end-->
-            </div> <!--//layout-contents end -->
-<!--            <footer>-->
-<!--                <p>Copyrightⓒ 0000 corp. All rights reserved.</p>-->
-<!--            </footer>-->
-        </div> <!-- //dashboard-layout-right end-->
+                <section class="tab-item" style="display: block; margin-top: 20px; border-radius: 15px">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>발전소 관리</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>사용자권한신청조회 승인 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="spworkcd">
+                                        관할산단공
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="spworkcd" name="spworkcd" onchange="updateSelect('spworkcd', 'spworknm')" style="width: 213px">
+                                        <option value="001">대구</option>
+                                        <option value="002">경기</option>
+                                    </select>
+                                    <input type="hidden" id="spworknm" name="spworknm">
+                                </td>
 
-    </div> <!-- //dashboard-layout-contents end-->
+                                <th>
+                                    <label for="spcompcd">
+                                        산단명
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="spcompcd" name="spcompcd" onchange="updateSelect('spcompcd', 'spcompnm')">
+                                        <option value="001">성서산단</option>
+                                        <option value="002">성남산단</option>
+                                    </select>
+                                    <input type="hidden" id="spcompnm" name="spcompnm">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="spplannm">
+                                        발전소명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="spplannm" name="spplannm" placeholder="대구물류센터" style="width: 213px">
+                                </td>
+                                <th>
+                                    <label for="spwtycd">
+                                        발전유형
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="spwtycd" name="spwtycd" onchange="updateSelect('spwtycd', 'spwtynm')">
+                                        <option value="01">전지발전</option>
+                                        <option value="02">전지발전2</option>
+                                    </select>
+                                    <input type="hidden" id="spwtynm" name="spwtynm">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="makercd">
+                                        제조사
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="makercd" name="makercd" onchange="updateSelect('makercd', 'makernm')" style="width: 213px">
+                                        <option value="001">블룸에너지</option>
+                                        <option value="002">블룸에너지2</option>
+                                    </select>
+                                    <input type="hidden" id="makernm" name="makernm">
+                                </td>
+                                <th>
+                                    <label for="setupdt">
+                                        설립년월일
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="setupdt" name="setupdt" placeholder="20.01.01" style="width: 180px">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="pwcapa">
+                                        발전용량
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="number" id="pwcapa" name="pwcapa" step="0.0001" placeholder="10" oninput="validateDecimal(this)">
+                                    <span style="font-weight: bold">kw</span>
+                                </td>
+                                <th>
+                                    <label for="postno">
+                                        주소
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="postno" name="postno" placeholder="00000" style="width: 180px">
+                                    <input type="text" id="address1" name="address1" placeholder="대구" style="width: 180px">
+                                    <input type="text" id="address2" name="address2" placeholder="성서" style="width: 160px">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="workyn">
+                                        가동유무
+                                    </label>
+                                </th>
+                                <td>
+                                    <select id="workyn" name="workyn" style="width: 213px">
+                                        <option value="1">가동</option>
+                                        <option value="2">비가동</option>
+                                    </select>
+                                </td>
+                                <th>
+                                    <label for="mcltcd">
+                                        유지보수사
+                                    </label>
+                                </th>
+                                <td>
+                                    <select type="text" id="mcltcd" name="mcltcd" onchange="updateSelect('mcltcd','mcltnm')">
+                                        <option value="001">블룸에너지</option>
+                                        <option value="002">블룸에너지2</option>
+                                    </select>
+                                    <input type="hidden" id="mcltnm" name="mcltnm">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="mcltusrnm">
+                                        관리자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="mcltusrnm" name="mcltusrnm" placeholder="홍길동" style="width: 213px">
+                                </td>
+                                <th>
+                                    <label for="mcltusrhp">
+                                        관리자 연락처
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="mcltusrhp" name="mcltusrhp" placeholder="010-0000-0000" style="width: 180px">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+
+
+
+
+
+
+                <!-- Section -->
+
+            </div> <!--//tab-contens end-->
+
+            <!--
+                        <div style="height: 50px"></div>
+            -->
+
+
+        </div> <!--//tab-wrap end-->
+    </div>
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+    <!-- 팝업 -->
+    <!-- 파일 첨부 팝업 -->
 
     <div class="modal">
         <div class="popup-wrapper w700" id="popup1">
@@ -411,10 +395,17 @@
         </div>
     </div>
 
-</th:block>
 
+
+
+
+
+</th:block>
 <th:block layout:fragment="scripts">
-    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
 
     <script type="text/javascript">
 
@@ -580,7 +571,6 @@
         }
 
     </script>
-
 </th:block>
-</html>
 
+</html>

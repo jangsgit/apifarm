@@ -6,14 +6,11 @@
 <th:block layout:fragment="content">
 
 
-    <div class="layout-contents">
+    <div class="layout-contents" style="margin-bottom: 1%">
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
                 <h2>FieldService Report</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -47,17 +44,17 @@
             </ul>
         </div>
         <div class="tab-wrap">
-            <ul class="tab-links">
+            <!--<ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="목록">목록</a>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록">등록</a>
+                    <a href="#tab2" title="승인" id="inputTabLink">승인</a>
                 </li>
-            </ul>
-            <div class="tab-contents" style="height: 940px">
+            </ul>-->
+            <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" style="border-radius: 15px">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -77,6 +74,8 @@
                                     </ul>
                                 </dd>
                             </dl>
+
+
                             <dl>
                                 <dt>
                                     <label for="text1">
@@ -90,19 +89,21 @@
                                     </div>
                                 </dd>
                             </dl>
+
                             <dl>
                                 <dt>
-                                    <label for="text1">
+                                    <label for="searchuserid">
                                         ES명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="ES명 검색">
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                        <input type="text" id="searchuserid" name="searchuserid" class="input-srch" placeholder="ES명 검색">
+                                        <a  class="btn-srch" id="searchgrid2" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
                                     </div>
                                 </dd>
                             </dl>
+
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -119,25 +120,31 @@
                                         수정
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style="height: 650px; max-height: 680px"></div>
+                        <div id="theGrid" style="height: 320px"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
+
+
                 </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
+
+                <section class="tab-item" style="display: block; margin-top: 20px; border-radius: 15px">
                     <div class="section-top">
                         <div class="title-wrap">
-                            <h3>점검 등록</h3>
+                            <h3>점검등록</h3>
                         </div>
                         <div class="button-wrap">
                             <ul>
+                                <li>
+                                    <a class="btn file_btn" title="파일첨부" onclick="showPopup2()">
+
+                                        파일첨부<span>(0)</span>
+                                    </a>
+                                </li>
                                 <li>
                                     <a class="btn btn-excell" title="엑셀다운로드">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
@@ -161,7 +168,7 @@
                     </div>
                     <div class="table-wrap">
                         <table class="write-table">
-                            <caption>점검등록 테이블</caption>
+                            <caption>사용자권한신청조회 승인 테이블</caption>
                             <colgroup>
                                 <col class="wp12">
                                 <col class="wp40">
@@ -171,40 +178,43 @@
                             <tbody>
                             <tr>
                                 <th>
-                                    <label for="supplier">
+                                    <label>
                                         S-Number
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50">
+                                    <input type="text" id="divinm2" name="divinm" class="wp100">
                                 </td>
+
                                 <th>
-                                    <label for="supplier">
+                                    <label for="divinm">
                                         사이트명
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="사이트명">
+                                    <input type="text" id="divinm" name="divinm" class="wp100">
                                 </td>
                             </tr>
+
                             <tr>
                                 <th>
-                                    <label for="supplier">
+                                    <label for="rank">
                                         방문목적
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50">
+                                    <input type="text" id="rank" name="rank" class="wp100" placeholder="직급">
                                 </td>
                                 <th>
-                                    <label for="supplier">
+                                    <label for="tel">
                                         ES명(ES No.)
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50">
+                                    <input type="text" id="tel" name="tel" class="wp100">
                                 </td>
                             </tr>
+
                             <tr>
                                 <th>
                                     <label for="checkstdt">
@@ -223,6 +233,8 @@
                                     <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">
                                 </td>
                             </tr>
+
+
                             <tr>
                                 <th>
                                     <label for="checkusr">
@@ -246,32 +258,31 @@
                                 </td>
                             </tr>
 
+
                             <tr>
                                 <th>
-                                    <label for="checkitem">
+                                    <label for="reason">
                                         서비스발생사유
                                     </label>
                                 </th>
-                                <td colspan="3">
-                                    <div class="textarea-box">
-                                        <textarea id="checkitem" name="checkitem" maxlength="200" placeholder="서비스발생사유"></textarea>
-                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="reason" name="reason" class="wp100">
                                     </div>
                                 </td>
-                            </tr>
-                            <tr>
                                 <th>
-                                    <label for="checkplan">
+                                    <label for="reason">
                                         훈련계획
                                     </label>
                                 </th>
-                                <td colspan="3">
-                                    <div class="textarea-box">
-                                        <textarea id="checkplan" name="checkplan" maxlength="200" placeholder="훈련계획"></textarea>
-                                        <p class="text-count" id="text-count2" name="checkplan">0/200</p>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="reason" name="reason" class="wp100">
                                     </div>
                                 </td>
                             </tr>
+
+
                             <tr>
                                 <th>
                                     <label for="supplier">
@@ -282,44 +293,40 @@
                                     <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50">
                                 </td>
                             </tr>
-                            <tr>
-                                <th>
-                                    첨부파일
-                                </th>
-                                <td colspan="3">
-                                    <div id="uploadComponent1" class="upload-component">
-                                        <div class="upload-filebox">
-                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
-                                            <a class="btn" title="파일업로드">파일업로드</a>
-                                            <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
-                                            <p>Maximun upload file size <span>1GiB</span></p>
-                                        </div>
-                                        <div class="upload-filelist">
-                                            <div class="title">
-                                                <h5>Files (0)</h5>
-                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
-                                            </div>
-                                            <ul class="filelist">
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-            </div> <!--//tab-contens end-->
-        </div> <!--//tab-wrap end-->
-    </div> <!--//layout-contents end -->
 
+
+
+
+
+
+
+
+                <!-- Section -->
+
+            </div> <!--//tab-contens end-->
+
+            <!--
+                        <div style="height: 50px"></div>
+            -->
+
+
+        </div> <!--//tab-wrap end-->
+    </div>
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
     <!-- 팝업 -->
-    <div class="modal">
-        <div class="popup-wrapper w700" id="popup1">
+    <!-- 파일 첨부 팝업 -->
+
+    <div class="modal3">
+        <div class="popup-wrapper3 w800" id="popup2">
             <div class="popup-title">
-                <h3>점검일지 업로드</h3>
-                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                <a title="팝업닫기" onclick="closeFilePopup()" class="btn-popup-close">
                     <img src="/images/icon/btn-popup-close.svg" alt="닫기">
                 </a>
             </div>
@@ -331,48 +338,17 @@
                             <col class="wp20">
                             <col class="wp80">
                         </colgroup>
-                        <input type="hidden" id="popup-spuncode">
                         <tbody>
                         <tr>
                             <th>
-                                <label for="date6">등록일자</label>
+                                첨부파일
                             </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-date" readonly>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popup-checkusr">점검자</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="popuptext2">점검장소</label>
-                            </th>
-                            <td>
-                                <div class="input-clear">
-                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
-                                    <span class="btn-clear">×</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>첨부파일</th>
-                            <td>
-                                <div id="uploadComponent2" class="upload-component">
+                            <td colspan="3">
+                                <div id="uploadComponent1" class="upload-component">
                                     <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
+                                        <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
                                         <p>Maximun upload file size <span>1GiB</span></p>
                                     </div>
                                     <div class="upload-filelist">
@@ -382,6 +358,7 @@
                                         </div>
                                         <ul class="filelist">
                                         </ul>
+
                                     </div>
                                 </div>
                             </td>
@@ -391,8 +368,8 @@
                 </div>
             </div>
             <div class="popup-button">
-                <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
-                <button onclick="saveFile()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                <button onclick="closeFilePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">닫기</button>
+
             </div>
         </div>
     </div>
@@ -418,16 +395,37 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '등록일자', align: 'center', width: '*', minWidth: 220 },
-            { binding: '', header: '등록자', align: 'center', width: '*', minWidth: 180 },
-            { binding: '', header: '방문목적', align: 'center', width: '*', minWidth: 300 },
-            { binding: '', header: '서비스발생사유', align: 'center', width: '*', minWidth: 400 },
-            { binding: '', header: '사이트명', align: 'center', width: '*', minWidth: 180 },
-            { binding: '', header: 'S-N', align: 'center', width: '*', minWidth: 200 },
+            { binding: '', header: '등록일자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: '', header: '등록자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: '', header: '방문목적', align: 'center', width: '*', minWidth: 290 },
+            { binding: '', header: '서비스발생사유', align: 'center', width: '*', minWidth: 390 },
+            { binding: '', header: '사이트명', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: '', header: 'S-N', align: 'center', width: '0.5*', minWidth: 190 },
 
         ];
 
 
+        function closeFilePopup(){
+            const modal = document.querySelector('.modal3');
+
+            modal.style.display = 'none';
+        }
+
+        function showPopup2(){
+
+            const modal = document.querySelector('.modal3');
+            const modalContent = document.querySelector('.popup-wrapper3');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+        }
 
 
         function submitTextarea(event){
@@ -482,14 +480,7 @@
                 columns: columns,
                 itemsSource: viewdata
             });
-
-
-            let selector = new wijmo.grid.selector.Selector(theGrid, {
-                itemChecked: (e, ctx) => {
-                    SelectItem = theGrid.rows.filter(r => r.isSelected);
-
-                }
-            })
+            theGrid.rowHeaders.columns.splice(0,1);
 
 
 

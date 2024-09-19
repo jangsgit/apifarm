@@ -202,9 +202,17 @@ public class AuthListController {
     public AjaxResult delete(@RequestParam(value = "userid") String userid){
         AjaxResult result = new AjaxResult();
 
+
         List<String> paramList = new UtilClass().parseUserIds(userid);
 
         for(String param : paramList){
+
+            Optional<User> user = userRepository.findByUsername(param);
+            System.out.println(user);
+            if(user.isPresent()){
+                userRepository.deleteByUsername(param);
+            }
+
             tb_rp940Repository.deleteByUserid(param);
             tb_rp945Repository.deleteByUserid(param);
 
