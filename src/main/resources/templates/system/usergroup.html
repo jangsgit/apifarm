@@ -30,40 +30,13 @@
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
-                </li>
-                <li>
-                    <a href="#tab3" title="메뉴권한">메뉴권한</a>
+                    <a href="#tab2" title="메뉴권한">메뉴권한</a>
                 </li>
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
-                <section class="tab-item" id="tab1">
-                    <div class="section-top" style="float: right">
-                        <div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
-                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
-                                        수정
-                                    </a>
-                                </li>
-                                <li>
-                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
-                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
-                                        삭제
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> <!--//section-top end -->
-                    <div class="container-fluid">
-                        <p id="selectedItem"></p>
-                        <div id="theGrid" style=" height: 500px"></div>
-                    </div>
-                </section>
-                <!-- Section -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item" id="tab1" style="height: 820px;">
+
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>사용자 등록</h3>
@@ -136,11 +109,114 @@
                             </tbody>
                         </table>
                     </div>
+
+
+                    <div class="section-top" style="float: right; margin-top: 24px;">
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 650px"></div>
+                    </div>
+
+
+
+
                 </section>
+                <!-- Section -->
+               <!-- <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>사용자 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="code">
+                                        코드
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="code" name="code" class="wp100" maxlength="30" placeholder="코드">
+                                    <input type="hidden" id="id" name="id" class="wp100" maxlength="30" placeholder="id">
+                                </td>
+                                <th>
+                                    <label for="name">
+                                        그룹명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="name" name="name" class="wp100" maxlength="50" placeholder="그룹명">
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                    설명
+                                </th>
+                                <td>
+                                    <input type="text" id="description" name="description" maxlength="100" class="wp100" placeholder="설명">
+                                </td>
+                                <th>
+                                    <label for="name">
+                                        기본화면
+                                    </label>
+                                </th>
+                                <td>
+                                    <select class="mg-r5" id="gmenu" name="gmenu" style="width: 100%">
+                                        <option></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>-->
 
                 <!--section 3-->
 
-                <section class="tab-item" id="tab3" style="height: 820px;">
+                <section class="tab-item" id="tab2" style="height: 820px;">
                     <div class="section-top">
                         <form id="searchForm" autocomplete="off">
                             <div class="search-wrap">
@@ -304,14 +380,14 @@
                     document.getElementById('description').value = item.description;
                     document.getElementById('gmenu').value = item.gmenu;
 
-                    updateTabLink('id');
+                  /*  updateTabLink('id');
 
                     let tabIds = '#tab2';
                     $(".tab-item").hide();
                     $(tabIds).show();
 
                     $("#listTabLink").parent().removeClass("active");
-                    $("#inputTabLink").parent().addClass("active");
+                    $("#inputTabLink").parent().addClass("active");*/
                 }
             });
 
@@ -501,12 +577,12 @@
                 return false;
             }
 
-            let tabIds = '#tab2';
+            /*let tabIds = '#tab2';
             $(".tab-item").hide();
             $(tabIds).show();
 
             $("#listTabLink").parent().removeClass("active");
-            $("#inputTabLink").parent().addClass("active");
+            $("#inputTabLink").parent().addClass("active");*/
 
 
             document.getElementById('code').value = selectedItem._data.code;
@@ -515,7 +591,7 @@
             document.getElementById('description').value = selectedItem._data.description;
             document.getElementById('gmenu').value = selectedItem._data.gmenu;
 
-            updateTabLink('id');
+        /*    updateTabLink('id');*/
 
         }
 

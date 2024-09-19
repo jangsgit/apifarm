@@ -11,9 +11,9 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>사용자 관리</h2>
-                <a title="북마크" class="bookmark toggle">
-                    내메뉴
-                </a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내메뉴-->
+<!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -28,14 +28,163 @@
                 <li>
                     <a href="#tab1" title="목록" id="listTabLink">목록</a>
                 </li>
-                <li>
-                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
-                </li>
+<!--                <li>-->
+<!--                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>-->
+<!--                </li>-->
             </ul>
             <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
+
                     <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>사용자 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete2">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        사용자ID
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="userid" name="userid" class="wp100" maxlength="50" placeholder="사용자ID">
+                                    <input type="hidden" id="id" name="id" />
+                                </td>
+                                <th>
+                                    <label for="supplier2">
+                                        사용자명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="usernm" name="usernm" class="wp100" maxlength="50" placeholder="사용자명">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    사용자그룹
+                                </th>
+                                <td>
+                                    <select id="authType" name="authType" class="wp30">
+
+                                    </select>
+                                </td>
+                                <th>
+                                    산단
+                                </th>
+                                <td>
+                                    <ul id="dataList">
+                                        <li>
+                                            <select class="wp25 mg-r5" id="firstSelect" name="spworkcd" onchange="updateNextSelect(this)">
+
+                                                <option></option>
+                                            </select>
+                                            <select class="wp25 mg-r5" id="secondSelect" name="spcompcd" onchange="updateNextSelect(this)">
+                                                <option></option>
+                                            </select>
+                                            <select class="wp25 mg-r5" id="thirdSelect" name="spplancd">
+                                                <option></option>
+                                            </select>
+                                            <button type="button" onclick="addselectField(this)" class="btn" style="width: 107px">발전시설 추가</button>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        비밀번호
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="password" id="password" name="password" class="wp100" maxlength="50" autocomplete="new-password" placeholder="비밀번호">
+                                </td>
+                                <th>
+                                    <label for="supplier2">
+                                        이메일
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="email" id="email" name="email" class="wp100" maxlength="30" autocomplete="off" placeholder="이메일">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        휴대전화
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="tel" name="tel" class="wp100" maxlength="50" placeholder="휴대전화">
+                                </td>
+                                <th>
+                                    <label for="supplier2">
+                                        부서명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="divinm2" name="divinm2" class="wp100" maxlength="30" placeholder="부서명">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="agencycd">
+                                        소속사
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-clear">
+                                        <select class="mg-r5 wp30" id="agencycd" name="agencycd">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                </td>
+
+                                <th></th>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+
+
+                    <div class="section-top" style="margin-top: 24px;">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
@@ -109,13 +258,13 @@
                     <!--//section-top end -->
                     <div class="container-fluid">
                         <p id="selectedItem"></p>
-                        <div id="theGrid" style="height: 500px;"></div>
+                        <div id="theGrid" style="max-height: 400px;"></div>
                     </div>
                     <div class="btn-wrap">
                     </div>
                 </section>
                 <!-- Section -->
-                <section class="tab-item" id="tab2">
+               <!-- <section class="tab-item" id="tab2">
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>사용자 등록</h3>
@@ -256,7 +405,8 @@
                             </tbody>
                         </table>
                     </div>
-                </section>
+                </section>-->
+
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
@@ -474,16 +624,19 @@
                         }
                     })
 
-                    //탭 수정으로 업더이트
+                  /*  //탭 수정으로 업더이트
                     updateTabLink('id');
                     let tabIds = '#tab2';
                     $(".tab-item").hide();
                     $(tabIds).show();
 
                     $("#listTabLink").parent().removeClass("active");
-                    $("#inputTabLink").parent().addClass("active");
+                    $("#inputTabLink").parent().addClass("active");*/
                 }
             });
+
+
+
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -711,7 +864,7 @@
             document.getElementById('divinm2').value = selectedItem.divinm;
             document.getElementById('agencycd').value = selectedItem.agencycd;
 
-            //탭 수정으로 업더이트
+          /*  //탭 수정으로 업더이트
             updateTabLink('id');
 
             let tabIds = '#tab2';
@@ -719,20 +872,20 @@
             $(tabIds).show();
 
             $("#listTabLink").parent().removeClass("active");
-            $("#inputTabLink").parent().addClass("active");
+            $("#inputTabLink").parent().addClass("active");*/
 
             AjaxFunction.PostAjaxRequest('/api/system/user/modfind', true, 'application/json', true, userid, function (data) {
                 if (data.success) {
 
                     console.log('data.data', data.data);
 
-                    let tabIds = '#tab2';
+                  /*  let tabIds = '#tab2';
                     $(".tab-item").hide();
                     $(tabIds).show();
 
                     $("#listTabLink").parent().removeClass("active");
                     $("#inputTabLink").parent().addClass("active");
-
+*/
 
                     $('#password').prop('readonly', true);
 
@@ -807,8 +960,6 @@
 
                 }
             })
-
-
 
         }
 
