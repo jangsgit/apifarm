@@ -53,7 +53,8 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>발전량 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+                <h2>발전량 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                      alt="알람 아이콘"></a>
                 <!--<a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>-->
@@ -84,7 +85,8 @@
                     <input type="hidden" id="spcompnm" name="spcompnm">
                 </li>
                 <li>
-                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
                         <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
                     </select>
                     <input type="hidden" id="spplannm" name="spplannm">
@@ -101,10 +103,13 @@
                     <a href="#tab2" title="수정">수정</a>
                 </li>
                 <li>
-                    <a href="#tab3" title="기간별조회">기간별 조회</a>
+                    <a href="#tab3" title="시간별조회">시간별 조회</a>
                 </li>
                 <li>
-                    <a href="#tab4" title="기간별대비">기간별 대비</a>
+                    <a href="#tab4" title="기간별조회">기간별 조회</a>
+                </li>
+                <li>
+                    <a href="#tab5" title="기간별대비">기간별 대비</a>
                 </li>
             </ul>
             <div class="tab-contents" style="height: 830px;">
@@ -157,13 +162,15 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab1')" data-popup="popup2"
+                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab1')"
+                                       data-popup="popup2"
                                        id="btnShowDateList">
                                         일자목록
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-popup-open" title="" onclick="showPopup(event)" data-popup="popup1"
+                                    <a class="btn btn-popup-open" title="" onclick="showPopup(event)"
+                                       data-popup="popup1"
                                        id="btnShowUpload">
                                         <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
                                         엑셀등록
@@ -227,7 +234,8 @@
                         <div class="button-wrap">
                             <ul>
                                 <li>
-                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab2')" data-popup="popup2"
+                                    <a class="btn btn-popup-open" title="" onclick="showPopupWithDateList('tab2')"
+                                       data-popup="popup2"
                                        id="btnShowDateList2">
                                         일자목록
                                     </a>
@@ -254,69 +262,17 @@
                 </section>
 
                 <!-- tab3 -->
-                <section class="tab-item" id="tab3">
+                <section class="tab-item" id="tab3" style="height: 840px;">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="periodType">
-                                        기간유형<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
-                                                <option value="hourly">시간별</option>
-                                                <option value="monthly" selected>월별</option>
-                                                <option value="quarterly">분기별</option>
-                                                <option value="halfyearly">반기별</option>
-                                                <option value="yearly">연도별</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    조회연도<span class="eq">*</span>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="yearSelectTab1" name="yearSelectTab1">
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    조회기간<span class="eq">*</span>
+                                    조회일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box" id="dateBoxContainer">
                                         <li id="startDateContainer">
-                                            <input type="month" id="startDate" name="startDate">
-                                        </li>
-                                        <li id="endDateContainer">
-                                            <input type="month" id="endDate" name="endDate">
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="genename">
-                                        발전기명<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="genename" name="genename">
-                                                <!-- 동적으로 발전기명을 가져와서 옵션으로 추가 -->
-                                            </select>
+                                            <input type="date" id="startDate" name="startDate" value="2024-09-20">
                                         </li>
                                         <li>
                                             <a class="btn btn-delete" title="검색" id="btn-search"
@@ -329,31 +285,15 @@
                                 </dd>
                             </dl>
                         </div>
-
-                        <!--<div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>-->
                     </div> <!--//section-top end -->
 
-                    <div class="row row-2">
-                        <section class="wp50" style="border-radius: 10px;">
-                            <!-- 슬라이드 차트 -->
-                            <div id="chartHolder1" style="width:600px; height:670px;"></div>
-                        </section>
-                        <section class="wp50">
-                            <!-- 그리드 -->
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid3" style="max-height: 670px;"></div>
-                            </div>
-                        </section>
+                    <div class="row" style="margin-bottom: 10px">
+                        <div class="chart-wrap">
+                            <div id="chartHolder3" style="height:269px; width:100%;"></div>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div id="theGrid3" style="height:269px; width:100%;"></div>
                     </div>
                 </section>
 
@@ -363,56 +303,19 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    <label for="comparisonType">
-                                        비교유형<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="comparisonType" name="comparisonType">
-                                                <option value="YoY">YoY</option>
-                                                <option value="QoQ">QoQ</option>
-                                                <option value="MoM">MoM</option>
-                                                <option value="YTD">YTD</option>
-                                            </select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
                                     조회기간<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box" id="dateBoxContainerTab2">
-                                        <li id="startDateContainerTab2">
-                                            <select id="startDateTab2" name="startDateTab2"></select>
+                                    <ul class="date-box" id="dateBoxContainer">
+                                        <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
                                         </li>
-                                        <li id="endDateContainerTab2">
-                                            <select id="endDateTab2" name="endDateTab2"></select>
-                                        </li>
-                                    </ul>
-                                </dd>
-                            </dl>
-
-                            <dl>
-                                <dt>
-                                    <label for="genename2">
-                                        발전기명<span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <ul class="date-box">
-                                        <li>
-                                            <select id="genename2" name="genename">
-                                                <!-- 동적으로 발전기명을 가져와서 옵션으로 추가 -->
-                                            </select>
+                                        <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-12">
                                         </li>
                                         <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-searchTab2"
-                                               onclick="searchDataTab2()">
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
                                                 <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                                 검색
                                             </a>
@@ -421,31 +324,304 @@
                                 </dd>
                             </dl>
                         </div>
-
-                        <!--<div class="button-wrap">
-                            <ul>
-                                <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
-                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                        엑셀다운로드
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>-->
                     </div> <!--//section-top end -->
 
-                    <div class="row row-2">
-                        <section class="wp50" style="border-radius: 10px;">
-                            <!-- 차트 -->
-                            <div id="chartHolder2" style="width:600px; height:670px;"></div>
-                        </section>
-                        <section class="wp50">
-                            <!-- 그리드 -->
-                            <div class="container-fluid">
-                                <p id="selectedItem"></p>
-                                <div id="theGrid4" style="max-height: 670px;"></div>
-                            </div>
-                        </section>
+                    <!-- 4분할 레이아웃 -->
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                <div class="title-wrap">
+                                    <h3>월별</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab4_1" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab4_2" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab4_1 -->
+                                    <div class="tab-item-sub" id="tab4_1">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder4_1" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4_2 -->
+                                    <div class="tab-item-sub" id="tab4_2">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4_1" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 350px;">
+                                <div class="title-wrap">
+                                    <h3>분기별</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab4_3" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab4_4" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab4_3 -->
+                                    <div class="tab-item-sub" id="tab4_3">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder4_2" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4_4 -->
+                                    <div class="tab-item-sub" id="tab4_4">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4_2" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                <div class="title-wrap">
+                                    <h3>반기별</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab4_5" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab4_6" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab4_5 -->
+                                    <div class="tab-item-sub" id="tab4_5">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder4_3" style="height:269px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab4_6 -->
+                                    <div class="tab-item-sub" id="tab4_6">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4_3" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 350px;">
+                                <div class="title-wrap">
+                                    <h3>연도별</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab4_7" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab4_8" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab4_7 -->
+                                    <div class="tab-item-sub" id="tab4_7">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder4_4" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab4_8 -->
+                                    <div class="tab-item-sub" id="tab4_8">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4_4" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- tab5 -->
+                <section class="tab-item" id="tab5">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainer">
+                                        <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2023-01">
+                                        </li>
+                                        <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-12">
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <!-- <dl>
+                                 <dt>
+                                     <label for="genename2">
+                                         발전기명<span class="eq">*</span>
+                                     </label>
+                                 </dt>
+                                 <dd>
+                                     <ul class="date-box">
+                                         <li>
+                                             <select id="genename2" name="genename">
+                                                 &lt;!&ndash; 동적으로 발전기명을 가져와서 옵션으로 추가 &ndash;&gt;
+                                             </select>
+                                         </li>
+                                     </ul>
+                                 </dd>
+                             </dl>-->
+                        </div>
+                    </div> <!--//section-top end -->
+
+                    <!-- 4분할 레이아웃 -->
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                <div class="title-wrap">
+                                    <h3>YoY</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab5_1" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab5_2" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_1 -->
+                                    <div class="tab-item-sub" id="tab5_1">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder5_1" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_2 -->
+                                    <div class="tab-item-sub" id="tab5_2">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5_1" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 350px;">
+                                <div class="title-wrap">
+                                    <h3>QoQ</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab5_3" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab5_4" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_3 -->
+                                    <div class="tab-item-sub" id="tab5_3">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder5_2" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_4 -->
+                                    <div class="tab-item-sub" id="tab5_4">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5_2" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                <div class="title-wrap">
+                                    <h3>MoM</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab5_5" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab5_6" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_5 -->
+                                    <div class="tab-item-sub" id="tab5_5">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder5_3" style="height:269px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab2_6 -->
+                                    <div class="tab-item-sub" id="tab5_6">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5_3" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 350px;">
+                                <div class="title-wrap">
+                                    <h3>YTD</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab5_7" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab5_8" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_7 -->
+                                    <div class="tab-item-sub" id="tab5_7">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder5_4" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_8 -->
+                                    <div class="tab-item-sub" id="tab5_8">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5_4" style="height:269px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </section>
             </div> <!--//tab-contens end-->
@@ -558,8 +734,8 @@
 
     <script type="text/javascript">
 
-        let theGrid1, theGrid2, theGrid3, theGrid4;
-        let viewdata1, viewdata2, viewdata3, viewdata4;
+        let theGrid1, theGrid2;
+        let viewdata1, viewdata2;
 
         // DOM 로드 완료 시 실행
         $(document).ready(function (e) {
@@ -583,30 +759,45 @@
                 // 현재 탭 활성화
                 $(this).parent('li').addClass('active').siblings().removeClass('active');
 
-                if (currentAttrValue === '#tab3') {
-                    if (!$('#chartHolder1').data('initialized')) {
-                        rMateChartH5.create("chart1", "chartHolder1", "rMateOnLoadCallFunction=chartReadyHandler", "120%", "100%");
-                        $('#chartHolder1').data('initialized', true);
-                        loadMonthlyData(); // 월별 데이터 로드 및 차트 업데이트
-                    } else {
-                        updateChart('chart1', 'chartHolder1');
-                    }
-                }
+                // if (currentAttrValue === '#tab3') {
+                //     if (!$('#chartHolder1').data('initialized')) {
+                //         rMateChartH5.create("chart1", "chartHolder1", "rMateOnLoadCallFunction=chartReadyHandler", "120%", "100%");
+                //         $('#chartHolder1').data('initialized', true);
+                //         loadMonthlyData(); // 월별 데이터 로드 및 차트 업데이트
+                //     } else {
+                //         updateChart('chart1', 'chartHolder1');
+                //     }
+                // }
 
-                if (currentAttrValue === '#tab4') {
-                    if (!$('#chartHolder2').data('initialized')) {
-                        rMateChartH5.create("chart2", "chartHolder2", "rMateOnLoadCallFunction=chartReadyHandler2", "120%", "100%");
-                        $('#chartHolder2').data('initialized', true);
-                        loadInitialDataTab2(); // Tab2 초기 데이터 로드 및 차트 생성
-                    } else {
-                        updateChart('chart2', 'chartHolder2');
-                    }
+                // if (currentAttrValue === '#tab4') {
+                //     if (!$('#chartHolder2').data('initialized')) {
+                //         rMateChartH5.create("chart2", "chartHolder2", "rMateOnLoadCallFunction=chartReadyHandler2", "120%", "100%");
+                //         $('#chartHolder2').data('initialized', true);
+                //         loadInitialDataTab2(); // Tab2 초기 데이터 로드 및 차트 생성
+                //     } else {
+                //         updateChart('chart2', 'chartHolder2');
+                //     }
+                // }
+
+                // 0919
+                if (currentAttrValue === '#tab3') {
+                    initTab3Chart();
+                    initTab3Grid();
+                } else if (currentAttrValue === '#tab4') {
+                    initTab4Charts();
+                    initTab4Grids();
+                } else if (currentAttrValue === '#tab5') {
+                    initTab5Charts();
+                    initTab5Grids();
                 }
             });
 
-            document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
+            // 초기 탭 설정 (페이지 로드 시 첫 번째 탭 활성화)
+            $('ul.tab-links li:first-child a').click();
 
-            loadInitialDataTab2();
+            // document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
+
+            // loadInitialDataTab2();
         });
 
         // 페이지 초기화 함수
@@ -624,31 +815,44 @@
 
             // ==========
 
-            document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
+            // document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
 
-            loadYearlyData(); // tab1 연도 데이터를 로드
-            loadYearlyDataTab2(); // tab2 연도 데이터를 로드
+            // loadYearlyData(); // tab1 연도 데이터를 로드
+            // loadYearlyDataTab2(); // tab2 연도 데이터를 로드
 
-            updateYearInPeriod(); // 조회연도 변경 시 조회기간의 연도도 동기화
-            updatePeriodInputs(); // 페이지 로드 시 startDate와 endDate 초기화
+            // updateYearInPeriod(); // 조회연도 변경 시 조회기간의 연도도 동기화
+            // updatePeriodInputs(); // 페이지 로드 시 startDate와 endDate 초기화
             loadGeneratorNames(); // 발전기명을 서버에서 로드
-            loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
+            // loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
 
             // 슬라이드 차트 초기화
-            chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
-            chartReadyHandler2("chart2", "chartHolder2", []);
+            // chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
+            // chartReadyHandler2("chart2", "chartHolder2", []);
 
             // tab3 그리드 초기화
-            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-                autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-                columns: [] // 초기 열 설정
-            });
+            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
+            //     columns: [] // 초기 열 설정
+            // });
 
             // tab4 그리드 초기화
-            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-                autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-                columns: [] // 초기 열 설정
-            });
+            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
+            //     columns: [] // 초기 열 설정
+            // });
+
+            // 0919 하드코딩
+
+            // tab3와 tab4의 초기화는 해당 탭이 선택될 때만 수행하도록 변경
+            // $('ul.tab-links li a').on('click', function () {
+            //     var currentAttrValue = $(this).attr('href');
+            //     if (currentAttrValue === '#tab3') {
+            //         initTab3();
+            //     } else if (currentAttrValue === '#tab4') {
+            //         initTab4Charts();
+            //         initTab4Grids();
+            //     }
+            // });
 
         }
 
@@ -768,7 +972,14 @@
                             {binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0'},
                             {binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0'},
                             {binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevaluet', header: '합계', width: '*', minWidth: 110, align: 'right', format: 'n0'},
+                            {
+                                binding: 'mevaluet',
+                                header: '합계',
+                                width: '*',
+                                minWidth: 110,
+                                align: 'right',
+                                format: 'n0'
+                            },
                             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -794,348 +1005,348 @@
         // 차트 =============================================================
 
         // tab3 차트
-        function chartReadyHandler(id, chartHolderId, gridData) {
-            // id에 해당하는 차트가 생성되었는지 확인
-            var chart = document.getElementById(id);
-            if (!chart) {
-                // console.error("차트가 생성되지 않았습니다: " + id);
-                return;
-            }
-
-            if (!gridData) {
-                // console.error("그리드 데이터가 정의되지 않았습니다.");
-                return;
-            }
-
-            // 그리드 데이터를 슬라이드 차트의 형식에 맞게 변환
-            var transformedData = transformDataForChart(gridData);
-
-            // 각 차트의 레이아웃 정의
-            var layout1 = getCartesianLayout("Column2D", "2D Column Chart - MultiSeries", transformedData.fields);
-            var layout2 = getCartesianLayout("Line2D", "Line Chart with ItemRenderer", transformedData.fields,
-                ["CircleItemRenderer", "TriangleItemRenderer", "RectangleItemRenderer"] // 각 필드에 대한 itemRenderer 설정
-            );
-            var radarLayout = getRadarLayout(transformedData.fields);
-
-            // 슬라이드 차트에 적용할 레이아웃과 데이터 배열 설정
-            var layoutSet = [layout1, layout2, radarLayout];
-            var dataSet = [transformedData.data, transformedData.data, transformedData.data];
-
-            // 슬라이드 차트 레이아웃 및 데이터 설정
-            chart.setSlideLayoutSet(layoutSet);
-            chart.setSlideDataSet(dataSet);
-        }
-
-        // tab2 차트
-        function chartReadyHandler2(id, chartHolderId, gridData, comparisonType) {
-            const chart = document.getElementById(id);
-            if (!chart || !gridData) return;
-
-            const {data, fields} = transformDataForChartTab2(gridData, comparisonType);
-
-            const layout1 = getCartesianLayout("Column2D", "2D Column Chart", fields);
-            const layout2 = getCartesianLayout("Line2D", "Line Chart", fields, ["CircleItemRenderer"]);
-
-            const layoutSet = [layout1, layout2];
-            const dataSet = [data, data];
-
-            chart.setSlideLayoutSet(layoutSet);
-            chart.setSlideDataSet(dataSet);
-        }
-
-
-        function updateChart(id, holderId) {
-            var chart = document.getElementById(id);
-            if (!chart) return;
-
-            const gridData = (id === 'chart1') ? theGrid3.itemsSource.items : theGrid4.itemsSource.items;
-            const transformedData = (id === 'chart1') ? transformDataForChart(gridData) : transformDataForChartTab2(gridData);
-            chartReadyHandler(id, holderId, transformedData);
-        }
-
-
-        // 차트 디자인 가이드 색상 코드
-        const chartColors = [
-            "#62b2fd",
-            "#01dbab",
-            "#ffa336",
-            "#f99bab",
-            "#55667f",
-            "#82e8e8",
-            "#909bff",
-            "#f36f40"
-        ];
-
-        // 차트마다 형식이 다르기 때문에 다른 레이아웃 함수를 만들어야 합니다.
-        // 다른 유형의 차트 이용시, layout 함수 추가해서 사용하세요.
-
-        // Cartesian 차트 레이아웃 정의
-        function getCartesianLayout(type, title, dataFields, itemRenderers = []) {
-            var layout = "<rMateChart borderStyle='none'>"
-                + "<Options><Caption text='" + "' />" // 차트 제목
-                + "<SubCaption text='' textAlign='center' paddingBottom='20'/>" // 차트 부제목
-                + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
-                + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/></Options>"
-                + "<" + type + "Chart showDataTips='true'>"
-                + "<series>";
-
-            for (var i = 0; i < dataFields.length; ++i) {
-                var itemRenderer = itemRenderers[i] ? " itemRenderer='" + itemRenderers[i] + "'" : "";
-                var color = chartColors[i % chartColors.length]; // 색상을 순서대로 할당
-
-                if (type === "Line2D") {
-                    layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
-                        + "<showDataEffect><SeriesInterpolate duration='700'/></showDataEffect>"
-                        + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
-                        + "</" + type + "Series>";
-                } else {
-                    layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
-                        + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
-                        + "<fill>"
-                        + "<SolidColor color='" + color + "'/>" // 색상 적용
-                        + "</fill>"
-                        + "</" + type + "Series>";
-                }
-            }
-
-            layout += "</series>"
-                + "<horizontalAxis>"
-                + "<CategoryAxis categoryField='period'/>"
-                + "</horizontalAxis>"
-                + "<verticalAxis>"
-                + "<LinearAxis formatter='{numfmt}'/>"
-                + "</verticalAxis>"
-                + "</" + type + "Chart>"
-                + "</rMateChart>";
-
-            return layout;
-        }
-
-
-        // Radar 차트 레이아웃 정의
-        function getRadarLayout(dataFields) {
-            var radarLayout =
-                "<rMateChart borderStyle='none'>"
-                + "<Options>"
-                + "<Caption text='' />"
-                + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
-                + "</Options>"
-                + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
-                + "<RadarChart type='polygon' paddingTop='20' paddingBottom='20' showDataTips='true'>"
-                + "<radialAxis>"
-                + "<LinearAxis id='rAxis' formatter='{numfmt}'/>"
-                + "</radialAxis>"
-                + "<radialAxisRenderers>"
-                + "<Axis2DRenderer axis='{rAxis}' horizontal='true' tickPlacement='outside' tickLength='4'>"
-                + "<axisStroke>"
-                + "<Stroke color='#555555'/>"
-                + "</axisStroke>"
-                + "</Axis2DRenderer>"
-                + "</radialAxisRenderers>"
-                + "<angularAxis>"
-                + "<CategoryAxis categoryField='period' displayName='Year'/>"
-                + "</angularAxis>"
-                + "<series>";
-
-            for (var i = 0; i < dataFields.length; ++i) {
-                var color = chartColors[i % chartColors.length]; // 색상 순서대로 적용
-
-                radarLayout += "<RadarSeries field='" + dataFields[i] + "' displayName='" + dataFields[i] + "' fillLineArea='false'>"
-                    + "<showDataEffect>"
-                    + "<SeriesInterpolate duration='700'/>"
-                    + "</showDataEffect>"
-                    + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
-                    + "</RadarSeries>";
-            }
-
-            radarLayout += "</series>"
-                + "</RadarChart>"
-                + "</rMateChart>";
-
-            return radarLayout;
-        }
-
-        // 콤비네이션 차트 레이아웃
-        function getCombinationChartLayout() {
-            return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Options>
-        <Caption text=""/>
-        <Legend defaultMouseOverAction="true"/>
-    </Options>
-    <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
-    <Combination2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="period"/>
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
-        </verticalAxis>
-        <series>
-            <Column2DSet type="clustered">
-                <series>
-                    <Column2DSeries yField="value1" displayName="2023" fill="#62b2fd">
-                        <showDataEffect><SeriesInterpolate/></showDataEffect>
-                    </Column2DSeries>
-                    <Column2DSeries yField="value2" displayName="2024" fill="#01dbab">
-                        <showDataEffect><SeriesInterpolate/></showDataEffect>
-                    </Column2DSeries>
-                </series>
-            </Column2DSet>
-            <Line2DSeries yField="growth" displayName="증감율 (%)" itemRenderer="DiamondItemRenderer">
-                <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
-                <showDataEffect><SeriesInterpolate/></showDataEffect>
-                <verticalAxis>
-                    <LinearAxis id="vAxis2" interval="10" maximum="100"/>
-                </verticalAxis>
-            </Line2DSeries>
-        </series>
-        <verticalAxisRenderers>
-            <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
-            <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
-        </verticalAxisRenderers>
-    </Combination2DChart>
-</rMateChart>`;
-        }
-
-        function getLineChartLayout() {
-            return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Options>
-        <Caption text=""/>
-        <Legend defaultMouseOverAction="true"/>
-    </Options>
-    <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="period"/>
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="value1" displayName="2023" itemRenderer="CircleItemRenderer">
-                <lineStroke><Stroke color="#62b2fd" weight="2"/></lineStroke>
-                <showDataEffect><SeriesInterpolate/></showDataEffect>
-            </Line2DSeries>
-            <Line2DSeries yField="value2" displayName="2024" itemRenderer="DiamondItemRenderer">
-                <lineStroke><Stroke color="#01dbab" weight="2"/></lineStroke>
-                <showDataEffect><SeriesInterpolate/></showDataEffect>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>`;
-        }
-
-
-        // 그리드 데이터를 차트에 맞게 변환 (tab3)
-        function transformDataForChart(gridData) {
-            // if (!gridData) {
-            //     // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
-            //     return { fields: [], data: [] };
-            // }
-
-            const dataFields = [];
-            const chartData = [];
-
-            // 데이터를 변환하여 차트에 사용할 수 있도록 변환
-            gridData.forEach(row => {
-                const dataItem = {period: row.period};
-                for (const key in row) {
-                    if (key !== 'period' && key !== 'powernm') {
-                        if (!dataFields.includes(key)) {
-                            dataFields.push(key);
-                        }
-                        dataItem[key] = row[key];
-                    }
-                }
-                chartData.push(dataItem);
-            });
-
-            return {
-                fields: dataFields,
-                data: chartData
-            };
-        }
-
-        // 그리드 데이터를 차트에 맞게 변환 (tab2)
-        function transformDataForChartTab2(gridData, comparisonType) {
-            let chartData = [];
-            let dataFields = [];
-            let firstYear, secondYear;
-
-            switch (comparisonType) {
-                case "YoY":
-                    // 연도 기반 데이터 처리
-                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-                    dataFields = [firstYear, secondYear];
-
-                    gridData.forEach(row => {
-                        const dataItem = {
-                            period: row.period || `${row.month}월`,
-                            [firstYear]: parseFloat(row.value1) || 0,
-                            [secondYear]: parseFloat(row.value2) || 0
-                        };
-                        chartData.push(dataItem);
-                    });
-                    break;
-
-                case "QoQ":
-                    // 분기별 데이터 처리
-                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-                    dataFields = [firstYear, secondYear];
-
-                    gridData.forEach(row => {
-                        const quarter = `Q${row.quarter}`;  // 분기를 'Q1', 'Q2', 등으로 표시
-                        const dataItem = {
-                            period: quarter,
-                            [firstYear]: parseFloat(row.value1) || 0,
-                            [secondYear]: parseFloat(row.value2) || 0
-                        };
-                        chartData.push(dataItem);
-                    });
-                    break;
-
-                case "MoM":
-                    // 월 기반 데이터 처리
-                    const month = document.getElementById("startDateTab2").value.split("-")[1]; // MoM의 경우 시작 월과 종료 월이 같다고 가정
-                    dataFields = [month];
-
-                    gridData.forEach(row => {
-                        const dataItem = {
-                            period: `${row.month}월`,
-                            [month]: parseFloat(row.value1) || 0
-                        };
-                        chartData.push(dataItem);
-                    });
-                    break;
-
-                case "YTD":
-                    // YTD일 경우, startYear와 endYear에서 누적 발전량을 가져옴
-                    firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-                    secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-                    dataFields = [firstYear, secondYear]; // 두 연도의 누적 발전량 필드를 설정
-
-                    // 중복된 월을 제거하기 위한 Set 객체
-                    let seenMonths = new Set();
-
-                    // 데이터를 월별로 그룹화 및 중복 월 제거
-                    chartData = gridData.filter(row => {
-                        if (seenMonths.has(row.month)) {
-                            return false;  // 중복된 월이면 필터링하여 제외
-                        }
-                        seenMonths.add(row.month);  // 중복 방지를 위해 Set에 추가
-                        return true;  // 중복이 아닌 경우 유지
-                    }).map(row => ({
-                        period: `${row.month}월`,  // 월별 데이터
-                        [firstYear]: parseFloat(row.cumulative_start_year) || 0, // 첫 번째 연도의 누적 발전량
-                        [secondYear]: parseFloat(row.cumulative_end_year) || 0  // 두 번째 연도의 누적 발전량
-                    }));
-                    break;
-            }
-
-            return { data: chartData, fields: dataFields };
-        }
+        //         function chartReadyHandler(id, chartHolderId, gridData) {
+        //             // id에 해당하는 차트가 생성되었는지 확인
+        //             var chart = document.getElementById(id);
+        //             if (!chart) {
+        //                 // console.error("차트가 생성되지 않았습니다: " + id);
+        //                 return;
+        //             }
+        //
+        //             if (!gridData) {
+        //                 // console.error("그리드 데이터가 정의되지 않았습니다.");
+        //                 return;
+        //             }
+        //
+        //             // 그리드 데이터를 슬라이드 차트의 형식에 맞게 변환
+        //             var transformedData = transformDataForChart(gridData);
+        //
+        //             // 각 차트의 레이아웃 정의
+        //             var layout1 = getCartesianLayout("Column2D", "2D Column Chart - MultiSeries", transformedData.fields);
+        //             var layout2 = getCartesianLayout("Line2D", "Line Chart with ItemRenderer", transformedData.fields,
+        //                 ["CircleItemRenderer", "TriangleItemRenderer", "RectangleItemRenderer"] // 각 필드에 대한 itemRenderer 설정
+        //             );
+        //             var radarLayout = getRadarLayout(transformedData.fields);
+        //
+        //             // 슬라이드 차트에 적용할 레이아웃과 데이터 배열 설정
+        //             var layoutSet = [layout1, layout2, radarLayout];
+        //             var dataSet = [transformedData.data, transformedData.data, transformedData.data];
+        //
+        //             // 슬라이드 차트 레이아웃 및 데이터 설정
+        //             chart.setSlideLayoutSet(layoutSet);
+        //             chart.setSlideDataSet(dataSet);
+        //         }
+        //
+        //         // tab2 차트
+        //         function chartReadyHandler2(id, chartHolderId, gridData, comparisonType) {
+        //             const chart = document.getElementById(id);
+        //             if (!chart || !gridData) return;
+        //
+        //             const {data, fields} = transformDataForChartTab2(gridData, comparisonType);
+        //
+        //             const layout1 = getCartesianLayout("Column2D", "2D Column Chart", fields);
+        //             const layout2 = getCartesianLayout("Line2D", "Line Chart", fields, ["CircleItemRenderer"]);
+        //
+        //             const layoutSet = [layout1, layout2];
+        //             const dataSet = [data, data];
+        //
+        //             chart.setSlideLayoutSet(layoutSet);
+        //             chart.setSlideDataSet(dataSet);
+        //         }
+        //
+        //
+        //         function updateChart(id, holderId) {
+        //             var chart = document.getElementById(id);
+        //             if (!chart) return;
+        //
+        //             const gridData = (id === 'chart1') ? theGrid3.itemsSource.items : theGrid4.itemsSource.items;
+        //             const transformedData = (id === 'chart1') ? transformDataForChart(gridData) : transformDataForChartTab2(gridData);
+        //             chartReadyHandler(id, holderId, transformedData);
+        //         }
+        //
+        //
+        //         // 차트 디자인 가이드 색상 코드
+        //         const chartColors = [
+        //             "#62b2fd",
+        //             "#01dbab",
+        //             "#ffa336",
+        //             "#f99bab",
+        //             "#55667f",
+        //             "#82e8e8",
+        //             "#909bff",
+        //             "#f36f40"
+        //         ];
+        //
+        //         // 차트마다 형식이 다르기 때문에 다른 레이아웃 함수를 만들어야 합니다.
+        //         // 다른 유형의 차트 이용시, layout 함수 추가해서 사용하세요.
+        //
+        //         // Cartesian 차트 레이아웃 정의
+        //         function getCartesianLayout(type, title, dataFields, itemRenderers = []) {
+        //             var layout = "<rMateChart borderStyle='none'>"
+        //                 + "<Options><Caption text='" + "' />" // 차트 제목
+        //                 + "<SubCaption text='' textAlign='center' paddingBottom='20'/>" // 차트 부제목
+        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
+        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/></Options>"
+        //                 + "<" + type + "Chart showDataTips='true'>"
+        //                 + "<series>";
+        //
+        //             for (var i = 0; i < dataFields.length; ++i) {
+        //                 var itemRenderer = itemRenderers[i] ? " itemRenderer='" + itemRenderers[i] + "'" : "";
+        //                 var color = chartColors[i % chartColors.length]; // 색상을 순서대로 할당
+        //
+        //                 if (type === "Line2D") {
+        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+        //                         + "<showDataEffect><SeriesInterpolate duration='700'/></showDataEffect>"
+        //                         + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
+        //                         + "</" + type + "Series>";
+        //                 } else {
+        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+        //                         + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
+        //                         + "<fill>"
+        //                         + "<SolidColor color='" + color + "'/>" // 색상 적용
+        //                         + "</fill>"
+        //                         + "</" + type + "Series>";
+        //                 }
+        //             }
+        //
+        //             layout += "</series>"
+        //                 + "<horizontalAxis>"
+        //                 + "<CategoryAxis categoryField='period'/>"
+        //                 + "</horizontalAxis>"
+        //                 + "<verticalAxis>"
+        //                 + "<LinearAxis formatter='{numfmt}'/>"
+        //                 + "</verticalAxis>"
+        //                 + "</" + type + "Chart>"
+        //                 + "</rMateChart>";
+        //
+        //             return layout;
+        //         }
+        //
+        //
+        //         // Radar 차트 레이아웃 정의
+        //         function getRadarLayout(dataFields) {
+        //             var radarLayout =
+        //                 "<rMateChart borderStyle='none'>"
+        //                 + "<Options>"
+        //                 + "<Caption text='' />"
+        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
+        //                 + "</Options>"
+        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
+        //                 + "<RadarChart type='polygon' paddingTop='20' paddingBottom='20' showDataTips='true'>"
+        //                 + "<radialAxis>"
+        //                 + "<LinearAxis id='rAxis' formatter='{numfmt}'/>"
+        //                 + "</radialAxis>"
+        //                 + "<radialAxisRenderers>"
+        //                 + "<Axis2DRenderer axis='{rAxis}' horizontal='true' tickPlacement='outside' tickLength='4'>"
+        //                 + "<axisStroke>"
+        //                 + "<Stroke color='#555555'/>"
+        //                 + "</axisStroke>"
+        //                 + "</Axis2DRenderer>"
+        //                 + "</radialAxisRenderers>"
+        //                 + "<angularAxis>"
+        //                 + "<CategoryAxis categoryField='period' displayName='Year'/>"
+        //                 + "</angularAxis>"
+        //                 + "<series>";
+        //
+        //             for (var i = 0; i < dataFields.length; ++i) {
+        //                 var color = chartColors[i % chartColors.length]; // 색상 순서대로 적용
+        //
+        //                 radarLayout += "<RadarSeries field='" + dataFields[i] + "' displayName='" + dataFields[i] + "' fillLineArea='false'>"
+        //                     + "<showDataEffect>"
+        //                     + "<SeriesInterpolate duration='700'/>"
+        //                     + "</showDataEffect>"
+        //                     + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
+        //                     + "</RadarSeries>";
+        //             }
+        //
+        //             radarLayout += "</series>"
+        //                 + "</RadarChart>"
+        //                 + "</rMateChart>";
+        //
+        //             return radarLayout;
+        //         }
+        //
+        //         // 콤비네이션 차트 레이아웃
+        //         function getCombinationChartLayout() {
+        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        //     <Options>
+        //         <Caption text=""/>
+        //         <Legend defaultMouseOverAction="true"/>
+        //     </Options>
+        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        //     <Combination2DChart showDataTips="true">
+        //         <horizontalAxis>
+        //             <CategoryAxis categoryField="period"/>
+        //         </horizontalAxis>
+        //         <verticalAxis>
+        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
+        //         </verticalAxis>
+        //         <series>
+        //             <Column2DSet type="clustered">
+        //                 <series>
+        //                     <Column2DSeries yField="value1" displayName="2023" fill="#62b2fd">
+        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                     </Column2DSeries>
+        //                     <Column2DSeries yField="value2" displayName="2024" fill="#01dbab">
+        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                     </Column2DSeries>
+        //                 </series>
+        //             </Column2DSet>
+        //             <Line2DSeries yField="growth" displayName="증감율 (%)" itemRenderer="DiamondItemRenderer">
+        //                 <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                 <verticalAxis>
+        //                     <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+        //                 </verticalAxis>
+        //             </Line2DSeries>
+        //         </series>
+        //         <verticalAxisRenderers>
+        //             <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+        //             <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+        //         </verticalAxisRenderers>
+        //     </Combination2DChart>
+        // </rMateChart>`;
+        //         }
+        //
+        //         function getLineChartLayout() {
+        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        //     <Options>
+        //         <Caption text=""/>
+        //         <Legend defaultMouseOverAction="true"/>
+        //     </Options>
+        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        //     <Line2DChart showDataTips="true">
+        //         <horizontalAxis>
+        //             <CategoryAxis categoryField="period"/>
+        //         </horizontalAxis>
+        //         <verticalAxis>
+        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
+        //         </verticalAxis>
+        //         <series>
+        //             <Line2DSeries yField="value1" displayName="2023" itemRenderer="CircleItemRenderer">
+        //                 <lineStroke><Stroke color="#62b2fd" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //             </Line2DSeries>
+        //             <Line2DSeries yField="value2" displayName="2024" itemRenderer="DiamondItemRenderer">
+        //                 <lineStroke><Stroke color="#01dbab" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //             </Line2DSeries>
+        //         </series>
+        //     </Line2DChart>
+        // </rMateChart>`;
+        //         }
+        //
+        //
+        //         // 그리드 데이터를 차트에 맞게 변환 (tab3)
+        //         function transformDataForChart(gridData) {
+        //             // if (!gridData) {
+        //             //     // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
+        //             //     return { fields: [], data: [] };
+        //             // }
+        //
+        //             const dataFields = [];
+        //             const chartData = [];
+        //
+        //             // 데이터를 변환하여 차트에 사용할 수 있도록 변환
+        //             gridData.forEach(row => {
+        //                 const dataItem = {period: row.period};
+        //                 for (const key in row) {
+        //                     if (key !== 'period' && key !== 'powernm') {
+        //                         if (!dataFields.includes(key)) {
+        //                             dataFields.push(key);
+        //                         }
+        //                         dataItem[key] = row[key];
+        //                     }
+        //                 }
+        //                 chartData.push(dataItem);
+        //             });
+        //
+        //             return {
+        //                 fields: dataFields,
+        //                 data: chartData
+        //             };
+        //         }
+        //
+        //         // 그리드 데이터를 차트에 맞게 변환 (tab2)
+        //         function transformDataForChartTab2(gridData, comparisonType) {
+        //             let chartData = [];
+        //             let dataFields = [];
+        //             let firstYear, secondYear;
+        //
+        //             switch (comparisonType) {
+        //                 case "YoY":
+        //                     // 연도 기반 데이터 처리
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear];
+        //
+        //                     gridData.forEach(row => {
+        //                         const dataItem = {
+        //                             period: row.period || `${row.month}월`,
+        //                             [firstYear]: parseFloat(row.value1) || 0,
+        //                             [secondYear]: parseFloat(row.value2) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "QoQ":
+        //                     // 분기별 데이터 처리
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear];
+        //
+        //                     gridData.forEach(row => {
+        //                         const quarter = `Q${row.quarter}`;  // 분기를 'Q1', 'Q2', 등으로 표시
+        //                         const dataItem = {
+        //                             period: quarter,
+        //                             [firstYear]: parseFloat(row.value1) || 0,
+        //                             [secondYear]: parseFloat(row.value2) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "MoM":
+        //                     // 월 기반 데이터 처리
+        //                     const month = document.getElementById("startDateTab2").value.split("-")[1]; // MoM의 경우 시작 월과 종료 월이 같다고 가정
+        //                     dataFields = [month];
+        //
+        //                     gridData.forEach(row => {
+        //                         const dataItem = {
+        //                             period: `${row.month}월`,
+        //                             [month]: parseFloat(row.value1) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "YTD":
+        //                     // YTD일 경우, startYear와 endYear에서 누적 발전량을 가져옴
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear]; // 두 연도의 누적 발전량 필드를 설정
+        //
+        //                     // 중복된 월을 제거하기 위한 Set 객체
+        //                     let seenMonths = new Set();
+        //
+        //                     // 데이터를 월별로 그룹화 및 중복 월 제거
+        //                     chartData = gridData.filter(row => {
+        //                         if (seenMonths.has(row.month)) {
+        //                             return false;  // 중복된 월이면 필터링하여 제외
+        //                         }
+        //                         seenMonths.add(row.month);  // 중복 방지를 위해 Set에 추가
+        //                         return true;  // 중복이 아닌 경우 유지
+        //                     }).map(row => ({
+        //                         period: `${row.month}월`,  // 월별 데이터
+        //                         [firstYear]: parseFloat(row.cumulative_start_year) || 0, // 첫 번째 연도의 누적 발전량
+        //                         [secondYear]: parseFloat(row.cumulative_end_year) || 0  // 두 번째 연도의 누적 발전량
+        //                     }));
+        //                     break;
+        //             }
+        //
+        //             return {data: chartData, fields: dataFields};
+        //         }
 
         // 차트 끝 =================================================================================
 
@@ -1181,7 +1392,7 @@
                             // 일자 열
                             const cellDate = document.createElement('td');
                             cellDate.textContent = date;
-                            cellDate.onclick = function() {
+                            cellDate.onclick = function () {
                                 onDateSelected(date, tabSuffix);
                             };
                             cellDate.style.cursor = 'pointer'; // 클릭 가능한 커서 스타일 추가
@@ -1273,7 +1484,7 @@
                         data.forEach(date => {
                             const li = document.createElement('li');
                             li.textContent = date;
-                            li.onclick = function() {
+                            li.onclick = function () {
                                 onDateSelected(date);
                             };
                             ul.appendChild(li);
@@ -1420,7 +1631,6 @@
         }
 
 
-
         // 그리드에 데이터 바인딩
         function bindGridData(data) {
             // NO에 1부터 시작하는 번호 설정
@@ -1441,12 +1651,12 @@
 
         $(document).ready(function (e) {
 
-            document.getElementById('searchButton1').addEventListener('click', function(event) {
+            document.getElementById('searchButton1').addEventListener('click', function (event) {
                 synchronizeTabs('tab1', 'tab2');
                 search(event);
             });
 
-            document.getElementById('searchButton2').addEventListener('click', function(event) {
+            document.getElementById('searchButton2').addEventListener('click', function (event) {
                 synchronizeTabs('tab2', 'tab1');
                 search(event);
             });
@@ -1496,10 +1706,6 @@
             }
 
 
-
-
-
-
             //  select 바뀌면 hidden input 변경
             function updateSelect(selectId, hiddenInputId) {
                 var selectElement = document.getElementById(selectId);
@@ -1515,9 +1721,7 @@
             selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 
 
-
-
-            document.getElementById('btnSave').addEventListener('click', function() {
+            document.getElementById('btnSave').addEventListener('click', function () {
                 // 변경 사항이 있는지 확인
                 if (viewdata2.itemsEdited.length === 0 && viewdata2.itemsAdded.length === 0 && viewdata2.itemsRemoved.length === 0) {
                     Alert.alert('', '수정사항이 없습니다.');
@@ -1598,9 +1802,9 @@
                 '확인',
                 '수정하시겠습니까?',
                 function () { // 확인 버튼 클릭 시 실행할 함수
-                    var edits = viewdata2.itemsEdited.map(item => ({ ...item, type: 'edit' }));
-                    var adds = viewdata2.itemsAdded.map(item => ({ ...item, type: 'add' }));
-                    var deletes = viewdata2.itemsRemoved.map(item => ({ ...item, type: 'delete' }));
+                    var edits = viewdata2.itemsEdited.map(item => ({...item, type: 'edit'}));
+                    var adds = viewdata2.itemsAdded.map(item => ({...item, type: 'add'}));
+                    var deletes = viewdata2.itemsRemoved.map(item => ({...item, type: 'delete'}));
 
                     var changes = edits.concat(adds).concat(deletes);
 
@@ -1719,222 +1923,221 @@
             item.mevaluet = sum; // 합계를 합계 컬럼에 반영
         }
 
-    //     ================================================================================================
-    //     ================================================================================================
+        //     ================================================================================================
+        //     ================================================================================================
 
         //  그리드 컬럼 생성 (tab3)
-        function buildGridColumnsTab1(data) {
-            const columns = [
-                {binding: 'period', header: '기간', width: 180, align: 'center'},
-            ];
-
-            // 모든 powernm(발전기명)을 확인하여 열을 동적으로 생성
-            const powerNames = [...new Set(data.map(item => item.powernm))];
-            powerNames.forEach(powerName => {
-                columns.push({
-                    binding: powerName,
-                    header: powerName,
-                    width: "*",
-                    align: 'right',
-                    format: 'n0'
-                });
-            });
-
-            return columns;
-        }
+        // function buildGridColumnsTab1(data) {
+        //     const columns = [
+        //         {binding: 'period', header: '기간', width: 180, align: 'center'},
+        //     ];
+        //
+        //     // 모든 powernm(발전기명)을 확인하여 열을 동적으로 생성
+        //     const powerNames = [...new Set(data.map(item => item.powernm))];
+        //     powerNames.forEach(powerName => {
+        //         columns.push({
+        //             binding: powerName,
+        //             header: powerName,
+        //             width: "*",
+        //             align: 'right',
+        //             format: 'n0'
+        //         });
+        //     });
+        //
+        //     return columns;
+        // }
 
         //  그리드 컬럼 생성 (tab4)
-        function buildGridColumnsTab2(data, comparisonType) {
-            const columns = [
-                {binding: 'period', header: '기간', width: 180, align: 'center'},
-            ];
-
-            const firstYear = document.getElementById("startDateTab2").value;
-            const secondYear = document.getElementById("endDateTab2").value;
-
-            if (comparisonType === "YTD") {
-                columns.push(
-                    {
-                        binding: 'cumulative_start_year',
-                        header: `${firstYear}년`,
-                        width: "*",
-                        align: 'right',
-                        format: 'n0'
-                    },
-                    {binding: 'cumulative_end_year', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
-                );
-            } else {
-                columns.push(
-                    {binding: 'value1', header: `${firstYear}년`, width: "*", align: 'right', format: 'n0'},
-                    {binding: 'value2', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
-                );
-            }
-
-            return columns;
-        }
+        // function buildGridColumnsTab2(data, comparisonType) {
+        //     const columns = [
+        //         {binding: 'period', header: '기간', width: 180, align: 'center'},
+        //     ];
+        //
+        //     const firstYear = document.getElementById("startDateTab2").value;
+        //     const secondYear = document.getElementById("endDateTab2").value;
+        //
+        //     if (comparisonType === "YTD") {
+        //         columns.push(
+        //             {
+        //                 binding: 'cumulative_start_year',
+        //                 header: `${firstYear}년`,
+        //                 width: "*",
+        //                 align: 'right',
+        //                 format: 'n0'
+        //             },
+        //             {binding: 'cumulative_end_year', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
+        //         );
+        //     } else {
+        //         columns.push(
+        //             {binding: 'value1', header: `${firstYear}년`, width: "*", align: 'right', format: 'n0'},
+        //             {binding: 'value2', header: `${secondYear}년`, width: "*", align: 'right', format: 'n0'}
+        //         );
+        //     }
+        //
+        //     return columns;
+        // }
 
         // 데이터 변환 + 그리드 업데이트 (tab3)
-        function transformDataForGridTab1(data, periodType) {
-            const gridData = {};
-
-            data.forEach(row => {
-                const period = row.period ? row.period.toString() : ''; // 기간 데이터가 없는 경우 빈 문자열로 설정
-                const powernm = row.powernm ? row.powernm.toString() : ''; // 발전기명이 없는 경우 빈 문자열로 설정
-
-                if (periodType === 'hourly') {
-                    // 시간별 데이터를 처리하는 로직
-                    for (let i = 1; i <= 24; i++) {
-                        const hourKey = `hour${i.toString().padStart(2, '0')}`;
-                        if (row[hourKey] !== undefined) {
-                            const periodWithHour = `${period} ${i.toString().padStart(2, '0')}시`;
-                            if (!gridData[periodWithHour]) {
-                                gridData[periodWithHour] = {period: periodWithHour};
-                            }
-                            gridData[periodWithHour][powernm] = row[hourKey] ? parseFloat(row[hourKey].toString().replace(/,/g, '')) : 0;
-                        }
-                    }
-                } else {
-                    // 월별, 분기별, 반기별, 연도별 데이터를 처리하는 로직
-                    if (!gridData[period]) {
-                        gridData[period] = {period: period};
-                    }
-                    Object.keys(row).forEach(key => {
-                        if (key !== 'period' && key !== 'powernm') {
-                            // 쉼표 제거 후 숫자로 변환
-                            gridData[period][powernm] = row[key] ? parseFloat(row[key].toString().replace(/,/g, '')) : 0;
-                        }
-                    });
-                }
-            });
-
-            return Object.values(gridData);
-        }
+        // function transformDataForGridTab1(data, periodType) {
+        //     const gridData = {};
+        //
+        //     data.forEach(row => {
+        //         const period = row.period ? row.period.toString() : ''; // 기간 데이터가 없는 경우 빈 문자열로 설정
+        //         const powernm = row.powernm ? row.powernm.toString() : ''; // 발전기명이 없는 경우 빈 문자열로 설정
+        //
+        //         if (periodType === 'hourly') {
+        //             // 시간별 데이터를 처리하는 로직
+        //             for (let i = 1; i <= 24; i++) {
+        //                 const hourKey = `hour${i.toString().padStart(2, '0')}`;
+        //                 if (row[hourKey] !== undefined) {
+        //                     const periodWithHour = `${period} ${i.toString().padStart(2, '0')}시`;
+        //                     if (!gridData[periodWithHour]) {
+        //                         gridData[periodWithHour] = {period: periodWithHour};
+        //                     }
+        //                     gridData[periodWithHour][powernm] = row[hourKey] ? parseFloat(row[hourKey].toString().replace(/,/g, '')) : 0;
+        //                 }
+        //             }
+        //         } else {
+        //             // 월별, 분기별, 반기별, 연도별 데이터를 처리하는 로직
+        //             if (!gridData[period]) {
+        //                 gridData[period] = {period: period};
+        //             }
+        //             Object.keys(row).forEach(key => {
+        //                 if (key !== 'period' && key !== 'powernm') {
+        //                     // 쉼표 제거 후 숫자로 변환
+        //                     gridData[period][powernm] = row[key] ? parseFloat(row[key].toString().replace(/,/g, '')) : 0;
+        //                 }
+        //             });
+        //         }
+        //     });
+        //
+        //     return Object.values(gridData);
+        // }
 
         // 데이터 변환 + 그리드 업데이트 (tab4)
-        function transformDataForGridTab2(data, comparisonType) {
-            if (comparisonType === "YTD") {
-                const months = [...new Set(data.map(item => parseInt(item.month)))].sort((a, b) => a - b);
-
-                const result = months.map(month => {
-                    const monthData = data.find(item => parseInt(item.month) === month);
-                    return {
-                        period: `${month}월`,
-                        cumulative_start_year: monthData ? parseFloat(monthData.cumulative_start_year) || 0 : 0,
-                        cumulative_end_year: monthData ? parseFloat(monthData.cumulative_end_year) || 0 : 0
-                    };
-                });
-                return result;
-            } else {
-                return data.map(row => {
-                    const period = (comparisonType === "QoQ") ? `Q${row.quarter}` : `${row.month}월`;
-                    return {
-                        period: period,
-                        value1: parseFloat(row.value1) || 0,
-                        value2: parseFloat(row.value2) || 0
-                    };
-                });
-            }
-        }
+        // function transformDataForGridTab2(data, comparisonType) {
+        //     if (comparisonType === "YTD") {
+        //         const months = [...new Set(data.map(item => parseInt(item.month)))].sort((a, b) => a - b);
+        //
+        //         const result = months.map(month => {
+        //             const monthData = data.find(item => parseInt(item.month) === month);
+        //             return {
+        //                 period: `${month}월`,
+        //                 cumulative_start_year: monthData ? parseFloat(monthData.cumulative_start_year) || 0 : 0,
+        //                 cumulative_end_year: monthData ? parseFloat(monthData.cumulative_end_year) || 0 : 0
+        //             };
+        //         });
+        //         return result;
+        //     } else {
+        //         return data.map(row => {
+        //             const period = (comparisonType === "QoQ") ? `Q${row.quarter}` : `${row.month}월`;
+        //             return {
+        //                 period: period,
+        //                 value1: parseFloat(row.value1) || 0,
+        //                 value2: parseFloat(row.value2) || 0
+        //             };
+        //         });
+        //     }
+        // }
 
         // 그리드 생성
-        function updateGridTab1(grid, data, periodType) {
-            // console.log("Updating grid with data:", data); // 디버깅을 위한 로그 추가
-            // console.log("Period Type:", periodType); // periodType이 올바르게 전달되었는지 확인
-
-            const columns = buildGridColumnsTab1(data); // 그리드의 컬럼을 동적으로 생성
-            const transformedData = transformDataForGridTab1(data, periodType); // 데이터를 그리드에 맞게 변환
-
-            // console.log("Transformed Data:", transformedData); // 변환된 데이터 확인!
-
-            // 그리드를 초기화하고 데이터를 설정
-            grid.initialize({
-                autoGenerateColumns: false,
-                columns: columns,
-                itemsSource: new wijmo.collections.CollectionView(transformedData), // 변환된 데이터를 소스로 설정
-                showMarquee: true,
-                isReadOnly: true,
-                headersVisibility: wijmo.grid.HeadersVisibility.Column // 컬럼 헤더만 보이도록 설정 (행 헤더는 숨김)
-            });
-
-            // 이전 데이터를 완전히 초기화 후 새 데이터 적용
-            grid.itemsSource = new wijmo.collections.CollectionView(transformedData);
-
-
-            // 헤더 중앙 정렬을 위해 formatItem 이벤트 핸들러 추가
-            grid.formatItem.addHandler((s, e) => {
-                if (e.panel === s.columnHeaders) {
-                    e.cell.style.textAlign = 'center';
-                }
-            });
-
-            // 그리드 데이터를 차트에 전달하여 슬라이드 차트를 업데이트
-            chartReadyHandler("chart1", "chartHolder1", transformedData);
-        }
+        // function updateGridTab1(grid, data, periodType) {
+        //     // console.log("Updating grid with data:", data); // 디버깅을 위한 로그 추가
+        //     // console.log("Period Type:", periodType); // periodType이 올바르게 전달되었는지 확인
+        //
+        //     const columns = buildGridColumnsTab1(data); // 그리드의 컬럼을 동적으로 생성
+        //     const transformedData = transformDataForGridTab1(data, periodType); // 데이터를 그리드에 맞게 변환
+        //
+        //     // console.log("Transformed Data:", transformedData); // 변환된 데이터 확인!
+        //
+        //     // 그리드를 초기화하고 데이터를 설정
+        //     grid.initialize({
+        //         autoGenerateColumns: false,
+        //         columns: columns,
+        //         itemsSource: new wijmo.collections.CollectionView(transformedData), // 변환된 데이터를 소스로 설정
+        //         showMarquee: true,
+        //         isReadOnly: true,
+        //         headersVisibility: wijmo.grid.HeadersVisibility.Column // 컬럼 헤더만 보이도록 설정 (행 헤더는 숨김)
+        //     });
+        //
+        //     // 이전 데이터를 완전히 초기화 후 새 데이터 적용
+        //     grid.itemsSource = new wijmo.collections.CollectionView(transformedData);
+        //
+        //
+        //     // 헤더 중앙 정렬을 위해 formatItem 이벤트 핸들러 추가
+        //     grid.formatItem.addHandler((s, e) => {
+        //         if (e.panel === s.columnHeaders) {
+        //             e.cell.style.textAlign = 'center';
+        //         }
+        //     });
+        //
+        //     // 그리드 데이터를 차트에 전달하여 슬라이드 차트를 업데이트
+        //     chartReadyHandler("chart1", "chartHolder1", transformedData);
+        // }
 
         // =======================================================================================
         // 검색 기능 미완
 
         // 검색
-        function searchDataTab1() {
-            const periodType = document.getElementById("periodType").value;
-            let startDate, endDate, startHour, endHour;
-            const generator = document.getElementById("genename").value; // 발전기명 선택
-
-            // console.log("Selected powerid:", document.getElementById("genename").value);
-
-            if (periodType === "hourly") {
-                startDate = document.getElementById("startDate").value;
-                startHour = document.getElementById("startHour").value;
-                endHour = document.getElementById("endHour").value;
-                endDate = startDate; // 시간별 조회에서는 시작 날짜와 종료 날짜가 동일
-
-            } else if (periodType === "monthly") {
-                startDate = document.getElementById("startDate").value + "-01";
-                let endDateInput = document.getElementById("endDate").value;
-                let [endYear, endMonth] = endDateInput.split('-');
-                let lastDay = new Date(endYear, endMonth, 0).getDate();
-                endDate = `${endDateInput}-${lastDay}`;
-
-            } else if (periodType === "quarterly") {
-                const startQuarter = document.getElementById("startQuarter").value;
-                const endQuarter = document.getElementById("endQuarter").value;
-                const selectedYear = document.getElementById("yearSelectTab1").value;
-
-                // 분기 값을 연도와 함께 날짜 범위로 변환
-                [startDate, endDate] = convertQuarterToDateRange(startQuarter, endQuarter, selectedYear);
-
-            } else if (periodType === "halfyearly") {
-                const startHalf = document.getElementById("startHalf").value;
-                const endHalf = document.getElementById("endHalf").value;
-                const selectedYear = document.getElementById("yearSelectTab1").value;
-
-                // 반기 값을 연도와 함께 날짜 범위로 변환
-                [startDate, endDate] = convertHalfYearToDateRange(startHalf, endHalf, selectedYear);
-
-            } else if (periodType === "yearly") {
-                const selectedYear = document.getElementById("yearSelectTab1").value;
-                startDate = `${selectedYear}-01-01`;
-                endDate = `${selectedYear}-12-31`;
-            }
-
-            let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
-
-            if (periodType === "hourly") {
-                query += `&startHour=${startHour}&endHour=${endHour}`;
-            }
-
-            fetch(query)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        Alert.alert("", "데이터가 존재하지 않습니다.");
-                    } else {
-                        updateGridTab1(theGrid3, data, periodType); // periodType 전달
-                    }
-                })
-                .catch(error => console.error('Error fetching search data:', error));
-        }
-
+        // function searchDataTab1() {
+        //     const periodType = document.getElementById("periodType").value;
+        //     let startDate, endDate, startHour, endHour;
+        //     const generator = document.getElementById("genename").value; // 발전기명 선택
+        //
+        //     // console.log("Selected powerid:", document.getElementById("genename").value);
+        //
+        //     if (periodType === "hourly") {
+        //         startDate = document.getElementById("startDate").value;
+        //         startHour = document.getElementById("startHour").value;
+        //         endHour = document.getElementById("endHour").value;
+        //         endDate = startDate; // 시간별 조회에서는 시작 날짜와 종료 날짜가 동일
+        //
+        //     } else if (periodType === "monthly") {
+        //         startDate = document.getElementById("startDate").value + "-01";
+        //         let endDateInput = document.getElementById("endDate").value;
+        //         let [endYear, endMonth] = endDateInput.split('-');
+        //         let lastDay = new Date(endYear, endMonth, 0).getDate();
+        //         endDate = `${endDateInput}-${lastDay}`;
+        //
+        //     } else if (periodType === "quarterly") {
+        //         const startQuarter = document.getElementById("startQuarter").value;
+        //         const endQuarter = document.getElementById("endQuarter").value;
+        //         const selectedYear = document.getElementById("yearSelectTab1").value;
+        //
+        //         // 분기 값을 연도와 함께 날짜 범위로 변환
+        //         [startDate, endDate] = convertQuarterToDateRange(startQuarter, endQuarter, selectedYear);
+        //
+        //     } else if (periodType === "halfyearly") {
+        //         const startHalf = document.getElementById("startHalf").value;
+        //         const endHalf = document.getElementById("endHalf").value;
+        //         const selectedYear = document.getElementById("yearSelectTab1").value;
+        //
+        //         // 반기 값을 연도와 함께 날짜 범위로 변환
+        //         [startDate, endDate] = convertHalfYearToDateRange(startHalf, endHalf, selectedYear);
+        //
+        //     } else if (periodType === "yearly") {
+        //         const selectedYear = document.getElementById("yearSelectTab1").value;
+        //         startDate = `${selectedYear}-01-01`;
+        //         endDate = `${selectedYear}-12-31`;
+        //     }
+        //
+        //     let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+        //
+        //     if (periodType === "hourly") {
+        //         query += `&startHour=${startHour}&endHour=${endHour}`;
+        //     }
+        //
+        //     fetch(query)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data.length === 0) {
+        //                 Alert.alert("", "데이터가 존재하지 않습니다.");
+        //             } else {
+        //                 updateGridTab1(theGrid3, data, periodType); // periodType 전달
+        //             }
+        //         })
+        //         .catch(error => console.error('Error fetching search data:', error));
+        // }
 
         // 분기별 기간을 날짜 범위로 변환
         function convertQuarterToDateRange(startQuarter, endQuarter, year) {
@@ -1975,45 +2178,45 @@
 
 
         // 월별 데이터
-        function loadMonthlyData() {
-            const generator = 'all';  // 기본적으로 전체 발전기명에 대해 로드
-
-            // 최소/최대 날짜를 서버에서 받아오는 API 호출
-            fetch('/api/gene/upload/dateRange')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(dateRange => {
-                    const startDate = dateRange.startdt;  // 서버에서 받은 최소 날짜
-                    const endDate = dateRange.enddt;      // 서버에서 받은 최대 날짜
-
-                    let query = `/api/gene/upload/periodSearch?periodType=monthly&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
-
-                    return fetch(query);
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // console.log('Received data:', data); // 데이터 확인
-                    // 서버로부터 데이터를 받아서 처리
-                    if (!data || data.length === 0) {
-                        // console.warn('No data received.');
-                        // Alert.alert("", "데이터가 존재하지 않습니다.\n발전량 업로드 페이지를 확인해 주세요.")
-                        return;
-                    }
-
-                    chartReadyHandler("chart1", "chartHolder1", data); // 차트 업데이트
-                    updateGridTab1(theGrid3, data); // 그리드 업데이트
-                })
-                .catch(error => console.error('Error fetching initial monthly data:', error));
-        }
+        // function loadMonthlyData() {
+        //     const generator = 'all';  // 기본적으로 전체 발전기명에 대해 로드
+        //
+        //     // 최소/최대 날짜를 서버에서 받아오는 API 호출
+        //     fetch('/api/gene/upload/dateRange')
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error(`HTTP error! status: ${response.status}`);
+        //             }
+        //             return response.json();
+        //         })
+        //         .then(dateRange => {
+        //             const startDate = dateRange.startdt;  // 서버에서 받은 최소 날짜
+        //             const endDate = dateRange.enddt;      // 서버에서 받은 최대 날짜
+        //
+        //             let query = `/api/gene/upload/periodSearch?periodType=monthly&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+        //
+        //             return fetch(query);
+        //         })
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error(`HTTP error! status: ${response.status}`);
+        //             }
+        //             return response.json();
+        //         })
+        //         .then(data => {
+        //             // console.log('Received data:', data); // 데이터 확인
+        //             // 서버로부터 데이터를 받아서 처리
+        //             if (!data || data.length === 0) {
+        //                 // console.warn('No data received.');
+        //                 // Alert.alert("", "데이터가 존재하지 않습니다.\n발전량 업로드 페이지를 확인해 주세요.")
+        //                 return;
+        //             }
+        //
+        //             chartReadyHandler("chart1", "chartHolder1", data); // 차트 업데이트
+        //             updateGridTab1(theGrid3, data); // 그리드 업데이트
+        //         })
+        //         .catch(error => console.error('Error fetching initial monthly data:', error));
+        // }
 
 
         // 발전기명
@@ -2133,10 +2336,10 @@
         }
 
         // 조회연도 선택 요소에 이벤트 리스너 추가
-        document.getElementById("yearSelectTab1").addEventListener("change", function () {
-            updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
-            updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
-        });
+        // document.getElementById("yearSelectTab1").addEventListener("change", function () {
+        //     updateYearInPeriod(); // 조회연도 변경 시 startDate와 endDate 갱신
+        //     updatePeriodInputs(); // 연도 변경 시 기간 입력 필드 초기화
+        // });
 
         // 연도를 로드하고 기존 UI를 업데이트
         function loadYearlyData() {
@@ -2325,35 +2528,823 @@
         // }
 
         // Tab4 그리드 업데이트
-        function updateGridTab2(grid, data, comparisonType) {
-            const columns = buildGridColumnsTab2(data, comparisonType);
-            const transformedData = transformDataForGridTab2(data, comparisonType);
+        // function updateGridTab2(grid, data, comparisonType) {
+        //     const columns = buildGridColumnsTab2(data, comparisonType);
+        //     const transformedData = transformDataForGridTab2(data, comparisonType);
+        //
+        //     grid.initialize({
+        //         autoGenerateColumns: false,
+        //         columns: columns,
+        //         itemsSource: new wijmo.collections.CollectionView(transformedData),
+        //         // itemsSource: new wijmo.collections.CollectionView(data),
+        //         showMarquee: true,
+        //         isReadOnly: true,
+        //         headersVisibility: wijmo.grid.HeadersVisibility.Column
+        //     });
+        //
+        //     // 이전 데이터를 완전히 초기화 후 새 데이터 적용
+        //     grid.itemsSource = new wijmo.collections.CollectionView(transformedData);
+        //
+        //     grid.formatItem.addHandler((s, e) => {
+        //         if (e.panel === s.columnHeaders) {
+        //             e.cell.style.textAlign = 'center';
+        //         }
+        //     });
+        //
+        //     // 그리드 데이터를 차트에 전달하여 슬라이드 차트를 업데이트
+        //     chartReadyHandler2("chart2", "chartHolder2", transformedData);
+        // }
 
-            grid.initialize({
-                autoGenerateColumns: false,
-                columns: columns,
-                itemsSource: new wijmo.collections.CollectionView(transformedData),
-                // itemsSource: new wijmo.collections.CollectionView(data),
-                showMarquee: true,
-                isReadOnly: true,
-                headersVisibility: wijmo.grid.HeadersVisibility.Column
-            });
+        // ===================================================================================================
+        // 0919 하드코딩
 
-            // 이전 데이터를 완전히 초기화 후 새 데이터 적용
-            grid.itemsSource = new wijmo.collections.CollectionView(transformedData);
+        // tab3
 
-            grid.formatItem.addHandler((s, e) => {
-                if (e.panel === s.columnHeaders) {
-                    e.cell.style.textAlign = 'center';
+        // tab3 차트 초기화 함수
+        function initTab3Chart() {
+            rMateChartH5.create("chart3", "chartHolder3", "rMateOnLoadCallFunction=chartReadyHandler3", "100%", "100%");
+        }
+
+        // tab3 그리드 초기화 함수
+        function initTab3Grid(){
+            initGrid3();
+        }
+
+        // tab3 차트 데이터 설정 함수
+        function chartReadyHandler3(id) {
+            var chartData = [
+                {Hour: "01시", Value: 100},
+                {Hour: "02시", Value: 120},
+                {Hour: "03시", Value: 110},
+                {Hour: "04시", Value: 90},
+                {Hour: "05시", Value: 80},
+                {Hour: "06시", Value: 100},
+                {Hour: "07시", Value: 130},
+                {Hour: "08시", Value: 150},
+                {Hour: "09시", Value: 180},
+                {Hour: "10시", Value: 200},
+                {Hour: "11시", Value: 220},
+                {Hour: "12시", Value: 210},
+                {Hour: "13시", Value: 200},
+                {Hour: "14시", Value: 190},
+                {Hour: "15시", Value: 180},
+                {Hour: "16시", Value: 170},
+                {Hour: "17시", Value: 160},
+                {Hour: "18시", Value: 150},
+                {Hour: "19시", Value: 140},
+                {Hour: "20시", Value: 130},
+                {Hour: "21시", Value: 120},
+                {Hour: "22시", Value: 110},
+                {Hour: "23시", Value: 100},
+                {Hour: "24시", Value: 90}
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Caption text="시간별 발전량"/>
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Hour"/>
+            </horizontalAxis>
+            <verticalAxis>
+                <LinearAxis/>
+            </verticalAxis>
+            <series>
+                <Column2DSeries yField="Value" displayName="발전량" fill="#88BABF">
+                    <showDataEffect>
+                        <SeriesInterpolate/>
+                    </showDataEffect>
+                </Column2DSeries>
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+        // tab3 그리드 초기화 및 데이터 설정 함수
+        function initGrid3() {
+            var gridData = [
+                {
+                    powerid: 'PW001',
+                    powernm: '발전기1',
+                    chargedv: '충전',
+                    mevalue01: 100,
+                    mevalue02: 120,
+                    mevalue03: 110,
+                    mevalue04: 90,
+                    mevalue05: 80,
+                    mevalue06: 100,
+                    mevalue07: 130,
+                    mevalue08: 150,
+                    mevalue09: 180,
+                    mevalue10: 200,
+                    mevalue11: 220,
+                    mevalue12: 210,
+                    mevalue13: 200,
+                    mevalue14: 190,
+                    mevalue15: 180,
+                    mevalue16: 170,
+                    mevalue17: 160,
+                    mevalue18: 150,
+                    mevalue19: 140,
+                    mevalue20: 130,
+                    mevalue21: 120,
+                    mevalue22: 110,
+                    mevalue23: 100,
+                    mevalue24: 90,
+                    mevaluet: 3430,
+                    indatem: '2024-09-20',
+                    inusernm: '홍길동',
+                    updatem: '2024-09-20'
+                },
+                {
+                    powerid: 'PW002',
+                    powernm: '발전기2',
+                    chargedv: '방전',
+                    mevalue01: 90,
+                    mevalue02: 110,
+                    mevalue03: 100,
+                    mevalue04: 80,
+                    mevalue05: 70,
+                    mevalue06: 90,
+                    mevalue07: 120,
+                    mevalue08: 140,
+                    mevalue09: 170,
+                    mevalue10: 190,
+                    mevalue11: 210,
+                    mevalue12: 200,
+                    mevalue13: 190,
+                    mevalue14: 180,
+                    mevalue15: 170,
+                    mevalue16: 160,
+                    mevalue17: 150,
+                    mevalue18: 140,
+                    mevalue19: 130,
+                    mevalue20: 120,
+                    mevalue21: 110,
+                    mevalue22: 100,
+                    mevalue23: 90,
+                    mevalue24: 80,
+                    mevaluet: 3190,
+                    indatem: '2024-09-20',
+                    inusernm: '김철수',
+                    updatem: '2024-09-20'
                 }
-            });
+            ];
 
-            // 그리드 데이터를 차트에 전달하여 슬라이드 차트를 업데이트
-            chartReadyHandler2("chart2", "chartHolder2", transformedData);
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                columns: [
+                    {binding: 'powerid', header: '발전기코드', width: 100},
+                    {binding: 'powernm', header: '발전기명', width: 100},
+                    {binding: 'chargedv', header: '충전/방전', width: 100},
+                    {binding: 'mevalue01', header: '01시', width: 70, format: 'n0'},
+                    {binding: 'mevalue02', header: '02시', width: 70, format: 'n0'},
+                    {binding: 'mevalue03', header: '03시', width: 70, format: 'n0'},
+                    {binding: 'mevalue04', header: '04시', width: 70, format: 'n0'},
+                    {binding: 'mevalue05', header: '05시', width: 70, format: 'n0'},
+                    {binding: 'mevalue06', header: '06시', width: 70, format: 'n0'},
+                    {binding: 'mevalue07', header: '07시', width: 70, format: 'n0'},
+                    {binding: 'mevalue08', header: '08시', width: 70, format: 'n0'},
+                    {binding: 'mevalue09', header: '09시', width: 70, format: 'n0'},
+                    {binding: 'mevalue10', header: '10시', width: 70, format: 'n0'},
+                    {binding: 'mevalue11', header: '11시', width: 70, format: 'n0'},
+                    {binding: 'mevalue12', header: '12시', width: 70, format: 'n0'},
+                    {binding: 'mevalue13', header: '13시', width: 70, format: 'n0'},
+                    {binding: 'mevalue14', header: '14시', width: 70, format: 'n0'},
+                    {binding: 'mevalue15', header: '15시', width: 70, format: 'n0'},
+                    {binding: 'mevalue16', header: '16시', width: 70, format: 'n0'},
+                    {binding: 'mevalue17', header: '17시', width: 70, format: 'n0'},
+                    {binding: 'mevalue18', header: '18시', width: 70, format: 'n0'},
+                    {binding: 'mevalue19', header: '19시', width: 70, format: 'n0'},
+                    {binding: 'mevalue20', header: '20시', width: 70, format: 'n0'},
+                    {binding: 'mevalue21', header: '21시', width: 70, format: 'n0'},
+                    {binding: 'mevalue22', header: '22시', width: 70, format: 'n0'},
+                    {binding: 'mevalue23', header: '23시', width: 70, format: 'n0'},
+                    {binding: 'mevalue24', header: '24시', width: 70, format: 'n0'},
+                    {binding: 'mevaluet', header: '합계', width: 100, format: 'n0'},
+                    {binding: 'indatem', header: '등록일자', width: 100},
+                    {binding: 'inusernm', header: '등록자', width: 80},
+                    {binding: 'updatem', header: '최종수정일', width: 100}
+                ],
+                itemsSource: gridData
+            });
+            // 맨 앞에 헤더부분 없애기
+            theGrid3.rowHeaders.columns.splice(0, 1);
+        }
+
+        // tab3 검색 함수 (실제 구현할때 수정하기)
+        function searchDataTab3() {
+            const periodType = document.getElementById("periodType").value;
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            // 여기에 실제 검색 로직을 구현하기
+            // API 호출이나 데이터 필터링 등을 수행
+
+            // 더미 데이터로 차트와 그리드 업데이트 (임시)
+            updateTab3ChartsAndGrids(periodType);
+        }
+
+        // tab3 차트와 그리드 업데이트 함수 (임시)
+        function updateTab3ChartsAndGrids() {
+            // 실제 데이터를 사용하여 차트와 그리드를 업데이트
+
+            chartReadyHandler3("chart3");
+            initGrid3();
         }
 
 
+        // tab4
 
+        // 차트 초기화 함수
+        function initTab4Charts() {
+            for (let i = 1; i <= 4; i++) {
+                rMateChartH5.create("chart4_" + i, "chartHolder4_" + i, "rMateOnLoadCallFunction=chartReadyHandler4_" + i, "100%", "100%");
+            }
+        }
+
+        // 그리드 초기화 함수
+        function initTab4Grids() {
+            for (let i = 1; i <= 4; i++) {
+                initGrid4(i);
+            }
+        }
+
+        // 차트 데이터 설정 함수
+        function chartReadyHandler4_1(id) {
+            var chartData = [
+                { Month: "1월", "KT대구물류센터 연료전지": 1000, "KT대덕2연구센터연료전지": 800 },
+                { Month: "2월", "KT대구물류센터 연료전지": 1500, "KT대덕2연구센터연료전지": 1200 },
+                { Month: "3월", "KT대구물류센터 연료전지": 1200, "KT대덕2연구센터연료전지": 1000 },
+                { Month: "4월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
+                { Month: "5월", "KT대구물류센터 연료전지": 2000, "KT대덕2연구센터연료전지": 1700 },
+                { Month: "6월", "KT대구물류센터 연료전지": 1700, "KT대덕2연구센터연료전지": 1400 },
+                { Month: "7월", "KT대구물류센터 연료전지": 1900, "KT대덕2연구센터연료전지": 1600 },
+                { Month: "8월", "KT대구물류센터 연료전지": 2200, "KT대덕2연구센터연료전지": 1800 },
+                { Month: "9월", "KT대구물류센터 연료전지": 2100, "KT대덕2연구센터연료전지": 1700 },
+                { Month: "10월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
+                { Month: "11월", "KT대구물류센터 연료전지": 1600, "KT대덕2연구센터연료전지": 1300 },
+                { Month: "12월", "KT대구물류센터 연료전지": 2300, "KT대덕2연구센터연료전지": 1900 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month" />
+            </horizontalAxis>
+            <series>
+                <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+                <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+
+        function chartReadyHandler4_2(id) {
+            var chartData = [
+                { Quarter: "1분기", "KT대구물류센터 연료전지": 3700, "KT대덕2연구센터연료전지": 3000 },
+                { Quarter: "2분기", "KT대구물류센터 연료전지": 5500, "KT대덕2연구센터연료전지": 4600 },
+                { Quarter: "3분기", "KT대구물류센터 연료전지": 6200, "KT대덕2연구센터연료전지": 5100 },
+                { Quarter: "4분기", "KT대구물류센터 연료전지": 5700, "KT대덕2연구센터연료전지": 4700 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Quarter" />
+            </horizontalAxis>
+            <series>
+                <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+                <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+
+        function chartReadyHandler4_3(id) {
+            var chartData = [
+                { Half: "상반기", "KT대구물류센터 연료전지": 9200, "KT대덕2연구센터연료전지": 7600 },
+                { Half: "하반기", "KT대구물류센터 연료전지": 11900, "KT대덕2연구센터연료전지": 9800 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Half" />
+            </horizontalAxis>
+            <series>
+                <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+                <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+
+        function chartReadyHandler4_4(id) {
+            var chartData = [
+                { Year: "2023년", "KT대구물류센터 연료전지": 21100, "KT대덕2연구센터연료전지": 17400 },
+                { Year: "2024년", "KT대구물류센터 연료전지": 24000, "KT대덕2연구센터연료전지": 20000 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Year" />
+            </horizontalAxis>
+            <series>
+                <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+                <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
+                    <showDataEffect>
+                        <SeriesInterpolate />
+                    </showDataEffect>
+                </Column2DSeries>
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+
+        // 그리드 초기화 및 데이터 설정 함수
+        function initGrid4(gridNumber) {
+            // console.log("Grid data for grid", gridNumber, ":", data);
+            let columns, gridData;
+            const gridId = '#theGrid4_' + gridNumber;
+
+            switch (gridNumber) {
+                case 1: // 월별 데이터
+                    columns = [
+                        {binding: 'Month', header: '월', width: 100, align: 'center'},
+                        {binding: 'KT대구물류센터 연료전지', header: 'KT대구물류센터 연료전지', width: '*', align: 'right'},
+                        {binding: 'KT대덕2연구센터 연료전지', header: 'KT대덕2연구센터 연료전지', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        {Month: "1월", "KT대구물류센터 연료전지": 1000, "KT대덕2연구센터 연료전지": 800},
+                        {Month: "2월", "KT대구물류센터 연료전지": 1500, "KT대덕2연구센터 연료전지": 1200},
+                        {Month: "3월", "KT대구물류센터 연료전지": 1200, "KT대덕2연구센터 연료전지": 1000},
+                        {Month: "4월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터 연료전지": 1500},
+                        {Month: "5월", "KT대구물류센터 연료전지": 2000, "KT대덕2연구센터 연료전지": 1700},
+                        {Month: "6월", "KT대구물류센터 연료전지": 1700, "KT대덕2연구센터 연료전지": 1400},
+                        {Month: "7월", "KT대구물류센터 연료전지": 1900, "KT대덕2연구센터 연료전지": 1600},
+                        {Month: "8월", "KT대구물류센터 연료전지": 2200, "KT대덕2연구센터 연료전지": 1800},
+                        {Month: "9월", "KT대구물류센터 연료전지": 2100, "KT대덕2연구센터 연료전지": 1700},
+                        {Month: "10월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터 연료전지": 1500},
+                        {Month: "11월", "KT대구물류센터 연료전지": 1600, "KT대덕2연구센터 연료전지": 1300},
+                        {Month: "12월", "KT대구물류센터 연료전지": 2300, "KT대덕2연구센터 연료전지": 1900}
+                    ];
+                    break;
+                case 2: // 분기별 데이터
+                    columns = [
+                        {binding: 'Quarter', header: '분기', width: 100, align: 'center'},
+                        {binding: 'KT대구물류센터 연료전지', header: 'KT대구물류센터 연료전지', width: '*', align: 'right'},
+                        {binding: 'KT대덕2연구센터 연료전지', header: 'KT대덕2연구센터 연료전지', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        {Quarter: "1분기", "KT대구물류센터 연료전지": 3700, "KT대덕2연구센터 연료전지": 3000},
+                        {Quarter: "2분기", "KT대구물류센터 연료전지": 5500, "KT대덕2연구센터 연료전지": 4600},
+                        {Quarter: "3분기", "KT대구물류센터 연료전지": 6200, "KT대덕2연구센터 연료전지": 5100},
+                        {Quarter: "4분기", "KT대구물류센터 연료전지": 5700, "KT대덕2연구센터 연료전지": 4700}
+                    ];
+                    break;
+                case 3: // 반기별 데이터
+                    columns = [
+                        {binding: 'Half', header: '반기', width: 100, align: 'center'},
+                        {binding: 'KT대구물류센터 연료전지', header: 'KT대구물류센터 연료전지', width: '*', align: 'right'},
+                        {binding: 'KT대덕2연구센터 연료전지', header: 'KT대덕2연구센터 연료전지', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        {Half: "상반기", "KT대구물류센터 연료전지": 9200, "KT대덕2연구센터 연료전지": 7600},
+                        {Half: "하반기", "KT대구물류센터 연료전지": 11900, "KT대덕2연구센터 연료전지": 9800}
+                    ];
+                    break;
+                case 4: // 연도별 데이터
+                    columns = [
+                        {binding: 'Year', header: '연도', width: 100, align: 'center'},
+                        {binding: 'KT대구물류센터 연료전지', header: 'KT대구물류센터 연료전지', width: '*', align: 'right'},
+                        {binding: 'KT대덕2연구센터 연료전지', header: 'KT대덕2연구센터 연료전지', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        {Year: "2023년", "KT대구물류센터 연료전지": 21100, "KT대덕2연구센터 연료전지": 17400},
+                        {Year: "2024년", "KT대구물류센터 연료전지": 24000, "KT대덕2연구센터 연료전지": 20000}
+                    ];
+                    break;
+            }
+
+            let viewdata = new wijmo.collections.CollectionView(gridData);
+            let grid = new wijmo.grid.FlexGrid(gridId, {
+                autoGenerateColumns: false,
+                columns: columns,
+                itemsSource: viewdata,
+                isReadOnly: true
+            });
+
+            // 맨 앞에 헤더부분 없애기
+            grid.rowHeaders.columns.splice(0, 1);
+        }
+
+        // 검색 기능 구현 (임시)
+        function searchDataTab4() {
+            const periodType = document.getElementById("periodType").value;
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            // 여기에 실제 검색 로직을 구현하기
+            // API 호출이나 데이터 필터링 등을 수행
+
+            // 더미 데이터로 차트와 그리드 업데이트 (임시)
+            updateTab4ChartsAndGrids(periodType);
+        }
+
+        // 차트와 그리드 업데이트 함수 (임시)
+        function updateTab4ChartsAndGrids(periodType) {
+            // 실제 데이터를 사용하여 차트와 그리드를 업데이트
+
+            switch (periodType) {
+                case "monthly":
+                    chartReadyHandler4_1("chart4_1");
+                    initGrid4(1);
+                    break;
+                case "quarterly":
+                    chartReadyHandler4_2("chart4_2");
+                    initGrid4(2);
+                    break;
+                case "halfyearly":
+                    chartReadyHandler4_3("chart4_3");
+                    initGrid4(3);
+                    break;
+                case "yearly":
+                    chartReadyHandler4_4("chart4_4");
+                    initGrid4(4);
+                    break;
+            }
+        }
+
+        // tab5
+        // 차트 초기화 함수
+        function initTab5Charts() {
+            for (let i = 1; i <= 4; i++) {
+                rMateChartH5.create("chart5_" + i, "chartHolder5_" + i, "rMateOnLoadCallFunction=chartReadyHandler5_" + i, "100%", "100%");
+            }
+        }
+
+        // 그리드 초기화 함수
+        function initTab5Grids() {
+            for (let i = 1; i <= 4; i++) {
+                initGrid5(i);
+            }
+        }
+
+        // 차트 데이터 설정 함수
+
+        // 1. YoY 차트
+        function chartReadyHandler5_1(id) {
+            var chartData = [
+                { Month: "1월", "2023년": 1000, "2024년": 800 },
+                { Month: "2월", "2023년": 1500, "2024년": 1200 },
+                { Month: "3월", "2023년": 1200, "2024년": 1000 },
+                { Month: "4월", "2023년": 1800, "2024년": 1500 },
+                { Month: "5월", "2023년": 2000, "2024년": 1700 },
+                { Month: "6월", "2023년": 1700, "2024년": 1400 },
+                { Month: "7월", "2023년": 1900, "2024년": 1600 },
+                { Month: "8월", "2023년": 2200, "2024년": 1800 },
+                { Month: "9월", "2023년": 2100, "2024년": 1700 },
+                { Month: "10월", "2023년": 1800, "2024년": 1500 },
+                { Month: "11월", "2023년": 1600, "2024년": 1300 },
+                { Month: "12월", "2023년": 2300, "2024년": 1900 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Line2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month" />
+            </horizontalAxis>
+            <series>
+                <Line2DSeries yField="2023년" displayName="2023년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#ffa336" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+                <Line2DSeries yField="2024년" displayName="2024년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#909bff" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+            </series>
+        </Line2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+        // 2. QoQ 차트
+        function chartReadyHandler5_2(id) {
+            var chartData = [
+                { Quarter: "1분기", "2023년": 3700, "2024년": 3000 },
+                { Quarter: "2분기", "2023년": 5500, "2024년": 4600 },
+                { Quarter: "3분기", "2023년": 6200, "2024년": 5100 },
+                { Quarter: "4분기", "2023년": 5700, "2024년": 4700 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Line2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Quarter" />
+            </horizontalAxis>
+            <series>
+                <Line2DSeries yField="2023년" displayName="2023년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#ffa336" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+                <Line2DSeries yField="2024년" displayName="2024년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#909bff" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+            </series>
+        </Line2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+        // 3. MoM 차트
+        function chartReadyHandler5_3(id) {
+            var chartData = [
+                // MoM 데이터는 필요에 따라 수정 가능합니다.
+                { Month: "1월", "2023년": 1000, "2024년": 1100 },
+                { Month: "2월", "2023년": 1500, "2024년": 1600 },
+                { Month: "3월", "2023년": 1200, "2024년": 1300 },
+                { Month: "4월", "2023년": 1800, "2024년": 1900 },
+                { Month: "5월", "2023년": 2000, "2024년": 2100 },
+                { Month: "6월", "2023년": 1700, "2024년": 1800 },
+                { Month: "7월", "2023년": 1900, "2024년": 2000 },
+                { Month: "8월", "2023년": 2200, "2024년": 2300 },
+                { Month: "9월", "2023년": 2100, "2024년": 2200 },
+                { Month: "10월", "2023년": 1800, "2024년": 1900 },
+                { Month: "11월", "2023년": 1600, "2024년": 1700 },
+                { Month: "12월", "2023년": 2300, "2024년": 2400 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Line2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month" />
+            </horizontalAxis>
+            <series>
+                <Line2DSeries yField="2023년" displayName="2023년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#ffa336" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+                <Line2DSeries yField="2024년" displayName="2024년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#909bff" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+            </series>
+        </Line2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+        // 4. YTD 차트
+        function chartReadyHandler5_4(id) {
+            var chartData = [
+                { Month: "1월", "2023년": 1000, "2024년": 1100 },
+                { Month: "2월", "2023년": 2500, "2024년": 2700 },
+                { Month: "3월", "2023년": 3700, "2024년": 4000 },
+                { Month: "4월", "2023년": 5500, "2024년": 5900 },
+                { Month: "5월", "2023년": 7500, "2024년": 8000 },
+                { Month: "6월", "2023년": 9200, "2024년": 9800 },
+                { Month: "7월", "2023년": 11100, "2024년": 11800 },
+                { Month: "8월", "2023년": 13300, "2024년": 14100 },
+                { Month: "9월", "2023년": 15400, "2024년": 16300 },
+                { Month: "10월", "2023년": 17200, "2024년": 18200 },
+                { Month: "11월", "2023년": 18800, "2024년": 19900 },
+                { Month: "12월", "2023년": 21100, "2024년": 22300 }
+            ];
+
+            var layoutStr = `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Line2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month" />
+            </horizontalAxis>
+            <series>
+                <Line2DSeries yField="2023년" displayName="2023년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#ffa336" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+                <Line2DSeries yField="2024년" displayName="2024년" itemRenderer="CircleItemRenderer">
+                    <lineStroke>
+                        <Stroke color="#909bff" weight="2"/>
+                    </lineStroke>
+                </Line2DSeries>
+            </series>
+        </Line2DChart>
+    </rMateChart>
+    `;
+
+            var chart = document.getElementById(id);
+            chart.setLayout(layoutStr);
+            chart.setData(chartData);
+        }
+
+        // 그리드 초기화 및 데이터 설정 함수
+        function initGrid5(gridNumber) {
+            let columns, gridData;
+            const gridId = '#theGrid5_' + gridNumber;
+
+            switch (gridNumber) {
+                case 1: // YoY
+                    columns = [
+                        {binding: 'Month', header: '월', width: 100, align: 'center'},
+                        {binding: '2023년', header: '2023년', width: '*', align: 'right'},
+                        {binding: '2024년', header: '2024년', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        { Month: "1월", "2023년": 1000, "2024년": 800 },
+                        { Month: "2월", "2023년": 1500, "2024년": 1200 },
+                        { Month: "3월", "2023년": 1200, "2024년": 1000 },
+                        { Month: "4월", "2023년": 1800, "2024년": 1500 },
+                        { Month: "5월", "2023년": 2000, "2024년": 1700 },
+                        { Month: "6월", "2023년": 1700, "2024년": 1400 },
+                        { Month: "7월", "2023년": 1900, "2024년": 1600 },
+                        { Month: "8월", "2023년": 2200, "2024년": 1800 },
+                        { Month: "9월", "2023년": 2100, "2024년": 1700 },
+                        { Month: "10월", "2023년": 1800, "2024년": 1500 },
+                        { Month: "11월", "2023년": 1600, "2024년": 1300 },
+                        { Month: "12월", "2023년": 2300, "2024년": 1900 }
+                    ];
+                    break;
+                case 2: // QoQ
+                    columns = [
+                        {binding: 'Quarter', header: '분기', width: 100, align: 'center'},
+                        {binding: '2023년', header: '2023년', width: '*', align: 'right'},
+                        {binding: '2024년', header: '2024년', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        { Quarter: "1분기", "2023년": 3700, "2024년": 3000 },
+                        { Quarter: "2분기", "2023년": 5500, "2024년": 4600 },
+                        { Quarter: "3분기", "2023년": 6200, "2024년": 5100 },
+                        { Quarter: "4분기", "2023년": 5700, "2024년": 4700 }
+                    ];
+                    break;
+                case 3: // MoM
+                    columns = [
+                        {binding: 'Month', header: '월', width: 100, align: 'center'},
+                        {binding: '2023년', header: '2023년', width: '*', align: 'right'},
+                        {binding: '2024년', header: '2024년', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        { Month: "1월", "2023년": 1000, "2024년": 1100 },
+                        { Month: "2월", "2023년": 1500, "2024년": 1600 },
+                        { Month: "3월", "2023년": 1200, "2024년": 1300 },
+                        { Month: "4월", "2023년": 1800, "2024년": 1900 },
+                        { Month: "5월", "2023년": 2000, "2024년": 2100 },
+                        { Month: "6월", "2023년": 1700, "2024년": 1800 },
+                        { Month: "7월", "2023년": 1900, "2024년": 2000 },
+                        { Month: "8월", "2023년": 2200, "2024년": 2300 },
+                        { Month: "9월", "2023년": 2100, "2024년": 2200 },
+                        { Month: "10월", "2023년": 1800, "2024년": 1900 },
+                        { Month: "11월", "2023년": 1600, "2024년": 1700 },
+                        { Month: "12월", "2023년": 2300, "2024년": 2400 }
+                    ];
+                    break;
+                case 4: // YTD
+                    columns = [
+                        {binding: 'Month', header: '월', width: 100, align: 'center'},
+                        {binding: '2023년', header: '누적 2023년', width: '*', align: 'right'},
+                        {binding: '2024년', header: '누적 2024년', width: '*', align: 'right'}
+                    ];
+                    gridData = [
+                        { Month: "1월", "2023년": 1000, "2024년": 1100 },
+                        { Month: "2월", "2023년": 2500, "2024년": 2700 },
+                        { Month: "3월", "2023년": 3700, "2024년": 4000 },
+                        { Month: "4월", "2023년": 5500, "2024년": 5900 },
+                        { Month: "5월", "2023년": 7500, "2024년": 8000 },
+                        { Month: "6월", "2023년": 9200, "2024년": 9800 },
+                        { Month: "7월", "2023년": 11100, "2024년": 11800 },
+                        { Month: "8월", "2023년": 13300, "2024년": 14100 },
+                        { Month: "9월", "2023년": 15400, "2024년": 16300 },
+                        { Month: "10월", "2023년": 17200, "2024년": 18200 },
+                        { Month: "11월", "2023년": 18800, "2024년": 19900 },
+                        { Month: "12월", "2023년": 21100, "2024년": 22300 }
+                    ];
+                    break;
+            }
+
+            let viewdata = new wijmo.collections.CollectionView(gridData);
+            let grid = new wijmo.grid.FlexGrid(gridId, {
+                autoGenerateColumns: false,
+                columns: columns,
+                itemsSource: viewdata,
+                isReadOnly: true
+            });
+
+            // 맨 앞에 헤더부분 없애기
+            grid.rowHeaders.columns.splice(0, 1);
+        }
 
     </script>
 </th:block>
