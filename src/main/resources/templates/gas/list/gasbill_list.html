@@ -61,20 +61,8 @@
                 <li>
                     <a href="#tab3" title="청구서등록">청구서등록</a>
                 </li>
-                <!--                <li>-->
-                <!--                    <a href="#tab1" title="도시가스공급단가">도시가스공급단가</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab2" title="도시가스평균단가">도시가스평균단가</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab3" title="도시가스사용량">도시가스사용량</a>-->
-                <!--                </li>-->
-                <!--                <li>-->
-                <!--                    <a href="#tab4" title="도시가스사용금액">도시가스사용금액</a>-->
-                <!--                </li>-->
             </ul>
-            <div class="tab-contents" style="margin-bottom: 70px">
+            <div class="tab-contents">
                 <!-- Section -->
                 <section class="tab-item" id="tab1">
                     <!--                    <div class="section-top">-->
@@ -674,6 +662,11 @@
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
+<footer>
+    <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+</footer>
+    <div style="height: 10px;"></div>
+
 
     <div class="modal">
         <div class="popup-wrapper w700" id="popup1">
@@ -1175,21 +1168,6 @@
                 {"Month": "12월", "ASKAMT": 1800, "SMUSEQTY": 90, "SMUSEHQTY": 95}
             ];
 
-            // var chartDataCombo = [
-            //     {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
-            //     {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
-            //     {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
-            //     {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
-            //     {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
-            //     {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
-            //     {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
-            //     {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
-            //     {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
-            //     {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
-            //     {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
-            //     {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
-            // ];
-
 
             rMateChartH5.calls("chart9", {"setLayout": layoutStr3, "setData": chartDataCombo});
 
@@ -1574,7 +1552,7 @@
                 dataType: 'json',
                 success: function(years) {
                     const yearSelect = $('#yearSelect');
-
+                    const currentYear = new Date().getFullYear(); // 올해 연도
 
                     // 기존 option 요소 모두 삭제
                     yearSelect.empty();
@@ -1584,23 +1562,22 @@
                         yearSelect.append(new Option(year, year));
                     });
 
-                    // 최신 연도를 기본 선택하고 해당 연도의 데이터를 그리드에 바인딩
-                    if (years.length > 0) {
-                        const latestYear = years[0]; // 최신 연도
-                        yearSelect.val(latestYear);
-                        loadGridData(latestYear); // 최신 연도 데이터 로드
+                    // 올해 연도가 years 배열에 포함되어 있지 않으면 추가
+                    if (!years.includes(currentYear.toString())) {
+                        yearSelect.append(new Option(currentYear, currentYear));
+                        years.push(currentYear.toString()); // 배열에도 올해 연도를 추가
                     }
+
+                    // 올해 연도를 기본 선택하고 해당 연도의 데이터를 그리드에 바인딩
+                    const latestYear = currentYear.toString(); // 올해 연도를 기본으로 선택
+                    yearSelect.val(latestYear);
+                    loadGridData(latestYear); // 선택한 연도 데이터 로드
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching years:', status, error);
                 }
             });
 
-            // 연도 변경 시 그리드 데이터 로드
-            document.getElementById('yearSelect').addEventListener('change', function() {
-                const selectedYear = this.value;
-                loadGridData(selectedYear);
-            });
 
             // 선택된 연도의 데이터를 그리드에 로드하는 함수
             function loadGridData(year) {
@@ -1613,17 +1590,12 @@
                         // 응답에서 실제 데이터 배열 추출
                         const data = response.data;
 
-                        // 데이터가 배열인지 확인
-                        console.log('Data type:', typeof data);
-
-                        // 데이터가 배열인지 확인
-                        if (!Array.isArray(data)) {
-                            console.error('Expected data to be an array but got:', data);
-                            return;
+                        if (theGrid5) {
+                            theGrid5.dispose();
                         }
 
                         // 그리드 초기화 및 데이터 바인딩
-                        const theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
+                        theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
                             autoGenerateColumns: false,
                             showMarquee: true,
                             columns: [
@@ -1646,6 +1618,19 @@
 
                         theGrid5.rowHeaders.columns.splice(0, 1);
 
+                        if (!Array.isArray(data) || data.length === 0) {
+                            console.warn('No data found for the selected year:', year);
+
+                            // 빈 그리드 초기화
+                            const emptyData = [
+                                { category: '사용량', Jan: '', Feb: '', Mar: '', Apr: '', May: '', Jun: '', Jul: '', Aug: '', Sep: '', Oct: '', Nov: '', Dec: '', total: '' },
+                                { category: '사용열량', Jan: '', Feb: '', Mar: '', Apr: '', May: '', Jun: '', Jul: '', Aug: '', Sep: '', Oct: '', Nov: '', Dec: '', total: '' },
+                                { category: '청구금액', Jan: '', Feb: '', Mar: '', Apr: '', May: '', Jun: '', Jul: '', Aug: '', Sep: '', Oct: '', Nov: '', Dec: '', total: '' }
+                            ];
+                            theGrid5.itemsSource = emptyData;
+                            return;
+                        }
+
                         // 데이터 가공 및 바인딩
                         const gridData = [
                             { category: '사용량', ...getMonthlyData(data, 'smuseqty') },
@@ -1661,6 +1646,12 @@
                     }
                 });
             }
+
+            // 연도 변경 시 그리드 데이터 로드
+            document.getElementById('yearSelect').addEventListener('change', function() {
+                const selectedYear = this.value;
+                loadGridData(selectedYear);
+            });
 
             // 월별 데이터 가공 함수
             function getMonthlyData(data, field) {
@@ -1698,7 +1689,11 @@
                 return monthlyData;
             }
 
+
+
         }
+
+
 
 
 
