@@ -5,7 +5,7 @@
             text-align: center !important;
         }
 
-        #theGrid1.wj-flexgrid .wj-cell,
+        /*#theGrid1.wj-flexgrid .wj-cell,
         #theGrid2.wj-flexgrid .wj-cell,
         #theGrid3.wj-flexgrid .wj-cell,
         #theGrid4.wj-flexgrid .wj-cell {
@@ -18,7 +18,7 @@
         #theGrid3.wj-flexgrid .downloads,
         #theGrid4.wj-flexgrid .downloads {
             padding-top: 0px;
-        }
+        }*/
 
         /*.container-fluid {
             overflow-x: auto;
@@ -41,8 +41,6 @@
         .popup-wrapper::-webkit-scrollbar-track {
             background-color: transparent !important;
         }
-
-
     </style>
 </head>
 
@@ -112,7 +110,7 @@
                     <a href="#tab5" title="기간별대비">기간별 대비</a>
                 </li>
             </ul>
-            <div class="tab-contents" style="height: 830px;">
+            <div class="tab-contents">
 
                 <!-- tab1 -->
                 <section class="tab-item" id="tab1">
@@ -120,7 +118,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    일자<span class="eq">*</span>
+                                    조회일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -182,7 +180,7 @@
 
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem1"></p>
-                        <div id="theGrid1" style="max-height: 710px;"></div>
+                        <div id="theGrid1" style="max-height: 722px;"></div>
                     </div>
                 </section>
 
@@ -192,7 +190,7 @@
                         <div class="search-wrap">
                             <dl>
                                 <dt>
-                                    일자<span class="eq">*</span>
+                                    조회일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
                                     <ul class="date-box">
@@ -257,12 +255,12 @@
                     </div> <!--//section-top end -->
                     <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
                         <p id="selectedItem2"></p>
-                        <div id="theGrid2" style="max-height: 710px;"></div>
+                        <div id="theGrid2" style="max-height: 722px;"></div>
                     </div>
                 </section>
 
                 <!-- tab3 -->
-                <section class="tab-item" id="tab3" style="height: 840px;">
+                <section class="tab-item" id="tab3">
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -274,26 +272,46 @@
                                         <li id="startDateContainer">
                                             <input type="date" id="startDate" name="startDate" value="2024-09-20">
                                         </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search"
-                                               onclick="searchDataTab1()">
-                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                검색
-                                            </a>
-                                        </li>
                                     </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1_tab1">
+                                        발전기코드<span class="eq">*</span>
+                                    </label>
+                                </dt>
+
+                                <dd>
+                                    <select id="select1_tab3" class="w120">
+                                        <option>전체</option>
+                                        <option>AJ38</option>
+                                        <option>A373</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton3" onclick="search()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
                                 </dd>
                             </dl>
                         </div>
                     </div> <!--//section-top end -->
 
-                    <div class="row" style="margin-bottom: 10px">
+                    <div class="row" style="margin-bottom: 35px;">
                         <div class="chart-wrap">
-                            <div id="chartHolder3" style="height:269px; width:100%;"></div>
+                            <div id="chartHolder3" style="height:545px; width:1560px;"></div>
                         </div>
                     </div>
                     <div class="container-fluid">
-                        <div id="theGrid3" style="height:269px; width:100%;"></div>
+                        <div id="theGrid3" style="height:137px; width:100%;"></div>
                     </div>
                 </section>
 
@@ -313,23 +331,43 @@
                                         <li id="endDateContainer">
                                             <input type="month" id="endDate" name="endDate" value="2024-12">
                                         </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search"
-                                               onclick="searchDataTab1()">
-                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                검색
-                                            </a>
-                                        </li>
                                     </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1_tab1">
+                                        발전기코드<span class="eq">*</span>
+                                    </label>
+                                </dt>
+
+                                <dd>
+                                    <select id="select1_tab4" class="w120">
+                                        <option>전체</option>
+                                        <option>AJ38</option>
+                                        <option>A373</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton4" onclick="search()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
                                 </dd>
                             </dl>
                         </div>
                     </div> <!--//section-top end -->
 
                     <!-- 4분할 레이아웃 -->
-                    <div class="row row-2" style="margin-bottom: 10px">
+                    <div class="row row-2" style="margin-bottom: 12px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 348px; ">
                                 <div class="title-wrap">
                                     <h3>월별</h3>
                                     <ul class="tab-links-sub">
@@ -345,13 +383,13 @@
                                     <!-- tab4_1 -->
                                     <div class="tab-item-sub" id="tab4_1">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder4_1" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder4_1" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab4_2 -->
                                     <div class="tab-item-sub" id="tab4_2">
                                         <div class="container-fluid">
-                                            <div id="theGrid4_1" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid4_1" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +397,7 @@
                         </div>
 
                         <div class="col wp50">
-                            <section class="tab-section section_top" style="height: 350px;">
+                            <section class="tab-section section_top" style="height: 348px;">
                                 <div class="title-wrap">
                                     <h3>분기별</h3>
                                     <ul class="tab-links-sub">
@@ -375,13 +413,13 @@
                                     <!-- tab4_3 -->
                                     <div class="tab-item-sub" id="tab4_3">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder4_2" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder4_2" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab4_4 -->
                                     <div class="tab-item-sub" id="tab4_4">
                                         <div class="container-fluid">
-                                            <div id="theGrid4_2" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid4_2" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -389,9 +427,9 @@
                         </div>
                     </div>
 
-                    <div class="row row-2" style="margin-bottom: 10px">
+                    <div class="row row-2" style="margin-bottom: 12px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 348px; ">
                                 <div class="title-wrap">
                                     <h3>반기별</h3>
                                     <ul class="tab-links-sub">
@@ -407,14 +445,14 @@
                                     <!-- tab4_5 -->
                                     <div class="tab-item-sub" id="tab4_5">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder4_3" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder4_3" style="height:266px; width:100%;"></div>
 
                                         </div>
                                     </div>
                                     <!-- tab4_6 -->
                                     <div class="tab-item-sub" id="tab4_6">
                                         <div class="container-fluid">
-                                            <div id="theGrid4_3" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid4_3" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -422,7 +460,7 @@
                         </div>
 
                         <div class="col wp50">
-                            <section class="tab-section section_top" style="height: 350px;">
+                            <section class="tab-section section_top" style="height: 348px;">
                                 <div class="title-wrap">
                                     <h3>연도별</h3>
                                     <ul class="tab-links-sub">
@@ -438,13 +476,13 @@
                                     <!-- tab4_7 -->
                                     <div class="tab-item-sub" id="tab4_7">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder4_4" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder4_4" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab4_8 -->
                                     <div class="tab-item-sub" id="tab4_8">
                                         <div class="container-fluid">
-                                            <div id="theGrid4_4" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid4_4" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -469,39 +507,43 @@
                                         <li id="endDateContainer">
                                             <input type="month" id="endDate" name="endDate" value="2024-12">
                                         </li>
-                                        <li>
-                                            <a class="btn btn-delete" title="검색" id="btn-search"
-                                               onclick="searchDataTab1()">
-                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                검색
-                                            </a>
-                                        </li>
                                     </ul>
                                 </dd>
                             </dl>
-                            <!-- <dl>
-                                 <dt>
-                                     <label for="genename2">
-                                         발전기명<span class="eq">*</span>
-                                     </label>
-                                 </dt>
-                                 <dd>
-                                     <ul class="date-box">
-                                         <li>
-                                             <select id="genename2" name="genename">
-                                                 &lt;!&ndash; 동적으로 발전기명을 가져와서 옵션으로 추가 &ndash;&gt;
-                                             </select>
-                                         </li>
-                                     </ul>
-                                 </dd>
-                             </dl>-->
+                            <dl>
+                                <dt>
+                                    <label for="select1_tab1">
+                                        발전기코드<span class="eq">*</span>
+                                    </label>
+                                </dt>
+
+                                <dd>
+                                    <select id="select1_tab5" class="w120">
+                                        <option>전체</option>
+                                        <option>AJ38</option>
+                                        <option>A373</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton5" onclick="search()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
                         </div>
                     </div> <!--//section-top end -->
 
                     <!-- 4분할 레이아웃 -->
-                    <div class="row row-2" style="margin-bottom: 10px">
+                    <div class="row row-2" style="margin-bottom: 12px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 348px; ">
                                 <div class="title-wrap">
                                     <h3>YoY</h3>
                                     <ul class="tab-links-sub">
@@ -517,13 +559,13 @@
                                     <!-- tab2_1 -->
                                     <div class="tab-item-sub" id="tab5_1">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder5_1" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder5_1" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab2_2 -->
                                     <div class="tab-item-sub" id="tab5_2">
                                         <div class="container-fluid">
-                                            <div id="theGrid5_1" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid5_1" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -531,7 +573,7 @@
                         </div>
 
                         <div class="col wp50">
-                            <section class="tab-section section_top" style="height: 350px;">
+                            <section class="tab-section section_top" style="height: 348px;">
                                 <div class="title-wrap">
                                     <h3>QoQ</h3>
                                     <ul class="tab-links-sub">
@@ -547,13 +589,13 @@
                                     <!-- tab2_3 -->
                                     <div class="tab-item-sub" id="tab5_3">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder5_2" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder5_2" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab2_4 -->
                                     <div class="tab-item-sub" id="tab5_4">
                                         <div class="container-fluid">
-                                            <div id="theGrid5_2" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid5_2" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -561,9 +603,9 @@
                         </div>
                     </div>
 
-                    <div class="row row-2" style="margin-bottom: 10px">
+                    <div class="row row-2" style="margin-bottom: 12px">
                         <div class="col wp50" style="margin-right: 15px">
-                            <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 348px; ">
                                 <div class="title-wrap">
                                     <h3>MoM</h3>
                                     <ul class="tab-links-sub">
@@ -579,14 +621,14 @@
                                     <!-- tab2_5 -->
                                     <div class="tab-item-sub" id="tab5_5">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder5_3" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder5_3" style="height:266px; width:100%;"></div>
 
                                         </div>
                                     </div>
                                     <!-- tab2_6 -->
                                     <div class="tab-item-sub" id="tab5_6">
                                         <div class="container-fluid">
-                                            <div id="theGrid5_3" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid5_3" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -594,7 +636,7 @@
                         </div>
 
                         <div class="col wp50">
-                            <section class="tab-section section_top" style="height: 350px;">
+                            <section class="tab-section section_top" style="height: 348px;">
                                 <div class="title-wrap">
                                     <h3>YTD</h3>
                                     <ul class="tab-links-sub">
@@ -610,13 +652,13 @@
                                     <!-- tab2_7 -->
                                     <div class="tab-item-sub" id="tab5_7">
                                         <div class="chart-wrap">
-                                            <div id="chartHolder5_4" style="height:269px; width:100%;"></div>
+                                            <div id="chartHolder5_4" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                     <!-- tab2_8 -->
                                     <div class="tab-item-sub" id="tab5_8">
                                         <div class="container-fluid">
-                                            <div id="theGrid5_4" style="height:269px; width:100%;"></div>
+                                            <div id="theGrid5_4" style="height:266px; width:100%;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -721,7 +763,9 @@
             </div>
         </div>
     </div> <!--//layout-contents end -->
-
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
 
 </th:block>
 
@@ -739,6 +783,15 @@
 
         // DOM 로드 완료 시 실행
         $(document).ready(function (e) {
+
+            // 임시로 막아둠
+            document.getElementById("btnShowDateList").onclick = function(e) {
+                e.preventDefault();  // 첫 번째 버튼 클릭 이벤트 막기
+            };
+            document.getElementById("btnShowDateList2").onclick = function(e) {
+                e.preventDefault();  // 두 번째 버튼 클릭 이벤트 막기
+            };
+
             init();
 
             // 초기 활성화된 탭에 대해서만 차트를 초기화
@@ -855,6 +908,7 @@
             // });
 
         }
+
 
         // 그리드 초기화
         function initializeGrid(data) {
@@ -2558,6 +2612,63 @@
         // ===================================================================================================
         // 0919 하드코딩
 
+        // 해당 탭에서 현황 탭 누른 상태에서 다른 탭 이동 후 다시 해당 탭 돌아와서 통계 탭 클릭 시 차트 안나타날때
+        $(".tab-links-sub a").click(function (event) {
+            event.preventDefault();
+
+            var tabId = $(this).attr("href");
+            $(this).closest('.tab-section').find('.tab-item-sub').hide(); // 모든 탭 내용 숨기기
+            $(tabId).show(); // 선택한 탭 내용 보여주기
+            $(this).closest('.tab-links-sub').find('li').removeClass('active'); // 모든 탭 버튼 비활성화
+            $(this).parent().addClass('active'); // 선택한 탭 버튼 활성화
+
+            // 현재 선택된 메인 탭(tab4 또는 tab5)에 따라 차트 다시 로드
+            var currentMainTab = $(".tab-links li.active a").attr("href");
+
+            if (currentMainTab === "#tab4") {
+                // 기간별 조회 (tab4)
+                if (tabId.includes('tab4_1') || tabId.includes('tab4_3') || tabId.includes('tab4_5') || tabId.includes('tab4_7')) {
+                    showTab4Charts(); // 기간별 조회 차트 리사이즈 및 렌더링
+                }
+            } else if (currentMainTab === "#tab5") {
+                // 기간별 대비 (tab5)
+                if (tabId.includes('tab5_1') || tabId.includes('tab5_3') || tabId.includes('tab5_5') || tabId.includes('tab5_7')) {
+                    showTab5Charts(); // 기간별 대비 차트 리사이즈 및 렌더링
+                }
+            }
+        });
+
+        function showTab4Charts() {
+            // tab4의 모든 차트 리사이즈 및 렌더링
+            for (let i = 1; i <= 4; i++) {
+                let chartId = "chart4_" + i;
+                if (typeof window["chartReadyHandler4_" + i] === "function") {
+                    window["chartReadyHandler4_" + i](chartId);
+                }
+                resizeChart(chartId);
+            }
+        }
+
+        function showTab5Charts() {
+            // tab5의 모든 차트 리사이즈 및 렌더링
+            for (let i = 1; i <= 4; i++) {
+                let chartId = "chart5_" + i;
+                if (typeof window["chartReadyHandler5_" + i] === "function") {
+                    window["chartReadyHandler5_" + i](chartId);
+                }
+                resizeChart(chartId);
+            }
+        }
+
+        function resizeChart(chartId) {
+            var chart = document.getElementById(chartId);
+            if (chart && typeof chart.resize === 'function') {
+                chart.resize();
+            }
+        }
+
+
+
         // tab3
 
         // tab3 차트 초기화 함수
@@ -2573,54 +2684,59 @@
         // tab3 차트 데이터 설정 함수
         function chartReadyHandler3(id) {
             var chartData = [
-                {Hour: "01시", Value: 100},
-                {Hour: "02시", Value: 120},
-                {Hour: "03시", Value: 110},
-                {Hour: "04시", Value: 90},
-                {Hour: "05시", Value: 80},
-                {Hour: "06시", Value: 100},
-                {Hour: "07시", Value: 130},
-                {Hour: "08시", Value: 150},
-                {Hour: "09시", Value: 180},
-                {Hour: "10시", Value: 200},
-                {Hour: "11시", Value: 220},
-                {Hour: "12시", Value: 210},
-                {Hour: "13시", Value: 200},
-                {Hour: "14시", Value: 190},
-                {Hour: "15시", Value: 180},
-                {Hour: "16시", Value: 170},
-                {Hour: "17시", Value: 160},
-                {Hour: "18시", Value: 150},
-                {Hour: "19시", Value: 140},
-                {Hour: "20시", Value: 130},
-                {Hour: "21시", Value: 120},
-                {Hour: "22시", Value: 110},
-                {Hour: "23시", Value: 100},
-                {Hour: "24시", Value: 90}
+                {Hour: "01시", KT대구물류센터: 651000, KT대덕2연구센터: 835000},
+                {Hour: "02시", KT대구물류센터: 660000, KT대덕2연구센터: 820000},
+                {Hour: "03시", KT대구물류센터: 645000, KT대덕2연구센터: 840000},
+                {Hour: "04시", KT대구물류센터: 655000, KT대덕2연구센터: 830000},
+                {Hour: "05시", KT대구물류센터: 670000, KT대덕2연구센터: 815000},
+                {Hour: "06시", KT대구물류센터: 680000, KT대덕2연구센터: 825000},
+                {Hour: "07시", KT대구물류센터: 690000, KT대덕2연구센터: 845000},
+                {Hour: "08시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
+                {Hour: "09시", KT대구물류센터: 665000, KT대덕2연구센터: 835000},
+                {Hour: "10시", KT대구물류센터: 655000, KT대덕2연구센터: 820000},
+                {Hour: "11시", KT대구물류센터: 670000, KT대덕2연구센터: 830000},
+                {Hour: "12시", KT대구물류센터: 685000, KT대덕2연구센터: 845000},
+                {Hour: "13시", KT대구물류센터: 695000, KT대덕2연구센터: 855000},
+                {Hour: "14시", KT대구물류센터: 680000, KT대덕2연구센터: 840000},
+                {Hour: "15시", KT대구물류센터: 665000, KT대덕2연구센터: 825000},
+                {Hour: "16시", KT대구물류센터: 650000, KT대덕2연구센터: 815000},
+                {Hour: "17시", KT대구물류센터: 660000, KT대덕2연구센터: 830000},
+                {Hour: "18시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
+                {Hour: "19시", KT대구물류센터: 685000, KT대덕2연구센터: 860000},
+                {Hour: "20시", KT대구물류센터: 670000, KT대덕2연구센터: 840000},
+                {Hour: "21시", KT대구물류센터: 655000, KT대덕2연구센터: 825000},
+                {Hour: "22시", KT대구물류센터: 645000, KT대덕2연구센터: 815000},
+                {Hour: "23시", KT대구물류센터: 650000, KT대덕2연구센터: 830000},
+                {Hour: "24시", KT대구물류센터: 660000, KT대덕2연구센터: 845000}
             ];
 
             var layoutStr = `
-    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-        <Options>
-            <Caption text="시간별 발전량"/>
-        </Options>
-        <Column2DChart showDataTips="true">
-            <horizontalAxis>
-                <CategoryAxis categoryField="Hour"/>
-            </horizontalAxis>
-            <verticalAxis>
-                <LinearAxis/>
-            </verticalAxis>
-            <series>
-                <Column2DSeries yField="Value" displayName="발전량" fill="#88BABF">
-                    <showDataEffect>
-                        <SeriesInterpolate/>
-                    </showDataEffect>
-                </Column2DSeries>
-            </series>
-        </Column2DChart>
-    </rMateChart>
-    `;
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Options>
+        <Legend />
+    </Options>
+    <Line2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Hour" />
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis minimum="600000" maximum="900000" interval="50000"/>
+        </verticalAxis>
+        <series>
+            <Line2DSeries yField="KT대구물류센터" displayName="KT대구물류센터 연료전지" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#ffa336" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+            <Line2DSeries yField="KT대덕2연구센터" displayName="KT대덕2연구센터 연료전지" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#909bff" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+        </series>
+    </Line2DChart>
+</rMateChart>
+`;
 
             var chart = document.getElementById(id);
             chart.setLayout(layoutStr);
@@ -2631,112 +2747,127 @@
         function initGrid3() {
             var gridData = [
                 {
-                    powerid: 'PW001',
-                    powernm: '발전기1',
+                    rownum: 1,
+                    standdt: '2024-08-01',
+                    powerid: 'AJ38',
+                    powernm: 'KT대구물류센터 연료전지',
                     chargedv: '충전',
-                    mevalue01: 100,
-                    mevalue02: 120,
-                    mevalue03: 110,
-                    mevalue04: 90,
-                    mevalue05: 80,
-                    mevalue06: 100,
-                    mevalue07: 130,
-                    mevalue08: 150,
-                    mevalue09: 180,
-                    mevalue10: 200,
-                    mevalue11: 220,
-                    mevalue12: 210,
-                    mevalue13: 200,
-                    mevalue14: 190,
-                    mevalue15: 180,
-                    mevalue16: 170,
-                    mevalue17: 160,
-                    mevalue18: 150,
-                    mevalue19: 140,
-                    mevalue20: 130,
-                    mevalue21: 120,
-                    mevalue22: 110,
-                    mevalue23: 100,
-                    mevalue24: 90,
-                    mevaluet: 3430,
+                    mevalue01: 651565,
+                    mevalue02: 651565,
+                    mevalue03: 649396,
+                    mevalue04: 649396,
+                    mevalue05: 649396,
+                    mevalue06: 649396,
+                    mevalue07: 648673,
+                    mevalue08: 649396,
+                    mevalue09: 650119,
+                    mevalue10: 648673,
+                    mevalue11: 651565,
+                    mevalue12: 648673,
+                    mevalue13: 649396,
+                    mevalue14: 649396,
+                    mevalue15: 650119,
+                    mevalue16: 651565,
+                    mevalue17: 649396,
+                    mevalue18: 649396,
+                    mevalue19: 650119,
+                    mevalue20: 651565,
+                    mevalue21: 649396,
+                    mevalue22: 650119,
+                    mevalue23: 651565,
+                    mevalue24: 650119,
+                    mevaluet: 15612900,
                     indatem: '2024-09-20',
                     inusernm: '홍길동',
-                    updatem: '2024-09-20'
+                    updatem: '2024-09-10'
                 },
                 {
-                    powerid: 'PW002',
-                    powernm: '발전기2',
+                    rownum: 2,
+                    standdt: '2024-08-01',
+                    powerid: 'A373',
+                    powernm: 'KT대덕2연구센터 연료전지',
                     chargedv: '방전',
-                    mevalue01: 90,
-                    mevalue02: 110,
-                    mevalue03: 100,
-                    mevalue04: 80,
-                    mevalue05: 70,
-                    mevalue06: 90,
-                    mevalue07: 120,
-                    mevalue08: 140,
-                    mevalue09: 170,
-                    mevalue10: 190,
-                    mevalue11: 210,
-                    mevalue12: 200,
-                    mevalue13: 190,
-                    mevalue14: 180,
-                    mevalue15: 170,
-                    mevalue16: 160,
-                    mevalue17: 150,
-                    mevalue18: 140,
-                    mevalue19: 130,
-                    mevalue20: 120,
-                    mevalue21: 110,
-                    mevalue22: 100,
-                    mevalue23: 90,
-                    mevalue24: 80,
-                    mevaluet: 3190,
+                    mevalue01: 835200,
+                    mevalue02: 834480,
+                    mevalue03: 835200,
+                    mevalue04: 835200,
+                    mevalue05: 835200,
+                    mevalue06: 836640,
+                    mevalue07: 835920,
+                    mevalue08: 835920,
+                    mevalue09: 835200,
+                    mevalue10: 835200,
+                    mevalue11: 834480,
+                    mevalue12: 834480,
+                    mevalue13: 834480,
+                    mevalue14: 834480,
+                    mevalue15: 834480,
+                    mevalue16: 835200,
+                    mevalue17: 834480,
+                    mevalue18: 833760,
+                    mevalue19: 834480,
+                    mevalue20: 833760,
+                    mevalue21: 833760,
+                    mevalue22: 833760,
+                    mevalue23: 834480,
+                    mevalue24: 835200,
+                    mevaluet: 20030000,
                     indatem: '2024-09-20',
                     inusernm: '김철수',
-                    updatem: '2024-09-20'
+                    updatem: ''
                 }
             ];
 
             theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
                 autoGenerateColumns: false,
+                showMarquee: true,
+                isReadOnly: true,
                 columns: [
-                    {binding: 'powerid', header: '발전기코드', width: 100},
-                    {binding: 'powernm', header: '발전기명', width: 100},
-                    {binding: 'chargedv', header: '충전/방전', width: 100},
-                    {binding: 'mevalue01', header: '01시', width: 70, format: 'n0'},
-                    {binding: 'mevalue02', header: '02시', width: 70, format: 'n0'},
-                    {binding: 'mevalue03', header: '03시', width: 70, format: 'n0'},
-                    {binding: 'mevalue04', header: '04시', width: 70, format: 'n0'},
-                    {binding: 'mevalue05', header: '05시', width: 70, format: 'n0'},
-                    {binding: 'mevalue06', header: '06시', width: 70, format: 'n0'},
-                    {binding: 'mevalue07', header: '07시', width: 70, format: 'n0'},
-                    {binding: 'mevalue08', header: '08시', width: 70, format: 'n0'},
-                    {binding: 'mevalue09', header: '09시', width: 70, format: 'n0'},
-                    {binding: 'mevalue10', header: '10시', width: 70, format: 'n0'},
-                    {binding: 'mevalue11', header: '11시', width: 70, format: 'n0'},
-                    {binding: 'mevalue12', header: '12시', width: 70, format: 'n0'},
-                    {binding: 'mevalue13', header: '13시', width: 70, format: 'n0'},
-                    {binding: 'mevalue14', header: '14시', width: 70, format: 'n0'},
-                    {binding: 'mevalue15', header: '15시', width: 70, format: 'n0'},
-                    {binding: 'mevalue16', header: '16시', width: 70, format: 'n0'},
-                    {binding: 'mevalue17', header: '17시', width: 70, format: 'n0'},
-                    {binding: 'mevalue18', header: '18시', width: 70, format: 'n0'},
-                    {binding: 'mevalue19', header: '19시', width: 70, format: 'n0'},
-                    {binding: 'mevalue20', header: '20시', width: 70, format: 'n0'},
-                    {binding: 'mevalue21', header: '21시', width: 70, format: 'n0'},
-                    {binding: 'mevalue22', header: '22시', width: 70, format: 'n0'},
-                    {binding: 'mevalue23', header: '23시', width: 70, format: 'n0'},
-                    {binding: 'mevalue24', header: '24시', width: 70, format: 'n0'},
-                    {binding: 'mevaluet', header: '합계', width: 100, format: 'n0'},
-                    {binding: 'indatem', header: '등록일자', width: 100},
-                    {binding: 'inusernm', header: '등록자', width: 80},
-                    {binding: 'updatem', header: '최종수정일', width: 100}
+                    {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
+                    {binding: 'standdt', header: '일자', width: 115, align: 'center'},
+                    {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
+                    {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
+                    {binding: 'chargedv', header: '충전/방전', width: 100, align: 'center'},
+                    {binding: 'mevalue01', header: '01시', width: 90, format: 'n0'},
+                    {binding: 'mevalue02', header: '02시', width: 90, format: 'n0'},
+                    {binding: 'mevalue03', header: '03시', width: 90, format: 'n0'},
+                    {
+                        binding: 'toggle',
+                        header: '...',
+                        width: 90,
+                        format: 'n0',
+                        allowSorting: false
+                    },
+                    {binding: 'mevalue04', header: '04시', width: 90, format: 'n0'},
+                    {binding: 'mevalue05', header: '05시', width: 90, format: 'n0'},
+                    {binding: 'mevalue06', header: '06시', width: 90, format: 'n0'},
+                    {binding: 'mevalue07', header: '07시', width: 90, format: 'n0'},
+                    {binding: 'mevalue08', header: '08시', width: 90, format: 'n0'},
+                    {binding: 'mevalue09', header: '09시', width: 90, format: 'n0'},
+                    {binding: 'mevalue10', header: '10시', width: 90, format: 'n0'},
+                    {binding: 'mevalue11', header: '11시', width: 90, format: 'n0'},
+                    {binding: 'mevalue12', header: '12시', width: 90, format: 'n0'},
+                    {binding: 'mevalue13', header: '13시', width: 90, format: 'n0'},
+                    {binding: 'mevalue14', header: '14시', width: 90, format: 'n0'},
+                    {binding: 'mevalue15', header: '15시', width: 90, format: 'n0'},
+                    {binding: 'mevalue16', header: '16시', width: 90, format: 'n0'},
+                    {binding: 'mevalue17', header: '17시', width: 90, format: 'n0'},
+                    {binding: 'mevalue18', header: '18시', width: 90, format: 'n0'},
+                    {binding: 'mevalue19', header: '19시', width: 90, format: 'n0'},
+                    {binding: 'mevalue20', header: '20시', width: 90, format: 'n0'},
+                    {binding: 'mevalue21', header: '21시', width: 90, format: 'n0'},
+                    {binding: 'mevalue22', header: '22시', width: 90, format: 'n0'},
+                    {binding: 'mevalue23', header: '23시', width: 90, format: 'n0'},
+                    {binding: 'mevalue24', header: '24시', width: 90, format: 'n0'},
+                    {binding: 'mevaluet', header: '합계', width: 110, format: 'n0'},
+                    {binding: 'indatem', header: '등록일자', width:115, align: 'center'},
+                    {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
+                    {binding: 'updatem', header: '최종수정일', width: 121, align: 'center'}
                 ],
                 itemsSource: gridData
             });
-            // 맨 앞에 헤더부분 없애기
-            theGrid3.rowHeaders.columns.splice(0, 1);
+            theGrid3.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
+            initializeColumnToggle(theGrid3); // 컬럼 숨기기 초기화 함수 호출
         }
 
         // tab3 검색 함수 (실제 구현할때 수정하기)
@@ -3006,6 +3137,7 @@
             let viewdata = new wijmo.collections.CollectionView(gridData);
             let grid = new wijmo.grid.FlexGrid(gridId, {
                 autoGenerateColumns: false,
+                showMarquee: true,
                 columns: columns,
                 itemsSource: viewdata,
                 isReadOnly: true
@@ -3337,6 +3469,7 @@
             let viewdata = new wijmo.collections.CollectionView(gridData);
             let grid = new wijmo.grid.FlexGrid(gridId, {
                 autoGenerateColumns: false,
+                showMarquee: true,
                 columns: columns,
                 itemsSource: viewdata,
                 isReadOnly: true
