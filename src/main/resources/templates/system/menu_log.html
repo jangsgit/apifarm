@@ -360,12 +360,13 @@
                     <div class="btn-wrap">
                     </div>
                 </section>
-
-
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
 
+    <footer style="margin-top: 24px;">
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -402,9 +403,10 @@
         var columns = [
             {binding: 'folder_name', header: '메뉴폴더', width: 200, align: 'center'},
             {binding: 'menu_name', header: '메뉴', width: 200, align: 'center'},
-            {binding: 'use_count', header: '사용횟수', width: 200, align: 'center', format: 'n0'},
-            {binding: '', header: '', width: "*", align: 'center'},
+            {binding: 'use_count', header: '사용횟수', width: 200, align: 'center'},
+            {binding: '', header: '', width: "*"},
         ];
+
         var columns2 = [
             {binding: 'row_number', header: 'No', width: 160, align: 'center'},
             {binding: 'folder_name', header: '메뉴폴더', width: 160, align: 'center'},
@@ -515,6 +517,7 @@
                 itemsSource: viewdata
             });
 
+
             theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
                 autoGenerateColumns: false,
                 showMarquee: true,
@@ -522,6 +525,8 @@
                 isReadOnly: true,
                 itemsSource: viewdata2
             });
+
+
 
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: () => {
