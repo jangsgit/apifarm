@@ -94,7 +94,8 @@ $(document).ready(function () {
         // 추가 예외 URL을 여기에 추가할 수 있습니다.
         "/gui/another_exception",
         "/gui/wm_inspec_statistics/default",
-        "/gui/wm_inspec_month_list/default"
+        "/gui/wm_inspec_month_list/default",
+        "/gui/wm_equipment_search/default"
     ];
 
     // 현재 URL의 경로를 가져옵니다.

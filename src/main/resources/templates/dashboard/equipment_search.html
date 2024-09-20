@@ -12,9 +12,9 @@
         <div class="page-title-wrap">
             <div class="left">
                 <h2>장비이력조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
+                <!--<a title="북마크" class="bookmark toggle">
                     내 메뉴
-                </a>
+                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -50,16 +50,18 @@
                 </a>
             </div>
         </div>
-        <section style="background-color: #f0f1f2; border-radius: 0px; border: none; box-shadow: none; padding: 2px">
+        <section style="border-radius: 0px; border: none; box-shadow: none; padding: 2px">
             <div class="section-top">
                 <div class="search-wrap">
 
                     <dl>
+                        <dt>
+                            <label for="periodType">
+                                기간유형<span class="eq">*</span>
+                            </label>
+                        </dt>
                         <dd>
-                            <ul class="date-box" style="gap: 5px">
-                                <label class="search-label" id="periodLabel">
-                                    기간유형<span class="eq">*</span>
-                                </label>
+                            <ul class="date-box">
                                 <li>
                                     <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
                                         <option value="hourly">시간별</option>
@@ -72,14 +74,14 @@
                             </ul>
                         </dd>
                     </dl>
-                    <dl id="searchYear" style="display: none">
+                    <dl id="searchYear">
+                        <dt>
+                            조회연도<span class="eq">*</span>
+                        </dt>
                         <dd>
-                            <ul class="date-box" style="gap: 5px">
-                                <label class="search-label">
-                                    조회연도<span class="eq">*</span>
-                                </label>
+                            <ul class="date-box">
                                 <li>
-                                    <select id="yearSelectTab1" name="yearSelectTab1">
+                                    <select id="yearSelectTab" name="yearSelectTab">
                                         <option>2023</option>
                                         <option selected>2024</option>
                                     </select>
@@ -87,23 +89,15 @@
                             </ul>
                         </dd>
                     </dl>
-                    <dl>
+                    <dl id="dateBoxContainer">
+                        <dt>
+                            조회기간<span class="eq">*</span>
+                        </dt>
                         <dd>
-                            <ul class="date-box" style="gap: 10px" id="dateBoxContainer">
-                                <label class="search-label">
-                                    조회기간<span class="eq">*</span>
-                                </label>
-                                <!--<li style="cursor: default; list-style-image: none;">
-                                    <input type="date" id="searchfrdate" name="searchfrdate" style="background-color: #fff">
-                                    <label for="searchfrdate" class="hide">시작일</label>
-                                </li>-->
+                            <ul class="date-box" >
                                 <li id="startDateContainer">
-                                    <input type="month" id="startDate" name="startDate" value="2024-01" style="background-color: white">
+                                    <input type="month" id="startDate" name="startDate" value="2024-01">
                                 </li>
-                                <!--<li style="cursor: default; list-style-image: none;">
-                                    <input type="date" id="searchtodate" name="searchtodate" style="background-color: #fff">
-                                    <label for="searchtodate" class="hide">종료일</label>
-                                </li>-->
                                 <li id="endDateContainer">
                                     <input type="month" id="endDate" name="endDate" value="2024-05">
                                 </li>
@@ -112,20 +106,20 @@
                     </dl>
 
                     <dl>
+                        <dt><label for="confirm">표출조건</label></dt>
                         <dd>
-                            <label for="select1" class="search-label">
-                                표출조건
-                            </label>
-                            <select id="select1" class="w120">
+                            <select id="confirm" class="w120">
                                 <option>5분</option>
+
                             </select>
                         </dd>
                     </dl>
                     <dl>
+                        <dt><label for="btn-search"></label></dt>
                         <dd>
-                            <ul class="date-box">
-                                <li style="cursor: default; list-style-image: none;">
-                                    <a class="btn btn-delete" title="검색" id="btn-search">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="검색" id="btn-search" onclick="searchData()">
                                         <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                         검색
                                     </a>
@@ -141,20 +135,20 @@
                 <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>가스소비량</h3>
-                        <ul class="tab-links">
+                        <ul class="tab-links-sub">
                             <li><a href="#tab1" title="통계">통계</a></li>
                             <li><a href="#tab2" title="현황">현황</a></li>
                         </ul>
                     </div>
                     <div class="tab-contents">
                         <!-- tab1 -->
-                        <div class="tab-item" id="tab1">
+                        <div class="tab-item-sub" id="tab1">
                             <div>
-                                <div id="chartHolder" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                <div id="chartHolder" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab2 -->
-                        <div class="tab-item" id="tab2">
+                        <div class="tab-item-sub" id="tab2">
                             <div class="section-card-wrap" style="height: 88px">
                                 <section class="card-section-top">
                                     <div class="title card-section-title">
@@ -195,7 +189,7 @@
                 <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>전기생산량</h3>
-                        <ul class="tab-links">
+                        <ul class="tab-links-sub">
                             <li><a href="#tab3" title="통계">통계</a></li>
                             <li><a href="#tab4" title="현황">현황</a></li>
 
@@ -203,13 +197,13 @@
                     </div>
                     <div class="tab-contents">
                         <!-- tab5 -->
-                        <div class="tab-item" id="tab3">
+                        <div class="tab-item-sub" id="tab3">
                             <div>
-                                <div id="chartHolder2" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                <div id="chartHolder2" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab6 -->
-                        <div class="tab-item" id="tab4">
+                        <div class="tab-item-sub" id="tab4">
                             <div class="section-card-wrap" style="height: 88px">
                                 <section class="card-section-top">
                                     <div class="title card-section-title">
@@ -252,7 +246,7 @@
                 <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>열공급량</h3>
-                        <ul class="tab-links">
+                        <ul class="tab-links-sub">
                             <li><a href="#tab5" title="통계">통계</a></li>
                             <li><a href="#tab6" title="현황">현황</a></li>
 
@@ -260,13 +254,13 @@
                     </div>
                     <div class="tab-contents">
                         <!-- tab1 -->
-                        <div class="tab-item" id="tab5">
+                        <div class="tab-item-sub" id="tab5">
                             <div>
-                                <div id="chartHolder3" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                <div id="chartHolder3" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab2 -->
-                        <div class="tab-item" id="tab6">
+                        <div class="tab-item-sub" id="tab6">
                             <div class="section-card-wrap" style="height: 88px">
                                 <section class="card-section-top">
                                     <div class="title card-section-title">
@@ -306,7 +300,7 @@
                 <section class="tab-section section_top">
                     <div class="title-wrap" style="margin-bottom: 0px">
                         <h3>효율</h3>
-                        <ul class="tab-links">
+                        <ul class="tab-links-sub">
                             <li><a href="#tab7" title="통계">통계</a></li>
                             <li><a href="#tab8" title="현황">현황</a></li>
 
@@ -314,13 +308,13 @@
                     </div>
                     <div class="tab-contents">
                         <!-- tab7 -->
-                        <div class="tab-item" id="tab7">
+                        <div class="tab-item-sub" id="tab7">
                             <div>
-                                <div id="chartHolder4" style="width: 100%; height: 320px; padding-top: 13px"></div>
+                                <div id="chartHolder4" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab8 -->
-                        <div class="tab-item" id="tab8">
+                        <div class="tab-item-sub" id="tab8">
                             <div class="section-card-wrap" style="height: 88px">
                                 <section class="card-section-top">
                                     <div class="title card-section-title">
@@ -357,7 +351,10 @@
             </div>
         </div>
     </div> <!--//layout-contents end -->
-
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
     <!-- [대시보드] 팝업  -->
     <div class="dashboard-layout-popup">
         <div class="popup-overlay"></div>
@@ -810,19 +807,9 @@
                 success: function(data){
                     console.log('check1',data.data);
 
-                    let datalen = 5 - data.data.length;
-                    if(data.data < 5){
-                        for(let i=0; i < datalen; i++){
-                            data2.push({
-                                hour: dummyData[i]["hour"],
-                                gas: dummyData[i]["gas"],
-                                won: dummyData[i]["won"],
-                                temperature: dummyData[i]["temperature"]
-                            })//data.data.push(dummyData);
-                        }
-                    }else{
+
                         data2 = data.data;
-                    }
+
 
 
                 }
@@ -952,13 +939,12 @@
         // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
         function updatePeriodInputs() {
             const periodType = document.getElementById("periodType").value;
-            const selectedYear = document.getElementById("yearSelectTab1").value; // 선택된 조회연도 가져오기
+            const selectedYear = document.getElementById("yearSelectTab").value; // 선택된 조회연도 가져오기
             const dateBoxContainer = document.getElementById("dateBoxContainer");
             const startDateContainer = document.getElementById("startDateContainer");
             const endDateContainer = document.getElementById("endDateContainer");
             const periodLabel = document.getElementById("dateBoxContainer") // <dl> 요소를 가져옴
-            let searchYear = document.getElementById('searchYear');
-
+            const searchYear = document.getElementById("searchYear")
             // 기존 내용을 초기화
             // document.getElementById("startDateContainer").innerHTML = "";
             // document.getElementById("endDateContainer").innerHTML = "";
@@ -980,7 +966,7 @@
                 // 각 기간유형에 맞는 요소 설정
                 if (periodType === "hourly") {
 
-                    searchYear.style.display = "none";
+
                     const currentDate = new Date();
                     const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
                     const defaultDay = currentDate.getDate().toString().padStart(2, '0');
@@ -1001,15 +987,13 @@
                 } else if (periodType === "monthly") {
 
 
-                    searchYear.style.display = 'none';
-
                     const startDate = `${selectedYear}-01`;
                     const endDate = `${selectedYear}-12`;
 
                     document.getElementById("startDateContainer").innerHTML = `<input type="month" style="background-color: white" id="startDate" name="startDate" value="${startDate}">`;
                     document.getElementById("endDateContainer").innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
                 } else if (periodType === "quarterly") {
-                    searchYear.style.display = "block";
+
                     const options = `
                 <option value="Q1">1분기</option>
                 <option value="Q2">2분기</option>
@@ -1019,7 +1003,7 @@
                     document.getElementById("startDateContainer").innerHTML = `<select id="startQuarter">${options}</select>`;
                     document.getElementById("endDateContainer").innerHTML = `<select id="endQuarter">${options}</select>`;
                 } else if (periodType === "halfyearly") {
-                    searchYear.style.display = "block";
+
                     const options = `
                 <option value="H1">상반기</option>
                 <option value="H2">하반기</option>

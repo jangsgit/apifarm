@@ -279,7 +279,9 @@ public class InspecService {
                      select
                       sb.*,
                       checkstdt || ' ~ ' || checkendt as checktmdt,
-                      'Y' as downloads,
+                      CASE WHEN COALESCE((SELECT sa.fileornm FROM tb_rp715 sa WHERE sa.spuncode_id = sb.spuncode AND sa.repyn = 'Y' ORDER BY sa.indatem DESC LIMIT 1),'') != '' THEN 'Y'
+                      ELSE 'N'
+                      END AS downloads,
                       'Y' as upload,
                       coalesce(
                       	(select sa.fileornm from tb_rp715 sa where sa.spuncode_id = sb.spuncode and sa.repyn = 'Y'

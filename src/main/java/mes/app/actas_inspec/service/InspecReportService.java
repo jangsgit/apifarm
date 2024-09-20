@@ -78,7 +78,8 @@ public class InspecReportService {
         List<Map<String, Object>> items2 = this.sqlRunner.getRows(sql2, dicParam);
         //합동안전
         String sql3 = """
-                    SELECT  rp720.checkdt as checkdt, rp720.chkaddres as inspecarea, 'wm_hap_input' AS inspectypeCode, '합동안전점검' AS inspectype, STRING_AGG(rp726.checkusr, ', ') AS checkusr
+                    SELECT rp720.checkno as checkno, rp720.spworkcd as spworkcd, rp720.spcompcd as spcompcd, rp720.spplancd as spplancd,  
+                    rp720.checkdt as checkdt, rp720.chkaddres as inspecarea, 'wm_hap_input' AS inspectypeCode, '합동안전점검' AS inspectype, STRING_AGG(rp726.checkusr, ', ') AS checkusr
                     FROM tb_rp720 rp720
                     JOIN tb_rp726 rp726
                     ON rp720.spworkcd = rp726.spworkcd
@@ -87,7 +88,7 @@ public class InspecReportService {
                            AND rp720.checkno = rp726.checkno
                            AND rp720.checkdt = rp726.checkdt
                     where rp720.checkdt = :date       
-                    GROUP BY rp720.checkdt, rp720.chkaddres       
+                    GROUP BY rp720.checkdt, rp720.chkaddres, rp720.spplancd, rp720.spworkcd, rp720.spcompcd, rp720.checkno       
                 """;
         List<Map<String, Object>> items3 = this.sqlRunner.getRows(sql3, dicParam);
 
