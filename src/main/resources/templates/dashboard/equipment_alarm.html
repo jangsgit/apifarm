@@ -31,6 +31,78 @@
         /*}*/
 
 
+        /* 차트 확장 아이콘 css */
+        .expand-icon {
+            position: relative;
+            width: 20px; /* 전체 크기 20px */
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF; /* 아이콘 배경색 */
+        }
+
+        .expand-icon .corner {
+            position: absolute;
+            width: 6px; /* 꺾은선 크기 */
+            height: 6px;
+            border: 2px solid #808080; /* 꺾은선 색상 */
+        }
+
+        .corner.corner-1 {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner.corner-2 {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner.corner-3 {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner.corner-4 {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
+        .expand-icon span {
+            display: block;
+            position: absolute;
+            background-color: #808080;
+        }
+
+        .icon-horizontal, .icon-vertical {
+            position: absolute;
+            background-color: black;
+            width: 100%; /* 선 길이를 모서리까지 확장 */
+            height: 2px; /* 선 두께 */
+        }
+
+        .icon-horizontal {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(45deg); /* 45도 회전하여 대각선 */
+        }
+
+        .icon-vertical {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(-45deg); /* 반대 방향으로 45도 회전하여 X 자 형성 */
+        }
+
+
 
 
 
@@ -468,12 +540,12 @@
     </footer>
 <!--    <div style="height: 10px"></div>-->
 
-<!--    <div id="chartModal" class="modal" style="opacity:100">-->
-<!--        <div class="modal-content">-->
-<!--            <span class="close">&times;</span>-->
-<!--            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> &lt;!&ndash; 차트를 보여줄 모달의 div &ndash;&gt;-->
-<!--        </div>-->
-<!--    </div>-->
+    <div id="chartModal" class="modal" style="opacity:100">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> <!-- 차트를 보여줄 모달의 div -->
+        </div>
+    </div>
 
 
 </th:block>
@@ -1208,120 +1280,127 @@
 
         rMateChartH5.registerTheme(rMateChartH5.themes);
 
-        // $(document).ready(function() {
-        //     // 모든 chart-wrap 요소에 투명한 오버레이를 자동으로 추가
-        //     $('.chart-wrap').each(function () {
-        //         // 오버레이 요소를 생성
-        //         let overlay = $('<div class="chart-overlay"></div>');
-        //
-        //         // 오버레이 스타일 적용
-        //         overlay.css({
-        //             'position': 'absolute',
-        //             'top': '0',
-        //             'left': '0',
-        //             'width': '100%',
-        //             'height': '100%',
-        //             'cursor': 'pointer',
-        //             'z-index': '10',
-        //             'background': 'transparent'
-        //         });
-        //
-        //         // chart-wrap에 오버레이 추가
-        //         $(this).css('position', 'relative').append(overlay);
-        //     });
-        //
-        //
-        //     // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
-        //     $(document).on('click', '.chart-overlay', function() {
-        //         // 클릭한 div의 id 가져오기
-        //         let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
-        //
-        //         // ID가 제대로 추출되었는지 확인
-        //         console.log("Clicked chartHolder ID: " + chartHolderId);
-        //
-        //         // 모달 열기
-        //         let modal = document.getElementById("chartModal");
-        //         let modalChartHolder = document.getElementById("modalChartHolder");
-        //         modal.style.display = "block";
-        //
-        //         // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
-        //         rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
-        //
-        //         // 모달 닫기 버튼 클릭 시 모달 닫기
-        //         let closeModal = document.getElementsByClassName("close")[0];
-        //         closeModal.onclick = function() {
-        //             modal.style.display = "none";
-        //             modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-        //         }
-        //
-        //         // 모달 외부를 클릭하면 모달 닫기
-        //         window.onclick = function(event) {
-        //             if (event.target === modal) {
-        //                 modal.style.display = "none";
-        //                 modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-        //             }
-        //         }
-        //     });
-        // });
         $(document).ready(function() {
+            // 모든 chart-wrap 요소에 투명한 오버레이를 자동으로 추가
+            $('.chart-wrap').each(function() {
+                // expand-icon 아이콘 생성
+                let expandIcon = $('<div class="expand-icon">'
+                    + '<span class="icon-horizontal"></span>'
+                    + '<span class="icon-vertical"></span>'
+                    + '<div class="corner corner-1"></div>'
+                    + '<div class="corner corner-2"></div>'
+                    + '<div class="corner corner-3"></div>'
+                    + '<div class="corner corner-4"></div>'
+                    + '</div>');
 
-            // 공통 모달 HTML을 body 태그에 추가
-            const modalHTML = `
-        <div id="chartModal" class="modal" style="opacity:100">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
-            </div>
-        </div>
-    `;
+                // expand-icon 스타일 적용
+                expandIcon.css({
+                    'position': 'absolute',
+                    'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
+                    'right': '3px', // 차트의 오른쪽 끝에 위치
+                    'cursor': 'pointer',
+                    'z-index': '10'
+                });
 
-            // body 태그의 끝에 모달을 추가
-            $('body').append(modalHTML);
-
-            // 모달 닫기 이벤트
-            $(document).on('click', '.close', function () {
-                $('#chartModal').hide();
-                $('#modalChartHolder').html('');  // 모달 내용 초기화
+                // chart-wrap에 expand-icon 추가
+                $(this).css('position', 'relative').append(expandIcon);
             });
 
-            $('div[id^="chartHolder"]').on('dblclick', function(event) {
-                clickfunc(event);
-            });
 
-        });
+            // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+            $(document).on('click', '.expand-icon', function() {
+                // 클릭한 div의 id 가져오기
+                let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
 
-        // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
-        function clickfunc(event){
-            console.log(event);
-            // 클릭한 div의 id 가져오기
-            let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
+                // ID가 제대로 추출되었는지 확인
+                console.log("Clicked chartHolder ID: " + chartHolderId);
 
-            // ID가 제대로 추출되었는지 확인
-            console.log("Clicked chartHolder ID: " + chartHolderId);
+                // 모달 열기
+                let modal = document.getElementById("chartModal");
+                let modalChartHolder = document.getElementById("modalChartHolder");
+                modal.style.display = "block";
 
-            // 모달 열기
-            let modal = document.getElementById("chartModal");
-            let modalChartHolder = document.getElementById("modalChartHolder");
-            modal.style.display = "block";
+                // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+                rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
 
-            // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
-            rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
-
-            // 모달 닫기 버튼 클릭 시 모달 닫기
-            let closeModal = document.getElementsByClassName("close")[0];
-            closeModal.onclick = function() {
-                modal.style.display = "none";
-                modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-            }
-
-            // 모달 외부를 클릭하면 모달 닫기
-            window.onclick = function(event) {
-                if (event.target === modal) {
+                // 모달 닫기 버튼 클릭 시 모달 닫기
+                let closeModal = document.getElementsByClassName("close")[0];
+                closeModal.onclick = function() {
                     modal.style.display = "none";
                     modalChartHolder.innerHTML = ""; // 모달 차트 초기화
                 }
-            }
-        }
+
+                // 모달 외부를 클릭하면 모달 닫기
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                    }
+                }
+            });
+        });
+
+
+        // 더블클릭시 모달로 그래프 확장
+    //     $(document).ready(function() {
+    //
+    //         // 공통 모달 HTML을 body 태그에 추가
+    //         const modalHTML = `
+    //     <div id="chartModal" class="modal" style="opacity:100">
+    //         <div class="modal-content">
+    //             <span class="close">&times;</span>
+    //             <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
+    //         </div>
+    //     </div>
+    // `;
+    //
+    //         // body 태그의 끝에 모달을 추가
+    //         $('body').append(modalHTML);
+    //
+    //         // 모달 닫기 이벤트
+    //         $(document).on('click', '.close', function () {
+    //             $('#chartModal').hide();
+    //             $('#modalChartHolder').html('');  // 모달 내용 초기화
+    //         });
+    //
+    //         $('div[id^="chartHolder"]').on('dblclick', function(event) {
+    //             clickfunc(event);
+    //         });
+    //
+    //     });
+    //
+    //     // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+    //     function clickfunc(event){
+    //         console.log(event);
+    //         // 클릭한 div의 id 가져오기
+    //         let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
+    //
+    //         // ID가 제대로 추출되었는지 확인
+    //         console.log("Clicked chartHolder ID: " + chartHolderId);
+    //
+    //         // 모달 열기
+    //         let modal = document.getElementById("chartModal");
+    //         let modalChartHolder = document.getElementById("modalChartHolder");
+    //         modal.style.display = "block";
+    //
+    //         // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+    //         rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+    //
+    //         // 모달 닫기 버튼 클릭 시 모달 닫기
+    //         let closeModal = document.getElementsByClassName("close")[0];
+    //         closeModal.onclick = function() {
+    //             modal.style.display = "none";
+    //             modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+    //         }
+    //
+    //         // 모달 외부를 클릭하면 모달 닫기
+    //         window.onclick = function(event) {
+    //             if (event.target === modal) {
+    //                 modal.style.display = "none";
+    //                 modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+    //             }
+    //         }
+    //     }
 
     </script>
 </th:block>
