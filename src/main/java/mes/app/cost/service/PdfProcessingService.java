@@ -28,6 +28,8 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -58,6 +60,14 @@ public class PdfProcessingService {
 
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             String fileUploadPath = settings.getProperty("file_upload_path") + "도시가스청구서/";
+
+            // 폴더가 없으면 생성
+            Path directoryPath = Paths.get(fileUploadPath);
+            if (!Files.exists(directoryPath)) {
+                Files.createDirectories(directoryPath);
+                logger.info("Directory created at: " + fileUploadPath);
+            }
+
 
             for (int page = 0; page < numberOfPages; ++page) {
                 try {

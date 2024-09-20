@@ -32,6 +32,9 @@ public class TB_RP410 extends BaseEntity {
     @Id @Column(name="STANDYM")
     private String standym; //기준년월 (기본키)
 
+    @Column(name="STANDDT")
+    private String standdt;
+
     @Column(name="SPPLANNM")
     private String spplannm;
 

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,17 +45,13 @@ public class GasBillController {
     @Autowired
     TB_RP410Repository tbRp410Repository;
 
-//    public GasBillController(PdfProcessingService pdfProcessingService) {
-//        this.pdfProcessingService = pdfProcessingService;
-//    }
-
     private static final Logger logger = LoggerFactory.getLogger(GasBillController.class);
 
 
     // 특정 연도에 대한 1월부터 12월까지의 데이터를 가져오는 API
     @GetMapping("/read")
     public AjaxResult getGasBillList(@RequestParam("year") String year) {
-        // 월별 데이터를 가져와서 AjaxResult 형태로 반환
+
         AjaxResult result = new AjaxResult();
 
         List<Map<String, Object>> monthlyData = gasBillService.getMonthlyUsageSummary(year);
@@ -81,6 +78,7 @@ public class GasBillController {
                                  @RequestParam("spworknm") String spworknm,
                                  @RequestParam("spcompnm") String spcompnm,
                                  @RequestParam("spplancd") String spplancd,
+                                 @RequestParam("standdt") String standdt,
                                  Authentication auth) {
         AjaxResult result = new AjaxResult();
 
@@ -128,11 +126,61 @@ public class GasBillController {
                 }
 
                 // 사용량 및 사용열량 값을 추출
-                List<BigDecimal> usageValues = extractUsageValues(text);
-                if (usageValues != null && usageValues.size() == 2) {
-                    rp410.setSmuseqty(usageValues.get(0));  // 첫 번째 값: smuseqty
-                    rp410.setSmusehqty(usageValues.get(1)); // 두 번째 값: smusehqty
+                List<BigDecimal> usageValues = extractSixUsageValues(text);
+                if (usageValues != null && usageValues.size() == 6) {
+                    rp410.setSmuseqty(usageValues.get(0));
+                    rp410.setSmusehqty(usageValues.get(1));
+                    rp410.setLmuseqty(usageValues.get(2));
+                    rp410.setLmusehqty(usageValues.get(3));
+                    rp410.setLyuseqty(usageValues.get(4));
+                    rp410.setLyusehqty(usageValues.get(5));
+
                 }
+
+
+
+                // 가스사용료 값 추출 및 저장
+                BigDecimal gasUseAmt = extractGasUseAmt(parsedText);
+                if (gasUseAmt != null) {
+                    rp410.setGasuseamt(gasUseAmt);
+                }
+
+                // 계량기관리비 값 추출 및 저장
+                BigDecimal meterMgAmt = extractMeterMgAmt(parsedText);
+                if (meterMgAmt != null) {
+                    rp410.setMetermgamt(meterMgAmt);
+                }
+
+                // 수입부과금환급 값 추출 및 저장
+                BigDecimal imtarrAmt = extractImtarrAmt(parsedText);
+                if (imtarrAmt != null) {
+                    rp410.setImtarramt(imtarrAmt);
+                }
+
+                // 안전관리부담금제외 값 추출 및 저장
+                BigDecimal safeMgAmt = extractSafeMgAmt(parsedText);
+                if (safeMgAmt != null) {
+                    rp410.setSafemgamt(safeMgAmt);
+                }
+
+                // 공급가액 값 추출 및 저장
+                BigDecimal suppAmt = extractSuppAmt(parsedText);
+                if (suppAmt != null) {
+                    rp410.setSuppamt(suppAmt);
+                }
+
+                // 부가세 값 추출 및 저장
+                BigDecimal taxAmt = extractTaxAmt(parsedText);
+                if (taxAmt != null) {
+                    rp410.setTaxamt(taxAmt);
+                }
+
+                // 절사액 값 추출 및 저장
+                BigDecimal trunAmt = extractTrunAmt(parsedText);
+                if (trunAmt != null) {
+                    rp410.setTrunamt(trunAmt);
+                }
+
 
             }
 
@@ -145,6 +193,11 @@ public class GasBillController {
                 rp410.setSpplannm(spplannm);
                 rp410.setSpworknm(spworknm);
                 rp410.setSpcompnm(spcompnm);
+                rp410.setInuserid(String.valueOf(user.getId()));
+                rp410.setInusernm(user.getUsername());
+
+                String formattedDate = standdt.replace("-", "");
+                rp410.setStanddt(formattedDate);
 
                 // 데이터베이스에 엔티티 저장
                 rp410 = this.tbRp410Repository.save(rp410);
@@ -189,18 +242,29 @@ public class GasBillController {
     }
 
 
-    // 예시: 특정 패턴에 맞는 텍스트를 추출하는 메서드
     private String convertToStandymFormat(String text) {
-        // 정규식을 사용하여 연도와 월 추출 (ex. "2023년05월")
-        Pattern pattern = Pattern.compile("(\\d{4})년(\\d{2})월");
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            String year = matcher.group(1);  // 2023
-            String month = matcher.group(2); // 05
-            return year + month; // "202305"
+        Pattern yearPattern = Pattern.compile("(\\d{4})년");
+        Pattern monthPattern = Pattern.compile("(\\d{2})월");
+
+        Matcher yearMatcher = yearPattern.matcher(text);
+        Matcher monthMatcher = monthPattern.matcher(text);
+
+        String year = null;
+        String month = null;
+
+        if (yearMatcher.find()) {
+            year = yearMatcher.group(1);  // 2023
         }
-        return null; // 변환 실패 시 null 반환
+        if (monthMatcher.find()) {
+            month = monthMatcher.group(1); // 05
+        }
+        // 둘 다 찾았을 때만 반환
+        if (year != null && month != null) {
+            return year + month;
+        }
+        return null;
     }
+
 
     //  ASKAMT 값을 추출하는 메서드
     private BigDecimal extractAskamt(String text) {
@@ -217,45 +281,125 @@ public class GasBillController {
         return null;
     }
 
-    private List<BigDecimal> extractUsageValues(String text) {
-        // 마지막 사용열량(MJ) 다음에 나오는 두 개의 값을 추출하는 정규식
-        Pattern pattern = Pattern.compile("사용열량\\(MJ\\)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)");
+    private List<BigDecimal> extractSixUsageValues(String text) {
+        // 마지막 사용열량(MJ) 다음에 나오는 여섯 개의 값을 추출하는 정규식
+        Pattern pattern = Pattern.compile("사용열량\\(MJ\\)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)");
         Matcher matcher = pattern.matcher(text);
 
         if (matcher.find()) {
             String smuseqtyString = matcher.group(1); // 첫 번째 값 (smuseqty)
             String smusehqtyString = matcher.group(4); // 두 번째 값 (smusehqty)
+            String lmuseqtyString = matcher.group(7);
+            String lmusehqtyString = matcher.group(10);
+            String lyuseqtyString = matcher.group(13);
+            String lyusehqtyString = matcher.group(16);
 
             // 쉼표 제거 후 BigDecimal로 변환
             String cleanedSmuseqtyString = smuseqtyString.replaceAll(",", "");
             String cleanedSmusehqtyString = smusehqtyString.replaceAll(",", "");
+            String cleanedLmuseqtyString = lmuseqtyString.replaceAll(",", "");
+            String cleanedLmusehqtyString = lmusehqtyString.replaceAll(",", "");
+            String cleanedLyuseqtyString = lyuseqtyString.replaceAll(",", "");
+            String cleanedLyusehqtyString = lyusehqtyString.replaceAll(",", "");
 
             BigDecimal smuseqty = new BigDecimal(cleanedSmuseqtyString);
             BigDecimal smusehqty = new BigDecimal(cleanedSmusehqtyString);
+            BigDecimal lmuseqty = new BigDecimal(cleanedLmuseqtyString);
+            BigDecimal lmusehqty = new BigDecimal(cleanedLmusehqtyString);
+            BigDecimal lyuseqty= new BigDecimal(cleanedLyuseqtyString);
+            BigDecimal lyusehqty = new BigDecimal(cleanedLyusehqtyString);
 
-            return Arrays.asList(smuseqty, smusehqty); // 두 값을 리스트로 반환
+
+
+
+            return Arrays.asList(smuseqty, smusehqty,lmuseqty,lmusehqty,lyuseqty,lyusehqty); // 리스트로 반환
         }
 
-        return null; // 값이 없거나 변환 실패 시 null 반환
+        return null;
     }
+
+
+    // 가스사용료(GASUSEAMT) 값을 추출하는 메서드
+    private BigDecimal extractGasUseAmt(String text) {
+        Pattern pattern = Pattern.compile("가스사용료\\s*(\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 계량기관리비(METERMGAMT) 값을 추출하는 메서드
+    private BigDecimal extractMeterMgAmt(String text) {
+        Pattern pattern = Pattern.compile("계량기관리비\\s*(\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 수입부과금환급(IMTARRAMT) 값을 추출하는 메서드
+    private BigDecimal extractImtarrAmt(String text) {
+        Pattern pattern = Pattern.compile("수입부과금환급\\s*(-?\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 안전관리부담금제외(SAFEMGAMT) 값을 추출하는 메서드
+    private BigDecimal extractSafeMgAmt(String text) {
+        Pattern pattern = Pattern.compile("안전관리부담금제외\\s*(-?\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 공급가액(SUPPAMT) 값을 추출하는 메서드
+    private BigDecimal extractSuppAmt(String text) {
+        Pattern pattern = Pattern.compile("공급가액\\s*(\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 부가세(TAXAMT) 값을 추출하는 메서드
+    private BigDecimal extractTaxAmt(String text) {
+        Pattern pattern = Pattern.compile("부가세\\s*(\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
+    // 절사액(TRUNAMT) 값을 추출하는 메서드
+    private BigDecimal extractTrunAmt(String text) {
+        Pattern pattern = Pattern.compile("절사액\\s*(-?\\d{1,3}(,\\d{3})*)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            String amountString = matcher.group(1).replaceAll(",", "");
+            return new BigDecimal(amountString);
+        }
+        return null;
+    }
+
 
 
 }
 
-//            String standym = extractedTexts.get(0);    // 년월 저장.
-//            String gasuseamt = extractedTexts.get(1); // 가스사용료 저장
-//            String metermgamt = extractedTexts.get(2); // 계량기 관리비
-//            String imtarramt = extractedTexts.get(3); // 수입부과금환급
-//            String safemgamt = extractedTexts.get(4); // 안전관리부담금제외
-//            String suppamt = extractedTexts.get(5); // 공급가액
-//            String taxamt = extractedTexts.get(6);  // 부가세
-//            String trunamt = extractedTexts.get(7); // 절사액
-//            String askamt = extractedTexts.get(8);  // 청구금액
 //            String useuamt = extractedTexts.get(9); // 사용단가 (이거 pdf에서 못본거같은데 물어봐야함 )
-//            String smuseqty = extractedTexts.get(10);   // 당월사용량
-//            String smusehqty = extractedTexts.get(11);  // 당월 사용열량
-//            String lmuseqty = extractedTexts.size() > 12 ? extractedTexts.get(12) : null;   // 전월사용량
-//            String lmusehqty = extractedTexts.size() > 13 ? extractedTexts.get(13) : null;  // 전월사용열량
-//            String lyuseqty = extractedTexts.size() > 14 ? extractedTexts.get(14) : null;   // 전년사용량
-//            String lyusehqty = extractedTexts.size() > 15 ? extractedTexts.get(15) : null;  // 전년사용열량
+
 

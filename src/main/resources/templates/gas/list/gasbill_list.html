@@ -698,7 +698,7 @@
                             </th>
                             <td>
                                 <div class="input-clear">
-                                    <input type="date" id="popup-date" name="standym" class="CostDate" readonly>
+                                    <input type="date" id="popup-date" name="standdt" class="CostDate" readonly>
                                 </div>
                             </td>
                         </tr>
@@ -1257,15 +1257,15 @@
             }
 
 
-            const dateInput = document.getElementById('popup-date');
-            const standymValue = dateInput.value;
+
 
             const formData = new FormData();
 
+            const dateInput = document.getElementById('popup-date').value;
+
             formData.append("file", file);
             formData.append("_csrf", csrfToken);
-            formData.append("standym", standymValue);  // 날짜 값 추가
-
+            formData.append("standdt", dateInput);  // 날짜 값 추가
 
             // 각각의 select 요소 값 가져오기
             const spworkcdValue = document.getElementById('spworkcd').value;
@@ -1627,7 +1627,7 @@
                             autoGenerateColumns: false,
                             showMarquee: true,
                             columns: [
-                                { binding: 'category', header: '구분', width: 80, align: 'center' },
+                                { binding: 'category', header: '구분', width: 100, align: 'center' },
                                 { binding: 'Jan', header: '1월', width: 110, align: 'center', format: 'n0'},
                                 { binding: 'Feb', header: '2월', width: 110, align: 'center', format: 'n0'},
                                 { binding: 'Mar', header: '3월', width: 110, align: 'center', format: 'n0'},
@@ -1667,12 +1667,13 @@
 
                 const monthlyData = {
                     Jan: '', Feb: '', Mar: '', Apr: '', May: '', Jun: '',
-                    Jul: '', Aug: '', Sep: '', Oct: '', Nov: '', Dec: ''
+                    Jul: '', Aug: '', Sep: '', Oct: '', Nov: '', Dec: '',
+                    total: 0 // 합계를 계산하는 필드 추가
                 };
 
                 data.forEach(function(item) {
                     const month = parseInt(item.month, 10);
-                    const value = item[field];
+                    const value = item[field] ? parseInt(item[field], 10) : 0; // 값이 없을 때 0으로 처리
 
                     switch (month) {
                         case 1: monthlyData.Jan = value; break;
@@ -1689,6 +1690,10 @@
                         case 12: monthlyData.Dec = value; break;
                     }
                 });
+
+                monthlyData.total = monthlyData.Jan + monthlyData.Feb + monthlyData.Mar + monthlyData.Apr +
+                    monthlyData.May + monthlyData.Jun + monthlyData.Jul + monthlyData.Aug +
+                    monthlyData.Sep + monthlyData.Oct + monthlyData.Nov + monthlyData.Dec;
 
                 return monthlyData;
             }
