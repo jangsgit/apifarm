@@ -277,7 +277,7 @@
                                     </ul>
                                 </li>
                                 <li class="dep1-1">
-                                    <a href="#a" title="운영관리" class="ico-lnb03">
+                                    <a href="#a" title="운영관리" class="ico-lnb04">
                                         운영 관리
                                     </a>
                                     <ul class="dep2" id="dep2-operation-management">
@@ -319,6 +319,7 @@
 
         </div>
     </div>
+
     <div class="con_area">
 <!--        <div class="contents">-->
             <div class="nth-tabs" id="main-tabs"></div>
@@ -333,7 +334,7 @@
 <!--    <span class="footer-right">Copyright ⓒ (주)레플러스. All Rights Reserved.</span>-->
 <!--    &lt;!&ndash;footer [E]&ndash;&gt;-->
 <!--</div>-->
-
+<div id="overlay"></div>
 <!-- [사용자권한] 팝업  -->
 <div class="dashboard-layout-popup">
     <div class="popup-overlay" id="popup1"></div>
@@ -351,7 +352,7 @@
             <form id="userForm" autocomplete="off">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="table-wrap">
-                    <table class="write-table">
+                    <table class="table">
                         <caption>사용자정보 테이블</caption>
                         <colgroup>
                             <col class="wp20">
@@ -366,7 +367,7 @@
                                     ID
                                 </label>
                             </th>
-                            <td colspan="3">
+                            <td colspan="3" style="text-align: left">
                                 <div class="input-clear">
                                     <input type="text" id="login_id" name="login_id" class="wp50" required
                                            readonly="readonly"/>
@@ -506,6 +507,28 @@
 <script type="text/javascript">
     let nthTabs = null;
     let default_menu = null;
+
+    window.addEventListener('message', function(event) {
+        if (event.data === 'centerPopup') {
+            // 팝업을 화면 중앙에 위치시키는 로직
+            const iframe = document.querySelector('iframe'); // iframe 요소 선택
+            const popup = iframe.contentWindow.document.querySelector('.ax5-ui-dialog'); // iframe 내 팝업 선택
+
+            if (popup) {
+                // 화면의 중앙 위치 계산
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const popupWidth = popup.offsetWidth;
+                const popupHeight = popup.offsetHeight;
+
+                // 중앙으로 이동시키는 CSS 설정
+                popup.style.position = 'fixed';
+                popup.style.top = `${(windowHeight - popupHeight) / 2}px`;
+                popup.style.left = `${(windowWidth - popupWidth) / 2}px`;
+            }
+        }
+    });
+
 
     $(document).ready(function () {
 
