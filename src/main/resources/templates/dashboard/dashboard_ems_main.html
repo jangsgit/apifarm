@@ -689,39 +689,39 @@
             },
         });
 
-        $(document).ready(function (){
-           searchData();
-        });
-
-        function searchData(){
-            let result = AjaxUtil.getSyncData('/api/common/Card/List');
-
-            if(result.success){
-                console.log('result.data', result.data);
-
-                const parent = document.getElementById('cardwrap');
-
-                const sections = Array.from(document.querySelectorAll('.section-item'));
-
-                result.data.forEach(item => {
-                    const section = sections.find(sec => sec.getAttribute('data-title') === item.title);
-
-                    if(section){
-
-                        if(item.visible){
-                            section.classList.remove('card-hidden');
-                        }else{
-                            section.classList.add('card-hidden');
-                        }
-
-                        section.setAttribute('data-id', item.id);
-
-                        parent.appendChild(section);
-
-                    }
-                });
-            }
-        }
+        // $(document).ready(function (){
+        //    searchData();
+        // });
+        //
+        // function searchData(){
+        //     let result = AjaxUtil.getSyncData('/api/common/Card/List');
+        //
+        //     if(result.success){
+        //         console.log('result.data', result.data);
+        //
+        //         const parent = document.getElementById('cardwrap');
+        //
+        //         const sections = Array.from(document.querySelectorAll('.section-item'));
+        //
+        //         result.data.forEach(item => {
+        //             const section = sections.find(sec => sec.getAttribute('data-title') === item.title);
+        //
+        //             if(section){
+        //
+        //                 if(item.visible){
+        //                     section.classList.remove('card-hidden');
+        //                 }else{
+        //                     section.classList.add('card-hidden');
+        //                 }
+        //
+        //                 section.setAttribute('data-id', item.id);
+        //
+        //                 parent.appendChild(section);
+        //
+        //             }
+        //         });
+        //     }
+        // }
 
         $('#btnSave').click(function(){
             const parent = document.getElementById('cardwrap');
