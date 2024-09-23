@@ -224,9 +224,16 @@
                 <!-- 알람 -->
                 <!-- 사용자 로그인 상태-->
                 <a class="user" title="사용자">
-                    <img src="/images/icon/ico-user.svg" alt="사용자 아이콘">
-                    <strong><span class="user-name" id="userName2" th:text="${ username }"></span></strong>
+                    <span id="userName1" th:text="${ sandanList[0].spcompnm }"></span>
+                    <span style="padding:0 5px">·</span>
                     <span>관리자</span>
+                    <span style="padding:0 5px">·</span>
+                    <span id="userName2" th:text="${ username }"></span>
+                    <span>(</span>
+                    <span id="userName3" th:text="${ userid }"></span>
+                    <span>)</span>
+                    <span style="padding-right: 5px">님</span>
+
                 </a>
                 <div class="user-box">
                     <ul>
@@ -277,7 +284,7 @@
                                     </ul>
                                 </li>
                                 <li class="dep1-1">
-                                    <a href="#a" title="운영관리" class="ico-lnb04">
+                                    <a href="#a" title="운영관리" class="ico-lnb03">
                                         운영 관리
                                     </a>
                                     <ul class="dep2" id="dep2-operation-management">
@@ -507,6 +514,22 @@
 <script type="text/javascript">
     let nthTabs = null;
     let default_menu = null;
+
+    window.onload = function() {
+        // 사용자 이름 마스킹 처리
+        var userNameSpan = document.getElementById('userName2');
+        var userName = userNameSpan.textContent;
+        if (userName.length > 1) {
+            userNameSpan.textContent = userName.substring(0, userName.length - 1) + '*';
+        }
+
+        // 사용자 ID 마스킹 처리
+        var userIdSpan = document.getElementById('userName3');
+        var userId = userIdSpan.textContent;
+        if (userId.length > 3) {
+            userIdSpan.textContent = userId.substring(0, userId.length - 3) + '***';
+        }
+    };
 
     window.addEventListener('message', function(event) {
         if (event.data === 'centerPopup') {

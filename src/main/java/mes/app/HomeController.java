@@ -67,7 +67,7 @@ public class HomeController {
 		mv.addObject("username", username);
 		mv.addObject("userinfo", user);
 		mv.addObject("system_title", logoTitle);
-//		mv.addObject("sandanList", sandanList);
+		mv.addObject("sandanList", sandanList);
 //		mv.addObject("default_menu_code", "wm_dashboard_summary");
 
 		

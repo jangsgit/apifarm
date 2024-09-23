@@ -1,7 +1,91 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
 <style>
+    /* 기본 Flatpickr 컨테이너 스타일 */
+    .flatpickr-calendar {
+        font-family: 'Helvetica', sans-serif;
+        background-color: white;
+        border: 1px solid #cccccc;
+        border-radius: 12px; /* 모서리를 더 둥글게 */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* 그림자 추가 */
+    }
+
+    /* 달력 내부 패딩 */
+    .flatpickr-innerContainer {
+        padding: 10px;
+    }
+
+    /* 상단 년/월 선택 영역 */
+    .flatpickr-month {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px; /* 패딩 조정 */
+        background-color: #f0f0f0; /* 연한 회색 배경 */
+        border-bottom: 1px solid #cccccc; /* 구분선 추가 */
+    }
+
+    /* 상단 년/월 드롭다운 */
+    .flatpickr-monthDropdown-months, .flatpickr-monthDropdown-years {
+        background-color: white;
+        border: 1px solid #cccccc;
+        border-radius: 5px; /* 모서리 둥글게 */
+        padding: 8px 10px; /* 패딩 조정 */
+        cursor: pointer;
+        font-size: 14px; /* 글자 크기 조정 */
+    }
+
+    /* 화살표 버튼 */
+    .flatpickr-prev-month, .flatpickr-next-month {
+        cursor: pointer;
+        background-color: transparent; /* 배경 투명 */
+        border: none;
+        padding: 8px; /* 패딩 조정 */
+        color: #555; /* 아이콘 색상 */
+    }
+
+    /* 날짜 영역 */
+    .flatpickr-days {
+        border-top: 1px solid #cccccc;
+    }
+
+    /* 요일 표시 (월, 화, 수...) */
+    .flatpickr-weekday {
+        color: #666;
+        font-size: 12px;
+        text-align: center; /* 가운데 정렬 */
+    }
+
+    /* 날짜 셀 */
+    .flatpickr-day {
+        color: #333;
+        border-radius: 5px; /* 모서리 둥글게 */
+        padding: 5px 10px; /* 패딩 조정 */
+        cursor: pointer;
+        text-align: center; /* 가운데 정렬 */
+    }
+
+    /* 선택된 날짜 스타일 */
+    .flatpickr-day.selected {
+        background-color: #0078d7; /* 진한 파랑 */
+        color: white;
+    }
+
+    /* 오늘 날짜 스타일 */
+    .flatpickr-day.today {
+        border: 2px solid #0078d7; /* 진한 파랑 테두리 */
+    }
+
+    /* 날짜에 마우스 호버 시 */
+    .flatpickr-day:hover {
+        background-color: #f0f0f0; /* 연한 회색 배경 */
+    }
+
+
+
 
 </style>
+</head>
 <th:block layout:fragment="content">
 
     <!--- (레이아웃) Contents 영역 -->
@@ -67,6 +151,7 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
+                                            <input type="text" id="dateInput" placeholder="Select Date">
                                             <input type="date" id="startDate" name="startDate">
                                             <label for="startDate" class="hide">시작일</label>
                                         </li>
@@ -528,6 +613,13 @@
         }
 
         $(document).ready(function() {
+            flatpickr("#dateInput", {
+                dateFormat: "Y-m-d",  // 날짜 형식
+                "locale": "ko",
+                defaultDate: "today",  // 기본값을 오늘로 설정
+
+            });
+
 
             // 공통 모달 HTML을 body 태그에 추가
             const modalHTML = `
@@ -583,6 +675,7 @@
                 }
             }
         }
+
 
     </script>
 
