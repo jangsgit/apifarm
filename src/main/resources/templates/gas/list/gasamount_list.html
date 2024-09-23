@@ -1,8 +1,82 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<style>
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
 
 
-</style>
+        /* 차트 확장 아이콘 css */
+        .expand-icon {
+            position: relative;
+            width: 20px; /* 전체 크기 20px */
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF; /* 아이콘 배경색 */
+        }
+
+        .expand-icon .corner {
+            position: absolute;
+            width: 6px; /* 꺾은선 크기 */
+            height: 6px;
+            border: 2px solid #808080; /* 꺾은선 색상 */
+        }
+
+        .corner.corner-1 {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .corner.corner-2 {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner.corner-3 {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
+
+        .corner.corner-4 {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
+
+        .expand-icon span {
+            display: block;
+            position: absolute;
+            background-color: #808080;
+        }
+
+        .icon-horizontal, .icon-vertical {
+            position: absolute;
+            background-color: black;
+            width: 100%; /* 선 길이를 모서리까지 확장 */
+            height: 2px; /* 선 두께 */
+        }
+
+        .icon-horizontal {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(45deg); /* 45도 회전하여 대각선 */
+        }
+
+        .icon-vertical {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(-45deg); /* 반대 방향으로 45도 회전하여 X 자 형성 */
+        }
+
+    </style>
+</head>
 
 <th:block layout:fragment="content">
 
@@ -13,9 +87,9 @@
             <div class="left">
                 <h2>도시가스사용량조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
                                                                                          alt="알람 아이콘"></a>
-                <a title="북마크" class="bookmark toggle">
-                    내 메뉴
-                </a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내 메뉴-->
+<!--                </a>-->
             </div>
             <ul class="page-navi">
                 <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
@@ -179,7 +253,6 @@
 <!--                        </div>-->
 <!--                    </div> &lt;!&ndash;//section-top end &ndash;&gt;-->
 
-
                     <div class="section-top">
                         <div class="search-wrap">
                             <dl>
@@ -246,7 +319,7 @@
                     </div>
 
 
-                    <div class="row row-2">
+                    <div class="row row-2" style="margin-bottom: 9px;">
                         <div class="col wp50" style="margin-right: 15px;">
                             <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
                                 <div class="title-wrap" style="margin-bottom: 0px">
@@ -259,8 +332,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab01">
-                                        <div>
-                                            <div id="chartHolder"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder1"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -318,7 +391,7 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab03">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder2"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -365,7 +438,7 @@
                     </div>
 
 
-                    <div class="row row-2" style="margin-bottom: 24px; margin-right: 15px;">
+                    <div class="row row-2" style="margin-right: 15px;">
                         <div class="col wp50" style="margin-right: 15px;">
                             <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
                                 <div class="title-wrap" style="margin-bottom: 0px">
@@ -378,7 +451,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab05">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder3"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -521,7 +594,7 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="row row-2">
+                    <div class="row row-2" style="margin-bottom: 9px;">
                         <div class="col wp50" style="margin-right: 15px;">
                             <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
                                 <div class="title-wrap" style="margin-bottom: 0px">
@@ -534,7 +607,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab07">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder4"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -562,7 +635,7 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab09">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder5"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -580,7 +653,7 @@
                     </div>
 
 
-                    <div class="row row-2" style="margin-bottom: 24px; margin-right: 15px;">
+                    <div class="row row-2" style="margin-right: 15px;">
                         <div class="col wp50" style="margin-right: 15px;">
                             <section class="tab-section" style="height: 360px; padding: 11px; margin-bottom: 0px;">
                                 <div class="title-wrap" style="margin-bottom: 0px">
@@ -593,7 +666,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab11">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder6"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -612,13 +685,25 @@
 
                 </section>
 
-
-
-
-
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
+
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+
+
+    <div id="chartModal" class="modal" style="opacity:100">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> <!-- 차트를 보여줄 모달의 div -->
+        </div>
+    </div>
+
+
+
+
 
 </th:block>
 <th:block layout:fragment="scripts">
@@ -805,59 +890,214 @@
 
         // 첫 번째 탭 차트 생성 함수
         function createTab1Charts() {
-            rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
-            rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
-            rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
+            // rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
+            // rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
+            // rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
 
-            var layoutStr = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-                + '<Column2DChart showDataTips="true">'
-                + '<horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>'
-                + '<series>'
-                + '<Column2DSeries yField="sales" fill="#62b2fd">'
-                + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
-                + '</Column2DSeries>'
-                + '</series>'
-                + '</Column2DChart>'
-                + '</rMateChart>';
 
-            var chartData = [
-                {"Month": "Jan", "sales": 200},
-                {"Month": "Feb", "sales": 300},
-                {"Month": "Mar", "sales": 420},
-                {"Month": "Apr", "sales": 550},
-                {"Month": "May", "sales": 620},
-                {"Month": "Jun", "sales": 720},
-                {"Month": "Jul", "sales": 880},
-                {"Month": "Aug", "sales": 990},
-                {"Month": "Sep", "sales": 450},
-                {"Month": "Oct", "sales": 100},
-                {"Month": "Nov", "sales": 220},
-                {"Month": "Dec", "sales": 440}
+            let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+
+            let chartsTab1 = [
+                {name: "chart1", vars: chartVars},
+                {name: "chart2", vars: chartVars},
+                {name: "chart3", vars: chartVars},
+
             ];
 
-            rMateChartH5.calls("chart1", {
-                "setLayout": layoutStr,
-                "setData": chartData
-            });
-            rMateChartH5.calls("chart2", {
-                "setLayout": layoutStr,
-                "setData": chartData
-            });
-            rMateChartH5.calls("chart3", {
-                "setLayout": layoutStr,
-                "setData": chartData
+            chartsTab1.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
             });
         }
 
+
+
+            // rMateChartH5.calls("chart1", {
+            //     "setLayout": layoutStr,
+            //     "setData": chartData
+            // });
+            // rMateChartH5.calls("chart2", {
+            //     "setLayout": layoutStr,
+            //     "setData": chartData
+            // });
+            // rMateChartH5.calls("chart3", {
+            //     "setLayout": layoutStr,
+            //     "setData": chartData
+            // });
+
+
         // 두 번째 탭 차트 생성 함수
         function createTab2Charts() {
-            rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
-            rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
-            rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
+            // rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
+            // rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
+            // rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
+
+
+
+            let chartVars1 = "rMateOnLoadCallFunction=chartReadyHandler";
+
+
+            let chartsTab2 = [
+
+                {name: "chart4", vars: chartVars1},
+                {name: "chart5", vars: chartVars1},
+                {name: "chart6", vars: chartVars1},
+
+
+            ];
+
+
+            chartsTab2.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+
+
+        }
+
+        function chartReadyHandler(id) {
+
+            let chartIndex = parseInt(id.replace(/\D/g, ""), 10);  // 숫자로 변환
+
+            var chartData;
+
+            switch (chartIndex) {
+                case 1:
+                    chartData = [
+                        {"Month": "Jan", "sales": 200},
+                        {"Month": "Feb", "sales": 300},
+                        {"Month": "Mar", "sales": 420},
+                        {"Month": "Apr", "sales": 550},
+                        {"Month": "May", "sales": 620},
+                        {"Month": "Jun", "sales": 720},
+                        {"Month": "Jul", "sales": 880},
+                        {"Month": "Aug", "sales": 990},
+                        {"Month": "Sep", "sales": 450},
+                        {"Month": "Oct", "sales": 100},
+                        {"Month": "Nov", "sales": 220},
+                        {"Month": "Dec", "sales": 440}
+                    ];
+                    break;
+
+                case 2:
+                    chartData = [
+                        {"Month": "Jan", "sales": 200},
+                        {"Month": "Feb", "sales": 300},
+                        {"Month": "Mar", "sales": 420},
+                        {"Month": "Apr", "sales": 550},
+                        {"Month": "May", "sales": 620},
+                        {"Month": "Jun", "sales": 720},
+                        {"Month": "Jul", "sales": 880},
+                        {"Month": "Aug", "sales": 990},
+                        {"Month": "Sep", "sales": 450},
+                        {"Month": "Oct", "sales": 100},
+                        {"Month": "Nov", "sales": 220},
+                        {"Month": "Dec", "sales": 440}
+                    ];
+
+                    break;
+
+                case 3:
+                    chartData = [
+                        {"Month": "Jan", "sales": 200},
+                        {"Month": "Feb", "sales": 300},
+                        {"Month": "Mar", "sales": 420},
+                        {"Month": "Apr", "sales": 550},
+                        {"Month": "May", "sales": 620},
+                        {"Month": "Jun", "sales": 720},
+                        {"Month": "Jul", "sales": 880},
+                        {"Month": "Aug", "sales": 990},
+                        {"Month": "Sep", "sales": 450},
+                        {"Month": "Oct", "sales": 100},
+                        {"Month": "Nov", "sales": 220},
+                        {"Month": "Dec", "sales": 440}
+                    ];
+                    break;
+
+                case 4:
+                    chartData = [
+                        {"Year":"1월", "2023":120, "2024":100},
+                        {"Year":"2월", "2023":140, "2024":150},
+                        {"Year":"3월", "2023":220, "2024":180},
+                        {"Year":"4월", "2023":160, "2024":140},
+                        {"Year":"5월", "2023":210, "2024":220},
+                        {"Year":"6월", "2023":400, "2024":420},
+                        {"Year":"7월", "2023":330, "2024":320},
+                        {"Year":"8월", "2023":420, "2024":280},
+                        {"Year":"9월", "2023":550, "2024":610},
+                        {"Year":"10월", "2023":480, "2024":330},
+                        {"Year":"11월", "2023":320, "2024":450},
+                        {"Year":"12월", "2023":600, "2024":740}
+                    ];
+
+                    break;
+
+                case 5:
+                    chartData = [
+                        {"Year":"1월", "2023":120, "2024":100},
+                        {"Year":"2월", "2023":140, "2024":150},
+                        {"Year":"3월", "2023":220, "2024":180},
+                        {"Year":"4월", "2023":160, "2024":140},
+                        {"Year":"5월", "2023":210, "2024":220},
+                        {"Year":"6월", "2023":400, "2024":420},
+                        {"Year":"7월", "2023":330, "2024":320},
+                        {"Year":"8월", "2023":420, "2024":280},
+                        {"Year":"9월", "2023":550, "2024":610},
+                        {"Year":"10월", "2023":480, "2024":330},
+                        {"Year":"11월", "2023":320, "2024":450},
+                        {"Year":"12월", "2023":600, "2024":740}
+                    ];
+                    break;
+                case 6:
+                    chartData = [
+                        {"Year":"1월", "2023":120, "2024":100},
+                        {"Year":"2월", "2023":140, "2024":150},
+                        {"Year":"3월", "2023":220, "2024":180},
+                        {"Year":"4월", "2023":160, "2024":140},
+                        {"Year":"5월", "2023":210, "2024":220},
+                        {"Year":"6월", "2023":400, "2024":420},
+                        {"Year":"7월", "2023":330, "2024":320},
+                        {"Year":"8월", "2023":420, "2024":280},
+                        {"Year":"9월", "2023":550, "2024":610},
+                        {"Year":"10월", "2023":480, "2024":330},
+                        {"Year":"11월", "2023":320, "2024":450},
+                        {"Year":"12월", "2023":600, "2024":740}
+                    ];
+                    break;
+
+            }
+
+            // document.getElementById(id).setLayout(layoutStr);
+            document.getElementById(id).setData(chartData);
+            if (chartIndex >= 1 && chartIndex <= 3) {
+                document.getElementById(id).setLayout(layoutStr1);
+            } else if (chartIndex >= 4 && chartIndex <= 6) {
+                document.getElementById(id).setLayout(layoutStr2);
+            }
+        }
+
+
+
+        var layoutStr1 = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            + '<Column2DChart showDataTips="true">'
+            + '<horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>'
+            + '<series>'
+            + '<Column2DSeries yField="sales" fill="#62b2fd">'
+            + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
+            + '</Column2DSeries>'
+            + '</series>'
+            + '</Column2DChart>'
+            + '</rMateChart>';
+
+
+
+
+
+
 
             var layoutStr2 = `
         <rMateChart borderStyle='none'>
-            <Options><Caption text='사용량 대비 YoY (2023 vs 2024)'/>
+            <Options><Caption text=''/>
             <Legend defaultMouseOverAction='true' useVisibleCheck='true'/>
             </Options>
             <Line2DChart showDataTips='true'>
@@ -876,34 +1116,34 @@
             </Line2DChart>
         </rMateChart>`;
 
-            var chartData4 = [
-                {"Year":"1월", "2023":120, "2024":100},
-                {"Year":"2월", "2023":140, "2024":150},
-                {"Year":"3월", "2023":220, "2024":180},
-                {"Year":"4월", "2023":160, "2024":140},
-                {"Year":"5월", "2023":210, "2024":220},
-                {"Year":"6월", "2023":400, "2024":420},
-                {"Year":"7월", "2023":330, "2024":320},
-                {"Year":"8월", "2023":420, "2024":280},
-                {"Year":"9월", "2023":550, "2024":610},
-                {"Year":"10월", "2023":480, "2024":330},
-                {"Year":"11월", "2023":320, "2024":450},
-                {"Year":"12월", "2023":600, "2024":740}
-            ];
+            // var chartData4 = [
+            //     {"Year":"1월", "2023":120, "2024":100},
+            //     {"Year":"2월", "2023":140, "2024":150},
+            //     {"Year":"3월", "2023":220, "2024":180},
+            //     {"Year":"4월", "2023":160, "2024":140},
+            //     {"Year":"5월", "2023":210, "2024":220},
+            //     {"Year":"6월", "2023":400, "2024":420},
+            //     {"Year":"7월", "2023":330, "2024":320},
+            //     {"Year":"8월", "2023":420, "2024":280},
+            //     {"Year":"9월", "2023":550, "2024":610},
+            //     {"Year":"10월", "2023":480, "2024":330},
+            //     {"Year":"11월", "2023":320, "2024":450},
+            //     {"Year":"12월", "2023":600, "2024":740}
+            // ];
 
-            rMateChartH5.calls("chart4", {
-                "setLayout": layoutStr2,
-                "setData": chartData4
-            });
-            rMateChartH5.calls("chart5", {
-                "setLayout": layoutStr2,
-                "setData": chartData4
-            });
-            rMateChartH5.calls("chart6", {
-                "setLayout": layoutStr2,
-                "setData": chartData4
-            });
-        }
+            // rMateChartH5.calls("chart4", {
+            //     "setLayout": layoutStr2,
+            //     "setData": chartData4
+            // });
+            // rMateChartH5.calls("chart5", {
+            //     "setLayout": layoutStr2,
+            //     "setData": chartData4
+            // });
+            // rMateChartH5.calls("chart6", {
+            //     "setLayout": layoutStr2,
+            //     "setData": chartData4
+            // });
+
 
         // 테마 변경 함수
         function rMateChartH5ChangeTheme(theme) {
@@ -1207,33 +1447,59 @@
             updatePeriodInputs();
             updateComparisonType();
 
-            // 현재 연도를 가져옴
-            const currentYear = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate = `${currentYear}-01-01`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchfrdate').value = defaultDate;
 
-            // 현재 연도를 가져옴
-            const currentYear2 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate2 = `${currentYear2}-12-31`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchtodate').value = defaultDate2;
+            $('.chart-wrap').each(function() {
+                // expand-icon 아이콘 생성
+                let expandIcon = $('<span class="material-symbols-outlined">\n' +
+                    'zoom_out_map\n' +
+                    '</span>');
 
-            // 현재 연도를 가져옴
-            const currentYear3 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate3 = `${currentYear3}-01-01`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchfrdate2').value = defaultDate3;
+                // expand-icon 스타일 적용
+                expandIcon.css({
+                    'position': 'absolute',
+                    'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
+                    'right': '3px', // 차트의 오른쪽 끝에 위치
+                    'cursor': 'pointer',
+                    'z-index': '10',
+                    'color': '##B3B3B3'
+                });
 
-            // 현재 연도를 가져옴
-            const currentYear4 = new Date().getFullYear();
-            // 1월 1일 날짜 문자열 생성
-            const defaultDate4 = `${currentYear4}-12-31`;
-            // input 요소에 기본값 설정
-            document.getElementById('searchtodate2').value = defaultDate4;
+                // chart-wrap에 expand-icon 추가
+                $(this).css('position', 'relative').append(expandIcon);
+            });
+
+
+            // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+            $(document).on('click', '.material-symbols-outlined', function() {
+                // 클릭한 div의 id 가져오기
+                let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
+
+                // ID가 제대로 추출되었는지 확인
+                console.log("Clicked chartHolder ID: " + chartHolderId);
+
+                // 모달 열기
+                let modal = document.getElementById("chartModal");
+                let modalChartHolder = document.getElementById("modalChartHolder");
+                modal.style.display = "block";
+
+                // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+                rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+                // 모달 닫기 버튼 클릭 시 모달 닫기
+                let closeModal = document.getElementsByClassName("close")[0];
+                closeModal.onclick = function() {
+                    modal.style.display = "none";
+                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                }
+
+                // 모달 외부를 클릭하면 모달 닫기
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                    }
+                }
+            });
 
         });
     </script>

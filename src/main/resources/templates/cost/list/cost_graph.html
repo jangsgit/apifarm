@@ -1,37 +1,82 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<style>
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
 
 
-    .tabs .tab_links:after {
-        content: '';
-        display: block;
-        clear: both;
-    }
+        /* 차트 확장 아이콘 css */
+        .expand-icon {
+            position: relative;
+            width: 20px; /* 전체 크기 20px */
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #FFFFFF; /* 아이콘 배경색 */
+        }
 
-    .tabs .tab_links li {
-        float: left;
-    }
+        .expand-icon .corner {
+            position: absolute;
+            width: 6px; /* 꺾은선 크기 */
+            height: 6px;
+            border: 2px solid #808080; /* 꺾은선 색상 */
+        }
 
-    .tabs .tab_links li:first-child {
-        margin-left: 0;
-    }
+        .corner.corner-1 {
+            top: 0;
+            left: 0;
+            border-right: none;
+            border-bottom: none;
+        }
 
-    .tabs .tab_links button {
-        padding: 17px 12px 13px;
-        color: #a1a3b6
-    }
+        .corner.corner-2 {
+            top: 0;
+            right: 0;
+            border-left: none;
+            border-bottom: none;
+        }
 
-    .tabs .tab_links li.on button {
-        color: #000
-    }
+        .corner.corner-3 {
+            bottom: 0;
+            left: 0;
+            border-right: none;
+            border-top: none;
+        }
 
+        .corner.corner-4 {
+            bottom: 0;
+            right: 0;
+            border-left: none;
+            border-top: none;
+        }
 
-    .theGrid1-cell {
-        padding: 12px;
-    }
+        .expand-icon span {
+            display: block;
+            position: absolute;
+            background-color: #808080;
+        }
 
-</style>
+        .icon-horizontal, .icon-vertical {
+            position: absolute;
+            background-color: black;
+            width: 100%; /* 선 길이를 모서리까지 확장 */
+            height: 2px; /* 선 두께 */
+        }
 
+        .icon-horizontal {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(45deg); /* 45도 회전하여 대각선 */
+        }
+
+        .icon-vertical {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) rotate(-45deg); /* 반대 방향으로 45도 회전하여 X 자 형성 */
+        }
+
+    </style>
+</head>
 <th:block layout:fragment="content">
 
 
@@ -173,8 +218,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab01">
-                                        <div>
-                                            <div id="chartHolder"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder1"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -201,7 +246,7 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab03">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder2"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -231,7 +276,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab05">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder3"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -259,7 +304,7 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab07">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder4"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -289,7 +334,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab09">
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder5"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -317,7 +362,7 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab11" >
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder6"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -347,7 +392,7 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab13" >
-                                        <div>
+                                        <div class="chart-wrap">
                                             <div id="chartHolder7"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
@@ -433,8 +478,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab15">
-                                        <div>
-                                            <div id="chartHolder1-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder8"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -461,8 +506,8 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab17">
-                                        <div>
-                                            <div id="chartHolder2-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder9"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -491,8 +536,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab19">
-                                        <div>
-                                            <div id="chartHolder3-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder10"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -519,8 +564,8 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab21">
-                                        <div>
-                                            <div id="chartHolder4-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder11"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -549,8 +594,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab23">
-                                        <div>
-                                            <div id="chartHolder5-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder12"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -577,8 +622,8 @@
                                 <div class="tab-contents">
                                     <!-- tab5 -->
                                     <div class="tab-item-sub" id="tab25" >
-                                        <div>
-                                            <div id="chartHolder6-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder13"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -607,8 +652,8 @@
                                 <div class="tab-contents">
                                     <!-- tab1 -->
                                     <div class="tab-item-sub" id="tab27" >
-                                        <div>
-                                            <div id="chartHolder7-2"
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder14"
                                                  style="width: 100%; height: 290px; padding-top: 13px"></div>
                                         </div>
                                     </div>
@@ -829,13 +874,21 @@
                         <div id="theGrid8" style="max-height:380px;"></div>
                     </div>
 
-
-
                 </section>
-
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
+
+
+
+    <div id="chartModal" class="modal" style="opacity:100">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> <!-- 차트를 보여줄 모달의 div -->
+        </div>
+    </div>
+
+
 
 
 </th:block>
@@ -1025,147 +1078,330 @@
 
 
         function createTab1Charts() {
-            rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
-            rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
-            rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
-            rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
-            rMateChartH5.create("chart5", "chartHolder5", "", "100%", "100%");
-            rMateChartH5.create("chart6", "chartHolder6", "", "100%", "100%");
-            rMateChartH5.create("chart7", "chartHolder7", "", "100%", "100%");
+            let chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
 
-
-            // 스트링 형식으로 레이아웃 정의.
-            var layoutStr = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
-                + '<Column2DChart showDataTips="true">'
-                + '<horizontalAxis><CategoryAxis categoryField="EXPESYM"/></horizontalAxis>'
-                + '<series>'
-                + '<Column2DSeries yField="FUEAMT" fill="#62b2fd">'
-                + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
-                + '</Column2DSeries>'
-                + '</series>'
-                + '</Column2DChart>'
-                + '</rMateChart>';
-
-
-            var chartData = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData2 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData3 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData4 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData5 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData6 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
-            ];
-            var chartData7 = [
-                {"EXPESYM": "01월", "FUEAMT": 20},
-                {"EXPESYM": "02월","FUEAMT": 30},
-                {"EXPESYM": "03월", "FUEAMT": 51.2},
-                {"EXPESYM": "04월", "FUEAMT": 44.5},
-                {"EXPESYM": "05월", "FUEAMT": 62.35},
-                {"EXPESYM": "06월", "FUEAMT": 84.46},
-                {"EXPESYM": "07월", "FUEAMT": 48.9},
-                {"EXPESYM": "08월", "FUEAMT": 38},
-                {"EXPESYM": "09월", "FUEAMT": 60.5},
-                {"EXPESYM": "10월","FUEAMT": 40.1},
-                {"EXPESYM": "11월", "FUEAMT": 36.1},
-                {"EXPESYM": "12월", "FUEAMT": 26.8}
+            let chartsTab1 = [
+                {name: "chart1", vars: chartVars},
+                {name: "chart2", vars: chartVars},
+                {name: "chart3", vars: chartVars},
+                {name: "chart4", vars: chartVars},
+                {name: "chart5", vars: chartVars},
+                {name: "chart6", vars: chartVars},
+                {name: "chart7", vars: chartVars},
             ];
 
+            chartsTab1.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
 
-                rMateChartH5.calls("chart1", { "setLayout" : layoutStr, "setData" : chartData });
-                rMateChartH5.calls("chart2", { "setLayout" : layoutStr, "setData" : chartData2 });
-                rMateChartH5.calls("chart3", { "setLayout" : layoutStr, "setData" : chartData3 });
-                rMateChartH5.calls("chart4", { "setLayout" : layoutStr, "setData" : chartData4 });
-                rMateChartH5.calls("chart5", { "setLayout" : layoutStr, "setData" : chartData5 });
-                rMateChartH5.calls("chart6", { "setLayout" : layoutStr, "setData" : chartData6 });
-                rMateChartH5.calls("chart7", { "setLayout" : layoutStr, "setData" : chartData7 });
+            });
+        }
+
+
+
+
+
+        // 두 번째 탭 차트 생성 함수
+        function createTab2Charts() {
+
+            let chartVars1 = "rMateOnLoadCallFunction=chartReadyHandler";
+
+
+            let chartsTab2 = [
+
+                {name: "chart8", vars: chartVars1},
+                {name: "chart9", vars: chartVars1},
+                {name: "chart10", vars: chartVars1},
+                {name: "chart11", vars: chartVars1},
+                {name: "chart12", vars: chartVars1},
+                {name: "chart13", vars: chartVars1},
+                {name: "chart14", vars: chartVars1},
+            ];
+
+            chartsTab2.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
 
         }
 
-        // 두 번째 탭의 차트 생성 함수
-        function createTab2Charts() {
-            rMateChartH5.create("chart8", "chartHolder1-2", "", "100%", "100%");
-            rMateChartH5.create("chart9", "chartHolder2-2", "", "100%", "100%");
-            rMateChartH5.create("chart10", "chartHolder3-2", "", "100%", "100%");
-            rMateChartH5.create("chart11", "chartHolder4-2", "", "100%", "100%");
-            rMateChartH5.create("chart12", "chartHolder5-2", "", "100%", "100%");
-            rMateChartH5.create("chart13", "chartHolder6-2", "", "100%", "100%");
-            rMateChartH5.create("chart14", "chartHolder7-2", "", "100%", "100%");
+
+
+        function chartReadyHandler(id) {
+
+            let chartIndex = id.replace(/\D/g, "");
+
+            var chartData;
+
+            switch (chartIndex) {
+                case "1":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "2":
+                     chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "3":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "4":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "5":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "6":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+
+                case "7":
+                    chartData = [
+                        {"EXPESYM": "01월", "FUEAMT": 20},
+                        {"EXPESYM": "02월","FUEAMT": 30},
+                        {"EXPESYM": "03월", "FUEAMT": 51.2},
+                        {"EXPESYM": "04월", "FUEAMT": 44.5},
+                        {"EXPESYM": "05월", "FUEAMT": 62.35},
+                        {"EXPESYM": "06월", "FUEAMT": 84.46},
+                        {"EXPESYM": "07월", "FUEAMT": 48.9},
+                        {"EXPESYM": "08월", "FUEAMT": 38},
+                        {"EXPESYM": "09월", "FUEAMT": 60.5},
+                        {"EXPESYM": "10월","FUEAMT": 40.1},
+                        {"EXPESYM": "11월", "FUEAMT": 36.1},
+                        {"EXPESYM": "12월", "FUEAMT": 26.8}
+                    ];
+
+                    break;
+                case "8":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "9":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "10":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "11":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "12":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "13":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+
+                case "14":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    break;
+            }
+
+            // document.getElementById(id).setLayout(layoutStr);
+            document.getElementById(id).setData(chartData);
+            // 레이아웃 설정
+            if (chartIndex >= 1 && chartIndex <= 7) {
+                document.getElementById(id).setLayout(layoutStr1);
+            } else if (chartIndex >= 8 && chartIndex <= 14) {
+                document.getElementById(id).setLayout(layoutStr2);
+            }
+        }
+
+
+        // 스트링 형식으로 레이아웃 정의.
+        var layoutStr1 = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+            + '<Column2DChart showDataTips="true">'
+            + '<horizontalAxis><CategoryAxis categoryField="EXPESYM"/></horizontalAxis>'
+            + '<series>'
+            + '<Column2DSeries yField="FUEAMT" fill="#62b2fd">'
+            + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
+            + '</Column2DSeries>'
+            + '</series>'
+            + '</Column2DChart>'
+            + '</rMateChart>';
+
 
 
             var layoutStr2 =
@@ -1217,51 +1453,6 @@
 
 
 
-
-
-             var chartDataCombo = [
-            {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
-            {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
-            {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
-            {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
-            {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
-            {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
-            {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
-            {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
-            {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
-            {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
-            {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
-            {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
-        ];
-
-
-            // // 차트 데이터
-            // var chartData8 = [
-            //     {"Year": "1월", "2023": 120, "2024": 100},
-            //     {"Year": "2월", "2023": 140, "2024": 150},
-            //     {"Year": "3월", "2023": 220, "2024": 180},
-            //     {"Year": "4월", "2023": 160, "2024": 140},
-            //     {"Year": "5월", "2023": 210, "2024": 220},
-            //     {"Year": "6월", "2023": 400, "2024": 420},
-            //     {"Year": "7월", "2023": 330, "2024": 320},
-            //     {"Year": "8월", "2023": 420, "2024": 280},
-            //     {"Year": "9월", "2023": 550, "2024": 610},
-            //     {"Year": "10월", "2023": 480, "2024": 330},
-            //     {"Year": "11월", "2023": 320, "2024": 450},
-            //     {"Year": "12월", "2023": 600, "2024": 740},
-            //
-            // ];
-
-
-            rMateChartH5.calls("chart8", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart9", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart10", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart11", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart12", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart13", {"setLayout": layoutStr2, "setData": chartDataCombo});
-            rMateChartH5.calls("chart14", {"setLayout": layoutStr2, "setData": chartDataCombo});
-
-        }
 
         rMateChartH5.registerTheme(rMateChartH5.themes);
 
@@ -1651,6 +1842,61 @@
             document.querySelectorAll('.Costtodate').forEach(input => {
                 input.value = endMonth ;
             });
+
+
+
+            $('.chart-wrap').each(function() {
+                // expand-icon 아이콘 생성
+                let expandIcon = $('<span class="material-symbols-outlined">\n' +
+                    'zoom_out_map\n' +
+                    '</span>');
+
+                // expand-icon 스타일 적용
+                expandIcon.css({
+                    'position': 'absolute',
+                    'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
+                    'right': '3px', // 차트의 오른쪽 끝에 위치
+                    'cursor': 'pointer',
+                    'z-index': '10',
+                    'color': '##B3B3B3'
+                });
+
+                // chart-wrap에 expand-icon 추가
+                $(this).css('position', 'relative').append(expandIcon);
+            });
+
+// .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+            $(document).on('click', '.material-symbols-outlined', function() {
+                // 클릭한 div의 id 가져오기
+                let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
+
+                // ID가 제대로 추출되었는지 확인
+                console.log("Clicked chartHolder ID: " + chartHolderId);
+
+                // 모달 열기
+                let modal = document.getElementById("chartModal");
+                let modalChartHolder = document.getElementById("modalChartHolder");
+                modal.style.display = "block";
+
+                // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+                rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+                // 모달 닫기 버튼 클릭 시 모달 닫기
+                let closeModal = document.getElementsByClassName("close")[0];
+                closeModal.onclick = function() {
+                    modal.style.display = "none";
+                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                }
+
+                // 모달 외부를 클릭하면 모달 닫기
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                    }
+                }
+            });
+
 
         });
     </script>
