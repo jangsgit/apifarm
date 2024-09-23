@@ -643,9 +643,6 @@ $(document).ready(function() {
         // 클릭한 div의 id 가져오기
         let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
 
-        // ID가 제대로 추출되었는지 확인
-        console.log("Clicked chartHolder ID: " + chartHolderId);
-
         // 모달 열기
         let modal = document.getElementById("chartModal");
         let modalChartHolder = document.getElementById("modalChartHolder");
