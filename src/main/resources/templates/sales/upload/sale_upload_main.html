@@ -110,7 +110,7 @@
             <div class="tab-contents">
 
                 <!-- tab1 -->
-                <section class="tab-item" id="tab1">
+                <section class="tab-item" id="tab1" style="height: 840px;">
                     <div class="row">
                         <div class="wp100">
                             <div class="section-top">
@@ -259,7 +259,7 @@
                 </section>
 
                 <!-- tab2 -->
-                <section class="tab-item" id="tab2">
+                <section class="tab-item" id="tab2" style="height: 840px;">
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>매출 등록</h3>
@@ -453,12 +453,12 @@
                         <div class="row" style="padding-right: 20px;">
                             <!-- 그리드 영역 -->
                             <div class="col-6" style="margin-right: 10px;">
-                                <div id="theGrid2" style="max-height: 386px;"></div>
+                                <div id="theGrid2" style="max-height: 385px;"></div>
                             </div>
                             <!-- 차트 영역 -->
                             <div class="col-6">
                                 <div class="chart-wrap">
-                                    <div id="chartHolder2" style="width: 760px; height: 386px;"></div>
+                                    <div id="chartHolder2" style="width: 760px; height: 385px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -466,413 +466,288 @@
                 </section>
 
                 <!-- tab3 -->
-                <section class="tab-item" id="tab3">
+                <section class="tab-item" id="tab3" style="height: 840px;">
 
                     <div class="row">
-                        <div class="wp50" style="margin-right: 20px;">
-                            <div class="section-top">
-                                <div class="title-wrap">
-                                    <h3>SMP 등록</h3>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-excell" title="신규등록">
-                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                                신규등록
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" id="btnDelete" title="삭제">
-                                                <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-edit" title="저장" id="btnSave">
-                                                <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                                저장
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
-                                            <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
-                                                <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                    </ul>
+                        <section class="wp50" style="margin-right: 20px; border-radius: 10px;">
+                            <div class="title-wrap">
+                                <h3>REC 현물시장 캘린더</h3>
+                                <div class="btn-wrap">
                                 </div>
                             </div>
+                            <div class="calendar-wrap">
+                                <div id="calendar"></div>
+                            </div>
+                        </section>
 
-                            <form action="/api/sales/upload" id="saleForm" method="post">
-                                <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
-                                <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spworknm" name="spworknm" value="def"/>
-                                <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
-                                <input type="hidden" id="spplannm" name="spplannm" value="def"/>
-                                <div class="table-wrap">
-                                    <table class="write-table">
-                                        <caption>SMP등록 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp24">
-                                            <col class="wp80">
-                                            <col class="wp24">
-                                            <col class="wp80">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th>
-                                                <label for="date3">
-                                                    등록일자
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <!-- 나중에 required 빼도 되나 고려해봐 -->
-                                                <input type="date" id="" name="" class="wp100" value="2024-09-20">
-                                                <!--                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>-->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="222">
-                                                    SMP 단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <!-- 나중에 required 빼도 되나 고려해봐 -->
-                                                <input type="text" id="222" name="222" class="wp100" readonly=""
-                                                       value="149.02">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
+                        <section class="wp50">
+                            <div class="title-wrap">
+                                <ul class="tab-links-sub">
+                                    <li><a href="#tab3_1" title="SMP등록">SMP 등록</a></li>
+                                    <li><a href="#tab3_2" title="REC현물단가등록">REC 현물단가등록</a></li>
+                                </ul>
+                            </div>
 
-                            <div class="section-top" style="margin-top:40px;">
-                                <div class="search-wrap">
-                                    <dl>
-                                        <dt>
-                                            SMP 조회일자<span class="eq">*</span>
-                                        </dt>
-                                        <dd>
-                                            <ul class="date-box">
-                                                <li>
-                                                    <input type="date" id="" name="startDate" value="2024-08-01">
-                                                    <label for="date1" class="hide">시작일</label>
-                                                </li>
-                                                <li>
-                                                    <input type="date" id="" name="endDate" value="2024-08-31">
-                                                    <label for="date2" class="hide">종료일</label>
-                                                </li>
-                                                <li>
-                                                    <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
-                                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                        검색
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-
-                                </div>
-                            </div> <!--//section-top end -->
-
-
-                            <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                                <div class="row">
-                                    <!-- 그리드 영역 -->
-                                    <div class="col-6" style="margin-right: 10px;">
-                                        <div id="theGrid3" style="max-height: 531px;"></div>
+                            <div class="tab-contents">
+                                <!-- tab3_1 -->
+                                <div class="tab-item-sub" id="tab3_1">
+                                    <!--<div class="button-wrap">
+                                        <ul>
+                                            <li>
+                                                <a class="btn btn-excell" title="신규등록">
+                                                    <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                                    신규등록
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" id="btnDelete" title="삭제">
+                                                    <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                                    삭제
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-edit" title="저장" id="btnSave">
+                                                    <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                                    저장
+                                                </a>
+                                            </li>
+                                            <li>
+                                                &lt;!&ndash; 수정 버튼, 처음에는 숨겨져 있음 &ndash;&gt;
+                                                <a class="btn btn-edit" title="수정" id="btnEdit"
+                                                   style="display:none;">
+                                                    <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                                    수정
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <!-- 차트 영역 -->
-                                    <div class="col-6">
-                                        <div class="chart-wrap">
-                                            <div id="chartHolder3" style="width: 377px; height: 531px;"></div>
+                                    <form action="" id="" method="">
+                                        <div class="table-wrap">
+                                            <table class="write-table">
+                                                <caption>SMP등록 테이블</caption>
+                                                <colgroup>
+                                                    <col class="wp24">
+                                                    <col class="wp80">
+                                                    <col class="wp24">
+                                                    <col class="wp80">
+                                                </colgroup>
+                                                <tbody>
+                                                <tr>
+                                                    <th>
+                                                        <label for="date3">
+                                                            등록일자
+                                                        </label>
+                                                    </th>
+                                                    <td>
+                                                        &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                                        <input type="date" id="" name="" class="wp100"
+                                                               value="2024-09-20">
+                                                        &lt;!&ndash;                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>&ndash;&gt;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        <label for="222">
+                                                            SMP 단가
+                                                        </label>
+                                                    </th>
+                                                    <td>
+                                                        &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                                        <input type="text" id="222" name="222" class="wp100"
+                                                               readonly=""
+                                                               value="149.02">
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>-->
+
+                                    <div class="section-top" style="margin-top:40px;">
+                                        <div class="search-wrap">
+                                            <dl>
+                                                <dt>
+                                                    SMP 조회일자<span class="eq">*</span>
+                                                </dt>
+                                                <dd>
+                                                    <ul class="date-box">
+                                                        <li>
+                                                            <input type="date" id="" name="startDate"
+                                                                   value="2024-08-01">
+                                                            <label for="date1" class="hide">시작일</label>
+                                                        </li>
+                                                        <li>
+                                                            <input type="date" id="" name="endDate"
+                                                                   value="2024-08-31">
+                                                            <label for="date2" class="hide">종료일</label>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                                검색
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-popup-open" title="신규등록"
+                                                               data-popup="popup1">
+                                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                                                SMP등록
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div> <!--//section-top end -->
+
+                                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                                        <!-- 그리드 영역 -->
+                                        <div class="col-6" style="margin-bottom: 10px;">
+                                            <div id="theGrid3" style="max-height: 295px;"></div>
+                                        </div>
+                                        <!-- 차트 영역 -->
+                                        <div class="col-6">
+                                            <div class="chart-wrap">
+                                                <div id="chartHolder3"
+                                                     style="width: 770px; height: 295px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- tab3_2 -->
+                                <div class="tab-item-sub" id="tab3_2">
+                                    <!--                                    <h3>REC 현물 단가 등록</h3>-->
+                                    <!--<div class="button-wrap">
+                                        <ul>
+                                            <li>
+                                                <a class="btn btn-excell" title="신규등록">
+                                                    <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                                    신규등록
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" id="btnDelete" title="삭제">
+                                                    <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                                    삭제
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-edit" title="저장" id="btnSave">
+                                                    <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                                    저장
+                                                </a>
+                                            </li>
+                                            <li>
+                                                &lt;!&ndash; 수정 버튼, 처음에는 숨겨져 있음 &ndash;&gt;
+                                                <a class="btn btn-edit" title="수정" id="btnEdit"
+                                                   style="display:none;">
+                                                    <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                                    수정
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <form action="/api/sales/upload" id="saleForm" method="post">
+                                        <div class="table-wrap">
+                                            <table class="write-table">
+                                                <caption>REC 현물 단가 등록 테이블</caption>
+                                                <colgroup>
+                                                    <col class="wp24">
+                                                    <col class="wp80">
+                                                    <col class="wp24">
+                                                    <col class="wp80">
+                                                </colgroup>
+                                                <tbody>
+                                                <tr>
+                                                    <th>
+                                                        <label for="date3">
+                                                            등록일자
+                                                        </label>
+                                                    </th>
+                                                    <td>
+                                                        &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                                        <input type="date" id="" name="" class="wp100"
+                                                               value="2024-09-20">
+                                                        &lt;!&ndash;                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>&ndash;&gt;
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>
+                                                        <label for="222">
+                                                            REC 단가
+                                                        </label>
+                                                    </th>
+                                                    <td>
+                                                        &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                                        <input type="text" id="222" name="222" class="wp100"
+                                                               readonly=""
+                                                               value="79,441">
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>-->
+
+                                    <div class="section-top" style="margin-top:40px;">
+                                        <div class="search-wrap">
+                                            <dl>
+                                                <dt>
+                                                    REC 조회일자<span class="eq">*</span>
+                                                </dt>
+                                                <dd>
+                                                    <ul class="date-box">
+                                                        <li>
+                                                            <input type="date" id="" name="startDate"
+                                                                   value="2024-08-01">
+                                                            <label for="date1" class="hide">시작일</label>
+                                                        </li>
+                                                        <li>
+                                                            <input type="date" id="" name="endDate"
+                                                                   value="2024-08-31">
+                                                            <label for="date2" class="hide">종료일</label>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-delete" title="검색" id="btn-srch">
+                                                                <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                                검색
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="btn btn-excell" title="신규등록" data-popup="popup2">
+                                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                                                REC등록
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div> <!--//section-top end -->
+
+                                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                                        <!-- 그리드 영역 -->
+                                        <div class="col-6" style="margin-bottom: 10px;">
+                                            <div id="theGrid4" style="max-height: 295px;"></div>
+                                        </div>
+                                        <!-- 차트 영역 -->
+                                        <div class="col-6">
+                                            <div class="chart-wrap">
+                                                <div id="chartHolder4" style="width: 770px; height: 295px;"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="wp50">
-                            <div class="section-top">
-                                <div class="title-wrap">
-                                    <h3>REC 현물 단가 등록</h3>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-excell" title="신규등록">
-                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                                신규등록
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" id="btnDelete" title="삭제">
-                                                <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-edit" title="저장" id="btnSave">
-                                                <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                                저장
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <!-- 수정 버튼, 처음에는 숨겨져 있음 -->
-                                            <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
-                                                <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <form action="/api/sales/upload" id="saleForm" method="post">
-                                <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
-                                <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spworknm" name="spworknm" value="def"/>
-                                <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
-                                <input type="hidden" id="spplannm" name="spplannm" value="def"/>
-                                <div class="table-wrap">
-                                    <table class="write-table">
-                                        <caption>REC 현물 단가 등록 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp24">
-                                            <col class="wp80">
-                                            <col class="wp24">
-                                            <col class="wp80">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th>
-                                                <label for="date3">
-                                                    등록일자
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <!-- 나중에 required 빼도 되나 고려해봐 -->
-                                                <input type="date" id="" name="" class="wp100" value="2024-09-20">
-                                                <!--                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>-->
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="222">
-                                                    REC 단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                <!-- 나중에 required 빼도 되나 고려해봐 -->
-                                                <input type="text" id="222" name="222" class="wp100" readonly=""
-                                                       value="79,441">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-
-                            <div class="section-top" style="margin-top:40px;">
-                                <div class="search-wrap">
-                                    <dl>
-                                        <dt>
-                                            REC 조회일자<span class="eq">*</span>
-                                        </dt>
-                                        <dd>
-                                            <ul class="date-box">
-                                                <li>
-                                                    <input type="date" id="" name="startDate" value="2024-08-01">
-                                                    <label for="date1" class="hide">시작일</label>
-                                                </li>
-                                                <li>
-                                                    <input type="date" id="" name="endDate" value="2024-08-31">
-                                                    <label for="date2" class="hide">종료일</label>
-                                                </li>
-                                                <li>
-                                                    <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                        <!-- class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
-                                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                        검색
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-                                </div>
-                            </div> <!--//section-top end -->
-
-                            <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                                <!-- 그리드 영역 -->
-                                <div class="col-6" style="margin-bottom: 10px;">
-                                    <div id="theGrid4" style="max-height: 265px;"></div>
-                                </div>
-                                <!-- 차트 영역 -->
-                                <div class="col-6">
-                                    <div class="chart-wrap">
-                                        <div id="chartHolder4" style="width: 770px; height: 265px;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </section>
                     </div>
                 </section>
 
                 <!-- tab4 -->
-                <!--<section class="tab-item" id="tab4">
-                    <div class="row">
-                        <div class="wp100">
-                            <div class="section-top">
-                                <div class="title-wrap">
-                                    <h3>REC 현물 단가 등록</h3>
-                                </div>
-                                <div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-excell" title="신규등록">
-                                                <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
-                                                신규등록
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-delete" id="btnDelete" title="삭제">
-                                                <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                                삭제
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="btn btn-edit" title="저장" id="btnSave">
-                                                <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
-                                                저장
-                                            </a>
-                                        </li>
-                                        <li>
-                                            &lt;!&ndash; 수정 버튼, 처음에는 숨겨져 있음 &ndash;&gt;
-                                            <a class="btn btn-edit" title="수정" id="btnEdit" style="display:none;">
-                                                <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
-                                                수정
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <form action="/api/sales/upload" id="saleForm" method="post">
-                                &lt;!&ndash;                                value 임의로 하드코딩함. 추후 수정하기. &ndash;&gt;
-                                <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spworknm" name="spworknm" value="def"/>
-                                <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
-                                <input type="hidden" id="spplannm" name="spplannm" value="def"/>
-                                <div class="table-wrap">
-                                    <table class="write-table">
-                                        <caption>REC 현물 단가 등록 테이블</caption>
-                                        <colgroup>
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                            <col class="wp12">
-                                            <col class="wp40">
-                                        </colgroup>
-                                        <tbody>
-                                        <tr>
-                                            <th>
-                                                <label for="date3">
-                                                    등록일자
-                                                </label>
-                                            </th>
-                                            <td>
-                                                &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
-                                                <input type="date" id="" name="" class="wp100" value="2024-09-20">
-                                                &lt;!&ndash;                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>&ndash;&gt;
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                <label for="222">
-                                                    REC 단가
-                                                </label>
-                                            </th>
-                                            <td>
-                                                &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
-                                                <input type="text" id="222" name="222" class="wp100" readonly=""
-                                                       value="79,441">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-
-                            <div class="section-top" style="margin-top:40px;">
-                                <div class="search-wrap">
-                                    <dl>
-                                        <dt>
-                                            조회일자<span class="eq">*</span>
-                                        </dt>
-                                        <dd>
-                                            <ul class="date-box">
-                                                <li>
-                                                    <input type="date" id="" name="startDate" value="2024-08-01">
-                                                    <label for="date1" class="hide">시작일</label>
-                                                </li>
-                                                <li>
-                                                    <input type="date" id="" name="endDate" value="2024-08-31">
-                                                    <label for="date2" class="hide">종료일</label>
-                                                </li>
-                                                <li>
-                                                    <a class="btn btn-delete" title="검색" id="btn-srch">
-                                                        &lt;!&ndash; class 쓰이는 곳 찾고 없으면 클래스명 수정하기&ndash;&gt;
-                                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
-                                                        검색
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                    </dl>
-
-                                </div>
-                                &lt;!&ndash;<div class="button-wrap">
-                                    <ul>
-                                        <li>
-                                            <a class="btn btn-excell" title="엑셀다운로드">
-                                                <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
-                                                엑셀다운로드
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>&ndash;&gt;
-                            </div> &lt;!&ndash;//section-top end &ndash;&gt;
-
-                            <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
-                                <div class="row">
-                                    &lt;!&ndash; 그리드 영역 &ndash;&gt;
-                                    <div class="col-6" style="margin-right: 10px;">
-                                        <div id="theGrid4" style="max-height: 531px;"></div>
-                                    </div>
-                                    &lt;!&ndash; 차트 영역 &ndash;&gt;
-                                    <div class="col-6">
-                                        <div class="chart-wrap">
-                                            <div id="chartHolder4" style="width: 1170px; height: 531px;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>-->
-
-                <!-- tab5 -->
-                <section class="tab-item" id="tab4">
+                <section class="tab-item" id="tab4" style="height: 840px;">
 
                     <div class="row">
                         <div class="wp50" style="margin-right: 10px;">
@@ -1079,10 +954,127 @@
             </div> <!--//tab-contens end-->
         </div> <!--//tab-wrap end-->
     </div> <!--//layout-contents end -->
+
+    <!-- [대시보드] 팝업  -->
+    <!--<div class="dashboard-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup1">
+            <div class="popup-title">
+                <h3>SMP 등록</h3>
+                <a title="팝업닫기" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form action="" id="" method="">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>SMP등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp24">
+                                <col class="wp80">
+                                <col class="wp24">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="date3">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                    <input type="date" id="" name="" class="wp100"
+                                           value="2024-09-20">
+                                    &lt;!&ndash;                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>&ndash;&gt;
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="222">
+                                        SMP 단가
+                                    </label>
+                                </th>
+                                <td>
+                                    &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                    <input type="text" id="222" name="222" class="wp100"
+                                           readonly=""
+                                           value="149.02">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="popup-button">
+                <button class="btn-navy btn-popup-close">확인</button>
+            </div>
+        </div>
+    </div> &lt;!&ndash; //dashboard-layout-popup end &ndash;&gt;
+
+    <div class="dashboard-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup2">
+            <div class="popup-title">
+                <h3>SMP 등록</h3>
+                <a title="팝업닫기" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form action="/api/sales/upload" id="saleForm" method="post">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>REC 현물 단가 등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp24">
+                                <col class="wp80">
+                                <col class="wp24">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="date3">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                    <input type="date" id="" name="" class="wp100"
+                                           value="2024-09-20">
+                                    &lt;!&ndash;                                    <input type="text" id="111" name="111" class="wp100" maxlength="50" disabled required>&ndash;&gt;
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="222">
+                                        REC 단가
+                                    </label>
+                                </th>
+                                <td>
+                                    &lt;!&ndash; 나중에 required 빼도 되나 고려해봐 &ndash;&gt;
+                                    <input type="text" id="222" name="222" class="wp100"
+                                           readonly=""
+                                           value="79,441">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="popup-button">
+                <button class="btn-navy btn-popup-close">확인</button>
+            </div>
+        </div>
+    </div> &lt;!&ndash; //dashboard-layout-popup end &ndash;&gt;-->
+
     <footer>
         <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
     </footer>
-    <div style="height: 10px"></div>
 
 </th:block>
 
@@ -1116,20 +1108,55 @@
         $(document).ready(function () {
             init();
             setTimeout(initChart1, 100);
-            $('.tab-links a[href="#tab2"]').on('click', function () {
-                setTimeout(initChart2, 100);
+            /* $('.tab-links a[href="#tab2"]').on('click', function () {
+                 setTimeout(initChart2, 100);
+             });
+             $('.tab-links a[href="#tab3"]').on('click', function () {
+                 setTimeout(initChart3, 100);
+                 setTimeout(initCalendar, 100);
+                 // setTimeout(initChart4, 100);
+             });
+             $('.tab-links-sub a[href="#tab3_2"]').on('click', function () {
+                 setTimeout(initChart4, 100);
+             });
+             $('.tab-links a[href="#tab4"]').on('click', function () {
+                 setTimeout(initChart5, 100);
+             });*/
+
+            // 메인 탭 전환 이벤트
+            $('.tab-links a').on('click', function (e) {
+                e.preventDefault();
+                var targetTab = $(this).attr('href');
+
+                switch (targetTab) {
+                    case '#tab2':
+                        setTimeout(initChart2, 100);
+                        break;
+                    case '#tab3':
+                        setTimeout(initChart3, 100);
+                        setTimeout(initCalendar, 100);
+                        break;
+                    case '#tab4':
+                        setTimeout(initChart5, 100);
+                        break;
+                }
             });
-            $('.tab-links a[href="#tab3"]').on('click', function () {
-                setTimeout(initChart3, 100);
-                setTimeout(initChart4, 100);
-            });
-            $('.tab-links a[href="#tab4"]').on('click', function () {
-                setTimeout(initChart5, 100);
+
+            // 하위 탭 전환 이벤트 (이벤트 위임 사용)
+            $(document).on('click', '.tab-links-sub a', function (e) {
+                e.preventDefault();
+                var targetSubTab = $(this).attr('href');
+
+                if (targetSubTab === '#tab3_2') {
+                    setTimeout(initChart4, 100);
+                }
             });
         });
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+
             // initChart1();
 
             initGrid1();
@@ -1808,9 +1835,6 @@
         // 기존
 
         $(document).ready(function () {
-
-            initializeSelections();  //위에 산단, 발전소명 관련 함수
-
 
             // 전역 변수로 선택된 매출 ID를 저장
             let selectedSalesId = null;
@@ -2638,8 +2662,8 @@
                 showMarquee: true,
                 columns: [
                     {binding: 'rownum', header: 'No', align: 'center', width: 90},
-                    {binding: 'standdt', header: '등록일자', align: 'center', width: 140},
-                    {binding: 'smpcost', header: 'SMP 단가', align: 'right', width: 140}
+                    {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
+                    {binding: 'smpcost', header: 'SMP 단가', align: 'right', width: 315}
                 ],
                 itemsSource: viewdata3,
                 isReadOnly: true
@@ -2736,8 +2760,8 @@
                 showMarquee: true,
                 columns: [
                     {binding: 'rownum', header: 'No', align: 'center', width: 90},
-                    {binding: 'standdt', header: '등록일자', align: 'center', width: 340},
-                    {binding: 'recCost', header: 'REC 단가', align: 'right', width: 340}
+                    {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
+                    {binding: 'recCost', header: 'REC 단가', align: 'right', width: 315}
                 ],
                 itemsSource: viewdata4,
                 isReadOnly: true
@@ -3023,6 +3047,104 @@
             document.getElementById(id).setData(chartData);
         }
 
+        // 캘린더
+        /*document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'ko',  // 한국어 로케일 설정
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialView: 'dayGridMonth',
+                height: 670,
+                dayHeaderFormat: { weekday: 'short' }, // 요일 형식 설정
+                views: {
+                    dayGridMonth: {
+                        dayCellContent: function(arg) {
+                            // '일' 텍스트 제거
+                            return arg.dayNumberText.replace('일', '');
+                        }
+                    }
+                },
+                dateClick: function(info) {
+                    // 날짜 클릭 이벤트 처리
+                    console.log('Clicked on: ' + info.dateStr);
+                }
+            });
+            calendar.render();
+        });*/
+
+        // 캘린더 초기화 함수
+        function initCalendar() {
+            var calendarEl = document.getElementById('calendar');
+            if (calendarEl) {
+
+                // FullCalendar 설정
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    locale: 'ko',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    initialView: 'dayGridMonth',
+                    height: 714,
+                    dayHeaderFormat: {weekday: 'short'},
+                    views: {
+                        dayGridMonth: {
+                            dayCellContent: function (arg) {
+                                return arg.dayNumberText.replace('일', '');
+                            }
+                        }
+                    },
+                    dateClick: function (info) {
+                        console.log('Clicked on: ' + info.dateStr);
+                    },
+                    events: [
+                        {title: '거래', start: '2024-09-03'},
+                        {title: '거래', start: '2024-09-05'},
+                        {title: '거래', start: '2024-09-10'},
+                        {title: '거래', start: '2024-09-12'},
+                        {title: '거래', start: '2024-09-19'},
+                        {title: '거래', start: '2024-09-24'},
+                        {title: '거래', start: '2024-09-26'},
+                        {
+                            title: '추석',
+                            start: '2024-09-17',
+                            backgroundColor: '#EC193A',
+                            borderColor: '#EC193A',
+                            textColor: 'white'
+                        },
+
+                        // {
+                        //     title: '국국의날',
+                        //     start: '2024-10-01',
+                        //     backgroundColor: '#EC193A',
+                        //     borderColor: '#EC193A',
+                        //     textColor: 'white'
+                        // },
+                        // {
+                        //     title: '개천절',
+                        //     start: '2024-10-03',
+                        //     backgroundColor: '#EC193A',
+                        //     borderColor: '#EC193A',
+                        //     textColor: 'white'
+                        // },
+                        // {title: '거래', start: '2024-10-08'},
+                        // {title: '거래', start: '2024-10-10'},
+                        // {title: '거래', start: '2024-10-15'},
+                        // {title: '거래', start: '2024-10-17'},
+                        // {title: '거래', start: '2024-10-22'},
+                        // {title: '거래', start: '2024-10-24'},
+                        // {title: '거래', start: '2024-10-29'},
+                        // {title: '거래', start: '2024-10-31'}
+                    ],
+                });
+                calendar.render();
+            }
+        }
 
     </script>
 </th:block>
