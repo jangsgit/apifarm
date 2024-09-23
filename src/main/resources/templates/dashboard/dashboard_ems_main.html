@@ -1,6 +1,8 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
 <style>
-
+    .section-item{
+        order: 0;
+    }
 </style>
 <th:block layout:fragment="content">
 
@@ -512,13 +514,13 @@
                 </a>
             </div>
             <div class="popup-contents">
-                <div class="card-wrap card-edit-wrap">
+                <div class="card-wrap card-edit-wrap" id="cardwrap">
                     <div class="gesture-box">
                         <img src="/images/icon/ico-gesture.png" alt="제스처 안내">
                     </div>
-                    <section>
+                    <section class="section-item" data-title="INPUT1">
                         <div class="title">
-                            <h3>INPUT</h3>
+                            <h3>INPUT1</h3>
                             <a title="숨김" class="btn-hidden"></a>
                         </div>
                         <dl>
@@ -534,7 +536,7 @@
                             </dd>
                         </dl>
                     </section>
-                    <section>
+                    <section class="section-item" data-title="Elec. OUTPUT">
                         <div class="title">
                             <h3>Elec. OUTPUT</h3>
                             <a title="숨김" class="btn-hidden"></a>
@@ -552,7 +554,7 @@
                             </dd>
                         </dl>
                     </section>
-                    <section>
+                    <section  class="section-item" data-title="Heat OUTPUT">
                         <div class="title">
                             <h3>Heat OUTPUT</h3>
                             <a title="숨김" class="btn-hidden"></a>
@@ -570,7 +572,7 @@
                             </dd>
                         </dl>
                     </section>
-                    <section>
+                    <section  class="section-item" data-title="F/C Efficiency">
                         <div class="title">
                             <h3>F/C Efficiency</h3>
                             <a title="숨김" class="btn-hidden"></a>
@@ -588,7 +590,7 @@
                             </dd>
                         </dl>
                     </section>
-                    <section>
+                    <section  class="section-item" data-title="INCOME">
                         <div class="title">
                             <h3>INCOME</h3>
                             <a title="숨김" class="btn-hidden"></a>
@@ -607,9 +609,9 @@
                         </dl>
                     </section>
 
-                    <section>
+                    <section  class="section-item" data-title="Heat OUTPUT2">
                         <div class="title">
-                            <h3>Heat OUTPUT</h3>
+                            <h3>Heat OUTPUT2</h3>
                             <a title="숨김" class="btn-hidden"></a>
                         </div>
                         <dl>
@@ -625,9 +627,9 @@
                             </dd>
                         </dl>
                     </section>
-                    <section>
+                    <section  class="section-item" data-title="F/C Efficiency2">
                         <div class="title">
-                            <h3>F/C Efficiency</h3>
+                            <h3>F/C Efficiency2</h3>
                             <a title="숨김" class="btn-hidden"></a>
                         </div>
                         <dl>
@@ -643,9 +645,9 @@
                             </dd>
                         </dl>
                     </section>
-                    <section class="card-hidden">
+                    <section class="card-hidden section-item" data-title="INCOME2">
                         <div class="title">
-                            <h3>INCOME</h3>
+                            <h3>INCOME2</h3>
                             <a title="숨김" class="btn-hidden"></a>
                         </div>
                         <dl>
@@ -665,13 +667,15 @@
             </div>
             <div class="popup-button">
                 <button class="btn-popup-close">취소</button>
-                <button class="btn-navy">저장</button>
+                <button class="btn-navy" id="btnSave">저장</button>
             </div>
         </div>
     </div>
 
 
     <script>
+        let csrfToken = $("[name=_csrf]").val();
+
         var swiper = new Swiper(".card-swiper", {
             slidesPerView: 5,
             spaceBetween: 20,
@@ -683,6 +687,82 @@
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
+        });
+
+        $(document).ready(function (){
+           searchData();
+        });
+
+        function searchData(){
+            let result = AjaxUtil.getSyncData('/api/common/Card/List');
+
+            if(result.success){
+                console.log('result.data', result.data);
+
+                const parent = document.getElementById('cardwrap');
+
+                const sections = Array.from(document.querySelectorAll('.section-item'));
+
+                result.data.forEach(item => {
+                    const section = sections.find(sec => sec.getAttribute('data-title') === item.title);
+
+                    if(section){
+
+                        if(item.visible){
+                            section.classList.remove('card-hidden');
+                        }else{
+                            section.classList.add('card-hidden');
+                        }
+
+                        section.setAttribute('data-id', item.id);
+
+                        parent.appendChild(section);
+
+                    }
+                });
+            }
+        }
+
+        $('#btnSave').click(function(){
+            const parent = document.getElementById('cardwrap');
+
+            const sections = Array.from(document.querySelectorAll('.section-item'));
+
+            const sectionData = [];
+
+            sections.forEach((section, index) => {
+                const dataTitle = section.getAttribute('data-title');
+                const dataid = section.getAttribute('data-id');
+                const isHidden = section.classList.contains('card-hidden');
+                const visible = !isHidden;
+
+                sectionData.push({
+                    id: dataid,
+                    orderNum: index + 1,
+                    title: dataTitle,
+                    visible: visible
+
+                });
+            });
+
+            console.log('testest', sectionData);
+
+            fetch('/api/common/Card/Save', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify(sectionData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    Alert.alert('', '저장되었습니다.');
+                })
+                .catch(error => {
+                    Alert.alert('', '에러가 발생하였습니다.');// 에러 처리
+                });
+
         });
     </script>
     <!--</body>-->

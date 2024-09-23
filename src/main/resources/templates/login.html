@@ -99,33 +99,54 @@
             display: block;
             animation: shake 0.5s ease;
         }
-        #loadingOverlay {
+        #loader2 {
             position: fixed;
             top: 0;
             left: 0;
+            background-color: #fff;
+            opacity: 0.8;
             width: 100%;
             height: 100%;
-
-            z-index: 9998; /* 로딩 바 바로 아래에 위치 */
-            display: none;
+            display: none; /* 처음에는 숨김 상태 */
+            z-index: 9000;
         }
-        #loading {
+
+        #loader2 .loader {
             position: fixed;
-            top: 44%;
-            left: 48%;
-            display: none;
-            width: 55px;
-            height: 55px;
-            border: 7px solid gray;
-            border-radius: 50%;
-            border-top-color: dodgerblue;
-            animation: spin 1s ease-in-out infinite;
-            -webkit-animation: spin 1s ease-in-out infinite;
-            z-index: 9999;
+            top: calc(50% - 48px);
+            left: calc(50% - 48px);
+            width: 96px;
+            height: 96px;
+            border-radius: 12px;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        /* 회전 애니메이션 정의 */
-        @keyframes spin {
+        #loader2 .loader > span {
+            position: fixed;
+            top: calc(50% - 27px);
+            left: calc(50% - 27px);
+            width: 48px;
+            height: 48px;
+            border: 3px solid #FFF;
+            border-radius: 50%;
+            display: inline-block;
+            animation: rotation 1s linear infinite;
+        }
+
+        #loader2 .loader > span::after {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #5ddfde;
+            width: 16px;
+            height: 16px;
+            transform: translate(-50%, 50%);
+            border-radius: 50%;
+        }
+
+        @keyframes rotation {
             0% {
                 transform: rotate(0deg);
             }
@@ -133,20 +154,14 @@
                 transform: rotate(360deg);
             }
         }
-
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
     </style>
 </head>
 <body>
-<div id="loadingOverlay"></div>
-<div id="loading"></div>
+<div id="loader2">
+    <div class="loader">
+        <span></span>
+    </div>
+</div>
 <div class="page-wrapper page-login"><!-- ★페이지 Class명 -->
     <div class="dashboard-login-wrap">
         <div class="login-wrap">
@@ -202,7 +217,7 @@
     <!-- [사용자권한] 팝업  -->
     <div class="dashboard-layout-popup">
         <div class="popup-overlay"  id="popup1"></div>
-        <div class="popup-wrapper" id="wrapper1">
+        <div class="popup-wrapper" id="wrapper1" style="width: 1000px">
             <div class="popup-title">
                 <h3>사용자권한신청</h3>
                 <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
@@ -291,7 +306,7 @@
                                         <input type="text" id="email" name="email">
                                         <button type="button" style="margin: 0 0 0 5px;width: 14.5%;background: white;color: #03428E;border: 1px solid #03428E;" id="BtnAuthenticationRegister">코드발급</button>
                                         <label style="width: 9%; margin-top: 10px">인증코드: </label>
-                                        <input type="text" id="AuthenticationCodeRegister" name="AuthenticationCodeRegister" required="" maxlength="38" autocomplete="off" style="width: 36%;border: none;border-bottom: 1px solid;
+                                        <input type="text" id="AuthenticationCodeRegister" name="AuthenticationCodeRegister" required="" maxlength="38" autocomplete="off" style="width: 30%;border: none;border-bottom: 1px solid;
                        border-radius: 0px;">
                                     </div>
                                     <div style="margin-top: 5px; text-align: center;">
@@ -307,7 +322,7 @@
                                 </th>
                                 <td colspan="3">
                                     <div class="input-clear">
-                                        <input type="text" id="id" name="id" class="wp50" style="width: 225px; !important;">
+                                        <input type="text" id="id" name="id" class="wp50" style="width: 360px !important;">
                                     </div>
                                     <a href="#" class="btn" id="btnDuplicate">중복확인</a>
                                 </td>
@@ -410,7 +425,7 @@
 
 
                 <div style="margin: 0 auto;">
-                    <button type="button" class="close" onclick="closeModal()" style="width: 100px;margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
+                    <button type="button" onclick="closeModal()" style="width: 100px;margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
                     <button type="button" style="width: 100px; border: 1px solid white; border-radius: 3px; color: white; background: #03428E" id="btnSearch">아이디 찾기</button>
                 </div>
             </form>
@@ -459,7 +474,7 @@
 
 
                 <div style="margin: 0 auto;">
-                    <button type="button" class="close" onclick="closePwModal()" style="width: 100px; margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
+                    <button type="button" onclick="closePwModal()" style="width: 100px; margin-right: 10px; background: white; border: 1px solid #03428E; border-radius: 3px; color: #03428E">닫기</button>
                     <button type="button" style="width: 100px; border: 1px solid white; border-radius: 3px; color: white; background: #03428E" id="btnPwSearch">비밀번호 변경</button>
                 </div>
             </form>
@@ -487,20 +502,14 @@
 
 <script type="text/javascript">
 
-    // 로딩 바를 보여주는 함수
-    function showLoadingBar() {
-        let loadingBar = document.getElementById("loading");
-        let loadingOverlay = document.getElementById("loadingOverlay");
-        loadingBar.style.display = "inline-block";
-        loadingOverlay.style.display = "block"; // 오버레이 표시
+    // 로딩바를 보여주는 함수
+    function showLoader() {
+        document.getElementById('loader2').style.display = 'block';
     }
 
-    // 로딩 바를 감추는 함수
-    function hideLoadingBar() {
-        let loadingBar = document.getElementById("loading");
-        let loadingOverlay = document.getElementById("loadingOverlay");
-        loadingBar.style.display = "none";
-        loadingOverlay.style.display = "none"; // 오버레이 숨기기
+    // 로딩바를 숨기는 함수
+    function hideLoader() {
+        document.getElementById('loader2').style.display = 'none';
     }
 
 
@@ -924,11 +933,11 @@
 
             if(!emailValidate(mail.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return false; }
             let data = { usernm, mail, _CsrfValue }
-            showLoadingBar();
+            showLoader();
 
             let fnSuccess = function (res){
                 if(res.success){
-                    hideLoadingBar();
+                    hideLoader();
                     $('#userid').attr('readonly', true);
 
                     Alert.alert('', res.message, function(e){
@@ -937,12 +946,12 @@
                     });
                 }
                 else if(!res.success){
-                    hideLoadingBar();
+                    hideLoader();
                     Alert.alert('', res.message, function(){});
 
                 }
             };
-            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoadingBar(); Alert.alert('', '서버통신 실패');});
+            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoader(); Alert.alert('', '서버통신 실패');});
         })
 
         $('#BtnAuthenticationRegister').click(function (e){
@@ -954,10 +963,10 @@
             if(mail.trim().length === 0){ Alert.alert('', '이메일을 입력해주세요.'); email.focus();  return;}
             if(!emailValidate(mail.trim())){ Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return false; }
             let data = {  usernm: 'empty',mail, _CsrfValue }
-            showLoadingBar();
+            showLoader();
             let fnSuccess = function (res){
                 if(res.success){
-                    hideLoadingBar();
+                    hideLoader();
 
                     Alert.alert('', res.message, function(e){
 
@@ -965,12 +974,12 @@
                     });
                 }
                 else if(!res.success){
-                    hideLoadingBar();
+                    hideLoader();
                     Alert.alert('', res.message, function(){});
 
                 }
             };
-            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoadingBar(); Alert.alert('', '서버통신 실패');});
+            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoader(); Alert.alert('', '서버통신 실패');});
         })
 
         //비밀번호 재설정
@@ -1020,7 +1029,7 @@
             };
 
             AjaxUtil.postAsyncData("/user-auth/verifyCode", data, fnSuccess, function () {
-                hideLoadingBar();
+                hideLoader();
                 Alert.alert('', '서버 통신 실패');
             });
 
