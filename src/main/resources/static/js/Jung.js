@@ -585,7 +585,6 @@ function closePopup(popupId) {
     }
 }
 
-
 function showPopup(element) {
     // 클릭된 요소의 data-popup 속성 값 가져오기
     const popupId = element.getAttribute('data-popup');
@@ -613,3 +612,118 @@ function showPopup(element) {
     }
 }
 
+
+// 모달로 그래프 확장
+$(document).ready(function() {
+
+    // 모든 chart-wrap 요소에 투명한 오버레이를 자동으로 추가
+    $('.chart-wrap').each(function() {
+        // expand-icon 아이콘 생성
+        let expandIcon = $('<span class="material-symbols-outlined">\n' +
+            'zoom_out_map\n' +
+            '</span>');
+
+        // expand-icon 스타일 적용
+        expandIcon.css({
+            'position': 'absolute',
+            'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
+            'right': '3px', // 차트의 오른쪽 끝에 위치
+            'cursor': 'pointer',
+            'z-index': '10',
+            'color': '##B3B3B3'
+        });
+
+        // chart-wrap에 expand-icon 추가
+        $(this).css('position', 'relative').append(expandIcon);
+    });
+
+
+    // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+    $(document).on('click', '.material-symbols-outlined', function() {
+        // 클릭한 div의 id 가져오기
+        let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
+
+        // ID가 제대로 추출되었는지 확인
+        console.log("Clicked chartHolder ID: " + chartHolderId);
+
+        // 모달 열기
+        let modal = document.getElementById("chartModal");
+        let modalChartHolder = document.getElementById("modalChartHolder");
+        modal.style.display = "block";
+
+        // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+        rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+        // 모달 닫기 버튼 클릭 시 모달 닫기
+        let closeModal = document.getElementsByClassName("close")[0];
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+            modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+        }
+
+        // 모달 외부를 클릭하면 모달 닫기
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+                modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+            }
+        }
+    });
+
+    // 공통 모달 HTML을 body 태그에 추가
+    const modalHTML = `
+        <div id="chartModal" class="modal" style="opacity:100">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+    `;
+
+    // body 태그의 끝에 모달을 추가
+    $('body').append(modalHTML);
+
+    // 모달 닫기 이벤트
+    $(document).on('click', '.close', function () {
+        $('#chartModal').hide();
+        $('#modalChartHolder').html('');  // 모달 내용 초기화
+    });
+
+    $('div[id^="chartHolder"]').on('dblclick', function(event) {
+        clickfunc(event);
+    });
+
+});
+
+// .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+// function clickfunc(event){
+//     console.log(event);
+//     // 클릭한 div의 id 가져오기
+//     let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
+//
+//     // ID가 제대로 추출되었는지 확인
+//     console.log("Clicked chartHolder ID: " + chartHolderId);
+//
+//     // 모달 열기
+//     let modal = document.getElementById("chartModal");
+//     let modalChartHolder = document.getElementById("modalChartHolder");
+//     modal.style.display = "block";
+//
+//     // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+//     rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+//
+//     // 모달 닫기 버튼 클릭 시 모달 닫기
+//     let closeModal = document.getElementsByClassName("close")[0];
+//     closeModal.onclick = function() {
+//         modal.style.display = "none";
+//         modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+//     }
+//
+//     // 모달 외부를 클릭하면 모달 닫기
+//     window.onclick = function(event) {
+//         if (event.target === modal) {
+//             modal.style.display = "none";
+//             modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+//         }
+//     }
+// }

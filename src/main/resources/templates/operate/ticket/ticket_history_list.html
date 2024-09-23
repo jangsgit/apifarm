@@ -138,7 +138,7 @@
                         </div>
                     </div> <!--//section-top end -->
                     <div class="container-fluid">
-                        <div>
+                        <div class="chart-wrap" style="justify-content: normal">
                             <div id="chartHolder1" style="width:600px; height:400px; margin-left: 20px">
                             </div>
                         </div>
@@ -385,7 +385,7 @@
 
                 var chartData2 = [
                     {"browser": "A ticket", "share": 68},
-                    {"browser": "B ticket Explorer", "share": 12},
+                    {"browser": "B ticket", "share": 12},
                     {"browser": "C ticket", "share": 11},
                     {"browser": "D ticket", "share": 6},
                     {"browser": "E ticket", "share": 3}
@@ -467,9 +467,6 @@
 
                     // theGrid1의 데이터를 data1 배열에 업데이트
                     var updatedData1 = theGrid1.collectionView.items;
-
-                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
-                    console.log("Updated data1:", updatedData1);
 
                     let formData = new FormData();
 
@@ -559,12 +556,9 @@
 
         // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
         function clickfunc(event){
-            console.log(event);
+
             // 클릭한 div의 id 가져오기
             let chartHolderId = $(event.target).closest('div[id^="chartHolder"]').attr('id');
-
-            // ID가 제대로 추출되었는지 확인
-            console.log("Clicked chartHolder ID: " + chartHolderId);
 
             // 모달 열기
             let modal = document.getElementById("chartModal");
