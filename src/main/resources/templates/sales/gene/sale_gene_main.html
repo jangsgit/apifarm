@@ -5,26 +5,6 @@
             text-align: center !important;
         }
 
-        /*#theGrid1.wj-flexgrid .wj-cell,
-        #theGrid2.wj-flexgrid .wj-cell,
-        #theGrid3.wj-flexgrid .wj-cell,
-        #theGrid4.wj-flexgrid .wj-cell {
-            padding: 12px;
-
-        }
-
-        #theGrid1.wj-flexgrid .downloads,
-        #theGrid2.wj-flexgrid .downloads,
-        #theGrid3.wj-flexgrid .downloads,
-        #theGrid4.wj-flexgrid .downloads {
-            padding-top: 0px;
-        }*/
-
-        /*.container-fluid {
-            overflow-x: auto;
-            max-width: 100%;
-        }*/
-
         /* 토글 클릭시 애니메이션 효과*/
         .wj-flexgrid .wj-colheaders, .wj-flexgrid .wj-cell {
             transition: all 0.2s ease;
@@ -51,8 +31,7 @@
         <!-- Page Title -->
         <div class="page-title-wrap">
             <div class="left">
-                <h2>발전량 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
-                                                                                      alt="알람 아이콘"></a>
+                <h2>발전량 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
                 <!--<a title="북마크" class="bookmark toggle">
                     내메뉴
                 </a>-->
@@ -149,7 +128,6 @@
                                 <dd>
                                     <li>
                                         <a class="btn btn-delete" title="검색" id="searchButton1" onclick="search()">
-                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
                                             <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                             검색
                                         </a>
@@ -195,11 +173,11 @@
                                 <dd>
                                     <ul class="date-box">
                                         <li>
-                                            <input type="date" id="date1_tab2" name="" value="2023-09-01">
+                                            <input type="date" id="date1_tab2" name="">
                                             <label for="date1_tab2" class="hide">시작일</label>
                                         </li>
                                         <li>
-                                            <input type="date" id="date2_tab2" name="" value="2023-09-30">
+                                            <input type="date" id="date2_tab2" name="">
                                             <label for="date2_tab2" class="hide">종료일</label>
                                         </li>
                                     </ul>
@@ -268,26 +246,26 @@
                                     조회일자<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box" id="dateBoxContainer">
-                                        <li id="startDateContainer">
-                                            <input type="date" id="startDate" name="startDate" value="2024-09-20">
+                                    <ul class="date-box" id="">
+                                        <!--<li id="">
+                                            <input type="date" id="" name="startDate" value="2024-09-20">
+                                        </li>-->
+                                        <li>
+                                            <input type="date" id="date2_tab3" name="">
+                                            <label for="date2_tab3" class="hide"></label>
                                         </li>
                                     </ul>
                                 </dd>
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="select1_tab1">
+                                    <label for="select1_tab3">
                                         발전기코드<span class="eq">*</span>
                                     </label>
                                 </dt>
 
                                 <dd>
-                                    <select id="select1_tab3" class="w120">
-                                        <option>전체</option>
-                                        <option>AJ38</option>
-                                        <option>A373</option>
-                                    </select>
+                                    <select id="select1_tab3" class="w120"></select>
                                 </dd>
                             </dl>
                             <dl>
@@ -336,17 +314,13 @@
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="select1_tab1">
+                                    <label for="select1_tab4">
                                         발전기코드<span class="eq">*</span>
                                     </label>
                                 </dt>
 
                                 <dd>
-                                    <select id="select1_tab4" class="w120">
-                                        <option>전체</option>
-                                        <option>AJ38</option>
-                                        <option>A373</option>
-                                    </select>
+                                    <select id="select1_tab4" class="w120"></select>
                                 </dd>
                             </dl>
                             <dl>
@@ -512,17 +486,13 @@
                             </dl>
                             <dl>
                                 <dt>
-                                    <label for="select1_tab1">
+                                    <label for="select1_tab5">
                                         발전기코드<span class="eq">*</span>
                                     </label>
                                 </dt>
 
                                 <dd>
-                                    <select id="select1_tab5" class="w120">
-                                        <option>전체</option>
-                                        <option>AJ38</option>
-                                        <option>A373</option>
-                                    </select>
+                                    <select id="select1_tab5" class="w120"></select>
                                 </dd>
                             </dl>
                             <dl>
@@ -767,6 +737,13 @@
         <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
     </footer>
 
+    <!-- 차트모달 -->
+    <div id="chartModal" class="modal" style="opacity:100">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> <!-- 차트를 보여줄 모달의 div -->
+        </div>
+    </div>
 </th:block>
 
 <th:block layout:fragment="scripts">
@@ -780,6 +757,62 @@
 
         let theGrid1, theGrid2;
         let viewdata1, viewdata2;
+
+        // 페이지 초기화 함수
+        function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+
+            loadData(); // 데이터 로드 및 그리드 초기화 함수 호출
+            setCurrentDate(); // 현재 날짜 설정
+            loadPowerIds(); // 발전기코드 옵션
+            setStartAndEndDate('tab1'); // 시작일, 종료일 설정 (tab1)
+            setStartAndEndDate('tab2'); // 시작일, 종료일 설정 (tab2)
+
+            initGrid();
+            initGrid2();
+
+            // ==========
+
+            // document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
+
+            // loadYearlyData(); // tab1 연도 데이터를 로드
+            // loadYearlyDataTab2(); // tab2 연도 데이터를 로드
+
+            // updateYearInPeriod(); // 조회연도 변경 시 조회기간의 연도도 동기화
+            // updatePeriodInputs(); // 페이지 로드 시 startDate와 endDate 초기화
+            loadGeneratorNames(); // 발전기명을 서버에서 로드
+            // loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
+
+            // 슬라이드 차트 초기화
+            // chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
+            // chartReadyHandler2("chart2", "chartHolder2", []);
+
+            // tab3 그리드 초기화
+            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
+            //     columns: [] // 초기 열 설정
+            // });
+
+            // tab4 그리드 초기화
+            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
+            //     columns: [] // 초기 열 설정
+            // });
+
+            // 0919 하드코딩
+
+            // tab3와 tab4의 초기화는 해당 탭이 선택될 때만 수행하도록 변경
+            // $('ul.tab-links li a').on('click', function () {
+            //     var currentAttrValue = $(this).attr('href');
+            //     if (currentAttrValue === '#tab3') {
+            //         initTab3();
+            //     } else if (currentAttrValue === '#tab4') {
+            //         initTab4Charts();
+            //         initTab4Grids();
+            //     }
+            // });
+
+        }
 
         // DOM 로드 완료 시 실행
         $(document).ready(function (e) {
@@ -853,65 +886,9 @@
             // loadInitialDataTab2();
         });
 
-        // 페이지 초기화 함수
-        function init() {
-            initializeSelections();  //위에 산단, 발전소명 관련 함수
-
-            loadData(); // 데이터 로드 및 그리드 초기화 함수 호출
-            setCurrentDate(); // 현재 날짜 설정
-            loadPowerIds(); // 발전기코드 옵션
-            setStartAndEndDate('tab1'); // 시작일, 종료일 설정 (tab1)
-            setStartAndEndDate('tab2'); // 시작일, 종료일 설정 (tab2)
-
-            initializeGrid();
-            initializeGrid2();
-
-            // ==========
-
-            // document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
-
-            // loadYearlyData(); // tab1 연도 데이터를 로드
-            // loadYearlyDataTab2(); // tab2 연도 데이터를 로드
-
-            // updateYearInPeriod(); // 조회연도 변경 시 조회기간의 연도도 동기화
-            // updatePeriodInputs(); // 페이지 로드 시 startDate와 endDate 초기화
-            loadGeneratorNames(); // 발전기명을 서버에서 로드
-            // loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
-
-            // 슬라이드 차트 초기화
-            // chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
-            // chartReadyHandler2("chart2", "chartHolder2", []);
-
-            // tab3 그리드 초기화
-            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-            //     columns: [] // 초기 열 설정
-            // });
-
-            // tab4 그리드 초기화
-            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-            //     columns: [] // 초기 열 설정
-            // });
-
-            // 0919 하드코딩
-
-            // tab3와 tab4의 초기화는 해당 탭이 선택될 때만 수행하도록 변경
-            // $('ul.tab-links li a').on('click', function () {
-            //     var currentAttrValue = $(this).attr('href');
-            //     if (currentAttrValue === '#tab3') {
-            //         initTab3();
-            //     } else if (currentAttrValue === '#tab4') {
-            //         initTab4Charts();
-            //         initTab4Grids();
-            //     }
-            // });
-
-        }
-
 
         // 그리드 초기화
-        function initializeGrid(data) {
+        function initGrid(data) {
             // 이미 그리드가 초기화되어 있는지 확인
             if (theGrid1 && theGrid1.hostElement) {
                 theGrid1.itemsSource = data; // 그리드가 이미 초기화된 경우 데이터만 갱신
@@ -978,7 +955,7 @@
         }
 
         // 두 번째 그리드 초기화
-        function initializeGrid2(data) {
+        function initGrid2(data) {
             // 이미 그리드가 초기화되어 있는지 확인
             if (theGrid2 && theGrid2.hostElement) {
                 theGrid2.itemsSource = data; // 그리드가 이미 초기화된 경우 데이터만 갱신
@@ -1576,6 +1553,7 @@
             document.getElementById('date2_tab1').value = formatDate(maxDate);
             document.getElementById('date1_tab2').value = formatDate(minDate);
             document.getElementById('date2_tab2').value = formatDate(maxDate);
+            document.getElementById('date2_tab3').value = formatDate(maxDate);
         }
 
         // 데이터 로드 함수
@@ -1623,7 +1601,7 @@
                 .then(response => response.json())
                 .then(powerIds => {
                     // 각 탭별 select element의 ID 배열
-                    const selectIds = ['select1_tab1', 'select1_tab2'];
+                    const selectIds = ['select1_tab1', 'select1_tab2', 'select1_tab3', 'select1_tab4', 'select1_tab5'];
                     selectIds.forEach(selectId => {
                         const selectElement = document.getElementById(selectId);
                         if (selectElement) {
@@ -1695,11 +1673,11 @@
 
             // `tab1`의 그리드 데이터 바인딩
             viewdata1 = new wijmo.collections.CollectionView(data);
-            initializeGrid(viewdata1);
+            initGrid(viewdata1);
 
             // 수정: trackChanges 옵션을 활성화하여 viewdata2를 초기화
             viewdata2 = new wijmo.collections.CollectionView(data, {trackChanges: true}); // 다른 데이터를 사용하는 경우 이 부분을 수정
-            initializeGrid2(viewdata2);
+            initGrid2(viewdata2);
         }
 
 

@@ -29,11 +29,6 @@
             text-align: center !important;
         }
 
-        /*#theGrid1.wj-flexgrid .wj-cell,
-        #theGrid5.wj-flexgrid .wj-cell {
-            padding: 12px;
-
-        }*/
     </style>
 </head>
 <th:block layout:fragment="content">
@@ -91,20 +86,17 @@
         <div class="tab-wrap">
             <ul class="tab-links">
                 <li>
-                    <a href="#tab1" title="REC일별매도등록">REC 일별매도등록</a>
+                    <a href="#tab1" title="REC일별매도등록" class="tab-button">REC 일별매도등록</a>
                 </li>
                 <li>
-                    <a href="#tab2" title="매출등록">매출등록</a>
+                    <a href="#tab2" title="매출등록" class="tab-button">매출등록</a>
                 </li>
                 <li>
-                    <a href="#tab3" title="SMP/REC등록">SMP/REC 등록</a>
+                    <a href="#tab3" title="SMP/REC등록" class="tab-button">SMP/REC 등록</a>
                 </li>
                 <li>
-                    <a href="#tab4" title="KPI목표매출등록">KPI 목표매출등록</a>
+                    <a href="#tab4" title="KPI목표매출등록" class="tab-button">KPI 목표매출등록</a>
                 </li>
-                <!-- <li>
-                     <a href="#tab5" title="KPI목표매출등록">KPI 목표매출등록</a>
-                 </li>-->
             </ul>
 
             <div class="tab-contents">
@@ -149,13 +141,6 @@
                             </div>
 
                             <form action="" method="">
-                                <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
-                                <!--<input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                                <input type="hidden" id="spworknm" name="spworknm" value="def"/>
-                                <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
-                                <input type="hidden" id="spplannm" name="spplannm" value="def"/>-->
                                 <div class="table-wrap">
                                     <table class="write-table">
                                         <caption>REC 일별 매도 등록</caption>
@@ -297,12 +282,12 @@
 
                     <form action="/api/sales/upload" id="saleForm" method="post">
                         <!--                                value 임의로 하드코딩함. 추후 수정하기. -->
-                        <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>
-                        <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>
-                        <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>
-                        <input type="hidden" id="spworknm" name="spworknm" value="def"/>
-                        <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>
-                        <input type="hidden" id="spplannm" name="spplannm" value="def"/>
+<!--                        <input type="hidden" id="spworkcd" name="spworkcd" value="def" maxlength="3"/>-->
+<!--                        <input type="hidden" id="spcompcd" name="spcompcd" value="def" maxlength="3"/>-->
+<!--                        <input type="hidden" id="spplancd" name="spplancd" value="def" maxlength="3"/>-->
+<!--                        <input type="hidden" id="spworknm" name="spworknm" value="def"/>-->
+<!--                        <input type="hidden" id="spcompnm" name="spcompnm" value="def"/>-->
+<!--                        <input type="hidden" id="spplannm" name="spplannm" value="def"/>-->
                         <div class="table-wrap">
                             <table class="write-table">
                                 <caption>매출등록 테이블</caption>
@@ -484,7 +469,7 @@
                             <div class="title-wrap">
                                 <ul class="tab-links-sub">
                                     <li><a href="#tab3_1" title="SMP등록">SMP 등록</a></li>
-                                    <li><a href="#tab3_2" title="REC현물단가등록">REC 현물단가등록</a></li>
+                                    <li><a href="#tab3_2" title="REC현물단가등록" class="tab-button">REC 현물단가등록</a></li>
                                 </ul>
                             </div>
 
@@ -1076,6 +1061,13 @@
         <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
     </footer>
 
+    <div id="chartModal" class="modal" style="opacity:100">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalChartHolder" style="width: 100%; height: 500px;"></div> <!-- 차트를 보여줄 모달의 div -->
+        </div>
+    </div>
+
 </th:block>
 
 <th:block layout:fragment="scripts">
@@ -1083,88 +1075,23 @@
     <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
     <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
     <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
     <script type="text/javascript">
 
-        // var theGrid1;
-        // var theGrid2;
-        // var theGrid3;
-        // var theGrid4;
-        // var theGrid5;
-
-        // var viewdata1;
-        // var viewdata2;
-        // var viewdata3;
-        // var viewdata4;
-        // var viewdata5;
-
-        // var columns = [
-        //     {binding: 'rownum', header: 'No', align: 'center', width: 140},
-        //     {binding: 'standdt', header: '적용일자', align: 'center', width: 140},
-        //     {binding: 'smpcost', header: '단가', align: 'center', width: 140}
-        // ];
-
-        // document.readyState === 'complete' ? init() : window.onload = init;
-
-        $(document).ready(function () {
-            init();
-            setTimeout(initChart1, 100);
-            /* $('.tab-links a[href="#tab2"]').on('click', function () {
-                 setTimeout(initChart2, 100);
-             });
-             $('.tab-links a[href="#tab3"]').on('click', function () {
-                 setTimeout(initChart3, 100);
-                 setTimeout(initCalendar, 100);
-                 // setTimeout(initChart4, 100);
-             });
-             $('.tab-links-sub a[href="#tab3_2"]').on('click', function () {
-                 setTimeout(initChart4, 100);
-             });
-             $('.tab-links a[href="#tab4"]').on('click', function () {
-                 setTimeout(initChart5, 100);
-             });*/
-
-            // 메인 탭 전환 이벤트
-            $('.tab-links a').on('click', function (e) {
-                e.preventDefault();
-                var targetTab = $(this).attr('href');
-
-                switch (targetTab) {
-                    case '#tab2':
-                        setTimeout(initChart2, 100);
-                        break;
-                    case '#tab3':
-                        setTimeout(initChart3, 100);
-                        setTimeout(initCalendar, 100);
-                        break;
-                    case '#tab4':
-                        setTimeout(initChart5, 100);
-                        break;
-                }
-            });
-
-            // 하위 탭 전환 이벤트 (이벤트 위임 사용)
-            $(document).on('click', '.tab-links-sub a', function (e) {
-                e.preventDefault();
-                var targetSubTab = $(this).attr('href');
-
-                if (targetSubTab === '#tab3_2') {
-                    setTimeout(initChart4, 100);
-                }
-            });
-        });
+        document.readyState === 'complete' ? init() : window.onload = init;
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
         function init() {
+            fetchListData();
             initializeSelections();  //위에 산단, 발전소명 관련 함수
 
-            // initChart1();
-
-            initGrid1();
-            initGrid2();
-            initGrid3();
-            initGrid4();
-            initGrid5();
-
+            setTimeout(function () {
+                createTab1Charts();
+                createTab2Charts();
+                createTab3Charts();
+                createTab4Charts();
+                createTab5Charts();
+            }, 100);
 
             // let data2 = [];
 
@@ -1246,88 +1173,7 @@
 
             //===================================================
             // tab2
-            // 하드코딩 시작
-            // 여기서부터 지워
-            // 하드코딩된 데이터 예제
-            // console.log("Initializing the grid..."); // 지워
-            // var data = [
-            //     // 필요시 check: false나 true 넣기
-            //     {rownum: '1', standdt: '2024-05-01', smpcost: '172.10', check: false},
-            //     {rownum: '2', standdt: '2024-05-02', smpcost: '172.20', check: false},
-            //     {rownum: '3', standdt: '2024-05-03', smpcost: '172.30', check: false},
-            //     {rownum: '4', standdt: '2024-05-04', smpcost: '172.40', check: false},
-            //     {rownum: '5', standdt: '2024-05-05', smpcost: '172.50', check: false},
-            //     {rownum: '6', standdt: '2024-05-06', smpcost: '172.60', check: false},
-            //     {rownum: '7', standdt: '2024-05-07', smpcost: '172.70', check: false},
-            //     {rownum: '8', standdt: '2024-05-08', smpcost: '172.80', check: false},
-            //     {rownum: '9', standdt: '2024-05-9', smpcost: '172.10', check: false},
-            //     {rownum: '10', standdt: '2024-05-10', smpcost: '172.20', check: false},
-            //     {rownum: '11', standdt: '2024-05-11', smpcost: '172.30', check: false},
-            //     {rownum: '12', standdt: '2024-05-12', smpcost: '172.40', check: false},
-            //     {rownum: '13', standdt: '2024-05-13', smpcost: '172.50', check: false},
-            //     {rownum: '14', standdt: '2024-05-14', smpcost: '172.60', check: false},
-            //     {rownum: '15', standdt: '2024-05-15', smpcost: '172.70', check: false},
-            //     {rownum: '16', standdt: '2024-05-16', smpcost: '172.80', check: false},
-            //     {rownum: '17', standdt: '2024-05-17', smpcost: '172.10', check: false},
-            //     {rownum: '18', standdt: '2024-05-18', smpcost: '172.20', check: false},
-            //     {rownum: '19', standdt: '2024-05-19', smpcost: '172.30', check: false},
-            //     {rownum: '20', standdt: '2024-05-20', smpcost: '172.40', check: false},
-            //     {rownum: '21', standdt: '2024-05-21', smpcost: '172.50', check: false},
-            //     {rownum: '22', standdt: '2024-05-22', smpcost: '172.60', check: false},
-            //     {rownum: '23', standdt: '2024-05-23', smpcost: '172.70', check: false},
-            //     {rownum: '24', standdt: '2024-05-24', smpcost: '172.80', check: false},
-            //     {rownum: '25', standdt: '2024-05-25', smpcost: '172.70', check: false},
-            //     {rownum: '26', standdt: '2024-05-26', smpcost: '172.70', check: false},
-            //     {rownum: '27', standdt: '2024-05-27', smpcost: '172.70', check: false},
-            //     {rownum: '28', standdt: '2024-05-28', smpcost: '172.70', check: false},
-            //     {rownum: '29', standdt: '2024-05-29', smpcost: '172.70', check: false},
-            //     {rownum: '30', standdt: '2024-05-30', smpcost: '172.70', check: false},
-            //     {rownum: '31', standdt: '2024-05-31', smpcost: '172.70', check: false}
-            // ];
 
-            // viewdata1 = new wijmo.collections.CollectionView(data);
-            // console.log("Data loaded:", data); // 지워
-
-            // theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata1
-            // });
-
-
-            // 그리드 내부에 있는 체크박스 클릭시
-            // theGrid1.cellEditEnding.addHandler(function (s, e) {
-            //     // 체크박스의 열 인덱스가 3인 경우 실행
-            //     if (e.col === 3) {
-            //         if (e.panel.grid.activeEditor.checked) {
-            //             // 체크박스가 체크된 경우, 현재 체크된 행의 데이터를 입력 필드에 반영
-            //             document.getElementById('date3').value = s.rows[e.row].dataItem.standdt;
-            //             document.getElementById('222').value = s.rows[e.row].dataItem.smpcost;
-            //         } else {
-            //             // 체크박스가 해제된 경우, 입력 필드 초기화
-            //             document.getElementById('date3').value = '';
-            //             document.getElementById('222').value = '';
-            //         }
-            //
-            //         // 모든 행에 대해 체크박스 상태 업데이트
-            //         s.rows.forEach(function (row, index) {
-            //             if (index !== e.row) {
-            //                 row.dataItem.check = false;  // 다른 모든 행의 체크 해제
-            //             }
-            //         });
-            //
-            //         // 데이터 변경 후에 CollectionView를 새로고침
-            //         viewdata1.refresh();
-            //     }
-            // });
-
-
-            // console.log("Grid initialized:", theGrid); // 지워
-            // 하드코딩 끝 여기까지 지워
-
-
-            // 위에 하드코딩 된거 지우고 이거 복구시켜
             /*let data2 = [];
             let searchusr = $('#searchusr').val();
 
@@ -1361,7 +1207,6 @@
 
                 }
             })*/
-
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -1369,41 +1214,7 @@
 
             //===================================================
             // tab3
-            // 하드코딩 시작
-            // 여기서부터 지워
-            // 하드코딩된 데이터 예제
-            // console.log("Initializing the grid..."); // 지워
-            // var data = [
-            //     // 필요시 check: false나 true 넣기
-            //     {rownum: '1', standdt: '2024-01', smpcost: '172.10', check: false},
-            //     {rownum: '2', standdt: '2024-02', smpcost: '172.20', check: false},
-            //     {rownum: '3', standdt: '2024-03', smpcost: '172.30', check: false},
-            //     {rownum: '4', standdt: '2024-04', smpcost: '172.40', check: false},
-            //     {rownum: '5', standdt: '2024-05', smpcost: '172.50', check: false},
-            //     {rownum: '6', standdt: '2024-06', smpcost: '172.60', check: false},
-            //     {rownum: '7', standdt: '2024-07', smpcost: '172.70', check: false},
-            //     {rownum: '8', standdt: '2024-08', smpcost: '172.80', check: false},
-            //     {rownum: '9', standdt: '2024-09', smpcost: '172.90', check: false},
-            //     {rownum: '10', standdt: '2024-10', smpcost: '172.10', check: false},
-            //     {rownum: '11', standdt: '2024-11', smpcost: '172.11', check: false},
-            //     {rownum: '12', standdt: '2024-12', smpcost: '172.12', check: false}
-            // ];
-            //
-            // viewdata3 = new wijmo.collections.CollectionView(data);
-            // console.log("Data loaded:", data); // 지워
 
-            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata3
-            // });
-
-            // console.log("Grid initialized:", theGrid); // 지워
-            // 하드코딩 끝 여기까지 지워
-
-
-            // 위에 하드코딩 된거 지우고 이거 복구시켜
             /*let data2 = [];
             let searchusr = $('#searchusr').val();
 
@@ -1437,7 +1248,6 @@
 
                 }
             })*/
-
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -1445,44 +1255,7 @@
 
             //===================================================
             // tab4
-            // 하드코딩 시작
-            // 여기서부터 지워
-            // 하드코딩된 데이터 예제
-            // console.log("Initializing the grid..."); // 지워
-            // var data = [
-            //     // 필요시 check: false나 true 넣기
-            //     {rownum: '1', standdt: '2024-01', smpcost: '172.10', check: false},
-            //     {rownum: '2', standdt: '2024-02', smpcost: '172.20', check: false},
-            //     {rownum: '3', standdt: '2024-03', smpcost: '172.30', check: false},
-            //     {rownum: '4', standdt: '2024-04', smpcost: '172.40', check: false},
-            //     {rownum: '5', standdt: '2024-05', smpcost: '172.50', check: false},
-            //     {rownum: '6', standdt: '2024-06', smpcost: '172.60', check: false},
-            //     {rownum: '7', standdt: '2024-07', smpcost: '172.70', check: false},
-            //     {rownum: '8', standdt: '2024-08', smpcost: '172.80', check: false},
-            //     {rownum: '9', standdt: '2024-09', smpcost: '172.90', check: false},
-            //     {rownum: '10', standdt: '2024-10', smpcost: '172.10', check: false},
-            //     {rownum: '11', standdt: '2024-11', smpcost: '172.11', check: false},
-            //     {rownum: '12', standdt: '2024-12', smpcost: '172.12', check: false}
-            // ];
-            //
-            // viewdata4 = new wijmo.collections.CollectionView(data);
-            // console.log("Data loaded:", data); // 지워
-            //
-            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-            //     autoGenerateColumns: false,
-            //     showMarquee: true,
-            //     columns: columns,
-            //     itemsSource: viewdata4
-            // });
-            //
-            // theGrid4.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
 
-
-            // console.log("Grid initialized:", theGrid); // 지워
-            // 하드코딩 끝 여기까지 지워
-
-
-            // 위에 하드코딩 된거 지우고 이거 복구시켜
             /*let data2 = [];
             let searchusr = $('#searchusr').val();
 
@@ -1509,14 +1282,12 @@
                 itemsSource: viewdata
             });
 
-
             let selector = new wijmo.grid.selector.Selector(theGrid, {
                 itemChecked: (e, ctx) => {
                     SelectItem = theGrid.rows.filter(r => r.isSelected);
 
                 }
             })*/
-
 
             // 선택이 변경될 때, 현재 항목 업데이트
 
@@ -1575,6 +1346,755 @@
         }
 
         <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        // 차트 시작
+
+        // 탭 버튼 클릭 이벤트
+        $('.tab-button').click(function () {
+            var targetTab = $(this).attr('href'); // 클릭한 탭의 href를 가져옴
+
+
+            setTimeout(function () {
+                switch (targetTab) {
+                    case '#tab1':
+                        createTab1Charts();
+                        break;
+                    case '#tab2':
+                        createTab2Charts();
+                        break;
+                    case '#tab3':
+                        initCalendar();
+                        createTab3Charts();
+                        createTab4Charts();
+                        break;
+                    case '#tab4':
+                        createTab5Charts();
+                        break;
+                }
+            }, 100);
+        });
+
+        // 탭 전환 이벤트 핸들러 수정
+        $('.tab-links-sub a').click(function(e) {
+            e.preventDefault();
+            var targetTab = $(this).attr('href');
+            $('.tab-item-sub').hide();
+            $(targetTab).show();
+
+            if (targetTab === '#tab3_1') {
+                createTab3Charts();
+            } else if (targetTab === '#tab3_2') {
+                createTab4Charts();
+            }
+        });
+
+
+        // 페이지 로드 시 첫 번째 탭의 차트를 자동으로 로드
+        function createTab1Charts() {
+            let chartVars1 = "rMateOnLoadCallFunction=chartReadyHandler"; // 필요시 사용될 변수
+            let chartsTab1 = [
+                {name: "chart1", vars: chartVars1}
+            ];
+
+            chartsTab1.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 호출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+        }
+
+        function createTab2Charts() {
+            let chartVars2 = "rMateOnLoadCallFunction=chartReadyHandler";
+            let chartsTab2 = [
+                {name: "chart2", vars: chartVars2}
+            ];
+
+            chartsTab2.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+        }
+
+        function createTab3Charts() {
+            let chartVars3 = "rMateOnLoadCallFunction=chartReadyHandler";
+            let chartsTab3 = [
+                {name: "chart3", vars: chartVars3}
+            ];
+
+            chartsTab3.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+
+            // 차트 생성 직후 강제 리사이즈
+            setTimeout(() => {
+                rMateChartH5.call(chart.name, "resize", "100%", "100%");
+            }, 100);
+        }
+
+        function createTab4Charts() {
+            let chartVars4 = "rMateOnLoadCallFunction=chartReadyHandler";
+            let chartsTab4 = [
+                {name: "chart4", vars: chartVars4}
+            ];
+
+            chartsTab4.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+
+                // 차트 생성 직후 강제 리사이즈
+                setTimeout(() => {
+                    rMateChartH5.call(chart.name, "resize", "100%", "100%");
+                }, 100);
+            });
+        }
+
+        function createTab5Charts() {
+            let chartVars5 = "rMateOnLoadCallFunction=chartReadyHandler";
+            let chartsTab5 = [
+                {name: "chart5", vars: chartVars5}
+            ];
+
+            chartsTab5.forEach(chart => {
+                let chartID = chart.name.replace(/\D/g, ""); // 숫자만 추출
+                rMateChartH5.create(chart.name, "chartHolder" + chartID, chart.vars, "100%", "100%");
+            });
+        }
+
+        function chartReadyHandler(id){
+            // console.log("Chart ready handler called for id:", id);
+
+            let chartIndex = id.replace(/\D/g, ""); // 숫자만 추출하여 해당 레이아웃 및 데이터를 설정
+            var chartData;
+            var layoutStr;
+
+            switch (chartIndex) {
+                case "1":
+                    // 차트 데이터
+                    chartData = [
+                        {Date: '2024-08-01', recPrice: 152000},
+                        {Date: '2024-08-02', recPrice: 152300},
+                        {Date: '2024-08-03', recPrice: 152100},
+                        {Date: '2024-08-04', recPrice: 152500},
+                        {Date: '2024-08-05', recPrice: 152800},
+                        {Date: '2024-08-06', recPrice: 153200},
+                        {Date: '2024-08-07', recPrice: 153000},
+                        {Date: '2024-08-08', recPrice: 153400},
+                        {Date: '2024-08-09', recPrice: 153700},
+                        {Date: '2024-08-10', recPrice: 154100},
+                        {Date: '2024-08-11', recPrice: 154500},
+                        {Date: '2024-08-12', recPrice: 154300},
+                        {Date: '2024-08-13', recPrice: 154700},
+                        {Date: '2024-08-14', recPrice: 155000},
+                        {Date: '2024-08-15', recPrice: 155400},
+                        {Date: '2024-08-16', recPrice: 155200},
+                        {Date: '2024-08-17', recPrice: 155600},
+                        {Date: '2024-08-18', recPrice: 155900},
+                        {Date: '2024-08-19', recPrice: 156300},
+                        {Date: '2024-08-20', recPrice: 156700},
+                        {Date: '2024-08-21', recPrice: 156500},
+                        {Date: '2024-08-22', recPrice: 156900},
+                        {Date: '2024-08-23', recPrice: 157200},
+                        {Date: '2024-08-24', recPrice: 157600},
+                        {Date: '2024-08-25', recPrice: 157400},
+                        {Date: '2024-08-26', recPrice: 157800},
+                        {Date: '2024-08-27', recPrice: 158100},
+                        {Date: '2024-08-28', recPrice: 158500},
+                        {Date: '2024-08-29', recPrice: 158300},
+                        {Date: '2024-08-30', recPrice: 158700},
+                        {Date: '2024-08-31', recPrice: 159000}
+                    ];
+                    layoutStr = `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Line2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Date" />
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis minimum="151000" maximum="160000" interval="1000"/>
+        </verticalAxis>
+        <series>
+            <Line2DSeries yField="recPrice" displayName="REC 매도단가" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#f99bab" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+        </series>
+    </Line2DChart>
+</rMateChart>
+            `;
+                    break;
+
+                case "2":
+                    // 차트 데이터
+                    chartData = [
+                        {"Month": "2024-01", "totalRevenue": 3001.55, "recPrice": 75.30},
+                        {"Month": "2024-02", "totalRevenue": 3300.70, "recPrice": 78.60},
+                        {"Month": "2024-03", "totalRevenue": 3600.80, "recPrice": 80.90},
+                        {"Month": "2024-04", "totalRevenue": 3901.10, "recPrice": 83.20},
+                        {"Month": "2024-05", "totalRevenue": 4201.30, "recPrice": 85.50},
+                        {"Month": "2024-06", "totalRevenue": 4500.80, "recPrice": 87.80},
+                        {"Month": "2024-07", "totalRevenue": 4801.20, "recPrice": 90.10}
+                    ];
+                    layoutStr = `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Options>
+        <Legend defaultMouseOverAction="true" useVisibleCheck="true"/>
+    </Options>
+    <NumberFormatter id="numFmt1" useThousandsSeparator="true"/>
+    <NumberFormatter id="numFmt2" precision="2"/>
+    <Combination2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Month"/>
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis id="vAxis1" formatter="{numFmt1}"/>
+        </verticalAxis>
+        <series>
+            <Column2DSeries labelPosition="outside" yField="totalRevenue" displayName="총 발전매출" fill="#62b2fd">
+                <showDataEffect>
+                    <SeriesInterpolate/>
+                </showDataEffect>
+            </Column2DSeries>
+            <Line2DSeries radius="4" yField="recPrice" displayName="REC 단가" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#ffa336" weight="3"/>
+                </lineStroke>
+                <verticalAxis>
+                    <LinearAxis id="vAxis2" formatter="{numFmt2}"/>
+                </verticalAxis>
+                <showDataEffect>
+                    <SeriesInterpolate/>
+                </showDataEffect>
+            </Line2DSeries>
+        </series>
+        <verticalAxisRenderers>
+            <Axis2DRenderer axis="{vAxis1}" showLine="false"/>
+            <Axis2DRenderer axis="{vAxis2}" showLine="false"/>
+        </verticalAxisRenderers>
+    </Combination2DChart>
+</rMateChart>
+            `;
+                    break;
+
+                case "3":
+                    chartData = [
+                        {Date: '2024-08-01', smpCost: 135.50},
+                        {Date: '2024-08-02', smpCost: 137.20},
+                        {Date: '2024-08-03', smpCost: 136.80},
+                        {Date: '2024-08-04', smpCost: 138.30},
+                        {Date: '2024-08-05', smpCost: 139.90},
+                        {Date: '2024-08-06', smpCost: 141.80},
+                        {Date: '2024-08-07', smpCost: 140.20},
+                        {Date: '2024-08-08', smpCost: 138.10},
+                        {Date: '2024-08-09', smpCost: 137.00},
+                        {Date: '2024-08-10', smpCost: 139.40},
+                        {Date: '2024-08-11', smpCost: 141.90},
+                        {Date: '2024-08-12', smpCost: 140.30},
+                        {Date: '2024-08-13', smpCost: 143.70},
+                        {Date: '2024-08-14', smpCost: 141.60},
+                        {Date: '2024-08-15', smpCost: 140.00},
+                        {Date: '2024-08-16', smpCost: 138.50},
+                        {Date: '2024-08-17', smpCost: 137.10},
+                        {Date: '2024-08-18', smpCost: 139.50},
+                        {Date: '2024-08-19', smpCost: 142.10},
+                        {Date: '2024-08-20', smpCost: 144.40},
+                        {Date: '2024-08-21', smpCost: 143.80},
+                        {Date: '2024-08-22', smpCost: 141.70},
+                        {Date: '2024-08-23', smpCost: 139.70},
+                        {Date: '2024-08-24', smpCost: 138.60},
+                        {Date: '2024-08-25', smpCost: 140.30},
+                        {Date: '2024-08-26', smpCost: 142.60},
+                        {Date: '2024-08-27', smpCost: 144.30},
+                        {Date: '2024-08-28', smpCost: 143.20},
+                        {Date: '2024-08-29', smpCost: 141.60},
+                        {Date: '2024-08-30', smpCost: 139.90},
+                        {Date: '2024-08-31', smpCost: 138.70}
+                    ];
+                    layoutStr = `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Line2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Date" />
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis minimum="135" maximum="145" interval="1"/>
+        </verticalAxis>
+        <series>
+            <Line2DSeries yField="smpCost" displayName="SMP 단가" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#f99bab" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+        </series>
+    </Line2DChart>
+</rMateChart>
+            `;
+                    break;
+
+                case "4":
+                    chartData = [
+                        {Date: '2024-08-01', recCost: 71000},
+                        {Date: '2024-08-06', recCost: 72300},
+                        {Date: '2024-08-07', recCost: 71100},
+                        {Date: '2024-08-13', recCost: 71600},
+                        {Date: '2024-08-20', recCost: 73000},
+                        {Date: '2024-08-22', recCost: 72300},
+                        {Date: '2024-08-27', recCost: 72100},
+                        {Date: '2024-08-29', recCost: 73500}
+                    ];
+                    layoutStr = `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Line2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Date" />
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis minimum="70000" maximum="76000" interval="1000"/>
+        </verticalAxis>
+        <series>
+            <Line2DSeries yField="recCost" displayName="REC 단가" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#ffa336" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+        </series>
+    </Line2DChart>
+</rMateChart>
+            `;
+                    break;
+
+                case "5":
+                    chartData = [
+                        {Date: '2024-01', totalGenerationRevenue: 3270000, targetAmount: 3250000},
+                        {Date: '2024-02', totalGenerationRevenue: 3180000, targetAmount: 3220000},
+                        {Date: '2024-03', totalGenerationRevenue: 3420000, targetAmount: 3280000},
+                        {Date: '2024-04', totalGenerationRevenue: 3350000, targetAmount: 3260000},
+                        {Date: '2024-05', totalGenerationRevenue: 3510000, targetAmount: 3310000},
+                        {Date: '2024-06', totalGenerationRevenue: 3290000, targetAmount: 3270000},
+                        {Date: '2024-07', totalGenerationRevenue: 3380000, targetAmount: 3320000},
+                        {Date: '2024-08', totalGenerationRevenue: 3460000, targetAmount: 3300000},
+                        {Date: '2024-09', totalGenerationRevenue: 3320000, targetAmount: 3340000},
+                        {Date: '2024-10', totalGenerationRevenue: 3540000, targetAmount: 3290000},
+                        {Date: '2024-11', totalGenerationRevenue: 3430000, targetAmount: 3360000},
+                        {Date: '2024-12', totalGenerationRevenue: 3490000, targetAmount: 3330000}
+                    ];
+                    layoutStr = `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Options>
+        <Legend />
+    </Options>
+    <Line2DChart showDataTips="true">
+        <horizontalAxis>
+            <CategoryAxis categoryField="Date" />
+        </horizontalAxis>
+        <verticalAxis>
+            <LinearAxis minimum="3150000" maximum="3600000" interval="50000"/>
+        </verticalAxis>
+        <series>
+            <Line2DSeries yField="totalGenerationRevenue" displayName="총 발전매출" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#ffa336" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+            <Line2DSeries yField="targetAmount" displayName="목표금액" itemRenderer="CircleItemRenderer">
+                <lineStroke>
+                    <Stroke color="#909bff" weight="2"/>
+                </lineStroke>
+            </Line2DSeries>
+        </series>
+    </Line2DChart>
+</rMateChart>
+            `;
+                    break;
+            }
+
+            // console.log("Setting layout and data for chart:", id);
+            document.getElementById(id).setLayout(layoutStr);
+            document.getElementById(id).setData(chartData);
+        }
+
+        // 차트 끝
+
+        // 그리드 시작
+        let theGrid1;
+        let theGrid2;
+        let theGrid3;
+        let theGrid4;
+        let theGrid5;
+
+        let viewdata1;
+        let viewdata2;
+        let viewdata3;
+        let viewdata4;
+        let viewdata5;
+
+        var columns1 = [
+            {binding: 'rownum', header: 'No', align: 'center', width: 90},
+            {binding: 'standdt', header: '매도일자', align: 'center', width: 140},
+            {binding: 'recQuantity', header: 'REC 매도수량', align: 'right', width: 140},
+            {binding: 'recPrice', header: 'REC 매도단가', align: 'right', width: 140},
+            {binding: 'recAmount', header: 'REC 매도금액', align: 'right', width: 140},
+            {binding: 'manager', header: '담당자', align: 'center', width: 140}
+        ];
+        var columns2 = [
+            {binding: 'salesym', header: '매출년월', width: 98, align: 'center'},
+            {binding: 'energyQty', header: '발전량', width: 90, align: 'right', aggregate: 'Sum'},
+            {binding: 'smpCost', header: 'SMP 단가', width: 105, align: 'right', aggregate: 'Sum'},
+            {binding: 'smpAmt', header: 'SMP 매출', width: 105, align: 'right', aggregate: 'Sum'},
+            {binding: 'recCost', header: 'REC 단가', width: 105, align: 'right', aggregate: 'Sum'},
+            {binding: 'recQty', header: 'REC 수량', width: 105, align: 'right', aggregate: 'Sum'},
+            {binding: 'recAmt', header: 'REC 매출', width: 105, align: 'right', aggregate: 'Sum'},
+            {binding: 'stotAmt', header: '총 매출', width: 90, align: 'right', aggregate: 'Sum'}
+        ];
+        var columns3 = [
+            {binding: 'rownum', header: 'No', align: 'center', width: '*'},
+            {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
+            {binding: 'smpcost', header: 'SMP 단가', align: 'right', width: 315}
+        ];
+        var columns4 = [
+            {binding: 'rownum', header: 'No', align: 'center', width: '*'},
+            {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
+            {binding: 'recCost', header: 'REC 단가', align: 'right', width: 315}
+        ];
+        var columns5 = [
+            {binding: 'salesym', header: '매출년월', align: 'center', width: 120},
+            {binding: 'targetPrice', header: '목표단가', align: 'right', width: 180},
+            {binding: 'targetAmount', header: '목표금액', align: 'right', width: 180},
+            {binding: 'recAvgPrice', header: 'REC 평균단가', align: 'right', width: 180},
+            {binding: 'recActualPrice', header: 'REC 실단가', align: 'right', width: 180},
+            {binding: 'totalGenerationRevenue', header: '총 발전매출', align: 'right', width: 200},
+            {binding: 'targetAchievementRate', header: '목표달성율', align: 'right', width: 180},
+            {binding: 'regDate', header: '등록일자', align: 'center', width: 200},
+            {binding: 'registrant', header: '등록자', align: 'center', width: '*'}
+        ];
+
+        function fetchListData() {
+
+            // $.ajax({
+            //     url: '/api/inspec_report/read',
+            //     type: 'GET',
+            //     data: {
+            //         'searchusr': 'infinited',
+            //
+            //     },
+            //     async: false,
+            //     success: function (data) {
+            //         console.log('check1', data.data);
+            //         if (data.data.length === 0) {
+            //             for (let i = 0; i < 10; i++) {
+            //                 data.data.push('example');
+            //             }
+            //         }
+            //         console.log(data.data);
+            //         data2 = data.data;
+            //     }
+            // })
+
+            // theGrid1
+            let data1 = [
+                {rownum: 1, standdt: '2024-08-01', recQuantity: 75, recPrice: 155.50, recAmount: 11662.50, manager: '관리자'},
+                {rownum: 2, standdt: '2024-08-02', recQuantity: 82, recPrice: 162.20, recAmount: 13300.40, manager: '관리자'},
+                {rownum: 3, standdt: '2024-08-03', recQuantity: 68, recPrice: 148.80, recAmount: 10118.40, manager: '관리자'},
+                {rownum: 4, standdt: '2024-08-04', recQuantity: 91, recPrice: 173.30, recAmount: 15770.30, manager: '관리자'},
+                {rownum: 5, standdt: '2024-08-05', recQuantity: 79, recPrice: 159.90, recAmount: 12632.10, manager: '관리자'},
+                {rownum: 6, standdt: '2024-08-06', recQuantity: 86, recPrice: 168.80, recAmount: 14516.80, manager: '관리자'},
+                {rownum: 7, standdt: '2024-08-07', recQuantity: 73, recPrice: 152.20, recAmount: 11110.60, manager: '관리자'},
+                {rownum: 8, standdt: '2024-08-08', recQuantity: 95, recPrice: 181.10, recAmount: 17204.50, manager: '관리자'},
+                {rownum: 9, standdt: '2024-08-09', recQuantity: 80, recPrice: 160.00, recAmount: 12800.00, manager: '관리자'},
+                {rownum: 10, standdt: '2024-08-10', recQuantity: 88, recPrice: 174.40, recAmount: 15347.20, manager: '관리자'},
+                {rownum: 11, standdt: '2024-08-11', recQuantity: 71, recPrice: 149.90, recAmount: 10642.90, manager: '관리자'},
+                {rownum: 12, standdt: '2024-08-12', recQuantity: 93, recPrice: 183.30, recAmount: 17046.90, manager: '관리자'},
+                {rownum: 13, standdt: '2024-08-13', recQuantity: 77, recPrice: 157.70, recAmount: 12142.90, manager: '관리자'},
+                {rownum: 14, standdt: '2024-08-14', recQuantity: 84, recPrice: 166.60, recAmount: 13994.40, manager: '관리자'},
+                {rownum: 15, standdt: '2024-08-15', recQuantity: 70, recPrice: 150.00, recAmount: 10500.00, manager: '관리자'},
+                {rownum: 16, standdt: '2024-08-16', recQuantity: 97, recPrice: 185.50, recAmount: 17993.50, manager: '관리자'},
+                {rownum: 17, standdt: '2024-08-17', recQuantity: 81, recPrice: 161.10, recAmount: 13049.10, manager: '관리자'},
+                {rownum: 18, standdt: '2024-08-18', recQuantity: 89, recPrice: 175.50, recAmount: 15619.50, manager: '관리자'},
+                {rownum: 19, standdt: '2024-08-19', recQuantity: 72, recPrice: 151.10, recAmount: 10879.20, manager: '관리자'},
+                {rownum: 20, standdt: '2024-08-20', recQuantity: 94, recPrice: 184.40, recAmount: 17333.60, manager: '관리자'},
+                {rownum: 21, standdt: '2024-08-21', recQuantity: 78, recPrice: 158.80, recAmount: 12386.40, manager: '관리자'},
+                {rownum: 22, standdt: '2024-08-22', recQuantity: 85, recPrice: 167.70, recAmount: 14254.50, manager: '관리자'},
+                {rownum: 23, standdt: '2024-08-23', recQuantity: 69, recPrice: 147.70, recAmount: 10191.30, manager: '관리자'},
+                {rownum: 24, standdt: '2024-08-24', recQuantity: 96, recPrice: 186.60, recAmount: 17913.60, manager: '관리자'},
+                {rownum: 25, standdt: '2024-08-25', recQuantity: 83, recPrice: 163.30, recAmount: 13553.90, manager: '관리자'},
+                {rownum: 26, standdt: '2024-08-26', recQuantity: 90, recPrice: 176.60, recAmount: 15894.00, manager: '관리자'},
+                {rownum: 27, standdt: '2024-08-27', recQuantity: 74, recPrice: 153.30, recAmount: 11344.20, manager: '관리자'},
+                {rownum: 28, standdt: '2024-08-28', recQuantity: 92, recPrice: 182.20, recAmount: 16762.40, manager: '관리자'},
+                {rownum: 29, standdt: '2024-08-29', recQuantity: 76, recPrice: 156.60, recAmount: 11901.60, manager: '관리자'},
+                {rownum: 30, standdt: '2024-08-30', recQuantity: 87, recPrice: 169.90, recAmount: 14781.30, manager: '관리자'},
+                {rownum: 31, standdt: '2024-08-31', recQuantity: 98, recPrice: 187.70, recAmount: 18394.60, manager: '관리자'}
+            ]
+            viewdata1 = new wijmo.collections.CollectionView(data1);
+            // 데이터 그리드에 바인딩
+            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns1,
+                itemsSource: viewdata1
+            });
+            theGrid1.rowHeaders.columns.splice(0, 1);
+
+            // theGrid2
+            let data2 = [
+                {salesym: '2024-01', energyQty: 750.25, smpCost: 85.50, smpAmt: 1800.75, recCost: 75.30, recQty: 350.50, recAmt: 1200.80, stotAmt: 3001.55},
+                {salesym: '2024-02', energyQty: 780.50, smpCost: 87.20, smpAmt: 1950.30, recCost: 78.60, recQty: 380.75, recAmt: 1350.40, stotAmt: 3300.70},
+                {salesym: '2024-03', energyQty: 810.75, smpCost: 89.80, smpAmt: 2100.60, recCost: 80.90, recQty: 410.25, recAmt: 1500.20, stotAmt: 3600.80},
+                {salesym: '2024-04', energyQty: 850.00, smpCost: 92.30, smpAmt: 2250.80, recCost: 83.20, recQty: 440.50, recAmt: 1650.30, stotAmt: 3901.10},
+                {salesym: '2024-05', energyQty: 900.25, smpCost: 94.70, smpAmt: 2400.90, recCost: 85.50, recQty: 470.75, recAmt: 1800.40, stotAmt: 4201.30},
+                {salesym: '2024-06', energyQty: 950.50, smpCost: 97.10, smpAmt: 2550.20, recCost: 87.80, recQty: 500.25, recAmt: 1950.60, stotAmt: 4500.80},
+                {salesym: '2024-07', energyQty: 1000.75, smpCost: 99.50, smpAmt: 2700.40, recCost: 90.10, recQty: 530.50, recAmt: 2100.80, stotAmt: 4801.20}
+            ]
+            viewdata2 = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns2,
+                itemsSource: viewdata2
+            });
+            theGrid2.rowHeaders.columns.splice(0, 1);
+
+            // theGrid3
+            let data3 = [
+                {rownum: 1, standdt: '2024-08-01', smpcost: 135.50},
+                {rownum: 2, standdt: '2024-08-02', smpcost: 137.20},
+                {rownum: 3, standdt: '2024-08-03', smpcost: 136.80},
+                {rownum: 4, standdt: '2024-08-04', smpcost: 138.30},
+                {rownum: 5, standdt: '2024-08-05', smpcost: 139.90},
+                {rownum: 6, standdt: '2024-08-06', smpcost: 141.80},
+                {rownum: 7, standdt: '2024-08-07', smpcost: 140.20},
+                {rownum: 8, standdt: '2024-08-08', smpcost: 138.10},
+                {rownum: 9, standdt: '2024-08-09', smpcost: 137.00},
+                {rownum: 10, standdt: '2024-08-10', smpcost: 139.40},
+                {rownum: 11, standdt: '2024-08-11', smpcost: 142.90},
+                {rownum: 12, standdt: '2024-08-12', smpcost: 144.30},
+                {rownum: 13, standdt: '2024-08-13', smpcost: 143.70},
+                {rownum: 14, standdt: '2024-08-14', smpcost: 141.60},
+                {rownum: 15, standdt: '2024-08-15', smpcost: 140.00},
+                {rownum: 16, standdt: '2024-08-16', smpcost: 138.50},
+                {rownum: 17, standdt: '2024-08-17', smpcost: 137.10},
+                {rownum: 18, standdt: '2024-08-18', smpcost: 139.50},
+                {rownum: 19, standdt: '2024-08-19', smpcost: 142.10},
+                {rownum: 20, standdt: '2024-08-20', smpcost: 144.40},
+                {rownum: 21, standdt: '2024-08-21', smpcost: 143.80},
+                {rownum: 22, standdt: '2024-08-22', smpcost: 141.70},
+                {rownum: 23, standdt: '2024-08-23', smpcost: 139.70},
+                {rownum: 24, standdt: '2024-08-24', smpcost: 138.60},
+                {rownum: 25, standdt: '2024-08-25', smpcost: 140.30},
+                {rownum: 26, standdt: '2024-08-26', smpcost: 142.60},
+                {rownum: 27, standdt: '2024-08-27', smpcost: 144.30},
+                {rownum: 28, standdt: '2024-08-28', smpcost: 143.20},
+                {rownum: 29, standdt: '2024-08-29', smpcost: 141.60},
+                {rownum: 30, standdt: '2024-08-30', smpcost: 139.90},
+                {rownum: 31, standdt: '2024-08-31', smpcost: 138.70}
+            ]
+            viewdata3 = new wijmo.collections.CollectionView(data3);
+            // 데이터 그리드에 바인딩
+            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns3,
+                itemsSource: viewdata3
+            });
+            theGrid3.rowHeaders.columns.splice(0, 1);
+
+            // theGrid4
+            let data4 = [
+                {rownum: 1, standdt: '2024-08-01', recCost: 70500},
+                {rownum: 2, standdt: '2024-08-06', recCost: 71200},
+                {rownum: 3, standdt: '2024-08-08', recCost: 70800},
+                {rownum: 4, standdt: '2024-08-13', recCost: 72300},
+                {rownum: 5, standdt: '2024-08-20', recCost: 73900},
+                {rownum: 6, standdt: '2024-08-22', recCost: 74800},
+                {rownum: 7, standdt: '2024-08-27', recCost: 73200},
+            ]
+            viewdata4 = new wijmo.collections.CollectionView(data4);
+            // 데이터 그리드에 바인딩
+            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns4,
+                itemsSource: viewdata4
+            });
+            theGrid4.rowHeaders.columns.splice(0, 1);
+
+            // theGrid5
+            let data5 = [
+                {salesym: '2024-01', targetPrice: 65000, targetAmount: 3250000, recAvgPrice: 67000, recActualPrice: 66500, totalGenerationRevenue: 3325000, targetAchievementRate: '102.3%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-02', targetPrice: 65500, targetAmount: 3275000, recAvgPrice: 66000, recActualPrice: 65800, totalGenerationRevenue: 3290000, targetAchievementRate: '100.5%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-03', targetPrice: 66000, targetAmount: 3300000, recAvgPrice: 67500, recActualPrice: 67200, totalGenerationRevenue: 3360000, targetAchievementRate: '101.8%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-04', targetPrice: 66500, targetAmount: 3325000, recAvgPrice: 66800, recActualPrice: 66600, totalGenerationRevenue: 3330000, targetAchievementRate: '100.2%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-05', targetPrice: 67000, targetAmount: 3350000, recAvgPrice: 68000, recActualPrice: 67800, totalGenerationRevenue: 3390000, targetAchievementRate: '101.2%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-06', targetPrice: 67500, targetAmount: 3375000, recAvgPrice: 67200, recActualPrice: 67000, totalGenerationRevenue: 3350000, targetAchievementRate: '99.3%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-07', targetPrice: 68000, targetAmount: 3400000, recAvgPrice: 69000, recActualPrice: 68800, totalGenerationRevenue: 3440000, targetAchievementRate: '101.2%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-08', targetPrice: 68500, targetAmount: 3425000, recAvgPrice: 68700,recActualPrice: 68600, totalGenerationRevenue: 3430000, targetAchievementRate: '100.1%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-09', targetPrice: 69000, targetAmount: 3450000, recAvgPrice: 70000, recActualPrice: 69800, totalGenerationRevenue: 3490000, targetAchievementRate: '101.2%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-10', targetPrice: 69500, targetAmount: 3475000, recAvgPrice: 69200, recActualPrice: 69000, totalGenerationRevenue: 3450000, targetAchievementRate: '99.3%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-11', targetPrice: 70000, targetAmount: 3500000, recAvgPrice: 71000, recActualPrice: 70800, totalGenerationRevenue: 3540000, targetAchievementRate: '101.1%', regDate: '2024-09-19', registrant: '관리자'},
+                {salesym: '2024-12', targetPrice: 70500, targetAmount: 3525000, recAvgPrice: 70700, recActualPrice: 70600, totalGenerationRevenue: 3530000, targetAchievementRate: '100.1%', regDate: '2024-09-19', registrant: '관리자'}
+            ]
+            viewdata5 = new wijmo.collections.CollectionView(data5);
+            // 데이터 그리드에 바인딩
+            theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns5,
+                itemsSource: viewdata5
+            });
+            theGrid5.rowHeaders.columns.splice(0, 1);
+        }
+
+        // 그리드 끝
+
+        // 캘린더
+        /*document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'ko',  // 한국어 로케일 설정
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialView: 'dayGridMonth',
+                height: 670,
+                dayHeaderFormat: { weekday: 'short' }, // 요일 형식 설정
+                views: {
+                    dayGridMonth: {
+                        dayCellContent: function(arg) {
+                            // '일' 텍스트 제거
+                            return arg.dayNumberText.replace('일', '');
+                        }
+                    }
+                },
+                dateClick: function(info) {
+                    // 날짜 클릭 이벤트 처리
+                    console.log('Clicked on: ' + info.dateStr);
+                }
+            });
+            calendar.render();
+        });*/
+
+        // 캘린더 초기화 함수
+        function initCalendar() {
+            var calendarEl = document.getElementById('calendar');
+            if (calendarEl) {
+
+                // FullCalendar 설정
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    locale: 'ko',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    initialView: 'dayGridMonth',
+                    height: 714,
+                    dayHeaderFormat: {weekday: 'short'},
+                    views: {
+                        dayGridMonth: {
+                            dayCellContent: function (arg) {
+                                return arg.dayNumberText.replace('일', '');
+                            }
+                        }
+                    },
+                    dateClick: function (info) {
+                        console.log('Clicked on: ' + info.dateStr);
+                    },
+                    events: [
+                        {title: '거래', start: '2024-09-03'},
+                        {title: '거래', start: '2024-09-05'},
+                        {title: '거래', start: '2024-09-10'},
+                        {title: '거래', start: '2024-09-12'},
+                        {title: '거래', start: '2024-09-19'},
+                        {title: '거래', start: '2024-09-24'},
+                        {title: '거래', start: '2024-09-26'},
+                        {
+                            title: '추석',
+                            start: '2024-09-17',
+                            backgroundColor: '#EC193A',
+                            borderColor: '#EC193A',
+                            textColor: 'white'
+                        },
+
+                        // {
+                        //     title: '국국의날',
+                        //     start: '2024-10-01',
+                        //     backgroundColor: '#EC193A',
+                        //     borderColor: '#EC193A',
+                        //     textColor: 'white'
+                        // },
+                        // {
+                        //     title: '개천절',
+                        //     start: '2024-10-03',
+                        //     backgroundColor: '#EC193A',
+                        //     borderColor: '#EC193A',
+                        //     textColor: 'white'
+                        // },
+                        // {title: '거래', start: '2024-10-08'},
+                        // {title: '거래', start: '2024-10-10'},
+                        // {title: '거래', start: '2024-10-15'},
+                        // {title: '거래', start: '2024-10-17'},
+                        // {title: '거래', start: '2024-10-22'},
+                        // {title: '거래', start: '2024-10-24'},
+                        // {title: '거래', start: '2024-10-29'},
+                        // {title: '거래', start: '2024-10-31'}
+                    ],
+                });
+                calendar.render();
+            }
+        }
+
+
+
+        /*$(document).ready(function () {
+            // init();
+            setTimeout(initChart1, 100);
+            /!* $('.tab-links a[href="#tab2"]').on('click', function () {
+                 setTimeout(initChart2, 100);
+             });
+             $('.tab-links a[href="#tab3"]').on('click', function () {
+                 setTimeout(initChart3, 100);
+                 setTimeout(initCalendar, 100);
+                 // setTimeout(initChart4, 100);
+             });
+             $('.tab-links-sub a[href="#tab3_2"]').on('click', function () {
+                 setTimeout(initChart4, 100);
+             });
+             $('.tab-links a[href="#tab4"]').on('click', function () {
+                 setTimeout(initChart5, 100);
+             });*!/
+
+            // 메인 탭 전환 이벤트
+            $('.tab-links a').on('click', function (e) {
+                e.preventDefault();
+                var targetTab = $(this).attr('href');
+
+                switch (targetTab) {
+                    case '#tab2':
+                        setTimeout(initChart2, 100);
+                        break;
+                    case '#tab3':
+                        setTimeout(initChart3, 100);
+                        setTimeout(initCalendar, 100);
+                        break;
+                    case '#tab4':
+                        setTimeout(initChart5, 100);
+                        break;
+                }
+            });
+
+            // 하위 탭 전환 이벤트 (이벤트 위임 사용)
+            $(document).on('click', '.tab-links-sub a', function (e) {
+                e.preventDefault();
+                var targetSubTab = $(this).attr('href');
+
+                if (targetSubTab === '#tab3_2') {
+                    setTimeout(initChart4, 100);
+                }
+            });
+        });*/
 
         // 초기 그리드 설정
         // init();
@@ -2110,1041 +2630,6 @@
                 $('.tab-links a[href="' + tabId + '"]').click();
             }
         });
-
-
-        // =========
-        // 0919 하드코딩
-
-        // tab1 그리드 초기화
-        function initGrid1() {
-            var data = [
-                {
-                    rownum: 1,
-                    standdt: '2024-08-01',
-                    recQuantity: 75,
-                    recPrice: 155.50,
-                    recAmount: 11662.50,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 2,
-                    standdt: '2024-08-02',
-                    recQuantity: 82,
-                    recPrice: 162.20,
-                    recAmount: 13300.40,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 3,
-                    standdt: '2024-08-03',
-                    recQuantity: 68,
-                    recPrice: 148.80,
-                    recAmount: 10118.40,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 4,
-                    standdt: '2024-08-04',
-                    recQuantity: 91,
-                    recPrice: 173.30,
-                    recAmount: 15770.30,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 5,
-                    standdt: '2024-08-05',
-                    recQuantity: 79,
-                    recPrice: 159.90,
-                    recAmount: 12632.10,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 6,
-                    standdt: '2024-08-06',
-                    recQuantity: 86,
-                    recPrice: 168.80,
-                    recAmount: 14516.80,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 7,
-                    standdt: '2024-08-07',
-                    recQuantity: 73,
-                    recPrice: 152.20,
-                    recAmount: 11110.60,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 8,
-                    standdt: '2024-08-08',
-                    recQuantity: 95,
-                    recPrice: 181.10,
-                    recAmount: 17204.50,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 9,
-                    standdt: '2024-08-09',
-                    recQuantity: 80,
-                    recPrice: 160.00,
-                    recAmount: 12800.00,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 10,
-                    standdt: '2024-08-10',
-                    recQuantity: 88,
-                    recPrice: 174.40,
-                    recAmount: 15347.20,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 11,
-                    standdt: '2024-08-11',
-                    recQuantity: 71,
-                    recPrice: 149.90,
-                    recAmount: 10642.90,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 12,
-                    standdt: '2024-08-12',
-                    recQuantity: 93,
-                    recPrice: 183.30,
-                    recAmount: 17046.90,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 13,
-                    standdt: '2024-08-13',
-                    recQuantity: 77,
-                    recPrice: 157.70,
-                    recAmount: 12142.90,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 14,
-                    standdt: '2024-08-14',
-                    recQuantity: 84,
-                    recPrice: 166.60,
-                    recAmount: 13994.40,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 15,
-                    standdt: '2024-08-15',
-                    recQuantity: 70,
-                    recPrice: 150.00,
-                    recAmount: 10500.00,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 16,
-                    standdt: '2024-08-16',
-                    recQuantity: 97,
-                    recPrice: 185.50,
-                    recAmount: 17993.50,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 17,
-                    standdt: '2024-08-17',
-                    recQuantity: 81,
-                    recPrice: 161.10,
-                    recAmount: 13049.10,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 18,
-                    standdt: '2024-08-18',
-                    recQuantity: 89,
-                    recPrice: 175.50,
-                    recAmount: 15619.50,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 19,
-                    standdt: '2024-08-19',
-                    recQuantity: 72,
-                    recPrice: 151.10,
-                    recAmount: 10879.20,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 20,
-                    standdt: '2024-08-20',
-                    recQuantity: 94,
-                    recPrice: 184.40,
-                    recAmount: 17333.60,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 21,
-                    standdt: '2024-08-21',
-                    recQuantity: 78,
-                    recPrice: 158.80,
-                    recAmount: 12386.40,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 22,
-                    standdt: '2024-08-22',
-                    recQuantity: 85,
-                    recPrice: 167.70,
-                    recAmount: 14254.50,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 23,
-                    standdt: '2024-08-23',
-                    recQuantity: 69,
-                    recPrice: 147.70,
-                    recAmount: 10191.30,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 24,
-                    standdt: '2024-08-24',
-                    recQuantity: 96,
-                    recPrice: 186.60,
-                    recAmount: 17913.60,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 25,
-                    standdt: '2024-08-25',
-                    recQuantity: 83,
-                    recPrice: 163.30,
-                    recAmount: 13553.90,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 26,
-                    standdt: '2024-08-26',
-                    recQuantity: 90,
-                    recPrice: 176.60,
-                    recAmount: 15894.00,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 27,
-                    standdt: '2024-08-27',
-                    recQuantity: 74,
-                    recPrice: 153.30,
-                    recAmount: 11344.20,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 28,
-                    standdt: '2024-08-28',
-                    recQuantity: 92,
-                    recPrice: 182.20,
-                    recAmount: 16762.40,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 29,
-                    standdt: '2024-08-29',
-                    recQuantity: 76,
-                    recPrice: 156.60,
-                    recAmount: 11901.60,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 30,
-                    standdt: '2024-08-30',
-                    recQuantity: 87,
-                    recPrice: 169.90,
-                    recAmount: 14781.30,
-                    manager: '관리자'
-                },
-                {
-                    rownum: 31,
-                    standdt: '2024-08-31',
-                    recQuantity: 98,
-                    recPrice: 187.70,
-                    recAmount: 18394.60,
-                    manager: '관리자'
-                }
-            ];
-
-            viewdata1 = new wijmo.collections.CollectionView(data);
-
-            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'rownum', header: 'No', align: 'center', width: 90},
-                    {binding: 'standdt', header: '매도일자', align: 'center', width: 140},
-                    {binding: 'recQuantity', header: 'REC 매도수량', align: 'right', width: 140},
-                    {binding: 'recPrice', header: 'REC 매도단가', align: 'right', width: 140},
-                    {binding: 'recAmount', header: 'REC 매도금액', align: 'right', width: 140},
-                    {binding: 'manager', header: '담당자', align: 'center', width: 140}
-                ],
-                itemsSource: viewdata1,
-                isReadOnly: true
-            });
-            theGrid1.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
-        }
-
-        // tab1 차트 초기화
-        function initChart1() {
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
-            rMateChartH5.create("chart1", "chartHolder1", chartVars, "100%", "100%");
-        }
-
-        function chartReadyHandler(id) {
-            var chartData = [
-                {Date: '2024-08-01', recPrice: 152000},
-                {Date: '2024-08-02', recPrice: 152300},
-                {Date: '2024-08-03', recPrice: 152100},
-                {Date: '2024-08-04', recPrice: 152500},
-                {Date: '2024-08-05', recPrice: 152800},
-                {Date: '2024-08-06', recPrice: 153200},
-                {Date: '2024-08-07', recPrice: 153000},
-                {Date: '2024-08-08', recPrice: 153400},
-                {Date: '2024-08-09', recPrice: 153700},
-                {Date: '2024-08-10', recPrice: 154100},
-                {Date: '2024-08-11', recPrice: 154500},
-                {Date: '2024-08-12', recPrice: 154300},
-                {Date: '2024-08-13', recPrice: 154700},
-                {Date: '2024-08-14', recPrice: 155000},
-                {Date: '2024-08-15', recPrice: 155400},
-                {Date: '2024-08-16', recPrice: 155200},
-                {Date: '2024-08-17', recPrice: 155600},
-                {Date: '2024-08-18', recPrice: 155900},
-                {Date: '2024-08-19', recPrice: 156300},
-                {Date: '2024-08-20', recPrice: 156700},
-                {Date: '2024-08-21', recPrice: 156500},
-                {Date: '2024-08-22', recPrice: 156900},
-                {Date: '2024-08-23', recPrice: 157200},
-                {Date: '2024-08-24', recPrice: 157600},
-                {Date: '2024-08-25', recPrice: 157400},
-                {Date: '2024-08-26', recPrice: 157800},
-                {Date: '2024-08-27', recPrice: 158100},
-                {Date: '2024-08-28', recPrice: 158500},
-                {Date: '2024-08-29', recPrice: 158300},
-                {Date: '2024-08-30', recPrice: 158700},
-                {Date: '2024-08-31', recPrice: 159000}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Date" />
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis minimum="151000" maximum="160000" interval="1000"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="recPrice" displayName="REC 매도단가" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#f99bab" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>
-`;
-
-            document.getElementById(id).setLayout(layoutStr);
-            document.getElementById(id).setData(chartData);
-        }
-
-        // tab2 그리드 초기화
-        function initGrid2() {
-            // 하드코딩된 데이터
-            var data2 = [
-                {
-                    salesym: '2024-01',
-                    energyQty: 750.25,
-                    smpCost: 85.50,
-                    smpAmt: 1800.75,
-                    recCost: 75.30,
-                    recQty: 350.50,
-                    recAmt: 1200.80,
-                    stotAmt: 3001.55
-                },
-                {
-                    salesym: '2024-02',
-                    energyQty: 780.50,
-                    smpCost: 87.20,
-                    smpAmt: 1950.30,
-                    recCost: 78.60,
-                    recQty: 380.75,
-                    recAmt: 1350.40,
-                    stotAmt: 3300.70
-                },
-                {
-                    salesym: '2024-03',
-                    energyQty: 810.75,
-                    smpCost: 89.80,
-                    smpAmt: 2100.60,
-                    recCost: 80.90,
-                    recQty: 410.25,
-                    recAmt: 1500.20,
-                    stotAmt: 3600.80
-                },
-                {
-                    salesym: '2024-04',
-                    energyQty: 850.00,
-                    smpCost: 92.30,
-                    smpAmt: 2250.80,
-                    recCost: 83.20,
-                    recQty: 440.50,
-                    recAmt: 1650.30,
-                    stotAmt: 3901.10
-                },
-                {
-                    salesym: '2024-05',
-                    energyQty: 900.25,
-                    smpCost: 94.70,
-                    smpAmt: 2400.90,
-                    recCost: 85.50,
-                    recQty: 470.75,
-                    recAmt: 1800.40,
-                    stotAmt: 4201.30
-                },
-                {
-                    salesym: '2024-06',
-                    energyQty: 950.50,
-                    smpCost: 97.10,
-                    smpAmt: 2550.20,
-                    recCost: 87.80,
-                    recQty: 500.25,
-                    recAmt: 1950.60,
-                    stotAmt: 4500.80
-                },
-                {
-                    salesym: '2024-07',
-                    energyQty: 1000.75,
-                    smpCost: 99.50,
-                    smpAmt: 2700.40,
-                    recCost: 90.10,
-                    recQty: 530.50,
-                    recAmt: 2100.80,
-                    stotAmt: 4801.20
-                }
-            ];
-
-            viewdata2 = new wijmo.collections.CollectionView(data2);
-
-            // 그리드 바인딩
-            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'salesym', header: '매출년월', width: 98, align: 'center'},
-                    {binding: 'energyQty', header: '발전량', width: 90, align: 'right', aggregate: 'Sum'},
-                    {binding: 'smpCost', header: 'SMP 단가', width: 105, align: 'right', aggregate: 'Sum'},
-                    {binding: 'smpAmt', header: 'SMP 매출', width: 105, align: 'right', aggregate: 'Sum'},
-                    {binding: 'recCost', header: 'REC 단가', width: 105, align: 'right', aggregate: 'Sum'},
-                    {binding: 'recQty', header: 'REC 수량', width: 105, align: 'right', aggregate: 'Sum'},
-                    {binding: 'recAmt', header: 'REC 매출', width: 105, align: 'right', aggregate: 'Sum'},
-                    {binding: 'stotAmt', header: '총 매출', width: 90, align: 'right', aggregate: 'Sum'}
-                ],
-                itemsSource: viewdata2,
-                isReadOnly: true // 그리드 읽기 전용으로 설정
-            });
-
-            // Footer 행 추가
-            theGrid2.columnFooters.rows.push(new wijmo.grid.GroupRow());
-            theGrid2.bottomLeftCells.setCellData(0, 0, 'Σ');
-            theGrid2.columnFooters.setCellData(0, 0, '계');
-
-            // 맨 앞에 헤더부분 없애기
-            theGrid2.rowHeaders.columns.splice(0, 1);
-        }
-
-        // tab2 차트 초기화
-        function initChart2() {
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandlerTab2";
-            rMateChartH5.create("chart2", "chartHolder2", chartVars, "100%", "100%");
-        }
-
-        function chartReadyHandlerTab2(id) {
-            var chartData = [
-                {"Month": "2024-01", "totalRevenue": 3001.55, "recPrice": 75.30},
-                {"Month": "2024-02", "totalRevenue": 3300.70, "recPrice": 78.60},
-                {"Month": "2024-03", "totalRevenue": 3600.80, "recPrice": 80.90},
-                {"Month": "2024-04", "totalRevenue": 3901.10, "recPrice": 83.20},
-                {"Month": "2024-05", "totalRevenue": 4201.30, "recPrice": 85.50},
-                {"Month": "2024-06", "totalRevenue": 4500.80, "recPrice": 87.80},
-                {"Month": "2024-07", "totalRevenue": 4801.20, "recPrice": 90.10}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Options>
-        <Legend defaultMouseOverAction="true" useVisibleCheck="true"/>
-    </Options>
-    <NumberFormatter id="numFmt1" useThousandsSeparator="true"/>
-    <NumberFormatter id="numFmt2" precision="2"/>
-    <Combination2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Month"/>
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis id="vAxis1" formatter="{numFmt1}"/>
-        </verticalAxis>
-        <series>
-            <Column2DSeries labelPosition="outside" yField="totalRevenue" displayName="총 발전매출" fill="#62b2fd">
-                <showDataEffect>
-                    <SeriesInterpolate/>
-                </showDataEffect>
-            </Column2DSeries>
-            <Line2DSeries radius="4" yField="recPrice" displayName="REC 단가" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#ffa336" weight="3"/>
-                </lineStroke>
-                <verticalAxis>
-                    <LinearAxis id="vAxis2" formatter="{numFmt2}"/>
-                </verticalAxis>
-                <showDataEffect>
-                    <SeriesInterpolate/>
-                </showDataEffect>
-            </Line2DSeries>
-        </series>
-        <verticalAxisRenderers>
-            <Axis2DRenderer axis="{vAxis1}" showLine="false"/>
-            <Axis2DRenderer axis="{vAxis2}" showLine="false"/>
-        </verticalAxisRenderers>
-    </Combination2DChart>
-</rMateChart>
-    `;
-
-            document.getElementById(id).setLayout(layoutStr);
-            document.getElementById(id).setData(chartData);
-        }
-
-
-        // tab3 그리드 초기화
-        function initGrid3() {
-            var data3 = [
-                {rownum: 1, standdt: '2024-08-01', smpcost: 135.50},
-                {rownum: 2, standdt: '2024-08-02', smpcost: 137.20},
-                {rownum: 3, standdt: '2024-08-03', smpcost: 136.80},
-                {rownum: 4, standdt: '2024-08-04', smpcost: 138.30},
-                {rownum: 5, standdt: '2024-08-05', smpcost: 139.90},
-                {rownum: 6, standdt: '2024-08-06', smpcost: 141.80},
-                {rownum: 7, standdt: '2024-08-07', smpcost: 140.20},
-                {rownum: 8, standdt: '2024-08-08', smpcost: 138.10},
-                {rownum: 9, standdt: '2024-08-09', smpcost: 137.00},
-                {rownum: 10, standdt: '2024-08-10', smpcost: 139.40},
-                {rownum: 11, standdt: '2024-08-11', smpcost: 142.90},
-                {rownum: 12, standdt: '2024-08-12', smpcost: 144.30},
-                {rownum: 13, standdt: '2024-08-13', smpcost: 143.70},
-                {rownum: 14, standdt: '2024-08-14', smpcost: 141.60},
-                {rownum: 15, standdt: '2024-08-15', smpcost: 140.00},
-                {rownum: 16, standdt: '2024-08-16', smpcost: 138.50},
-                {rownum: 17, standdt: '2024-08-17', smpcost: 137.10},
-                {rownum: 18, standdt: '2024-08-18', smpcost: 139.50},
-                {rownum: 19, standdt: '2024-08-19', smpcost: 142.10},
-                {rownum: 20, standdt: '2024-08-20', smpcost: 144.40},
-                {rownum: 21, standdt: '2024-08-21', smpcost: 143.80},
-                {rownum: 22, standdt: '2024-08-22', smpcost: 141.70},
-                {rownum: 23, standdt: '2024-08-23', smpcost: 139.70},
-                {rownum: 24, standdt: '2024-08-24', smpcost: 138.60},
-                {rownum: 25, standdt: '2024-08-25', smpcost: 140.30},
-                {rownum: 26, standdt: '2024-08-26', smpcost: 142.60},
-                {rownum: 27, standdt: '2024-08-27', smpcost: 144.30},
-                {rownum: 28, standdt: '2024-08-28', smpcost: 143.20},
-                {rownum: 29, standdt: '2024-08-29', smpcost: 141.60},
-                {rownum: 30, standdt: '2024-08-30', smpcost: 139.90},
-                {rownum: 31, standdt: '2024-08-31', smpcost: 138.70}
-            ];
-
-            viewdata3 = new wijmo.collections.CollectionView(data3);
-
-            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'rownum', header: 'No', align: 'center', width: 90},
-                    {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
-                    {binding: 'smpcost', header: 'SMP 단가', align: 'right', width: 315}
-                ],
-                itemsSource: viewdata3,
-                isReadOnly: true
-            });
-            theGrid3.rowHeaders.columns.splice(0, 1);  // Remove the header part at the front
-        }
-
-        // tab3 차트 초기화
-        function initChart3() {
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandlerTab3";
-            rMateChartH5.create("chart3", "chartHolder3", chartVars, "100%", "100%");
-        }
-
-        function chartReadyHandlerTab3(id) {
-            var chartData = [
-                {Date: '2024-08-01', smpCost: 135.50},
-                {Date: '2024-08-02', smpCost: 137.20},
-                {Date: '2024-08-03', smpCost: 136.80},
-                {Date: '2024-08-04', smpCost: 138.30},
-                {Date: '2024-08-05', smpCost: 139.90},
-                {Date: '2024-08-06', smpCost: 141.80},
-                {Date: '2024-08-07', smpCost: 140.20},
-                {Date: '2024-08-08', smpCost: 138.10},
-                {Date: '2024-08-09', smpCost: 137.00},
-                {Date: '2024-08-10', smpCost: 139.40},
-                {Date: '2024-08-11', smpCost: 141.90},
-                {Date: '2024-08-12', smpCost: 140.30},
-                {Date: '2024-08-13', smpCost: 143.70},
-                {Date: '2024-08-14', smpCost: 141.60},
-                {Date: '2024-08-15', smpCost: 140.00},
-                {Date: '2024-08-16', smpCost: 138.50},
-                {Date: '2024-08-17', smpCost: 137.10},
-                {Date: '2024-08-18', smpCost: 139.50},
-                {Date: '2024-08-19', smpCost: 142.10},
-                {Date: '2024-08-20', smpCost: 144.40},
-                {Date: '2024-08-21', smpCost: 143.80},
-                {Date: '2024-08-22', smpCost: 141.70},
-                {Date: '2024-08-23', smpCost: 139.70},
-                {Date: '2024-08-24', smpCost: 138.60},
-                {Date: '2024-08-25', smpCost: 140.30},
-                {Date: '2024-08-26', smpCost: 142.60},
-                {Date: '2024-08-27', smpCost: 144.30},
-                {Date: '2024-08-28', smpCost: 143.20},
-                {Date: '2024-08-29', smpCost: 141.60},
-                {Date: '2024-08-30', smpCost: 139.90},
-                {Date: '2024-08-31', smpCost: 138.70}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Date" />
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis minimum="135" maximum="145" interval="1"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="smpCost" displayName="SMP 단가" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#f99bab" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>
-`;
-
-            document.getElementById(id).setLayout(layoutStr);
-            document.getElementById(id).setData(chartData);
-        }
-
-        <!-- tab4 그리드 초기화 -->
-        function initGrid4() {
-            var data4 = [
-                {rownum: 1, standdt: '2024-08-01', recCost: 70500},
-                {rownum: 2, standdt: '2024-08-06', recCost: 71200},
-                {rownum: 3, standdt: '2024-08-08', recCost: 70800},
-                {rownum: 4, standdt: '2024-08-13', recCost: 72300},
-                {rownum: 5, standdt: '2024-08-20', recCost: 73900},
-                {rownum: 6, standdt: '2024-08-22', recCost: 74800},
-                {rownum: 7, standdt: '2024-08-27', recCost: 73200},
-                // {rownum: 8, standdt: '2024-09-03', recCost: 71100},
-                // {rownum: 9, standdt: '2024-09-05', recCost: 70000},
-                // {rownum: 10, standdt: '2024-09-10', recCost: 71400},
-                // {rownum: 11, standdt: '2024-09-12', recCost: 72900},
-                // {rownum: 12, standdt: '2024-09-19', recCost: 74300}
-            ];
-
-            viewdata4 = new wijmo.collections.CollectionView(data4);
-
-            theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'rownum', header: 'No', align: 'center', width: 90},
-                    {binding: 'standdt', header: '등록일자', align: 'center', width: 315},
-                    {binding: 'recCost', header: 'REC 단가', align: 'right', width: 315}
-                ],
-                itemsSource: viewdata4,
-                isReadOnly: true
-            });
-            theGrid4.rowHeaders.columns.splice(0, 1);
-        }
-
-        // tab4 차트 초기화
-        function initChart4() {
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandlerTab4";
-            rMateChartH5.create("chart4", "chartHolder4", chartVars, "100%", "100%");
-        }
-
-        function chartReadyHandlerTab4(id) {
-            var chartData = [
-                {Date: '2024-08-01', recCost: 71000},
-                {Date: '2024-08-06', recCost: 72300},
-                {Date: '2024-08-07', recCost: 71100},
-                {Date: '2024-08-13', recCost: 71600},
-                {Date: '2024-08-20', recCost: 73000},
-                {Date: '2024-08-22', recCost: 72300},
-                {Date: '2024-08-27', recCost: 72100},
-                {Date: '2024-08-29', recCost: 73500},
-                // {Date: '2024-08-09', recCost: 72800},
-                // {Date: '2024-08-10', recCost: 73200},
-                // {Date: '2024-08-11', recCost: 73000},
-                // {Date: '2024-08-12', recCost: 73400},
-                // {Date: '2024-08-13', recCost: 73700},
-                // {Date: '2024-08-14', recCost: 74100},
-                // {Date: '2024-08-15', recCost: 73900},
-                // {Date: '2024-08-16', recCost: 74300},
-                // {Date: '2024-08-17', recCost: 74600},
-                // {Date: '2024-08-18', recCost: 74400},
-                // {Date: '2024-08-19', recCost: 74800},
-                // {Date: '2024-08-20', recCost: 75100},
-                // {Date: '2024-08-21', recCost: 74900},
-                // {Date: '2024-08-22', recCost: 75200},
-                // {Date: '2024-08-23', recCost: 74800},
-                // {Date: '2024-08-24', recCost: 75100},
-                // {Date: '2024-08-25', recCost: 74700},
-                // {Date: '2024-08-26', recCost: 74400},
-                // {Date: '2024-08-27', recCost: 74100},
-                // {Date: '2024-08-28', recCost: 73800},
-                // {Date: '2024-08-29', recCost: 73500},
-                // {Date: '2024-08-30', recCost: 73200},
-                // {Date: '2024-08-31', recCost: 73000}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Date" />
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis minimum="70000" maximum="76000" interval="1000"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="recCost" displayName="REC 단가" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#ffa336" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>
-`;
-
-            document.getElementById(id).setLayout(layoutStr);
-            document.getElementById(id).setData(chartData);
-        }
-
-        // tab5 그리드 초기화
-        function initGrid5() {
-            var data5 = [
-                {
-                    salesym: '2024-01',
-                    targetPrice: 65000,
-                    targetAmount: 3250000,
-                    recAvgPrice: 67000,
-                    recActualPrice: 66500,
-                    totalGenerationRevenue: 3325000,
-                    targetAchievementRate: '102.3%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-02',
-                    targetPrice: 65500,
-                    targetAmount: 3275000,
-                    recAvgPrice: 66000,
-                    recActualPrice: 65800,
-                    totalGenerationRevenue: 3290000,
-                    targetAchievementRate: '100.5%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-03',
-                    targetPrice: 66000,
-                    targetAmount: 3300000,
-                    recAvgPrice: 67500,
-                    recActualPrice: 67200,
-                    totalGenerationRevenue: 3360000,
-                    targetAchievementRate: '101.8%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-04',
-                    targetPrice: 66500,
-                    targetAmount: 3325000,
-                    recAvgPrice: 66800,
-                    recActualPrice: 66600,
-                    totalGenerationRevenue: 3330000,
-                    targetAchievementRate: '100.2%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-05',
-                    targetPrice: 67000,
-                    targetAmount: 3350000,
-                    recAvgPrice: 68000,
-                    recActualPrice: 67800,
-                    totalGenerationRevenue: 3390000,
-                    targetAchievementRate: '101.2%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-06',
-                    targetPrice: 67500,
-                    targetAmount: 3375000,
-                    recAvgPrice: 67200,
-                    recActualPrice: 67000,
-                    totalGenerationRevenue: 3350000,
-                    targetAchievementRate: '99.3%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-07',
-                    targetPrice: 68000,
-                    targetAmount: 3400000,
-                    recAvgPrice: 69000,
-                    recActualPrice: 68800,
-                    totalGenerationRevenue: 3440000,
-                    targetAchievementRate: '101.2%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-08',
-                    targetPrice: 68500,
-                    targetAmount: 3425000,
-                    recAvgPrice: 68700,
-                    recActualPrice: 68600,
-                    totalGenerationRevenue: 3430000,
-                    targetAchievementRate: '100.1%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-09',
-                    targetPrice: 69000,
-                    targetAmount: 3450000,
-                    recAvgPrice: 70000,
-                    recActualPrice: 69800,
-                    totalGenerationRevenue: 3490000,
-                    targetAchievementRate: '101.2%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-10',
-                    targetPrice: 69500,
-                    targetAmount: 3475000,
-                    recAvgPrice: 69200,
-                    recActualPrice: 69000,
-                    totalGenerationRevenue: 3450000,
-                    targetAchievementRate: '99.3%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-11',
-                    targetPrice: 70000,
-                    targetAmount: 3500000,
-                    recAvgPrice: 71000,
-                    recActualPrice: 70800,
-                    totalGenerationRevenue: 3540000,
-                    targetAchievementRate: '101.1%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                },
-                {
-                    salesym: '2024-12',
-                    targetPrice: 70500,
-                    targetAmount: 3525000,
-                    recAvgPrice: 70700,
-                    recActualPrice: 70600,
-                    totalGenerationRevenue: 3530000,
-                    targetAchievementRate: '100.1%',
-                    regDate: '2024-09-19',
-                    registrant: '관리자'
-                }
-            ];
-
-            viewdata5 = new wijmo.collections.CollectionView(data5);
-
-            theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: [
-                    {binding: 'salesym', header: '매출년월', align: 'center', width: 120},
-                    {binding: 'targetPrice', header: '목표단가', align: 'right', width: 180},
-                    {binding: 'targetAmount', header: '목표금액', align: 'right', width: 180},
-                    {binding: 'recAvgPrice', header: 'REC 평균단가', align: 'right', width: 180},
-                    {binding: 'recActualPrice', header: 'REC 실단가', align: 'right', width: 180},
-                    {binding: 'totalGenerationRevenue', header: '총 발전매출', align: 'right', width: 200},
-                    {binding: 'targetAchievementRate', header: '목표달성율', align: 'right', width: 180},
-                    {binding: 'regDate', header: '등록일자', align: 'center', width: 200},
-                    {binding: 'registrant', header: '등록자', align: 'center', width: '*'}
-                ],
-                itemsSource: viewdata5,
-                isReadOnly: true
-            });
-            theGrid5.rowHeaders.columns.splice(0, 1);
-        }
-
-        // tab5 차트 초기화
-        function initChart5() {
-            var chartVars = "rMateOnLoadCallFunction=chartReadyHandlerTab5";
-            rMateChartH5.create("chart5", "chartHolder5", chartVars, "100%", "100%");
-        }
-
-        function chartReadyHandlerTab5(id) {
-            var chartData = [
-                {Date: '2024-01', totalGenerationRevenue: 3270000, targetAmount: 3250000},
-                {Date: '2024-02', totalGenerationRevenue: 3180000, targetAmount: 3220000},
-                {Date: '2024-03', totalGenerationRevenue: 3420000, targetAmount: 3280000},
-                {Date: '2024-04', totalGenerationRevenue: 3350000, targetAmount: 3260000},
-                {Date: '2024-05', totalGenerationRevenue: 3510000, targetAmount: 3310000},
-                {Date: '2024-06', totalGenerationRevenue: 3290000, targetAmount: 3270000},
-                {Date: '2024-07', totalGenerationRevenue: 3380000, targetAmount: 3320000},
-                {Date: '2024-08', totalGenerationRevenue: 3460000, targetAmount: 3300000},
-                {Date: '2024-09', totalGenerationRevenue: 3320000, targetAmount: 3340000},
-                {Date: '2024-10', totalGenerationRevenue: 3540000, targetAmount: 3290000},
-                {Date: '2024-11', totalGenerationRevenue: 3430000, targetAmount: 3360000},
-                {Date: '2024-12', totalGenerationRevenue: 3490000, targetAmount: 3330000}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Options>
-        <Legend />
-    </Options>
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Date" />
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis minimum="3150000" maximum="3600000" interval="50000"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="totalGenerationRevenue" displayName="총 발전매출" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#ffa336" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-            <Line2DSeries yField="targetAmount" displayName="목표금액" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#909bff" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>
-`;
-
-            document.getElementById(id).setLayout(layoutStr);
-            document.getElementById(id).setData(chartData);
-        }
-
-        // 캘린더
-        /*document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'ko',  // 한국어 로케일 설정
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                initialView: 'dayGridMonth',
-                height: 670,
-                dayHeaderFormat: { weekday: 'short' }, // 요일 형식 설정
-                views: {
-                    dayGridMonth: {
-                        dayCellContent: function(arg) {
-                            // '일' 텍스트 제거
-                            return arg.dayNumberText.replace('일', '');
-                        }
-                    }
-                },
-                dateClick: function(info) {
-                    // 날짜 클릭 이벤트 처리
-                    console.log('Clicked on: ' + info.dateStr);
-                }
-            });
-            calendar.render();
-        });*/
-
-        // 캘린더 초기화 함수
-        function initCalendar() {
-            var calendarEl = document.getElementById('calendar');
-            if (calendarEl) {
-
-                // FullCalendar 설정
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    locale: 'ko',
-                    headerToolbar: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                    },
-                    initialView: 'dayGridMonth',
-                    height: 714,
-                    dayHeaderFormat: {weekday: 'short'},
-                    views: {
-                        dayGridMonth: {
-                            dayCellContent: function (arg) {
-                                return arg.dayNumberText.replace('일', '');
-                            }
-                        }
-                    },
-                    dateClick: function (info) {
-                        console.log('Clicked on: ' + info.dateStr);
-                    },
-                    events: [
-                        {title: '거래', start: '2024-09-03'},
-                        {title: '거래', start: '2024-09-05'},
-                        {title: '거래', start: '2024-09-10'},
-                        {title: '거래', start: '2024-09-12'},
-                        {title: '거래', start: '2024-09-19'},
-                        {title: '거래', start: '2024-09-24'},
-                        {title: '거래', start: '2024-09-26'},
-                        {
-                            title: '추석',
-                            start: '2024-09-17',
-                            backgroundColor: '#EC193A',
-                            borderColor: '#EC193A',
-                            textColor: 'white'
-                        },
-
-                        // {
-                        //     title: '국국의날',
-                        //     start: '2024-10-01',
-                        //     backgroundColor: '#EC193A',
-                        //     borderColor: '#EC193A',
-                        //     textColor: 'white'
-                        // },
-                        // {
-                        //     title: '개천절',
-                        //     start: '2024-10-03',
-                        //     backgroundColor: '#EC193A',
-                        //     borderColor: '#EC193A',
-                        //     textColor: 'white'
-                        // },
-                        // {title: '거래', start: '2024-10-08'},
-                        // {title: '거래', start: '2024-10-10'},
-                        // {title: '거래', start: '2024-10-15'},
-                        // {title: '거래', start: '2024-10-17'},
-                        // {title: '거래', start: '2024-10-22'},
-                        // {title: '거래', start: '2024-10-24'},
-                        // {title: '거래', start: '2024-10-29'},
-                        // {title: '거래', start: '2024-10-31'}
-                    ],
-                });
-                calendar.render();
-            }
-        }
 
     </script>
 </th:block>
