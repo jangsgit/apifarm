@@ -1,82 +1,9 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <style>
 
+<style>
 
-        /* 차트 확장 아이콘 css */
-        .expand-icon {
-            position: relative;
-            width: 20px; /* 전체 크기 20px */
-            height: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #FFFFFF; /* 아이콘 배경색 */
-        }
+</style>
 
-        .expand-icon .corner {
-            position: absolute;
-            width: 6px; /* 꺾은선 크기 */
-            height: 6px;
-            border: 2px solid #808080; /* 꺾은선 색상 */
-        }
-
-        .corner.corner-1 {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .corner.corner-2 {
-            top: 0;
-            right: 0;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner.corner-3 {
-            bottom: 0;
-            left: 0;
-            border-right: none;
-            border-top: none;
-        }
-
-        .corner.corner-4 {
-            bottom: 0;
-            right: 0;
-            border-left: none;
-            border-top: none;
-        }
-
-        .expand-icon span {
-            display: block;
-            position: absolute;
-            background-color: #808080;
-        }
-
-        .icon-horizontal, .icon-vertical {
-            position: absolute;
-            background-color: black;
-            width: 100%; /* 선 길이를 모서리까지 확장 */
-            height: 2px; /* 선 두께 */
-        }
-
-        .icon-horizontal {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%) rotate(45deg); /* 45도 회전하여 대각선 */
-        }
-
-        .icon-vertical {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%) rotate(-45deg); /* 반대 방향으로 45도 회전하여 X 자 형성 */
-        }
-
-    </style>
-</head>
 
 <th:block layout:fragment="content">
 
@@ -1446,60 +1373,6 @@
             initializeSelections();
             updatePeriodInputs();
             updateComparisonType();
-
-
-            $('.chart-wrap').each(function() {
-                // expand-icon 아이콘 생성
-                let expandIcon = $('<span class="material-symbols-outlined">\n' +
-                    'zoom_out_map\n' +
-                    '</span>');
-
-                // expand-icon 스타일 적용
-                expandIcon.css({
-                    'position': 'absolute',
-                    'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
-                    'right': '3px', // 차트의 오른쪽 끝에 위치
-                    'cursor': 'pointer',
-                    'z-index': '10',
-                    'color': '##B3B3B3'
-                });
-
-                // chart-wrap에 expand-icon 추가
-                $(this).css('position', 'relative').append(expandIcon);
-            });
-
-
-            // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
-            $(document).on('click', '.material-symbols-outlined', function() {
-                // 클릭한 div의 id 가져오기
-                let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
-
-                // ID가 제대로 추출되었는지 확인
-                console.log("Clicked chartHolder ID: " + chartHolderId);
-
-                // 모달 열기
-                let modal = document.getElementById("chartModal");
-                let modalChartHolder = document.getElementById("modalChartHolder");
-                modal.style.display = "block";
-
-                // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
-                rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
-
-                // 모달 닫기 버튼 클릭 시 모달 닫기
-                let closeModal = document.getElementsByClassName("close")[0];
-                closeModal.onclick = function() {
-                    modal.style.display = "none";
-                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-                }
-
-                // 모달 외부를 클릭하면 모달 닫기
-                window.onclick = function(event) {
-                    if (event.target === modal) {
-                        modal.style.display = "none";
-                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-                    }
-                }
-            });
 
         });
     </script>

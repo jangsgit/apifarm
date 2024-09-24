@@ -1,82 +1,7 @@
 <html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
-<head>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
 
-
-        /* 차트 확장 아이콘 css */
-        .expand-icon {
-            position: relative;
-            width: 20px; /* 전체 크기 20px */
-            height: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #FFFFFF; /* 아이콘 배경색 */
-        }
-
-        .expand-icon .corner {
-            position: absolute;
-            width: 6px; /* 꺾은선 크기 */
-            height: 6px;
-            border: 2px solid #808080; /* 꺾은선 색상 */
-        }
-
-        .corner.corner-1 {
-            top: 0;
-            left: 0;
-            border-right: none;
-            border-bottom: none;
-        }
-
-        .corner.corner-2 {
-            top: 0;
-            right: 0;
-            border-left: none;
-            border-bottom: none;
-        }
-
-        .corner.corner-3 {
-            bottom: 0;
-            left: 0;
-            border-right: none;
-            border-top: none;
-        }
-
-        .corner.corner-4 {
-            bottom: 0;
-            right: 0;
-            border-left: none;
-            border-top: none;
-        }
-
-        .expand-icon span {
-            display: block;
-            position: absolute;
-            background-color: #808080;
-        }
-
-        .icon-horizontal, .icon-vertical {
-            position: absolute;
-            background-color: black;
-            width: 100%; /* 선 길이를 모서리까지 확장 */
-            height: 2px; /* 선 두께 */
-        }
-
-        .icon-horizontal {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%) rotate(45deg); /* 45도 회전하여 대각선 */
-        }
-
-        .icon-vertical {
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%) rotate(-45deg); /* 반대 방향으로 45도 회전하여 X 자 형성 */
-        }
-
     </style>
-</head>
 <th:block layout:fragment="content">
 
 
@@ -664,7 +589,7 @@
                                 <div class="button-wrap" style="float: right; padding-top: 5px; margin-bottom: 7px;">
                                     <ul>
                                         <li>
-                                            <a class="btn btn-edit" title="저장">
+                                            <a class="btn btn-edit" title="저장" id="btnEdit">
                                                 <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
                                                 수정
                                             </a>
@@ -693,7 +618,7 @@
                                         <tr>
                                             <th><label for="smuseqty">사용량</label></th>
                                             <td>
-                                                <div class="input-clear"><input type="text" id="smuseqty" class="wp100" readonly>
+                                                <div class="input-clear"><input type="text" id="smuseqty" class="wp100">
                                                 </div>
                                             </td>
                                         </tr>
@@ -702,7 +627,7 @@
                                             <th><label for="smusehqty">사용열량</label></th>
                                             <td>
                                                 <div class="input-clear">
-                                                    <input type="text" id="smusehqty" class="wp100" readonly><span class="btn-clear">×</span>
+                                                    <input type="text" id="smusehqty" class="wp100" ><span class="btn-clear">×</span>
                                                 </div>
                                             </td>
                                         </tr>
@@ -710,7 +635,7 @@
                                         <tr>
                                             <th><label for="askamt">청구금액</label></th>
                                             <td>
-                                                <div class="input-clear"><input type="text" id="askamt" class="wp100" readonly>
+                                                <div class="input-clear"><input type="text" id="askamt" class="wp100" >
                                                 </div>
                                             </td>
                                         </tr>
@@ -1780,7 +1705,7 @@
                  theGrid4.setCellData(3, 'day', '2024-01-04');
                  theGrid4.setCellData(4, 'day', '2024-01-05');*/
 
-
+                  /*  $('#btnEdit').click(Edit);*/
         }
 
             <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
@@ -1840,6 +1765,7 @@
                         theGrid5 = new wijmo.grid.FlexGrid('#theGrid5', {
                             autoGenerateColumns: false,
                             showMarquee: true,
+                            isReadOnly: true,
                             columns: [
                                 { binding: 'category', header: '구분', width: 100, align: 'center' },
                                 { binding: 'Jan', header: '1월', width: 110, align: 'center', format: 'n0'},
@@ -1888,23 +1814,40 @@
                             const selectedRow = theGrid5.selection.row; // 선택된 행
                             const selectedCol = theGrid5.selection.col; // 선택된 열
 
-                            console.log(selectedRow,"+", selectedCol,"선택된 행과 열 확인");
+                            console.log(selectedRow, "+", selectedCol, "선택된 행과 열 확인");
 
-                            if (selectedRow >= 0) {
-                                const selectedData = theGrid5.itemsSource[selectedRow]; // 선택된 행의 데이터
-
-                                // 월 인덱스 계산
+                            if (selectedRow >= 0 && selectedCol > 0) { // 열이 0보다 큰 경우에만 처리 (0은 구분 열)
                                 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                                const monthIndex = selectedCol - 1; // 0은 구분, 1부터 12월
+                                const selectedMonthName = monthNames[selectedCol - 1]; // 선택된 열에서 월 이름 가져오기
 
-                                // 필드에 데이터 표시
+                                let askamt = '';  // 청구금액 변수
+                                let smuseqty = ''; // 사용량 변수
+                                let smusehqty = ''; // 사용열량 변수
+
+                                // 선택된 열에 해당하는 월의 데이터를 모든 행에서 가져오기
+                                theGrid5.itemsSource.forEach(function (rowData) {
+                                    const monthData = rowData[selectedMonthName]; // 선택된 열의 월 데이터
+                                    console.log("Row: ", rowData.category, " : " + selectedMonthName + " 데이터 = ", monthData);
+
+                                    // 각 카테고리에 따라 해당하는 입력 필드에 데이터 저장
+                                    if (rowData.category === '청구금액') {
+                                        askamt = monthData;
+                                    } else if (rowData.category === '사용량') {
+                                        smuseqty = monthData;
+                                    } else if (rowData.category === '사용열량') {
+                                        smusehqty = monthData;
+                                    }
+                                });
+
+                                // 필드에 데이터를 넣기
+                                $('#askamt').val(askamt); // 청구금액
+                                $('#smuseqty').val(smuseqty); // 사용량
+                                $('#smusehqty').val(smusehqty); // 사용열량
+
+                                const monthIndex = selectedCol - 1; // 0은 구분, 1부터 12월
                                 const selectedMonth = monthIndex < 9 ? '0' + (monthIndex + 1) : (monthIndex + 1); // 월 포맷팅
                                 const formattedYearMonth = year + selectedMonth; // 예: 202301
-
                                 $('#standym').val(formattedYearMonth); // 청구년월
-                                $('#askamt').val(selectedData.category === '청구금액' ? selectedData.total : ''); // 청구금액
-                                $('#smuseqty').val(selectedData.category === '사용량' ? selectedData.total : ''); // 사용량
-                                $('#smusehqty').val(selectedData.category === '사용열량' ? selectedData.total : ''); // 사용열량
                             }
                         });
 
@@ -2068,58 +2011,6 @@
                     input.value = CostDate;
                 });
 
-                $('.chart-wrap').each(function() {
-                    // expand-icon 아이콘 생성
-                    let expandIcon = $('<span class="material-symbols-outlined">\n' +
-                        'zoom_out_map\n' +
-                        '</span>');
-
-                    // expand-icon 스타일 적용
-                    expandIcon.css({
-                        'position': 'absolute',
-                        'top': '17px', // 차트 오른쪽 끝 위에서 10px 아래
-                        'right': '3px', // 차트의 오른쪽 끝에 위치
-                        'cursor': 'pointer',
-                        'z-index': '10',
-                        'color': '##B3B3B3'
-                    });
-
-                    // chart-wrap에 expand-icon 추가
-                    $(this).css('position', 'relative').append(expandIcon);
-                });
-
-
-                // .chart-wrap에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
-                $(document).on('click', '.material-symbols-outlined', function() {
-                    // 클릭한 div의 id 가져오기
-                    let chartHolderId = $(this).prev('div[id^="chartHolder"]').attr('id');
-
-                    // ID가 제대로 추출되었는지 확인
-                    console.log("Clicked chartHolder ID: " + chartHolderId);
-
-                    // 모달 열기
-                    let modal = document.getElementById("chartModal");
-                    let modalChartHolder = document.getElementById("modalChartHolder");
-                    modal.style.display = "block";
-
-                    // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
-                    rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
-
-                    // 모달 닫기 버튼 클릭 시 모달 닫기
-                    let closeModal = document.getElementsByClassName("close")[0];
-                    closeModal.onclick = function() {
-                        modal.style.display = "none";
-                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-                    }
-
-                    // 모달 외부를 클릭하면 모달 닫기
-                    window.onclick = function(event) {
-                        if (event.target === modal) {
-                            modal.style.display = "none";
-                            modalChartHolder.innerHTML = ""; // 모달 차트 초기화
-                        }
-                    }
-                });
 
             });
     </script>
