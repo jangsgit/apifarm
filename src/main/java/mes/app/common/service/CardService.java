@@ -35,7 +35,6 @@ public class CardService {
         }catch (Exception e){
             // 예외가 발생할 경우 예외 메시지 출력 및 false 반환
             System.err.println("Error occurred while inserting cards: " + e.getMessage());
-            e.printStackTrace();  // 예외 스택 트레이스 출력 (개발 및 디버깅 용도로만 사용)
 
             // 실패 시 false 반환
             return false;

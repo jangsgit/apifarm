@@ -143,8 +143,8 @@
                     <div class="tab-contents">
                         <!-- tab1 -->
                         <div class="tab-item-sub" id="tab1">
-                            <div>
-                                <div id="chartHolder" style="width: 100%; height: 310px; padding-top: 13px"></div>
+                            <div class="chart-wrap" style="border: none">
+                                <div id="chartHolder1" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
                         <!-- tab2 -->
@@ -198,7 +198,7 @@
                     <div class="tab-contents">
                         <!-- tab5 -->
                         <div class="tab-item-sub" id="tab3">
-                            <div>
+                            <div class="chart-wrap" style="border: none">
                                 <div id="chartHolder2" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                     <div class="tab-contents">
                         <!-- tab1 -->
                         <div class="tab-item-sub" id="tab5">
-                            <div>
+                            <div class="chart-wrap" style="border: none">
                                 <div id="chartHolder3" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
                     <div class="tab-contents">
                         <!-- tab7 -->
                         <div class="tab-item-sub" id="tab7">
-                            <div>
+                            <div class="chart-wrap" style="border: none">
                                 <div id="chartHolder4" style="width: 100%; height: 310px; padding-top: 13px"></div>
                             </div>
                         </div>
@@ -529,20 +529,58 @@
 
         // -----------------------차트 설정 시작-----------------------
 
-        rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
+        function RunRmateGraph(param){
+
+            setTimeout(function(){
+                let con = param;
+
+                rMateChartH5.create(con, "chartHolder" + con.replace(/\D/g, ""), "100%", "100%");
+
+                chartReadyHandler(con);
+                console.log('check', param);
+                document.getElementById(param).resize();
+            }, 300)
+
+
+        }
+
+        function chartReadyHandler(id){
+            let chartIndex = id.replace(/\D/g, "");
+            let data;
+            console.log('id')
+            switch(chartIndex){
+                case "1" : document.getElementById(id).setLayout(layoutStrValue("gas", "가스소비량", "temperature", "외기온도"));
+                           document.getElementById(id).setData(chartData);
+                    break;
+                case "2" : document.getElementById(id).setLayout(layoutStrValue("electronic", "전기생산량", "temperature", "외기온도"));
+                           document.getElementById(id).setData(chartData2);
+                    break;
+                case "3" : document.getElementById(id).setLayout(layoutStrValue("heat", "열 공급량", "temperature", "외기온도"));
+                           document.getElementById(id).setData(chartData3);
+                    break;
+                case "4" : document.getElementById(id).setLayout(layoutStrValue("efficiency", "효율", "temperature", "외기온도"));
+                           document.getElementById(id).setData(chartData4);
+                    break;
+
+            }
+
+        }
+
+
+        /*rMateChartH5.create("chart1", "chartHolder", "", "100%", "100%");
 
         rMateChartH5.create("chart2", "chartHolder2", "", "100%", "100%");
 
         rMateChartH5.create("chart3", "chartHolder3", "", "100%", "100%");
 
         rMateChartH5.create("chart4", "chartHolder4", "", "100%", "100%");
-
+*/
         // 스트링 형식으로 레이아웃 정의.
         function layoutStrValue(yField, yFieldName, yField2, yFieldName2) {
             return `
         <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
             <Options>
-                <Caption text="" paddingBottom="45"/>
+                <Caption text="" paddingBottom="20"/>
                 <Legend defaultMouseOverAction="true" useVisibleCheck="true"/>
             </Options>
             <NumberFormatter id="numFmt1" useThousandsSeparator="true" />
@@ -693,7 +731,11 @@
 
             ];
 
-        rMateChartH5.calls("chart1", {
+        let readType = '';
+
+
+
+        /*rMateChartH5.calls("chart1", {
             "setLayout" : layoutStrValue("gas", "가스소비량", "temperature", "외기온도"),
             "setData" : chartData
         });
@@ -712,7 +754,7 @@
             "setLayout" : layoutStrValue("efficiency", "효율", "temperature", "외기온도"),
             "setData" : chartData4
         });
-
+*/
         function dataTipJsFunc (seriesId, seriesName, index, xName, yName, data, values) {
             if (seriesName == "외기온도")
                 return data['Hour'] + " 외기온도 : " + "<b>" + data['temperature'] + "°C</b>";
@@ -727,8 +769,14 @@
         }
 
 
+        function reload(param){
 
-        rMateChartH5.registerTheme(rMateChartH5.themes);
+            setTimeout(function(){
+                document.getElementById(param).resize();
+            }, 60);
+        }
+
+        /*rMateChartH5.registerTheme(rMateChartH5.themes);
 
 
         function rMateChartH5ChangeTheme(theme){
@@ -738,7 +786,7 @@
             document.getElementById("chart4").setTheme(theme);
 
         }
-
+*/
 
         //===============================================================================================================
 
@@ -1027,6 +1075,10 @@
 
             initializeSelections();
             init();
+
+            for(let i=0; i<4; i++){
+                RunRmateGraph(`chart${i+1}`);
+            }
 
         });
 
