@@ -901,43 +901,27 @@
                         columns: [
                             //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                             {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
-                            {binding: 'standdt', header: '일자', width: 115, align: 'center'},
+                            {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
                             {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
                             {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                            {binding: 'chargedv', header: '충전/방전', width: 100, align: 'center'},
-                            {binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0'},
+                            {binding: '', header: '시간', width: 65, align: 'center'},
+                            {binding: '', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+                            {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                            {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
+                            {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
                             {
-                                binding: 'toggle',
-                                header: '...',
-                                width: 90,
-                                align: 'right',
-                                format: 'n0',
-                                allowSorting: false
+                                header: '기타 정산금',
+                                align: 'center',
+                                collapseTo: 'etcSettlement',
+                                isCollapsed: true,
+                                columns: [
+                                    { binding: '', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                                ]
                             },
-                            {binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0'},
+                            {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
                             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -947,7 +931,7 @@
 
                     theGrid1.rowHeaders.columns.splice(0, 1);  // 맨 앞에 헤더부분 없애기
 
-                    initializeColumnToggle(theGrid1); // 컬럼 숨기기 초기화 함수 호출
+                    // initializeColumnToggle(theGrid1); // 컬럼 숨기기 초기화 함수 호출
                 } catch (error) {
                     console.error('Failed to initialize grid:', error);
                 }
@@ -967,50 +951,27 @@
                         isReadOnly: false, // 수정 가능하게 설정
                         columns: [
                             {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
-                            {binding: 'standdt', header: '일자', width: 115, align: 'center'},
+                            {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
                             {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
                             {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                            {binding: 'chargedv', header: '충전/방전', width: 100, align: 'center'},
-                            {binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0'},
+                            {binding: '', header: '시간', width: 65, align: 'center'},
+                            {binding: '', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+                            {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                            {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
+                            {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
                             {
-                                binding: 'toggle',
-                                header: '...',
-                                width: 90,
-                                align: 'right',
-                                format: 'n0',
-                                allowSorting: false
+                                header: '기타 정산금',
+                                align: 'center',
+                                collapseTo: 'etcSettlement',
+                                isCollapsed: true,
+                                columns: [
+                                    { binding: '', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                                    { binding: '', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                                ]
                             },
-                            {binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0'},
-                            {binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0'},
-                            {
-                                binding: 'mevaluet',
-                                header: '합계',
-                                width: '*',
-                                minWidth: 110,
-                                align: 'right',
-                                format: 'n0'
-                            },
+                            {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
                             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -1026,7 +987,7 @@
 
                     theGrid2.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
 
-                    initializeColumnToggle(theGrid2); // 컬럼 숨기기 초기화 함수 호출
+                    // initializeColumnToggle(theGrid2); // 컬럼 숨기기 초기화 함수 호출
                 } catch (error) {
                     console.error('Failed to initialize grid:', error);
                 }
@@ -1618,7 +1579,7 @@
 
         // 토글 기능
         // 초기 컬럼 숨기기 설정
-        function toggleColumns(grid, show) {
+        /*function toggleColumns(grid, show) {
             for (let i = 4; i <= 22; i++) {
                 let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
                 if (column) column.visible = show;
@@ -1660,7 +1621,7 @@
                     grid.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
                 }
             });
-        }
+        }*/
 
 
         // 그리드에 데이터 바인딩
@@ -2723,78 +2684,7 @@
 
         // tab3 그리드 초기화 및 데이터 설정 함수
         function initGrid3() {
-            var gridData = [
-                {
-                    rownum: 1,
-                    standdt: '2024-08-01',
-                    powerid: 'AJ38',
-                    powernm: 'KT대구물류센터 연료전지',
-                    chargedv: '충전',
-                    mevalue01: 651565,
-                    mevalue02: 651565,
-                    mevalue03: 649396,
-                    mevalue04: 649396,
-                    mevalue05: 649396,
-                    mevalue06: 649396,
-                    mevalue07: 648673,
-                    mevalue08: 649396,
-                    mevalue09: 650119,
-                    mevalue10: 648673,
-                    mevalue11: 651565,
-                    mevalue12: 648673,
-                    mevalue13: 649396,
-                    mevalue14: 649396,
-                    mevalue15: 650119,
-                    mevalue16: 651565,
-                    mevalue17: 649396,
-                    mevalue18: 649396,
-                    mevalue19: 650119,
-                    mevalue20: 651565,
-                    mevalue21: 649396,
-                    mevalue22: 650119,
-                    mevalue23: 651565,
-                    mevalue24: 650119,
-                    mevaluet: 15612900,
-                    indatem: '2024-09-20',
-                    inusernm: '홍길동',
-                    updatem: '2024-09-10'
-                },
-                {
-                    rownum: 2,
-                    standdt: '2024-08-01',
-                    powerid: 'A373',
-                    powernm: 'KT대덕2연구센터 연료전지',
-                    chargedv: '방전',
-                    mevalue01: 835200,
-                    mevalue02: 834480,
-                    mevalue03: 835200,
-                    mevalue04: 835200,
-                    mevalue05: 835200,
-                    mevalue06: 836640,
-                    mevalue07: 835920,
-                    mevalue08: 835920,
-                    mevalue09: 835200,
-                    mevalue10: 835200,
-                    mevalue11: 834480,
-                    mevalue12: 834480,
-                    mevalue13: 834480,
-                    mevalue14: 834480,
-                    mevalue15: 834480,
-                    mevalue16: 835200,
-                    mevalue17: 834480,
-                    mevalue18: 833760,
-                    mevalue19: 834480,
-                    mevalue20: 833760,
-                    mevalue21: 833760,
-                    mevalue22: 833760,
-                    mevalue23: 834480,
-                    mevalue24: 835200,
-                    mevaluet: 20030000,
-                    indatem: '2024-09-20',
-                    inusernm: '김철수',
-                    updatem: ''
-                }
-            ];
+            var gridData = [];
 
             theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
                 autoGenerateColumns: false,
@@ -2802,51 +2692,74 @@
                 isReadOnly: true,
                 columns: [
                     {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
-                    {binding: 'standdt', header: '일자', width: 115, align: 'center'},
+                    {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
                     {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
                     {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                    {binding: 'chargedv', header: '충전/방전', width: 100, align: 'center'},
-                    {binding: 'mevalue01', header: '01시', width: 90, format: 'n0'},
-                    {binding: 'mevalue02', header: '02시', width: 90, format: 'n0'},
-                    {binding: 'mevalue03', header: '03시', width: 90, format: 'n0'},
+                    {binding: '', header: '시간', width: 65, align: 'center'},
+                    {binding: '', header: 'SMP', width: 90, format: 'n0', align: 'center'},
+                    {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                    {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
+                    {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
                     {
-                        binding: 'toggle',
-                        header: '...',
-                        width: 90,
-                        format: 'n0',
-                        allowSorting: false
+                        header: '기타 정산금',
+                        align: 'center',
+                        collapseTo: 'etcSettlement',
+                        isCollapsed: true,
+                        columns: [
+                            { binding: 'localResourceTax', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                            { binding: 'emissionSettlement', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                            { binding: 'RPS', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                            { binding: 'differenceSettlement', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                        ]
                     },
-                    {binding: 'mevalue04', header: '04시', width: 90, format: 'n0'},
-                    {binding: 'mevalue05', header: '05시', width: 90, format: 'n0'},
-                    {binding: 'mevalue06', header: '06시', width: 90, format: 'n0'},
-                    {binding: 'mevalue07', header: '07시', width: 90, format: 'n0'},
-                    {binding: 'mevalue08', header: '08시', width: 90, format: 'n0'},
-                    {binding: 'mevalue09', header: '09시', width: 90, format: 'n0'},
-                    {binding: 'mevalue10', header: '10시', width: 90, format: 'n0'},
-                    {binding: 'mevalue11', header: '11시', width: 90, format: 'n0'},
-                    {binding: 'mevalue12', header: '12시', width: 90, format: 'n0'},
-                    {binding: 'mevalue13', header: '13시', width: 90, format: 'n0'},
-                    {binding: 'mevalue14', header: '14시', width: 90, format: 'n0'},
-                    {binding: 'mevalue15', header: '15시', width: 90, format: 'n0'},
-                    {binding: 'mevalue16', header: '16시', width: 90, format: 'n0'},
-                    {binding: 'mevalue17', header: '17시', width: 90, format: 'n0'},
-                    {binding: 'mevalue18', header: '18시', width: 90, format: 'n0'},
-                    {binding: 'mevalue19', header: '19시', width: 90, format: 'n0'},
-                    {binding: 'mevalue20', header: '20시', width: 90, format: 'n0'},
-                    {binding: 'mevalue21', header: '21시', width: 90, format: 'n0'},
-                    {binding: 'mevalue22', header: '22시', width: 90, format: 'n0'},
-                    {binding: 'mevalue23', header: '23시', width: 90, format: 'n0'},
-                    {binding: 'mevalue24', header: '24시', width: 90, format: 'n0'},
-                    {binding: 'mevaluet', header: '합계', width: 110, format: 'n0'},
-                    {binding: 'indatem', header: '등록일자', width:115, align: 'center'},
+                    {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
+                    {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                     {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
-                    {binding: 'updatem', header: '최종수정일', width: 121, align: 'center'}
+                    {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
                 ],
                 itemsSource: gridData
             });
             theGrid3.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
-            initializeColumnToggle(theGrid3); // 컬럼 숨기기 초기화 함수 호출
+
+            theGrid3.refresh(); // 그리드 새로고침
         }
+
+
+        // function toggleEtcSettlementGroup(grid) {
+        //     let etcSettlementGroup = grid.columnGroups.find(g => g.header === '기타 정산금');
+        //     if (etcSettlementGroup) {
+        //         etcSettlementGroup.isCollapsed = !etcSettlementGroup.isCollapsed;
+        //         etcSettlementGroup.columns.forEach((col, index) => {
+        //             if (index > 0) { // 첫 번째 열(etcSettlement)은 항상 보이게 함
+        //                 col.visible = !etcSettlementGroup.isCollapsed;
+        //             }
+        //         });
+        //         grid.refresh();
+        //     }
+        // }
+
+        /*function initTab3ColumnToggle(grid) {
+            grid.formatItem.addHandler(function (s, e) {
+                if (e.panel == s.columnHeaders && e.col === grid.columns.findIndex(c => c.header === '기타 정산금')) {
+                    e.cell.style.cursor = 'pointer';
+                    e.cell.addEventListener('click', function (event) {
+                        event.stopPropagation(); // 이벤트 버블링 방지
+                        toggleTab3Columns(grid);
+                    });
+                }
+            });
+        }
+
+        function toggleTab3Columns(grid) {
+            let parentCol = grid.columns.find(c => c.header === '기타 정산금');
+            if (parentCol && parentCol.columns) {
+                let isExpanded = parentCol.columns[0].visible;
+                parentCol.columns.forEach(col => {
+                    col.visible = !isExpanded;
+                });
+                grid.refresh();
+            }
+        }*/
 
         // tab3 검색 함수 (실제 구현할때 수정하기)
         function searchDataTab3() {
