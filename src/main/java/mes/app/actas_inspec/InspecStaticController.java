@@ -75,7 +75,25 @@ public class InspecStaticController {
                 }else if(wm_flag.equals("wm_elecsafe_input")){
                     items = inspecStaticService.getRP750List(startdate, "", startHour, endHour);
                     result.subData = this.getRmaTeGraphData_Hourly(items);
+                }else if(wm_flag.equals("wm_emergency_plan")){
+                    items = inspecStaticService.getRP750List(startdate, "", startHour, endHour);
+                    result.subData = this.getRmaTeGraphData_Hourly(items);
+                }else if(wm_flag.equals("wm_emergency_result")){
+                    items = inspecStaticService.getRP750List(startdate, "", startHour, endHour);
+                    result.subData = this.getRmaTeGraphData_Hourly(items);
+                }else if(wm_flag.equals("wm_safety_health")){
+                    items = inspecStaticService.getRP750List(startdate, "", startHour, endHour);
+                    result.subData = this.getRmaTeGraphData_Hourly(items);
+                }else if(wm_flag.equals("wm_inspec_field_report")){
+                    items = inspecStaticService.getRP810List(startdate, "", startHour, endHour);
+                    result.subData = this.getRmaTeGraphData_Hourly(items);
                 }
+
+
+                /*else if(wm_flag.equals("wm_inspec_field_report")){
+                    items = inspecStaticService.getRP810List(startdate, "", startHour, endHour);
+                    result.subData = this.getRmaTeGraphData_Hourly(items);
+                }*/
                 result.data = items;
 
 
@@ -239,7 +257,7 @@ public class InspecStaticController {
         }else if(wm_flag.equals("wm_safety_health")){
             items = inspecStaticService.getRP750List(startdate, endDate, null, null);
         }else if(wm_flag.equals("wm_inspec_field_report")){
-            items = inspecStaticService.getRP750List(startdate, endDate, null, null);
+            items = inspecStaticService.getRP810List(startdate, endDate, null, null);
         }
 
         return items;

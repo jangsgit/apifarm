@@ -1,58 +1,47 @@
 package mes.domain.entity.actasEntity;
 
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.*;
+import org.apache.poi.ss.formula.functions.Offset;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
-import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Objects;
-
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TB_RP710Id implements Serializable {
-
+public class TB_RP810_PK implements Serializable {
 
     private String spworkcd;
-
-
     private String spcompcd;
-
-
     private String spplancd;
-
-
-    private String checkdt;
-
-
-    private String checkno;
-
-
+    private String srnumber;
+    private LocalDateTime servicertm;
+    private LocalDateTime serviceftm;
     private String spuncode;
-
-    // Getters, setters, equals, hashCode
-    // (생략)
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TB_RP710Id that = (TB_RP710Id) o;
+        TB_RP810_PK that = (TB_RP810_PK) o;
         return Objects.equals(spworkcd, that.spworkcd) &&
                 Objects.equals(spcompcd, that.spcompcd) &&
                 Objects.equals(spplancd, that.spplancd) &&
-                Objects.equals(checkdt, that.checkdt) &&
-                Objects.equals(checkno, that.checkno) &&
+                Objects.equals(srnumber, that.srnumber) &&
+                Objects.equals(servicertm, that.servicertm) &&
+                Objects.equals(serviceftm, that.serviceftm) &&
                 Objects.equals(spuncode, that.spuncode);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(spworkcd, spcompcd, spplancd, checkdt, checkno, spuncode);
+        return Objects.hash(spworkcd, spcompcd, spplancd, srnumber, servicertm, serviceftm, spuncode);
     }
+
 }

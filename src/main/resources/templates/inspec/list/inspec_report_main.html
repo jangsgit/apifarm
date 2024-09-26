@@ -84,26 +84,41 @@
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="searchusr" name="searchusr" class="input-srch" placeholder="사이트명 검색">
-                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                        <div class="input-clear"><div class="input-clear">
+                                            <input type="text" id="searchsitename" name="searchsitename" class="input-srch" style="border-radius: 5px;" autocomplete="off"><span class="btn-clear">×</span>
+                                        </div>
+                                            <span class="btn-clear">×</span></div>
                                     </div>
                                 </dd>
                             </dl>
 
                             <dl>
                                 <dt>
-                                    <label for="searchuserid">
+                                    <label for="searchesname">
                                         ES명<span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="srch-box">
-                                        <input type="text" id="searchuserid" name="searchuserid" class="input-srch" placeholder="ES명 검색">
-                                        <a  class="btn-srch" id="searchgrid2" title="검색" onclick="searchData()" onkeyup="searchData()"></a>
+                                        <div class="input-clear"><div class="input-clear">
+                                            <input type="text" id="searchesname" name="searchesname" class="input-srch" style="border-radius: 5px;" autocomplete="off"><span class="btn-clear">×</span>
+                                        </div>
+                                            <span class="btn-clear">×</span></div>
                                     </div>
                                 </dd>
                             </dl>
-
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li style="cursor: default; list-style-image: none;">
+                                        <a class="btn btn-delete" title="검색" id="searchgrid" onclick="searchData()" onkeyup="searchData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -115,7 +130,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  class="btn btn-edit" title="수정">
+                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
                                         <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
                                         수정
                                     </a>
@@ -136,6 +151,7 @@
                     <div class="section-top">
                         <div class="title-wrap">
                             <h3>점검등록</h3>
+                            <input type="hidden" id="spuncode" name="spuncode" />
                         </div>
                         <div class="button-wrap">
                             <ul>
@@ -146,15 +162,9 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
                                         <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
                                         신규등록
-                                    </a>
-                                </li>
-                                <li>
-                                    <a  class="btn btn-delete" title="삭제">
-                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
-                                        삭제
                                     </a>
                                 </li>
                                 <li>
@@ -183,77 +193,78 @@
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="divinm2" name="divinm" class="wp100">
+                                    <input type="text" id="srnumber" name="divinm" class="wp100">
                                 </td>
 
                                 <th>
-                                    <label for="divinm">
+                                    <label for="sitename">
                                         사이트명
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="divinm" name="divinm" class="wp100">
+                                    <input type="text" id="sitename" name="sitename" class="wp100">
                                 </td>
                             </tr>
 
                             <tr>
                                 <th>
-                                    <label for="rank">
+                                    <label for="purpvisit">
                                         방문목적
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="rank" name="rank" class="wp100" placeholder="직급">
+                                    <input type="text" id="purpvisit" name="purpvisit" class="wp100">
                                 </td>
                                 <th>
-                                    <label for="tel">
+                                    <label for="esname">
                                         ES명(ES No.)
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="text" id="tel" name="tel" class="wp100">
+                                    <input type="text" id="esname" name="esname" class="wp100">
                                 </td>
                             </tr>
 
                             <tr>
                                 <th>
-                                    <label for="checkstdt">
+                                    <label for="servicertm">
                                         서비스발생시간
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">
+                                    <input type="datetime-local" id="servicertm" name="servicertm" autocomplete="off">
                                 </td>
                                 <th>
-                                    <label for="checkstdt">
-                                        서비스발생시간
+                                    <label for="serviceftm">
+                                        서비스종료시간
                                     </label>
                                 </th>
                                 <td>
-                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">
+                                    <input type="datetime-local" id="serviceftm" name="serviceftm" autocomplete="off">
                                 </td>
                             </tr>
 
 
                             <tr>
                                 <th>
-                                    <label for="checkusr">
+                                    <label>
                                         담당자
                                     </label>
                                 </th>
                                 <td>
-                                    <div class="input-btnbox">
-                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="담당자" maxlength="5">
+                                    <div class="input-clear">
+                                        <select class="mg-r5" id="fsresponnm" name="fsresponnm" style="width: 100%">
+                                        </select>
                                     </div>
                                 </td>
                                 <th>
-                                    <label for="checkusr">
+                                    <label for="sncode">
                                         S-N
                                     </label>
                                 </th>
                                 <td>
                                     <div class="input-btnbox">
-                                        <input type="text" id="checkusr" name="checkusr" class="wp100" maxlength="5">
+                                        <input type="text" id="sncode" name="sncode" class="wp100">
                                     </div>
                                 </td>
                             </tr>
@@ -261,16 +272,16 @@
 
                             <tr>
                                 <th>
-                                    <label for="reason">
+                                    <label for="servicecause">
                                         서비스발생사유
                                     </label>
                                 </th>
-                                <td>
+                                <td colspan="3">
                                     <div class="input-btnbox">
-                                        <input type="text" id="reason" name="reason" class="wp100">
+                                        <input type="text" id="servicecause" name="reason" class="wp100">
                                     </div>
                                 </td>
-                                <th>
+                                <!--<th>
                                     <label for="reason">
                                         훈련계획
                                     </label>
@@ -279,30 +290,24 @@
                                     <div class="input-btnbox">
                                         <input type="text" id="reason" name="reason" class="wp100">
                                     </div>
-                                </td>
+                                </td>-->
                             </tr>
 
 
                             <tr>
                                 <th>
-                                    <label for="supplier">
+                                    <label for="addregitem">
                                         추가사항
                                     </label>
                                 </th>
                                 <td colspan="3">
-                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50">
+                                    <input type="text" id="addregitem" name="addregitem" class="wp100" maxlength="100">
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </section>
-
-
-
-
-
-
 
 
                 <!-- Section -->
@@ -348,17 +353,17 @@
                                     <div class="upload-filebox">
                                         <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
                                         <a class="btn" title="파일업로드">파일업로드</a>
-                                        <input type="file" id="fileInput1" name="filelist" class="fileInput" onchange="test(this.files)" multiple>
+                                        <input type="file" id="fileInput1" class="fileInput" multiple>
                                         <p>Maximun upload file size <span>1GiB</span></p>
                                     </div>
                                     <div class="upload-filelist">
                                         <div class="title">
                                             <h5>Files (0)</h5>
-                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete
+                                                all</a>
                                         </div>
-                                        <ul class="filelist">
+                                        <ul class="filelist" id="filelist">
                                         </ul>
-
                                     </div>
                                 </div>
                             </td>
@@ -395,20 +400,172 @@
         let csrfToken = $("[name=_csrf]").val();
 
         var columns = [
-            { binding: '', header: '등록일자', align: 'center', width: '0.5*', minWidth: 180 },
-            { binding: '', header: '등록자', align: 'center', width: '0.5*', minWidth: 180 },
-            { binding: '', header: '방문목적', align: 'center', width: '*', minWidth: 290 },
-            { binding: '', header: '서비스발생사유', align: 'center', width: '*', minWidth: 390 },
-            { binding: '', header: '사이트명', align: 'center', width: '0.5*', minWidth: 180 },
-            { binding: '', header: 'S-N', align: 'center', width: '0.5*', minWidth: 190 },
+            { binding: 'indatem', header: '등록일자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'inusernm', header: '등록자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'purpvisit', header: '방문목적', align: 'center', width: '*', minWidth: 290 },
+            { binding: 'servicecause', header: '서비스발생사유', align: 'center', width: '*', minWidth: 390 },
+            { binding: 'sitename', header: '사이트명', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'sncode', header: 'S-N', align: 'center', width: '0.5*', minWidth: 190 },
 
         ];
 
+        function searchData(){
+
+            let param = {
+                'searchfrdate' : $('#searchfrdate').val(),
+                'searchtodate' : $('#searchtodate').val(),
+                'searchsitename': $('#searchsitename').val(),
+                'searchesname' : $('#searchesname').val()
+            }
+            let result = AjaxUtil.getSyncData('/api/fieldService/read', param);
+
+            if(result.success){
+                if(!theGrid){
+                    viewdata = new wijmo.collections.CollectionView(result.data);
+
+                    theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                        autoGenerateColumns: false,
+                        showMarquee: true,
+                        columns: columns,
+                        itemsSource: viewdata,
+                        isReadOnly: true
+                    });
+                    theGrid.rowHeaders.columns.splice(0,1);
+                    new FlexGridContextMenu(theGrid);
+                    window.downloadFileName = 'FieldService';
+                    theGrid.hostElement.addEventListener('dblclick', function(e){
+                        let hitTest = theGrid.hitTest(e);
+                        if (hitTest.cellType === wijmo.grid.CellType.Cell){
+                            let row = hitTest.row;
+                            let item = theGrid.rows[row].dataItem;
+
+                            console.log('tiem', item);
+
+                            let data = {
+                                'spuncode' : item.spuncode }
+
+                            let result = AjaxUtil.getSyncData('/api/fieldService/fileList', data);
+                            if(result.success){
+                                console.log('file12', result.data);
+                            }
+                            document.getElementById('srnumber').value = item.srnumber;
+                            document.getElementById('sitename').value = item.sitename;
+                            document.getElementById('purpvisit').value = item.purpvisit;
+                            document.getElementById('servicertm').value = item.checkstdt;
+                            document.getElementById('servicecause').value = item.servicecause;
+                            document.getElementById('addregitem').value = item.addregitem;
+                            document.getElementById('esname').value = item.esname;
+                            document.getElementById('serviceftm').value = item.checkendt;
+                            document.getElementById('sncode').value = item.sncode;
+                            document.getElementById('spuncode').value = item.spuncode;
+
+                            const selectElement = document.getElementById('fsresponnm');
+
+                            for(let i=0; i < selectElement.options.length; i++){
+                                if (selectElement.options[i].text === item.fsresponnm) {
+                                    // 일치하는 옵션이 있으면 선택
+                                    selectElement.selectedIndex = i;
+                                    break;
+                                }
+                            }
+
+                            let fileList = Array.isArray(result.data) ? result.data : [];
+
+                            deletedFiles = [];
+                            uploadedFiles = [];
+                            $('.filelist').empty(); // 파일 리스트 초기화
+
+                            fileList.forEach(file => {
+                                let newFile = {
+                                    name: file.fileornm,
+                                    size: file.filesize,
+                                    type: file.fileextns,
+                                    spuncode_id: file.spuncode_id,
+                                    checkseq: file.checkseq,
+                                    filepath: file.filepath,
+                                    filesvnm: file.filesvnm
+
+                                };
+                                uploadedFiles.push(newFile); // 파일 리스트에 추가
+                            });
+                            console.log('파일목록확인', uploadedFiles)
+                            updateFileListUI();
+                            updateFileCount();
+                        }
+                    })
+                }else{
+                    theGrid.itemsSource = new wijmo.collections.CollectionView(result.data);
+                }
+
+            }
+        }
+
+        function modifyData(){
+
+            let selectedItems = theGrid.selectedItems;
+
+            console.log('selectedItems', selectedItems);
+
+            let data = { 'spuncode' : selectedItems[0].spuncode }
+
+            let result = AjaxUtil.getSyncData('/api/fieldService/fileList', data);
+            if(result.success){
+                console.log('file12', result.data);
+            }
+
+            document.getElementById('srnumber').value = selectedItems[0].srnumber;
+            document.getElementById('sitename').value = selectedItems[0].sitename;
+            document.getElementById('purpvisit').value = selectedItems[0].purpvisit;
+            document.getElementById('servicertm').value = selectedItems[0].checkstdt;
+            document.getElementById('servicecause').value = selectedItems[0].servicecause;
+            document.getElementById('addregitem').value = selectedItems[0].addregitem;
+            document.getElementById('esname').value = selectedItems[0].esname;
+            document.getElementById('serviceftm').value = selectedItems[0].checkendt;
+            document.getElementById('sncode').value = selectedItems[0].sncode;
+            document.getElementById('spuncode').value = selectedItems[0].spuncode;
+
+            const selectElement = document.getElementById('fsresponnm');
+
+            for(let i=0; i < selectElement.options.length; i++){
+                if (selectElement.options[i].text === selectedItems[0].fsresponnm) {
+                    // 일치하는 옵션이 있으면 선택
+                    selectElement.selectedIndex = i;
+                    break;
+                }
+            }
+
+            let fileList = Array.isArray(result.data) ? result.data : [];
+
+            deletedFiles = [];
+            uploadedFiles = [];
+            $('.filelist').empty(); // 파일 리스트 초기화
+
+            fileList.forEach(file => {
+                let newFile = {
+                    name: file.fileornm,
+                    size: file.filesize,
+                    type: file.fileextns,
+                    spuncode_id: file.spuncode_id,
+                    checkseq: file.checkseq,
+                    filepath: file.filepath,
+                    filesvnm: file.filesvnm
+
+                };
+                uploadedFiles.push(newFile); // 파일 리스트에 추가
+            });
+            console.log('파일목록확인', uploadedFiles)
+            updateFileListUI();
+            updateFileCount();
+
+
+        }
 
         function closeFilePopup(){
             const modal = document.querySelector('.modal3');
 
             modal.style.display = 'none';
+
+            updateFileCount();
         }
 
         function showPopup2(){
@@ -436,284 +593,213 @@
             }
         }
 
-        let searchusrval = document.getElementById('searchusr');
-        searchusrval.addEventListener('keyup', event => submitTextarea(event))
+        let searchesnameval = document.getElementById('searchesname');
+        searchesnameval.addEventListener('keyup', event => submitTextarea(event))
+        let searchsitename = document.getElementById('searchsitename');
+        searchsitename.addEventListener('keyup', event => submitTextarea(event))
 
-
-        document.readyState === 'complete' ? init() : window.onload = init;
-
-
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-        function init() {
-
-
-            initializeSelections();
-
-            let data2 = [];
-            let searchusr = $('#searchusr').val();
-
-            $.ajax({
-                url: '/api/inspec_report/read',
-                type: 'GET',
-                data: {
-                    'searchusr' : 'infinited',
-
-                },
-                async: false,
-                success: function(data){
-                    console.log('check1',data.data);
-                    if(data.data.length === 0){
-                        for(let i=0; i < 10; i++ ){
-                            data.data.push('example');
-                        }
-                    }
-                    console.log(data.data);
-                    data2 = data.data;
-                }
-            })
-
-            viewdata = new wijmo.collections.CollectionView(data2);
-            // 데이터 그리드에 바인딩
-            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                columns: columns,
-                itemsSource: viewdata
-            });
-            theGrid.rowHeaders.columns.splice(0,1);
-
-
-
-            // 선택이 변경될 때, 현재 항목 업데이트
-
-            //theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
-        }
-        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
-
-        <!-- 점검자 추가 버튼 이벤트-->
-        function addInputField(button) {
-            // 새로운 td 요소를 생성합니다.
-            var newTd = document.createElement('div');
-            newTd.className = 'input-btnbox';
-
-            // 새로운 input 요소를 생성합니다.
-            var newInput = document.createElement('input');
-            newInput.type = 'text';
-            newInput.className = 'wp100';
-            newInput.placeholder = '점검자';
-            newInput.name = 'checkusr'
-            newInput.maxLength = 5;
-
-            // 삭제 버튼을 생성합니다.
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '점검자 삭제';
-            deleteButton.onclick = function() {
-                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            };
-            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
-            deleteButton.style.color = 'red';
-            deleteButton.style.marginTop = '5px';
-            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-            newTd.appendChild(newInput);
-            newTd.appendChild(deleteButton);
-
-            // 클릭된 버튼의 부모 td 요소를 찾습니다.
-            var parentTd = button.parentElement;
-
-            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-        }
-
-        function deleteInputField(inputField) {
-            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-            var tdToDelete = inputField.parentElement;
-            tdToDelete.parentElement.removeChild(tdToDelete);
-        }
-
-        <!-- 점검자 추가 버튼 이벤트 끝-->
 
         let filelist = [];
 
+        $(document).ready(function (e) {
+            initializeSelections();
+            readPsResPonNm();
 
-        //검색
-        function searchData(){
-            let data = {
-                'searchusr' : $('#searchusr').val(),
-                'searchfrdate': $('#searchfrdate').val(),
-                'searchtodate': $('#searchtodate').val()
-            }
+            //등록일자 셋팅
+            document.getElementById("searchfrdate").value = getDateYYYYMMDD().slice(0, 7) + "-" + "01";
+            document.getElementById("searchtodate").value = getLastDayOfCurrentMonth();
+            searchData();
 
-            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+        });
+
+        function readPsResPonNm(){
+            let result = AjaxUtil.getSyncData('/api/fieldService/fsresponList');
 
             if(result.success){
-                console.log(result.data);
-                grid_binding(result.data);
+                console.log('succ', result.data);
+
+                populateSelectOptions(result, 'fsresponnm');
+
+            }else{
+                console.log('err');
             }
         }
 
-        function grid_binding(data){
-            var inspecDto = data;
-            var inspecData = [];
-            var cnt = 1;
-            for (let i = 0; i < inspecDto.length; i++) {
-                inspecData.push({
-                    spuncode: inspecDto[i]["spuncode"],
-                    spworknm: inspecDto[i]["spworknm"],
-                    spcompnm: inspecDto[i]["spcompnm"],
-                    spplannm: inspecDto[i]["spplannm"],
-                    checkdt: inspecDto[i]["checkdt"],
-                    checkusr: inspecDto[i]["checkusr"],
-                    checkarea: inspecDto[i]["checkarea"],
-                    checktmdt: inspecDto[i]["checktmdt"],
+        function populateSelectOptions(result, ele){
+            const selectElement = document.getElementById(ele);
 
-                });
-                cnt++;
-            }
+            result.data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item.id;
+                option.textContent = item.first_name;
 
-            theGrid.columns.clear();
-            theGrid.autoGenerateColumns = false;
-            viewdata.sourceCollection = inspecData;
-
-            for (var i = 0; i < columns.length; i++) {
-                var col = new wijmo.grid.Column(columns[i]);
-                theGrid.columns.push(col);
-            }
-
-
+                selectElement.appendChild(option);
+            });
         }
 
-
-
-        $(document).ready(function (e) {
-
-
-
+        const requiredFields = [
+            { id: 'srnumber', name: 'S-Number' },
+            { id: 'sitename', name: '사이트명' },
+            { id: 'purpvisit', name: '방문목적' },
+            { id: 'servicertm', name: '서비스발생시간' },
+            { id: 'serviceftm', name: '서비스종료시간' },
+            { id: 'servicecause', name: '서비스발생사유' },
+            { id: 'esname', name: 'ES명' },
+            { id: 'fsresponnm', name: '담당자' }
+        ]
 
             // 저장 시작
             $('#btnSave').click(function (e){
 
+                for(let i=0; i< requiredFields.length; i++){
+                    let chk = validateFieldById(requiredFields[i].id, requiredFields[i].name)
+
+                    if(!chk){
+                        return;
+                    }
+                }
+
 
                 Alert.confirm('', '저장하시겠습니까?', function() {
 
+                        //S면 저장, M이면 수정
+                        let changeFlag = "S";
+
                         let formData = new FormData();
-
-                        // 점검항목 값 가져오기
-                        const table = document.querySelector('table.doc-table');
-                        const rows = table.querySelectorAll('tbody tr');
-                        let results = [];
-                        let currentDivision = '';
-
-                        rows.forEach(row => {
-                            let cells = row.querySelectorAll('td');
-
-                            // Check if the first cell has rowspan attribute, indicating a new division
-                            if (cells[0].hasAttribute('rowspan')) {
-                                currentDivision = cells[0].innerText.trim();
-                            } else {
-                                cells = Array.from(cells);
-                                cells.unshift(document.createElement('td')); // Insert a placeholder cell
-                            }
-
-                            const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
-                            const inspectionResult = cells[2].innerText.trim();
-                            const improvement = cells[3].querySelector('textarea').value.trim();
-
-                            const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
-
-                            formData.append('doc-list', combinedText);
-
-                            results.push(combinedText);
-                        });
-                        // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
 
                         for (let i = 0; i < uploadedFiles.length; i++) {
                             formData.append('filelist', uploadedFiles[i]);
                         }
 
-                        const randomString = generateRandomStringWithDate();
+                        let SpunCodeValue = $('#spuncode').val();
+                        let randomString;
 
-                        var inputs = document.querySelectorAll('input[name="checkusr"]');
-                        var values = [];
+                        if(SpunCodeValue === ""){
+                            randomString = generateRandomStringWithDate();
 
-                        inputs.forEach(function (input) {
-                            values.push(input.value);
+                        }else{
+                            randomString = SpunCodeValue;
+                            changeFlag = "M";
+                        }
+                        formData.append('fsresponnm', $('#fsresponnm').val());
+                        formData.append('flag', changeFlag);
+                        formData.append('_csrf', csrfToken);
+                    const jsonData = {
+                        srnumber: $('#srnumber').val(),
+                        sitename: $('#sitename').val(),
+                        purpvisit: $('#purpvisit').val(),
+                        servicertm: $('#servicertm').val(),
+                        servicecause: $('#servicecause').val(),
+                        addregitem: $('#addregitem').val(),
+                        esname: $('#esname').val(),
+                        serviceftm: $('#serviceftm').val(),
+                        sncode: $('#sncode').val(),
+                        spuncode: randomString,
+                        spworkcd: $('#spworkcd').val(),
+                        spworknm: $('#spworknm').val(),
+                        spcompcd: $('#spcompcd').val(),
+                        spcompnm: $('#spcompnm').val(),
+                        spplancd: $('#spplancd').val(),
+                        spplannm: $('#spplannm').val()
 
+                    };
+                    formData.append('jsonData', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+                        // 삭제된 파일 목록 추가
+                        deletedFiles.forEach((file, index) => {
+                            formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                        });
+                    AjaxFunction.PostAjaxRequest('/api/fieldService/save', true, false, false, formData, fnSuccess, fnFailure)
+                    },
+
+                )
+            });
+            let fnFailure = function(){
+                Alert.alert('', '에러가발생하였습니다.');
+            }
+            let fnSuccess = function (res){
+                Alert.alert('', res.message, function(){
+                    clearForm();
+                    searchData();
+                    let inputFields = document.querySelectorAll('.addusr');
+                    if (inputFields) {
+
+                        inputFields.forEach(r => {
+                            deleteInputField(r);
                         })
 
-                        var checkusrString = values.join(',');
-
-
-                        // 다른 데이터를 FormData에 추가합니다.
-                        formData.append('supplier', $('#supplier').val());
-                        formData.append('checkdt', $('#checkdt').val());
-                        formData.append('checkstdt', $('#checkstdt').val());
-                        formData.append('checkendt', $('#checkendt').val());
-                        formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
-                        formData.append('checkarea', $('#checkarea').val());
-                        formData.append('randomuuid', randomString);
-                        //formData.append('_csrf', $('[name=_csrf]').val());
-                        formData.append('_csrf', csrfToken);
-                        formData.append('ReformList', $('#inspecreform1').val());
-                        formData.append('ReformList', $('#inspecreform2').val());
-                        formData.append('ReformList', $('#inspecreform3').val());
-                        formData.append('ReformList', $('#inspecreform4').val());
-                        formData.append('ReformList', $('#inspecreform5').val());
-
-
-                        $.ajax({
-                            url: '/api/inspec_report/save',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
-                            contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
-                            success: function (response) {
-                                if (response.success) {
-                                    Alert.alert('', response.message);
-                                }
-                            },
-                            error: function (jqXHR, textStatus, errorThrown) {
-                                Alert.alert('', '에러가발생하였습니다.');
-                            }
-                        });
-
-
-                    },
-                    function () {
                     }
-                )
-            })
+                });
+            }
 
+            function clearForm(){
+
+                //let dataset = DataLoad('/api/inspec_report/recentData', '').data;
+
+                ['srnumber', 'sitename', 'purpvisit', 'servicertm', 'fsresponnm', 'servicecause', 'addregitem', 'esname',
+                    'serviceftm', 'sncode'].forEach(id => {
+                    document.getElementById(id).value = '';
+                });
+
+                //document.getElementById('checkarea').value = dataset.checkarea;
+                //document.getElementById('checkusr').value = dataset.checkusr;
+                //document.getElementById('supplier').value = dataset.supplier;
+
+                $('#spuncode').val('');
+                $('.filelist').empty();
+
+                uploadedFiles = [];
+                deletedFiles = [];
+                //updateTabLink('spuncode');
+                updateFileCount();
+                resetFileInput($('.fileInput'));
+
+            }
+
+            //이거는 따로 못뺀다.
+            function updateFileCount() {
+                const fileCount = uploadedFiles.length;
+                $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+                $('.file_btn span').text(`(${fileCount})`);
+
+            }
+            // 파일 인풋 초기화
+            function resetFileInput($input) {
+                $input.val('');
+            }
 
             //삭제
             $('#btnDelete').click(function (e) {
 
                 let delList = [];
+                let selectedItems = theGrid.selectedItems;
 
-                delList = SelectItemPush();
+                console.log(selectedItems, '삭제목록');
 
-
-                Alert.confirm('', '삭제하시겠습니까?', function () {
-
+                for (let i = 0; i < selectedItems.length; i++) {
+                    delList.push(
+                        selectedItems[i].spuncode,
+                    );
+                }
+                Alert.confirm('', '삭제하시겠습니까?', function(){
                     let data = {
                         'spuncode': JSON.stringify(delList),
                         '_csrf': csrfToken
                     }
-
                     let fnSuccess = function (res) {
                         if (res.success) {
                             Alert.alert('', '삭제되었습니다.');
                             searchData();
                         }
                     }
+                    AjaxUtil.postAsyncData('/api/fieldService/delete', data, fnSuccess);
+                });
 
-                    AjaxUtil.postAsyncData('/api/inspec_report/delete', data, fnSuccess);
-
-
-                })
             })
 
 
-        });
+
     </script>
 </th:block>
 

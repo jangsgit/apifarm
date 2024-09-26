@@ -1743,7 +1743,7 @@
 
             uploadedFiles = [];
             deletedFiles = [];
-            updateTabLink('spuncode');
+            //updateTabLink('spuncode');
             updateFileCount();
             resetFileInput($('.fileInput'));
             resetAddedInputFields();
@@ -2093,10 +2093,6 @@
                             document.getElementById(str).value = data2.inspecitem[i].seq;
 
                         }
-
-
-                        //탭 수정으로 업더이트
-                        updateTabLink('spuncode');
 
                         let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
                         deletedFiles = [];
@@ -2944,9 +2940,9 @@
             { binding: 'result', header: '공사명', align: 'center', width: '*', minWidth: 100 },
             { binding: 'checkusr', header: '공사명', align: 'center', width: '0.5*', minWidth: 100 }]
 
-        let columns71 = [{ binding: 'checkarea', header: '사이트명', align: 'center', width: '0.5*', minWidth: 100},
-            { binding: 'result', header: '방문목적', align: 'center', width: '*', minWidth: 100 },
-            { binding: 'checkusr', header: '담당자', align: 'center', width: '0.5*', minWidth: 100 }]
+        let columns71 = [{ binding: 'sitename', header: '사이트명', align: 'center', width: '0.5*', minWidth: 100},
+            { binding: 'purpvisit', header: '방문목적', align: 'center', width: '*', minWidth: 100 },
+            { binding: 'fsresponnm', header: '담당자', align: 'center', width: '0.5*', minWidth: 100 }]
 
         let GridIdList = [theGrid11, theGrid21, theGrid31, theGrid41, theGrid51, theGrid61, theGrid71];
         let columnList = [columns11, columns21, columns31, columns41, columns51, columns61, columns71];
@@ -2978,7 +2974,7 @@
                     GridIdList[i].itemsSource = new wijmo.collections.CollectionView(wijmoData);
                 }
 
-
+                console.log('rmateData', rmateData);
                 ChartDataSetting(i, rMateDataLoad_ColumnsGraph(rmateData))
                 RunRmateGraph(`chart${i+1}`)
 

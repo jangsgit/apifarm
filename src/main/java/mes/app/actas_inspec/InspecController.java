@@ -101,8 +101,6 @@ public class InspecController {
         searchfrdate = Optional.ofNullable(searchfrdate).orElse("20000101");
         searchtodate = Optional.ofNullable(searchtodate).orElse("29991231");
 
-
-
         if(searchfrdate.isEmpty()){
             searchfrdate = "20000101";
         }
@@ -226,11 +224,9 @@ public class InspecController {
                 String filepath = deleteFileMap.get("filepath");
                 String filesvnm = deleteFileMap.get("filesvnm");
 
-                deleteFileFromDisk(filepath, filesvnm);
+                new FileUploaderService().deleteFileFromDisk(filepath, filesvnm);
 
                 tb_rp715Repository.deleteBySpuncodeIdAAndCheckseq(spuncode_id, checkseq);
-
-
 
             }
         }
@@ -249,21 +245,7 @@ public class InspecController {
         return result;
     }
 
-    private void deleteFileFromDisk(String filepath, String filesvnm){
 
-        if(filepath == null || filesvnm == null ){
-            return;
-        }
-
-        String fullPath = Paths.get(filepath, filesvnm).toString();
-        File file = new File(fullPath);
-
-        if(file.exists()){
-            file.delete();
-        } else {
-            System.out.println("파일이 존쟇지 않음");
-        }
-    }
 
 
     @PostMapping("/filesave")
@@ -282,7 +264,7 @@ public class InspecController {
         tb_rp715Repository.deleteBySpuncodeIdAAndRepyn(spuncode);
 
         if(!tb_rp715.isEmpty()){
-            deleteFileFromDisk(path, tb_rp715.get(0));
+            new FileUploaderService().deleteFileFromDisk(path, tb_rp715.get(0));
         }
 
 
@@ -348,7 +330,7 @@ public class InspecController {
 
             if(!FileItems.isEmpty()){
                 for (Map<String, Object> fileItem : FileItems) {
-                    deleteFileFromDisk(fileItem.get("filepath").toString(), fileItem.get("filesvnm").toString());
+                    new FileUploaderService().deleteFileFromDisk(fileItem.get("filepath").toString(), fileItem.get("filesvnm").toString());
                 }
             }
 

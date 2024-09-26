@@ -1,4 +1,9 @@
 package mes.app;
+import mes.domain.entity.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
@@ -33,4 +38,19 @@ public class UtilClass {
         LocalDate LastDay = yearMonth.atEndOfMonth();
         return LastDay.toString();
     }
+
+    public String getUserId(){
+        SecurityContext sc = SecurityContextHolder.getContext();
+        Authentication auth = sc.getAuthentication();
+        User user = (User) auth.getPrincipal();
+        return user.getUsername();
+    }
+
+    public String getUsername(){
+        SecurityContext sc = SecurityContextHolder.getContext();
+        Authentication auth = sc.getAuthentication();
+        User user = (User) auth.getPrincipal();
+        return user.getFirst_name();
+    }
+
 }

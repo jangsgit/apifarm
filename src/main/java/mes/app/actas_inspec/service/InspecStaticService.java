@@ -345,30 +345,31 @@ public class InspecStaticService {
 
 
 
-    public List<Map<String, Object>> getRP790List(String startDate, String endDate, String startHour, String endHour){
+    public List<Map<String, Object>> getRP810List(String startDate, String endDate, String startHour, String endHour){
+
 
         if(startDate.contains("-")){
             startDate = startDate.replaceAll("-","");
         }
+
         if(endDate.contains("-")){
             endDate = endDate.replaceAll("-","");
         }
 
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
-
         String sql;
 
         if(startHour == null && endHour == null){
             dicParam.addValue("startDate", startDate);
             dicParam.addValue("endDate", endDate);
 
-            sql = """
-                select educdt, educarea, worknm, educwusr   
-                from tb_rp790 
-                where educdt between :startDate and :endDate
-                order by educdt;
-                """;
 
+            sql = """
+                select TO_CHAR(indatem, 'YYYYMMDD') as checkdt, sitename, purpvisit, fsresponnm, indatem   
+                from tb_rp810
+                where TO_CHAR(indatem, 'YYYYMMDD') between :startDate and :endDate
+                order by checkdt;
+                """;
         }else{
             dicParam.addValue("startDate", startDate);
 
@@ -380,13 +381,14 @@ public class InspecStaticService {
             dicParam.addValue("endHour", endHour);
 
             sql = """
-                select educdt, educarea, worknm, educwusr, indatem      
-                from tb_rp790 
-                where indatem between :startHour::timestamptz and :endHour::timestamptz
-                order by educdt;
-                """;
-
+                select TO_CHAR(indatem, 'YYYYMMDD') as checkdt, sitename, purpvisit, fsresponnm, indatem   
+                from tb_rp810
+                where TO_CHAR(indatem, 'YYYYMMDD') = :startDate
+                and indatem between :startHour::timestamptz and :endHour::timestamptz
+                order by checkdt;      
+                  """;
         }
+
 
         List<Map<String, Object>> items = this.sqlRunner.getRows(sql, dicParam);
 

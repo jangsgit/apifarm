@@ -63,5 +63,21 @@ public class FileUploaderService {
 
     }
 
+    public void deleteFileFromDisk(String filepath, String filesvnm){
+
+        if(filepath == null || filesvnm == null ){
+            return;
+        }
+
+        String fullPath = Paths.get(filepath, filesvnm).toString();
+        File file = new File(fullPath);
+
+        if(file.exists()){
+            file.delete();
+        } else {
+            System.out.println("파일이 존쟇지 않음");
+        }
+    }
+
 
 }
