@@ -508,6 +508,13 @@
                         else {
                             // 조치 열인지 확인
                             if (c === theGrid.columns.getColumn('contnum').index) {
+                                let contnum = theGrid.getCellData(r, 'contnum', false);  // 현재 행의 조치 값
+                                if (!contnum) {
+                                    // contnum 값이 없으면 ContainshowPopup 실행 안 함
+                                    console.log('contnum 값이 없으므로 ContainshowPopup 실행 안 함');
+                                    return;
+                                }
+
                                 let contdt = theGrid.getCellData(r, 'contdt', false);  // 현재 행의 제어일자
                                 let isFirstContnumCell = true;  // 해당 제어일자 그룹의 첫 번째 셀인지 확인하기 위한 플래그
 
@@ -525,9 +532,6 @@
                                 } else {
                                     ContainshowPopup();  // 나머지 조치 셀은 showPopup 실행
                                 }
-                            } else {
-                                // 조치 열이 아닌 다른 셀은 showPopup 실행
-                                ContainshowPopup();
                             }
                         }
                     }
