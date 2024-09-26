@@ -563,7 +563,9 @@
         document.readyState === 'complete' ? init() : window.onload = init;
 
         // 오늘 날짜 설정
-        const today = new Date().toISOString().split('T')[0];
+        const date = new Date();
+        date.setHours(date.getHours() + 9); // UTC+9로 한국 시간 설정
+        const today = date.toISOString().split('T')[0];
         document.getElementById('registdt').value = today;
         document.getElementById('checkdt').value = today;
         document.getElementById('registdt2').value = today;
@@ -815,6 +817,7 @@
                         updateFileListUI();
                         updateFileCount();
                         // updateButton();
+                        updateDisable();
 
                     } else {
                         Alert.alert('', '불러오기에 실패했습니다. ');
@@ -984,7 +987,7 @@
             updateFileCount();
             resetFileInput($('.fileInput'));
             // updateButton();
-
+            updateDisable();
             // endresult의 첫 번째 옵션을 선택
             const endresultSelect = document.getElementById('endresult');
             if (endresultSelect.options.length > 0) {
@@ -1304,6 +1307,7 @@
             // 초기화된 파일 개수 업데이트
             updateFileCount2();
             resetFileInput($('.fileInput2'));
+            updateDisable();
             $('.text-count').text('0/100'); // 글자 수 0으로 초기화
             // 특정 필드에 대한 btn-clear 숨김 처리
             $('#doctitle').each(function () {
@@ -1378,7 +1382,7 @@
                         $('.filelist2').empty(); // 파일 리스트 초기화
                         updateFileCount2();
                         updateFileListUI2();
-
+                        updateDisable();
 
                     } else {
                         Alert.alert('', '불러오기에 실패했습니다. ');
@@ -1388,6 +1392,25 @@
                     Alert.alert('', '에러가 발생하였습니다.');
                 }
             });
+        }
+
+        // 수정불가
+        function updateDisable() {
+            const checkseq = document.getElementById('checkseq').value;
+            const checkseq_doc = document.getElementById('checkseq_doc').value;
+            const checkdt = document.getElementById('checkdt');
+            const registdt2 = document.getElementById('registdt2');
+
+            if (checkseq) {
+                checkdt.disabled = true;
+            } else {
+                checkdt.disabled = false;
+            }
+            if (checkseq_doc) {
+                registdt2.disabled = true;
+            } else {
+                registdt2.disabled = false;
+            }
         }
 
         // 그리드에서 삭제 버튼

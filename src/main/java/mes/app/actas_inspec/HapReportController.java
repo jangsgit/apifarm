@@ -218,15 +218,19 @@ public class HapReportController {
             TBRP725Repository.deleteAll(tbRp725List);
         }
 
+        // 파일 시퀀스 생성 로직
+        Optional<String> maxFileseqValue = TBRP725Repository.findMaxCheckseq(nspworkcd, nspcompcd, nspplancd, ncheckdt, finalCheckno);
+        String newCheckSeq = maxFileseqValue.map(s -> String.valueOf(Integer.parseInt(s) + 1)).orElse("1");
+
         // 파일 처리
         if (files != null) {
+            List<TB_RP725> tbRp725List = new ArrayList<>();
             for (MultipartFile multipartFile : files) {
 
-                // 파일 시퀀스 생성 로직
-                Optional<String> maxFileseqValue = TBRP725Repository.findMaxCheckseq(nspworkcd, nspcompcd, nspplancd, ncheckdt, finalCheckno);
-                String newCheckSeq = maxFileseqValue.map(s -> String.valueOf(Integer.parseInt(s) + 1)).orElse("1");
-
                 TB_RP725_PK pk2 = new TB_RP725_PK(nspworkcd, nspcompcd, nspplancd, ncheckdt, finalCheckno, newCheckSeq);
+                int newCheckSeqInt = Integer.parseInt(newCheckSeq);
+                newCheckSeqInt++;
+                newCheckSeq = String.valueOf(newCheckSeqInt);
 
                 TB_RP725 TBRP725 = new TB_RP725();
                 TBRP725.setId(pk2);
@@ -264,11 +268,20 @@ public class HapReportController {
                 TBRP725.setInusernm(user.getFirst_name());
                 TBRP725.setInuserid(user.getUsername());
 
-                if (!hapReportService.saveFile(TBRP725)) {
-                    result.success = false;
-                    result.message = "파일 저장에 실패하였습니다.";
-                    return result;
-                }
+                // 리스트에 추가
+                tbRp725List.add(TBRP725);
+            }
+            try {
+                TBRP725Repository.saveAll(tbRp725List); // saveAll() 메서드 호출
+                // 성공 시
+                result.success = true;
+                result.message = "파일 저장에 성공하였습니다.";
+            } catch (Exception e) {
+                // 실패 시 예외 처리
+                result.success = false;
+                result.message = "파일 저장에 실패하였습니다.";
+                e.printStackTrace(); // 디버깅을 위한 예외 출력
+                return result;
             }
         }
 

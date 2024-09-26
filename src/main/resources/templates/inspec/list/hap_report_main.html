@@ -997,7 +997,7 @@
             initializeAutoComplete(nameInput.id, '/api/inspec/hap/autocomplete', nameSuggestionId);
         }
 
-        // 신규등록 버튼 클릭
+        // 초기화
         function clearForm() {
             ['checkdt', 'checkno', 'checknm', 'checkrem', 'chkaddres'].forEach(id => {
                 document.getElementById(id).value = '';
@@ -1076,13 +1076,16 @@
         function updateTabLink() {
             const checkno = document.getElementById('checkno').value;
             const inputTabLink = document.getElementById('inputTabLink');
+            const checkdt = document.getElementById('checkdt');
 
             if (checkno) {
                 inputTabLink.textContent = '수정';
                 inputTabLink.title = '수정';
+                checkdt.disabled = true;
             } else {
                 inputTabLink.textContent = '등록';
                 inputTabLink.title = '등록';
+                checkdt.disabled = false;
             }
         }
 
