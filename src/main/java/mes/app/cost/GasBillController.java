@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,8 +68,49 @@ public class GasBillController {
     }
 
 
+    @GetMapping("/mainread")
+    public AjaxResult mainReadList(@RequestParam(value = "searchfrdate", required = false) String searchfrdate,
+                                   @RequestParam(value = "searchtodate", required = false) String searchtodate,
+                                   @RequestParam(value = "searchYear", required = false) String searchYear,
+                                   @RequestParam(value = "searchfrYear", required = false) String searchfrYear,
+                                   @RequestParam(value = "searchtoYear", required = false) String searchtoYear,
+                                   @RequestParam(value = "searchfrMonth", required = false) String searchfrMonth,
+                                   @RequestParam(value = "searchtoMonth", required = false) String searchtoMonth,
+                                   @RequestParam(value = "searchType", required = true) String searchType) {
 
-    //    pdf 파일 업로드 및 db 저장
+        List<Map<String, Object>> items = new ArrayList<>();
+        String startdate = null;
+        String endDate = null;
+
+        switch (searchType) {
+            case "hourly":
+                startdate = searchfrdate.replaceAll("-", "");
+                // 시간 관련 조회 로직 추가 가능
+                break;
+            case "monthly":
+                startdate = searchfrdate.replaceAll("-", "");
+                endDate = searchtodate.replaceAll("-", "");
+                break;
+            case "yearly":
+                startdate = searchfrYear + "0101";
+                endDate = searchtoYear + "1231";
+                break;
+            // 필요한 경우 다른 타입의 조건 추가
+            default:
+                throw new IllegalArgumentException("Invalid search type: " + searchType);
+        }
+
+        // 서비스에서 데이터 가져오기
+        List<Map<String, Object>> mainDataList = gasBillService.getmainData(startdate, endDate, searchType);
+
+        AjaxResult result = new AjaxResult();
+        result.data = mainDataList;
+
+        return result;
+    }
+
+
+    // pdf 파일 업로드 및 db 저장
     @PostMapping("/upload")
     @Transactional
     public AjaxResult uploadFile(@RequestParam("file") MultipartFile file,
@@ -99,11 +141,11 @@ public class GasBillController {
             // 업로드된 파일을 임시 위치에 저장
             tempFile = File.createTempFile("uploaded-", ".pdf");
             file.transferTo(tempFile);
-            logger.info("파일 업로드 완료, 임시 파일 경로: {}", tempFile.getAbsolutePath());
+//            logger.info("파일 업로드 완료, 임시 파일 경로: {}", tempFile.getAbsolutePath());
 
             // PDF 파일을 처리하고 텍스트를 추출
             List<String> extractedTexts = pdfProcessingService.processPdf(tempFile.getAbsolutePath());
-            logger.info("PDF 파일 처리 완료, 추출된 텍스트 개수: {}", extractedTexts.size());
+//            logger.info("PDF 파일 처리 완료, 추출된 텍스트 개수: {}", extractedTexts.size());
 
             // OCR 응답 파싱 및 데이터 저장
             boolean isStandymSet = false;
@@ -137,7 +179,23 @@ public class GasBillController {
 
                 }
 
+                // 각 페이지에서 텍스트를 추출하고 amt와 divisor 값을 계산
 
+
+
+             /*   // 예시: askamt와 usageValues가 null이 아닌지 확인 후 값을 설정
+                if (usageValues != null && usageValues.size() == 6 && askamt != null) {
+                    BigDecimal useuamt = askamt.divide(usageValues.get(1), 4, RoundingMode.HALF_UP);
+                    rp410.setUseuamt(useuamt);
+                } else {
+                    // 오류 처리: null 값이 발생했을 경우에 대한 로그 남기기
+                    if (usageValues == null || usageValues.size() != 6) {
+                        System.err.println("usageValues가 null이거나 크기가 6이 아닙니다.");
+                    }
+                    if (askamt == null) {
+                        System.err.println("askamt가 null입니다.");
+                    }
+                }*/
 
                 // 가스사용료 값 추출 및 저장
                 BigDecimal gasUseAmt = extractGasUseAmt(parsedText);
@@ -181,7 +239,42 @@ public class GasBillController {
                     rp410.setTrunamt(trunAmt);
                 }
 
+            }
 
+            BigDecimal amt = null;
+            BigDecimal divisor = null;
+            for (int i = 0; i < extractedTexts.size(); i++) {
+                String page = extractedTexts.get(i);
+                System.out.println("페이지 " + (i + 1) + ": " + page);  // 페이지 텍스트 출력
+                List<BigDecimal> valuesDivide = extractValues(page);
+
+                if (valuesDivide != null && valuesDivide.size() == 3) {
+                    if(valuesDivide.get(0) != null){
+                        amt = valuesDivide.get(0);
+
+                    }
+                    if(valuesDivide.get(2) != null){
+                        divisor = valuesDivide.get(2);
+                    }
+
+                    // amt와 divisor가 null인지 확인
+                    if (amt == null) {
+                        System.out.println("페이지 " + (i + 1) + ": amt가 null입니다.");
+                    }
+                    if (divisor == null) {
+                        System.out.println("페이지 " + (i + 1) + ": divisor가 null입니다.");
+                    }
+                    // 유효한 값이 있을 때만 나눗셈 수행
+                } else {
+                    System.out.println("페이지 " + (i + 1) + ": 값을 추출할 수 없습니다.");
+                }
+            }
+            if (amt != null && divisor != null && divisor.compareTo(BigDecimal.ZERO) != 0) {
+                BigDecimal useuamt = amt.divide(divisor, 4, RoundingMode.HALF_UP);
+                rp410.setUseuamt(useuamt);
+//                System.out.println("페이지 " + (i + 1) + ": useuamt 설정 완료: " + useuamt);
+            } else {
+//                System.out.println("페이지 " + (i + 1) + ": 나눗셈을 수행할 수 없습니다.");
             }
 
 
@@ -201,7 +294,7 @@ public class GasBillController {
 
                 // 데이터베이스에 엔티티 저장
                 rp410 = this.tbRp410Repository.save(rp410);
-                logger.info("데이터베이스에 저장된 엔티티: {}", rp410);
+//                logger.info("데이터베이스에 저장된 엔티티: {}", rp410);
 
                 result.success = true;
                 result.message = "PDF 파일 처리 및 데이터 저장 완료";
@@ -211,7 +304,7 @@ public class GasBillController {
 
             // 5. 임시 파일 삭제
             if (tempFile.delete()) {
-                logger.info("임시 파일 삭제 완료");
+//                logger.info("임시 파일 삭제 완료");
             } else {
                 logger.warn("임시 파일 삭제 실패, 파일 경로: {}", tempFile.getAbsolutePath());
             }
@@ -231,7 +324,7 @@ public class GasBillController {
             if (tempFile != null && tempFile.exists()) {
                 try {
                     tempFile.delete();
-                    logger.info("임시 파일 finally 블록에서 삭제 완료");
+//                    logger.info("임시 파일 finally 블록에서 삭제 완료");
                 } catch (Exception e) {
                     logger.error("finally 블록에서 임시 파일 삭제 중 오류 발생", e);
                 }
@@ -268,18 +361,19 @@ public class GasBillController {
 
     //  ASKAMT 값을 추출하는 메서드
     private BigDecimal extractAskamt(String text) {
-        // ASKAMT에 해당하는 값을 추출하는 로직
-        Pattern pattern = Pattern.compile("금액은\\s*(\\d{1,3}(,\\d{3})*)원"); // 금액 추출을 위한 정규식
+        System.out.println("extractAskamt: " + text);  // 텍스트 출력
+        Pattern pattern = Pattern.compile("금액은\\s*(\\d{1,3}(,\\d{3})*)원");
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
-            String amountString = matcher.group(1); // 금액 문자열을 가져옴
-            // 쉼표 제거 후 BigDecimal로 변환
-            String cleanedAmountString = amountString.replaceAll(",", ""); // 쉼표 제거
-            return new BigDecimal(cleanedAmountString); // 문자열을 BigDecimal로 변환
+            String amountString = matcher.group(1);
+            System.out.println("추출된 금액 문자열: " + amountString);  // 추출된 문자열 출력
+            String cleanedAmountString = amountString.replaceAll(",", "");
+            return new BigDecimal(cleanedAmountString);
         }
-
         return null;
     }
+
+
 
     private List<BigDecimal> extractSixUsageValues(String text) {
         // 마지막 사용열량(MJ) 다음에 나오는 여섯 개의 값을 추출하는 정규식
@@ -396,10 +490,63 @@ public class GasBillController {
         return null;
     }
 
+    private List<BigDecimal> extractTwoUsageValues(String text) {
+        System.out.println("extractTwoUsageValues: " + text);  // 텍스트 출력
+        Pattern pattern = Pattern.compile("사용열량\\(MJ\\)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)");
+        Matcher matcher = pattern.matcher(text);
+
+        if (matcher.find()) {
+            String smuseqtyString = matcher.group(1);
+            String smusehqtyString = matcher.group(4);
+            System.out.println("추출된 사용열량: " + smuseqtyString + ", " + smusehqtyString);  // 추출된 값 출력
+            String cleanedSmuseqtyString = smuseqtyString.replaceAll(",", "");
+            String cleanedSmusehqtyString = smusehqtyString.replaceAll(",", "");
+
+            BigDecimal smuseqty = new BigDecimal(cleanedSmuseqtyString);
+            BigDecimal smusehqty = new BigDecimal(cleanedSmusehqtyString);
+
+            return Arrays.asList(smuseqty, smusehqty);
+        }
+        return null;
+    }
+
+
+    private List<BigDecimal> extractValues(String text) {
+        // 금액 추출 패턴
+        Pattern amountPattern = Pattern.compile("금액은\\s*(\\d{1,3}(,\\d{3})*)원");
+        Matcher amountMatcher = amountPattern.matcher(text);
+
+        BigDecimal askamt = null;
+        if (amountMatcher.find()) {
+            String amountString = amountMatcher.group(1);
+            System.out.println("추출된 금액 문자열: " + amountString);  // 추출된 문자열 출력
+            String cleanedAmountString = amountString.replaceAll(",", "");
+            askamt = new BigDecimal(cleanedAmountString);
+        }
+
+        // 사용열량 추출 패턴
+        Pattern usagePattern = Pattern.compile("사용열량\\(MJ\\)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)\\s*(\\d{1,3}(,\\d{3})*(\\.\\d{4})?)");
+        Matcher usageMatcher = usagePattern.matcher(text);
+
+        BigDecimal smuseqty = null;
+        BigDecimal smusehqty = null;
+        if (usageMatcher.find()) {
+            String smuseqtyString = usageMatcher.group(1);
+            String smusehqtyString = usageMatcher.group(4);
+            System.out.println("추출된 사용열량: " + smuseqtyString + ", " + smusehqtyString);  // 추출된 값 출력
+            String cleanedSmuseqtyString = smuseqtyString.replaceAll(",", "");
+            String cleanedSmusehqtyString = smusehqtyString.replaceAll(",", "");
+
+            smuseqty = new BigDecimal(cleanedSmuseqtyString);
+            smusehqty = new BigDecimal(cleanedSmusehqtyString);
+        }
+
+        // 추출된 값들을 Arrays.asList로 반환
+        return Arrays.asList(askamt, smuseqty, smusehqty);
+    }
 
 
 }
 
-//            String useuamt = extractedTexts.get(9); // 사용단가 (이거 pdf에서 못본거같은데 물어봐야함 )
 
 

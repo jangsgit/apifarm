@@ -56,7 +56,7 @@ public class PdfProcessingService {
         List<String> extractedTexts = new ArrayList<>();
         try (PDDocument document = PDDocument.load(new File(pdfFilePath))) {
             int numberOfPages = document.getNumberOfPages();
-            logger.info("Total number of pages in PDF: " + numberOfPages);
+//            logger.info("Total number of pages in PDF: " + numberOfPages);
 
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             String fileUploadPath = settings.getProperty("file_upload_path") + "도시가스청구서/";
@@ -65,7 +65,7 @@ public class PdfProcessingService {
             Path directoryPath = Paths.get(fileUploadPath);
             if (!Files.exists(directoryPath)) {
                 Files.createDirectories(directoryPath);
-                logger.info("Directory created at: " + fileUploadPath);
+//                logger.info("Directory created at: " + fileUploadPath);
             }
 
 
@@ -73,7 +73,7 @@ public class PdfProcessingService {
                 try {
                     BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300);
                     String imagePath = fileUploadPath + "page_" + page + ".jpg";
-                    logger.info("Saving page " + page + " as image to: " + imagePath);
+//                    logger.info("Saving page " + page + " as image to: " + imagePath);
 
                     ImageIO.write(bim, "jpg", new File(imagePath));
 
@@ -113,12 +113,12 @@ public class PdfProcessingService {
 
 
 
-        // HTTP 요청 정보 로그 출력
-        logger.info("Request URL: " + OCR_API_URL);
-        logger.info("Request Method: POST");
-        logger.info("Content-Type: multipart/form-data; boundary=" + boundary);
-        logger.info("X-OCR-SECRET: " + SECRET_KEY);
-        logger.info("X-NCP-APIGW-API-KEY-ID: " + API_KEY_ID);
+//        // HTTP 요청 정보 로그 출력
+//        logger.info("Request URL: " + OCR_API_URL);
+//        logger.info("Request Method: POST");
+//        logger.info("Content-Type: multipart/form-data; boundary=" + boundary);
+//        logger.info("X-OCR-SECRET: " + SECRET_KEY);
+//        logger.info("X-NCP-APIGW-API-KEY-ID: " + API_KEY_ID);
 
 
         // JSON 데이터 준비
@@ -137,8 +137,8 @@ public class PdfProcessingService {
         jsonPart.append("  \"enableTableDetection\": true\n"); // 테이블 감지 활성화
         jsonPart.append("}\r\n");
 
-        // JSON 부분 로그 출력
-        logger.info("Request JSON part: \n" + jsonPart.toString());
+//        // JSON 부분 로그 출력
+//        logger.info("Request JSON part: \n" + jsonPart.toString());
 
         // JSON 데이터를 출력 스트림에 쓰기
         OutputStream outputStream = connection.getOutputStream();
@@ -153,7 +153,7 @@ public class PdfProcessingService {
 
 
         // 파일 부분 로그 출력
-        logger.info("Request file part: \n" + filePart.toString());
+//        logger.info("Request file part: \n" + filePart.toString());
         outputStream.write(filePart.toString().getBytes("UTF-8"));
 
         // 이미지 파일을 출력 스트림에 쓰기
@@ -171,7 +171,7 @@ public class PdfProcessingService {
 
         // 응답 처리
         int responseCode = connection.getResponseCode();
-        logger.info("Response Code: " + responseCode);
+//        logger.info("Response Code: " + responseCode);
 
         BufferedReader reader;
         if (responseCode == 200) {
@@ -187,7 +187,7 @@ public class PdfProcessingService {
         reader.close();
 
         String responseContent = response.toString();
-        logger.info("Raw response: \n" + responseContent);
+//        logger.info("Raw response: \n" + responseContent);
 
         // 응답 데이터가 JSON 형식인지 확인하고, 파싱 시도
         ObjectMapper objectMapper = new ObjectMapper();
@@ -208,7 +208,7 @@ public class PdfProcessingService {
             JsonNode rootNode = objectMapper.readTree(response);
 
             // 응답의 전체 구조를 로그로 기록
-            logger.info("Parsed JSON structure: " + rootNode.toPrettyString());
+//            logger.info("Parsed JSON structure: " + rootNode.toPrettyString());
 
             StringBuilder extractedText = new StringBuilder();
 
