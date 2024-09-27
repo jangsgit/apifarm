@@ -99,7 +99,7 @@
                                 <!--                                        삭제-->
                                 <!--                                    </a>-->
                                 <!--                                </li>-->
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-edit" id="btnSave" title="저장" onclick="saveForm()">
                                         <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
                                         저장
@@ -234,7 +234,7 @@
                         </div>
                         <div class="button-wrap">
                             <ul>
-                                <li>
+                                <li th:if="${write_flag}">
                                     <a class="btn btn-delete" title="삭제" onclick="checkAndDelete();">
                                         <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
                                         삭제
@@ -321,7 +321,7 @@
             </div>
             <div class="popup-button">
                 <button onclick="closePopup()" class="btn-popup-close">취소</button>
-                <button class="btn-navy" onclick="checkAndSave()">저장</button>
+                <button th:if="${write_flag}" class="btn-navy" onclick="checkAndSave()">저장</button>
             </div>
         </div>
     </div> <!-- //dashboard-layout-popup end -->
@@ -352,6 +352,9 @@
             document.getElementById('spworkcd').addEventListener('change', fetchListData);
             document.getElementById('spcompcd').addEventListener('change', fetchListData);
             document.getElementById('spplancd').addEventListener('change', fetchListData);
+            document.getElementById('spworkcd').addEventListener('change', clearForm);
+            document.getElementById('spcompcd').addEventListener('change', clearForm);
+            document.getElementById('spplancd').addEventListener('change', clearForm);
         }
 
         class RestrictedMergeManager extends wijmo.grid.MergeManager {
