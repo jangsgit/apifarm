@@ -10,6 +10,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class TB_RP320_Id implements Serializable {
+	private String spworkcd;
+	private String spcompcd;
+	private String spplancd;
+	
 	private String standdt;
 	private String powerid;
+	private Integer powtime;
 }

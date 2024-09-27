@@ -127,7 +127,7 @@
                                 <dt>&nbsp;</dt>
                                 <dd>
                                     <li>
-                                        <a class="btn btn-delete" title="검색" id="searchButton1" onclick="search()">
+                                        <a class="btn btn-delete" title="검색" id="searchButton1">
                                             <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                             검색
                                         </a>
@@ -251,7 +251,7 @@
                                             <input type="date" id="" name="startDate" value="2024-09-20">
                                         </li>-->
                                         <li>
-                                            <input type="date" id="date2_tab3" name="">
+                                            <input type="date" id="date2_tab3" name="" value="">
                                             <label for="date2_tab3" class="hide"></label>
                                         </li>
                                     </ul>
@@ -272,7 +272,7 @@
                                 <dt>&nbsp;</dt>
                                 <dd>
                                     <li>
-                                        <a class="btn btn-delete" title="검색" id="searchButton3" onclick="search()">
+                                        <a class="btn btn-delete" title="검색" id="searchButton3">
                                             <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
                                             <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                             검색
@@ -285,11 +285,11 @@
 
                     <div class="row" style="margin-bottom: 23px;">
                         <div class="chart-wrap">
-                            <div id="chartHolder3" style="height:545px; width:1560px;"></div>
+<!--                            <div id="chartHolder3" style="height:545px; width:1560px;"></div>-->
                         </div>
                     </div>
                     <div class="container-fluid">
-                        <div id="theGrid3" style="height:149px; width:100%;"></div>
+                        <div id="theGrid3" style="height:545px; width:100%;"></div>
                     </div>
                 </section>
 
@@ -303,11 +303,11 @@
                                 </dt>
                                 <dd>
                                     <ul class="date-box" id="dateBoxContainer">
-                                        <li id="startDateContainer">
-                                            <input type="month" id="startDate" name="startDate" value="2024-01">
+                                        <li>
+                                            <input type="month" id="startDate" name="startDate">
                                         </li>
-                                        <li id="endDateContainer">
-                                            <input type="month" id="endDate" name="endDate" value="2024-12">
+                                        <li>
+                                            <input type="month" id="endDate" name="endDate">
                                         </li>
                                     </ul>
                                 </dd>
@@ -327,7 +327,7 @@
                                 <dt>&nbsp;</dt>
                                 <dd>
                                     <li>
-                                        <a class="btn btn-delete" title="검색" id="searchButton4" onclick="search()">
+                                        <a class="btn btn-delete" title="검색" id="searchButton4">
                                             <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
                                             <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                             검색
@@ -474,12 +474,12 @@
                                     조회기간<span class="eq">*</span>
                                 </dt>
                                 <dd>
-                                    <ul class="date-box" id="dateBoxContainer">
-                                        <li id="startDateContainer">
-                                            <input type="month" id="startDate" name="startDate" value="2023-01">
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="month" id="startDate2" name="startDate">
                                         </li>
-                                        <li id="endDateContainer">
-                                            <input type="month" id="endDate" name="endDate" value="2024-12">
+                                        <li>
+                                            <input type="month" id="endDate2" name="endDate">
                                         </li>
                                     </ul>
                                 </dd>
@@ -755,136 +755,556 @@
 
     <script type="text/javascript">
 
-        let theGrid1, theGrid2;
-        let viewdata1, viewdata2;
+        let theGrid1, theGrid2, theGrid3;
+        let viewdata1, viewdata2, viewdata3;
+
+        document.readyState === 'complete' ? init() : window.onload = init;
 
         // 페이지 초기화 함수
         function init() {
             initializeSelections();  //위에 산단, 발전소명 관련 함수
 
-            loadData(); // 데이터 로드 및 그리드 초기화 함수 호출
+            // loadData(); // 데이터 로드 및 그리드 초기화 함수 호출
+            // loadDataForTab3();
             setCurrentDate(); // 현재 날짜 설정
             loadPowerIds(); // 발전기코드 옵션
             setStartAndEndDate('tab1'); // 시작일, 종료일 설정 (tab1)
             setStartAndEndDate('tab2'); // 시작일, 종료일 설정 (tab2)
+            setStartAndEndMonth('tab4');
+            setStartAndEndMonth('tab5');
 
             initGrid();
             initGrid2();
+            initGrid3();
 
-            // ==========
-
-            // document.getElementById("periodType").value = "monthly"; // 기본으로 월별이 선택되도록 설정
-
-            // loadYearlyData(); // tab1 연도 데이터를 로드
-            // loadYearlyDataTab2(); // tab2 연도 데이터를 로드
-
-            // updateYearInPeriod(); // 조회연도 변경 시 조회기간의 연도도 동기화
-            // updatePeriodInputs(); // 페이지 로드 시 startDate와 endDate 초기화
-            loadGeneratorNames(); // 발전기명을 서버에서 로드
-            // loadMonthlyData(); // 페이지 로드 시 월별 데이터 자동 로드
-
-            // 슬라이드 차트 초기화
-            // chartReadyHandler("chart1", "chartHolder1", []); // 초기에는 빈 데이터로 초기화
-            // chartReadyHandler2("chart2", "chartHolder2", []);
-
-            // tab3 그리드 초기화
-            // theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-            //     columns: [] // 초기 열 설정
-            // });
-
-            // tab4 그리드 초기화
-            // theGrid4 = new wijmo.grid.FlexGrid('#theGrid4', {
-            //     autoGenerateColumns: false, // 그리드 초기화 시 자동 생성된 열을 비활성화
-            //     columns: [] // 초기 열 설정
-            // });
-
-            // 0919 하드코딩
-
-            // tab3와 tab4의 초기화는 해당 탭이 선택될 때만 수행하도록 변경
-            // $('ul.tab-links li a').on('click', function () {
-            //     var currentAttrValue = $(this).attr('href');
-            //     if (currentAttrValue === '#tab3') {
-            //         initTab3();
-            //     } else if (currentAttrValue === '#tab4') {
-            //         initTab4Charts();
-            //         initTab4Grids();
-            //     }
-            // });
-
+            // 각 탭에 대한 초기 데이터 로드 및 차트 초기화
+            initTab1();
+            // initTab2();
+            initTab3();
+            initTab4();
+            initTab5();
         }
 
-        // DOM 로드 완료 시 실행
-        $(document).ready(function (e) {
+        function initTab1() {
+            // Tab1 초기화 로직
+            loadDataForTab1();
+        }
 
-            // 임시로 막아둠
-            document.getElementById("btnShowDateList").onclick = function(e) {
-                e.preventDefault();  // 첫 번째 버튼 클릭 이벤트 막기
-            };
-            document.getElementById("btnShowDateList2").onclick = function(e) {
-                e.preventDefault();  // 두 번째 버튼 클릭 이벤트 막기
-            };
+        // function initTab2() {
+        //     // Tab2 초기화 로직
+        //     loadDataForTab2();
+        // }
 
-            init();
+        function initTab3() {
+            // Tab3 초기화 로직
+            loadDataForTab3();
+        }
 
-            // 초기 활성화된 탭에 대해서만 차트를 초기화
-            // rMateChartH5.create("chart1", "chartHolder1", "rMateOnLoadCallFunction=chartReadyHandler", "120%", "100%");
+        function initTab4() {
+            // Tab4 초기화 로직
+            $.ajax({
+                url: '/api/sales/gene/dateRange',
+                type: 'GET',
+                success: function(response) {
+                    if (response && response.minDate && response.maxDate) {
+                        // 날짜 형식을 yyyy-MM으로 변환
+                        let startDate = formatDateStringToYM(response.minDate);
+                        let endDate = formatDateStringToYM(response.maxDate);
 
-            // $('#chartHolder1').data('initialized', true);
+                        // 시작일과 종료일 입력 필드에 값을 설정
+                        document.getElementById('startDate').value = startDate;
+                        document.getElementById('endDate').value = endDate;
 
-
-            $('ul.tab-links li a').on('click', function () {
-                var currentAttrValue = $(this).attr('href');
-
-                // 모든 탭 숨기기
-                $('.tab-contents .tab-item').hide();
-
-                // 현재 탭 보이기
-                $(currentAttrValue).show();
-
-                // 현재 탭 활성화
-                $(this).parent('li').addClass('active').siblings().removeClass('active');
-
-                // if (currentAttrValue === '#tab3') {
-                //     if (!$('#chartHolder1').data('initialized')) {
-                //         rMateChartH5.create("chart1", "chartHolder1", "rMateOnLoadCallFunction=chartReadyHandler", "120%", "100%");
-                //         $('#chartHolder1').data('initialized', true);
-                //         loadMonthlyData(); // 월별 데이터 로드 및 차트 업데이트
-                //     } else {
-                //         updateChart('chart1', 'chartHolder1');
-                //     }
-                // }
-
-                // if (currentAttrValue === '#tab4') {
-                //     if (!$('#chartHolder2').data('initialized')) {
-                //         rMateChartH5.create("chart2", "chartHolder2", "rMateOnLoadCallFunction=chartReadyHandler2", "120%", "100%");
-                //         $('#chartHolder2').data('initialized', true);
-                //         loadInitialDataTab2(); // Tab2 초기 데이터 로드 및 차트 생성
-                //     } else {
-                //         updateChart('chart2', 'chartHolder2');
-                //     }
-                // }
-
-                // 0919
-                if (currentAttrValue === '#tab3') {
-                    initTab3Chart();
-                    initTab3Grid();
-                } else if (currentAttrValue === '#tab4') {
-                    initTab4Charts();
-                    initTab4Grids();
-                } else if (currentAttrValue === '#tab5') {
-                    initTab5Charts();
-                    initTab5Grids();
+                        // 데이터 로드
+                        loadDataForTab4();
+                    } else {
+                        console.error('서버로부터 날짜 범위를 받아오지 못했습니다.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching date range:', error);
                 }
             });
+        }
 
-            // 초기 탭 설정 (페이지 로드 시 첫 번째 탭 활성화)
+
+
+        function initTab5() {
+            // 서버에서 날짜 범위 가져오기
+            $.ajax({
+                url: '/api/sales/gene/dateRange',
+                type: 'GET',
+                success: function(response) {
+                    if (response && response.minDate && response.maxDate) {
+                        // 날짜를 'yyyy-MM' 형식으로 변환하고 입력 필드에 설정
+                        let startDate = formatDateStringToYM(response.minDate);
+                        let endDate = formatDateStringToYM(response.maxDate);
+                        document.getElementById('startDate2').value = startDate;
+                        document.getElementById('endDate2').value = endDate;
+
+                        // 데이터 로드
+                        loadDataForTab5();
+                    } else {
+                        console.error('서버로부터 날짜 범위를 받아오지 못했습니다.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching date range:', error);
+                }
+            });
+        }
+
+
+        // tab1 ====================================================
+        function loadDataForTab1() {
+            $.ajax({
+                url: '/api/sales/gene/read',
+                type: 'GET',
+                success: function(response) {
+                    if (response && response.length > 0) {
+                        bindGridData(response);
+                        // 차트 초기화 로직 추가
+                        // initChartTab1(response);
+
+                        const dates = response.map(item => item.standdt);  // 날짜 데이터를 반환
+                        setStartAndEndDate(dates);
+                    } else {
+                        console.log("No data returned for tab 1");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 1:', error);
+                }
+            });
+        }
+
+        // 그리드에 데이터 바인딩
+        function bindGridData(data) {
+            // NO에 1부터 시작하는 번호 설정
+            data.forEach((item, index) => {
+                item.rownum = index + 1; // 1부터 시작하는 번호 설정
+                calculateSumForRow(item); // 각 행의 합계를 계산하여 반영
+            });
+
+            // `tab1`의 그리드 데이터 바인딩
+            viewdata1 = new wijmo.collections.CollectionView(data);
+            initGrid(viewdata1);
+
+            // 수정: trackChanges 옵션을 활성화하여 viewdata2를 초기화
+            viewdata2 = new wijmo.collections.CollectionView(data, {trackChanges: true}); // 다른 데이터를 사용하는 경우 이 부분을 수정
+            initGrid2(viewdata2);
+        }
+
+        // tab3 ====================================================
+        function loadDataForTab3() {
+            $.ajax({
+                url: '/api/sales/gene/latest',
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.length > 0) {
+                        initGrid3(response);
+                    } else {
+                        console.log("No data returned for tab 3");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading data for tab 3:', error);
+                }
+            });
+        }
+
+        // `tab3`에 대한 별도의 그리드 데이터 바인딩 함수
+        function bindGridDataTab3(data) {
+            console.log('bindGridDataTab3 called with data:', data);
+
+            // NO에 1부터 시작하는 번호 설정
+            data.forEach((item, index) => {
+                item.rownum = index + 1; // 1부터 시작하는 번호 설정
+                calculateSumForRow(item); // 각 행의 합계를 계산하여 반영
+            });
+
+            // `tab3`의 그리드 데이터 바인딩
+            viewdata3 = new wijmo.collections.CollectionView(data);
+            initGrid3(viewdata3);
+
+            console.log('viewdata3', viewdata3);
+        }
+
+        // tab4 ====================================================
+        function loadDataForTab4() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const powerid = document.getElementById('select1_tab4').value || 'all';
+
+            $.ajax({
+                url: '/api/sales/gene/periodicData',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate, powerid: powerid },
+                success: function(response) {
+                    console.log("Server response:", response);
+                    if (response && response.monthly && response.monthly.length > 0) {
+                        initializeMonthlyGrid(response.monthly);
+                    }
+                    if (response && response.quarterly && response.quarterly.length > 0) {
+                        initializeQuarterlyGrid(response.quarterly);
+                    }
+                    if (response && response.halfYearly && response.halfYearly.length > 0) {
+                        initializeHalfYearlyGrid(response.halfYearly);
+                    }
+                    if (response && response.yearly && response.yearly.length > 0) {
+                        initializeYearlyGrid(response.yearly);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 4:', error);
+                }
+            });
+        }
+
+        function initializeEmptyGrid() {
+            const columns = [{ binding: 'Month', header: '월', width: 100, align: 'center' }];
+
+            // if (theGrid4_1) {
+            //     theGrid4_1.dispose();
+            // }
+
+            // theGrid4_1 = new wijmo.grid.FlexGrid('#theGrid4_1', {
+            //     autoGenerateColumns: false,
+            //     columns: columns,
+            //     itemsSource: []
+            // });
+        }
+
+
+        // function initializeTab4Grids(data) {
+        //     initializeMonthlyGrid(data.monthly);
+        //     // initializeQuarterlyGrid(data.quarterly);
+        //     // initializeHalfYearlyGrid(data.halfYearly);
+        //     // initializeYearlyGrid(data.yearly);
+        // }
+
+
+        // 월별 그리드 theGrid4_1
+        function initializeMonthlyGrid(monthlyData) {
+            console.log("Monthly data:", monthlyData);
+
+            if (monthlyData.length === 0) {
+                console.log("No data available for monthly grid");
+                initializeEmptyGrid();
+                return;
+            }
+
+            const columns = [
+                { binding: 'Month', header: '월', width: 100, align: 'center' }
+            ];
+
+            // 동적으로 발전기명 컬럼 추가
+            const powerNames = Object.keys(monthlyData[0]).filter(key => key !== 'Month');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            console.log("Columns:", columns);
+
+            // if (theGrid4_1) {
+            //     theGrid4_1.dispose();
+            // }
+
+            let grid = wijmo.Control.getControl('#theGrid4_1');
+            if (grid) {
+                // 기존 그리드가 있으면 데이터만 업데이트
+                grid.itemsSource = new wijmo.collections.CollectionView(monthlyData);
+            } else {
+                // 새 그리드 생성
+                grid = new wijmo.grid.FlexGrid('#theGrid4_1', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: columns,
+                    itemsSource: new wijmo.collections.CollectionView(monthlyData),
+                    isReadOnly: true
+                });
+                grid.rowHeaders.columns.splice(0, 1);
+            }
+
+            console.log("Grid data source:", grid.itemsSource.sourceCollection);
+        }
+
+        function transformMonthlyData(monthlyData) {
+            const transformedData = {};
+            monthlyData.forEach(item => {
+                if (!transformedData[item.month]) {
+                    transformedData[item.month] = { Month: item.month };
+                }
+                transformedData[item.month][item.powernm] = item.totalValue;
+            });
+            return Object.values(transformedData);
+        }
+
+        // 분기별 그리드
+        function initializeQuarterlyGrid(quarterlyData) {
+            console.log("Quarterly data:", quarterlyData);
+
+            const columns = [
+                { binding: 'Period', header: '분기', width: 100, align: 'center' }
+            ];
+
+            // 동적으로 발전기명 컬럼 추가
+            const powerNames = Object.keys(quarterlyData[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            console.log("Columns:", columns);
+
+            // 새로운 그리드 생성
+            theGrid4_2 = new wijmo.grid.FlexGrid('#theGrid4_2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: quarterlyData,
+                isReadOnly: true
+            });
+            theGrid4_2.rowHeaders.columns.splice(0, 1);
+            console.log("Quarterly Grid initialized with data:", theGrid4_2.itemsSource.sourceCollection);
+        }
+
+        // 반기별 그리드
+        function initializeHalfYearlyGrid(halfYearlyData) {
+            console.log("Half-Yearly data:", halfYearlyData);
+
+            if (halfYearlyData.length === 0) {
+                console.log("No data available for half-yearly grid");
+                initializeEmptyGrid();
+                return;
+            }
+
+            const columns = [
+                { binding: 'Period', header: '반기', width: 100, align: 'center' }
+            ];
+
+            // 동적으로 발전기명 컬럼 추가
+            const powerNames = Object.keys(halfYearlyData[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            console.log("Columns:", columns);
+
+            // 그리드 생성
+            theGrid4_3 = new wijmo.grid.FlexGrid('#theGrid4_3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: halfYearlyData,
+                isReadOnly: true
+            });
+            theGrid4_3.rowHeaders.columns.splice(0, 1);
+            console.log("Half-Yearly Grid initialized with data:", theGrid4_3.itemsSource.sourceCollection);
+        }
+
+        // 연도별 그리드
+        function initializeYearlyGrid(yearlyData) {
+            console.log("Yearly data:", yearlyData);
+
+            if (yearlyData.length === 0) {
+                console.log("No data available for yearly grid");
+                initializeEmptyGrid();
+                return;
+            }
+
+            const columns = [
+                { binding: 'Period', header: '연도', width: 100, align: 'center' }
+            ];
+
+            // 동적으로 발전기명 컬럼 추가
+            const powerNames = Object.keys(yearlyData[0]).filter(key => key !== 'Period' && key !== 'Year');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            console.log("Columns:", columns);
+
+            // 그리드 생성
+            theGrid4_4 = new wijmo.grid.FlexGrid('#theGrid4_4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: yearlyData,
+                isReadOnly: true
+            });
+            theGrid4_4.rowHeaders.columns.splice(0, 1);
+            console.log("Yearly Grid initialized with data:", theGrid4_4.itemsSource.sourceCollection);
+        }
+
+        // tab5 ====================================================
+        function loadDataForTab5() {
+            const startDate = document.getElementById('startDate2').value;
+            const endDate = document.getElementById('endDate2').value;
+            const powerid = document.getElementById('select1_tab5').value || 'all';
+
+            $.ajax({
+                url: '/api/sales/gene/tab5Data',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate, powerid: powerid },
+                success: function(response) {
+                    console.log("Tab 5 data:", response);
+
+                    // 데이터 처리 로직
+                    if (response) {
+                        // YoY (Year-over-Year) 데이터 처리
+                        if (response.yoy && response.yoy.length > 0) {
+                            initializeYoYGrid(response.yoy);
+                        } else {
+                            // 데이터가 없을 경우 그리드를 빈 상태로 초기화
+                            initializeYoYGrid([]);
+                        }
+
+                        // QoQ (Quarter-over-Quarter) 데이터 처리
+                        if (response.qoq && response.qoq.length > 0) {
+                            initializeQoQGrid(response.qoq);
+                        } else {
+                            initializeQoQGrid([]);
+                        }
+
+                        // MoM (Month-over-Month) 데이터 처리
+                        if (response.mom && response.mom.length > 0) {
+                            initializeMoMGrid(response.mom);
+                        } else {
+                            initializeMoMGrid([]);
+                        }
+
+                        // YTD (Year-to-Date) 데이터 처리
+                        if (response.ytd && response.ytd.length > 0) {
+                            initializeYTDGrid(response.ytd);
+                        } else {
+                            initializeYTDGrid([]);
+                        }
+                    } else {
+                        console.log("No data returned for Tab 5");
+                        // 모든 그리드를 빈 상태로 초기화
+                        initializeYoYGrid([]);
+                        initializeQoQGrid([]);
+                        initializeMoMGrid([]);
+                        initializeYTDGrid([]);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 5:', error);
+                }
+            });
+        }
+
+
+
+        function initializeYoYGrid(data) {
+            const columns = [
+                { binding: 'Period', header: '연', width: 100, align: 'center' }
+            ];
+
+            const powerNames = Object.keys(data[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            theGrid5_1 = new wijmo.grid.FlexGrid('#theGrid5_1', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: data,
+                isReadOnly: true
+            });
+            theGrid5_1.rowHeaders.columns.splice(0, 1);
+        }
+
+        function initializeQoQGrid(data) {
+            const columns = [
+                { binding: 'Period', header: '분기', width: 100, align: 'center' }
+            ];
+
+            const powerNames = Object.keys(data[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            theGrid5_2 = new wijmo.grid.FlexGrid('#theGrid5_2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: data,
+                isReadOnly: true
+            });
+            theGrid5_2.rowHeaders.columns.splice(0, 1);
+        }
+
+        function initializeMoMGrid(data) {
+            const columns = [
+                { binding: 'Period', header: '월', width: 100, align: 'center' }
+            ];
+
+            const powerNames = Object.keys(data[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            theGrid5_3 = new wijmo.grid.FlexGrid('#theGrid5_3', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: data,
+                isReadOnly: true
+            });
+            theGrid5_3.rowHeaders.columns.splice(0, 1);
+        }
+
+        function initializeYTDGrid(data) {
+            const columns = [
+                { binding: 'Period', header: '월', width: 100, align: 'center' }
+            ];
+
+            const powerNames = Object.keys(data[0]).filter(key => key !== 'Period');
+            powerNames.forEach(name => {
+                columns.push({ binding: name, header: name, width: '*', align: 'right' });
+            });
+
+            theGrid5_4 = new wijmo.grid.FlexGrid('#theGrid5_4', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: data,
+                isReadOnly: true
+            });
+            theGrid5_4.rowHeaders.columns.splice(0, 1);
+        }
+
+
+
+        // 다른 탭에 대한 유사한 함수들 추가하기
+
+        $(document).ready(function(e) {
+            // init();
+
+            $('ul.tab-links li a').on('click', function() {
+                var currentAttrValue = $(this).attr('href');
+                $('.tab-contents .tab-item').hide();
+                $(currentAttrValue).show();
+                $(this).parent('li').addClass('active').siblings().removeClass('active');
+
+                // 탭 전환 시 해당 탭의 차트 및 그리드 리프레시
+                if (currentAttrValue === '#tab1') {
+                    refreshTab1();
+                } else if (currentAttrValue === '#tab2') {
+                    // refreshTab2();
+                } // ... 다른 탭에 대해서도 유사하게 처리
+            });
+
+            // 초기 탭 설정
             $('ul.tab-links li:first-child a').click();
-
-            // document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
-
-            // loadInitialDataTab2();
         });
+
+        function refreshTab1() {
+            // Tab1 리프레시 로직
+            loadDataForTab1();
+        }
 
 
         // 그리드 초기화
@@ -904,24 +1324,24 @@
                             {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
                             {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
                             {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                            {binding: '', header: '시간', width: 65, align: 'center'},
-                            {binding: '', header: 'SMP', width: 86, format: 'n0', align: 'center'},
-                            {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
-                            {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
-                            {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
+                            {binding: 'powtime', header: '시간', width: 65, align: 'center'},
+                            {binding: 'smpamt', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+                            {binding: 'emamt', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                            {binding: 'mevalue', header: '거래량', width: 115,format: 'n6', align: 'center'},
+                            {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center'},
                             {
                                 header: '기타 정산금',
                                 align: 'center',
                                 collapseTo: 'etcSettlement',
                                 isCollapsed: true,
                                 columns: [
-                                    { binding: '', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: 'RPS', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                                    { binding: 'areaamt', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'outamt', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'rpsamt', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'difamt', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
                                 ]
                             },
-                            {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
+                            {binding: 'sumamt', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
                             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -950,28 +1370,29 @@
                         showMarquee: true,
                         isReadOnly: false, // 수정 가능하게 설정
                         columns: [
+                            //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
                             {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
                             {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
                             {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
                             {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                            {binding: '', header: '시간', width: 65, align: 'center'},
-                            {binding: '', header: 'SMP', width: 86, format: 'n0', align: 'center'},
-                            {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
-                            {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
-                            {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
+                            {binding: 'powtime', header: '시간', width: 65, align: 'center'},
+                            {binding: 'smpamt', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+                            {binding: 'emamt', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                            {binding: 'mevalue', header: '거래량', width: 115,format: 'n6', align: 'center'},
+                            {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center'},
                             {
                                 header: '기타 정산금',
                                 align: 'center',
                                 collapseTo: 'etcSettlement',
                                 isCollapsed: true,
                                 columns: [
-                                    { binding: '', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: 'RPS', width: 120, format: 'n0', align: 'center' },
-                                    { binding: '', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                                    { binding: 'areaamt', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'outamt', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'rpsamt', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'difamt', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
                                 ]
                             },
-                            {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
+                            {binding: 'sumamt', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
                             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
                             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
                             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
@@ -993,6 +1414,139 @@
                 }
             }
         }
+
+        // theGrid3 초기화
+        function initGrid3(data) {
+            // 이미 그리드가 초기화되어 있는지 확인
+            if (theGrid3 && theGrid3.hostElement) {
+                theGrid3.itemsSource = data; // 그리드가 이미 초기화된 경우 데이터만 갱신
+            } else {
+                try {
+                    theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+                        autoGenerateColumns: false,
+                        showMarquee: true,
+                        isReadOnly: true,
+                        columns: [
+                            //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
+                            {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
+                            {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
+                            {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
+                            {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
+                            {binding: 'powtime', header: '시간', width: 65, align: 'center'},
+                            {binding: 'smpamt', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+                            {binding: 'emamt', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+                            {binding: 'mevalue', header: '거래량', width: 115,format: 'n6', align: 'center'},
+                            {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center'},
+                            {
+                                header: '기타 정산금',
+                                align: 'center',
+                                collapseTo: 'etcSettlement',
+                                isCollapsed: true,
+                                columns: [
+                                    { binding: 'areaamt', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'outamt', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'rpsamt', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+                                    { binding: 'difamt', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+                                ]
+                            },
+                            {binding: 'sumamt', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
+                            {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
+                            {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
+                            {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
+                        ],
+                        itemsSource: data
+                    });
+
+                    theGrid3.rowHeaders.columns.splice(0, 1);  // 맨 앞에 헤더부분 없애기
+
+                    // initializeColumnToggle(theGrid1); // 컬럼 숨기기 초기화 함수 호출
+                } catch (error) {
+                    console.error('theGrid3 초기화 실패:', error);
+                }
+            }
+        }
+
+        // // 데이터 로드 함수
+        function loadData() {
+            $.ajax({
+                url: '/api/sales/gene/read',
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.length > 0) {  // success와 data 대신에 response 배열의 길이를 확인
+                        bindGridData(response);  // 직접 response를 데이터로 사용
+                        const dates = response.map(item => item.standdt);  // 날짜 데이터를 반환
+                        setStartAndEndDate(dates);
+                    } else {
+
+                        // 서버에서 응답된 데이터 확인을 위해 로깅
+                        console.log("Error or unexpected structure in response:", response);
+
+                        var errorMessage = response.message || 'No data returned';
+                        // alert('데이터 로드 실패: ' + errorMessage);
+                        // $("#emptyMessage").show();  // 서버 통신 오류 시 빈 메시지 표시
+                    }
+
+                },
+                error: function () {
+                    // alert('서버 통신 오류');
+                    var errorMsg = xhr.responseText || '서버 통신 오류';
+                    alert(errorMsg);
+                }
+            });
+        }
+
+        // 차트 =============================================================
+        // 월별 차트 생성
+        function createMonthlyChart(data) {
+            rMateChartH5.create("chartHolder4_1", "chartHolder4_1", "rMateOnLoadCallFunction=monthlyChartReadyHandler", "100%", "100%");
+
+            function monthlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(monthlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 분기별 차트 생성
+        function createQuarterlyChart(data) {
+            rMateChartH5.create("chartHolder4_2", "chartHolder4_2", "rMateOnLoadCallFunction=quarterlyChartReadyHandler", "100%", "100%");
+
+            function quarterlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(quarterlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 반기별 차트 생성
+        function createHalfYearlyChart(data) {
+            rMateChartH5.create("chartHolder4_3", "chartHolder4_3", "rMateOnLoadCallFunction=halfYearlyChartReadyHandler", "100%", "100%");
+
+            function halfYearlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(halfYearlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 연도별 차트 생성
+        function createYearlyChart(data) {
+            rMateChartH5.create("chartHolder4_4", "chartHolder4_4", "rMateOnLoadCallFunction=yearlyChartReadyHandler", "100%", "100%");
+
+            function yearlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(yearlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+
+
+
+
+
+
+
 
         // 차트 =============================================================
 
@@ -1371,7 +1925,7 @@
             tableBody.innerHTML = '';
 
             // API 요청 URL 구성
-            let query = `/api/gene/upload/regYMList?tab=${tabSuffix}`;
+            let query = `/api/sales/gene/regYMList?tab=${tabSuffix}`;
 
             fetch(query)
                 .then(response => response.json())
@@ -1434,12 +1988,9 @@
             const endDate = new Date(year, month, 0); // 다음 달의 0번째 날은 현재 달의 마지막 날
 
             // 날짜를 'YYYY-MM-DD' 형식으로 변환
-            const formatDate = date => {
-                const yyyy = date.getFullYear();
-                const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로
-                const dd = String(date.getDate()).padStart(2, '0'); // 일을 2자리로
-                return `${yyyy}-${mm}-${dd}`;
-            };
+            function formatDate(dateString) {
+                return dateString.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+            }
 
             // HTML의 날짜 입력 필드에 값을 설정
             document.getElementById('date1_' + tabSuffix).value = formatDate(startDate);
@@ -1463,7 +2014,7 @@
             const modalContent = document.getElementById('date-list-content');
 
             // API 요청 URL 구성
-            fetch('/api/gene/upload/regYMList')
+            fetch('/api/sales/gene/regYMList')
                 .then(response => response.json())
                 .then(data => {
                     // 기존 리스트 초기화
@@ -1495,10 +2046,10 @@
                 });
         }
 
-        // 날짜 설정 함수
+        // 날짜 설정 함수 (tab1, tab2, tab3)
         function setStartAndEndDate(dates) {
             if (!Array.isArray(dates) || dates.length === 0) {
-                // console.error("No dates available to set or dates is not an array.");
+                console.error("No dates available to set or dates is not an array.");
                 return;
             }
 
@@ -1517,34 +2068,57 @@
             document.getElementById('date2_tab3').value = formatDate(maxDate);
         }
 
-        // 데이터 로드 함수
-        function loadData() {
-            $.ajax({
-                url: '/api/gene/upload/read',
-                type: 'GET',
-                success: function (response) {
-                    if (response && response.length > 0) {  // success와 data 대신에 response 배열의 길이를 확인
-                        bindGridData(response);  // 직접 response를 데이터로 사용
-                        const dates = response.map(item => item.standdt);  // 날짜 데이터를 반환
-                        setStartAndEndDate(dates);
-                    } else {
 
-                        // 서버에서 응답된 데이터 확인을 위해 로깅
-                        console.log("Error or unexpected structure in response:", response);
-
-                        var errorMessage = response.message || 'No data returned';
-                        // alert('데이터 로드 실패: ' + errorMessage);
-                        // $("#emptyMessage").show();  // 서버 통신 오류 시 빈 메시지 표시
-                    }
-
-                },
-                error: function () {
-                    // alert('서버 통신 오류');
-                    var errorMsg = xhr.responseText || '서버 통신 오류';
-                    alert(errorMsg);
-                }
-            });
+        // yyyyMMdd 형식의 문자열을 yyyy-MM-dd 형식으로 변환하는 함수
+        function formatDate(dateString) {
+            return dateString.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
         }
+
+        // 'yyyyMMdd' 형식의 문자열을 'yyyy-MM' 형식으로 변환하는 함수
+        function formatDateStringToYM(dateString) {
+            return dateString.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2');
+        }
+
+        // 시작 월과 종료 월을 설정하는 함수 (tab4, tab5)
+        function setStartAndEndMonth(dates) {
+            if (!Array.isArray(dates) || dates.length === 0) {
+                console.error("설정할 날짜가 없거나, 배열이 아닙니다.");
+                return;
+            }
+
+            // 날짜 문자열을 Date 객체로 변환 (맞는 파싱 함수 사용)
+            const dateObjects = dates.map(date => parseDateString(date));
+
+            // 가장 빠른 날짜와 가장 늦은 날짜 찾기
+            const minDate = new Date(Math.min(...dateObjects));
+            const maxDate = new Date(Math.max(...dateObjects));
+
+            // 날짜를 'YYYY-MM' 형식으로 변환
+            const formatMonth = date => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+                return `${year}-${month}`;
+            };
+
+            // 월 입력 필드에 값 설정
+            document.getElementById('startDate').value = formatMonth(minDate);
+            document.getElementById('endDate').value = formatMonth(maxDate);
+            document.getElementById('startDate2').value = formatMonth(minDate);
+            document.getElementById('endDate2').value = formatMonth(maxDate);
+        }
+
+        // 날짜형식 파싱
+        function parseDateString(dateString) {
+            const year = dateString.substring(0, 4);
+            const month = dateString.substring(4, 6) - 1; // 월은 0부터 시작하므로 1을 빼줌
+            const day = dateString.substring(6, 8);
+            return new Date(year, month, day);
+        }
+
+
+
+
+
 
         // 현재 날짜를 설정하는 함수
         function setCurrentDate() {
@@ -1558,7 +2132,7 @@
 
         // 발전기코드 옵션 동적 생성
         function loadPowerIds() {
-            fetch('/api/gene/upload/powerids')
+            fetch('/api/sales/gene/powerids')
                 .then(response => response.json())
                 .then(powerIds => {
                     // 각 탭별 select element의 ID 배열
@@ -1577,128 +2151,213 @@
                 .catch(error => console.error('Error loading power IDs:', error));
         }
 
-        // 토글 기능
-        // 초기 컬럼 숨기기 설정
-        /*function toggleColumns(grid, show) {
-            for (let i = 4; i <= 22; i++) {
-                let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
-                if (column) column.visible = show;
+        // 검색 (tab1, tab2)
+        function search(event) {
+            const buttonId = event.target.id;
+            const tabSuffix = buttonId === "searchButton1" ? "tab1" : "tab2";
+
+            const startDate = document.getElementById('date1_' + tabSuffix).value;
+            const endDate = document.getElementById('date2_' + tabSuffix).value;
+            const powerId = document.getElementById('select1_' + tabSuffix).value;
+
+            // 검색 조건을 콘솔에 출력
+            console.log(`검색 조건 - 시작일: ${startDate}, 종료일: ${endDate}, 발전기코드: ${powerId}`);
+
+            // 필수 조건 : startdt와 enddt가 모두 있어야 함
+            if (!startDate || !endDate) {
+                Alert.alert('', '시작일과 종료일을 모두 선택해 주세요.');
+                return;
             }
-        }
 
-        // 초기에 04시~22시 컬럼을 숨김
-        function initializeColumnToggle(grid) {
+            // API 요청 URL 구성
+            let query = `/api/sales/gene/search?startdt=${startDate}&enddt=${endDate}`;
+            if (powerId !== 'all') {
+                query += `&powerid=${powerId}`;
+            }
 
-            // 상태를 추적하기 위한 변수
-            let columnsVisible = false;
+            console.log(`API 요청 URL: ${query}`);
 
-            toggleColumns(grid, columnsVisible);
-
-            grid.formatItem.addHandler(function (sender, e) {
-                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
-                    if (e.cell.textContent.trim() === '...') {
-                        e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
-                        e.cell.onclick = function (event) {
-                            event.stopPropagation(); // 이벤트 전파 막기
-
-                            // 토글 상태에 따라 컬럼을 펼치거나 접음
-                            columnsVisible = !columnsVisible;
-                            toggleColumns(grid, columnsVisible);
-
-                            // '...' 컬럼의 가시성 토글
-                            grid.columns.getColumn('toggle').visible = !columnsVisible;
-                        };
+            fetch(query)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`서버로부터 ${data.length}개의 데이터를 받았습니다.`);
+                    if (data.length > 0) {
+                        bindGridData(data); // 데이터를 그리드에 바인딩하는 함수 호출
+                    } else {
+                        console.log("No data found for the selected filters.");
+                        Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
+                        // 그리드를 비우는 코드 추가
+                        bindGridData([]); // 빈 배열로 그리드를 초기화
                     }
-                }
-            });
-
-            document.addEventListener('click', function (event) {
-                // '...' 컬럼 외의 다른 헤더를 클릭했을 때
-                if (!event.target.matches('.wj-colheaders .wj-cell')) return;
-                var headerText = event.target.textContent;
-                if (headerText !== '...' && grid.columns.getColumn('toggle').visible === false) {
-                    toggleColumns(grid, false); // 컬럼을 다시 접음
-                    grid.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
-                }
-            });
-        }*/
-
-
-        // 그리드에 데이터 바인딩
-        function bindGridData(data) {
-            // NO에 1부터 시작하는 번호 설정
-            data.forEach((item, index) => {
-                item.rownum = index + 1; // 1부터 시작하는 번호 설정
-                calculateSumForRow(item); // 각 행의 합계를 계산하여 반영
-            });
-
-            // `tab1`의 그리드 데이터 바인딩
-            viewdata1 = new wijmo.collections.CollectionView(data);
-            initGrid(viewdata1);
-
-            // 수정: trackChanges 옵션을 활성화하여 viewdata2를 초기화
-            viewdata2 = new wijmo.collections.CollectionView(data, {trackChanges: true}); // 다른 데이터를 사용하는 경우 이 부분을 수정
-            initGrid2(viewdata2);
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    Alert.alert('', 'Search failed. 다시 시도해 주세요.');
+                });
         }
 
+        function searchTab3(event) {
+            // 탭 3의 입력 필드에서 날짜와 발전기코드 값을 가져옵니다.
+            const date = document.getElementById('date2_tab3').value;
+            const powerId = document.getElementById('select1_tab3').value;
+
+            // 날짜 입력이 필수이므로 확인합니다.
+            if (!date) {
+                Alert.alert('', '날짜를 선택해 주세요.');
+                return;
+            }
+
+            // 검색 조건을 콘솔에 출력
+            console.log(`검색 조건 - 날짜: ${date}, 발전기코드: ${powerId}`);
+
+            // API 요청 URL 구성
+            let query = `/api/sales/gene/searchByDate?date=${date}`;
+            if (powerId !== 'all') {
+                query += `&powerid=${powerId}`;
+            }
+
+            console.log(`API 요청 URL: ${query}`);
+
+            // 데이터 요청
+            fetch(query)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(`서버로부터 ${data.length}개의 데이터를 받았습니다.`);
+                    if (data.length > 0) {
+                        bindGridDataTab3(data); // 탭 3의 그리드에 데이터 바인딩
+                    } else {
+                        console.log("선택한 조건에 해당하는 데이터가 없습니다.");
+                        Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
+                        // 그리드를 비우는 코드 추가
+                        bindGridDataTab3([]); // 빈 배열로 그리드를 초기화
+                    }
+                })
+                .catch(error => {
+                    console.error('검색 결과를 가져오는 중 오류 발생:', error);
+                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
+                });
+        }
+
+        function formatDateForServer(dateString) {
+            const [year, month] = dateString.split('-');
+            return `${year}${month}01`;  // 월의 첫날로 설정
+        }
+
+
+        // tab4 검색 기능
+        function searchTab4() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const powerid = document.getElementById('select1_tab4').value;
+
+            $.ajax({
+                url: '/api/sales/gene/statistics/periodic',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate, powerid: powerid },
+                success: function(response) {
+                    console.log("Server response:", response);
+                    if (response && typeof response === 'object') {
+                        if (response.monthly && response.monthly.length > 0) {
+                            console.log("Monthly data:", response.monthly);
+                            initializeMonthlyGrid(response.monthly);
+                        } else {
+                            console.log("No monthly data available");
+                            initializeEmptyGrid('theGrid4_1');
+                        }
+
+                        if (response.quarterly && response.quarterly.length > 0) {
+                            console.log("Quarterly data:", response.quarterly);
+                            initializeQuarterlyGrid(response.quarterly);
+                        } else {
+                            console.log("No quarterly data available");
+                            initializeEmptyGrid('theGrid4_2');
+                        }
+
+                        // Similar checks for halfYearly and yearly data
+                    } else {
+                        console.log("Invalid response format");
+                        Alert.alert("", "서버에서 올바른 형식의 데이터를 받지 못했습니다.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 4:', error);
+                    console.log('XHR status:', status);
+                    console.log('XHR response:', xhr.responseText);
+                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
+        }
+
+
+        // tab5 검색 기능
+        function searchTab5() {
+            const startDate = document.getElementById('startDate2').value;
+            const endDate = document.getElementById('endDate2').value;
+            const powerid = document.getElementById('select1_tab5').value;
+
+            $.ajax({
+                url: '/api/sales/gene/statistics/comparative',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate, powerid: powerid },
+                success: function(response) {
+                    if (response) {
+                        initializeYoYGrid(response.yoy);
+                        initializeQoQGrid(response.qoq);
+                        initializeMoMGrid(response.mom);
+                        initializeYTDGrid(response.ytd);
+                    } else {
+                        console.log("No data returned for tab 5");
+                        Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 5:', error);
+                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
+        }
+
+
+
+
+        document.getElementById('searchButton1').addEventListener('click', function (event) {
+            console.log('searchButton1 클릭됨');
+
+            synchronizeTabs('tab1', 'tab2');
+            search(event);
+        });
+
+        document.getElementById('searchButton2').addEventListener('click', function (event) {
+            console.log('searchButton2 클릭됨');
+
+            synchronizeTabs('tab2', 'tab1');
+            search(event);
+        });
+
+        document.getElementById('searchButton3').addEventListener('click', function (event) {
+            console.log('searchButton3 클릭됨');
+            searchTab3(event);
+        });
+
+        document.getElementById('searchButton4').addEventListener('click', function (event) {
+            console.log('searchButton4 클릭됨');
+            searchTab4(event);
+        });
+
+        document.getElementById('searchButton5').addEventListener('click', function (event) {
+            console.log('searchButton5 클릭됨');
+            searchTab5(event);
+        });
+
+
+        // 검색 버튼 클릭 시 Tab 1과 Tab 2의 값을 동기화하는 함수
+        function synchronizeTabs(sourceTab, targetTab) {
+            document.getElementById('date1_' + targetTab).value = document.getElementById('date1_' + sourceTab).value;
+            document.getElementById('date2_' + targetTab).value = document.getElementById('date2_' + sourceTab).value;
+            document.getElementById('select1_' + targetTab).value = document.getElementById('select1_' + sourceTab).value;
+        }
 
         $(document).ready(function (e) {
-
-            document.getElementById('searchButton1').addEventListener('click', function (event) {
-                synchronizeTabs('tab1', 'tab2');
-                search(event);
-            });
-
-            document.getElementById('searchButton2').addEventListener('click', function (event) {
-                synchronizeTabs('tab2', 'tab1');
-                search(event);
-            });
-
-            // 검색 버튼 클릭 시 Tab 1과 Tab 2의 값을 동기화하는 함수
-            function synchronizeTabs(sourceTab, targetTab) {
-                document.getElementById('date1_' + targetTab).value = document.getElementById('date1_' + sourceTab).value;
-                document.getElementById('date2_' + targetTab).value = document.getElementById('date2_' + sourceTab).value;
-                document.getElementById('select1_' + targetTab).value = document.getElementById('select1_' + sourceTab).value;
-            }
-
-            // 검색
-            function search(event) {
-                const buttonId = event.target.id;
-                const tabSuffix = buttonId === "searchButton1" ? "tab1" : "tab2";
-
-                const startDate = document.getElementById('date1_' + tabSuffix).value;
-                const endDate = document.getElementById('date2_' + tabSuffix).value;
-                const powerId = document.getElementById('select1_' + tabSuffix).value;
-
-                // 필수 조건 : startdt와 enddt가 모두 있어야 함
-                if (!startDate || !endDate) {
-                    Alert.alert('', '시작일과 종료일을 모두 선택해 주세요.');
-                    return;
-                }
-
-                // API 요청 URL 구성
-                let query = `/api/gene/upload/search?startdt=${startDate}&enddt=${endDate}`;
-                if (powerId !== 'all') {
-                    query += `&powerid=${powerId}`;
-                }
-
-                fetch(query)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.length > 0) {
-                            bindGridData(data); // 데이터를 그리드에 바인딩하는 함수 호출
-                        } else {
-                            console.log("No data found for the selected filters.");
-                            Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching search results:', error);
-                        Alert.alert('', 'Search failed. 다시 시도해 주세요.');
-                    });
-            }
-
-
             //  select 바뀌면 hidden input 변경
             function updateSelect(selectId, hiddenInputId) {
                 var selectElement = document.getElementById(selectId);
@@ -1706,12 +2365,12 @@
             }
 
             // select 아이디에 따라 히든 input 설정
-            const selects = [
-                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
-                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
-                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
-            ];
-            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+            // const selects = [
+            //     {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+            //     {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+            //     {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+            // ];
+            // selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
 
 
             document.getElementById('btnSave').addEventListener('click', function () {
@@ -1767,7 +2426,7 @@
             formData.append('date6', document.getElementById('date6').value);
 
             $.ajax({
-                url: '/api/gene/upload/upload_save',
+                url: '/api/sales/gene/upload',
                 type: 'POST',
                 data: formData,
                 processData: false, // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
@@ -1803,7 +2462,7 @@
 
                     if (changes.length > 0) {
                         $.ajax({
-                            url: '/api/gene/upload/update',
+                            url: '/api/sales/gene/update',
                             type: 'PATCH',
                             contentType: 'application/json',
                             data: JSON.stringify(changes),
@@ -1887,7 +2546,7 @@
         // 실제 삭제 처리를 수행하는 함수
         function confirmDelete(indatem) {
             $.ajax({
-                url: `/api/gene/upload/delete?indatem=${indatem}`,
+                url: `/api/sales/gene/delete?indatem=${indatem}`,
                 type: 'DELETE',
                 success: function (response) {
                     if (response.success) {
@@ -2114,7 +2773,7 @@
         //         endDate = `${selectedYear}-12-31`;
         //     }
         //
-        //     let query = `/api/gene/upload/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+        //     let query = `/api/sales/gene/periodSearch?periodType=${periodType}&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
         //
         //     if (periodType === "hourly") {
         //         query += `&startHour=${startHour}&endHour=${endHour}`;
@@ -2175,7 +2834,7 @@
         //     const generator = 'all';  // 기본적으로 전체 발전기명에 대해 로드
         //
         //     // 최소/최대 날짜를 서버에서 받아오는 API 호출
-        //     fetch('/api/gene/upload/dateRange')
+        //     fetch('/api/sales/gene/dateRange')
         //         .then(response => {
         //             if (!response.ok) {
         //                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -2186,7 +2845,7 @@
         //             const startDate = dateRange.startdt;  // 서버에서 받은 최소 날짜
         //             const endDate = dateRange.enddt;      // 서버에서 받은 최대 날짜
         //
-        //             let query = `/api/gene/upload/periodSearch?periodType=monthly&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
+        //             let query = `/api/sales/gene/periodSearch?periodType=monthly&startdt=${startDate}&enddt=${endDate}&powerid=${generator}`;
         //
         //             return fetch(query);
         //         })
@@ -2214,7 +2873,7 @@
 
         // 발전기명
         function loadGeneratorNames(callback) {
-            fetch('/api/gene/upload/generatornames')
+            fetch('/api/sales/gene/generatornames')
                 .then(response => response.json())
                 .then(generatorNames => {
                     // Tab1의 발전기명 선택 요소
@@ -2336,7 +2995,7 @@
 
         // 연도를 로드하고 기존 UI를 업데이트
         function loadYearlyData() {
-            fetch('/api/gene/upload/distinctYears')
+            fetch('/api/sales/gene/distinctYears')
                 .then(response => response.json())
                 .then(years => {
                     const yearSelectTab1 = document.getElementById("yearSelectTab1");
@@ -2399,7 +3058,7 @@
 
         // 연도 데이터
         function loadYearlyDataTab2() {
-            fetch('/api/gene/upload/distinctYears')
+            fetch('/api/sales/gene/distinctYears')
                 .then(response => response.json())
                 .then(years => {
                     const startDateTab2 = document.getElementById("startDateTab2");
@@ -2617,7 +3276,7 @@
 
         // tab3 그리드 초기화 함수
         function initTab3Grid(){
-            initGrid3();
+            // initGrid3();
         }
 
         // tab3 차트 데이터 설정 함수
@@ -2683,46 +3342,47 @@
         }
 
         // tab3 그리드 초기화 및 데이터 설정 함수
-        function initGrid3() {
-            var gridData = [];
-
-            theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                isReadOnly: true,
-                columns: [
-                    {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
-                    {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
-                    {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
-                    {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
-                    {binding: '', header: '시간', width: 65, align: 'center'},
-                    {binding: '', header: 'SMP', width: 90, format: 'n0', align: 'center'},
-                    {binding: '', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
-                    {binding: '', header: '거래량', width: 115, format: 'n0', align: 'center'},
-                    {binding: '', header: '정산금', width: 100, format: 'n0', align: 'center'},
-                    {
-                        header: '기타 정산금',
-                        align: 'center',
-                        collapseTo: 'etcSettlement',
-                        isCollapsed: true,
-                        columns: [
-                            { binding: 'localResourceTax', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
-                            { binding: 'emissionSettlement', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
-                            { binding: 'RPS', header: 'RPS', width: 120, format: 'n0', align: 'center' },
-                            { binding: 'differenceSettlement', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
-                        ]
-                    },
-                    {binding: '', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
-                    {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
-                    {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
-                    {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
-                ],
-                itemsSource: gridData
-            });
-            theGrid3.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
-
-            theGrid3.refresh(); // 그리드 새로고침
-        }
+        // function initGrid3() {
+        //     var gridData = [];
+        //
+        //     theGrid3 = new wijmo.grid.FlexGrid('#theGrid3', {
+        //         autoGenerateColumns: false,
+        //         showMarquee: true,
+        //         isReadOnly: true,
+        //         columns: [
+        //             //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
+        //             {binding: 'rownum', header: 'NO', width: 65, align: 'center'},
+        //             {binding: 'standdt', header: '날짜', width: 115, align: 'center'},
+        //             {binding: 'powerid', header: '발전기코드', width: 100, align: 'center'},
+        //             {binding: 'powernm', header: '발전기명', width: 200, align: 'center'},
+        //             {binding: 'powtime', header: '시간', width: 65, align: 'center'},
+        //             {binding: 'smpamt', header: 'SMP', width: 86, format: 'n0', align: 'center'},
+        //             {binding: 'emamt', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
+        //             {binding: 'mevalue', header: '거래량', width: 115,format: 'n6', align: 'center'},
+        //             {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center'},
+        //             {
+        //                 header: '기타 정산금',
+        //                 align: 'center',
+        //                 collapseTo: 'etcSettlement',
+        //                 isCollapsed: true,
+        //                 columns: [
+        //                     { binding: 'areaamt', header: '지역자원시설세', width: 120, format: 'n0', align: 'center' },
+        //                     { binding: 'outamt', header: '배출권정산금', width: 120, format: 'n0', align: 'center' },
+        //                     { binding: 'rpsamt', header: 'RPS', width: 120, format: 'n0', align: 'center' },
+        //                     { binding: 'difamt', header: '차액정산금', width: 120, format: 'n0', align: 'center' }
+        //                 ]
+        //             },
+        //             {binding: 'sumamt', header: '최종정산금', width: 120, format: 'n0', align: 'center'},
+        //             {binding: 'indatem', header: '등록일자', width: 115, align: 'center'},
+        //             {binding: 'inusernm', header: '등록자', width: 100, align: 'center'},
+        //             {binding: 'updatem', header: '최종수정일', width: 115, align: 'center'}
+        //         ],
+        //         itemsSource: gridData
+        //     });
+        //     theGrid3.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
+        //
+        //     theGrid3.refresh(); // 그리드 새로고침
+        // }
 
 
         // function toggleEtcSettlementGroup(grid) {
@@ -2779,7 +3439,7 @@
             // 실제 데이터를 사용하여 차트와 그리드를 업데이트
 
             chartReadyHandler3("chart3");
-            initGrid3();
+            // initGrid3();
         }
 
 

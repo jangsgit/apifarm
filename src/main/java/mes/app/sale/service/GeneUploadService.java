@@ -1,30 +1,19 @@
 package mes.app.sale.service;
 
 import mes.config.Settings;
-import mes.domain.entity.User;
-import mes.domain.entity.actasEntity.TB_RP310;
-import mes.domain.entity.actasEntity.TB_RP320;
-import mes.domain.entity.actasEntity.TB_RP320_Id;
 import mes.domain.repository.TB_RP310Repository;
 import mes.domain.repository.TB_RP320Repository;
 import mes.domain.services.SqlRunner;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,26 +42,26 @@ public class GeneUploadService {
 		XSSFWorkbook wb = new XSSFWorkbook(file.getInputStream());
 		XSSFSheet sheet = wb.getSheetAt(0);
 		
-		for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+		for (int i = 1; i <= sheet.getLastRowNum(); i++) { // 첫 번째 행은 헤더로 가정하고 1부터 시작
 			XSSFRow row = sheet.getRow(i);
 			List<String> value_list = new ArrayList<>();
+			
+			if (row == null) {
+				continue; // 빈 행 건너뛰기
+			}
 			
 			for (int j = 0; j < row.getLastCellNum(); j++) {
 				XSSFCell cell = row.getCell(j);
 				String cellValue = "";
 				
 				if (cell != null) {
-					if (cell.getCellType() == CellType.NUMERIC) {
-						if (DateUtil.isCellDateFormatted(cell)) {
-							cellValue = cell.getDateCellValue().toInstant()
-									.atZone(ZoneId.systemDefault())
-									.toLocalDate()
-									.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-						} else {
-							cellValue = new BigDecimal(cell.getNumericCellValue()).toPlainString();
-						}
-					} else if (cell.getCellType() == CellType.STRING) {
-						cellValue = cell.getStringCellValue().trim();
+					cell.setCellType(CellType.STRING); // 모든 셀을 문자열로 변환
+					
+					cellValue = cell.getStringCellValue().trim();
+					
+					// 숫자인 경우 소수점 제거
+					if (cellValue.matches("\\d+\\.0")) {
+						cellValue = cellValue.substring(0, cellValue.length() - 2);
 					}
 				}
 				value_list.add(cellValue);
@@ -104,18 +93,27 @@ public class GeneUploadService {
 	}*/
 	
 	// 데이터 삭제 메소드
-	public void deleteGeneData(TB_RP320_Id id) {
+	/*public void deleteGeneData(TB_RP320_Id id) {
 		TB_RP320Repository.deleteById(id);
-	}
+	}*/
 	
 	
 	// 수정
-	@Transactional
+	/*@Transactional
 	public void updateGeneData(List<TB_RP320> updates, User currentUser) {
 		for (TB_RP320 update : updates) {
 			
+			// 복합 키 생성
+			TB_RP320_Id id = new TB_RP320_Id(
+					update.getSpworkcd(),
+					update.getSpcompcd(),
+					update.getSpplancd(),
+					update.getStanddt(),
+					update.getPowerid()
+			);
+			
 			// 기존 데이터 가져오기
-			TB_RP320 existingData = TB_RP320Repository.findById(new TB_RP320_Id(update.getStanddt(), update.getPowerid())).orElse(null);
+			TB_RP320 existingData = TB_RP320Repository.findById(id).orElse(null);
 			
 			if (existingData != null && !existingData.equals(update)) {
 				// 수정 이력 기록 (TB_RP310)
@@ -129,21 +127,35 @@ public class GeneUploadService {
 				history.setStanddt(existingData.getStanddt());
 				history.setUserid(currentUser.getUsername());
 				history.setUsernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
-				history.setCreartdt(LocalDateTime.now());
+				history.setCreartdt(LocalDate.now()); // 생성일시
 				history.setPowerid(existingData.getPowerid());
 				history.setPowernm(existingData.getPowernm());
 				history.setUptyn("Y"); // 업데이트 여부 'Y'로 설정
 				
 				TB_RP310Repository.save(history);
 				
-				// 기존 데이터의 등록자 정보를 수정자로 업데이트
-				update.setInuserid(currentUser.getUsername());
-				update.setInusernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
-				update.setUpdatem(LocalDate.now());
+				// 기존 데이터의 수정자 정보 업데이트
+				existingData.setInuserid(currentUser.getUsername());
+				existingData.setInusernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
+				existingData.setUpdatem(LocalDate.now());
+				
+				// 필요한 필드 업데이트
+				existingData.setPowernm(update.getPowernm());
+				existingData.setPowtime(update.getPowtime());
+				existingData.setSmpamt(update.getSmpamt());
+				existingData.setEmamt(update.getEmamt());
+				existingData.setMevalue(update.getMevalue());
+				existingData.setFeeamt(update.getFeeamt());
+				existingData.setAreaamt(update.getAreaamt());
+				existingData.setOutamt(update.getOutamt());
+				existingData.setRpsamt(update.getRpsamt());
+				existingData.setDifamt(update.getDifamt());
+				existingData.setSumamt(update.getSumamt());
+				existingData.setIndatem(update.getIndatem());
 				
 				// TB_RP320 테이블 업데이트
-				TB_RP320Repository.save(update);
+				TB_RP320Repository.save(existingData);
 			}
 		}
-	}
+	}*/
 }
