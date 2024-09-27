@@ -2206,6 +2206,27 @@
 
         }
 
+        function saveFile(){
+
+            const fileInput = document.getElementById('fileInput2');
+            const file = fileInput.files[0];
+            if(!file){
+                Alert.alert('파일을 첨부하세요');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            AjaxFunction.PostAjaxRequest('/api/ltsa/pdfReader', true, false, false, formData, AlertOpen, AlertOpen)
+        }
+
+
+        let AlertOpen = function (res){
+            Alert.alert(res);
+        }
+
+
 
         $(document).ready(function (e) {
 
