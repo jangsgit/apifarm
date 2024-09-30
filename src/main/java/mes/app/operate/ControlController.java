@@ -1,44 +1,24 @@
 package mes.app.operate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import mes.app.actas_inspec.service.ElecSafeService;
-import mes.app.common.CommonController;
-import mes.app.common.service.CommonService;
 import mes.app.operate.service.ControlService;
 import mes.config.Settings;
 import mes.domain.entity.User;
 import mes.domain.entity.actasEntity.*;
 import mes.domain.model.AjaxResult;
-import mes.domain.repository.TB_RP750Repository;
-import mes.domain.repository.TB_RP760Repository;
-import mes.domain.repository.TB_RP880Repository;
-import mes.domain.repository.TB_RP885Repository;
-import org.exolab.castor.types.DateTime;
+import mes.domain.repository.actasRepository.TB_RP880Repository;
+import mes.domain.repository.actasRepository.TB_RP885Repository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @RestController
 @RequestMapping("/api/operate/control")
@@ -185,6 +165,9 @@ public class ControlController {
                 TBRP885.setIndatem(now);
                 TBRP885.setInusernm(user.getFirst_name());
                 TBRP885.setInuserid(user.getUsername());
+                TBRP885.setSpworkcd(nspworkcd);
+                TBRP885.setSpcompcd(nspcompcd);
+                TBRP885.setSpplancd(nspplancd);
 
                 // 성공 여부 저장
                 success2 = controlService.saveDetail(TBRP885);
@@ -242,6 +225,9 @@ public class ControlController {
         TBRP885.setIndatem(now);
         TBRP885.setInusernm(user.getFirst_name());
         TBRP885.setInuserid(user.getUsername());
+        TBRP885.setSpworkcd(params.get("spworkcd"));
+        TBRP885.setSpcompcd(params.get("spcompcd"));
+        TBRP885.setSpplancd(params.get("spplancd"));
 
         // 성공 여부 저장
         boolean success = controlService.saveDetail(TBRP885);

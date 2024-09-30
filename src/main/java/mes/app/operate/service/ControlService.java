@@ -1,15 +1,14 @@
 package mes.app.operate.service;
 
 import mes.domain.entity.actasEntity.*;
-import mes.domain.repository.TB_RP880Repository;
-import mes.domain.repository.TB_RP885Repository;
+import mes.domain.repository.actasRepository.TB_RP880Repository;
+import mes.domain.repository.actasRepository.TB_RP885Repository;
 import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.util.*;
 
 @Service
@@ -78,7 +77,10 @@ public class ControlService {
                     tb_rp885 t2
                 ON
                     t1.checkdt = t2.checkdt AND
-                    t1.contdt = t2.contdt
+                    t1.contdt = t2.contdt AND
+                    t1.spworkcd = t2.spworkcd AND
+                    t1.spcompcd = t2.spcompcd AND
+                    t1.spplancd = t2.spplancd
                 WHERE
                     t1.spworkcd = :spworkcd AND
                     t1.spcompcd = :spcompcd AND

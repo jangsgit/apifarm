@@ -1,4 +1,4 @@
-package mes.domain.repository;
+package mes.domain.repository.actasRepository;
 
 import mes.domain.entity.actasEntity.*;
 import org.springframework.data.jpa.repository.JpaRepository;

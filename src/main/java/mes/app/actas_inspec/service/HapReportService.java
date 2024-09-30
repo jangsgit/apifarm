@@ -1,11 +1,9 @@
 package mes.app.actas_inspec.service;
 
-import mes.config.Settings;
 import mes.domain.entity.actasEntity.*;
-import mes.domain.repository.TB_RP720Repository;
-import mes.domain.repository.TB_RP725Repository;
-import mes.domain.repository.TB_RP726Repository;
-import mes.domain.repository.TB_RP750Repository;
+import mes.domain.repository.actasRepository.TB_RP720Repository;
+import mes.domain.repository.actasRepository.TB_RP725Repository;
+import mes.domain.repository.actasRepository.TB_RP726Repository;
 import mes.domain.repository.actasRepository.TB_INSPECRepository;
 import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;

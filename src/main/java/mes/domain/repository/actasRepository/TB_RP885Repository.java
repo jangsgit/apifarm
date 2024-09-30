@@ -1,6 +1,5 @@
-package mes.domain.repository;
+package mes.domain.repository.actasRepository;
 
-import mes.domain.entity.actasEntity.TB_RP880_PK;
 import mes.domain.entity.actasEntity.TB_RP885;
 import mes.domain.entity.actasEntity.TB_RP885_PK;
 import org.springframework.data.jpa.repository.JpaRepository;

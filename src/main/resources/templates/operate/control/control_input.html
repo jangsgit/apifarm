@@ -357,8 +357,15 @@
             document.getElementById('spplancd').addEventListener('change', clearForm);
         }
 
+        // 병합
         class RestrictedMergeManager extends wijmo.grid.MergeManager {
             getMergedRange(p, r, c, clip = true) {
+                // 병합을 하지 않도록 하는 열(조치 열의 경우) 처리
+                let contnumColIndex = p.columns.getColumn('contnum').index;  // contnum 열의 인덱스를 가져옴
+                if (c === contnumColIndex) {
+                    return null;  // 조치 열의 경우 병합하지 않음
+                }
+
                 // 기본 cell range를 생성
                 let rng = new wijmo.grid.CellRange(r, c);
 
@@ -922,6 +929,10 @@
                 formData.append('contsequsr', $('#contsequsr').val());
                 formData.append('checkdt', $('#checkdt2').val());
                 formData.append('contdt', $('#contdt2').val());
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
 
                 $.ajax({
                     url: "/api/operate/control/save_detail",

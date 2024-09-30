@@ -3,8 +3,8 @@ package mes.app.actas_inspec.service;
 
 
 import mes.domain.entity.actasEntity.*;
-import mes.domain.repository.TB_RP870Repository;
-import mes.domain.repository.TB_RP875Repository;
+import mes.domain.repository.actasRepository.TB_RP870Repository;
+import mes.domain.repository.actasRepository.TB_RP875Repository;
 import mes.domain.services.SqlRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

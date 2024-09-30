@@ -9,8 +9,8 @@ import mes.config.Settings;
 import mes.domain.entity.User;
 import mes.domain.entity.actasEntity.*;
 import mes.domain.model.AjaxResult;
-import mes.domain.repository.TB_RP870Repository;
-import mes.domain.repository.TB_RP875Repository;
+import mes.domain.repository.actasRepository.TB_RP870Repository;
+import mes.domain.repository.actasRepository.TB_RP875Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;

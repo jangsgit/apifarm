@@ -1,4 +1,4 @@
-package mes.domain.repository;
+package mes.domain.repository.actasRepository;
 
 import mes.domain.entity.actasEntity.TB_RP870;
 import mes.domain.entity.actasEntity.TB_RP870_PK;

@@ -42,4 +42,13 @@ public class TB_RP885 {
     @Column(name="\"inusernm\"")
     String inusernm;    // 입력자명
 
+    @Column(name="\"spworkcd\"")
+    String spworkcd;    // 입력자명
+
+    @Column(name="\"spcompcd\"")
+    String spcompcd;    // 입력자명
+
+    @Column(name="\"spplancd\"")
+    String spplancd;    // 입력자명
+
 }
