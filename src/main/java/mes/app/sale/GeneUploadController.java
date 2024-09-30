@@ -233,6 +233,31 @@ public class GeneUploadController {
 	}
 	
 	// tab4 ============================================================
+//	@GetMapping("/periodicData")
+//	public ResponseEntity<Map<String, List<Map<String, Object>>>> getPeriodicData(
+//			@RequestParam("startDate") String startDate,
+//			@RequestParam("endDate") String endDate) {
+//
+//		System.out.println("Received request with startDate: " + startDate + ", endDate: " + endDate);
+//
+//		if (startDate == null || startDate.isEmpty() || endDate == null || endDate.isEmpty()) {
+//			// 날짜가 제공되지 않은 경우, 데이터베이스의 최소/최대 날짜를 사용
+//			startDate = TB_RP320Repository.findMinDate();
+//			endDate = TB_RP320Repository.findMaxDate();
+//
+//			System.out.println("Using default date range: " + startDate + " to " + endDate);
+//		}
+//
+//		Map<String, List<Map<String, Object>>> result = new HashMap<>();
+//		result.put("monthly", getMonthlyData(startDate, endDate));
+//		result.put("quarterly", getQuarterlyData(startDate, endDate));
+//		result.put("halfYearly", getHalfYearlyData(startDate, endDate));
+//		result.put("yearly", getYearlyData(startDate, endDate));
+//
+////		System.out.println("Returning data with " + monthlyData.size() + " entries");
+//
+//		return ResponseEntity.ok(result);
+//	}
 	@GetMapping("/periodicData")
 	public ResponseEntity<Map<String, List<Map<String, Object>>>> getPeriodicData(
 			@RequestParam("startDate") String startDate,
@@ -248,13 +273,23 @@ public class GeneUploadController {
 			System.out.println("Using default date range: " + startDate + " to " + endDate);
 		}
 		
-		Map<String, List<Map<String, Object>>> result = new HashMap<>();
-		result.put("monthly", getMonthlyData(startDate, endDate));
-		result.put("quarterly", getQuarterlyData(startDate, endDate));
-		result.put("halfYearly", getHalfYearlyData(startDate, endDate));
-		result.put("yearly", getYearlyData(startDate, endDate));
+		// 날짜 형식 변환
+		String formattedStartDate = startDate.replace("-", "") + "01";
+		String formattedEndDate = endDate.replace("-", "") + "31";
 		
-//		System.out.println("Returning data with " + monthlyData.size() + " entries");
+		System.out.println("Formatted date range: " + formattedStartDate + " to " + formattedEndDate);
+		
+		Map<String, List<Map<String, Object>>> result = new HashMap<>();
+		result.put("monthly", getMonthlyData(formattedStartDate, formattedEndDate));
+		result.put("quarterly", getQuarterlyData(formattedStartDate, formattedEndDate));
+		result.put("halfYearly", getHalfYearlyData(formattedStartDate, formattedEndDate));
+		result.put("yearly", getYearlyData(formattedStartDate, formattedEndDate));
+		
+		// 결과 로깅
+//		System.out.println("Monthly data: " + result.get("monthly"));
+//		System.out.println("Quarterly data: " + result.get("quarterly"));
+//		System.out.println("Half-yearly data: " + result.get("halfYearly"));
+//		System.out.println("Yearly data: " + result.get("yearly"));
 		
 		return ResponseEntity.ok(result);
 	}
@@ -273,7 +308,7 @@ public class GeneUploadController {
 			powerNames.add(powernm);
 			
 			result.putIfAbsent(month, new LinkedHashMap<>());
-			result.get(month).put("Month", month);
+			result.get(month).put("Period", month);  // 여기서 'Month' 대신 'Period' 사용
 			result.get(month).put(powernm, value);
 		}
 		
@@ -495,13 +530,15 @@ public class GeneUploadController {
 	
 	// 검색 (tab1, tab2)
 	@GetMapping("/search")
-	public ResponseEntity<List<TB_RP320>> searchGeneData(
-			@RequestParam String startdt,
-			@RequestParam String enddt,
-			@RequestParam(required = false) String powerid) {
+	public ResponseEntity<List<TB_RP320>> searchData(@RequestParam String startdt,
+													 @RequestParam String enddt,
+													 @RequestParam(required = false) String powerid) {
+		List<TB_RP320> data = TB_RP320Repository.searchGeneData(startdt, enddt, powerid);
 		
-		List<TB_RP320> results = TB_RP320Repository.searchGeneData(startdt, enddt, powerid);
-		return ResponseEntity.ok(results);
+		// 검색된 데이터에 대해서도 날짜 형식을 변환
+		data.forEach(entity -> entity.setStanddt(formatDateWithHyphens(entity.getStanddt())));
+		
+		return ResponseEntity.ok(data);
 	}
 	
 	// 검색 (tab3)
@@ -510,16 +547,22 @@ public class GeneUploadController {
 			@RequestParam String date,
 			@RequestParam(required = false) String powerid) {
 		
+		// 검색 쿼리 실행
 		List<TB_RP320> results = TB_RP320Repository.searchGeneDataByDate(date, powerid);
+		
+		// 검색된 데이터의 날짜 형식을 yyyy-MM-dd 형식으로 변환
+		results.forEach(entity -> entity.setStanddt(formatDateWithHyphens(entity.getStanddt())));
+		
 		return ResponseEntity.ok(results);
 	}
+	
 	
 	// =====
 	
 	
 	
 	// 수정
-	/*@PatchMapping("/update")
+	@PatchMapping("/update")
 	public ResponseEntity<AjaxResult> updateData(@RequestBody List<TB_RP320> updates, Authentication auth) {
 		AjaxResult result = new AjaxResult();
 		try {
@@ -533,7 +576,7 @@ public class GeneUploadController {
 			result.message = "데이터 업데이트 실패: " + e.getMessage();
 		}
 		return ResponseEntity.ok(result);
-	}*/
+	}
 	
 	// 삭제
 	/*@DeleteMapping("/delete")

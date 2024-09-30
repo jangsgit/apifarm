@@ -42,7 +42,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 				   "t.powernm, " +
 				   "SUM(t.mevalue) as totalValue " +
 				   "FROM tb_rp320 t " +
-				   "WHERE t.standdt BETWEEN :startDate AND :endDate " +
+				   "WHERE TO_DATE(t.standdt, 'YYYYMMDD') BETWEEN TO_DATE(:startDate, 'YYYYMMDD') AND TO_DATE(:endDate, 'YYYYMMDD') " +
 				   "GROUP BY TO_CHAR(TO_DATE(t.standdt, 'YYYYMMDD'), 'YYYY-MM'), t.powernm " +
 				   "ORDER BY month, t.powernm", nativeQuery = true)
 	List<Object[]> getMonthlyData(@Param("startDate") String startDate,
@@ -55,7 +55,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 				   "t.powernm, " +
 				   "SUM(t.mevalue) as totalValue " +
 				   "FROM tb_rp320 t " +
-				   "WHERE t.standdt BETWEEN :startDate AND :endDate " +
+				   "WHERE TO_DATE(t.standdt, 'YYYYMMDD') BETWEEN TO_DATE(:startDate, 'YYYYMMDD') AND TO_DATE(:endDate, 'YYYYMMDD') " +
 				   "GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYYMMDD')), " +
 				   "CEIL(EXTRACT(MONTH FROM TO_DATE(t.standdt, 'YYYYMMDD')) / 3.0), " +
 				   "t.powernm " +
@@ -70,7 +70,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 				   "t.powernm, " +
 				   "SUM(t.mevalue) as totalValue " +
 				   "FROM tb_rp320 t " +
-				   "WHERE t.standdt BETWEEN :startDate AND :endDate " +
+				   "WHERE TO_DATE(t.standdt, 'YYYYMMDD') BETWEEN TO_DATE(:startDate, 'YYYYMMDD') AND TO_DATE(:endDate, 'YYYYMMDD') " +
 				   "GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYYMMDD')), " +
 				   "CEIL(EXTRACT(MONTH FROM TO_DATE(t.standdt, 'YYYYMMDD')) / 6.0), " +
 				   "t.powernm " +
@@ -84,7 +84,7 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 				   "t.powernm, " +
 				   "SUM(t.mevalue) as totalValue " +
 				   "FROM tb_rp320 t " +
-				   "WHERE t.standdt BETWEEN :startDate AND :endDate " +
+				   "WHERE TO_DATE(t.standdt, 'YYYYMMDD') BETWEEN TO_DATE(:startDate, 'YYYYMMDD') AND TO_DATE(:endDate, 'YYYYMMDD') " +
 				   "GROUP BY EXTRACT(YEAR FROM TO_DATE(t.standdt, 'YYYYMMDD')), " +
 				   "t.powernm " +
 				   "ORDER BY year, t.powernm", nativeQuery = true)
@@ -145,12 +145,6 @@ public interface TB_RP320Repository extends JpaRepository<TB_RP320, TB_RP320_Id>
 				   + "AND (:powerid IS NULL OR t.powerid = :powerid)", nativeQuery = true)
 	List<TB_RP320> searchGeneDataByDate(@Param("date") String date,
 										@Param("powerid") String powerid);
-	
-	
-	
-	
-	
-	
 	
 	
 	// spworkcd, spcompcd, spplancd, standdt, powerid로 조회

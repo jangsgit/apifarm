@@ -285,11 +285,11 @@
 
                     <div class="row" style="margin-bottom: 23px;">
                         <div class="chart-wrap">
-<!--                            <div id="chartHolder3" style="height:545px; width:1560px;"></div>-->
+                            <div id="chartHolder3" style="height:350px; width:1560px;"></div>
                         </div>
                     </div>
                     <div class="container-fluid">
-                        <div id="theGrid3" style="height:545px; width:100%;"></div>
+                        <div id="theGrid3" style="height:345px; width:100%;"></div>
                     </div>
                 </section>
 
@@ -499,7 +499,7 @@
                                 <dt>&nbsp;</dt>
                                 <dd>
                                     <li>
-                                        <a class="btn btn-delete" title="검색" id="searchButton5" onclick="search()">
+                                        <a class="btn btn-delete" title="검색" id="searchButton5">
                                             <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
                                             <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
                                             검색
@@ -777,6 +777,10 @@
             initGrid2();
             initGrid3();
 
+            // 차트 초기화 추가
+            initTab4Chart();
+            initTab3Chart();
+
             // 각 탭에 대한 초기 데이터 로드 및 차트 초기화
             initTab1();
             // initTab2();
@@ -795,11 +799,17 @@
         //     loadDataForTab2();
         // }
 
+
+        // tab3
         function initTab3() {
             // Tab3 초기화 로직
             loadDataForTab3();
         }
 
+
+
+
+        // tab4
         function initTab4() {
             // Tab4 초기화 로직
             $.ajax({
@@ -826,8 +836,6 @@
                 }
             });
         }
-
-
 
         function initTab5() {
             // 서버에서 날짜 범위 가져오기
@@ -903,6 +911,7 @@
                 success: function (response) {
                     if (response && response.length > 0) {
                         initGrid3(response);
+                        updateChart3(response);  // 데이터를 차트에 반영
                     } else {
                         console.log("No data returned for tab 3");
                     }
@@ -930,6 +939,67 @@
             console.log('viewdata3', viewdata3);
         }
 
+        // tab3 차트
+        function updateChart3(data) {
+            const chart = document.getElementById('chart3');
+            if (chart) {
+                const layout = generateChartLayout3(data, 'standdt');
+                chart.setLayout(layout);
+                chart.setData(data);
+            } else {
+                console.error('Chart with id chart3 not found');
+            }
+        }
+
+        function generateChartLayout3(data, periodField) {
+            if (!data || data.length === 0) {
+                console.error("No data available for chart");
+                return "";
+            }
+
+            const sampleDataItem = data[0];
+            const fields = Object.keys(sampleDataItem).filter(key => key !== periodField && key !== 'rownum');
+
+            let seriesXml = fields.map((field, index) => `
+        <Line2DSeries yField="${field}" displayName="${field}" itemRenderer="CircleItemRenderer">
+            <lineStroke>
+                <Stroke color="${getColor3(index)}" weight="2"/>
+            </lineStroke>
+        </Line2DSeries>
+    `).join('');
+
+            return `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Line2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="${periodField}" />
+            </horizontalAxis>
+            <series>
+                ${seriesXml}
+            </series>
+        </Line2DChart>
+    </rMateChart>
+    `;
+        }
+
+        function getColor3(index) {
+            const colors = ["#ffa336", "#909bff", "#62b2fd", "#01dbab", "#f99bab"];
+            return colors[index % colors.length];
+        }
+
+        function initTab3Chart() {
+            rMateChartH5.create("chart3", "chartHolder3", "rMateOnLoadCallFunction=chartReadyHandler3", "100%", "100%");
+        }
+
+        function chartReadyHandler3(id) {
+            console.log("Chart 3 is ready");
+        }
+
+
+
         // tab4 ====================================================
         function loadDataForTab4() {
             const startDate = document.getElementById('startDate').value;
@@ -941,18 +1011,22 @@
                 type: 'GET',
                 data: { startDate: startDate, endDate: endDate, powerid: powerid },
                 success: function(response) {
-                    console.log("Server response:", response);
-                    if (response && response.monthly && response.monthly.length > 0) {
-                        initializeMonthlyGrid(response.monthly);
+                    console.log("Server response(loadDataForTab4):", response);
+                    if (response.monthly && response.monthly.length > 0) {
+                        initGrid4_1(response.monthly);
+                        updateChart4_1(response.monthly);
                     }
-                    if (response && response.quarterly && response.quarterly.length > 0) {
-                        initializeQuarterlyGrid(response.quarterly);
+                    if (response.quarterly && response.quarterly.length > 0) {
+                        initGrid4_2(response.quarterly);
+                        updateChart4_2(response.quarterly);
                     }
-                    if (response && response.halfYearly && response.halfYearly.length > 0) {
-                        initializeHalfYearlyGrid(response.halfYearly);
+                    if (response.halfYearly && response.halfYearly.length > 0) {
+                        initGrid4_3(response.halfYearly);
+                        updateChart4_3(response.halfYearly);
                     }
-                    if (response && response.yearly && response.yearly.length > 0) {
-                        initializeYearlyGrid(response.yearly);
+                    if (response.yearly && response.yearly.length > 0) {
+                        initGrid4_4(response.yearly);
+                        updateChart4_4(response.yearly);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -975,73 +1049,55 @@
             // });
         }
 
-
-        // function initializeTab4Grids(data) {
-        //     initializeMonthlyGrid(data.monthly);
-        //     // initializeQuarterlyGrid(data.quarterly);
-        //     // initializeHalfYearlyGrid(data.halfYearly);
-        //     // initializeYearlyGrid(data.yearly);
-        // }
-
-
         // 월별 그리드 theGrid4_1
-        function initializeMonthlyGrid(monthlyData) {
+        function initGrid4_1(monthlyData) {
             console.log("Monthly data:", monthlyData);
 
             if (monthlyData.length === 0) {
                 console.log("No data available for monthly grid");
-                initializeEmptyGrid();
                 return;
             }
 
             const columns = [
-                { binding: 'Month', header: '월', width: 100, align: 'center' }
+                { binding: 'Period', header: '월', width: 100, align: 'center' }
             ];
 
             // 동적으로 발전기명 컬럼 추가
-            const powerNames = Object.keys(monthlyData[0]).filter(key => key !== 'Month');
+            const powerNames = Object.keys(monthlyData[0]).filter(key => key !== 'Period');
             powerNames.forEach(name => {
                 columns.push({ binding: name, header: name, width: '*', align: 'right' });
             });
 
             console.log("Columns:", columns);
 
-            // if (theGrid4_1) {
-            //     theGrid4_1.dispose();
-            // }
-
-            let grid = wijmo.Control.getControl('#theGrid4_1');
-            if (grid) {
-                // 기존 그리드가 있으면 데이터만 업데이트
-                grid.itemsSource = new wijmo.collections.CollectionView(monthlyData);
-            } else {
-                // 새 그리드 생성
-                grid = new wijmo.grid.FlexGrid('#theGrid4_1', {
-                    autoGenerateColumns: false,
-                    showMarquee: true,
-                    columns: columns,
-                    itemsSource: new wijmo.collections.CollectionView(monthlyData),
-                    isReadOnly: true
-                });
-                grid.rowHeaders.columns.splice(0, 1);
+            // 기존 그리드 제거
+            let existingGrid = wijmo.Control.getControl('#theGrid4_1');
+            if (existingGrid) {
+                existingGrid.dispose();
             }
 
-            console.log("Grid data source:", grid.itemsSource.sourceCollection);
-        }
+            // 그리드 요소 재생성
+            let gridContainer = document.querySelector('#theGrid4_1').parentElement;
+            gridContainer.innerHTML = '<div id="theGrid4_1" style="width:100%; height:266px;"></div>';
 
-        function transformMonthlyData(monthlyData) {
-            const transformedData = {};
-            monthlyData.forEach(item => {
-                if (!transformedData[item.month]) {
-                    transformedData[item.month] = { Month: item.month };
-                }
-                transformedData[item.month][item.powernm] = item.totalValue;
+            // 새 그리드 생성
+            let newGrid = new wijmo.grid.FlexGrid('#theGrid4_1', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                itemsSource: new wijmo.collections.CollectionView(monthlyData),
+                isReadOnly: true
             });
-            return Object.values(transformedData);
+
+            // 행 헤더 제거
+            newGrid.rowHeaders.columns.splice(0, 1);
+
+            console.log("New grid created with row headers removed");
         }
 
-        // 분기별 그리드
-        function initializeQuarterlyGrid(quarterlyData) {
+
+        // 분기별 그리드 theGrid4_2
+        function initGrid4_2(quarterlyData) {
             console.log("Quarterly data:", quarterlyData);
 
             const columns = [
@@ -1056,27 +1112,31 @@
 
             console.log("Columns:", columns);
 
-            // 새로운 그리드 생성
-            theGrid4_2 = new wijmo.grid.FlexGrid('#theGrid4_2', {
+            // 기존 그리드 제거
+            let existingGrid = wijmo.Control.getControl('#theGrid4_2');
+            if (existingGrid) {
+                existingGrid.dispose();
+            }
+
+            // 그리드 요소 재생성
+            let gridContainer = document.querySelector('#theGrid4_2').parentElement;
+            gridContainer.innerHTML = '<div id="theGrid4_2" style="width:100%; height:266px;"></div>';
+
+            // 새 그리드 생성
+            let newGrid = new wijmo.grid.FlexGrid('#theGrid4_2', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
-                itemsSource: quarterlyData,
+                itemsSource: new wijmo.collections.CollectionView(quarterlyData),
                 isReadOnly: true
             });
-            theGrid4_2.rowHeaders.columns.splice(0, 1);
-            console.log("Quarterly Grid initialized with data:", theGrid4_2.itemsSource.sourceCollection);
+            newGrid.rowHeaders.columns.splice(0, 1);
+            // console.log("Quarterly Grid initialized with data:", theGrid4_2.itemsSource.sourceCollection);
         }
 
         // 반기별 그리드
-        function initializeHalfYearlyGrid(halfYearlyData) {
+        function initGrid4_3(halfYearlyData) {
             console.log("Half-Yearly data:", halfYearlyData);
-
-            if (halfYearlyData.length === 0) {
-                console.log("No data available for half-yearly grid");
-                initializeEmptyGrid();
-                return;
-            }
 
             const columns = [
                 { binding: 'Period', header: '반기', width: 100, align: 'center' }
@@ -1090,27 +1150,37 @@
 
             console.log("Columns:", columns);
 
-            // 그리드 생성
-            theGrid4_3 = new wijmo.grid.FlexGrid('#theGrid4_3', {
+            // 기존 그리드 제거
+            let existingGrid = wijmo.Control.getControl('#theGrid4_3');
+            if (existingGrid) {
+                existingGrid.dispose();
+            }
+
+            // 그리드 요소 재생성
+            let gridContainer = document.querySelector('#theGrid4_3').parentElement;
+            gridContainer.innerHTML = '<div id="theGrid4_3" style="width:100%; height:266px;"></div>';
+
+            // 새 그리드 생성
+            let newGrid = new wijmo.grid.FlexGrid('#theGrid4_3', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
-                itemsSource: halfYearlyData,
+                itemsSource: new wijmo.collections.CollectionView(halfYearlyData),
                 isReadOnly: true
             });
-            theGrid4_3.rowHeaders.columns.splice(0, 1);
-            console.log("Half-Yearly Grid initialized with data:", theGrid4_3.itemsSource.sourceCollection);
+            newGrid.rowHeaders.columns.splice(0, 1);
+            // console.log("Quarterly Grid initialized with data:", theGrid4_3.itemsSource.sourceCollection);
         }
 
         // 연도별 그리드
-        function initializeYearlyGrid(yearlyData) {
+        function initGrid4_4(yearlyData) {
             console.log("Yearly data:", yearlyData);
 
-            if (yearlyData.length === 0) {
-                console.log("No data available for yearly grid");
-                initializeEmptyGrid();
-                return;
-            }
+            // if (yearlyData.length === 0) {
+            //     console.log("No data available for yearly grid");
+            //     initializeEmptyGrid();
+            //     return;
+            // }
 
             const columns = [
                 { binding: 'Period', header: '연도', width: 100, align: 'center' }
@@ -1124,16 +1194,194 @@
 
             console.log("Columns:", columns);
 
-            // 그리드 생성
-            theGrid4_4 = new wijmo.grid.FlexGrid('#theGrid4_4', {
+            // 기존 그리드 제거
+            let existingGrid = wijmo.Control.getControl('#theGrid4_4');
+            if (existingGrid) {
+                existingGrid.dispose();
+            }
+
+            // 그리드 요소 재생성
+            let gridContainer = document.querySelector('#theGrid4_4').parentElement;
+            gridContainer.innerHTML = '<div id="theGrid4_4" style="width:100%; height:266px;"></div>';
+
+            // 새 그리드 생성
+            let newGrid = new wijmo.grid.FlexGrid('#theGrid4_4', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
-                itemsSource: yearlyData,
+                itemsSource: new wijmo.collections.CollectionView(yearlyData),
                 isReadOnly: true
             });
-            theGrid4_4.rowHeaders.columns.splice(0, 1);
-            console.log("Yearly Grid initialized with data:", theGrid4_4.itemsSource.sourceCollection);
+            newGrid.rowHeaders.columns.splice(0, 1);
+            // console.log("Quarterly Grid initialized with data:", theGrid4_3.itemsSource.sourceCollection);
+        }
+
+        // tab4 차트
+
+        // 차트 초기화 함수
+        function initTab4Chart() {
+            for (let i = 1; i <= 4; i++) {
+                rMateChartH5.create("chart4_" + i, "chartHolder4_" + i, "rMateOnLoadCallFunction=chartReadyHandler4_" + i, "100%", "100%");
+            }
+        }
+
+        // 각 차트의 준비 상태를 처리하는 함수들
+        function chartReadyHandler4_1(id) {
+            console.log("Chart 4_1 is ready");
+        }
+
+        function chartReadyHandler4_2(id) {
+            console.log("Chart 4_2 is ready");
+        }
+
+        function chartReadyHandler4_3(id) {
+            console.log("Chart 4_3 is ready");
+        }
+
+        function chartReadyHandler4_4(id) {
+            console.log("Chart 4_4 is ready");
+        }
+
+        // 기존의 차트 레이아웃 생성 및 업데이트 함수들은 그대로 유지
+        function generateChartLayout(data, periodField) {
+            if (!data || data.length === 0) {
+                console.error("No data available for chart");
+                return "";
+            }
+
+            const sampleDataItem = data[0];
+            const fields = Object.keys(sampleDataItem).filter(key => key !== periodField);
+
+            let seriesXml = fields.map((field, index) => `
+        <Column2DSeries yField="${field}" displayName="${field}" fill="${getColor(index)}">
+            <showDataEffect>
+                <SeriesInterpolate />
+            </showDataEffect>
+        </Column2DSeries>
+    `).join('');
+
+            return `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Legend />
+        </Options>
+        <Column2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="${periodField}" />
+            </horizontalAxis>
+            <series>
+                ${seriesXml}
+            </series>
+        </Column2DChart>
+    </rMateChart>
+    `;
+        }
+
+        function getColor(index) {
+            const colors = ["#62b2fd", "#01dbab", "#ffa336", "#f99bab", "#55667f"];
+            return colors[index % colors.length];
+        }
+
+        function updateChart(chartId, data, periodField) {
+            const chart = document.getElementById(chartId);
+            if (chart) {
+                const layout = generateChartLayout(data, periodField);
+                chart.setLayout(layout);
+                chart.setData(data);
+            } else {
+                console.error(`Chart with id ${chartId} not found`);
+            }
+        }
+
+        function updateChart4_1(monthlyData) {
+            updateChart("chart4_1", monthlyData, "Period");
+        }
+
+        function updateChart4_2(quarterlyData) {
+            updateChart("chart4_2", quarterlyData, "Period");
+        }
+
+        function updateChart4_3(halfYearlyData) {
+            updateChart("chart4_3", halfYearlyData, "Period");
+        }
+
+        function updateChart4_4(yearlyData) {
+            updateChart("chart4_4", yearlyData, "Period");
+        }
+
+        // tab4 검색 기능
+        function searchTab4() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const powerid = document.getElementById('select1_tab4').value;
+
+            console.log('Searching tab4 with:', { startDate, endDate, powerid });
+
+            $.ajax({
+                url: '/api/sales/gene/statistics/periodic',
+                type: 'GET',
+                data: { startDate, endDate, powerid },
+                success: function(response) {
+                    console.log("Server response(searchTab4):", response);
+
+                    // 월별 데이터 처리
+                    if (response && response.monthly && response.monthly.length > 0) {
+                        initGrid4_1(response.monthly);
+                        updateChart4_1(response.monthly);
+                    } else {
+                        console.log("No monthly data available");
+                        let gridContainer = document.querySelector('#theGrid4_1').parentElement;
+                        gridContainer.innerHTML = '<div id="theGrid4_1">No monthly data available</div>';
+                        clearChart("chart4_1");
+                    }
+
+                    // 분기별 데이터 처리
+                    if (response && response.quarterly && response.quarterly.length > 0) {
+                        initGrid4_2(response.quarterly);
+                        updateChart4_2(response.quarterly);
+                    } else {
+                        console.log("No quarterly data available");
+                        let gridContainer = document.querySelector('#theGrid4_2').parentElement;
+                        gridContainer.innerHTML = '<div id="theGrid4_2">No quarterly data available</div>';
+                        clearChart("chart4_2");
+                    }
+
+                    // 반기별 데이터 처리
+                    if (response && response.halfYearly && response.halfYearly.length > 0) {
+                        initGrid4_3(response.halfYearly);
+                        updateChart4_3(response.halfYearly);
+                    } else {
+                        console.log("No half-yearly data available");
+                        let gridContainer = document.querySelector('#theGrid4_3').parentElement;
+                        gridContainer.innerHTML = '<div id="theGrid4_3">No half-yearly data available</div>';
+                        clearChart("chart4_3");
+                    }
+
+                    // 연도별 데이터 처리
+                    if (response && response.yearly && response.yearly.length > 0) {
+                        initGrid4_4(response.yearly);
+                        updateChart4_4(response.yearly);
+                    } else {
+                        console.log("No yearly data available");
+                        let gridContainer = document.querySelector('#theGrid4_4').parentElement;
+                        gridContainer.innerHTML = '<div id="theGrid4_4">No yearly data available</div>';
+                        clearChart("chart4_4");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 4:', error);
+
+                    // 각 그리드와 차트에 대한 에러 처리
+                    ['#theGrid4_1', '#theGrid4_2', '#theGrid4_3', '#theGrid4_4'].forEach((gridId, index) => {
+                        let gridContainer = document.querySelector(gridId).parentElement;
+                        let periodType = ['monthly', 'quarterly', 'half-yearly', 'yearly'][index];
+                        gridContainer.innerHTML = `<div id="${gridId.slice(1)}">Error loading ${periodType} data. Please try again.</div>`;
+                        clearChart("chart4_" + (index + 1));
+                    });
+
+                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
         }
 
         // tab5 ====================================================
@@ -1153,17 +1401,17 @@
                     if (response) {
                         // YoY (Year-over-Year) 데이터 처리
                         if (response.yoy && response.yoy.length > 0) {
-                            initializeYoYGrid(response.yoy);
+                            initGrid5_1(response.yoy);
                         } else {
                             // 데이터가 없을 경우 그리드를 빈 상태로 초기화
-                            initializeYoYGrid([]);
+                            initGrid5_1([]);
                         }
 
                         // QoQ (Quarter-over-Quarter) 데이터 처리
                         if (response.qoq && response.qoq.length > 0) {
-                            initializeQoQGrid(response.qoq);
+                            initGrid5_2(response.qoq);
                         } else {
-                            initializeQoQGrid([]);
+                            initGrid5_2([]);
                         }
 
                         // MoM (Month-over-Month) 데이터 처리
@@ -1182,8 +1430,8 @@
                     } else {
                         console.log("No data returned for Tab 5");
                         // 모든 그리드를 빈 상태로 초기화
-                        initializeYoYGrid([]);
-                        initializeQoQGrid([]);
+                        initGrid5_1([]);
+                        initGrid5_2([]);
                         initializeMoMGrid([]);
                         initializeYTDGrid([]);
                     }
@@ -1194,29 +1442,43 @@
             });
         }
 
+        function initGrid5_1(data) {
 
-
-        function initializeYoYGrid(data) {
             const columns = [
                 { binding: 'Period', header: '연', width: 100, align: 'center' }
             ];
 
+            // 동적으로 발전기명 컬럼 추가
             const powerNames = Object.keys(data[0]).filter(key => key !== 'Period');
             powerNames.forEach(name => {
                 columns.push({ binding: name, header: name, width: '*', align: 'right' });
             });
 
-            theGrid5_1 = new wijmo.grid.FlexGrid('#theGrid5_1', {
+            // 기존 그리드 제거
+            let existingGrid = wijmo.Control.getControl('#theGrid5_1');
+            if (existingGrid) {
+                existingGrid.dispose();
+            }
+
+            // 그리드 요소 재생성
+            let gridContainer = document.querySelector('#theGrid5_1').parentElement;
+            gridContainer.innerHTML = '<div id="theGrid5_1" style="width:100%; height:266px;"></div>';
+
+            // 새 그리드 생성
+            let newGrid = new wijmo.grid.FlexGrid('#theGrid5_1', {
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: columns,
-                itemsSource: data,
+                itemsSource: new wijmo.collections.CollectionView(data),
                 isReadOnly: true
             });
-            theGrid5_1.rowHeaders.columns.splice(0, 1);
+            // 행 헤더 제거
+            newGrid.rowHeaders.columns.splice(0, 1);
+            console.log("New grid created with row headers removed");
         }
 
-        function initializeQoQGrid(data) {
+
+        function initGrid5_2(data) {
             const columns = [
                 { binding: 'Period', header: '분기', width: 100, align: 'center' }
             ];
@@ -1276,30 +1538,84 @@
             theGrid5_4.rowHeaders.columns.splice(0, 1);
         }
 
+        // tab5 검색 기능
+        function searchTab5() {
+            const startDate = document.getElementById('startDate2').value;
+            const endDate = document.getElementById('endDate2').value;
+            const powerid = document.getElementById('select1_tab5').value;
+
+            $.ajax({
+                url: '/api/sales/gene/statistics/comparative',
+                type: 'GET',
+                data: { startDate: startDate, endDate: endDate, powerid: powerid },
+                success: function(response) {
+                    console.log("Tab 5 data:", response);
+
+                    if (response) {
+                        if (response.yoy && response.yoy.length > 0) {
+                            initGrid5_1(response.yoy);
+                        } else {
+                            initGrid5_1([]);
+                        }
+
+                        if (response.qoq && response.qoq.length > 0) {
+                            initGrid5_2(response.qoq);
+                        } else {
+                            initGrid5_2([]);
+                        }
+
+                        if (response.mom && response.mom.length > 0) {
+                            initializeMoMGrid(response.mom);
+                        } else {
+                            initializeMoMGrid([]);
+                        }
+
+                        if (response.ytd && response.ytd.length > 0) {
+                            initializeYTDGrid(response.ytd);
+                        } else {
+                            initializeYTDGrid([]);
+                        }
+                    } else {
+                        console.log("No data returned for Tab 5");
+                        initGrid5_1([]);
+                        initGrid5_2([]);
+                        initializeMoMGrid([]);
+                        initializeYTDGrid([]);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading data for tab 5:', error);
+                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
+                }
+            });
+        }
+
+
+        // ===============
 
 
         // 다른 탭에 대한 유사한 함수들 추가하기
 
-        $(document).ready(function(e) {
-            // init();
-
-            $('ul.tab-links li a').on('click', function() {
-                var currentAttrValue = $(this).attr('href');
-                $('.tab-contents .tab-item').hide();
-                $(currentAttrValue).show();
-                $(this).parent('li').addClass('active').siblings().removeClass('active');
-
-                // 탭 전환 시 해당 탭의 차트 및 그리드 리프레시
-                if (currentAttrValue === '#tab1') {
-                    refreshTab1();
-                } else if (currentAttrValue === '#tab2') {
-                    // refreshTab2();
-                } // ... 다른 탭에 대해서도 유사하게 처리
-            });
-
-            // 초기 탭 설정
-            $('ul.tab-links li:first-child a').click();
-        });
+        // $(document).ready(function(e) {
+        //     // init();
+        //
+        //     $('ul.tab-links li a').on('click', function() {
+        //         var currentAttrValue = $(this).attr('href');
+        //         $('.tab-contents .tab-item').hide();
+        //         $(currentAttrValue).show();
+        //         $(this).parent('li').addClass('active').siblings().removeClass('active');
+        //
+        //         // 탭 전환 시 해당 탭의 차트 및 그리드 리프레시
+        //         if (currentAttrValue === '#tab1') {
+        //             refreshTab1();
+        //         } else if (currentAttrValue === '#tab2') {
+        //             // refreshTab2();
+        //         } // ... 다른 탭에 대해서도 유사하게 처리
+        //     });
+        //
+        //     // 초기 탭 설정
+        //     $('ul.tab-links li:first-child a').click();
+        // });
 
         function refreshTab1() {
             // Tab1 리프레시 로직
@@ -1379,7 +1695,7 @@
                             {binding: 'smpamt', header: 'SMP', width: 86, format: 'n0', align: 'center'},
                             {binding: 'emamt', header: '긴급정산상한가격', width: 145, format: 'n0', align: 'center'},
                             {binding: 'mevalue', header: '거래량', width: 115,format: 'n6', align: 'center'},
-                            {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center'},
+                            {binding: 'feeamt', header: '정산금', width: 100, format: 'n0', align: 'center', isReadOnly: true},
                             {
                                 header: '기타 정산금',
                                 align: 'center',
@@ -1401,9 +1717,12 @@
 
                         cellEditEnded: function (s, e) {
                             const item = s.rows[e.row].dataItem; // 현재 편집된 행의 데이터
+
+                            console.log('cellEditEnded: 변경된 값:', item); // 디버깅을 위해 추가
                             calculateSumForRow(item); // 합계 계산
                             s.invalidate(); // 그리드 새로 고침
                         }
+
                     });
 
                     theGrid2.rowHeaders.columns.splice(0, 1); // 맨 앞에 헤더부분 없애기
@@ -1467,434 +1786,34 @@
         }
 
         // // 데이터 로드 함수
-        function loadData() {
-            $.ajax({
-                url: '/api/sales/gene/read',
-                type: 'GET',
-                success: function (response) {
-                    if (response && response.length > 0) {  // success와 data 대신에 response 배열의 길이를 확인
-                        bindGridData(response);  // 직접 response를 데이터로 사용
-                        const dates = response.map(item => item.standdt);  // 날짜 데이터를 반환
-                        setStartAndEndDate(dates);
-                    } else {
-
-                        // 서버에서 응답된 데이터 확인을 위해 로깅
-                        console.log("Error or unexpected structure in response:", response);
-
-                        var errorMessage = response.message || 'No data returned';
-                        // alert('데이터 로드 실패: ' + errorMessage);
-                        // $("#emptyMessage").show();  // 서버 통신 오류 시 빈 메시지 표시
-                    }
-
-                },
-                error: function () {
-                    // alert('서버 통신 오류');
-                    var errorMsg = xhr.responseText || '서버 통신 오류';
-                    alert(errorMsg);
-                }
-            });
-        }
-
-        // 차트 =============================================================
-        // 월별 차트 생성
-        function createMonthlyChart(data) {
-            rMateChartH5.create("chartHolder4_1", "chartHolder4_1", "rMateOnLoadCallFunction=monthlyChartReadyHandler", "100%", "100%");
-
-            function monthlyChartReadyHandler(id) {
-                var chart = document.getElementById(id);
-                chart.setLayout(monthlyChartLayout);
-                chart.setData(data);
-            }
-        }
-
-        // 분기별 차트 생성
-        function createQuarterlyChart(data) {
-            rMateChartH5.create("chartHolder4_2", "chartHolder4_2", "rMateOnLoadCallFunction=quarterlyChartReadyHandler", "100%", "100%");
-
-            function quarterlyChartReadyHandler(id) {
-                var chart = document.getElementById(id);
-                chart.setLayout(quarterlyChartLayout);
-                chart.setData(data);
-            }
-        }
-
-        // 반기별 차트 생성
-        function createHalfYearlyChart(data) {
-            rMateChartH5.create("chartHolder4_3", "chartHolder4_3", "rMateOnLoadCallFunction=halfYearlyChartReadyHandler", "100%", "100%");
-
-            function halfYearlyChartReadyHandler(id) {
-                var chart = document.getElementById(id);
-                chart.setLayout(halfYearlyChartLayout);
-                chart.setData(data);
-            }
-        }
-
-        // 연도별 차트 생성
-        function createYearlyChart(data) {
-            rMateChartH5.create("chartHolder4_4", "chartHolder4_4", "rMateOnLoadCallFunction=yearlyChartReadyHandler", "100%", "100%");
-
-            function yearlyChartReadyHandler(id) {
-                var chart = document.getElementById(id);
-                chart.setLayout(yearlyChartLayout);
-                chart.setData(data);
-            }
-        }
-
-
-
-
-
-
-
-
-
-        // 차트 =============================================================
-
-        // tab3 차트
-        //         function chartReadyHandler(id, chartHolderId, gridData) {
-        //             // id에 해당하는 차트가 생성되었는지 확인
-        //             var chart = document.getElementById(id);
-        //             if (!chart) {
-        //                 // console.error("차트가 생성되지 않았습니다: " + id);
-        //                 return;
+        // function loadData() {
+        //     $.ajax({
+        //         url: '/api/sales/gene/read',
+        //         type: 'GET',
+        //         success: function (response) {
+        //             if (response && response.length > 0) {  // success와 data 대신에 response 배열의 길이를 확인
+        //                 bindGridData(response);  // 직접 response를 데이터로 사용
+        //                 const dates = response.map(item => item.standdt);  // 날짜 데이터를 반환
+        //                 setStartAndEndDate(dates);
+        //             } else {
+        //
+        //                 // 서버에서 응답된 데이터 확인을 위해 로깅
+        //                 console.log("Error or unexpected structure in response:", response);
+        //
+        //                 var errorMessage = response.message || 'No data returned';
+        //                 // alert('데이터 로드 실패: ' + errorMessage);
+        //                 // $("#emptyMessage").show();  // 서버 통신 오류 시 빈 메시지 표시
         //             }
         //
-        //             if (!gridData) {
-        //                 // console.error("그리드 데이터가 정의되지 않았습니다.");
-        //                 return;
-        //             }
-        //
-        //             // 그리드 데이터를 슬라이드 차트의 형식에 맞게 변환
-        //             var transformedData = transformDataForChart(gridData);
-        //
-        //             // 각 차트의 레이아웃 정의
-        //             var layout1 = getCartesianLayout("Column2D", "2D Column Chart - MultiSeries", transformedData.fields);
-        //             var layout2 = getCartesianLayout("Line2D", "Line Chart with ItemRenderer", transformedData.fields,
-        //                 ["CircleItemRenderer", "TriangleItemRenderer", "RectangleItemRenderer"] // 각 필드에 대한 itemRenderer 설정
-        //             );
-        //             var radarLayout = getRadarLayout(transformedData.fields);
-        //
-        //             // 슬라이드 차트에 적용할 레이아웃과 데이터 배열 설정
-        //             var layoutSet = [layout1, layout2, radarLayout];
-        //             var dataSet = [transformedData.data, transformedData.data, transformedData.data];
-        //
-        //             // 슬라이드 차트 레이아웃 및 데이터 설정
-        //             chart.setSlideLayoutSet(layoutSet);
-        //             chart.setSlideDataSet(dataSet);
+        //         },
+        //         error: function () {
+        //             // alert('서버 통신 오류');
+        //             var errorMsg = xhr.responseText || '서버 통신 오류';
+        //             alert(errorMsg);
         //         }
-        //
-        //         // tab2 차트
-        //         function chartReadyHandler2(id, chartHolderId, gridData, comparisonType) {
-        //             const chart = document.getElementById(id);
-        //             if (!chart || !gridData) return;
-        //
-        //             const {data, fields} = transformDataForChartTab2(gridData, comparisonType);
-        //
-        //             const layout1 = getCartesianLayout("Column2D", "2D Column Chart", fields);
-        //             const layout2 = getCartesianLayout("Line2D", "Line Chart", fields, ["CircleItemRenderer"]);
-        //
-        //             const layoutSet = [layout1, layout2];
-        //             const dataSet = [data, data];
-        //
-        //             chart.setSlideLayoutSet(layoutSet);
-        //             chart.setSlideDataSet(dataSet);
-        //         }
-        //
-        //
-        //         function updateChart(id, holderId) {
-        //             var chart = document.getElementById(id);
-        //             if (!chart) return;
-        //
-        //             const gridData = (id === 'chart1') ? theGrid3.itemsSource.items : theGrid4.itemsSource.items;
-        //             const transformedData = (id === 'chart1') ? transformDataForChart(gridData) : transformDataForChartTab2(gridData);
-        //             chartReadyHandler(id, holderId, transformedData);
-        //         }
-        //
-        //
-        //         // 차트 디자인 가이드 색상 코드
-        //         const chartColors = [
-        //             "#62b2fd",
-        //             "#01dbab",
-        //             "#ffa336",
-        //             "#f99bab",
-        //             "#55667f",
-        //             "#82e8e8",
-        //             "#909bff",
-        //             "#f36f40"
-        //         ];
-        //
-        //         // 차트마다 형식이 다르기 때문에 다른 레이아웃 함수를 만들어야 합니다.
-        //         // 다른 유형의 차트 이용시, layout 함수 추가해서 사용하세요.
-        //
-        //         // Cartesian 차트 레이아웃 정의
-        //         function getCartesianLayout(type, title, dataFields, itemRenderers = []) {
-        //             var layout = "<rMateChart borderStyle='none'>"
-        //                 + "<Options><Caption text='" + "' />" // 차트 제목
-        //                 + "<SubCaption text='' textAlign='center' paddingBottom='20'/>" // 차트 부제목
-        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
-        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/></Options>"
-        //                 + "<" + type + "Chart showDataTips='true'>"
-        //                 + "<series>";
-        //
-        //             for (var i = 0; i < dataFields.length; ++i) {
-        //                 var itemRenderer = itemRenderers[i] ? " itemRenderer='" + itemRenderers[i] + "'" : "";
-        //                 var color = chartColors[i % chartColors.length]; // 색상을 순서대로 할당
-        //
-        //                 if (type === "Line2D") {
-        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
-        //                         + "<showDataEffect><SeriesInterpolate duration='700'/></showDataEffect>"
-        //                         + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
-        //                         + "</" + type + "Series>";
-        //                 } else {
-        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
-        //                         + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
-        //                         + "<fill>"
-        //                         + "<SolidColor color='" + color + "'/>" // 색상 적용
-        //                         + "</fill>"
-        //                         + "</" + type + "Series>";
-        //                 }
-        //             }
-        //
-        //             layout += "</series>"
-        //                 + "<horizontalAxis>"
-        //                 + "<CategoryAxis categoryField='period'/>"
-        //                 + "</horizontalAxis>"
-        //                 + "<verticalAxis>"
-        //                 + "<LinearAxis formatter='{numfmt}'/>"
-        //                 + "</verticalAxis>"
-        //                 + "</" + type + "Chart>"
-        //                 + "</rMateChart>";
-        //
-        //             return layout;
-        //         }
-        //
-        //
-        //         // Radar 차트 레이아웃 정의
-        //         function getRadarLayout(dataFields) {
-        //             var radarLayout =
-        //                 "<rMateChart borderStyle='none'>"
-        //                 + "<Options>"
-        //                 + "<Caption text='' />"
-        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
-        //                 + "</Options>"
-        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
-        //                 + "<RadarChart type='polygon' paddingTop='20' paddingBottom='20' showDataTips='true'>"
-        //                 + "<radialAxis>"
-        //                 + "<LinearAxis id='rAxis' formatter='{numfmt}'/>"
-        //                 + "</radialAxis>"
-        //                 + "<radialAxisRenderers>"
-        //                 + "<Axis2DRenderer axis='{rAxis}' horizontal='true' tickPlacement='outside' tickLength='4'>"
-        //                 + "<axisStroke>"
-        //                 + "<Stroke color='#555555'/>"
-        //                 + "</axisStroke>"
-        //                 + "</Axis2DRenderer>"
-        //                 + "</radialAxisRenderers>"
-        //                 + "<angularAxis>"
-        //                 + "<CategoryAxis categoryField='period' displayName='Year'/>"
-        //                 + "</angularAxis>"
-        //                 + "<series>";
-        //
-        //             for (var i = 0; i < dataFields.length; ++i) {
-        //                 var color = chartColors[i % chartColors.length]; // 색상 순서대로 적용
-        //
-        //                 radarLayout += "<RadarSeries field='" + dataFields[i] + "' displayName='" + dataFields[i] + "' fillLineArea='false'>"
-        //                     + "<showDataEffect>"
-        //                     + "<SeriesInterpolate duration='700'/>"
-        //                     + "</showDataEffect>"
-        //                     + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
-        //                     + "</RadarSeries>";
-        //             }
-        //
-        //             radarLayout += "</series>"
-        //                 + "</RadarChart>"
-        //                 + "</rMateChart>";
-        //
-        //             return radarLayout;
-        //         }
-        //
-        //         // 콤비네이션 차트 레이아웃
-        //         function getCombinationChartLayout() {
-        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-        //     <Options>
-        //         <Caption text=""/>
-        //         <Legend defaultMouseOverAction="true"/>
-        //     </Options>
-        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
-        //     <Combination2DChart showDataTips="true">
-        //         <horizontalAxis>
-        //             <CategoryAxis categoryField="period"/>
-        //         </horizontalAxis>
-        //         <verticalAxis>
-        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
-        //         </verticalAxis>
-        //         <series>
-        //             <Column2DSet type="clustered">
-        //                 <series>
-        //                     <Column2DSeries yField="value1" displayName="2023" fill="#62b2fd">
-        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
-        //                     </Column2DSeries>
-        //                     <Column2DSeries yField="value2" displayName="2024" fill="#01dbab">
-        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
-        //                     </Column2DSeries>
-        //                 </series>
-        //             </Column2DSet>
-        //             <Line2DSeries yField="growth" displayName="증감율 (%)" itemRenderer="DiamondItemRenderer">
-        //                 <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
-        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
-        //                 <verticalAxis>
-        //                     <LinearAxis id="vAxis2" interval="10" maximum="100"/>
-        //                 </verticalAxis>
-        //             </Line2DSeries>
-        //         </series>
-        //         <verticalAxisRenderers>
-        //             <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
-        //             <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
-        //         </verticalAxisRenderers>
-        //     </Combination2DChart>
-        // </rMateChart>`;
-        //         }
-        //
-        //         function getLineChartLayout() {
-        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-        //     <Options>
-        //         <Caption text=""/>
-        //         <Legend defaultMouseOverAction="true"/>
-        //     </Options>
-        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
-        //     <Line2DChart showDataTips="true">
-        //         <horizontalAxis>
-        //             <CategoryAxis categoryField="period"/>
-        //         </horizontalAxis>
-        //         <verticalAxis>
-        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
-        //         </verticalAxis>
-        //         <series>
-        //             <Line2DSeries yField="value1" displayName="2023" itemRenderer="CircleItemRenderer">
-        //                 <lineStroke><Stroke color="#62b2fd" weight="2"/></lineStroke>
-        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
-        //             </Line2DSeries>
-        //             <Line2DSeries yField="value2" displayName="2024" itemRenderer="DiamondItemRenderer">
-        //                 <lineStroke><Stroke color="#01dbab" weight="2"/></lineStroke>
-        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
-        //             </Line2DSeries>
-        //         </series>
-        //     </Line2DChart>
-        // </rMateChart>`;
-        //         }
-        //
-        //
-        //         // 그리드 데이터를 차트에 맞게 변환 (tab3)
-        //         function transformDataForChart(gridData) {
-        //             // if (!gridData) {
-        //             //     // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
-        //             //     return { fields: [], data: [] };
-        //             // }
-        //
-        //             const dataFields = [];
-        //             const chartData = [];
-        //
-        //             // 데이터를 변환하여 차트에 사용할 수 있도록 변환
-        //             gridData.forEach(row => {
-        //                 const dataItem = {period: row.period};
-        //                 for (const key in row) {
-        //                     if (key !== 'period' && key !== 'powernm') {
-        //                         if (!dataFields.includes(key)) {
-        //                             dataFields.push(key);
-        //                         }
-        //                         dataItem[key] = row[key];
-        //                     }
-        //                 }
-        //                 chartData.push(dataItem);
-        //             });
-        //
-        //             return {
-        //                 fields: dataFields,
-        //                 data: chartData
-        //             };
-        //         }
-        //
-        //         // 그리드 데이터를 차트에 맞게 변환 (tab2)
-        //         function transformDataForChartTab2(gridData, comparisonType) {
-        //             let chartData = [];
-        //             let dataFields = [];
-        //             let firstYear, secondYear;
-        //
-        //             switch (comparisonType) {
-        //                 case "YoY":
-        //                     // 연도 기반 데이터 처리
-        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-        //                     dataFields = [firstYear, secondYear];
-        //
-        //                     gridData.forEach(row => {
-        //                         const dataItem = {
-        //                             period: row.period || `${row.month}월`,
-        //                             [firstYear]: parseFloat(row.value1) || 0,
-        //                             [secondYear]: parseFloat(row.value2) || 0
-        //                         };
-        //                         chartData.push(dataItem);
-        //                     });
-        //                     break;
-        //
-        //                 case "QoQ":
-        //                     // 분기별 데이터 처리
-        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-        //                     dataFields = [firstYear, secondYear];
-        //
-        //                     gridData.forEach(row => {
-        //                         const quarter = `Q${row.quarter}`;  // 분기를 'Q1', 'Q2', 등으로 표시
-        //                         const dataItem = {
-        //                             period: quarter,
-        //                             [firstYear]: parseFloat(row.value1) || 0,
-        //                             [secondYear]: parseFloat(row.value2) || 0
-        //                         };
-        //                         chartData.push(dataItem);
-        //                     });
-        //                     break;
-        //
-        //                 case "MoM":
-        //                     // 월 기반 데이터 처리
-        //                     const month = document.getElementById("startDateTab2").value.split("-")[1]; // MoM의 경우 시작 월과 종료 월이 같다고 가정
-        //                     dataFields = [month];
-        //
-        //                     gridData.forEach(row => {
-        //                         const dataItem = {
-        //                             period: `${row.month}월`,
-        //                             [month]: parseFloat(row.value1) || 0
-        //                         };
-        //                         chartData.push(dataItem);
-        //                     });
-        //                     break;
-        //
-        //                 case "YTD":
-        //                     // YTD일 경우, startYear와 endYear에서 누적 발전량을 가져옴
-        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
-        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
-        //                     dataFields = [firstYear, secondYear]; // 두 연도의 누적 발전량 필드를 설정
-        //
-        //                     // 중복된 월을 제거하기 위한 Set 객체
-        //                     let seenMonths = new Set();
-        //
-        //                     // 데이터를 월별로 그룹화 및 중복 월 제거
-        //                     chartData = gridData.filter(row => {
-        //                         if (seenMonths.has(row.month)) {
-        //                             return false;  // 중복된 월이면 필터링하여 제외
-        //                         }
-        //                         seenMonths.add(row.month);  // 중복 방지를 위해 Set에 추가
-        //                         return true;  // 중복이 아닌 경우 유지
-        //                     }).map(row => ({
-        //                         period: `${row.month}월`,  // 월별 데이터
-        //                         [firstYear]: parseFloat(row.cumulative_start_year) || 0, // 첫 번째 연도의 누적 발전량
-        //                         [secondYear]: parseFloat(row.cumulative_end_year) || 0  // 두 번째 연도의 누적 발전량
-        //                     }));
-        //                     break;
-        //             }
-        //
-        //             return {data: chartData, fields: dataFields};
-        //         }
+        //     });
+        // }
 
-        // 차트 끝 =================================================================================
 
         function showPopup(event) {
             const targetPopupId = event.target.getAttribute('data-popup');
@@ -2116,10 +2035,6 @@
         }
 
 
-
-
-
-
         // 현재 날짜를 설정하는 함수
         function setCurrentDate() {
             var today = new Date();
@@ -2151,6 +2066,7 @@
                 .catch(error => console.error('Error loading power IDs:', error));
         }
 
+        // 검색 =================================================================================
         // 검색 (tab1, tab2)
         function search(event) {
             const buttonId = event.target.id;
@@ -2225,6 +2141,7 @@
                     console.log(`서버로부터 ${data.length}개의 데이터를 받았습니다.`);
                     if (data.length > 0) {
                         bindGridDataTab3(data); // 탭 3의 그리드에 데이터 바인딩
+                        updateChart3(data);     // 데이터를 차트에 반영
                     } else {
                         console.log("선택한 조건에 해당하는 데이터가 없습니다.");
                         Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
@@ -2244,78 +2161,11 @@
         }
 
 
-        // tab4 검색 기능
-        function searchTab4() {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const powerid = document.getElementById('select1_tab4').value;
-
-            $.ajax({
-                url: '/api/sales/gene/statistics/periodic',
-                type: 'GET',
-                data: { startDate: startDate, endDate: endDate, powerid: powerid },
-                success: function(response) {
-                    console.log("Server response:", response);
-                    if (response && typeof response === 'object') {
-                        if (response.monthly && response.monthly.length > 0) {
-                            console.log("Monthly data:", response.monthly);
-                            initializeMonthlyGrid(response.monthly);
-                        } else {
-                            console.log("No monthly data available");
-                            initializeEmptyGrid('theGrid4_1');
-                        }
-
-                        if (response.quarterly && response.quarterly.length > 0) {
-                            console.log("Quarterly data:", response.quarterly);
-                            initializeQuarterlyGrid(response.quarterly);
-                        } else {
-                            console.log("No quarterly data available");
-                            initializeEmptyGrid('theGrid4_2');
-                        }
-
-                        // Similar checks for halfYearly and yearly data
-                    } else {
-                        console.log("Invalid response format");
-                        Alert.alert("", "서버에서 올바른 형식의 데이터를 받지 못했습니다.");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading data for tab 4:', error);
-                    console.log('XHR status:', status);
-                    console.log('XHR response:', xhr.responseText);
-                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
-                }
-            });
-        }
 
 
-        // tab5 검색 기능
-        function searchTab5() {
-            const startDate = document.getElementById('startDate2').value;
-            const endDate = document.getElementById('endDate2').value;
-            const powerid = document.getElementById('select1_tab5').value;
 
-            $.ajax({
-                url: '/api/sales/gene/statistics/comparative',
-                type: 'GET',
-                data: { startDate: startDate, endDate: endDate, powerid: powerid },
-                success: function(response) {
-                    if (response) {
-                        initializeYoYGrid(response.yoy);
-                        initializeQoQGrid(response.qoq);
-                        initializeMoMGrid(response.mom);
-                        initializeYTDGrid(response.ytd);
-                    } else {
-                        console.log("No data returned for tab 5");
-                        Alert.alert("", "선택한 조건에 해당하는 데이터가 없습니다.");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error loading data for tab 5:', error);
-                    Alert.alert('', '검색에 실패했습니다. 다시 시도해 주세요.');
-                }
-            });
-        }
+
+
 
 
 
@@ -2565,15 +2415,34 @@
             });
         }
 
-        // 합계 계산
+        // 정산금, 최종 정산금 계산
         function calculateSumForRow(item) {
-            let sum = 0;
-            for (let i = 1; i <= 24; i++) {
-                const field = `mevalue${i < 10 ? '0' + i : i}`;
-                sum += parseFloat(item[field]) || 0; // 각 시간을 합산 (NaN을 피하기 위해 0으로 처리)
+
+            let minPrice;
+
+            // smpamt와 emamt 중 0이 아닌 값을 선택 (둘 다 0이 아닌 경우 작은 값 선택)
+            if (item.smpamt == 0) {
+                minPrice = item.emamt;
+            } else if (item.emamt == 0) {
+                minPrice = item.smpamt;
+            } else {
+                minPrice = Math.min(item.smpamt, item.emamt);
             }
-            item.mevaluet = sum; // 합계를 합계 컬럼에 반영
+
+            // 거래량에 minPrice를 곱하여 정산금을 계산
+            item.feeamt = minPrice * (item.mevalue || 0);
+
+            // 기타 정산금 합산
+            let etcSettlement =
+                (item.areaamt || 0) +  // 지역자원시설세
+                (item.outamt || 0) +   // 배출권정산금
+                (item.rpsamt || 0) +   // RPS
+                (item.difamt || 0);    // 차액정산금
+
+            // 최종 정산금 계산: 정산금 + 기타 정산금
+            item.sumamt = (item.feeamt || 0) + etcSettlement;
         }
+
 
         //     ================================================================================================
         //     ================================================================================================
@@ -3207,6 +3076,407 @@
         //     chartReadyHandler2("chart2", "chartHolder2", transformedData);
         // }
 
+        // 차트 =============================================================
+        // 월별 차트 생성
+        function createMonthlyChart(data) {
+            rMateChartH5.create("chartHolder4_1", "chartHolder4_1", "rMateOnLoadCallFunction=monthlyChartReadyHandler", "100%", "100%");
+
+            function monthlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(monthlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 분기별 차트 생성
+        function createQuarterlyChart(data) {
+            rMateChartH5.create("chartHolder4_2", "chartHolder4_2", "rMateOnLoadCallFunction=quarterlyChartReadyHandler", "100%", "100%");
+
+            function quarterlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(quarterlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 반기별 차트 생성
+        function createHalfYearlyChart(data) {
+            rMateChartH5.create("chartHolder4_3", "chartHolder4_3", "rMateOnLoadCallFunction=halfYearlyChartReadyHandler", "100%", "100%");
+
+            function halfYearlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(halfYearlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+        // 연도별 차트 생성
+        function createYearlyChart(data) {
+            rMateChartH5.create("chartHolder4_4", "chartHolder4_4", "rMateOnLoadCallFunction=yearlyChartReadyHandler", "100%", "100%");
+
+            function yearlyChartReadyHandler(id) {
+                var chart = document.getElementById(id);
+                chart.setLayout(yearlyChartLayout);
+                chart.setData(data);
+            }
+        }
+
+
+
+
+
+
+
+
+
+        // 차트 =============================================================
+
+        // tab3 차트
+        //         function chartReadyHandler(id, chartHolderId, gridData) {
+        //             // id에 해당하는 차트가 생성되었는지 확인
+        //             var chart = document.getElementById(id);
+        //             if (!chart) {
+        //                 // console.error("차트가 생성되지 않았습니다: " + id);
+        //                 return;
+        //             }
+        //
+        //             if (!gridData) {
+        //                 // console.error("그리드 데이터가 정의되지 않았습니다.");
+        //                 return;
+        //             }
+        //
+        //             // 그리드 데이터를 슬라이드 차트의 형식에 맞게 변환
+        //             var transformedData = transformDataForChart(gridData);
+        //
+        //             // 각 차트의 레이아웃 정의
+        //             var layout1 = getCartesianLayout("Column2D", "2D Column Chart - MultiSeries", transformedData.fields);
+        //             var layout2 = getCartesianLayout("Line2D", "Line Chart with ItemRenderer", transformedData.fields,
+        //                 ["CircleItemRenderer", "TriangleItemRenderer", "RectangleItemRenderer"] // 각 필드에 대한 itemRenderer 설정
+        //             );
+        //             var radarLayout = getRadarLayout(transformedData.fields);
+        //
+        //             // 슬라이드 차트에 적용할 레이아웃과 데이터 배열 설정
+        //             var layoutSet = [layout1, layout2, radarLayout];
+        //             var dataSet = [transformedData.data, transformedData.data, transformedData.data];
+        //
+        //             // 슬라이드 차트 레이아웃 및 데이터 설정
+        //             chart.setSlideLayoutSet(layoutSet);
+        //             chart.setSlideDataSet(dataSet);
+        //         }
+        //
+        //         // tab2 차트
+        //         function chartReadyHandler2(id, chartHolderId, gridData, comparisonType) {
+        //             const chart = document.getElementById(id);
+        //             if (!chart || !gridData) return;
+        //
+        //             const {data, fields} = transformDataForChartTab2(gridData, comparisonType);
+        //
+        //             const layout1 = getCartesianLayout("Column2D", "2D Column Chart", fields);
+        //             const layout2 = getCartesianLayout("Line2D", "Line Chart", fields, ["CircleItemRenderer"]);
+        //
+        //             const layoutSet = [layout1, layout2];
+        //             const dataSet = [data, data];
+        //
+        //             chart.setSlideLayoutSet(layoutSet);
+        //             chart.setSlideDataSet(dataSet);
+        //         }
+        //
+        //
+        //         function updateChart(id, holderId) {
+        //             var chart = document.getElementById(id);
+        //             if (!chart) return;
+        //
+        //             const gridData = (id === 'chart1') ? theGrid3.itemsSource.items : theGrid4.itemsSource.items;
+        //             const transformedData = (id === 'chart1') ? transformDataForChart(gridData) : transformDataForChartTab2(gridData);
+        //             chartReadyHandler(id, holderId, transformedData);
+        //         }
+        //
+        //
+        //         // 차트 디자인 가이드 색상 코드
+        //         const chartColors = [
+        //             "#62b2fd",
+        //             "#01dbab",
+        //             "#ffa336",
+        //             "#f99bab",
+        //             "#55667f",
+        //             "#82e8e8",
+        //             "#909bff",
+        //             "#f36f40"
+        //         ];
+        //
+        //         // 차트마다 형식이 다르기 때문에 다른 레이아웃 함수를 만들어야 합니다.
+        //         // 다른 유형의 차트 이용시, layout 함수 추가해서 사용하세요.
+        //
+        //         // Cartesian 차트 레이아웃 정의
+        //         function getCartesianLayout(type, title, dataFields, itemRenderers = []) {
+        //             var layout = "<rMateChart borderStyle='none'>"
+        //                 + "<Options><Caption text='" + "' />" // 차트 제목
+        //                 + "<SubCaption text='' textAlign='center' paddingBottom='20'/>" // 차트 부제목
+        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
+        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/></Options>"
+        //                 + "<" + type + "Chart showDataTips='true'>"
+        //                 + "<series>";
+        //
+        //             for (var i = 0; i < dataFields.length; ++i) {
+        //                 var itemRenderer = itemRenderers[i] ? " itemRenderer='" + itemRenderers[i] + "'" : "";
+        //                 var color = chartColors[i % chartColors.length]; // 색상을 순서대로 할당
+        //
+        //                 if (type === "Line2D") {
+        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+        //                         + "<showDataEffect><SeriesInterpolate duration='700'/></showDataEffect>"
+        //                         + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
+        //                         + "</" + type + "Series>";
+        //                 } else {
+        //                     layout += "<" + type + "Series yField='" + dataFields[i] + "' displayName='" + dataFields[i] + "' " + itemRenderer + ">"
+        //                         + "<showDataEffect><SeriesSlide direction='up' duration='700'/></showDataEffect>"
+        //                         + "<fill>"
+        //                         + "<SolidColor color='" + color + "'/>" // 색상 적용
+        //                         + "</fill>"
+        //                         + "</" + type + "Series>";
+        //                 }
+        //             }
+        //
+        //             layout += "</series>"
+        //                 + "<horizontalAxis>"
+        //                 + "<CategoryAxis categoryField='period'/>"
+        //                 + "</horizontalAxis>"
+        //                 + "<verticalAxis>"
+        //                 + "<LinearAxis formatter='{numfmt}'/>"
+        //                 + "</verticalAxis>"
+        //                 + "</" + type + "Chart>"
+        //                 + "</rMateChart>";
+        //
+        //             return layout;
+        //         }
+        //
+        //
+        //         // Radar 차트 레이아웃 정의
+        //         function getRadarLayout(dataFields) {
+        //             var radarLayout =
+        //                 "<rMateChart borderStyle='none'>"
+        //                 + "<Options>"
+        //                 + "<Caption text='' />"
+        //                 + "<Legend defaultMouseOverAction='true' useVisibleCheck='true'/>" // 범례
+        //                 + "</Options>"
+        //                 + "<NumberFormatter id='numfmt' useThousandsSeparator='true'/>"
+        //                 + "<RadarChart type='polygon' paddingTop='20' paddingBottom='20' showDataTips='true'>"
+        //                 + "<radialAxis>"
+        //                 + "<LinearAxis id='rAxis' formatter='{numfmt}'/>"
+        //                 + "</radialAxis>"
+        //                 + "<radialAxisRenderers>"
+        //                 + "<Axis2DRenderer axis='{rAxis}' horizontal='true' tickPlacement='outside' tickLength='4'>"
+        //                 + "<axisStroke>"
+        //                 + "<Stroke color='#555555'/>"
+        //                 + "</axisStroke>"
+        //                 + "</Axis2DRenderer>"
+        //                 + "</radialAxisRenderers>"
+        //                 + "<angularAxis>"
+        //                 + "<CategoryAxis categoryField='period' displayName='Year'/>"
+        //                 + "</angularAxis>"
+        //                 + "<series>";
+        //
+        //             for (var i = 0; i < dataFields.length; ++i) {
+        //                 var color = chartColors[i % chartColors.length]; // 색상 순서대로 적용
+        //
+        //                 radarLayout += "<RadarSeries field='" + dataFields[i] + "' displayName='" + dataFields[i] + "' fillLineArea='false'>"
+        //                     + "<showDataEffect>"
+        //                     + "<SeriesInterpolate duration='700'/>"
+        //                     + "</showDataEffect>"
+        //                     + "<lineStroke><Stroke color='" + color + "'/></lineStroke>" // 선 색상 적용
+        //                     + "</RadarSeries>";
+        //             }
+        //
+        //             radarLayout += "</series>"
+        //                 + "</RadarChart>"
+        //                 + "</rMateChart>";
+        //
+        //             return radarLayout;
+        //         }
+        //
+        //         // 콤비네이션 차트 레이아웃
+        //         function getCombinationChartLayout() {
+        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        //     <Options>
+        //         <Caption text=""/>
+        //         <Legend defaultMouseOverAction="true"/>
+        //     </Options>
+        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        //     <Combination2DChart showDataTips="true">
+        //         <horizontalAxis>
+        //             <CategoryAxis categoryField="period"/>
+        //         </horizontalAxis>
+        //         <verticalAxis>
+        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
+        //         </verticalAxis>
+        //         <series>
+        //             <Column2DSet type="clustered">
+        //                 <series>
+        //                     <Column2DSeries yField="value1" displayName="2023" fill="#62b2fd">
+        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                     </Column2DSeries>
+        //                     <Column2DSeries yField="value2" displayName="2024" fill="#01dbab">
+        //                         <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                     </Column2DSeries>
+        //                 </series>
+        //             </Column2DSet>
+        //             <Line2DSeries yField="growth" displayName="증감율 (%)" itemRenderer="DiamondItemRenderer">
+        //                 <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //                 <verticalAxis>
+        //                     <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+        //                 </verticalAxis>
+        //             </Line2DSeries>
+        //         </series>
+        //         <verticalAxisRenderers>
+        //             <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+        //             <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+        //         </verticalAxisRenderers>
+        //     </Combination2DChart>
+        // </rMateChart>`;
+        //         }
+        //
+        //         function getLineChartLayout() {
+        //             return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        //     <Options>
+        //         <Caption text=""/>
+        //         <Legend defaultMouseOverAction="true"/>
+        //     </Options>
+        //     <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        //     <Line2DChart showDataTips="true">
+        //         <horizontalAxis>
+        //             <CategoryAxis categoryField="period"/>
+        //         </horizontalAxis>
+        //         <verticalAxis>
+        //             <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}"/>
+        //         </verticalAxis>
+        //         <series>
+        //             <Line2DSeries yField="value1" displayName="2023" itemRenderer="CircleItemRenderer">
+        //                 <lineStroke><Stroke color="#62b2fd" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //             </Line2DSeries>
+        //             <Line2DSeries yField="value2" displayName="2024" itemRenderer="DiamondItemRenderer">
+        //                 <lineStroke><Stroke color="#01dbab" weight="2"/></lineStroke>
+        //                 <showDataEffect><SeriesInterpolate/></showDataEffect>
+        //             </Line2DSeries>
+        //         </series>
+        //     </Line2DChart>
+        // </rMateChart>`;
+        //         }
+        //
+        //
+        //         // 그리드 데이터를 차트에 맞게 변환 (tab3)
+        //         function transformDataForChart(gridData) {
+        //             // if (!gridData) {
+        //             //     // console.error("그리드 데이터가 null 또는 정의되지 않았습니다.");
+        //             //     return { fields: [], data: [] };
+        //             // }
+        //
+        //             const dataFields = [];
+        //             const chartData = [];
+        //
+        //             // 데이터를 변환하여 차트에 사용할 수 있도록 변환
+        //             gridData.forEach(row => {
+        //                 const dataItem = {period: row.period};
+        //                 for (const key in row) {
+        //                     if (key !== 'period' && key !== 'powernm') {
+        //                         if (!dataFields.includes(key)) {
+        //                             dataFields.push(key);
+        //                         }
+        //                         dataItem[key] = row[key];
+        //                     }
+        //                 }
+        //                 chartData.push(dataItem);
+        //             });
+        //
+        //             return {
+        //                 fields: dataFields,
+        //                 data: chartData
+        //             };
+        //         }
+        //
+        //         // 그리드 데이터를 차트에 맞게 변환 (tab2)
+        //         function transformDataForChartTab2(gridData, comparisonType) {
+        //             let chartData = [];
+        //             let dataFields = [];
+        //             let firstYear, secondYear;
+        //
+        //             switch (comparisonType) {
+        //                 case "YoY":
+        //                     // 연도 기반 데이터 처리
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear];
+        //
+        //                     gridData.forEach(row => {
+        //                         const dataItem = {
+        //                             period: row.period || `${row.month}월`,
+        //                             [firstYear]: parseFloat(row.value1) || 0,
+        //                             [secondYear]: parseFloat(row.value2) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "QoQ":
+        //                     // 분기별 데이터 처리
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear];
+        //
+        //                     gridData.forEach(row => {
+        //                         const quarter = `Q${row.quarter}`;  // 분기를 'Q1', 'Q2', 등으로 표시
+        //                         const dataItem = {
+        //                             period: quarter,
+        //                             [firstYear]: parseFloat(row.value1) || 0,
+        //                             [secondYear]: parseFloat(row.value2) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "MoM":
+        //                     // 월 기반 데이터 처리
+        //                     const month = document.getElementById("startDateTab2").value.split("-")[1]; // MoM의 경우 시작 월과 종료 월이 같다고 가정
+        //                     dataFields = [month];
+        //
+        //                     gridData.forEach(row => {
+        //                         const dataItem = {
+        //                             period: `${row.month}월`,
+        //                             [month]: parseFloat(row.value1) || 0
+        //                         };
+        //                         chartData.push(dataItem);
+        //                     });
+        //                     break;
+        //
+        //                 case "YTD":
+        //                     // YTD일 경우, startYear와 endYear에서 누적 발전량을 가져옴
+        //                     firstYear = document.getElementById("startDateTab2").value.split("-")[0];
+        //                     secondYear = document.getElementById("endDateTab2").value.split("-")[0];
+        //                     dataFields = [firstYear, secondYear]; // 두 연도의 누적 발전량 필드를 설정
+        //
+        //                     // 중복된 월을 제거하기 위한 Set 객체
+        //                     let seenMonths = new Set();
+        //
+        //                     // 데이터를 월별로 그룹화 및 중복 월 제거
+        //                     chartData = gridData.filter(row => {
+        //                         if (seenMonths.has(row.month)) {
+        //                             return false;  // 중복된 월이면 필터링하여 제외
+        //                         }
+        //                         seenMonths.add(row.month);  // 중복 방지를 위해 Set에 추가
+        //                         return true;  // 중복이 아닌 경우 유지
+        //                     }).map(row => ({
+        //                         period: `${row.month}월`,  // 월별 데이터
+        //                         [firstYear]: parseFloat(row.cumulative_start_year) || 0, // 첫 번째 연도의 누적 발전량
+        //                         [secondYear]: parseFloat(row.cumulative_end_year) || 0  // 두 번째 연도의 누적 발전량
+        //                     }));
+        //                     break;
+        //             }
+        //
+        //             return {data: chartData, fields: dataFields};
+        //         }
+
+        // 차트 끝 =================================================================================
+
         // ===================================================================================================
         // 0919 하드코딩
 
@@ -3270,9 +3540,9 @@
         // tab3
 
         // tab3 차트 초기화 함수
-        function initTab3Chart() {
-            rMateChartH5.create("chart3", "chartHolder3", "rMateOnLoadCallFunction=chartReadyHandler3", "100%", "100%");
-        }
+        // function initTab3Chart() {
+        //     rMateChartH5.create("chart3", "chartHolder3", "rMateOnLoadCallFunction=chartReadyHandler3", "100%", "100%");
+        // }
 
         // tab3 그리드 초기화 함수
         function initTab3Grid(){
@@ -3280,66 +3550,66 @@
         }
 
         // tab3 차트 데이터 설정 함수
-        function chartReadyHandler3(id) {
-            var chartData = [
-                {Hour: "01시", KT대구물류센터: 651000, KT대덕2연구센터: 835000},
-                {Hour: "02시", KT대구물류센터: 660000, KT대덕2연구센터: 820000},
-                {Hour: "03시", KT대구물류센터: 645000, KT대덕2연구센터: 840000},
-                {Hour: "04시", KT대구물류센터: 655000, KT대덕2연구센터: 830000},
-                {Hour: "05시", KT대구물류센터: 670000, KT대덕2연구센터: 815000},
-                {Hour: "06시", KT대구물류센터: 680000, KT대덕2연구센터: 825000},
-                {Hour: "07시", KT대구물류센터: 690000, KT대덕2연구센터: 845000},
-                {Hour: "08시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
-                {Hour: "09시", KT대구물류센터: 665000, KT대덕2연구센터: 835000},
-                {Hour: "10시", KT대구물류센터: 655000, KT대덕2연구센터: 820000},
-                {Hour: "11시", KT대구물류센터: 670000, KT대덕2연구센터: 830000},
-                {Hour: "12시", KT대구물류센터: 685000, KT대덕2연구센터: 845000},
-                {Hour: "13시", KT대구물류센터: 695000, KT대덕2연구센터: 855000},
-                {Hour: "14시", KT대구물류센터: 680000, KT대덕2연구센터: 840000},
-                {Hour: "15시", KT대구물류센터: 665000, KT대덕2연구센터: 825000},
-                {Hour: "16시", KT대구물류센터: 650000, KT대덕2연구센터: 815000},
-                {Hour: "17시", KT대구물류센터: 660000, KT대덕2연구센터: 830000},
-                {Hour: "18시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
-                {Hour: "19시", KT대구물류센터: 685000, KT대덕2연구센터: 860000},
-                {Hour: "20시", KT대구물류센터: 670000, KT대덕2연구센터: 840000},
-                {Hour: "21시", KT대구물류센터: 655000, KT대덕2연구센터: 825000},
-                {Hour: "22시", KT대구물류센터: 645000, KT대덕2연구센터: 815000},
-                {Hour: "23시", KT대구물류센터: 650000, KT대덕2연구센터: 830000},
-                {Hour: "24시", KT대구물류센터: 660000, KT대덕2연구센터: 845000}
-            ];
-
-            var layoutStr = `
-<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-    <Options>
-        <Legend />
-    </Options>
-    <Line2DChart showDataTips="true">
-        <horizontalAxis>
-            <CategoryAxis categoryField="Hour" />
-        </horizontalAxis>
-        <verticalAxis>
-            <LinearAxis minimum="600000" maximum="900000" interval="50000"/>
-        </verticalAxis>
-        <series>
-            <Line2DSeries yField="KT대구물류센터" displayName="KT대구물류센터 연료전지" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#ffa336" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-            <Line2DSeries yField="KT대덕2연구센터" displayName="KT대덕2연구센터 연료전지" itemRenderer="CircleItemRenderer">
-                <lineStroke>
-                    <Stroke color="#909bff" weight="2"/>
-                </lineStroke>
-            </Line2DSeries>
-        </series>
-    </Line2DChart>
-</rMateChart>
-`;
-
-            var chart = document.getElementById(id);
-            chart.setLayout(layoutStr);
-            chart.setData(chartData);
-        }
+//         function chartReadyHandler3(id) {
+//             var chartData = [
+//                 {Hour: "01시", KT대구물류센터: 651000, KT대덕2연구센터: 835000},
+//                 {Hour: "02시", KT대구물류센터: 660000, KT대덕2연구센터: 820000},
+//                 {Hour: "03시", KT대구물류센터: 645000, KT대덕2연구센터: 840000},
+//                 {Hour: "04시", KT대구물류센터: 655000, KT대덕2연구센터: 830000},
+//                 {Hour: "05시", KT대구물류센터: 670000, KT대덕2연구센터: 815000},
+//                 {Hour: "06시", KT대구물류센터: 680000, KT대덕2연구센터: 825000},
+//                 {Hour: "07시", KT대구물류센터: 690000, KT대덕2연구센터: 845000},
+//                 {Hour: "08시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
+//                 {Hour: "09시", KT대구물류센터: 665000, KT대덕2연구센터: 835000},
+//                 {Hour: "10시", KT대구물류센터: 655000, KT대덕2연구센터: 820000},
+//                 {Hour: "11시", KT대구물류센터: 670000, KT대덕2연구센터: 830000},
+//                 {Hour: "12시", KT대구물류센터: 685000, KT대덕2연구센터: 845000},
+//                 {Hour: "13시", KT대구물류센터: 695000, KT대덕2연구센터: 855000},
+//                 {Hour: "14시", KT대구물류센터: 680000, KT대덕2연구센터: 840000},
+//                 {Hour: "15시", KT대구물류센터: 665000, KT대덕2연구센터: 825000},
+//                 {Hour: "16시", KT대구물류센터: 650000, KT대덕2연구센터: 815000},
+//                 {Hour: "17시", KT대구물류센터: 660000, KT대덕2연구센터: 830000},
+//                 {Hour: "18시", KT대구물류센터: 675000, KT대덕2연구센터: 850000},
+//                 {Hour: "19시", KT대구물류센터: 685000, KT대덕2연구센터: 860000},
+//                 {Hour: "20시", KT대구물류센터: 670000, KT대덕2연구센터: 840000},
+//                 {Hour: "21시", KT대구물류센터: 655000, KT대덕2연구센터: 825000},
+//                 {Hour: "22시", KT대구물류센터: 645000, KT대덕2연구센터: 815000},
+//                 {Hour: "23시", KT대구물류센터: 650000, KT대덕2연구센터: 830000},
+//                 {Hour: "24시", KT대구물류센터: 660000, KT대덕2연구센터: 845000}
+//             ];
+//
+//             var layoutStr = `
+// <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+//     <Options>
+//         <Legend />
+//     </Options>
+//     <Line2DChart showDataTips="true">
+//         <horizontalAxis>
+//             <CategoryAxis categoryField="Hour" />
+//         </horizontalAxis>
+//         <verticalAxis>
+//             <LinearAxis minimum="600000" maximum="900000" interval="50000"/>
+//         </verticalAxis>
+//         <series>
+//             <Line2DSeries yField="KT대구물류센터" displayName="KT대구물류센터 연료전지" itemRenderer="CircleItemRenderer">
+//                 <lineStroke>
+//                     <Stroke color="#ffa336" weight="2"/>
+//                 </lineStroke>
+//             </Line2DSeries>
+//             <Line2DSeries yField="KT대덕2연구센터" displayName="KT대덕2연구센터 연료전지" itemRenderer="CircleItemRenderer">
+//                 <lineStroke>
+//                     <Stroke color="#909bff" weight="2"/>
+//                 </lineStroke>
+//             </Line2DSeries>
+//         </series>
+//     </Line2DChart>
+// </rMateChart>
+// `;
+//
+//             var chart = document.getElementById(id);
+//             chart.setLayout(layoutStr);
+//             chart.setData(chartData);
+//         }
 
         // tab3 그리드 초기화 및 데이터 설정 함수
         // function initGrid3() {
@@ -3460,51 +3730,51 @@
         }
 
         // 차트 데이터 설정 함수
-        function chartReadyHandler4_1(id) {
-            var chartData = [
-                { Month: "1월", "KT대구물류센터 연료전지": 1000, "KT대덕2연구센터연료전지": 800 },
-                { Month: "2월", "KT대구물류센터 연료전지": 1500, "KT대덕2연구센터연료전지": 1200 },
-                { Month: "3월", "KT대구물류센터 연료전지": 1200, "KT대덕2연구센터연료전지": 1000 },
-                { Month: "4월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
-                { Month: "5월", "KT대구물류센터 연료전지": 2000, "KT대덕2연구센터연료전지": 1700 },
-                { Month: "6월", "KT대구물류센터 연료전지": 1700, "KT대덕2연구센터연료전지": 1400 },
-                { Month: "7월", "KT대구물류센터 연료전지": 1900, "KT대덕2연구센터연료전지": 1600 },
-                { Month: "8월", "KT대구물류센터 연료전지": 2200, "KT대덕2연구센터연료전지": 1800 },
-                { Month: "9월", "KT대구물류센터 연료전지": 2100, "KT대덕2연구센터연료전지": 1700 },
-                { Month: "10월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
-                { Month: "11월", "KT대구물류센터 연료전지": 1600, "KT대덕2연구센터연료전지": 1300 },
-                { Month: "12월", "KT대구물류센터 연료전지": 2300, "KT대덕2연구센터연료전지": 1900 }
-            ];
-
-            var layoutStr = `
-    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
-        <Options>
-            <Legend />
-        </Options>
-        <Column2DChart showDataTips="true">
-            <horizontalAxis>
-                <CategoryAxis categoryField="Month" />
-            </horizontalAxis>
-            <series>
-                <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
-                    <showDataEffect>
-                        <SeriesInterpolate />
-                    </showDataEffect>
-                </Column2DSeries>
-                <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
-                    <showDataEffect>
-                        <SeriesInterpolate />
-                    </showDataEffect>
-                </Column2DSeries>
-            </series>
-        </Column2DChart>
-    </rMateChart>
-    `;
-
-            var chart = document.getElementById(id);
-            chart.setLayout(layoutStr);
-            chart.setData(chartData);
-        }
+    //     function chartReadyHandler4_1(id) {
+    //         var chartData = [
+    //             { Month: "1월", "KT대구물류센터 연료전지": 1000, "KT대덕2연구센터연료전지": 800 },
+    //             { Month: "2월", "KT대구물류센터 연료전지": 1500, "KT대덕2연구센터연료전지": 1200 },
+    //             { Month: "3월", "KT대구물류센터 연료전지": 1200, "KT대덕2연구센터연료전지": 1000 },
+    //             { Month: "4월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
+    //             { Month: "5월", "KT대구물류센터 연료전지": 2000, "KT대덕2연구센터연료전지": 1700 },
+    //             { Month: "6월", "KT대구물류센터 연료전지": 1700, "KT대덕2연구센터연료전지": 1400 },
+    //             { Month: "7월", "KT대구물류센터 연료전지": 1900, "KT대덕2연구센터연료전지": 1600 },
+    //             { Month: "8월", "KT대구물류센터 연료전지": 2200, "KT대덕2연구센터연료전지": 1800 },
+    //             { Month: "9월", "KT대구물류센터 연료전지": 2100, "KT대덕2연구센터연료전지": 1700 },
+    //             { Month: "10월", "KT대구물류센터 연료전지": 1800, "KT대덕2연구센터연료전지": 1500 },
+    //             { Month: "11월", "KT대구물류센터 연료전지": 1600, "KT대덕2연구센터연료전지": 1300 },
+    //             { Month: "12월", "KT대구물류센터 연료전지": 2300, "KT대덕2연구센터연료전지": 1900 }
+    //         ];
+    //
+    //         var layoutStr = `
+    // <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    //     <Options>
+    //         <Legend />
+    //     </Options>
+    //     <Column2DChart showDataTips="true">
+    //         <horizontalAxis>
+    //             <CategoryAxis categoryField="Month" />
+    //         </horizontalAxis>
+    //         <series>
+    //             <Column2DSeries yField="KT대구물류센터 연료전지" displayName="KT대구물류센터 연료전지" fill="#62b2fd">
+    //                 <showDataEffect>
+    //                     <SeriesInterpolate />
+    //                 </showDataEffect>
+    //             </Column2DSeries>
+    //             <Column2DSeries yField="KT대덕2연구센터연료전지" displayName="KT대덕2연구센터연료전지" fill="#01dbab">
+    //                 <showDataEffect>
+    //                     <SeriesInterpolate />
+    //                 </showDataEffect>
+    //             </Column2DSeries>
+    //         </series>
+    //     </Column2DChart>
+    // </rMateChart>
+    // `;
+    //
+    //         var chart = document.getElementById(id);
+    //         chart.setLayout(layoutStr);
+    //         chart.setData(chartData);
+    //     }
 
 
         function chartReadyHandler4_2(id) {
@@ -3717,7 +3987,7 @@
 
             switch (periodType) {
                 case "monthly":
-                    chartReadyHandler4_1("chart4_1");
+                    // chartReadyHandler4_1("chart4_1");
                     initGrid4(1);
                     break;
                 case "quarterly":

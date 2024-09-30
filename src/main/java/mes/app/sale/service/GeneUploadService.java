@@ -1,6 +1,10 @@
 package mes.app.sale.service;
 
 import mes.config.Settings;
+import mes.domain.entity.User;
+import mes.domain.entity.actasEntity.TB_RP310;
+import mes.domain.entity.actasEntity.TB_RP320;
+import mes.domain.entity.actasEntity.TB_RP320_Id;
 import mes.domain.repository.TB_RP310Repository;
 import mes.domain.repository.TB_RP320Repository;
 import mes.domain.services.SqlRunner;
@@ -11,9 +15,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +106,7 @@ public class GeneUploadService {
 	
 	
 	// 수정
-	/*@Transactional
+	@Transactional
 	public void updateGeneData(List<TB_RP320> updates, User currentUser) {
 		for (TB_RP320 update : updates) {
 			
@@ -109,7 +116,8 @@ public class GeneUploadService {
 					update.getSpcompcd(),
 					update.getSpplancd(),
 					update.getStanddt(),
-					update.getPowerid()
+					update.getPowerid(),
+					update.getPowtime()
 			);
 			
 			// 기존 데이터 가져오기
@@ -127,7 +135,7 @@ public class GeneUploadService {
 				history.setStanddt(existingData.getStanddt());
 				history.setUserid(currentUser.getUsername());
 				history.setUsernm(currentUser.getFirst_name() + " " + currentUser.getLast_name());
-				history.setCreartdt(LocalDate.now()); // 생성일시
+				history.setCreartdt(LocalDateTime.now()); // 생성일시
 				history.setPowerid(existingData.getPowerid());
 				history.setPowernm(existingData.getPowernm());
 				history.setUptyn("Y"); // 업데이트 여부 'Y'로 설정
@@ -151,11 +159,11 @@ public class GeneUploadService {
 				existingData.setRpsamt(update.getRpsamt());
 				existingData.setDifamt(update.getDifamt());
 				existingData.setSumamt(update.getSumamt());
-				existingData.setIndatem(update.getIndatem());
+				existingData.setINDATEM(update.getINDATEM());
 				
 				// TB_RP320 테이블 업데이트
 				TB_RP320Repository.save(existingData);
 			}
 		}
-	}*/
+	}
 }
