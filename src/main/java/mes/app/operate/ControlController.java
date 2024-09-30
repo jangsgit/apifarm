@@ -104,6 +104,16 @@ public class ControlController {
         pk.setCheckdt(ncheckdt);
         pk.setContdt(ncontdt);
 
+        // PK 중복 여부 확인
+//        Optional<TB_RP880> existingRecord = TBRP880Repository.findById(pk);
+//        AjaxResult result = new AjaxResult();
+//
+//        if (existingRecord.isPresent()) {
+//            result.success = false;
+//            result.message = "해당 날짜에 이미 존재합니다.";  // 중복일 경우 메시지 설정
+//            return result;  // 중복 시 바로 반환
+//        }
+
         // 날짜와 시간을 결합하여 LocalDateTime으로 변환
         LocalDate date = LocalDate.parse(params.get("contdt"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalTime startTime = LocalTime.parse(params.get("contstime"), DateTimeFormatter.ofPattern("HH:mm"));
@@ -128,10 +138,8 @@ public class ControlController {
         TBRP880.setInusernm(user.getFirst_name());
         TBRP880.setInuserid(user.getUsername());
 
-
-        AjaxResult result = new AjaxResult();
-
         boolean success = controlService.save(TBRP880);
+        AjaxResult result = new AjaxResult();
 
         boolean success2 = false;
         try {
