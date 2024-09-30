@@ -4,6 +4,7 @@ package mes.domain.entity.actasEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import java.util.Date;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @IdClass(TB_RP810_PK.class)
-public class TB_RP810 extends BaseEntity{
+public class TB_RP810 extends BaseEntity implements Persistable<TB_RP810_PK> {
     @Id @Column(name = "spworkcd", length = 3)
     private String spworkcd;
     @Id @Column(name = "spcompcd", length = 3)
@@ -75,4 +76,13 @@ public class TB_RP810 extends BaseEntity{
     @Column(name="\"inusernm\"")
     String inusernm;    // 입력자명
 
+    @Override
+    public TB_RP810_PK getId() {
+        return new TB_RP810_PK(spworkcd, spcompcd, spplancd, srnumber, servicertm, serviceftm, spuncode);
+    }
+
+    @Override
+    public boolean isNew() {
+        return super.getINDATEM() == null;
+    }
 }

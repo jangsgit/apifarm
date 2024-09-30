@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_rp710")
+@Table(name = "tb_rp710") //순회점검 테이블
 @EntityListeners(AuditingEntityListener.class)
 @IdClass(TB_RP710Id.class)
 public class TB_RP710 extends BaseEntity{

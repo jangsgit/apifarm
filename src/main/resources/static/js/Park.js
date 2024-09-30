@@ -456,6 +456,17 @@ function formatDate(dateStr){
     return dateStr;
 }
 
+function FormDataInsert(formData) {
+    // 기본 필드들을 추가
+    const defaultFields = ['spworkcd', 'spworknm', 'spcompcd', 'spcompnm', 'spplancd', 'spplannm'];
+
+    defaultFields.forEach(field => {
+        formData.append(field, $(`#${field}`).val());
+    });
+
+    return formData; // formData에 기본 필드를 추가한 후 반환
+}
+
 
 
 

@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -179,7 +182,14 @@ public class FieldService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Timestamp fromDate = new Timestamp(dateFormat.parse(searchfrdate).getTime());
-        Timestamp toDate = new Timestamp(dateFormat.parse(searchtodate).getTime());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        LocalDate searchToDate = LocalDate.parse(searchtodate, formatter);
+// 해당 날짜의 23:59:59 시간으로 변환
+        LocalDateTime endOfDay = searchToDate.atTime(23, 59, 59);
+// Timestamp로 변환
+        Timestamp toDate = Timestamp.valueOf(endOfDay);
 
         // SQL 파라미터 설정
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
