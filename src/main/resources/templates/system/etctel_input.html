@@ -1,0 +1,844 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>비상연락망등록</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>시스템관리</li>
+                <li>비상연락망등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item EtcTelTab1" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="checkcomp">
+                                        협력사 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+
+                                    <input type="text" id="checkcomp" name="checkcomp" class="input-srch">
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="checkusr">
+                                        성명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="checkusr" name="checkusr" class="input-srch">
+                                        <!--                                        <a href="#a" class="btn-srch" id="searchgrid" title="검색" onclick="searchData()" onkeyup="searchData()"></a>-->
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="checkph">
+                                        모바일<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="checkph" name="checkph" class="input-srch">
+                                        <a class="btn-srch" id="btnSearch" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" id="btnDelete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnEdit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid"></div>
+                    </div>
+                </section>
+
+
+                <!-- Section -->
+                <section class="tab-item EtcTelTab2" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>비상연락망 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" id="btnDelete2">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <form id="980_form">
+                            <input type="hidden" id="emcontno" name="emcontno">
+                            <table class="write-table">
+                                <caption>비상연락망등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="emconcomp">
+                                            협력사명<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="emconcomp" name="emconcomp" class="wp100" maxlength="50">
+                                    </td>
+                                    <th>
+                                        <label for="divinm">
+                                            소속부서<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="divinm" name="divinm" class="wp100" maxlength="50"
+                                               placeholder="유지보수">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="emconper">
+                                            성명<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="emconper" name="emconper" class="wp100" maxlength="50"
+                                               placeholder="홍길동">
+                                    </td>
+                                    <th>
+                                        <label for="emconmno">
+                                            모바일<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="emconmno" name="emconmno" class="wp100" maxlength="50"
+                                               placeholder="010-0000-0000">
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>
+                                        <label for="emconemail">
+                                            이메일
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="emconemail" name="emconemail" class="wp100"
+                                               maxlength="50" placeholder="admin@naver.com">
+                                    </td>
+                                    <th>
+                                        <label for="emcontel">
+                                            사무실전화<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="emcontel" name="emcontel" class="wp100" maxlength="50"
+                                               placeholder="02-000-0000">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="spworkcd">
+                                            지역<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <ul>
+                                            <li>
+                                                <select title="지역" id="spworkcd"></select>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <th>
+                                        <label for="spcompcd">
+                                            산단<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <ul>
+                                            <li>
+                                                <select title="산단" id="spcompcd"></select>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="taskwork">
+                                            담당업무<span class="eq">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="taskwork" name="taskwork" class="wp100" maxlength="50"
+                                               placeholder="유지보수">
+                                    </td>
+                                    <th>
+                                        <label for="indatem">
+                                            생성일시
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="date" id="indatem" name="indatem" autocomplete="off" readonly>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let csrfToken = $("[name=_csrf]").val();
+        // 현재 날짜를 가져옴
+        const today = new Date();
+
+        // 연도, 월, 일을 2자리 숫자 형식으로 포맷팅
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        const day = String(today.getDate()).padStart(2, '0');
+
+        // 날짜 문자열 생성 (YYYY-MM-DD 형식)
+        const defaultDate = `${year}-${month}-${day}`;
+
+        // input 요소에 기본값 설정
+        document.getElementById('indatem').value = defaultDate;
+
+
+        var columns = [
+            {binding: 'emcontno', header: 'emcontno', align: 'center', width: 100, visible: false },
+            {binding: 'rownum', header: 'NO', width: 80, align: 'center'},
+            {binding: 'spworkcd', header: '지역명', width: 140, align: 'center'},
+            {binding: 'spcompcd', header: '산단명', width: 140, align: 'center'},
+            {binding: 'emconcomp', header: '협력사', width: 140, align: 'center'},
+            {binding: 'indatem', header: '생성일시', width: 140, align: 'center'},
+            {binding: 'divinm', header: '소속부서', width: 140, align: 'center'},
+            {binding: 'emconper', header: '성명', width: 140, align: 'center'},
+            {binding: 'taskwork', header: '담당업무', width: 160, align: 'center'},
+            {binding: 'emcontel', header: '사무실전화', width: 140, align: 'center'},
+            {binding: 'emconmno', header: '모바일', width: 160, align: 'center'},
+            {binding: 'emconemail', header: '이메일', width: "*", align: 'center'},
+        ];
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+
+            let data2 = [];
+
+            let emconcomp = $('#checkcomp').val();
+            let emconmno = $('#checkph').val();
+            let emconper = $('#checkusr').val();
+
+
+            $.ajax({
+                url: '/api/system/tbRp980/read',
+                type: 'GET',
+                data: {
+                    'emconper': emconper,
+                    'emconmno': emconmno,
+                    'emconcomp': emconcomp
+                },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 8;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: columns,
+                isReadOnly: true,
+                itemsSource: viewdata
+            });
+
+
+
+            theGrid.hostElement.addEventListener('dblclick', function(e) {
+                var ht = theGrid.hitTest(e);
+                var row = ht.row;
+
+                if (row >= 0) {
+                    var item = theGrid.rows[row].dataItem;
+
+                    // 데이터 확인
+                    console.log('item:', item);
+
+                    // 선택된 데이터를 HTML 테이블의 input/textarea 태그에 넣기
+                    document.getElementById('emcontno').value = item.emcontno;
+                    document.getElementById('emconcomp').value = item.emconcomp;
+
+                    // item.indatem이 ISO 8601 형식의 문자열일 때
+                    let dateValue;
+                    if (typeof item.indatem === 'string') {
+                        // 문자열이 'YYYY-MM-DDTHH:mm:ss.sssZ' 형식으로 되어 있으므로, 'YYYY-MM-DD' 형식으로 변환
+                        const date = new Date(item.indatem);
+                        dateValue = date.toISOString().split('T')[0];
+                    } else if (item.indatem instanceof Date) {
+                        // item.indatem이 Date 객체일 때
+                        dateValue = item.indatem.toISOString().split('T')[0];
+                    } else {
+                        // 유효하지 않은 경우 빈 문자열
+                        dateValue = '';
+                    }
+                    document.getElementById('indatem').value = dateValue;
+
+
+                    document.getElementById('divinm').value = item.divinm;
+                    document.getElementById('emconper').value = item.emconper;
+                    document.getElementById('taskwork').value = item.taskwork;
+                    document.getElementById('emcontel').value = item.emcontel;
+                    document.getElementById('emconmno').value = item.emconmno;
+                    document.getElementById('emconemail').value = item.emconemail;
+
+                    // 저장된 지역 코드 및 산단 코드
+                    var savedRegionName = item.spworkcd; // '대구'
+                    var savedDistrictName = item.spcompcd; // '성서산단
+
+                    // 콘솔 로그 확인
+                    console.log('Saved Region Name:', savedRegionName);
+                    console.log('Saved District Name:', savedDistrictName);
+
+
+                    // 지역 이름에 해당하는 옵션 선택
+                    $('#spworkcd').find('option').each(function() {
+                        if ($(this).text() === savedRegionName) {
+                            $(this).prop('selected', true);
+                        }
+                    }).trigger('change');
+
+                    // 지역 선택 후 산단 채우기
+                    $('#spworkcd').trigger('change').promise().done(function() {
+                        // 산단 이름에 해당하는 옵션 선택
+                        $('#spcompcd').find('option').each(function() {
+                            if ($(this).text() === savedDistrictName) {
+                                $(this).prop('selected', true);
+                            }
+                        }).trigger('change');
+
+                        // 지역 이름과 산단 이름을 가져오기
+                        var selectedRegionName = $('#spworkcd option:selected').text();
+                        var selectedDistrictName = $('#spcompcd option:selected').text();
+
+                        console.log('지역 이름:', selectedRegionName);
+                        console.log('산단 이름:', selectedDistrictName);
+
+                        // 화면에 표시
+                        $('#region-name').text(selectedRegionName || '지역 선택');
+                        $('#district-name').text(selectedDistrictName || '산단 선택');
+                    });
+
+                    // tab2로 이동
+                    var tab2 = document.querySelector('.EtcTelTab2');
+                    if (tab2) {
+                        document.querySelectorAll('.tab-item').forEach(function (tab) {
+                            tab.style.display = 'none';
+                        });
+
+                        tab2.style.display = 'block';
+
+                        var tabs = document.querySelectorAll('.tab-item');
+                        tabs.forEach(function (tab) {
+                            tab.classList.remove('active');
+                        });
+                        tab2.classList.add('active');
+
+                        var tab2Link = document.querySelector('a[href="#tab2"]');
+                        var tab1Link = document.querySelector('a[href="#tab1"]');
+
+                        if (tab2Link) {
+                            var tab2Li = tab2Link.parentElement;
+                            var tab1Li = tab1Link.parentElement;
+
+                            tab1Li.classList.remove('active');
+                            tab2Li.classList.add('active');
+                            tab2Li.style.setProperty('background-color', '#FFFFFF', 'important');
+                            tab2Li.style.setProperty('color', '#03428E', 'important');
+                        } else {
+                            console.error('Tab2 link element not found');
+                        }
+                    }
+
+                }
+            });
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+
+            new FlexGridContextMenu(theGrid);
+            window.downloadFileName = '비상연락망등록';
+
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            $('#btnSave').click(save);
+            $('#btnSearch').click(searchDataBind);
+
+
+            $('#btnEdit').click(function () {
+                fillTab2WithSelectedData();
+            });
+
+            $('#btnDelete').click(deleteCode);
+            $('#btnDelete2').click(deleteCode);
+
+
+
+        }
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        function fillTab2WithSelectedData() {
+            // 선택된 행 데이터 가져오기
+            let selectedRow = theGrid.selection.row;
+            if (selectedRow < 0) {
+                alert('먼저 그리드에서 항목을 선택하세요.');
+                return;
+            }
+
+            let selectedItem = theGrid.rows[selectedRow].dataItem;
+
+            // tab2의 입력 필드에 선택된 데이터 채우기
+            $('#emconcomp').val(selectedItem.emconcomp);
+            $('#divinm').val(selectedItem.divinm);
+            $('#emconper').val(selectedItem.emconper);
+            $('#emconmno').val(selectedItem.emconmno);
+            $('#emconemail').val(selectedItem.emconemail);
+            $('#emcontel').val(selectedItem.emcontel);
+            $('#taskwork').val(selectedItem.taskwork);
+            $('#indatem').val(selectedItem.indatem);
+
+
+            // 지역 및 산단 코드로 폼 필드 설정
+            var savedRegionName = selectedItem.spworkcd; // 지역 코드
+            var savedDistrictName = selectedItem.spcompcd; // 산단 코드
+
+            console.log(savedRegionName,savedDistrictName );
+
+            // 지역 이름에 해당하는 옵션 선택
+            $('#spworkcd').find('option').each(function() {
+                if ($(this).text() === savedRegionName) {
+                    $(this).prop('selected', true);
+                }
+            }).trigger('change');
+
+            // 지역 선택 후 산단 채우기
+            $('#spworkcd').trigger('change').promise().done(function() {
+                // 산단 이름에 해당하는 옵션 선택
+                $('#spcompcd').find('option').each(function() {
+                    if ($(this).text() === savedDistrictName) {
+                        $(this).prop('selected', true);
+                    }
+                }).trigger('change');
+
+                // 지역 이름과 산단 이름을 가져오기
+                var selectedRegionName = $('#spworkcd option:selected').text();
+                var selectedDistrictName = $('#spcompcd option:selected').text();
+
+                console.log('지역 이름:', selectedRegionName);
+                console.log('산단 이름:', selectedDistrictName);
+
+                // 화면에 표시
+                $('#region-name').text(selectedRegionName || '지역 선택');
+                $('#district-name').text(selectedDistrictName || '산단 선택');
+            });
+
+
+            // tab2로 전환
+            $('.tab-links a[href="#tab2"]').click();
+        }
+
+
+        let page = null;
+
+
+        function Move(){
+            // 필드 초기화
+            $('#980_form')[0].reset();
+            $('#spworkcd').val('').trigger('change');
+            $('#spcompcd').html("<option value=''>산단 선택</option>");
+
+            // input 요소에 기본값 설정
+            document.getElementById('indatem').value = defaultDate;
+
+            // tab1으로 전환
+            var tab1 = document.querySelector('.EtcTelTab1');
+            if (tab1) {
+                document.querySelectorAll('.tab-item').forEach(function (tab) {
+                    tab.style.display = 'none';
+                });
+
+                tab1.style.display = 'block';
+
+                var tabs = document.querySelectorAll('.tab-item');
+                tabs.forEach(function (tab) {
+                    tab.classList.remove('active');
+                });
+                tab1.classList.add('active');
+
+                var tab2Link = document.querySelector('a[href="#tab2"]');
+                var tab1Link = document.querySelector('a[href="#tab1"]');
+
+                if (tab1Link) {
+                    var tab2Li = tab2Link.parentElement;
+                    var tab1Li = tab1Link.parentElement;
+
+                    tab1Li.classList.add('active');
+                    tab2Li.classList.remove('active');
+                } else {
+                    console.error('Tab2 link element not found');
+                }
+            }
+        }
+
+        // 비상연락망 저장
+        function save() {
+            let url = '/api/system/tbRp980/save';
+
+
+            let data = FormUtil.extractForm($('#980_form'));
+
+            // 지역 및 산단 선택 값 추가
+            data.spworkcd = $('#spworkcd').val(); // 지역 코드
+            data.spcompcd = $('#spcompcd').val(); // 산단 코드
+
+            // 필수 입력 항목 체크
+            if (!data.emconcomp || !data.emconper || !data.emconmno ||
+                !data.emcontel || !data.taskwork || !data.spworkcd || !data.spcompcd) {
+                Alert.alert('', '필수항목을 입력해주세요');
+                return;
+            }
+
+            // !data.divinm ||
+
+
+            let fnSuccess = function (res) {
+                console.log(res, "+", data);
+                if (res.success) {
+                    Alert.alert('', '저장되었습니다.');
+                    Move();
+                searchDataBind(); // 그리드를 새로 고침
+
+                } else {
+                    Alert.alert('', res.message);
+                }
+            };
+            AjaxUtil.postAsyncData(url, data, fnSuccess);
+        }
+
+        //검색
+        function searchDataBind() {
+
+            let data = {
+                'emconper': $('#checkusr').val(),
+                'emconmno': $('#checkph').val(),
+                'emconcomp': $('#checkcomp').val()
+            }
+
+            console.log("Data to send:", data);
+
+            $.ajax({
+                url: '/api/system/tbRp980/read',
+                type: 'GET',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        console.log("Result data:", result.data);
+                        grid_binding(result.data);
+                    } else {
+                        console.log("Error occurred");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching log_list data:', textStatus, errorThrown);
+                }
+            });
+        }
+
+        function grid_binding(data) {
+            console.log("Data to bind to grid:", data);
+
+            let formattedData = data.map(item => ({
+                rownum: item.rownum,
+                emcontno:item.emcontno,
+                spworkcd: item.spworkcd,
+                spcompcd: item.spcompcd,
+                emconcomp: item.emconcomp,
+                indatem: item.indatem,
+                divinm: item.divinm,
+                emconper: item.emconper,
+                taskwork: item.taskwork,
+                emcontel: item.emcontel,
+                emconmno: item.emconmno,
+                emconemail: item.emconemail
+            }));
+
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+
+            columns.forEach(colDef => {
+                let col = new wijmo.grid.Column(colDef);
+                theGrid.columns.push(col);
+            });
+
+            viewdata = new wijmo.collections.CollectionView(formattedData);
+
+            theGrid.itemsSource = viewdata;
+            theGrid.refresh();
+        }
+
+        function deleteCode(event) {
+            var selectedRow = theGrid.selection.row;
+
+            // 선택된 항목의 데이터 아이템을 가져옵니다
+            var selectedItem = theGrid.rows[selectedRow]?.dataItem;
+            console.log(selectedItem);
+
+            if (!selectedItem) {
+                alert('선택된 항목이 없습니다.');
+                return;
+            }
+
+            let url = '/api/system/tbRp980/delete';
+            let id = selectedItem.emcontno;
+
+            // 삭제할 항목의 ID와 CSRF 토큰 데이터 설정
+            let data = {
+                '_csrf': csrfToken,
+                'emcontno': id
+            };
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                let fnSuccess = function (result) {
+                    if (result.success) {
+                        Alert.alert('', '삭제되었습니다');
+
+                        // 버튼의 ID에 따라 동작을 다르게 처리
+                        if (event.target.id === 'btnDelete2') {
+                            // 입력 필드 초기화 및 tab1으로 이동
+                            resetTab2Fields();
+
+                        }
+
+                        searchDataBind(); // 저장 후 새 데이터로 그리드 갱신
+                    } else {
+                        console.error('삭제 실패:', result.message);  // 실패 시 에러 로그
+                    }
+                };
+                AjaxUtil.postAsyncData(url, data, fnSuccess);
+            }, function () { });
+        }
+
+        function resetTab2Fields() {
+            // tab2 내의 모든 입력 필드 초기화
+            document.querySelectorAll('#tab2 input').forEach(function(input) {
+                input.value = '';
+            });
+
+            // 선택 박스 초기화
+            document.querySelectorAll('#tab2 select').forEach(function(select) {
+                select.selectedIndex = 0;
+            });
+
+            document.getElementById('indatem').value = defaultDate;
+        }
+
+
+
+        $(document).ready(function () {
+
+            // 지역 select 박스를 채우기
+            fetch('/api/system/tbRp980/regions')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('받은 데이터:', data); // 데이터 구조 확인용
+                    populateSelectBoxes(data);
+                })
+                .catch(error => console.error('데이터 로드 실패:', error));
+
+            function populateSelectBoxes(data) {
+                const $regionSelect = $('#spworkcd');
+                const $districtSelect = $('#spcompcd');
+
+                // 지역 select 박스 초기화
+                $regionSelect.html("<option value=''>지역 선택</option>");
+                $districtSelect.html("<option value=''>산단 선택</option>");
+
+                // 지역을 채우기
+                $.each(data, function (regionCode, districts) {
+                    // 지역 이름을 추출하기 위한 샘플 데이터, 실제는 아래 부분으로 대체됨
+                    const regionName = districts[0]?.regionName || regionCode;
+
+                    // 지역 옵션 추가
+                    const $regionOption = $('<option></option>');
+                    $regionOption.val(regionCode).text(regionName); // 지역 이름 표시
+                    $regionSelect.append($regionOption);
+                });
+
+                // 지역 선택 시 산단 채우기
+                $regionSelect.change(function () {
+                    const selectedRegionCode = $regionSelect.val();
+                    $districtSelect.html("<option value=''>산단 선택</option>");
+
+                    const districts = data[selectedRegionCode];
+                    if (districts) {
+                        $.each(districts, function (index, district) {
+                            const $districtOption = $('<option></option>');
+                            $districtOption.val(district.districtCode).text(district.districtName); // 산단 이름 표시
+                            $districtSelect.append($districtOption);
+                        });
+                    }
+                });
+            }
+
+
+            $('.btn-excell').click(function (event) {
+                // 기본 동작 방지 (페이지 새로고침 방지)
+                event.preventDefault();
+
+                // 입력 폼의 모든 텍스트 필드를 초기화
+                $('#980_form input[type="text"]').val('');
+
+                // 모든 <select> 요소의 값을 비웁니다.
+                $('#980_form select').each(function () {
+                    $(this).val(''); // 또는 초기값을 설정하려면 $(this).val('defaultValue') 사용
+                });
+
+                // input 요소에 기본값 설정
+                document.getElementById('indatem').value = defaultDate;
+
+
+                // 지역과 산단 선택 박스를 다시 초기화
+                fetch('/api/system/tbRp980/regions')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('받은 데이터:', data); // 데이터 구조 확인용
+                        populateSelectBoxes(data);
+                    })
+                    .catch(error => console.error('데이터 로드 실패:', error));
+
+            });
+
+            searchDataBind();
+
+        });
+
+    </script>
+</th:block>
+
+</html>
