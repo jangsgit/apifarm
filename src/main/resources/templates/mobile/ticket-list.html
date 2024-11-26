@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[KTFOMS] AI 기반 연료전지 인프라 구축 - 모바일</title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> <!-- Slide css -->
+    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css">
+    <link rel="stylesheet" type="text/css" href="/assets_mobile/css/import.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script src="/assets_mobile/js/ui.js"></script> <!-- Common js -->
+    <script th:inline="javascript">
+        var sandanData = /*[[${session.sandanList}]]*/ [];
+    </script>
+
+
+    <script type="text/javascript" src="/resource/ax5ui/ax5ui.all.min.js?v=1000"></script>
+
+    <script type="text/javascript" src="/js/ax5commUtil.js?v=1070"></script>
+
+    <script src="/js/common.js?v=1060"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
+    <script src="/js/Mobile.js"></script>
+</head>
+
+<body>
+<div class="mobile-wrapper page-ticket-list"><!-- ★페이지 Class명 -->
+    <!-- [모바일] 헤더  -->
+    <div class="mobile-layout-header">
+        <header>
+            <div class="left">
+                <a href="#" title="전체메뉴" class="logo">
+                    <img src="/images/logo/logo-new.png" alt="로고" style="width: 90px;">
+                </a>
+            </div>
+            <div class="center" style="margin-left:-50px;">
+                <h2>티켓목록</h2>
+            </div>
+            <div class="right">
+                <a href="#" title="전체메뉴" class="btn-menu">
+                    <img src="/assets_mobile/images/icon/btn-menu.svg" alt="전체메뉴 아이콘">
+                </a>
+            </div>
+        </header>
+    </div> <!-- //mobile-layout-header end-->
+
+    <!-- [모바일] 메뉴  -->
+    <div th:insert="~{mobile/mobile_menu :: mobile_menu}"></div>
+
+    <!-- [모바일] 컨덴츠  -->
+    <div class="mobile-layout-contents">
+        <!--- (레이아웃) Contents 영역 -->
+        <div class="layout-contents">
+            <div class="search-wrap-sp">
+                <div class="srch-tit aco-hd">
+                    <p>발전소 설정</p>
+                    <a href="#" title="열기/닫기" class="btn-aco">
+                        <img src="/assets_mobile/images/icon/ico-up.svg" alt="열기/닫기">
+                    </a>
+                </div>
+                <div class="srch-cont aco-cont" id="searchWrap">
+                    <div class="row">
+                        <dl>
+                            <dt>
+                                지역
+                            </dt>
+                            <dd>
+                                <select title="지역" id="spworkcd" name="spworkcd"
+                                        onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                                    <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spworknm" name="spworknm">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                산업단지
+                            </dt>
+                            <dd>
+                                <select title="산단" id="spcompcd" name="spcompcd"
+                                        onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                                    <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spcompnm" name="spcompnm">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                발전소
+                            </dt>
+                            <dd>
+                                <select title="시설" id="spplancd" name="spplancd"
+                                        onchange="updatePlannm(); saveSelectedSandanData()">
+                                    <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spplannm" name="spplannm">
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 검색 영역  -->
+            <div class="search-wrap">
+                <div class="srch-tit aco-hd">
+                    <p>기본검색</p>
+                    <a href="#" title="열기/닫기" class="btn-aco">
+                        <img src="/assets_mobile/images/icon/ico-up.svg" alt="열기/닫기">
+                    </a>
+                </div>
+                <div class="srch-cont aco-cont">
+                    <dl>
+                        <dt>
+                            발생일자
+                        </dt>
+                        <dd>
+                            <ul class="date-box">
+                                <li>
+                                    <input type="date" id="startDate" name="startDate">
+                                    <label for="startDate" class="hide">시작일</label>
+                                </li>
+                                <li>
+                                    <input type="date" id="endDate" name="endDate">
+                                    <label for="endDate" class="hide">종료일</label>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <div class="row">
+                        <dl>
+                            <dt>
+                                상태구분<span class="eq">*</span>
+                            </dt>
+                            <dd>
+                                <select id="tketflag_li" name="tketflag_li" title="전체">
+                                    <option value="" selected>전체</option>
+                                </select>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                요청유형<span class="eq">*</span>
+                            </dt>
+                            <dd>
+                                <select id="tketcate_li" name="tketcate_li">
+                                    <option value="">전체</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                    <dl>
+                        <dt>티켓명</dt>
+                        <dd>
+                            <div class="input-clear">
+                                <input type="text" id="searchtketnm" class="wp100">
+                                <span class="btn-clear">×</span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <div class="srch-btn">
+                        <button class="btn-dark" onclick="fetchListData()">검색</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 컨텐츠 영역  -->
+            <div class="contents-wrap">
+                <div class="list-top-wrap">
+                    <div class="list-num">
+                        목록 <span class="blue">10 건</span>
+                    </div>
+                    <a href="#" title="범례정보" class="btn-question">
+                        <img src="/assets_mobile/images/icon/ico-question.svg" alt="범례정보 아이콘">
+                    </a>
+                </div>
+                <div class="list-card-wrap" id="cardWrap">
+                    <!-- ★ status : green(생성) / blue(진행) / black(완료) / red(취소) -->
+
+                </div> <!--//card-wrap end-->
+            </div> <!--// contents-wrap end-->
+        </div> <!--//layout-contents end -->
+
+    </div> <!-- //mobile-layout-contents end-->
+
+    <div class="mobile-layout-popup" id="popup-history">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper">
+            <div class="popup-title">
+                <h3>작업이력</h3>
+                <a title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="ticket-tit">
+                    <dl>
+                        <dt>티켓명</dt>
+                        <dd></dd> <!-- 티켓 번호가 여기에 동적으로 삽입됩니다 -->
+                    </dl>
+                </div>
+                <div class="list-card-wrap">
+                    <!-- 작업이력 데이터가 여기에 동적으로 삽입됩니다 -->
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-layout-popup" id="popup-action">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper">
+            <div class="popup-title">
+                <h3>조치 내역</h3>
+                <a title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="ticket-tit">
+                    <dl>
+                        <dt>티켓명</dt>
+                        <dd></dd> <!-- 티켓 번호가 여기에 동적으로 삽입됩니다 -->
+                    </dl>
+                </div>
+                <div class="list-card-wrap">
+                    <!-- 작업이력 데이터가 여기에 동적으로 삽입됩니다 -->
+                </div>
+                <div class="write-wrap">
+
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy">확인</button>
+                <button class="btn-popup btn-white" onclick="saveForm_action()">등록</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-layout-popup" id="popup-notification">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper">
+            <div class="popup-title">
+                <h3>발전소 설정</h3>
+                <a href="#a" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="ticket-tit">
+                    <dl>
+                        <dd style="font-weight:500"></dd> <!-- 메시지가 동적으로 삽입됩니다. -->
+                    </dl>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy">확인</button>
+            </div>
+        </div>
+    </div>
+
+
+</div> <!-- //page-wrapper end-->
+
+<script th:inline="javascript">
+    // Thymeleaf에서 값 설정: Null 체크와 기본값 처리
+    var groupid = [[${session.groupid != null ? session.groupid : 'null'}]];
+    var id = /*[[${id != null ? id : 'null'}]]*/;
+    var groupname = /*[[${groupname != null ? groupname : 'null'}]]*/;
+    var username = /*[[${username != null ? username : 'null'}]]*/;
+
+    // 로컬스토리지에 값 유지 (null 또는 빈 문자열은 저장하지 않음)
+    if (groupid && groupid !== 'null') localStorage.setItem('groupid', groupid);
+    if (id && id !== 'null') localStorage.setItem('id', id);
+    if (username && username !== 'null') localStorage.setItem('username', username);
+    if (groupname && groupname !== 'null') localStorage.setItem('groupname', groupname);
+    saveSelectedSandanData();
+</script>
+
+
+<script type="text/javascript">
+
+    document.readyState === 'complete' ? init() : window.onload = init;
+
+    $(document).ready(function () {
+
+        // 산단 정보 초기화가 완료된 후에 실행
+        initializeSelections().then(() => {
+
+            if (!sessionStorage.getItem('sandanAlertShown')) {
+                // 발전소 설정된 데이터 가져오기
+                const spworknm = $('#spworknm').val() || "설정되지 않음";
+                const spcompnm = $('#spcompnm').val() || "설정되지 않음";
+                const spplannm = $('#spplannm').val() || "설정되지 않음";
+
+                // 모달 내용 동적으로 설정
+                $('#popup-notification .ticket-tit dl dd').html(
+                    `현재 설정된 발전소<br>
+                        - 지역: ${spworknm}<br>
+                        - 산업단지: ${spcompnm}<br>
+                        - 발전소: ${spplannm}<br>`
+                );
+
+                // 알림 팝업 표시
+                $('#popup-notification .popup-overlay').fadeIn(200);
+                $('#popup-notification .popup-wrapper').addClass('active');
+
+                // sessionStorage에 상태 저장
+                sessionStorage.setItem('sandanAlertShown', 'true');
+            }
+        });
+    });
+
+    function init() {
+        // 산단 연동
+        initializeSelections();
+
+        setDefaultDates('startDate', 'endDate');
+
+        fetchListData();
+        clearForm_action();
+
+        document.getElementById('spworkcd').addEventListener('change', fetchListData);
+        document.getElementById('spcompcd').addEventListener('change', fetchListData);
+        document.getElementById('spplancd').addEventListener('change', fetchListData);
+    }
+
+
+    function renderCards(data) {
+        const listCardWrap = document.getElementById('cardWrap');
+        listCardWrap.innerHTML = ''; // 기존 내용을 초기화
+
+        data.forEach(item => {
+            // 상태별 카드 색상 지정
+            let cardClass = 'card-blue'; // 기본값
+            if (item.tketflag === '진행') {
+                cardClass = 'card-green';
+            } else if (item.tketflag === '완료') {
+                cardClass = 'card-black';
+            } else if (item.tketflag === '취소') {
+                cardClass = 'card-red';
+            }
+
+            let hasWorkdt = false;
+            if (item.actionItems && item.actionItems.length > 0 && item.actionItems[0].workdt) {
+                hasWorkdt = true;
+            }
+
+            // 첨부파일 처리
+            let fileHtml = '';
+            if (item.isdownload && item.filenameList && item.filenameList.length > 0) {
+                const firstFilename = truncateFilename(item.filenameList[0]);
+                const additionalCount = item.filenameList.length > 1 ? ` 외 ${item.filenameList.length - 1}` : '';
+                fileHtml = `
+            <dl>
+                <dt>첨부파일</dt>
+                <dd>
+                    <a title="다운로드" class="btn-filedown" onclick="downloadFile_ticket(${item.tketnum})">
+                    ${firstFilename}${additionalCount}</a>
+                </dd>
+            </dl>
+        `;
+            }
+
+            // 버튼 처리
+            let buttonsHtml = '';
+            if (item.tketflag === '생성') {
+                buttonsHtml += `<button>삭제</button>`;
+                if (groupid === 14) {
+                    buttonsHtml += `<button onclick="confirm_button(${item.tketnum})">승인</button>`;
+                } else {
+                    buttonsHtml += `<button>수정</button>`;
+                }
+            } else if (item.tketflag === '진행') {
+                if (!hasWorkdt) {
+                    buttonsHtml += `<button onclick="cancel_button(${item.tketnum})">취소</button>`;
+                }
+                if (groupid === 14 && hasWorkdt) {
+                    buttonsHtml += `<button onclick="comple_button(${item.tketnum})">완료</button>`;
+                }
+
+                buttonsHtml += `<button class="btn btn-popup-open" data-popup="popup-action" title="조치내역">
+                    조치내역
+                </button>`;
+
+                buttonsHtml += `
+                <button class="btn btn-popup-open" data-popup="popup-history" title="작업이력">
+                    작업이력
+                </button>`;
+            } else if (['완료', '취소'].includes(item.tketflag)) {
+                buttonsHtml += `
+                <button class="btn btn-popup-open" data-popup="popup-history" title="작업이력">
+                    작업이력
+                </button>`;
+            }
+
+            // 카드 HTML 생성
+            const cardHtml = `
+            <div class="card-box ${cardClass}" data-tketnum="${item.tketnum}">
+                <div class="card-tit">
+                    <h3>${item.tketnm}</h3>
+                    <div class="status-tag">
+                        <span class="sta-${cardClass.split('-')[1]}">${item.tketflag}</span>
+                        <span class="sta-bgnavy">${item.tkettypecd || ''}</span>
+                    </div>
+                </div>
+                <div class="card-cont">
+                    <dl>
+                        <dt>발생일자 / 요청자</dt>
+                        <dd>${item.tketcrdtm || ''} / ${item.tketrusernm || ''}</dd>
+                    </dl>
+                    <dl>
+                        <dt>소속사 / 연락처</dt>
+                        <dd>${item.tketrcpnm || ''} / ${item.requesterhp || ''}</dd>
+                    </dl>
+                    <dl>
+                        <dt>작업내용</dt>
+                        <dd>${item.tketrem.replace(/\r\n/g, '<br>')}</dd>
+                    </dl>
+                    ${fileHtml}
+                </div>
+                <div class="card-btn">
+                    ${buttonsHtml}
+                </div>
+            </div>
+        `;
+
+            // HTML 삽입
+            listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+
+            // 조치내역 버튼에 클릭 이벤트 추가
+            const actionButton = listCardWrap.querySelector(
+                `.card-box[data-tketnum="${item.tketnum}"] .btn-popup-open[data-popup="popup-action"]`
+            );
+
+            // 작업이력 버튼에 클릭 이벤트 추가
+            const historyButton = listCardWrap.querySelector(
+                `.card-box[data-tketnum="${item.tketnum}"] .btn-popup-open[data-popup="popup-history"]`
+            );
+
+            attachPopupEvent(actionButton, item, 'popup-action');
+            attachPopupEvent(historyButton, item, 'popup-history');
+        });
+    }
+
+    function attachPopupEvent(button, item, popupType) {
+        if (!button) return;
+        button.addEventListener('click', () => {
+            if (popupType === 'popup-action') {
+                fetchListData_actionList(item);
+
+            } else if (popupType === 'popup-history') {
+                fetchListData_action(item);
+            }
+        });
+    }
+
+    // 데이터를 받아와 카드 렌더링
+    function fetchListData() {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+        let userid = null;
+
+        if (groupid === 14) {
+            userid = null;
+        } else {
+            userid = '[[${userid}]]';
+        }
+
+        $.ajax({
+            url: '/api/operate/ticket/read_all',
+            type: 'GET',
+            data: {
+                'startDate': $('#startDate').val(),
+                'endDate': $('#endDate').val(),
+                'tketflag': $('#tketflag_li').val(),
+                'tkettypecd': $('#tketcate_li').val(),
+                'searchtketnm': $('#searchtketnm').val(),
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                userid: userid
+            },
+            success: function (data) {
+                console.log(data.data);
+                renderCards(data.data);
+            }
+        });
+    }
+
+    // 다운로드
+    function downloadFile_ticket(tketnum) {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        // 선택된 항목에서 다운로드할 파일 목록 생성
+        const downloadList = [
+            {
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                tketnum: tketnum
+            }
+        ];
+
+        // 다운로드 URL 지정
+        let downloadUrl = '/api/operate/ticket/downloader';
+
+        // Jung.js에서 정의한 downloadFiles 함수 호출
+        downloadFiles(downloadList, downloadUrl);
+    }
+
+    function downloadFile_action(tketnum, workdt) {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        // 선택된 항목에서 다운로드할 파일 목록 생성
+        const downloadList = [
+            {
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                tketnum: tketnum,
+                workdt: formatToISOFormat(workdt)
+            }
+        ];
+
+        // 다운로드 URL 지정
+        let downloadUrl = '/api/operate/ticket/downloader_action';
+
+        // Jung.js에서 정의한 downloadFiles 함수 호출
+        downloadFiles(downloadList, downloadUrl);
+    }
+
+    function formatToISOFormat(date) {
+        const d = new Date(date);
+        return d.toISOString(); // '2024-10-08T09:32:00.000Z' 형식으로 변환
+    }
+
+    // 작업이력 불러오기
+    function fetchListData_action(item) {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        $.ajax({
+            url: '/api/operate/ticket/read_allaction',
+            type: 'GET',
+            data: {
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                tketnum: item.tketnum
+            },
+            success: function (data) {
+                renderActionHistory(data.data, item);
+            }
+        });
+    }
+
+    function fetchListData_actionList(item) {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        $.ajax({
+            url: '/api/operate/ticket/read_allaction',
+            type: 'GET',
+            data: {
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                tketnum: item.tketnum
+            },
+            success: function (data) {
+                console.log(data.data);
+                renderAction(data.data, item);
+            }
+        });
+    }
+
+    function renderActionHistory(data, item) {
+        // 팝업 활성화
+        const sortedData = data.sort((a, b) => {
+            const dateA = new Date(a.workdt || "1970-01-01");
+            const dateB = new Date(b.workdt || "1970-01-01");
+            return dateA - dateB; // 오름차순 정렬
+        });
+
+
+        const popup = document.getElementById('popup-history');
+        popup.classList.add('active');
+        // document.querySelector('#popup-history .popup-overlay').style.display = 'block';
+
+        // 작업이력 티켓명 표시
+        const ticketNameElement = document.querySelector('#popup-history .ticket-tit dd');
+        ticketNameElement.textContent = item.tketnm; // 티켓명 표시
+
+        // 작업이력 내용 렌더링
+        const listCardWrap = document.querySelector('#popup-history .list-card-wrap');
+        listCardWrap.innerHTML = ''; // 기존 내용을 초기화
+        popup.scrollTop = 0;
+
+        // 첫 번째 카드: 생성
+        let cardHtml = `
+        <div class="card-box card-blue">
+            <div class="card-cont">
+                <dl>
+                    <dt>상태</dt>
+                    <dd><span class="sta-blue">생성</span></dd>
+                </dl>
+                <dl>
+                    <dt>발생일자</dt>
+                    <dd>${item.tketcrdtm || 'N/A'}</dd>
+                </dl>
+                <dl>
+                    <dt>요청자</dt>
+                    <dd>${item.tketrusernm || 'N/A'}</dd>
+                </dl>
+            </div>
+        </div>
+    `;
+        listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+
+        // 두 번째 카드: 진행
+        if (item.confirmdt) {
+            cardHtml = `
+            <div class="card-box card-green">
+                <div class="card-cont">
+                    <dl>
+                        <dt>상태</dt>
+                        <dd><span class="sta-green">진행</span></dd>
+                    </dl>
+                    <dl>
+                        <dt>승인일자</dt>
+                        <dd>${item.confirmdt}</dd>
+                    </dl>
+                    <dl>
+                        <dt>담당자</dt>
+                        <dd>${item.tkconusernm || 'N/A'}</dd>
+                    </dl>
+                </div>
+            </div>
+        `;
+            listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+        }
+
+        // 세 번째, 네 번째 카드: 조치 및 요청 (data 배열 반복)
+        sortedData.forEach(action => {
+            let cardHtml = '';
+
+            // 조치 카드 (파랑)
+            if (action.workdt && action.workrm) {
+                // 첨부파일 처리
+                let fileHtml = '';
+                if (action.isdownload && action.filenameList && action.filenameList.length > 0) {
+                    const firstFilename = truncateFilename(action.filenameList[0]);
+                    const additionalCount = action.filenameList.length > 1 ? ` 외 ${action.filenameList.length - 1}` : '';
+                    fileHtml = `
+                        <dl>
+                            <dt>첨부파일</dt>
+                            <dd>
+                                <a title="다운로드" class="btn-filedown" onclick="downloadFile_action('${action.tketnum}', '${action.workdt}')">
+                                ${firstFilename}${additionalCount}</a>
+                            </dd>
+                        </dl>
+                    `;
+                }
+                cardHtml = `
+                <div class="card-box card-blue">
+                    <div class="card-cont">
+                        <dl>
+                            <dt></dt>
+                            <dd><span class="sta-blue">조치</span></dd>
+                        </dl>
+                        <dl>
+                            <dt>조치일자</dt>
+                            <dd>${action.workdt || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>조치자</dt>
+                            <dd>${item.tketrusernm || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>조치내용</dt>
+                            <dd>${action.workrm.replace(/\r\n/g, '<br>')}</dd>
+                        </dl>
+                        ${fileHtml} <!-- 첨부파일 HTML 추가 -->
+                    </div>
+                </div>
+                `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            } else if (action.workdt && action.orderdt) {
+                // 요청 카드 (파랑): 조치가 없고 요청만 있는 경우
+                cardHtml = `
+                <div class="card-box card-blue">
+                    <div class="card-cont">
+                        <dl>
+                            <dt></dt>
+                            <dd><span class="sta-blue">요청</span></dd>
+                        </dl>
+                        <dl>
+                            <dt>요청일자</dt>
+                            <dd>${action.orderdt || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>담당자</dt>
+                            <dd>${item.tkconusernm || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>요청내용</dt>
+                            <dd>${action.ordertext.replace(/\r\n/g, '<br>')}</dd>
+                        </dl>
+                    </div>
+                </div>
+                `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            }
+
+            // 요청 카드 (초록): 요청이 있고, 조치가 이미 표시된 경우
+            if (action.orderdt && action.workrm) {
+                cardHtml = `
+        <div class="card-box card-green">
+            <div class="card-cont">
+                <dl>
+                    <dt></dt>
+                    <dd><span class="sta-green">요청</span></dd>
+                </dl>
+                <dl>
+                    <dt>요청일자</dt>
+                    <dd>${action.orderdt || 'N/A'}</dd>
+                </dl>
+                <dl>
+                    <dt>담당자</dt>
+                    <dd>${item.tkconusernm || 'N/A'}</dd>
+                </dl>
+                <dl>
+                    <dt>요청내용</dt>
+                    <dd>${action.ordertext.replace(/\r\n/g, '<br>')}</dd>
+                </dl>
+            </div>
+        </div>
+        `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            }
+        });
+
+        // 다섯 번째 카드: 완료
+        if (item.finishdt) {
+            cardHtml = `
+            <div class="card-box card-black">
+                <div class="card-cont">
+                    <dl>
+                        <dt>상태</dt>
+                        <dd><span class="sta-black">완료</span></dd>
+                    </dl>
+                    <dl>
+                        <dt>완료일자</dt>
+                        <dd>${item.finishdt}</dd>
+                    </dl>
+                </div>
+            </div>
+        `;
+            listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+        }
+
+        // 여섯 번째 카드: 취소
+        if (item.canceldt) {
+            cardHtml = `
+            <div class="card-box card-red">
+                <div class="card-cont">
+                    <dl>
+                        <dt>상태</dt>
+                        <dd><span class="sta-red">취소</span></dd>
+                    </dl>
+                    <dl>
+                        <dt>취소일자</dt>
+                        <dd>${item.canceldt}</dd>
+                    </dl>
+                </div>
+            </div>
+        `;
+            listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+        }
+    }
+
+    function renderAction(data, item) {
+        // 팝업 활성화
+        const sortedData = data.sort((a, b) => {
+            const dateA = new Date(a.workdt || "1970-01-01");
+            const dateB = new Date(b.workdt || "1970-01-01");
+            return dateA - dateB; // 오름차순 정렬
+        });
+
+        const popup = document.getElementById('popup-action');
+        popup.classList.add('active');
+
+        // 현재 item 데이터를 팝업에 저장
+        popup.dataset.item = JSON.stringify(item);
+
+        // 작업이력 티켓명 표시
+        const ticketNameElement = document.querySelector('#popup-action .ticket-tit dd');
+        ticketNameElement.textContent = item.tketnm; // 티켓명 표시
+
+        // 작업이력 내용 렌더링
+        const listCardWrap = document.querySelector('#popup-action .list-card-wrap');
+        listCardWrap.innerHTML = ''; // 기존 내용을 초기화
+        popup.scrollTop = 0;
+
+        // 조치 및 요청 (data 배열 반복)
+        sortedData.forEach(action => {
+            let cardHtml = '';
+
+            // 조치 카드 (파랑)
+            if (action.workdt && action.workrm) {
+                // 첨부파일 처리
+                let fileHtml = '';
+                if (action.isdownload && action.filenameList && action.filenameList.length > 0) {
+                    const firstFilename = truncateFilename(action.filenameList[0]);
+                    const additionalCount = action.filenameList.length > 1 ? ` 외 ${action.filenameList.length - 1}` : '';
+                    fileHtml = `
+                        <dl>
+                            <dt>첨부파일</dt>
+                            <dd>
+                                <a title="다운로드" class="btn-filedown" onclick="downloadFile_action('${action.tketnum}', '${action.workdt}')">
+                                ${firstFilename}${additionalCount}</a>
+                            </dd>
+                        </dl>
+                    `;
+                }
+                cardHtml = `
+                <div class="card-box card-blue">
+                    <div class="card-cont">
+                        <dl>
+                            <dt></dt>
+                            <dd><span class="sta-blue">조치</span></dd>
+                        </dl>
+                        <dl>
+                            <dt>조치일자</dt>
+                            <dd>${action.workdt || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>조치자</dt>
+                            <dd>${item.tketrusernm || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>조치내용</dt>
+                            <dd>${action.workrm.replace(/\r\n/g, '<br>')}</dd>
+                        </dl>
+                        ${fileHtml} <!-- 첨부파일 HTML 추가 -->
+                        ${groupid === 14 && !action.orderdt ? `
+                        <dl>
+                            <dt>요청등록</dt>
+                            <dd><span class="sta-blue" onclick="handleOrder(${JSON.stringify(action).replace(/"/g, '&quot;')})">요청 등록</span></dd>
+                        </dl>` : ''}
+                    </div>
+                </div>
+                `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            } else if (action.workdt && action.orderdt) {
+                // 요청 카드 (파랑): 조치가 없고 요청만 있는 경우
+                cardHtml = `
+                <div class="card-box card-blue">
+                    <div class="card-cont">
+                        <dl>
+                            <dt></dt>
+                            <dd><span class="sta-blue">요청</span></dd>
+                        </dl>
+                        <dl>
+                            <dt>요청일자</dt>
+                            <dd>${action.orderdt || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>담당자</dt>
+                            <dd>${item.tkconusernm || 'N/A'}</dd>
+                        </dl>
+                        <dl>
+                            <dt>요청내용</dt>
+                            <dd>${action.ordertext.replace(/\r\n/g, '<br>')}</dd>
+                        </dl>
+                    </div>
+                </div>
+                `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            }
+
+            // 요청 카드 (초록): 요청이 있고, 조치가 이미 표시된 경우
+            if (action.orderdt && action.workrm) {
+                cardHtml = `
+        <div class="card-box card-green">
+            <div class="card-cont">
+                <dl>
+                    <dt></dt>
+                    <dd><span class="sta-green">요청</span></dd>
+                </dl>
+                <dl>
+                    <dt>요청일자</dt>
+                    <dd>${action.orderdt || 'N/A'}</dd>
+                </dl>
+                <dl>
+                    <dt>담당자</dt>
+                    <dd>${item.tkconusernm || 'N/A'}</dd>
+                </dl>
+                <dl>
+                    <dt>요청내용</dt>
+                    <dd>${action.ordertext.replace(/\r\n/g, '<br>')}</dd>
+                </dl>
+            </div>
+        </div>
+        `;
+                listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+            }
+        });
+
+        // 등록 폼 동적 렌더링
+        const writeWrap = document.querySelector('.write-wrap');
+        if (writeWrap) {
+            if (groupid !== 14) {
+                writeWrap.innerHTML = `
+                <dl>
+                    <dt>
+                        <label for="workdt">
+                            조치 일시
+                        </label>
+                    </dt>
+                    <dd>
+                        <input type="datetime-local" id="workdt" name="workdt">
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <label for="workrm">
+                            조치 내용
+                        </label>
+                    </dt>
+                    <dd>
+                        <div class="input-clear">
+                            <textarea type="text" id="workrm" name="workrm" style="height: 80px"></textarea>
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        파일첨부
+                    </dt>
+                    <dd>
+                        <div id="uploadComponent1" class="upload-component">
+                            <div class="upload-filebox">
+                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                <a class="btn" title="파일업로드">파일업로드</a>
+                                <input type="file" id="fileInput1" class="fileInput" multiple="">
+                                <p>Maximun upload file size <span>1GiB</span></p>
+                            </div>
+                            <div class="upload-filelist">
+                                <div class="title">
+                                    <h5>Files (0)</h5>
+                                    <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                </div>
+                                <ul class="filelist" id="filelist"></ul>
+                            </div>
+                        </div>
+                    </dd>
+                </dl>
+            `;
+            } else {
+                writeWrap.innerHTML = ''; // groupid가 14인 경우 등록 폼 제거
+            }
+        }
+        clearForm_action();
+    }
+
+    // 승인버튼
+    function confirm_button(tketnum) {
+
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        Alert.confirm('', '승인 하시겠습니까?', function () {
+            $.ajax({
+                url: '/api/operate/ticket/confirm',
+                type: 'POST',
+                contentType: 'application/json', // JSON 형식으로 보낼 것을 명시
+                data: JSON.stringify([ // 데이터를 JSON 배열 형태로 변환
+                    {
+                        spworkcd: spworkcd,
+                        spcompcd: spcompcd,
+                        spplancd: spplancd,
+                        tketnum: tketnum
+                    }
+                ]),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (res) {
+                    if (res.success) {
+                        Alert.alert('', '승인되었습니다.');
+                        fetchListData();
+                    }
+                }
+            });
+        });
+    }
+
+    // 취소버튼
+    function cancel_button(tketnum) {
+
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        Alert.confirm('', '취소 하시겠습니까?', function () {
+            $.ajax({
+                url: '/api/operate/ticket/cancel',
+                type: 'POST',
+                contentType: 'application/json', // JSON 형식으로 보낼 것을 명시
+                data: JSON.stringify( // 데이터를 JSON 배열 형태로 변환
+                    {
+                        spworkcd: spworkcd,
+                        spcompcd: spcompcd,
+                        spplancd: spplancd,
+                        tketnum: tketnum
+                    }
+                ),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (res) {
+                    if (res.success) {
+                        Alert.alert('', '취소되었습니다.');
+                        fetchListData();
+                    }
+                }
+            });
+        });
+    }
+
+    // 완료버튼
+    function comple_button(tketnum) {
+
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+
+        Alert.confirm('', '완료 하시겠습니까?', function () {
+            $.ajax({
+                url: '/api/operate/ticket/complete',
+                type: 'POST',
+                contentType: 'application/json', // JSON 형식으로 보낼 것을 명시
+                data: JSON.stringify([ // 데이터를 JSON 배열 형태로 변환
+                    {
+                        spworkcd: spworkcd,
+                        spcompcd: spcompcd,
+                        spplancd: spplancd,
+                        tketnum: tketnum
+                    }
+                ]),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (res) {
+                    if (res.success) {
+                        Alert.alert('', '완료되었습니다.');
+                        fetchListData();
+                    }
+                }
+            });
+        });
+    }
+
+    function saveForm_action() {
+
+        // 팝업에서 저장된 item 데이터를 가져옴
+        const popup = document.getElementById('popup-action');
+        const itemData = popup.dataset.item ? JSON.parse(popup.dataset.item) : null;
+        console.log('itemData', itemData);
+
+        if (!itemData) {
+            console.error('선택된 티켓이 없습니다.');
+            return;
+        }
+        const workrm = document.getElementById('workrm')?.value.trim();
+        const ordertext = document.getElementById('ordertext')?.value.trim();
+
+        // workrm과 ordertext가 모두 비어 있는 경우 팝업 표시
+        if (!workrm && !ordertext) {
+            Alert.alert('', '등록할 내용이 없습니다.');
+            return;
+        }
+
+        Alert.confirm('', '저장하시겠습니까?', function () {
+
+            let formData = new FormData();
+
+            formData.append('spworkcd', $('#spworkcd').val());
+            formData.append('spcompcd', $('#spcompcd').val());
+            formData.append('spplancd', $('#spplancd').val());
+            formData.append('tketnum', itemData.tketnum);
+            formData.append('workdt', $('#workdt').val());
+
+            formData.append('tketruserid', itemData.tketruserid);
+            formData.append('tkconuserid', itemData.tkconuserid);
+            formData.append('workrm', $('#workrm').val());
+            // ordertext 값이 있을 때만 추가
+            const ordertext = $('#ordertext').val();
+            if (ordertext && ordertext.trim() !== '') {
+                formData.append('ordertext', ordertext);
+            }
+
+            // 새로 추가된 파일만 폼 데이터에 추가
+            uploadedFiles.forEach((file, index) => {
+                formData.append('filelist', file);
+            });
+
+            // 삭제된 파일 목록 추가
+            deletedFiles.forEach((file, index) => {
+                formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
+            });
+
+            $.ajax({
+                url: "/api/operate/ticket/save_action",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message, function () {
+                            fetchListData_actionList(itemData);
+                            clearForm_action();
+                        });
+
+                    } else {
+                        Alert.alert('', '저장에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+        })
+    }
+
+    // 초기화
+    function clearForm_action() {
+        console.log('clearForm_action');
+        const date = new Date();
+        const today = formatDate2(date);
+        const workdtInput = document.getElementById('workdt');
+        console.log('workdtInput', workdtInput);
+        if (workdtInput) {
+            document.getElementById('workdt').value = today;
+        }
+
+        $('.filelist2').empty(); // 파일 리스트 초기화
+        uploadedFiles2 = []; // 업로드된 파일 리스트 초기화
+        deletedFiles2 = [];
+
+        updateFileCount2();
+        resetFileInput($('.fileInput2'));
+
+        const workrmInput = document.getElementById('workrm');
+        if (workrmInput) {
+            workrmInput.value = ''; // 값 초기화
+        }
+
+        const orderText = document.getElementById('ordertext');
+        if (orderText) {
+            orderText.value = ''; // 요청 내용 초기화
+        }
+
+
+    }
+
+    function handleOrder(action) {
+        console.log('action', action);
+        // 입력 폼 업데이트
+        const writeWrap = document.querySelector('.write-wrap');
+        if (writeWrap) {
+            writeWrap.innerHTML = `
+            <dl>
+                <dt>
+                    <label for="ordertext">
+                        요청 내용
+                    </label>
+                </dt>
+                <dd>
+                    <div class="input-clear">
+                        <textarea type="text" id="ordertext" name="ordertext" style="height: 80px"></textarea>
+                    </div>
+                </dd>
+            </dl>
+            <input type="hidden" id="workdt" name="workdt" value="${formatDate2(action.workdt)}">
+            <input type="hidden" id="workrm" name="workrm" value="${action.workrm || ''}">
+        `;
+
+        // 생성된 textarea에 포커스 설정
+        const orderText = document.getElementById('ordertext');
+        if (orderText) {
+            orderText.focus();
+        }
+        }
+    }
+
+
+    $(document).ready(function () {
+        const parentId = 241;
+        const selectElementId = 'tketflag_li';
+        fetchCommonCodes(parentId, selectElementId);
+
+        const parentId2 = 247;
+        const selectElementId2 = 'tketcate_li';
+        fetchCommonCodes(parentId2, selectElementId2);
+
+        $('#logout').on('click', function (e) {
+            e.preventDefault();
+            Alert.confirm('', '로그아웃하시겠습니까?', function () {
+                i18n.resetData();
+                location.href = '/logout';
+            });
+        });
+
+
+    });
+
+
+</script>
+
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</body>
+
+</html>
