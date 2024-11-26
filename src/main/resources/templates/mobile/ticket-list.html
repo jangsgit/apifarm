@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[KTFOMS] AI 기반 연료전지 인프라 구축 - 모바일</title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> <!-- Slide css -->
+    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css">
+    <link rel="stylesheet" type="text/css" href="/assets_mobile/css/import.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <script src="/assets_mobile/js/ui.js"></script> <!-- Common js -->
+    <script th:inline="javascript">
+        var sandanData = /*[[${session.sandanList}]]*/ [];
+    </script>
+
+
+    <script type="text/javascript" src="/resource/ax5ui/ax5ui.all.min.js?v=1000"></script>
+
+    <script type="text/javascript" src="/js/ax5commUtil.js?v=1070"></script>
+
+    <script src="/js/common.js?v=1060"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
+    <script src="/js/Mobile.js"></script>
+</head>
+
+<body>
+<div class="mobile-wrapper page-ticket-list"><!-- ★페이지 Class명 -->
+    <!-- [모바일] 헤더  -->
+    <div class="mobile-layout-header">
+        <header>
+            <div class="left">
+                <a href="#" title="전체메뉴" class="logo">
+                    <img src="/images/logo/logo-new.png" alt="로고" style="width: 90px;">
+                </a>
+            </div>
+            <div class="center" style="margin-left:-50px;">
+                <h2>티켓목록</h2>
+            </div>
+            <div class="right">
+                <a href="#" title="전체메뉴" class="btn-menu">
+                    <img src="/assets_mobile/images/icon/btn-menu.svg" alt="전체메뉴 아이콘">
+                </a>
+            </div>
+        </header>
+    </div> <!-- //mobile-layout-header end-->
+
+    <!-- [모바일] 메뉴  -->
+    <div th:insert="~{mobile/mobile_menu :: mobile_menu}"></div>
+
+    <!-- [모바일] 컨덴츠  -->
+    <div class="mobile-layout-contents">
+        <!--- (레이아웃) Contents 영역 -->
+        <div class="layout-contents">
+            <div class="search-wrap-sp">
+                <div class="srch-tit aco-hd">
+                    <p>발전소 설정</p>
+                    <a href="#" title="열기/닫기" class="btn-aco">
+                        <img src="/assets_mobile/images/icon/ico-up.svg" alt="열기/닫기">
+                    </a>
+                </div>
+                <div class="srch-cont aco-cont" id="searchWrap">
+                    <div class="row">
+                        <dl>
+                            <dt>
+                                지역
+                            </dt>
+                            <dd>
+                                <select title="지역" id="spworkcd" name="spworkcd"
+                                        onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                                    <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spworknm" name="spworknm">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                산업단지
+                            </dt>
+                            <dd>
+                                <select title="산단" id="spcompcd" name="spcompcd"
+                                        onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                                    <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spcompnm" name="spcompnm">
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                발전소
+                            </dt>
+                            <dd>
+                                <select title="시설" id="spplancd" name="spplancd"
+                                        onchange="updatePlannm(); saveSelectedSandanData()">
+                                    <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                                </select>
+                                <input type="hidden" id="spplannm" name="spplannm">
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <!-- 검색 영역  -->
+            <div class="search-wrap">
+                <div class="srch-tit aco-hd">
+                    <p>기본검색</p>
+                    <a href="#" title="열기/닫기" class="btn-aco">
+                        <img src="/assets_mobile/images/icon/ico-up.svg" alt="열기/닫기">
+                    </a>
+                </div>
+                <div class="srch-cont aco-cont">
+                    <dl>
+                        <dt>
+                            발생일자
+                        </dt>
+                        <dd>
+                            <ul class="date-box">
+                                <li>
+                                    <input type="date" id="startDate" name="startDate">
+                                    <label for="startDate" class="hide">시작일</label>
+                                </li>
+                                <li>
+                                    <input type="date" id="endDate" name="endDate">
+                                    <label for="endDate" class="hide">종료일</label>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <div class="row">
+                        <dl>
+                            <dt>
+                                상태구분<span class="eq">*</span>
+                            </dt>
+                            <dd>
+                                <select id="tketflag_li" name="tketflag_li" title="전체">
+                                    <option value="" selected>전체</option>
+                                </select>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                요청유형<span class="eq">*</span>
+                            </dt>
+                            <dd>
+                                <select id="tketcate_li" name="tketcate_li">
+                                    <option value="">전체</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+                    <dl>
+                        <dt>티켓명</dt>
+                        <dd>
+                            <div class="input-clear">
+                                <input type="text" id="searchtketnm" class="wp100" >
+                                <span class="btn-clear">×</span>
+                            </div>
+                        </dd>
+                    </dl>
+                    <div class="srch-btn">
+                        <button class="btn-dark" onclick="fetchListData()">검색</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 컨텐츠 영역  -->
+            <div class="contents-wrap">
+                <div class="list-top-wrap">
+                    <div class="list-num">
+                        목록 <span class="blue">10 건</span>
+                    </div>
+                    <a href="#" title="범례정보" class="btn-question">
+                        <img src="/assets_mobile/images/icon/ico-question.svg" alt="범례정보 아이콘">
+                    </a>
+                </div>
+                <div class="list-card-wrap" id="cardWrap">
+                    <!-- ★ status : green(생성) / blue(진행) / black(완료) / red(취소) -->
+
+                </div> <!--//card-wrap end-->
+            </div> <!--// contents-wrap end-->
+        </div> <!--//layout-contents end -->
+
+    </div> <!-- //mobile-layout-contents end-->
+
+    <div class="mobile-layout-popup" id="popup-history">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper">
+            <div class="popup-title">
+                <h3>작업이력</h3>
+                <a href="#a" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="ticket-tit">
+                    <dl>
+                        <dt>티켓명</dt>
+                        <dd>전지부품교체</dd>
+                    </dl>
+                </div>
+                <div class="list-card-wrap">
+                    <!-- ★ 상태배지 : green(생성) / blue(진행) / black(완료) / red(취소) -->
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-layout-popup" id="popup-notification">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper">
+            <div class="popup-title">
+                <h3>발전소 설정</h3>
+                <a href="#a" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="ticket-tit">
+                    <dl>
+                        <dd style="font-weight:500"></dd> <!-- 메시지가 동적으로 삽입됩니다. -->
+                    </dl>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy">확인</button>
+            </div>
+        </div>
+    </div>
+
+
+</div> <!-- //page-wrapper end-->
+
+<script th:inline="javascript">
+    // Thymeleaf에서 값 설정: Null 체크와 기본값 처리
+    var groupid = [[${session.groupid != null ? session.groupid : 'null'}]];
+    var id = /*[[${id != null ? id : 'null'}]]*/;
+    var groupname = /*[[${groupname != null ? groupname : 'null'}]]*/;
+    var username = /*[[${username != null ? username : 'null'}]]*/;
+
+    // 로컬스토리지에 값 유지 (null 또는 빈 문자열은 저장하지 않음)
+    if (groupid && groupid !== 'null') localStorage.setItem('groupid', groupid);
+    if (id && id !== 'null') localStorage.setItem('id', id);
+    if (username && username !== 'null') localStorage.setItem('username', username);
+    if (groupname && groupname !== 'null') localStorage.setItem('groupname', groupname);
+    saveSelectedSandanData();
+</script>
+
+
+<script type="text/javascript">
+
+    document.readyState === 'complete' ? init() : window.onload = init;
+
+    $(document).ready(function () {
+
+        // 산단 정보 초기화가 완료된 후에 실행
+        initializeSelections().then(() => {
+
+            if (!sessionStorage.getItem('sandanAlertShown')) {
+                // 발전소 설정된 데이터 가져오기
+                const spworknm = $('#spworknm').val() || "설정되지 않음";
+                const spcompnm = $('#spcompnm').val() || "설정되지 않음";
+                const spplannm = $('#spplannm').val() || "설정되지 않음";
+
+                // 모달 내용 동적으로 설정
+                $('#popup-notification .ticket-tit dl dd').html(
+                    `현재 설정된 발전소<br>
+                        - 지역: ${spworknm}<br>
+                        - 산업단지: ${spcompnm}<br>
+                        - 발전소: ${spplannm}<br>`
+                );
+
+                // 알림 팝업 표시
+                $('#popup-notification .popup-overlay').fadeIn(200);
+                $('#popup-notification .popup-wrapper').addClass('active');
+
+                // sessionStorage에 상태 저장
+                sessionStorage.setItem('sandanAlertShown', 'true');
+            }
+        });
+    });
+
+    function init() {
+        // 산단 연동
+        initializeSelections();
+
+        setDefaultDates('startDate', 'endDate');
+
+        fetchListData();
+        // fetchListData_ticket();
+        // fetchListData_action();
+        // clearForm();
+        // clearForm_action();
+
+        document.getElementById('spworkcd').addEventListener('change', fetchListData);
+        document.getElementById('spcompcd').addEventListener('change', fetchListData);
+        document.getElementById('spplancd').addEventListener('change', fetchListData);
+    }
+
+
+    function renderCards(data) {
+        const listCardWrap = document.getElementById('cardWrap');
+        listCardWrap.innerHTML = ''; // 기존 내용을 초기화
+
+        data.forEach(item => {
+            // 상태별 카드 색상 지정
+            let cardClass = 'card-blue'; // 기본값
+            if (item.tketflag === '진행') {
+                cardClass = 'card-green';
+            } else if (item.tketflag === '완료') {
+                cardClass = 'card-black';
+            } else if (item.tketflag === '취소') {
+                cardClass = 'card-red';
+            }
+
+            let hasWorkdt = false;
+            let actionsHtml = '';
+            if (item.actions && item.actions.length > 0) {
+                item.actions.forEach(action => {
+                    const workdt = action.workdt || ''; // 조치일자
+                    const workrm = action.workrm || ''; // 조치내용
+                    const ordertext = action.ordertext || ''; // 요청사항
+
+                    // workdt가 있을 때
+                    if (workdt) {
+                        hasWorkdt = true;
+                        actionsHtml += `
+                                <dl>
+                                    <dt>조치일자</dt>
+                                    <dd>${workdt}</dd>
+                                </dl>
+                            `;
+
+                        // workrm이 있을 경우에만 추가 출력
+                        if (workrm) {
+                            actionsHtml += `
+                                    <dl>
+                                        <dt>조치내용</dt>
+                                        <dd>${workrm.replace(/\r\n/g, '<br>')}</dd>
+                                    </dl>
+                                `;
+                        }
+                    }
+
+                    // ordertext가 있을 경우 추가 출력
+                    if (ordertext) {
+                        actionsHtml += `
+                                <dl>
+                                    <dt>요청사항</dt>
+                                    <dd>${ordertext.replace(/\r\n/g, '<br>')}</dd>
+                                </dl>
+                            `;
+                    }
+                });
+            }
+
+            // 버튼 처리
+            let buttonsHtml = '';
+            if (item.tketflag === '생성') {
+                buttonsHtml += `
+                            <button>삭제</button>
+                            <button onclick="downloadFile_ticket()">첨부파일</button>
+                        `;
+                if (groupid === 14 || groupid === 1 || groupid === 34) {
+                    buttonsHtml += `<button>승인</button>`;
+                }
+            } else if (item.tketflag === '진행') {
+                if (!hasWorkdt) { // workdt가 없을 경우에만 취소 버튼 표시
+                    buttonsHtml += `
+                            <button>취소</button>
+                        `;
+                }
+                buttonsHtml += `
+                            <button>첨부파일</button>
+                        `;
+                // groupid 조건 확인 및 workdt 유무에 따라 완료 버튼 표시
+                if (groupid === 14 || groupid === 1 || groupid === 34) {
+                    if (hasWorkdt) {
+                        buttonsHtml += `
+                            <button>완료</button>
+                        `;
+                    }
+                    buttonsHtml += `
+                            <button>요청등록</button>
+                        `;
+                } else {
+                    buttonsHtml += `
+                            <button>조치등록</button>
+                        `;
+                }
+            } else if (item.tketflag === '취소') {
+                buttonsHtml += `<button>첨부파일</button>`;
+            } else if (item.tketflag === '완료') {
+                buttonsHtml += `
+                            <button>첨부파일</button>
+                            <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
+                        `;
+            }
+
+            const cardHtml = `
+                        <div class="card-box ${cardClass}" data-tketnum="${item.tketnum}">
+                            <div class="card-tit">
+                                <h3>${item.tketnm}</h3>
+                                <div class="status-tag">
+                                    <span class="sta-${cardClass.split('-')[1]}">${item.tketflag}</span>
+                                    <span class="sta-bgnavy">${item.tkettypecd || ''}</span>
+                                </div>
+                            </div>
+                            <div class="card-cont">
+                                <dl>
+                                    <dt>발생일자 / 요청자</dt>
+                                    <dd>${item.tketcrdtm || ''} / ${item.tketrusernm || ''}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>소속사 / 연락처</dt>
+                                    <dd>${item.tketrcpnm || ''} / ${item.requesterhp || ''}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업내용</dt>
+                                    <dd>${item.tketrem.replace(/\r\n/g, '<br>')}</dd>
+                                </dl>
+                                ${actionsHtml}
+                            </div>
+                            <div class="card-btn">
+                                ${buttonsHtml}
+                            </div>
+                        </div>
+                    `;
+            listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
+        });
+    }
+
+
+    // 데이터를 받아와 카드 렌더링
+    function fetchListData() {
+        let spworkcd = document.getElementById('spworkcd').value;
+        let spcompcd = document.getElementById('spcompcd').value;
+        let spplancd = document.getElementById('spplancd').value;
+        let userid = null;
+
+        if (groupid === 14 || groupid === 1 || groupid === 34) {
+            userid = null;
+        } else {
+            userid = '[[${userid}]]';
+        }
+
+        $.ajax({
+            url: '/api/operate/ticket/read_mob_tklist',
+            type: 'GET',
+            data: {
+                'startDate': $('#startDate').val(),
+                'endDate': $('#endDate').val(),
+                'tketflag': $('#tketflag_li').val(),
+                'tkettypecd': $('#tketcate_li').val(),
+                'searchtketnm': $('#searchtketnm').val(),
+                spworkcd: spworkcd,
+                spcompcd: spcompcd,
+                spplancd: spplancd,
+                userid: userid
+            },
+            success: function (data) {
+                console.log(data.data);
+                renderCards(data.data);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        const parentId = 241;
+        const selectElementId = 'tketflag_li';
+        fetchCommonCodes(parentId, selectElementId);
+
+        const parentId2 = 247;
+        const selectElementId2 = 'tketcate_li';
+        fetchCommonCodes(parentId2, selectElementId2);
+
+        $('#logout').on('click', function (e) {
+            e.preventDefault();
+            Alert.confirm('', '로그아웃하시겠습니까?', function () {
+                i18n.resetData();
+                location.href = '/logout';
+            });
+        });
+
+
+    });
+
+
+</script>
+
+
+</body>
+
+</html>

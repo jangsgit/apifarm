@@ -1,91 +1,279 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="">
 <head>
-    <title>서신식품</title>
+    <title>[KT FOMS] AI 기반 연료전지 인프라 구축</title>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.2/main.min.css"> <!-- Calendar -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>  <!-- Calendar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> <!-- Slide css -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
     <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css?v=1000">
     <link rel="stylesheet" href="/resource/timepicker/jquery.timepicker.min.css">
-    <link rel="stylesheet" href="/resource/windowContainer/css/bootstrap.4.min.css">
+<!--    <link rel="stylesheet" href="/resource/windowContainer/css/bootstrap.4.min.css">-->
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="/resource/select2/select2.css">
-    <script type="text/javascript">
-        if (localStorage.getItem('theme-top') !== null) {
-            document.write('<link rel="stylesheet" href="' + localStorage.getItem('theme-top') + '-content.css">');
-        }
+
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+<!--    <script type="text/javascript">-->
+<!--        if (localStorage.getItem('theme-top') !== null) {-->
+<!--            document.write('<link rel="stylesheet" href="' + localStorage.getItem('theme-top') + '-content.css">');-->
+<!--        }-->
+<!--    </script>-->
+<!--    <link rel="stylesheet" href="/css/sf21_all_6.css?v=1000">-->
+<!--    <link rel="stylesheet" href="/css/sf21_all_5.css?v=1000">-->
+<!--    <link rel="stylesheet" href="/css/sf21_frame.css?v=1043">-->
+
+    <link rel="stylesheet" type="text/css" href="/css/import.css">
+    <link rel="stylesheet" type="text/css" href="/css/Park.css">
+    <script src="/js/vendor/jquery-ui.min.js"></script>
+    <script src="/js/vendor/jquery-3.6.0.js"></script>
+    <script src="/js/ui.js"></script> <!-- Common js -->
+    <script src="/js/Park.js"></script>
+
+    <script th:inline="javascript">
+        var sandanData = /*[[${session.sandanList}]]*/ [];
     </script>
-    <link rel="stylesheet" href="/css/sf21_all_6.css?v=1000">   
-    <link rel="stylesheet" href="/css/sf21_all_5.css?v=1000">
-    <link rel="stylesheet" href="/css/sf21_frame.css?v=1043">    
+    <script src="/js/Jung.js"></script>
+    <script src="/js/nth-tabs.js"></script>
+
+
+    <link href="/styles/wijmo.min.css" rel="stylesheet"  />
+    <script src="/scripts/vendors/controls/wijmo.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.grid.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.chart.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.input.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.gauge.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.grid.selector.min.js"></script>
+    <script src="/scripts/vendors/controls/wijmo.grid.cellmaker.min.js"></script>
+
+    <link href="https://cdn.grapecity.com/wijmo/5.latest/styles/wijmo.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.0.0/jszip.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.xlsx.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.xlsx.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.pdf.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.pdf.min.js"></script>
+    <script src="/js/flex-grid-context-menu.js"></script>
+
+    <!-- Wijmo 배포라이선스키 적용 (배포 시 필요) -->
+    <script>
+        wijmo.setLicenseKey('emmsg.co.kr,963842767449884#B0IOMI7ckJye0ICbuFkI1pjIEJCLi4TP7JDS7QTaNdkN9sScoJTNvk7ThZXUSh7c094QW3EOt3iNpB5KjpkWsRjSqhDMzdUTClmNEZFMHdUSrknanNXYYB5aSZ5SsdzYoJ5LChka4MVdrI7V8cXVyZHbzU5LDVlR9k4SzNGVTZTa9NlbCJTVolmNPdTVudkVjZ7bJhHTNJkR05kN9knah9UQkp6NON4Q9IUYwtEOBBVOHZnRDBlUtJEb7V7ZsZzbvllUuhUaUR4YsR6YpplaTRXeDBFV5tiNLBHO7R6NPljbvo4YDRzKS9GOxoEVFhHaRFkTDhkTPZTM4YTcjFjRFd7bzIzS9FGRVVHashFRGREM52iemF4bmpENzQ6YwQTVOx4NFBFT5EDM8p5QztEN8cEOTZDS6QlWHVzR4MEZ8sGMulEWsdnZsF4b8YmROF4a0R7czIVe9omeUhFaQJWRBRUTMtUazElTxIkNWlXSiojITJCLikjM4ADMxIkNiojIIJCLzETN8UDO8UTM0IicfJye#4Xfd5nIJBjMSJiOiMkIsIibvl6cuVGd8VEIgQXZlh6U8VGbGBybtpWaXJiOi8kI1xSfiUTSOFlI0IyQiwiIu3Waz9WZ4hXRgAicldXZpZFdy3GclJFIv5mapdlI0IiTisHL3JyS7gDSiojIDJCLi86bpNnblRHeFBCI73mUpRHb55EIv5mapdlI0IiTisHL3JCNGZDRiojIDJCLi86bpNnblRHeFBCIQFETPBCIv5mapdlI0IiTisHL3JyMDBjQiojIDJCLiUmcvNEIv5mapdlI0IiTisHL3JSV8cTQiojIDJCLi86bpNnblRHeFBCI4JXYoNEbhl6YuFmbpZEIv5mapdlI0IiTis7W0ICZyBlIsIiNwATMyADI7EDMxIjMwIjI0ICdyNkIsIicr9ybj9yZz5WblJiOiMXbEJCLiwZhtTqisz9isD1itTbnsTYlsjKmsLiOiEmTDJCLiQDO8kDN4cjN7IDN8MjN9IiOiQWSiwSfdtlOicGbmJCLiIjdwIDMyIiOiIXZ6JCLlNHbhZ');
+    </script>
+
+    <!-- 알메이트 -->
+<!--    <script src="https://www.riamore.net/HTML5demo/chart/LicenseKey/rMateChartH5License.js"></script>
+    <script src="https://www.riamore.net/HTML5demo/chart/rMateChartH5/JS/rMateChartH5.js"></script>
+    <link rel="stylesheet" href="https://www.riamore.net/HTML5demo/chart/rMateChartH5/Assets/Css/rMateChartH5.css"/>
+
+    <script src="https://demo.riamore.net/HTML5demo/chart/Samples/Web/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="https://demo.riamore.net/HTML5demo/chart/Samples/Web/jQuery/jquery-ui.js"></script>-->
+
+    <script src="/rMateChart/LicenseKey/rMateChartH5License.js"></script>
+    <script src="/rMateChart/rMateChartH5/JS/rMateChartH5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmpeg/0.1/jsmpg.js"></script>  <!--영상송출 -->
+    <link rel="stylesheet" href="/rMateChart/rMateChartH5/Assets/Css/rMateChartH5.css"/>
+
+
 
 </head>
+<style>
+    .time-group{
+        width: 10%;
+    }
+    .grid-cell-black2{
+        background: #f2f2f2;
+    }
+
+    /*#theGrid{*/
+    /*    max-height: 493px;*/
+    /*}*/
+
+    .wj-flexgrid .wj-header {
+        background-color: #EDEFF5;
+        color:black;
+        font-weight:700;
+
+        font-size: 15px;
+        line-height: 150%;
+    }
+
+    [id^="theGrid"].wj-flexgrid .wj-cell {
+        padding: 14px;
+    }
+
+    /*#theGrid.wj-flexgrid .wj-cell {*/
+    /*    padding: 14px;*/
+
+    /*}*/
+
+
+    /*#theGridEvent.wj-flexgrid .wj-cell {*/
+    /*    padding: 14px;*/
+
+    /*}*/
+
+    /*#theGridDetect.wj-flexgrid .wj-cell {*/
+    /*    padding: 14px;*/
+
+    /*}*/
+
+    .wj-cell.high-value, .wj-cell.wj-alt {
+
+        /*font-size: 15px;*/
+        /*font-weight: 500;*/
+        line-height: 150%;
+
+        background-color: transparent;
+    }
+
+
+    <!-- -->
+    /*.wj-flexgrid .wj-header {*/
+    /*    background-color: #EDEFF5;*/
+    /*    color: black;*/
+    /*    font-weight:bold;*/
+    /*}*/
+
+    .wj-cells .wj-cell.wj-state-multi-selected {
+        background-color: #E5F9F9;
+        color: black;
+    }
+
+    .selected-row .wj-cell {
+        background-color: #E5F9F9;
+        color: black;
+    }
+
+
+
+    /*  점검관리/전기안전관리/문서관리현황 전용  */
+    .filename{
+        color: dodgerblue;
+        cursor: pointer;
+    }
+
+    /*삭제ㄴㄴ, 나중에 css 파일로 따로 빼겠음 순회점검 점검일지 업로드, 버튼*/
+    .fileuploaders { border: none }
+
+
+
+
+
+</style>
 <body class="animated fadeIn">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <script src="/resource/jquery.min.js"></script>
-    <script src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
-    <script src="/resource/jquery-validation/1.17.0/additional-methods.min.js"></script>
-    <script src="/resource/filedownload/jquery.fileDownload.js"></script>
-    <script src="/resource/ax5ui/ax5ui.all.min.js"></script>
-    <script src="/resource/se2/js/HuskyEZCreator.js"></script>
-    <script src="/resource/timepicker/jquery.timepicker.min.js"></script>
-    <script src="/resource/jquery.multi-select-ak.js"></script>
-    <script src="/resource/moment.min.js"></script>
-    <script src="/resource/windowContainer/js/jquery.scrollbar.min.js"></script>
-    <script src="/resource/windowContainer/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/resource/paho-mqtt/mqttws31.min.js"></script>
-    <script type="text/javascript" src="/resource/select2/select2.min.js"></script>
-    <script src="/resource/JavaScript-Templates/tmpl.min.js"></script>
-    <th:block th:replace="system_js :: system_js" ></th:block>
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<script src="/resource/jquery.min.js"></script>
+<script src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
+<script src="/resource/jquery-validation/1.17.0/additional-methods.min.js"></script>
+<script src="/resource/filedownload/jquery.fileDownload.js"></script>
+<script src="/resource/ax5ui/ax5ui.all.min.js"></script>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script src="/resource/se2/js/HuskyEZCreator.js"></script>
+<script src="/resource/timepicker/jquery.timepicker.min.js"></script>
+<script src="/resource/jquery.multi-select-ak.js"></script>
+<script src="/resource/moment.min.js"></script>
+<script src="/resource/windowContainer/js/jquery.scrollbar.min.js"></script>
+<script src="/resource/windowContainer/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/paho-mqtt/mqttws31.min.js"></script>
+<script type="text/javascript" src="/resource/select2/select2.min.js"></script>
+<script src="/resource/JavaScript-Templates/tmpl.min.js"></script>
+<th:block th:replace="system_js :: system_js" ></th:block>
 
-    <script type="text/javascript" src="/js/common.js?v=1100"></script>
-    <script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
-    <script type="text/javascript" src="/js/ax5commUtil.js?v=1060"></script>
+<script type="text/javascript" src="/js/common.js?v=1100"></script>
+<!--<script type="text/javascript" src="/js/yumenu.js?v=1071"></script>-->
+<script type="text/javascript" src="/js/yuscript.js?v=1060"></script>
+<script type="text/javascript" src="/js/ax5commUtil.js?v=1060"></script>
+<script src="/js/jquery.datetimepicker.full.min.js"></script>
 
-    <th:block layout:fragment="content"></th:block>
-    <script type="text/javascript">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
 
+<!-- 줌아웃 스타일-->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+<th:block layout:fragment="content"></th:block>
+<script type="text/javascript">
 
-        $(document).ready(function () {
-            yullinAuth.removeWriteButton();
-            
-            var _wintitle = CommonUtil.getParameters('wintitle');
-            if (_wintitle != '') {
-                $('title').text(_wintitle);
-            }
-            authDisableBtn(''); // 버튼권한 처리==>정리대상
-            authDisableTab(''); // TAB권한 처리==>정리대상
-            var searchheight = parseInt($('.autoheight-search').height() === null ? '0' : $('.autoheight-search').height()) + 65;
-            if ($('.autoheight-div') !== null) {
-                $('.autoheight-div').height($(document).height() - searchheight);
-            }
-            if ($('section.popupcontent') !== null) {
-                $('section.popupcontent').height($(window).height() - 130);
-            }
+    $(document).ready(function () {
+        yullinAuth.removeWriteButton();
 
-            $('#btnHedaerFilter').click(function (e) {
-                $(".table_box.search").toggle(300);
-            });
+        var _wintitle = CommonUtil.getParameters('wintitle');
+        if (_wintitle != '') {
+            $('title').text(_wintitle);
+        }
 
-            $('#btnHeaderCompress').click(function (e) {
-                let $wrap = window.parent.$('.wrap');
+        authDisableBtn(''); // 버튼권한 처리==>정리대상
+        authDisableTab(''); // TAB권한 처리==>정리대상
+        var searchheight = parseInt($('.autoheight-search').height() === null ? '0' : $('.autoheight-search').height()) + 65;
+        if ($('.autoheight-div') !== null) {
+            $('.autoheight-div').height($(document).height() - searchheight);
+        }
+        if ($('section.popupcontent') !== null) {
+            $('section.popupcontent').height($(window).height() - 130);
+        }
 
-                window.parent.$('.header').toggle();
-                window.parent.$('.page-tabs').toggle();
-                
-                if (window.parent.$('.header').css('display') == 'none') {
-                    $('#iCompress').replaceWith("<i class='fas fa-compress-alt' id='iCompress'></i>");
-                    $wrap.addClass('menu_close');
-                } else {
-                    $('#iCompress').replaceWith("<i class='fas fa-compress' id='iCompress'></i>");
-                    $wrap.removeClass('menu_close');
-                }
-            });
-
+        $('#btnHedaerFilter').click(function (e) {
+            $(".table_box.search").toggle(300);
         });
-    </script>    
-    <th:block layout:fragment="scripts"></th:block>
+
+        $('#btnHeaderCompress').click(function (e) {
+            let $wrap = window.parent.$('.wrap');
+
+            window.parent.$('.header').toggle();
+            window.parent.$('.page-tabs').toggle();
+
+            if (window.parent.$('.header').css('display') == 'none') {
+                $('#iCompress').replaceWith("<i class='fas fa-compress-alt' id='iCompress'></i>");
+                $wrap.addClass('menu_close');
+            } else {
+                $('#iCompress').replaceWith("<i class='fas fa-compress' id='iCompress'></i>");
+                $wrap.removeClass('menu_close');
+            }
+        });
+
+    });
+
+
+    // 셀 클릭 이벤트 처리
+    $(document).on('click', '.wj-flexgrid .wj-cell', function() {
+
+        var $grid = $(this).closest('.wj-flexgrid');
+        var $row = $(this).closest('.wj-row'); // 클릭된 행
+
+        // 그리드 내에 체크박스가 없고, 헤더 셀이 아닐 경우에만 로직 수행
+        if ($grid.find('input[type="checkbox"]').length === 0 && !$(this).hasClass('wj-header')) {
+
+            // 이미 선택된 행이면 선택 해제
+            if ($row.hasClass('selected-row')) {
+                // 해당 행에서만 .selected-row 클래스 제거
+                $row.removeClass('selected-row');
+            } else {
+                // 다른 행들의 선택 상태를 유지하면서 현재 행만 선택
+                $grid.find('.wj-row').removeClass('selected-row');
+
+                // 현재 행에만 .selected-row 클래스 추가
+                $row.addClass('selected-row');
+            }
+        }
+    });
+
+
+</script>
+
+<th:block layout:fragment="scripts"></th:block>
 </body>
 </html>
 

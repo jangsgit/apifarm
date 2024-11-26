@@ -2,7 +2,25 @@
 // 공통콤보, validatin 등
 
 'use strict';
+//랜덤문자열 생성 50(랜덤문자열 42자리 + 오늘날짜 )자리로
+function generateRandomStringWithDate(length = 32) {
+    // 오늘 날짜를 "YYYYMMDD" 형식으로 가져오기
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+    const dd = String(today.getDate()).padStart(2, '0');
+    const formattedDate = `${yyyy}${mm}${dd}`;
 
+    // 지정된 길이의 랜덤 문자열 생성
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+        randomString += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    // 랜덤 문자열과 날짜를 결합하여 반환
+    return `${randomString}${formattedDate}`;
+}
 
 var JQuery = {
     extends: function () {
@@ -72,7 +90,7 @@ var JQuery = {
 
 var Ajax = {
     defaults: {
-        progressBarText: '엑타스 MES...'
+        progressBarText: '레플러스 MES...'
     },
     setProgressBarText: function (text) {
         Ajax.defaults.progressBarText = text;
@@ -1630,79 +1648,3 @@ var dynamicLinkCssPage = function (src) {
     document.head.appendChild(linkContent);
 };
 
-////////////////////////////////////////////////////////////////////////////////
-$(document).ready(function () {
-
-    // 다국어 처리 대상
-    let _msg_resource = {
-        'valid.msg.required': '필수 항목입니다.',
-        'valid.msg.remote': '항목을 수정하세요',
-        'valid.msg.email': '유효하지 않은 E-Mail주소입니다',
-        'valid.msg.url': '유효하지 않은 URL입니다',
-        'valid.msg.date': '올바른 날짜를 입력하세요',
-        'valid.msg.dateISO': '올바른 날짜를 입력하세요',
-        'valid.msg.number': '유효한 숫자가 아닙니다',
-        'valid.msg.digits': '숫자만 입력 가능합니다',
-        'valid.msg.creditcard': '신용카드 번호가 바르지 않습니다',
-        'valid.msg.equalTo': '같은 값을 다시 입력하세요',
-        'valid.msg.extension': '올바른 확장자가 아닙니다',
-        'valid.msg.maxlength': '{0}자를 넘을 수 없습니다',
-        'valid.msg.minlength': '{0} 이상의 값을 입력하세요',
-        'valid.msg.rangelength': '문자 길이가 {0} 에서 {1} 사이의 값을 입력하세요',
-        'valid.msg.range': '{0} 에서 {1} 사이의 값을 입력하세요',
-        'valid.msg.max': '{0} 이하의 값을 입력하세요',
-        'valid.msg.min': '{0} 이상의 값을 입력하세요',
-        'valid.msg.validrange': '{0}가 {1}보다 높습니다.',
-    };
-
-    $.extend(
-        $.validator.messages,
-        {
-            required: ' ' + _msg_resource['valid.msg.required']
-            , remote: ' ' + _msg_resource['valid.msg.remote']
-            , email: ' ' + _msg_resource['valid.msg.email']
-            , url: ' ' + _msg_resource['valid.msg.url']
-            , date: ' ' + _msg_resource['valid.msg.date']
-            , dateISO: ' ' + _msg_resource['valid.msg.dateISO']
-            , number: ' ' + _msg_resource['valid.msg.number']
-            , digits: ' ' + _msg_resource['valid.msg.digits']
-            , creditcard: ' ' + _msg_resource['valid.msg.creditcard']
-            , equalTo: ' ' + _msg_resource['valid.msg.equalTo']
-            , extension: ' ' + _msg_resource['valid.msg.extension']
-            , maxlength: ' ' + $.validator.format(_msg_resource['valid.msg.maxlength'])
-            , minlength: ' ' + $.validator.format(_msg_resource['valid.msg.minlength'])
-            , rangelength: ' ' + $.validator.format(_msg_resource['valid.msg.rangelength'])
-            , range: ' ' + $.validator.format(_msg_resource['valid.msg.range'])
-            , max: ' ' + $.validator.format(_msg_resource['valid.msg.max'])
-            , min: ' ' + $.validator.format(_msg_resource['valid.msg.min'])
-            , validrange: ' ' + $.validator.format(_msg_resource['valid.msg.validrange'])
-        }
-    );
-
-    $.validator.setDefaults({
-        onkeyup: false,
-        onclick: false,
-        onfocusout: false,
-        focusInvalid: false,
-        showErrors: function (errorMap, errorList) {
-            if (this.numberOfInvalids()) {
-                Alert.alert('', '[' + errorList[0].message + ']' + eval('$.validator.messages.' + errorList[0].method), function () {
-                    errorList[0].element.focus();
-                });
-            }
-        }
-    });
-
-    JQuery.extends();
-    Ajax.enableErrorHandler();
-    Ajax.enableProgressBar();
-
-
-    //다국어 설정
-    if (userinfo.login_id != '') {
-        i18n.initialize();
-    }
-
-
-
-});

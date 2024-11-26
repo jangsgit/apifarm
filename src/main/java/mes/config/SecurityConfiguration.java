@@ -41,8 +41,14 @@ public class SecurityConfiguration {
         http.headers().frameOptions().sameOrigin(); 
         //http.csrf().disable();
         http.csrf().ignoringAntMatchers("/api/files/upload/**");
+		http.csrf().ignoringAntMatchers("/api/sales/**");
+		http.csrf().ignoringAntMatchers("/api/gene/**");
         
-        http.authorizeRequests().mvcMatchers("/login","/logout").permitAll()
+        http.authorizeRequests().mvcMatchers("/login","/logout", "/useridchk/**", "/Register/save").permitAll()
+				.mvcMatchers("/api/sales/upload/**", "/api/gene/**").permitAll()  // 모든 사용자에게 허용 (임시)
+				.mvcMatchers("/user-codes/**", "/user-auth/**").permitAll()
+				.mvcMatchers("/authentication/**").permitAll()
+//				.mvcMatchers("/api/sales/upload/**").authenticated()  // 모든 인증된 사용자에게 허용 (임시)
         .mvcMatchers("/setup").hasAuthority("admin")		// hasRole -> hasAuthority로 수정
         .anyRequest().authenticated();
 
@@ -78,7 +84,7 @@ public class SecurityConfiguration {
     @Bean
     @Order(0)
     SecurityFilterChain exceptResources(HttpSecurity http) throws Exception {
-    	http.requestMatchers(matchers -> matchers.antMatchers("/resource/**","/img/**", "/js/**","/css/**","/font/**","/robots.txt","/favicon.ico","/intro", "/error", "/alive", "/api/das_device"))
+    	http.requestMatchers(matchers -> matchers.antMatchers("/resource/**","/img/**","/images/**", "/js/**","/css/**","/assets_mobile/**","/font/**","/robots.txt","/favicon.ico","/intro", "/error", "/alive", "/api/das_device"))
 		.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
 		.requestCache(RequestCacheConfigurer::disable)
 		.securityContext(AbstractHttpConfigurer::disable)

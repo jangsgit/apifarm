@@ -1,11 +1,14 @@
 package mes.app;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import mes.app.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -26,39 +29,55 @@ public class HomeController {
 	
 	@Autowired
 	SystemOptionRepository systemOptionRepository;
-	
+
 	@Autowired
-	Settings settings;	
-	
+	Settings settings;
+
+	@Autowired
+	UserService userService;
+
+	@RequestMapping(value = "/rtsp")
+	public String TestPage(){
+
+		return "/rtsp";
+
+	}
+
+
 	@RequestMapping(value= "/", method=RequestMethod.GET)
-    public ModelAndView pageIndex(HttpServletRequest request, HttpSession session) {	
-		
-        SecurityContext sc = SecurityContextHolder.getContext();
+    public ModelAndView pageIndex(HttpServletRequest request, HttpSession session) {
+
+		// User-Agent 확인
+		String userAgent = request.getHeader("User-Agent").toLowerCase();
+		boolean isMobile = userAgent.contains("mobile") || userAgent.contains("android") || userAgent.contains("iphone");
+
+		SecurityContext sc = SecurityContextHolder.getContext();
         Authentication auth = sc.getAuthentication();         
         User user = (User)auth.getPrincipal();
-        String username = user.getUserProfile().getName();
-                
+		String userid = user.getUsername();
+        String username = user.getUserProfile().getName();;
+
+
         SystemOption sysOpt= this.systemOptionRepository.getByCode("LOGO_TITLE");
         String logoTitle = sysOpt.getValue();
         
         //q = this.systemOptionRepository.getByCode("main_menu");        
-        
+
+
 		ModelAndView mv = new ModelAndView();
+		mv.addObject("userid", userid);
 		mv.addObject("username", username);
 		mv.addObject("userinfo", user);
 		mv.addObject("system_title", logoTitle);
-		mv.addObject("default_menu_code", "wm_dashboard_summary");
-		
-		
-		String mqtt_host = settings.getProperty("mqtt_host");
-		String mqtt_web_port = settings.getProperty("mqtt_web_port");
-		String hmi_topic = settings.getProperty("hmi_topic");
-		mv.addObject("mqtt_host", mqtt_host);
-		mv.addObject("mqtt_web_port", mqtt_web_port);
-		mv.addObject("hmi_topic", hmi_topic);
-		
-		mv.setViewName("index");		
-		
+//		mv.addObject("default_menu_code", "wm_dashboard_summary");
+
+
+
+
+		// 모바일 첫페이지
+		mv.addObject("currentPage", "ticket-list");
+//		mv.addObject("default_menu_code", "wm_dashboard_summary");
+		mv.setViewName(isMobile ? "mobile/ticket-list" : "index");
 		return mv;
 	}
 	
