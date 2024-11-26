@@ -1,0 +1,853 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .wj-header {
+            text-align: center !important;
+        }
+
+        #theGrid2.wj-flexgrid .wj-cell {
+            padding: 12px;
+
+        }
+        #theGrid2.wj-flexgrid .downloads {
+
+            padding-top: 0px;
+        }
+
+        .container-fluid {
+            overflow-x: scroll;
+        }
+
+        /* 토글 클릭시 애니메이션 효과*/
+        .wj-flexgrid .wj-colheaders, .wj-flexgrid .wj-cell {
+            transition: all 0.2s ease;
+        }
+
+
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>발전량등록</h2>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
+                <li>발전량등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="수정">수정</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select1">
+                                        발전기코드<span class="eq">*</span></dt>
+                                </label>
+                                <dd>
+                                    <select id="select1" class="w120">
+                                        <option>전체</option>
+                                        <option>option1</option>
+                                        <option>option2</option>
+                                    </select>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="select2">
+                                        시간<span class="eq">*</span></dt>
+                                </label>
+                                <!--                                시간 옵션 어떻게?-->
+                                <dd>
+                                    <select id="select2" class="w120">
+                                        <option>전체</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                        <option>24</option>
+                                    </select>
+                                    <select id="select3" class="w120">
+                                        <option>전체</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                        <option>04</option>
+                                        <option>05</option>
+                                        <option>06</option>
+                                        <option>07</option>
+                                        <option>08</option>
+                                        <option>09</option>
+                                        <option>10</option>
+                                        <option>11</option>
+                                        <option>12</option>
+                                        <option>13</option>
+                                        <option>14</option>
+                                        <option>15</option>
+                                        <option>16</option>
+                                        <option>17</option>
+                                        <option>18</option>
+                                        <option>19</option>
+                                        <option>20</option>
+                                        <option>21</option>
+                                        <option>22</option>
+                                        <option>23</option>
+                                        <option>24</option>
+                                    </select>
+
+                                </dd>
+
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-popup-open" title="" onclick="showPopup()" data-popup="popup1" id="btnShowUpload">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀업로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem1"></p>
+                        <div id="theGrid" style="max-height: 600px;" ></div>
+                    </div>
+                </section>
+
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="date1" name="">
+                                            <label for="date1" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="date2" name="">
+                                            <label for="date2" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="검색">
+                                        <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                        <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                        검색
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+                        <p id="selectedItem2"></p>
+                        <div id="theGrid2" style="max-height: 600px;"></div>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>엑셀 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form id="file-upload-form" enctype="multipart/form-data">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>발전량등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">
+                                    등록일자
+                                </label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="date" id="date6" name="" value="2024-06-27">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple>
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                        <p>*업로드 시 상태는 Excel이며, 수주전환 이전데이터만 삭제가능합니다.</p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    <div class="popup-button">
+                        <button onclick="closePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">취소</button>
+                        <button onclick="uploadExcelAndLoadData()" style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">저장</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        var theGrid;
+        var theGrid2;
+        var viewdata;
+        var viewdata1;
+        var viewdata2;
+
+        // 엑셀파일 업로드 / 조회
+        function uploadExcelAndLoadData() {
+            let formData = new FormData(document.getElementById('file-upload-form')); // 파일 업로드 폼의 ID
+            let fileInput = document.getElementById('fileInput2'); // 파일 입력 필드의 ID
+            let files = fileInput.files;
+
+            if (files.length > 0) {
+                formData.append('upload_file', files[0]); // 'upload_file'이 서버에서 요구하는 파트 이름
+            } else {
+                Alert.alert('', '파일을 첨부해 주세요.');
+                return; // 파일이 없으면 여기서 함수 종료
+            }
+
+            // formData.append('date', document.getElementById('date6').value); // 추가적인 데이터 필드
+            // 추가적인 데이터 : no, 등록일자, 등록자, 최종수정일
+
+            $.ajax({
+                url: '/api/gene/upload/upload_save', // 서버의 엑셀 업로드 API 주소
+                type: 'POST',
+                data: formData,
+                processData: false, // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                success: function(response) {
+                    if (response.success) {
+                        // Alert.alert('', '파일이 성공적으로 업로드되었습니다.');
+                        Alert.alert('', response.message);
+                        updateGrid(response.data); // 응답에서 데이터를 받아 그리드 업데이트
+                    } else {
+                        // alert('업로드 실패: ' + response.message);
+                        Alert.alert('', '업로드 실패: ' + response.message);
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
+                }
+            });
+        }
+
+        function updateGrid(data) {
+            viewdata.sourceCollection = data; // wijmo CollectionView를 사용하는 경우
+            theGrid.refresh(); // wijmo 그리드 업데이트
+        }
+
+        document.querySelector('.popup-button button').addEventListener('click', function() {
+            uploadExcelAndLoadData(); // 업로드 및 데이터 로딩 함수 호출
+        });
+
+        function closePopup(){
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';
+        }
+
+        function showPopup(){
+
+            const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'block';
+            modalOpen.style.display = 'block';
+            /*var popup = document.getElementById('popup1');
+
+            popup.style.display = 'block';*/
+        }
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+
+            // 하드코딩
+            let data2 = [];
+            for (let i = 1; i <= 20; i++) {
+                let paddedIndex = i.toString().padStart(2, '0'); // 2자리수로 패딩
+                let date = new Date(2023, 8, i); // 9월의 i일 (월은 0부터 시작하므로 8이 9월)
+                let formattedDate = date.toISOString().split('T')[0]; // 날짜 포맷 변환
+
+                data2.push({
+                    rownum: paddedIndex,
+                    standdt: formattedDate,
+                    powerid: 'AJ38',
+                    powernm: 'KT대구물류센터 연료전지',
+                    chargedv: '방전',
+                    toggle: '',
+                    mevalue01: 652288, mevalue02: 652288, mevalue03: 652288, mevalue04: 652288,
+                    mevalue05: 652288, mevalue06: 652288, mevalue07: 652288, mevalue08: 652288,
+                    mevalue09: 652288, mevalue10: 652288, mevalue11: 652288, mevalue12: 652288,
+                    mevalue13: 652288, mevalue14: 652288, mevalue15: 652288, mevalue16: 652288,
+                    mevalue17: 652288, mevalue18: 652288, mevalue19: 652288, mevalue20: 652288,
+                    mevalue21: 652288, mevalue22: 652288, mevalue23: 652288, mevalue24: 652288,
+                    mevaluet: 15644793,
+                    indatem: '2023-09-10',
+                    inusernm : '홍길동',
+                    updatem : '2023-09-12'
+                });
+            }
+
+            // let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            // inspec -> gene으로 수정하기
+            // $.ajax({
+            //     url: '/api/inspec_report/read',
+            //     type: 'GET',
+            //     data: {
+            //         'searchusr' : searchusr
+            //     },
+            //     async: false,
+            //     success: function(data){
+            //         console.log('wijmo', data.data);
+            //         data2 = data.data;
+            //     }
+            // })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            // 목록 탭 그리드 초기화
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                isReadOnly: true,
+                columns: [
+                    //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
+                    { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
+                    { binding: 'standdt', header: '일자', width: 115, align: 'center' },
+                    { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
+                    { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
+                    { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
+                    { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
+                    { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
+                    { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
+                    { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
+                    { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
+
+                ],
+                itemsSource: viewdata
+            });
+
+            // 초기에 04시~22시 컬럼을 숨김
+            toggleColumns(theGrid, false);
+
+            theGrid.formatItem.addHandler(function(sender, e) {
+                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
+                    if (e.cell.textContent === '...') {
+                        e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
+                        e.cell.onclick = function() {
+                            toggleColumns(theGrid, true); // 컬럼을 펼치고
+                            theGrid.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
+                        };
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                // '...' 컬럼 외의 다른 헤더를 클릭했을 때
+                if (!event.target.matches('.wj-colheaders .wj-cell')) return;
+                var headerText = event.target.textContent;
+                if (headerText !== '...' && theGrid.columns.getColumn('toggle').visible === false) {
+                    toggleColumns(theGrid, false); // 컬럼을 다시 접음
+                    theGrid.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
+                }
+            });
+
+            function toggleColumns(grid, show) {
+                for (let i = 4; i <= 22; i++) {
+                    let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
+                    if (column) column.visible = show;
+                }
+            }
+
+            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+            // 수정 탭 그리드 초기화
+            theGrid2 = new wijmo.grid.FlexGrid('#theGrid2', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                // isReadOnly: false, // 입력 허용 (기본값이므로 생략 가능)
+                // 대신 어디를 입력 허용으로 할지 정하기
+                columns: [
+                    //  format: 'n0' : 숫자를 천단위로 구분, 소수점 이하 표시하지 않는 포맷
+                    { binding: 'rownum', header: 'NO', width: 60 ,align: 'center'},
+                    { binding: 'standdt', header: '일자', width: 115, align: 'center' },
+                    { binding: 'powerid', header: '발전기코드', width: 100, align: 'center' },
+                    { binding: 'powernm', header: '발전기명', width: 200, align: 'center' },
+                    { binding: 'chargedv', header: '충전/방전', width: 100, align: 'center' },
+                    { binding: 'mevalue01', header: '01시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue02', header: '02시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue03', header: '03시', width: 90, align: 'right', format: 'n0' }, { binding: 'toggle', header: '...', width: 90, align: 'right', format: 'n0', allowSorting: false },
+                    { binding: 'mevalue04', header: '04시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue05', header: '05시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue06', header: '06시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue07', header: '07시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue08', header: '08시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue09', header: '09시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue10', header: '10시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue11', header: '11시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue12', header: '12시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue13', header: '13시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue14', header: '14시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue15', header: '15시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue16', header: '16시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue17', header: '17시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue18', header: '18시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue19', header: '19시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue20', header: '20시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue21', header: '21시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue22', header: '22시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevalue23', header: '23시', width: 90, align: 'right', format: 'n0' },
+                    { binding: 'mevalue24', header: '24시', width: 90, align: 'right', format: 'n0' }, { binding: 'mevaluet', header: '합계', width: 110, align: 'right', format: 'n0' },
+                    { binding: 'indatem', header: '등록일자', width: 115, align: 'center' },
+                    { binding: 'inusernm', header: '등록자', width: 100, align: 'center' },
+                    { binding: 'updatem', header: '최종수정일', width: 115, align: 'center' }
+
+                ],
+                itemsSource: viewdata
+            });
+
+            // 초기에 04시~22시 컬럼을 숨김
+            toggleColumns(theGrid2, false);
+
+            theGrid2.formatItem.addHandler(function(sender, e) {
+                if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader && e.col < sender.columns.length) {
+                    if (e.cell.textContent === '...') {
+                        e.cell.style.cursor = 'pointer'; // 마우스 오버 시 포인터 변경
+                        e.cell.onclick = function() {
+                            toggleColumns(theGrid2, true); // 컬럼을 펼치고
+                            theGrid2.columns.getColumn('toggle').visible = false; // '...' 컬럼을 숨김
+                        };
+                    }
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                // '...' 컬럼 외의 다른 헤더를 클릭했을 때
+                if (!event.target.matches('.wj-colheaders .wj-cell')) return;
+                var headerText = event.target.textContent;
+                if (headerText !== '...' && theGrid2.columns.getColumn('toggle').visible === false) {
+                    toggleColumns(theGrid2, false); // 컬럼을 다시 접음
+                    theGrid2.columns.getColumn('toggle').visible = true; // '...' 컬럼을 다시 표시
+                }
+            });
+
+            function toggleColumns(grid, show) {
+                for (let i = 4; i <= 22; i++) {
+                    let column = grid.columns.getColumn('mevalue' + (i < 10 ? '0' + i : i));
+                    if (column) column.visible = show;
+                }
+            }
+
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+            theGrid2.rowHeaders.columns.splice(0,1);  //맨 앞에 헤더부분 없애기
+        }
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+
+        function deleteInputField(inputField) {
+            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+            var tdToDelete = inputField.parentElement;
+            tdToDelete.parentElement.removeChild(tdToDelete);
+        }
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+        function filevalueinit (param){
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        function searchData(){
+            let data = {
+                'searchusr' : $('#searchusr').val()
+            }
+
+            let result =  AjaxUtil.getSyncData('/api/inspec_report/read', data);
+
+            if(result.success){
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+        // 이거 뭐지
+        function grid_binding(data){
+            var inspecDto = data;
+            var inspecData = [];
+
+            for (var i = 0; i < inspecDto.length; i++) {
+                inspecData.push({
+                    rownum: inspecDto[i]["rownum"],
+                    spworknm: inspecDto[i]["spworknm"],
+                    powerid: inspecDto[i]["powerid"],
+                    spplannm: inspecDto[i]["spplannm"],
+                    checkdt: inspecDto[i]["checkdt"],
+                    checkusr: inspecDto[i]["checkusr"],
+                    checkarea: inspecDto[i]["checkarea"],
+                    checktmdt: inspecDto[i]["checktmdt"],
+
+                });
+
+            }
+
+            theGrid.columns.clear();
+            theGrid.autoGenerateColumns = false;
+            viewdata.sourceCollection = inspecData;
+
+            var cols = new wijmo.grid.Column();
+            cols.binding = 'rownum';
+            cols.header = '순번';
+            cols.align = "center";
+            cols.width = 60;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spworknm';
+            cols.header = '지역명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spcompnm';
+            cols.header = '산단명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'spplannm';
+            cols.header = '발전소명';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkdt';
+            cols.header = '등록일자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkusr';
+            cols.header = '점검자';
+            cols.align = "center";
+            cols.width = 140;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checkarea';
+            cols.header = '점검장소';
+            cols.align = "center";
+            cols.width = 200;
+            theGrid.columns.push(cols);
+
+            cols = new wijmo.grid.Column();
+            cols.binding = 'checktmdt';
+            cols.header = '점검시간';
+            cols.align = "center";
+            cols.width = 260;
+            theGrid.columns.push(cols);
+
+
+
+        }
+
+        // $(document).ready(function (e) {
+        //
+        //
+        //     page = new CheckResultDiaryPage();
+        //
+        //
+        //
+        //
+        //
+        //
+        //     $('#btnSave').click(function (e){
+        //
+        //
+        //         Alert.confirm('', '저장하시겠습니까?', function() {
+        //
+        //                 let fileInput = document.getElementById('fileInput1');
+        //                 let files = fileInput.files;
+        //                 let formData = new FormData();
+        //
+        //                 for (var i = 0; i < files.length; i++) {
+        //                     formData.append('filelist', files[i]);
+        //                 }
+        //
+        //                 const randomString = generateRandomStringWithDate();
+        //
+        //                 var inputs = document.querySelectorAll('input[name="checkusr"]');
+        //                 var values = [];
+        //
+        //                 inputs.forEach(function(input){
+        //                     values.push(input.value);
+        //
+        //                 })
+        //
+        //                 var checkusrString = values.join(',');
+        //
+        //
+        //
+        //                 // 다른 데이터를 FormData에 추가합니다.
+        //                 formData.append('supplier', $('#supplier').val());
+        //                 formData.append('checkdt', $('#checkdt').val());
+        //                 formData.append('checkstdt', $('#checkstdt').val());
+        //                 formData.append('checkendt', $('#checkendt').val());
+        //                 formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+        //                 formData.append('checkarea', $('#checkarea').val());
+        //                 formData.append('checkitem', $('#checkitem').val());
+        //                 formData.append('checkplan', $('#checkplan').val());
+        //                 formData.append('randomuuid', randomString);
+        //                 formData.append('_csrf', $('[name=_csrf]').val());
+        //
+        //
+        //                 $.ajax({
+        //                     url: '/api/inspec_report/save',
+        //                     type: 'POST',
+        //                     data: formData,
+        //                     processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+        //                     contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+        //                     success: function (response) {
+        //                         if(response.success){
+        //                             Alert.alert('', response.message);
+        //                         }
+        //                     },
+        //                     error: function (jqXHR, textStatus, errorThrown) {
+        //                         Alert.alert('', '에러가발생하였습니다.');
+        //                     }
+        //                 });
+        //
+        //
+        //             },
+        //             function () {}
+        //
+        //
+        //         )
+        //     })
+        //
+        //
+        //     page.setUploader();
+        //
+        //
+        // });
+
+        // // 목록 탭에서 데이터 선택
+        // theGrid1.selectionChanged.addHandler(function (s, e) {
+        //     var selectedItem1= s.collectionView.currentItem;
+        //     if (selectedItem1) {
+        //         loadToEditTab(selectedItem1);  // 수정 탭에 데이터 로드 함수 호출
+        //     }
+        // });
+
+        // // 수정 탭에 데이터 로드
+        // function loadToEditTab(data) {
+        //     // 예를 들어, 발전량 데이터를 수정 탭의 입력 필드에 설정
+        //     $('#editEnergyQty').val(data.energyQty);  // id가 editEnergyQty인 입력 필드에 발전량 설정
+        //     // 다른 필드도 동일하게 설정
+        // }
+        //
+        // // 수정 탭의 '저장' 버튼 클릭 이벤트
+        // $('#btnSave').click(function() {
+        //     // 데이터 수집
+        //     var updatedData = {
+        //         energyQty: $('#editEnergyQty').val(),
+        //         // 다른 필드도 수집
+        //     };
+        //
+        //     // AJAX 호출로 서버에 데이터 저장 요청
+        //     $.ajax({
+        //         url: '/api/data/update',  // 데이터를 업데이트하는 서버의 API
+        //         type: 'POST',
+        //         contentType: 'application/json',
+        //         data: JSON.stringify(updatedData),
+        //         success: function(response) {
+        //             if(response.success) {
+        //                 alert('수정되었습니다.');
+        //                 // 성공 시 필요한 동작 수행, 예를 들어 페이지 리로드
+        //             } else {
+        //                 alert('오류: ' + response.message);
+        //             }
+        //         },
+        //         error: function() {
+        //             alert('서버와의 통신 중 오류가 발생했습니다.');
+        //         }
+        //     });
+        // });
+
+
+    </script>
+</th:block>
+
+</html>

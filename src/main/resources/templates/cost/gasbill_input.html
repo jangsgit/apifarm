@@ -1,0 +1,1058 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<style>
+
+
+</style>
+
+
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>도시가스청구서등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내 메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스분석</li>
+                <li>비용관리</li>
+                <li>도시가스청구서등록</li>
+            </ul>
+        </div>
+
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <!--                <li>-->
+                <!--                    <a href="#tab2" title="등록">등록</a>-->
+                <!--                </li>-->
+            </ul>
+            <!--            <div class="tab-contents">-->
+            <!--                &lt;!&ndash; Section &ndash;&gt;-->
+            <!--                <section class="tab-item" id="tab1">-->
+            <!--                    <div class="section-top">-->
+            <!--                        <div class="search-wrap">-->
+            <!--                            <dl>-->
+            <!--                                <dt>-->
+            <!--                                    등록일자<span class="eq">*</span>-->
+            <!--                                </dt>-->
+            <!--                                <dd>-->
+            <!--                                    <div class="srch-box">-->
+            <!--                                        <ul class="date-box">-->
+            <!--                                            <li>-->
+            <!--                                                <input type="date" id="searchfrdate" name="searchfrdate">-->
+            <!--                                                    <label for="searchfrdate" class="hide">시작일</label>-->
+            <!--                                            </li>-->
+            <!--                                            <li>-->
+            <!--                                                <input type="date" id="searchtodate" name="searchtodate">-->
+            <!--                                                    <label for="searchtodate" class="hide">종료일</label>-->
+            <!--                                                <a class="btn btn-srch" id="searchgrid" title="검색"  style="border-radius: 5px 5px 5px 5px;"></a>-->
+            <!--                                            </li>-->
+
+            <!--                                            <li>-->
+            <!--                                                <a title="청구서등록" class="btn btn-popup-open" data-popup="popup2" onclick="showPopup2()">청구서 등록</a>-->
+            <!--                                            </li>-->
+
+            <!--                                            <li>-->
+            <!--                                                <a title="청구서스캔" class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">청구서 스캔</a>-->
+            <!--                                                </a>-->
+            <!--                                            </li>-->
+
+            <!--                                        </ul>-->
+            <!--                                    </div>-->
+            <!--                                </dd>-->
+            <!--                            </dl>-->
+            <!--                        </div>-->
+
+
+            <!--                    </div> &lt;!&ndash;//section-top end &ndash;&gt;-->
+            <!--                    <div class="container-fluid">-->
+            <!--                        <p id="selectedItem"></p>-->
+            <!--                        <div id="theGrid" style="max-height: 600px"></div>-->
+            <!--                    </div>-->
+
+            <!--                </section>-->
+            <!--                &lt;!&ndash; Section &ndash;&gt;-->
+            <!--&lt;!&ndash;                <section class="tab-item" id="tab2">&ndash;&gt;-->
+            <!--&lt;!&ndash;                    <div class="section-top">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="title-wrap">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <h3>도시가스 청구서 등록</h3>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="button-wrap">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <ul>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <a class="btn btn-excell" title="엑셀다운로드">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        신규등록&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <a  class="btn btn-delete" title="삭제">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        삭제&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <a  class="btn btn-edit" id="btnSave" title="저장">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        저장&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </li>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    <div class="table-wrap">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <table class="write-table">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <caption>도시가스 청구서 등록 테이블</caption>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <colgroup>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <col class="wauto">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <col class="wauto">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <col class="wauto">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <col class="wauto">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </colgroup>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <tbody>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <label for="">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        청구년월&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <input type="text" id="" name="" class="wp100" maxlength="50">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <label for="">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        사용량&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <input type="text" id="" name="" class="wp100" maxlength="50">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                            <tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <label for="">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        청구금액&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <input type="text" id="" name="" class="wp100" maxlength="50">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <label for="">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        사용열량&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <input type="text" id="" name="" class="wp100" maxlength="50">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                            <tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <label for="">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        비고&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <td colspan="3">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <div class="textarea-box">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        <textarea id="checkitem" name="checkitem" maxlength="200"></textarea>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                        &lt;!&ndash;                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </td>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </tbody>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </table>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                </section>&ndash;&gt;-->
+            <!--            </div> &lt;!&ndash;//tab-contens end&ndash;&gt;-->
+
+
+            <div class="tab-contents">
+                <!-- Section -->
+                <!--                <section class="tab-item" id="tab1" style="height: 820px;">-->
+                <!--                    <div class="section-top">-->
+                <!--                        <div class="search-wrap">-->
+                <!--                            <dl>-->
+                <!--                                <dt>-->
+                <!--                                    등록일자<span class="eq">*</span>-->
+                <!--                                </dt>-->
+                <!--                                <dd>-->
+                <!--                                    <div class="srch-box">-->
+                <!--                                        <ul class="date-box">-->
+                <!--                                            <li>-->
+                <!--                                                <input type="date" id="searchfrdate" name="searchfrdate">-->
+                <!--                                                <label for="searchfrdate" class="hide">시작일</label>-->
+                <!--                                            </li>-->
+                <!--                                            <li>-->
+                <!--                                                <input type="date" id="searchtodate" name="searchtodate">-->
+                <!--                                                <label for="searchtodate" class="hide">종료일</label>-->
+                <!--                                                <a class="btn btn-srch" id="searchgrid" title="검색"-->
+                <!--                                                   style="border-radius: 5px 5px 5px 5px;"></a>-->
+                <!--                                            </li>-->
+
+                <!--                                            <li>-->
+                <!--                                                <a title="청구서등록" class="btn btn-popup-open" data-popup="popup2"-->
+                <!--                                                   onclick="showPopup2()">청구서 등록</a>-->
+                <!--                                            </li>-->
+
+                <!--                                            <li>-->
+                <!--                                                <a title="청구서스캔" class="btn btn-popup-open" data-popup="popup1"-->
+                <!--                                                   onclick="showPopup()">청구서 스캔</a>-->
+                <!--                                                </a>-->
+                <!--                                            </li>-->
+
+                <!--                                        </ul>-->
+                <!--                                    </div>-->
+                <!--                                </dd>-->
+                <!--                            </dl>-->
+                <!--                        </div>-->
+                <!--                        &lt;!&ndash;//section-top end &ndash;&gt;-->
+
+
+                <!--                        <div class="row">-->
+                <!--                            <div class="wp50 mg-r20">-->
+                <!--                                <div class="container-fluid col">-->
+                <!--                                    <p id="selectedItem"></p>-->
+                <!--                                    <div id="theGrid" style="max-height: 493px;"></div>-->
+                <!--                                </div>-->
+                <!--                            </div>-->
+                <!--                            <div class="col wp50">-->
+                <!--                                <div class="section">-->
+                <!--                                    <form id="codeForm">-->
+                <!--                                        <input type="hidden" id="parent_id" name="parent_id" value=""/>-->
+                <!--                                        <input class="form-control2" type="text" id="id" name="id" hidden/>-->
+                <!--                                        <div class="table-wrap">-->
+                <!--                                            <table class="view-table" id="selectedData">-->
+                <!--                                                <caption>보고분기 상세 테이블</caption>-->
+                <!--                                                <colgroup>-->
+                <!--                                                    <col class="wp20">-->
+                <!--                                                    <col class="wauto">-->
+                <!--                                                </colgroup>-->
+                <!--                                                <tbody>-->
+                <!--                                                <tr>-->
+                <!--                                                    <th><label for="parent_name">청구년월</label></th>-->
+                <!--                                                    <td>-->
+                <!--                                                        <input type="text" id="parent_name" name="parent_name"-->
+                <!--                                                               class="wp50" readonly>-->
+                <!--                                                    </td>-->
+                <!--                                                </tr>-->
+                <!--                                                <tr>-->
+                <!--                                                    <th><label for="code">사용량</label></th>-->
+                <!--                                                    <td>-->
+                <!--                                                        <input type="text" id="code" name="code" class="wp50" required>-->
+                <!--                                                        <div style="text-align:left; ">-->
+                <!--                                                                <span id="code-check-message"-->
+                <!--                                                                      style="color: red; display: none; ">중복된 코드입니다.</span>-->
+                <!--                                                        </div>-->
+                <!--                                                    </td>-->
+                <!--                                                </tr>-->
+                <!--                                                <tr>-->
+                <!--                                                    <th><label for="name">청구금액</label></th>-->
+                <!--                                                    <td>-->
+                <!--                                                        <input type="text" id="name" name="name" class="wp50">-->
+                <!--                                                    </td>-->
+                <!--                                                </tr>-->
+                <!--                                                <tr>-->
+                <!--                                                    <th><label for="description">사용열량</label></th>-->
+                <!--                                                    <td>-->
+                <!--                                                        <input type="text" id="description" name="description"-->
+                <!--                                                               class="wp50">-->
+                <!--                                                    </td>-->
+                <!--                                                </tr>-->
+                <!--                                                </tbody>-->
+                <!--                                            </table>-->
+                <!--                                        </div>-->
+                <!--                                    </form>-->
+                <!--                                </div>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </section>-->
+
+
+                <section class="tab-item" id="tab1" style="height: 820px;">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    조회년도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <ul class="date-box">
+                                            <li>
+<!--                                                <input type="number" id="yearInput" min="2000" max="2100" step="1" value="2024" class="wp100">-->
+                                                <select id="yearSelect" style="border-radius: 5px 5px 5px 5px;">
+                                                    <option value="2024" selected>2024</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2021">2021</option>
+                                                    <option value="2020">2020</option>
+                                                </select>
+                                                <!--                                                <label for="searchfrdate" class="hide">시작일</label>-->
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="searchbtn">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                            <!--                                            <li>-->
+                                            <!--                                                <input type="date" id="searchtodate" name="searchtodate">-->
+                                            <!--                                                <label for="searchtodate" class="hide">종료일</label>-->
+                                            <!--                                                <a class="btn btn-srch" id="searchgrid" title="검색"-->
+                                            <!--                                                   style="border-radius: 5px 5px 5px 5px;"></a>-->
+                                            <!--                                            </li>-->
+                                            <!--                                            <li>-->
+                                            <!--                                                <a title="청구서등록" class="btn btn-popup-open" data-popup="popup2" onclick="showPopup2()">청구서 등록</a>-->
+                                            <!--                                            </li>-->
+
+                                            <!--                                            <li>-->
+                                            <!--                                                <a title="청구서스캔" class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">청구서 스캔</a>-->
+                                            <!--                                                </a>-->
+                                            <!--                                            </li>-->
+                                        </ul>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a title="청구서스캔" class="btn btn-popup-open" data-popup="popup1"
+                                       onclick="showPopup()">청구서 스캔</a>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="wp70 mg-r20">-->
+                    <!--                            <div class="container-fluid col">-->
+                    <!--                                <p id="selectedItem"></p>-->
+                    <!--                                <div id="theGrid" style="max-height: 493px;"></div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="col wp30">-->
+                    <!--                            <div class="section">-->
+                    <!--                                <div class="table-wrap">-->
+                    <!--                                    <table class="view-table">-->
+                    <!--                                        <caption>청구서 등록 테이블</caption>-->
+                    <!--                                        <colgroup>-->
+                    <!--                                            <col class="wp20">-->
+                    <!--                                            <col class="wauto">-->
+                    <!--                                        </colgroup>-->
+                    <!--                                        <tbody>-->
+                    <!--                                        <tr>-->
+                    <!--                                            <th><label for="">청구년월</label></th>-->
+                    <!--                                            <td>-->
+                    <!--                                                <div class="input-clear"><input type="text" id="" class="wp100" readonly><span-->
+                    <!--                                                        class="btn-clear" >×</span></div>-->
+                    <!--                                            </td>-->
+                    <!--                                        </tr>-->
+                    <!--                                        <tr>-->
+                    <!--                                            <th><label for="">청구금액</label></th>-->
+                    <!--                                            <td>-->
+                    <!--                                                <div class="input-clear"><input type="text" id="" class="wp100" readonly><span-->
+                    <!--                                                        class="btn-clear">×</span></div>-->
+                    <!--                                            </td>-->
+                    <!--                                        </tr>-->
+                    <!--                                        <tr>-->
+                    <!--                                            <th><label for="">사용량</label></th>-->
+                    <!--                                            <td>-->
+                    <!--                                                <div class="input-clear"><input type="text" id="" class="wp100" readonly><span-->
+                    <!--                                                        class="btn-clear">×</span></div>-->
+                    <!--                                            </td>-->
+                    <!--                                        </tr>-->
+                    <!--                                        <tr>-->
+                    <!--                                            <th><label for="">사용열량</label></th>-->
+                    <!--                                            <td>-->
+                    <!--                                                <div class="input-clear"><input type="text" id="" class="wp100" readonly><span-->
+                    <!--                                                        class="btn-clear">×</span></div>-->
+                    <!--                                            </td>-->
+                    <!--                                        </tr>-->
+                    <!--                                        </tbody>-->
+                    <!--                                    </table>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+
+                    <div class="row row-2">
+                        <div class="col wp100">
+                            <div class="container-fluid">
+                                <p id="selectedItem"></p>
+                                <div id="theGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    <div class="row row-2">-->
+<!--                        <div class="col wp30" style="margin-right: 15px;">-->
+<!--                            <section class="tab-section" style="height: 300px; padding: 11px; margin-bottom: 0px;">-->
+<!--                                <div class="button-wrap" style="float: right; padding-top: 5px; margin-bottom: 7px;">-->
+<!--                                    <ul>-->
+<!--                                        <li>-->
+<!--                                            <a class="btn btn-edit" title="저장">-->
+<!--                                                <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">-->
+<!--                                                수정-->
+<!--                                            </a>-->
+<!--                                        </li>-->
+
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                                <div class="table-wrap">-->
+<!--                                    <table class="view-table" style="border-top:1px solid #D4D5D7">-->
+<!--                                        <caption>청구서 등록 테이블</caption>-->
+<!--                                        <colgroup>-->
+<!--                                            <col class="wp20">-->
+<!--                                            <col class="wauto">-->
+<!--                                        </colgroup>-->
+<!--                                        <tbody>-->
+<!--                                            <tr>-->
+<!--                                                <th><label for="">청구년월</label></th>-->
+<!--                                                <td>-->
+<!--                                                    <div class="input-clear"><input type="text" id="" class="wp100"-->
+<!--                                                                                    readonly><span-->
+<!--                                                            class="btn-clear">×</span></div>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <th><label for="">청구금액</label></th>-->
+<!--                                                <td>-->
+<!--                                                    <div class="input-clear"><input type="text" id="" class="wp100"-->
+<!--                                                                                    readonly><span-->
+<!--                                                            class="btn-clear">×</span></div>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <th><label for="">사용량</label></th>-->
+<!--                                                <td>-->
+<!--                                                    <div class="input-clear"><input type="text" id="" class="wp100"-->
+<!--                                                                                    readonly><span-->
+<!--                                                            class="btn-clear">×</span></div>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                            <tr>-->
+<!--                                                <th><label for="">사용열량</label></th>-->
+<!--                                                <td>-->
+<!--                                                    <div class="input-clear"><input type="text" id="" class="wp100"-->
+<!--                                                                                    readonly><span-->
+<!--                                                            class="btn-clear">×</span></div>-->
+<!--                                                </td>-->
+<!--                                            </tr>-->
+<!--                                        </tbody>-->
+<!--                                    </table>-->
+<!--                                </div>-->
+<!--                            </section>-->
+<!--                        </div>-->
+
+<!--                        <div class="col wp70">-->
+<!--                            <section class="tab-section" style="height: 480px; padding: 11px; margin-bottom: 0px;">-->
+<!--                                <div class="title-wrap" style="margin-bottom: 0px">-->
+<!--                                    <div>-->
+<!--                                        <div id="chartHolder1" style="width: 100%; height: 290px; padding-top: 13px"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </section>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="row row-2" style="margin-bottom: 24px;">
+                        <div class="col wp30" style="margin-right: 15px;">
+                            <section class="tab-section" style="height: 300px; padding: 11px; margin-bottom: 0px;">
+                                <div class="button-wrap" style="float: right; padding-top: 5px; margin-bottom: 7px;">
+                                    <ul>
+                                        <li>
+                                            <a class="btn btn-edit" title="저장">
+                                                <img src="/images/icon/ico-edit.svg" alt="수정 아이콘">
+                                                수정
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="table-wrap">
+                                    <table class="view-table" style="border-top:1px solid #D4D5D7">
+                                        <caption>청구서 등록 테이블</caption>
+                                        <colgroup>
+                                            <col class="wp20">
+                                            <col class="wauto">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <th><label for="">청구년월</label></th>
+                                            <td>
+                                                <div class="input-clear"><input type="text" id="" class="wp100"
+                                                                                readonly><span
+                                                        class="btn-clear">×</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">청구금액</label></th>
+                                            <td>
+                                                <div class="input-clear"><input type="text" id="" class="wp100"
+                                                                                readonly><span
+                                                        class="btn-clear">×</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">사용량</label></th>
+                                            <td>
+                                                <div class="input-clear"><input type="text" id="" class="wp100"
+                                                                                readonly><span
+                                                        class="btn-clear">×</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="">사용열량</label></th>
+                                            <td>
+                                                <div class="input-clear"><input type="text" id="" class="wp100"
+                                                                                readonly><span
+                                                        class="btn-clear">×</span></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+
+
+
+                        <div class="col wp70">
+                            <section class="tab-section" style="height: 450px; padding: 11px; margin-bottom: 0px;">
+                                <div class="tab-contents">
+                                    <div class="tab-item-sub">
+                                        <div>
+                                            <div id="chartHolder1"
+                                                 style="width: 100%; height: 420px; padding-top: 13px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+            </div>
+
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>청구서 스캔</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">등록일자</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="date" id="popup-date" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>첨부파일</th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" class="fileInput" multiple="">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <span> * 업로드시 PDF 파일이어야 합니다.</span>
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()"
+                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
+                </button>
+                <button onclick="uploadFile()"
+                        style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!--팝업 모달 2-->
+    <!--    <div class="modal999">-->
+    <!--        <div class="popup-wrapper999 w700" id="popup2">-->
+    <!--            <div class="popup-title">-->
+    <!--                <h3>청구서 등록</h3>-->
+    <!--                <a title="팝업닫기" onclick="closePopup2()" class="btn-popup-close">-->
+    <!--                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">-->
+    <!--                </a>-->
+    <!--            </div>-->
+    <!--            <div class="popup-contents">-->
+    <!--                <div class="table-wrap">-->
+    <!--                    <table class="write-table">-->
+    <!--                        <caption>도시가스 청구서 등록 테이블</caption>-->
+    <!--                        <colgroup>-->
+    <!--                            <col class="wauto">-->
+    <!--                            <col class="wauto">-->
+    <!--                            <col class="wauto">-->
+    <!--                            <col class="wauto">-->
+    <!--                        </colgroup>-->
+    <!--                        <tbody>-->
+    <!--                        <tr>-->
+    <!--                            <th>-->
+    <!--                                <label for="standym">-->
+    <!--                                    청구년월-->
+    <!--                                </label>-->
+    <!--                            </th>-->
+    <!--                            <td>-->
+    <!--                                <input type="text" id="standym" name="standym" class="wp50" readonly>-->
+    <!--                            </td>-->
+    <!--                            <th>-->
+    <!--                                <label for="smuseqty">-->
+    <!--                                    사용량-->
+    <!--                                </label>-->
+    <!--                            </th>-->
+    <!--                            <td>-->
+    <!--                                <input type="text" id="smuseqty" name="smuseqty" class="wp50" readonly>-->
+    <!--                            </td>-->
+    <!--                        </tr>-->
+
+    <!--                        <tr>-->
+    <!--                            <th>-->
+    <!--                                <label for="askamt">-->
+    <!--                                    청구금액-->
+    <!--                                </label>-->
+    <!--                            </th>-->
+    <!--                            <td>-->
+    <!--                                <input type="text" id="askamt" name="askamt" class="wp50" readonly>-->
+    <!--                            </td>-->
+    <!--                            <th>-->
+    <!--                                <label for="">-->
+    <!--                                    사용열량-->
+    <!--                                </label>-->
+    <!--                            </th>-->
+    <!--                            <td>-->
+    <!--                                <input type="text" id="smusehqty" name="smusehqty" class="wp50" readonly>-->
+    <!--                            </td>-->
+    <!--                        </tr>-->
+
+    <!--                        <tr>-->
+    <!--                            <th>-->
+    <!--                                <label for="">-->
+    <!--                                    비고-->
+    <!--                                </label>-->
+    <!--                            </th>-->
+    <!--                            <td colspan="3">-->
+    <!--                                <div class="textarea-box">-->
+    <!--                                    <textarea id="checkitem" name="checkitem" maxlength="200"></textarea>-->
+    <!--                                    &lt;!&ndash;                                        <p class="text-count" id="text=count1" name="checkitem">0/200</p>&ndash;&gt;-->
+    <!--                                </div>-->
+    <!--                            </td>-->
+    <!--                        </tr>-->
+    <!--                        </tbody>-->
+    <!--                    </table>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--            <div class="popup-button">-->
+    <!--                <button onclick="closePopup2()"-->
+    <!--                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소-->
+    <!--                </button>-->
+    <!--                <button style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">-->
+    <!--                    저장-->
+    <!--                </button>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+    <script type="text/javascript">
+
+        // -----------------------차트 설정 시작-----------------------
+
+        // 첫 번째 탭 버튼 클릭 이벤트
+        document.querySelector('a[href="#tab1"]').addEventListener('click', function() {
+            setTimeout(createTab1Charts, 100); // 탭이 보인 후에 차트가 렌더링되도록 약간의 지연을 줌
+        });
+        // 페이지 로드 시 첫 번째 탭의 차트를 자동으로 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            createTab1Charts();
+        });
+
+
+        function createTab1Charts() {
+            rMateChartH5.create("chart1", "chartHolder1", "", "100%", "100%");
+
+
+            var layoutStr2 =
+                `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+                <Options>
+                    <Caption text=""/>
+                    <Legend defaultMouseOverAction="true"/>
+                </Options>
+                <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+                <Combination2DChart showDataTips="true">
+                    <horizontalAxis>
+                        <CategoryAxis categoryField="Month"/>
+                    </horizontalAxis>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}" maximum="3000"/>
+                    </verticalAxis>
+                    <series>
+                        <Column2DSet type="clustered">
+                            <series>
+                                <Column2DSeries yField="ASKAMT" displayName="청구금액" fill="#62b2fd">
+                                    <showDataEffect><SeriesInterpolate/></showDataEffect>
+                                </Column2DSeries>
+                            </series>
+                        </Column2DSet>
+                        <Line2DSeries yField="SMUSEQTY" displayName="사용량" itemRenderer="DiamondItemRenderer">
+                            <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            <verticalAxis>
+                                <LinearAxis id="vAxis2" interval="10" maximum="100"/>  <!-- 오른쪽 축 최대값 100 -->
+                            </verticalAxis>
+                        </Line2DSeries>
+                        <Line2DSeries yField="SMUSEHQTY" displayName="사용열량" itemRenderer="DiamondItemRenderer">
+                            <lineStroke><Stroke color='#909BFF' weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            <verticalAxis>
+                                <LinearAxis id="vAxis2" interval="10" maximum="100"/>  <!-- 오른쪽 축 최대값 100 -->
+                            </verticalAxis>
+                        </Line2DSeries>
+                    </series>
+                    <verticalAxisRenderers>
+                        <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+                        <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+                    </verticalAxisRenderers>
+                </Combination2DChart>
+            </rMateChart>`;
+
+            var chartDataCombo = [
+                {"Month": "1월", "ASKAMT": 1000, "SMUSEQTY": 40, "SMUSEHQTY": 50},
+                {"Month": "2월", "ASKAMT": 1500, "SMUSEQTY": 50, "SMUSEHQTY": 60},
+                {"Month": "3월", "ASKAMT": 1700, "SMUSEQTY": 30, "SMUSEHQTY": 45},
+                {"Month": "4월", "ASKAMT": 2300, "SMUSEQTY": 50, "SMUSEHQTY": 60},
+                {"Month": "5월", "ASKAMT": 1800, "SMUSEQTY": 60, "SMUSEHQTY": 65},
+                {"Month": "6월", "ASKAMT": 2500, "SMUSEQTY": 85, "SMUSEHQTY": 95},
+                {"Month": "7월", "ASKAMT": 1500, "SMUSEQTY": 40, "SMUSEHQTY": 50},
+                {"Month": "8월", "ASKAMT": 1600, "SMUSEQTY": 60, "SMUSEHQTY": 65},
+                {"Month": "9월", "ASKAMT": 1200, "SMUSEQTY": 70, "SMUSEHQTY": 75},
+                {"Month": "10월", "ASKAMT":1400, "SMUSEQTY": 80, "SMUSEHQTY": 85},
+                {"Month": "11월", "ASKAMT":1600, "SMUSEQTY": 60, "SMUSEHQTY": 65},
+                {"Month": "12월", "ASKAMT":1800, "SMUSEQTY": 90, "SMUSEHQTY": 95}
+            ];
+
+            // var chartDataCombo = [
+            //     {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+            //     {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+            //     {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+            //     {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+            //     {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+            //     {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+            //     {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+            //     {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+            //     {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+            //     {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+            //     {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+            //     {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+            // ];
+
+
+            rMateChartH5.calls("chart1", {"setLayout": layoutStr2, "setData": chartDataCombo});
+
+        }
+
+        rMateChartH5.registerTheme(rMateChartH5.themes);
+
+        function rMateChartH5ChangeTheme(theme) {
+            document.getElementById("chart1").setTheme(theme);
+        }
+        // -----------------------차트 설정 끝-----------------------
+
+        var theGrid;
+        var viewdata;
+        let csrfToken = $("[name=_csrf]").val();
+
+        const modalOpen = document.querySelector('.modal_btn');
+        const modalClose = document.querySelector('.close_btn');
+
+        const dateInput2 = document.getElementById('popup-date');
+        const today2 = new Date();
+        const year2 = today2.getFullYear();
+        const month2 = String(today2.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day2 = String(today2.getDate()).padStart(2, '0');
+        const dateValue2 = `${year2}-${month2}-${day2}`;
+        dateInput2.value = dateValue2;
+
+
+        // 팝업 함수
+        function closePopup() {
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup() {
+            let fileNameDisplay = document.getElementById('fileNameDisplay');
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+        }
+
+
+        // 파일 업로드 함수
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput2');
+            const file = fileInput.files[0];
+
+            // 파일 유효성 검사
+            if (!file || file.type !== 'application/pdf') {
+                alert("PDF 파일만 업로드 가능합니다.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("_csrf", csrfToken);
+
+            fetch('/api/cost/gas_bill/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("파일 업로드 실패");
+                    }
+                    return response.json();  // 서버에서 JSON 응답을 기대
+                })
+                .then(result => {
+                    if (result.success) {
+                        alert("파일이 성공적으로 업로드되었습니다.");
+                    } else {
+                        alert(result.message);  // 오류 메시지 표시
+                    }
+                })
+                .catch(error => {
+                    console.error('오류:', error);
+                    alert(`파일 처리 중 오류가 발생했습니다: ${error.message}`);
+                });
+        }
+
+        function populateTextInModal(text) {
+            const billingDate = extractBillingDate(text);
+            if (billingDate) {
+                document.querySelector('#popup2 input[name="청구년월"]').value = billingDate;
+            } else {
+                alert("청구년월을 추출할 수 없습니다.");
+            }
+            // 다른 필드도 필요한 경우 여기에 추가
+            document.querySelector('.modal999').style.display = 'block';
+        }
+
+        function extractBillingDate(text) {
+            const match = text.match(/청구년월:\s*(\d{6})/);
+            return match ? match[1] : null;
+        }
+
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            let data2 = [];
+            let searchusr = $('#searchusr').val();
+
+            $.ajax({
+                url: '/api/cost/upload/gas_read',
+                type: 'GET',
+                // data: {
+                //     'searchusr': searchusr
+                // },
+                async: false,
+                success: function (data) {
+                    console.log('wijmo', data.data);
+                    data2 = data.data;
+                }
+            })
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 3;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+            // 데이터 그리드에 바인딩
+            theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                columns: [
+                    {binding: 'category', header: '구분', width: 120, align: 'center'},
+                    {binding: 'Year1', header: '1월', width: 120, align: 'center'},
+                    {binding: 'Year2', header: '2월', width: 120, align: 'center'},
+                    {binding: 'Year3', header: '3월', width: 120, align: 'center'},
+                    {binding: 'Year4', header: '4월', width: 120, align: 'center'},
+                    {binding: 'Year5', header: '5월', width: 120, align: 'center'},
+                    {binding: 'Year6', header: '6월', width: 120, align: 'center'},
+                    {binding: 'Year7', header: '7월', width: 120, align: 'center'},
+                    {binding: 'Year8', header: '8월', width: 120, align: 'center'},
+                    {binding: 'Year9', header: '9월', width: 120, align: 'center'},
+                    {binding: 'Year10', header: '10월', width: 120, align: 'center'},
+                    {binding: 'Year11', header: '11월', width: 120, align: 'center'},
+                    {binding: 'Year12', header: '12월', width: "*", align: 'center'}
+                ],
+
+                //홀짝 로우 음영주기
+
+                itemsSource: viewdata
+
+            });
+
+            theGrid.setCellData(0, 'category', '사용량');
+            theGrid.setCellData(1, 'category', '사용열량');
+            theGrid.setCellData(2, 'category', '청구금액');
+
+
+            // 선택이 변경될 때, 현재 항목 업데이트
+
+            theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+        }
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+        let filelist = [];
+
+        function filevalueinit(param) {
+            filelist = param;
+
+        }
+
+        let page = null;
+
+        //검색
+        function searchData() {
+            let data = {
+                'searchusr': $('#searchusr').val()
+            }
+
+            let result = AjaxUtil.getSyncData('/api/cost_upload/read', data);
+
+            if (result.success) {
+                console.log(result.data);
+                grid_binding(result.data);
+            }
+        }
+
+
+        $(document).ready(function (e) {
+            initializeSelections();
+
+            const currentYear = new Date().getFullYear();
+            const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0'); // 현재 월을 두 자리 수로 포맷팅
+            const defaultDate = `${currentYear}-${currentMonth}`;
+            document.getElementById('searchfrdate').value = defaultDate;
+        });
+    </script>
+</th:block>
+
+</html>

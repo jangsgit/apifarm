@@ -1,0 +1,1684 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+<style>
+    #loader2 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        opacity: 0.8;
+        width: 100%;
+        height: 100%;
+        display: none; /* 처음에는 숨김 상태 */
+        z-index: 1000;
+    }
+
+    #loader2 .loader {
+        position: fixed;
+        top: calc(50% - 48px);
+        left: calc(50% - 48px);
+        width: 96px;
+        height: 96px;
+        border-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    #loader2 .loader > span {
+        position: fixed;
+        top: calc(50% - 27px);
+        left: calc(50% - 27px);
+        width: 48px;
+        height: 48px;
+        border: 3px solid #FFF;
+        border-radius: 50%;
+        display: inline-block;
+        animation: rotation 1s linear infinite;
+    }
+
+    #loader2 .loader > span::after {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #5ddfde;
+        width: 16px;
+        height: 16px;
+        transform: translate(-50%, 50%);
+        border-radius: 50%;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+</head>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>합동 안전점검</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                       alt="알람 아이콘"></a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내 메뉴-->
+<!--                </a>-->
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검 관리</li>
+                <li>순회점검 관리</li>
+                <li>합동 안전점검</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <input type="hidden" id="checkno" name="checkno"/>
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <!-- write_flag가 true일 때만 '등록' 탭을 보여줍니다. -->
+                <li th:if="${write_flag}">
+                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    점검일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchusr">
+                                        점검자<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchusr" class="input-srch"
+                                               placeholder="점검자 검색" style="border-radius: 5px;">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchcom">
+                                        협력사<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchcom" class="input-srch"
+                                               placeholder="협력사 검색" style="border-radius: 5px;">
+<!--                                        <a class="btn-srch" title="검색" onclick="fetchListData()"></a>-->
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" onclick="fetchListData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-print" title="점검일지 출력" onclick="DownloadDoc()">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        점검일지 출력
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- 로딩 바 요소 -->
+                            <div id="loadingBar">
+                                <div class="spinner"></div>
+                            </div>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="height: 719px"></div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>합동 안전점검 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록" onclick="newForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-file" title="파일 첨부" data-popup="popup1"
+                                       onclick="showPopup(this)">
+                                        파일 첨부<span>(0)</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm()">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장" onclick="saveForm()">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <!--                                <col class="wp12">-->
+                                <!--                                <col class="wp40">-->
+                                <!--                                <col class="wp12">-->
+                                <!--                                <col class="wp40">-->
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="checknm">
+                                        점검명
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="checknm" class="wp100" onkeyup="fetchSuggestions()">
+                                    <ul id="suggestions-checknm" class="suggestions-list"></ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkdt">
+                                        점검일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="checkdt">
+                                </td>
+                                <th>
+                                    <label for="chkaddres">
+                                        점검 장소
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="chkaddres" name="chkaddres" maxlength="100"
+                                           onkeyup="fetchSuggestions()">
+                                    <ul id="suggestions-chkaddres" class="suggestions-list"></ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="checkusr1_seq_1">
+                                        점검자(도급인)
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="checkusr1">
+                                        <div class="inspector-group" data-id="1">
+                                            <input type="hidden" id="checkusr1_seq_1" name="checkusr1_seq_1" value="">
+                                            <label for="checkusr1_company_1"></label><input type="text" id="checkusr1_company_1" name="checkusr1_company_1"
+                                                                                            placeholder="업체명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-company-do-1" class="suggestions-list"></ul>
+                                            <label for="checkusr1_position_1"></label><input type="text" id="checkusr1_position_1" name="checkusr1_position_1"
+                                                                                             placeholder="직급" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-position-do-1" class="suggestions-list"></ul>
+                                            <label for="checkusr1_name_1"></label><input type="text" id="checkusr1_name_1" name="checkusr1_name_1"
+                                                                                         placeholder="성명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-name-do-1" class="suggestions-list"></ul>
+                                            <button onclick="addInspector('checkusr1', null, false)" class="mg-l8">점검자 추가
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <th>
+                                    <label for="checkusr2_seq_1">
+                                        점검자(관계수급인)
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="checkusr2">
+                                        <div class="inspector-group" data-id="1">
+                                            <input type="hidden" id="checkusr2_seq_1" name="checkusr2_seq_1" value="">
+                                            <input type="text" id="checkusr2_company_1" name="checkusr2_company_1"
+                                                   placeholder="업체명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-company-ha-1" class="suggestions-list"></ul>
+                                            <input type="text" id="checkusr2_position_1" name="checkusr2_position_1"
+                                                   placeholder="직급" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-position-ha-1" class="suggestions-list"></ul>
+                                            <input type="text" id="checkusr2_name_1" name="checkusr2_name_1"
+                                                   placeholder="성명" onkeyup="fetchSuggestions()">
+                                            <ul id="suggestions-name-ha-1" class="suggestions-list"></ul>
+                                            <button onclick="addInspector('checkusr2', null, false)" class="mg-l8">점검자 추가
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table style="margin: 15px 0px;" class="write-table doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col" rowspan="2" style="width: 10%;">점검 구분</th>
+                                <th scope="col" rowspan="2" style="width: 25%;">점검 내용</th>
+                                <th scope="col" rowspan="2" style="width: 8%;">점검 결과</th>
+                                <th scope="col" rowspan="2">시정 조치 사항</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td rowspan="2">
+                                    <span id="inspecdivision1">안전보건 일반사항</span>
+                                </td>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont1_1">ㅇ 작업장 출입/이동경로 상태 : 출입문 및 이동통로 주변 통행방해 적치 여부<br></span>
+                                    <span id="inspeccont1_2">ㅇ 기타 출입 및 이동 방해 요소</span>
+                                </td>
+                                <td class="checkbox-cell"><span id="inspecresult1">O</span></td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform1" name="inspecreform1" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="checkplan">0/100</p>
+                                        <input type="hidden" id="seq1" name="seq1">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont2">ㅇ 작업장 실내 유해가스 등 환기 상태<br>ㅇ 자재 적재, 작업개소 등에 대한 구획정리를 통한 안전 이동통로 확보</span>
+                                </td>
+                                <td class="checkbox-cell">
+                                    <span id="inspecresult2">O</span>
+                                </td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform2" name="inspecreform2" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="inspecreform2">0/100</p>
+                                        <input type="hidden" id="seq2" name="seq2">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">
+                                    <span id="inspecdivision2">비상상황</span>
+                                </td>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont3">ㅇ 화재 대비 소화기 등 비치 상태<br>ㅇ 비상상황시 비상문, 비상대피로 확보<br>ㅇ 비상시 연락체계 등 관리체계 공지 및 교육 상태</span>
+                                </td>
+                                <td class="checkbox-cell">
+                                    <span id="inspecresult3">O</span>
+                                </td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform3" name="inspecreform3" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="inspecreform3">0/100</p>
+                                        <input type="hidden" id="seq3" name="seq3">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont4">ㅇ 비상상황 발생시 대응방안 관련<br>- 비상상황시 연락체계, 역할, 대피로 등 관리체계 수립 및 게시<br>- 업무 참여자 공지 및 교육 상태</span>
+                                </td>
+                                <td class="checkbox-cell">
+                                    <span id="inspecresult4">O</span>
+                                </td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform4" name="inspecreform4" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="inspecreform4">0/100</p>
+                                        <input type="hidden" id="seq4" name="seq4">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2"><span id="inspecdivision3">기타사항</span></td>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont5">ㅇ 위험물 또는 인화성 물질 관리상태 및 존치 여부</span>
+                                </td>
+                                <td class="checkbox-cell">
+                                    <span id="inspecresult5">O</span>
+                                </td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform5" name="inspecreform5" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="checkplan">0/100</p>
+                                        <input type="hidden" id="seq5" name="seq5">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left;">
+                                    <span id="inspeccont6">ㅇ 작업부산물, 폐기물 처리 상태 등 작업장 및 그 주변 정리정돈 상태</span>
+                                </td>
+                                <td class="checkbox-cell">
+                                    <span id="inspecresult6">O</span>
+                                </td>
+                                <td>
+                                    <div class="textarea-box">
+                                        <textarea id="inspecreform6" name="inspecreform6" maxlength="100"
+                                                  style="height: 60px;"></textarea>
+                                        <p class="text-count" name="inspecreform6">0/100</p>
+                                        <input type="hidden" id="seq6" name="seq6">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="checkrem">
+                                        점검의견
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div class="textarea-box">
+                                        <textarea id="checkrem"></textarea>
+                                        <p class="text-count" id="text-count1">0/100</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>파일 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup('popup1')" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <form id="file-upload-form" enctype="multipart/form-data">
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>전기안전 점검 첨부파일</caption>
+                            <colgroup>
+                                <col class="wp20">
+                                <col class="wp80">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td>
+                                    <div id="uploadComponent1" class="upload-component">
+                                        <div class="upload-filebox">
+                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                            <a class="btn" title="파일업로드">파일 업로드</a>
+                                            <input type="file" id="fileInput" class="fileInput" multiple>
+                                            <p>Maximun upload file size <span>1GiB</span></p>
+                                        </div>
+
+                                        <div class="upload-filelist">
+                                            <div class="title">
+                                                <h5>Files (0)</h5>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                            </div>
+                                            <ul class="filelist" id="filelist">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="popup-button">
+                        <button type="button" onclick="closePopup('popup1')" class="btn-navy">확인</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="loader2">
+        <div class="loader">
+            <span></span>
+        </div>
+    </div>
+    <style>
+        .inspector-group input {
+            width: 150px;
+        }
+
+        .inspector-group {
+            margin-top: 3px;
+        }
+    </style>
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+
+    <script type="text/javascript">
+
+        var theGrid;    // 목록에 뿌림
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        // 오늘 날짜 설정
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkdt').value = today;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            // 산단 연동
+            initializeSelections();
+
+            // 검색 초기 날짜
+            setDefaultDates('startDate', 'endDate');
+
+            // read 초기화
+            fetchListData();
+
+            // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
+            document.getElementById('spworkcd').addEventListener('change', fetchListData);
+            document.getElementById('spcompcd').addEventListener('change', fetchListData);
+            document.getElementById('spplancd').addEventListener('change', fetchListData);
+            document.getElementById('spworkcd').addEventListener('change', clearForm);
+            document.getElementById('spcompcd').addEventListener('change', clearForm);
+            document.getElementById('spplancd').addEventListener('change', clearForm);
+        }
+
+        function fetchListData() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/inspec/hap/read',
+                type: 'GET',
+                data: {
+                    'startDate': $('#startDate').val(),
+                    'endDate': $('#endDate').val(),
+                    'searchusr': $('#searchusr').val(),
+                    'searchcom': $('#searchcom').val(),
+                    spworkcd: spworkcd,
+                    spcompcd: spcompcd,
+                    spplancd: spplancd
+                },
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {
+                            binding: 'checkdt',
+                            header: '점검일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spworknm',
+                            header: '산단지역본부',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spcompnm',
+                            header: '산단명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'spplannm',
+                            header: '발전소명',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'checkusrs',
+                            header: '점검자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {
+                            binding: 'chkaddres',
+                            header: '점검장소',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+                        {binding: 'downloads', header: '첨부파일', width: '*', minWidth: 100, align: 'center'},
+                        {
+                            binding: 'checkrem',
+                            header: '점검의견',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true
+                        },
+
+                    ],
+                    itemsSource: viewdata,
+                    itemFormatter: function (panel, r, c, cell) {
+                        if (panel.cellType === wijmo.grid.CellType.Cell) {
+                            var item = panel.rows[r].dataItem; // 현재 행의 데이터 항목
+                            if (panel.columns[c].binding === 'downloads') {
+                                cell.innerHTML = ''; // 셀 내용 초기화
+                                if (item.isdownload) {
+                                    cell.innerHTML = '<a title="다운로드" class="btn-filedown" onclick="downloadFile()">다운로드</a>';
+                                }
+                            }
+                        }
+                    }
+                });
+                // 그리드의 더블클릭 이벤트 추가
+                let lastClickTime = 0;
+                theGrid.hostElement.addEventListener('click', function (e) {
+                    const now = new Date().getTime();
+                    if (now - lastClickTime < 300) { // 300ms 이내의 두 번 클릭은 더블클릭으로 인식
+                        modifyData(); // 더블클릭 시 modifyData 함수 실행
+                    }
+                    lastClickTime = now;
+                });
+
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '합동안전점검';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+        // 다운로드
+        function downloadFile() {
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                let checkdtFormatted = item.checkdt.replace(/-/g, '');
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    checkdt: checkdtFormatted,
+                    checkno: item.checkno
+                });
+            });
+
+            // 다운로드 URL 지정
+            let downloadUrl = '/api/inspec/hap/downloader';
+
+            // Jung.js에서 정의한 downloadFiles 함수 호출
+            downloadFiles(downloadList, downloadUrl);
+        }
+
+        let deletedSeqs = []; // 삭제된 점검자의 seq 값을 저장할 배열
+        let inspectorIdCounterCheckusr1 = 2; // checkusr1의 ID 카운터
+        let inspectorIdCounterCheckusr2 = 2; // checkusr2의 ID 카운터
+        // 점검자 추가
+        function addInspector(wrapperClass, inspectorData = null, isFirst = false) {
+            const wrapper = document.querySelector(`.${wrapperClass}`);
+            const index = wrapper.querySelectorAll('.inspector-group').length + 1;
+
+            // checkusr1, checkusr2에 따라 각각의 카운터를 사용
+            let dataId;
+            if (wrapperClass === 'checkusr1') {
+                dataId = inspectorIdCounterCheckusr1++;
+            } else if (wrapperClass === 'checkusr2') {
+                dataId = inspectorIdCounterCheckusr2++;
+            }
+
+            const newInspectorGroup = document.createElement('div');
+            newInspectorGroup.classList.add('inspector-group');
+            newInspectorGroup.setAttribute('data-id', dataId.toString());
+
+            let seqInput;
+
+            // seq hidden input 추가
+            if (inspectorData && inspectorData.seq) {
+                seqInput = document.createElement('input');
+                seqInput.type = "hidden";
+                seqInput.name = `${wrapperClass}_seq_${index}`;
+                seqInput.value = inspectorData.seq;
+                newInspectorGroup.appendChild(seqInput);
+            }
+
+            // input-clear 구조 추가
+            const createInputClear = (inputField) => {
+                const inputClearDiv = document.createElement('div');
+                inputClearDiv.classList.add('input-clear');
+
+                inputField.style.marginRight = '4px';
+
+                const clearButton = document.createElement('span');
+                clearButton.classList.add('btn-clear');
+                clearButton.innerHTML = '×';
+                clearButton.style.display = 'none';
+
+                // x 버튼 누르면 지우기
+                clearButton.onclick = () => {
+                    inputField.value = '';
+                    clearButton.style.display = 'none';
+                    inputField.focus();
+                };
+
+                inputField.addEventListener('input', () => {
+                    clearButton.style.display = inputField.value ? 'inline' : 'none';
+                });
+
+                inputClearDiv.appendChild(inputField);
+                inputClearDiv.appendChild(clearButton);
+
+                return inputClearDiv;
+            };
+
+            // 업체명 input
+            const companyInput = document.createElement('input');
+            companyInput.type = "text";
+            companyInput.name = `${wrapperClass}_company_${index}`;
+            companyInput.id = `${wrapperClass}_company_${index}`;
+            companyInput.placeholder = '업체명';
+            companyInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) companyInput.value = inspectorData.company;
+
+            const companyInputClear = createInputClear(companyInput);
+            const companySuggestionId = wrapperClass === 'checkusr1' ? `suggestions-company-do-${index}` : `suggestions-company-ha-${index}`;
+            const companySuggestions = document.createElement('ul');
+            companySuggestions.id = companySuggestionId;
+            companySuggestions.classList.add('suggestions-list');
+            companySuggestions.style.display = 'none';
+
+            // 직급 input
+            const positionInput = document.createElement('input');
+            positionInput.type = "text";
+            positionInput.name = `${wrapperClass}_position_${index}`;
+            positionInput.id = `${wrapperClass}_position_${index}`;
+            positionInput.placeholder = '직급';
+            positionInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) positionInput.value = inspectorData.jiggeub;
+
+            const positionInputClear = createInputClear(positionInput);
+            const positionSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-position-do-${index}` : `suggestions-position-ha-${index}`;
+            const positionSuggestions = document.createElement('ul');
+            positionSuggestions.id = positionSuggestionId;
+            positionSuggestions.classList.add('suggestions-list');
+
+            // 성명 input
+            const nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.name = `${wrapperClass}_name_${index}`;
+            nameInput.id = `${wrapperClass}_name_${index}`;
+            nameInput.placeholder = '성명';
+            nameInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) nameInput.value = inspectorData.checkusr;
+
+            const nameInputClear = createInputClear(nameInput);
+            const nameSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-name-do-${index}` : `suggestions-name-ha-${index}`;
+            const nameSuggestions = document.createElement('ul');
+            nameSuggestions.id = nameSuggestionId;
+            nameSuggestions.classList.add('suggestions-list');
+
+            const actionButton = document.createElement('button');
+            if (isFirst) {
+                actionButton.innerText = '점검자 추가';
+                actionButton.classList.add('mg-l8');
+                actionButton.onclick = function () {
+                    addInspector(wrapperClass, null, false);
+                };
+            } else {
+                actionButton.innerText = '점검자 삭제';
+                actionButton.classList.add('mg-l8');
+                actionButton.style.color = 'red';
+                actionButton.onclick = function () {
+                    if (seqInput && seqInput.value) {
+                        deletedSeqs.push(seqInput.value);
+                    }
+                    wrapper.removeChild(newInspectorGroup);
+                };
+            }
+
+            newInspectorGroup.appendChild(companyInputClear);
+            newInspectorGroup.appendChild(companySuggestions);
+            newInspectorGroup.appendChild(positionInputClear);
+            newInspectorGroup.appendChild(positionSuggestions);
+            newInspectorGroup.appendChild(nameInputClear);
+            newInspectorGroup.appendChild(nameSuggestions);
+            newInspectorGroup.appendChild(actionButton);
+
+            wrapper.appendChild(newInspectorGroup);
+
+            // 동적으로 추가된 필드에 대해 자동완성 기능 적용
+            initializeAutoComplete(companyInput.id, '/api/inspec/hap/autocomplete', companySuggestionId);
+            initializeAutoComplete(positionInput.id, '/api/inspec/hap/autocomplete', positionSuggestionId);
+            initializeAutoComplete(nameInput.id, '/api/inspec/hap/autocomplete', nameSuggestionId);
+        }
+
+        function addInspector2(wrapperClass, inspectorData = null, isFirst = false) {
+            const wrapper = document.querySelector(`.${wrapperClass}`);
+            const index = wrapper.querySelectorAll('.inspector-group').length + 1;
+
+            // checkusr1, checkusr2에 따라 각각의 카운터를 사용
+            let dataId;
+            if (wrapperClass === 'checkusr1') {
+                dataId = inspectorIdCounterCheckusr1++;
+            } else if (wrapperClass === 'checkusr2') {
+                dataId = inspectorIdCounterCheckusr2++;
+            }
+
+            const newInspectorGroup = document.createElement('div');
+            newInspectorGroup.classList.add('inspector-group');
+            newInspectorGroup.setAttribute('data-id', dataId.toString());
+
+            // input-clear 구조 추가
+            const createInputClear = (inputField) => {
+                const inputClearDiv = document.createElement('div');
+                inputClearDiv.classList.add('input-clear');
+
+                inputField.style.marginRight = '4px';
+
+                const clearButton = document.createElement('span');
+                clearButton.classList.add('btn-clear');
+                clearButton.innerHTML = '×';
+                clearButton.style.display = 'none';
+
+                // x 버튼 누르면 지우기
+                clearButton.onclick = () => {
+                    inputField.value = '';
+                    clearButton.style.display = 'none';
+                    inputField.focus();
+                };
+
+                inputField.addEventListener('input', () => {
+                    clearButton.style.display = inputField.value ? 'inline' : 'none';
+                });
+
+                inputClearDiv.appendChild(inputField);
+                inputClearDiv.appendChild(clearButton);
+
+                return inputClearDiv;
+            };
+
+            // 업체명 input
+            const companyInput = document.createElement('input');
+            companyInput.type = "text";
+            companyInput.name = `${wrapperClass}_company_${index}`;
+            companyInput.id = `${wrapperClass}_company_${index}`;
+            companyInput.placeholder = '업체명';
+            companyInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) companyInput.value = inspectorData.company;
+
+            const companyInputClear = createInputClear(companyInput);
+            const companySuggestionId = wrapperClass === 'checkusr1' ? `suggestions-company-do-${index}` : `suggestions-company-ha-${index}`;
+            const companySuggestions = document.createElement('ul');
+            companySuggestions.id = companySuggestionId;
+            companySuggestions.classList.add('suggestions-list');
+            companySuggestions.style.display = 'none';
+
+            // 직급 input
+            const positionInput = document.createElement('input');
+            positionInput.type = "text";
+            positionInput.name = `${wrapperClass}_position_${index}`;
+            positionInput.id = `${wrapperClass}_position_${index}`;
+            positionInput.placeholder = '직급';
+            positionInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) positionInput.value = inspectorData.jiggeub;
+
+            const positionInputClear = createInputClear(positionInput);
+            const positionSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-position-do-${index}` : `suggestions-position-ha-${index}`;
+            const positionSuggestions = document.createElement('ul');
+            positionSuggestions.id = positionSuggestionId;
+            positionSuggestions.classList.add('suggestions-list');
+
+            // 성명 input
+            const nameInput = document.createElement('input');
+            nameInput.type = "text";
+            nameInput.name = `${wrapperClass}_name_${index}`;
+            nameInput.id = `${wrapperClass}_name_${index}`;
+            nameInput.placeholder = '성명';
+            nameInput.setAttribute('autocomplete', 'off');
+            if (inspectorData) nameInput.value = inspectorData.checkusr;
+
+            const nameInputClear = createInputClear(nameInput);
+            const nameSuggestionId = wrapperClass === 'checkusr1' ? `suggestions-name-do-${index}` : `suggestions-name-ha-${index}`;
+            const nameSuggestions = document.createElement('ul');
+            nameSuggestions.id = nameSuggestionId;
+            nameSuggestions.classList.add('suggestions-list');
+
+            const actionButton = document.createElement('button');
+            if (isFirst) {
+                actionButton.innerText = '점검자 추가';
+                actionButton.classList.add('mg-l8');
+                actionButton.onclick = function () {
+                    addInspector(wrapperClass, null, false);
+                };
+            } else {
+                actionButton.innerText = '점검자 삭제';
+                actionButton.classList.add('mg-l8');
+                actionButton.style.color = 'red';
+                actionButton.onclick = function () {
+                    wrapper.removeChild(newInspectorGroup);
+                };
+            }
+
+            newInspectorGroup.appendChild(companyInputClear);
+            newInspectorGroup.appendChild(companySuggestions);
+            newInspectorGroup.appendChild(positionInputClear);
+            newInspectorGroup.appendChild(positionSuggestions);
+            newInspectorGroup.appendChild(nameInputClear);
+            newInspectorGroup.appendChild(nameSuggestions);
+            newInspectorGroup.appendChild(actionButton);
+
+            wrapper.appendChild(newInspectorGroup);
+
+            // 동적으로 추가된 필드에 대해 자동완성 기능 적용
+            initializeAutoComplete(companyInput.id, '/api/inspec/hap/autocomplete', companySuggestionId);
+            initializeAutoComplete(positionInput.id, '/api/inspec/hap/autocomplete', positionSuggestionId);
+            initializeAutoComplete(nameInput.id, '/api/inspec/hap/autocomplete', nameSuggestionId);
+        }
+
+        // 초기화
+        function clearForm() {
+            ['checkdt', 'checkno', 'checknm', 'checkrem', 'chkaddres'].forEach(id => {
+                document.getElementById(id).value = '';
+                document.getElementById('checkdt').value = today;
+            });
+            $('.filelist').empty(); // 파일 리스트 초기화
+            uploadedFiles = []; // 업로드된 파일 리스트 초기화
+            deletedFiles = [];
+            deletedSeqs=[];
+
+            // inspectorIdCounter 초기화
+            inspectorIdCounterCheckusr1 = 1; // checkusr1 카운터 초기화
+            inspectorIdCounterCheckusr2 = 1; // checkusr2 카운터 초기화
+
+            // 탭 수정/등록 변경
+            updateTabLink();
+            // 초기화된 파일 개수 업데이트
+            updateFileCount();
+            resetFileInput($('.fileInput'));
+
+            // 각 textarea의 글자 수 초기화
+            $('textarea').each(function () {
+                $(this).siblings('.text-count').text('0/100');
+            });
+
+            // 점검 항목 테이블 초기화
+            clearInspectionTable();
+
+            // 점검자 필드 초기화 (추가된 그룹 제거)
+            clearInspectors('checkusr1');
+            clearInspectors('checkusr2');
+
+            $('#checknm, #chkaddres, #checkusr1_company, #checkusr1_position, #checkusr1_name, #checkusr2_company, #checkusr2_position, #checkusr2_name').each(function () {
+                $(this).siblings('.btn-clear').hide();
+            });
+        }
+
+        // 점검 항목 테이블 초기화
+        function clearInspectionTable() {
+            // 점검 항목 필드 초기화
+            for (let i = 1; i <= 6; i++) {
+                const seqInput = document.getElementById(`input[name="seq${i}"]`);
+                if (seqInput) {
+                    seqInput.value = '';
+                }
+                const resultSpan = document.getElementById(`inspecresult${i}`);
+                if (resultSpan) {
+                    resultSpan.textContent = 'O';
+                }
+                const reformTextarea = document.getElementById(`inspecreform${i}`);
+                if (reformTextarea) {
+                    reformTextarea.value = '';
+                }
+            }
+        }
+
+        // 점검자 초기화 함수
+        function clearInspectors(wrapperClass) {
+            const wrapper = document.querySelector(`.${wrapperClass}`);
+            const inspectorGroups = wrapper.querySelectorAll('.inspector-group');
+
+            // 새로 추가된 점검자 그룹이 있는 경우 제거
+            inspectorGroups.forEach((group, index) => {
+                if (index > 0) {
+                    wrapper.removeChild(group);  // 새로 추가된 점검자 그룹을 삭제
+                }
+            });
+
+            // 기본 필드(첫 번째 점검자 그룹) 초기화
+            wrapper.querySelectorAll('input').forEach(input => {
+                input.value = '';  // 기본 그룹의 입력 필드를 초기화합니다.
+            });
+        }
+
+        // 탭 수정/등록으로 업데이트
+        function updateTabLink() {
+            const checkno = document.getElementById('checkno').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+            const checkdt = document.getElementById('checkdt');
+
+            if (checkno) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+                checkdt.disabled = true;
+            } else {
+                inputTabLink.textContent = '등록';
+                inputTabLink.title = '등록';
+                checkdt.disabled = false;
+            }
+        }
+
+        // 수정하기
+        function modifyData() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
+
+            let data = {
+                spworkcd: selectedItem.spworkcd,
+                spcompcd: selectedItem.spcompcd,
+                spplancd: selectedItem.spplancd,
+                checkdt: checkdtFormatted,
+                checkno: selectedItem.checkno
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }
+
+            $.ajax({
+                url: "/api/inspec/hap/modfind",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+
+                        $('#inputTabLink').click();
+                        document.getElementById('spworkcd').value = data2.spworkcd;
+                        document.getElementById('spcompcd').value = data2.spcompcd;
+                        document.getElementById('spplancd').value = data2.spplancd;
+                        document.getElementById('checkdt').value = formatDate(data2.checkdt);
+                        document.getElementById('checkno').value = data2.checkno;
+                        document.getElementById('checknm').value = data2.checknm;
+                        // document.getElementById('checkusr').value = data2.checkusr;
+                        document.getElementById('checkrem').value = data2.checkrem;
+                        document.getElementById('chkaddres').value = data2.chkaddres;
+
+                        // 테이블의 점검 항목 업데이트
+                        updateInspectionTable(data2.inspectionItems);
+
+                        // 탭 수정으로 업데이트
+                        updateTabLink();
+
+                        // filelist 처리
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+
+                        deletedFiles = [];
+                        uploadedFiles = [];
+                        $('.filelist').empty(); // 파일 리스트 초기화
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                lastModified: new Date().getTime(),
+                                spcompcd: file.spcompcd,
+                                spplancd: file.spplancd,
+                                spworkcd: file.spworkcd,
+                                checkdt: file.checkdt,
+                                checkno: file.checkno,
+                                checkseq: file.checkseq,
+
+                            };
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
+
+                        updateFileListUI();
+                        updateFileCount();
+
+                        // 점검자 리스트 처리
+                        const checkusr1Wrapper = document.querySelector('.checkusr1');
+                        const checkusr2Wrapper = document.querySelector('.checkusr2');
+                        checkusr1Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+                        checkusr2Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+
+                        inspectorIdCounterCheckusr1 = 1;
+                        inspectorIdCounterCheckusr2 = 1;
+
+                        let firstCheckusr1 = true; // checkusr1의 첫 번째 여부
+                        let firstCheckusr2 = true; // checkusr2의 첫 번째 여부
+
+                        if (data2.inspectorlist && Array.isArray(data2.inspectorlist)) {
+                            data2.inspectorlist.forEach((inspector, index) => {
+
+                                let wrapperClass = inspector.chkflag === "0" ? 'checkusr1' : 'checkusr2';
+                                let isFirst = false;
+
+                                if (inspector.chkflag === "0" && firstCheckusr1) {
+                                    isFirst = true;
+                                    firstCheckusr1 = false; // 첫 번째 이후는 false로 설정
+                                } else if (inspector.chkflag === "1" && firstCheckusr2) {
+                                    isFirst = true;
+                                    firstCheckusr2 = false; // 첫 번째 이후는 false로 설정
+                                }
+
+                                addInspector(wrapperClass, inspector, isFirst);
+
+                                // hidden input에 seq 값을 추가
+                                const seqInput = document.createElement('input');
+                                seqInput.type = 'hidden';
+                                seqInput.name = `${wrapperClass}_seq_${index + 1}`;
+                                seqInput.value = inspector.seq;
+                                document.querySelector(`.${wrapperClass} .inspector-group:last-child`).appendChild(seqInput);
+                            });
+                        }
+
+                    } else {
+                        Alert.alert('', '불러오기에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+
+        }
+
+        // 수정하기 > 점검항목 업데이트
+        function updateInspectionTable(inspectionItems) {
+            inspectionItems.forEach(item => {
+                const inspecnum = item.inspecnum;
+
+                // 점검 결과 업데이트
+                const resultSpan = document.getElementById(`inspecresult${inspecnum}`);
+                if (resultSpan) {
+                    resultSpan.textContent = item.inspecresult;
+                }
+
+                // 시정 조치 사항 업데이트
+                const reformTextarea = document.getElementById(`inspecreform${inspecnum}`);
+                if (reformTextarea) {
+                    reformTextarea.value = item.inspecreform;
+                }
+
+                // seq 값 업데이트
+                const seqInput = document.getElementById(`seq${inspecnum}`);
+                if (seqInput) {
+                    seqInput.value = item.seq;
+                }
+            });
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid() {
+
+            let delList = [];
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                delList.push({
+                    spworkcd: selectedItems[i].spworkcd,
+                    spcompcd: selectedItems[i].spcompcd,
+                    spplancd: selectedItems[i].spplancd,
+                    checkdt: selectedItems[i].checkdt,
+                    checkno: selectedItems[i].checkno
+                });
+            }
+
+            if (delList.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/inspec/hap/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(delList),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData();
+                            clearForm();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 점검일지 출력
+        function DownloadDoc() {
+            // 로딩 바 표시
+            showLoader();
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                let checkdtFormatted = item.checkdt.replace(/-/g, '');
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    checkdt: checkdtFormatted,
+                    checkno: item.checkno
+                });
+            });
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/inspec/hap/download-docs', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRF-Token', document.querySelector('[name=_csrf]').value);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // 파일 다운로드 처리
+                    let blob = xhr.response;
+                    let link = document.createElement('a');
+                    let url = window.URL.createObjectURL(blob); // Blob으로부터 URL 생성
+                    let contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                    let fileName = 'downloadedFile';
+
+                    // Content-Disposition 헤더에서 파일 이름 추출
+                    if (contentDisposition) {
+                        let fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                        let matches = fileNameRegex.exec(contentDisposition);
+                        if (matches != null && matches[1]) {
+                            fileName = decodeURIComponent(matches[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+
+                        // 추가: filename* 속성에서 파일 이름 추출
+                        let fileNameStarRegex = /filename\*\=([^;]*)/;
+                        let matchesStar = fileNameStarRegex.exec(contentDisposition);
+                        if (matchesStar != null && matchesStar[1]) {
+                            fileName = decodeURIComponent(matchesStar[1].split("''")[1].replace(/['"]/g, '')); // 큰따옴표 제거 및 디코딩
+                        }
+                    }
+
+                    link.href = url;
+                    link.download = fileName; // 다운로드 파일 이름 설정
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url); // URL 객체 해제
+                } else {
+                    console.error('Download failed:', xhr.statusText);
+                }
+                hideLoader();
+            };
+
+            xhr.onerror = function () {
+                hideLoader();
+                console.error('Network error');
+            };
+
+            xhr.send(JSON.stringify(downloadList));
+        }
+
+        // 수정에서 삭제 버튼
+        function deleteForm() {
+
+            let data = [{
+                'spworkcd': $('#spworkcd').val(),
+                'spcompcd': $('#spcompcd').val(),
+                'spplancd': $('#spplancd').val(),
+                'checkdt': $('#checkdt').val(),
+                'checkno': $('#checkno').val()
+            }];
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+
+                if ($('#checkno').val() === '') {
+                    Alert.alert('', '삭제할 내용이 없습니다.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/inspec/hap/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            $('#listTabLink').click();
+                            fetchListData();
+                            clearForm();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '삭제에 실패했습니다.');
+                    }
+                });
+            });
+        }
+
+        // 정보 저장
+        function saveForm() {
+
+            // 필수 입력 필드 검사
+            let requiredFields = [
+                {id: '#checknm', label: '점검명을 입력해주세요'},
+                {id: '#checkdt', label: '점검 일자를 입력해주세요'},
+                {id: '#chkaddres', label: '점검 장소를 입력해주세요'},
+                {id: '#checkusr1_company_1', label: '도급인 업체명을 입력해주세요'},
+                {id: '#checkusr1_position_1', label: '도급인 직급을 입력해주세요'},
+                {id: '#checkusr1_name_1', label: '도급인 성명을 입력해주세요'},
+                {id: '#checkusr2_company_1', label: '관계수급인 업체명을 입력해주세요'},
+                {id: '#checkusr2_position_1', label: '관계수급인 직급을 입력해주세요'},
+                {id: '#checkusr2_name_1', label: '관계수급인 성명을 입력해주세요'},
+                {id: '#checkrem', label: '점검 의견을 입력해주세요'}
+            ];
+
+            for (let i = 0; i < requiredFields.length; i++) {
+                let field = requiredFields[i];
+                let $element = $(field.id);
+                // 필드가 존재하는지 확인
+                if ($element.length === 0) {
+                    console.error(`Element with ID ${field.id} not found.`);
+                    Alert.alert('', `필드 ${field.id}가 존재하지 않습니다.`);
+                    return;
+                }
+
+                if ($(field.id).val().trim() === '') {
+                    Alert.alert('', field.label);
+                    return;
+                }
+            }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+
+                // 점검항목 값 가져오기
+                const table = document.querySelector('table.doc-table');
+                const rows = table.querySelectorAll('tbody tr');
+                let results = [];
+                let currentDivision = '';
+
+                rows.forEach(row => {
+                    let cells = row.querySelectorAll('td');
+
+                    if (cells[0].hasAttribute('rowspan')) {
+                        currentDivision = cells[0].innerText.trim();
+                    } else {
+                        cells = Array.from(cells);
+                        cells.unshift(document.createElement('td'));
+                    }
+
+                    const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
+                    const inspectionResult = cells[2].innerText.trim();
+                    const improvement = cells[3].querySelector('textarea').value.trim();
+                    const seqElement = cells[3].querySelector('input[type="hidden"]');
+                    const seq = seqElement ? seqElement.value.trim() : '';
+
+                    const combinedText = `${seq}@ ${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}`;
+                    formData.append('doc-list', combinedText);
+
+                    results.push(combinedText);
+                });
+                // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
+
+                // checkusr1 정보를 수집하여 formData에 추가 (도급인)
+                const checkusr1Wrapper = document.querySelector('.checkusr1');
+                const checkusr1Groups = checkusr1Wrapper.querySelectorAll('.inspector-group');
+
+                checkusr1Groups.forEach((group) => {
+                    // 삭제된 그룹을 제외하고 남아있는 점검자들의 정보를 저장
+                    const dataId = group.getAttribute('data-id');  // 고유 data-id 사용
+                    const companyInput = group.querySelector(`input[name="checkusr1_company_${dataId}"]`);
+                    const company = companyInput ? companyInput.value.trim() : '';
+
+                    const positionInput = group.querySelector(`input[name="checkusr1_position_${dataId}"]`);
+                    const position = positionInput ? positionInput.value.trim() : '';
+
+                    const nameInput = group.querySelector(`input[name="checkusr1_name_${dataId}"]`);
+                    const name = nameInput ? nameInput.value.trim() : '';
+
+                    // seq는 새로 추가된 점검자는 없으므로 빈 값으로 처리
+                    const seqInput = group.querySelector(`input[name="checkusr1_seq_${dataId}"]`);
+                    const seq = seqInput ? seqInput.value.trim() : '';
+
+                    // 값이 있는 경우만 formData에 추가
+                    if (company && position && name) {
+                        formData.append(`checkusr1_company_${dataId}`, company);
+                        formData.append(`checkusr1_position_${dataId}`, position);
+                        formData.append(`checkusr1_name_${dataId}`, name);
+                        formData.append(`checkusr1_seq_${dataId}`, seq);  // seq가 있으면 추가
+                    }
+                });
+
+                // checkusr2 정보를 수집하여 formData에 추가 (관계수급인)
+                const checkusr2Wrapper = document.querySelector('.checkusr2');
+                const checkusr2Groups = checkusr2Wrapper.querySelectorAll('.inspector-group');
+
+                checkusr2Groups.forEach((group) => {
+                    const dataId = group.getAttribute('data-id');  // 고유 data-id 사용
+                    const companyInput = group.querySelector(`input[name="checkusr2_company_${dataId}"]`);
+                    const company = companyInput ? companyInput.value.trim() : '';
+
+                    const positionInput = group.querySelector(`input[name="checkusr2_position_${dataId}"]`);
+                    const position = positionInput ? positionInput.value.trim() : '';
+
+                    const nameInput = group.querySelector(`input[name="checkusr2_name_${dataId}"]`);
+                    const name = nameInput ? nameInput.value.trim() : '';
+
+                    const seqInput = group.querySelector(`input[name="checkusr2_seq_${dataId}"]`);
+                    const seq = seqInput ? seqInput.value.trim() : '';
+
+                    // 값이 있는 경우만 formData에 추가
+                    if (company && position && name) {
+                        formData.append(`checkusr2_company_${dataId}`, company);
+                        formData.append(`checkusr2_position_${dataId}`, position);
+                        formData.append(`checkusr2_name_${dataId}`, name);
+                        formData.append(`checkusr2_seq_${dataId}`, seq);
+                    }
+                });
+                // 삭제된 seq 값들을 formData에 추가
+                if (deletedSeqs.length > 0) {
+                    deletedSeqs.forEach(seq => {
+                        formData.append('deletedSeqs', seq);
+                    });
+                }
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+                formData.append('checkdt', $('#checkdt').val());
+                formData.append('checkno', $('#checkno').val());
+
+                // formData.append('spworknm', $('#spworknm').val());
+                // formData.append('spcompnm', $('#spcompnm').val());
+                // formData.append('spplannm', $('#spplannm').val());
+                formData.append('checknm', $('#checknm').val());
+                formData.append('chkaddres', $('#chkaddres').val());
+                formData.append('checkrem', $('#checkrem').val());
+
+                formData.append('ReformList', $('#inspecreform1').val());
+                formData.append('ReformList', $('#inspecreform2').val());
+                formData.append('ReformList', $('#inspecreform3').val());
+                formData.append('ReformList', $('#inspecreform4').val());
+                formData.append('ReformList', $('#inspecreform5').val());
+                formData.append('ReformList', $('#inspecreform6').val());
+
+                // 새로 추가된 파일만 폼 데이터에 추가
+                uploadedFiles.forEach((file, index) => {
+                    formData.append('filelist', file);
+                });
+
+                // 삭제된 파일 목록 추가
+                deletedFiles.forEach((file, index) => {
+                    formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
+                });
+
+                $.ajax({
+                    url: "/api/inspec/hap/save",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                $('#listTabLink').click();
+                                fetchListData();
+                                clearForm();
+                            });
+
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        // 신규등록 버튼
+        function newForm() {
+            clearForm();
+            // updateButton();
+            $.ajax({
+                url: '/api/inspec/hap/newform',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    'spworkcd': $('#spworkcd').val(),
+                    'spcompcd': $('#spcompcd').val(),
+                    'spplancd': $('#spplancd').val(),
+                },
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('checknm').value = data2.checknm;
+                        document.getElementById('chkaddres').value = data2.chkaddres;
+
+                        // 점검자 리스트 처리
+                        const checkusr1Wrapper = document.querySelector('.checkusr1');
+                        const checkusr2Wrapper = document.querySelector('.checkusr2');
+                        checkusr1Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+                        checkusr2Wrapper.innerHTML = ''; // 기존 점검자 리스트 초기화
+
+                        inspectorIdCounterCheckusr1 = 1;
+                        inspectorIdCounterCheckusr2 = 1;
+
+                        let firstCheckusr1 = true; // checkusr1의 첫 번째 여부
+                        let firstCheckusr2 = true; // checkusr2의 첫 번째 여부
+
+                        if (data2.inspectorlist && Array.isArray(data2.inspectorlist)) {
+                            data2.inspectorlist.forEach((inspector, index) => {
+
+                                let wrapperClass = inspector.chkflag === "0" ? 'checkusr1' : 'checkusr2';
+                                let isFirst = false;
+
+                                if (inspector.chkflag === "0" && firstCheckusr1) {
+                                    isFirst = true;
+                                    firstCheckusr1 = false; // 첫 번째 이후는 false로 설정
+                                } else if (inspector.chkflag === "1" && firstCheckusr2) {
+                                    isFirst = true;
+                                    firstCheckusr2 = false; // 첫 번째 이후는 false로 설정
+                                }
+
+                                addInspector2(wrapperClass, inspector, isFirst);
+
+                            });
+                        }
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '불러오기에 실패했습니다.');
+                }
+            });
+        }
+
+        $(document).ready(function (e) {
+            // 글자수 제한
+            $('textarea').on('input', function () {
+                let value = $(this).val();
+                if (value.length > 100) {
+                    $(this).val(value.substring(0, 100));  // 초과된 글자 제거
+                }
+            });
+
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
+            // 자동완성
+            const autoCompleteFields = [
+                { inputId: 'chkaddres', suggestionId: 'suggestions-chkaddres', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checknm', suggestionId: 'suggestions-checknm', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_company_1', suggestionId: 'suggestions-company-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_position_1', suggestionId: 'suggestions-position-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr1_name_1', suggestionId: 'suggestions-name-do-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_company_1', suggestionId: 'suggestions-company-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_position_1', suggestionId: 'suggestions-position-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
+                { inputId: 'checkusr2_name_1', suggestionId: 'suggestions-name-ha-1', apiUrl: '/api/inspec/hap/autocomplete' },
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
+
+            // 수정 > 등록, 등록 > 수정
+            updateTabLink();
+
+        })
+
+    </script>
+
+</th:block>
+</html>
+

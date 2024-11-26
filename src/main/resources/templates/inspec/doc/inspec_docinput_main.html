@@ -1,0 +1,718 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>문서 등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                     alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내 메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검 관리</li>
+                <li>문서 등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <input type="hidden" id="checkseq" name="checkseq"/>
+                <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}" />
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <li th:if="${write_flag}">
+                    <a href="#tab2" title="등록" id="inputTabLink">등록</a>
+                </li>
+            </ul>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtitle">
+                                        제목<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchtitle" name="searchtitle" class="input-srch">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="finddocdv">
+                                        문서구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="finddocdv">
+                                                <option value="" selected>전체</option>
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <div style="margin-left: -20px" class="srch-box">
+                                                <a href="#a" class="btn-srch" title="검색" onclick="fetchListData()"></a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteGrid()">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 700px; height: 700px"></div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>문서 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" onclick="deleteForm()">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장" onclick="saveForm()">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>문서등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="doctitle">
+                                        제목
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="doctitle" name="doctitle" class="wp100" maxlength="50">
+                                    <ul id="suggestions-doctitle" class="suggestions-list"></ul>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="registdt">
+                                        등록일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id=registdt name="registdt">
+                                </td>
+                                <th>
+                                    <label for="docdv">
+                                        문서구분 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <select title="문서구분" name="docdv" id="docdv">
+                                        <option value="" disabled selected hidden>선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    문서정보
+                                </th>
+                                <td colspan="3">
+                                    <div class="textarea-box">
+                                        <textarea id="docrem" name="docrem" maxlength="200"></textarea>
+                                        <p class="text-count" id="text-count1">0/200</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    첨부파일
+                                </th>
+                                <td colspan="3">
+                                    <div id="uploadComponent1" class="upload-component">
+                                        <div class="upload-filebox">
+                                            <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                            <a class="btn" title="파일업로드">파일 업로드</a>
+                                            <input type="file" id="fileInput" class="fileInput" multiple>
+                                            <p>Maximun upload file size <span>1GiB</span></p>
+                                        </div>
+                                        <div class="upload-filelist">
+                                            <div class="title">
+                                                <h5>Files (0)</h5>
+                                                <a title="Delete all" class="btn-file-deleteall">Delete
+                                                    all</a>
+                                            </div>
+                                            <ul class="filelist" id="filelist">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+
+
+    <script type="text/javascript">
+
+        var theGrid;
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        // 오늘 날짜 설정
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('registdt').value = today;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 -->
+        function init() {
+            // 산단 연동
+            initializeSelections();
+
+            // read 초기화
+            fetchListData();
+
+            // 검색 초기 날짜
+            setDefaultDates('startDate', 'endDate');
+
+            // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
+            document.getElementById('spworkcd').addEventListener('change', fetchListData);
+            document.getElementById('spcompcd').addEventListener('change', fetchListData);
+            document.getElementById('spplancd').addEventListener('change', fetchListData);
+        }
+
+        function fetchListData_doc() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/inspec_doc/read',
+                type: 'GET',
+                data: {
+                    'startDate': $('#startDate').val(),
+                    'endDate': $('#endDate').val(),
+                    'searchtitle': $('#searchtitle').val(),
+                    'finddocdv': $('#finddocdv').val(),
+                    spworkcd: spworkcd,
+                    spcompcd: spcompcd,
+                    spplancd: spplancd
+                },
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    allowSorting: 'MultiColumn',
+                    columns: [
+                        { binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true },
+                        { binding: 'registdt', header: '등록일자', width: '*', minWidth: 100, align: 'center', isReadOnly: true },
+                        { binding: 'inusernm', header: '등록자', width: '*', minWidth: 100, align: 'center', isReadOnly: true },
+                        { binding: 'docdv', header: '문서구분', width: '*', minWidth: 100, align: 'center', isReadOnly: true },
+                        { binding: 'doctitle', header: '제목', width: '*', minWidth: 100, align: 'center', isReadOnly: true },
+                        { binding: 'downloads', header: '첨부파일', width: '*', minWidth: 100, align: 'center' },
+                        { binding: 'docrem', header: '문서정보', width: '*', minWidth: 100, align: 'center', isReadOnly: true }
+                    ],
+                    itemsSource: viewdata,
+                    itemFormatter: function (panel, r, c, cell) {
+                        if (panel.cellType === wijmo.grid.CellType.Cell) {
+                            var item = panel.rows[r].dataItem; // 현재 행의 데이터 항목
+                            if (panel.columns[c].binding === 'downloads') {
+                                cell.innerHTML = ''; // 셀 내용 초기화
+                                if (item.isdownload) {
+                                    cell.innerHTML = '<a title="다운로드" class="btn-filedown" onclick="downloadFile()">다운로드</a>';
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // 그리드의 더블클릭 이벤트 추가
+                let lastClickTime = 0;
+                theGrid.hostElement.addEventListener('click', function (e) {
+                    const now = new Date().getTime();
+                    if (now - lastClickTime < 300) { // 300ms 이내의 두 번 클릭은 더블클릭으로 인식
+                        modifyData(); // 더블클릭 시 modifyData 함수 실행
+                    }
+                    lastClickTime = now;
+                });
+
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '전기안전점검';
+
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+        // 다운로드
+        function downloadFile_doc() {
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+            let downloadList = [];
+
+            // 선택된 항목에서 다운로드할 파일 목록 생성
+            selectedItems.forEach(function (item) {
+                let registdtFormatted = item.registdt.replace(/-/g, '');
+                downloadList.push({
+                    spworkcd: item.spworkcd,
+                    spcompcd: item.spcompcd,
+                    spplancd: item.spplancd,
+                    registdt: registdtFormatted,
+                    checkseq: item.checkseq
+                });
+            });
+
+            // 다운로드 URL 지정
+            let downloadUrl = '/api/inspec_doc/downloader';
+
+            // Jung.js에서 정의한 downloadFiles 함수 호출
+            downloadFiles(downloadList, downloadUrl);
+        }
+
+
+        // 정보 저장
+        function saveForm() {
+
+            // 필수 입력 필드 검사
+            let requiredFields = [
+                {id: '#doctitle', label: '제목을 입력해주세요'},
+                {id: '#registdt', label: '등록 일자를 입력해주세요'},
+                {id: '#docdv', label: '문서 구분을 선택해주세요' }
+            ];
+
+            for (let i = 0; i < requiredFields.length; i++) {
+                let field = requiredFields[i];
+                let $element = $(field.id);
+                let value = $element.val();
+
+                // 요소가 존재하지 않거나, 값이 빈 문자열(선택되지 않은 경우)인 경우 경고
+                if ($element.length === 0 || value === null || value.trim() === '') {
+                    Alert.alert('', field.label);
+                    return;
+                }
+            }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+                formData.append('registdt', $('#registdt').val());
+                formData.append('checkseq', $('#checkseq').val());
+
+                formData.append('spworknm', $('#spworknm').val());
+                formData.append('spcompnm', $('#spcompnm').val());
+                formData.append('spplannm', $('#spplannm').val());
+                formData.append('docdv', $('#docdv').val());
+                formData.append('doctitle', $('#doctitle').val());
+                formData.append('docrem', $('#docrem').val());
+
+                // 새로 추가된 파일만 폼 데이터에 추가
+                uploadedFiles.forEach((file, index) => {
+                    formData.append('filelist', file);
+                });
+
+                // 삭제된 파일 목록 추가
+                deletedFiles.forEach((file, index) => {
+                    formData.append('deletedFiles', new Blob([JSON.stringify(file)], {type: 'application/json'}));
+                });
+
+                $.ajax({
+                    url: "/api/inspec_doc/save",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                $('#listTabLink').click();
+                                fetchListData();
+                                clearForm();
+                            });
+
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        // 신규등록 버튼 클릭
+        function clearForm() {
+            ['doctitle', 'docdv', 'docrem', 'checkseq'].forEach(id => {
+                document.getElementById(id).value = '';
+                document.getElementById('registdt').value = today;
+            });
+            $('.filelist').empty(); // 파일 리스트 초기화
+            uploadedFiles = []; // 업로드된 파일 리스트 초기화
+            deletedFiles = [];
+            // 탭 수정/등록 변경
+            updateTabLink();
+            // 초기화된 파일 개수 업데이트
+            updateFileCount();
+            resetFileInput($('.fileInput'));
+            $('.text-count').text('0/100'); // 글자 수 0으로 초기화
+            // 특정 필드에 대한 btn-clear 숨김 처리
+            $('#doctitle').each(function() {
+                $(this).siblings('.btn-clear').hide();
+            });
+        }
+
+        // 탭 수정/등록으로 업데이트
+        function updateTabLink() {
+            const checkseq = document.getElementById('checkseq').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            if (checkseq) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+            } else {
+                inputTabLink.textContent = '등록';
+                inputTabLink.title = '등록';
+            }
+        }
+
+        // 수정하기
+        function modifyData() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+            let registdtFormatted = selectedItem.registdt.replace(/-/g, '');
+
+            let data = {
+                spworkcd: selectedItem.spworkcd,
+                spcompcd: selectedItem.spcompcd,
+                spplancd: selectedItem.spplancd,
+                registdt: registdtFormatted,
+                checkseq: selectedItem.checkseq
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '수정할 항목을 선택하세요.');
+                return;
+            }
+
+            $.ajax({
+                url: "/api/inspec_doc/modfind",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        $('#inputTabLink').click();
+                        document.getElementById('spworkcd').value = data2.spworkcd;
+                        document.getElementById('spcompcd').value = data2.spcompcd;
+                        document.getElementById('spplancd').value = data2.spplancd;
+                        document.getElementById('doctitle').value = data2.doctitle;
+                        document.getElementById('registdt').value = formatDate(data2.registdt);
+                        document.getElementById('docdv').value = data2.docdv;
+                        document.getElementById('docrem').value = data2.docrem;
+                        document.getElementById('checkseq').value = data2.checkseq;
+
+                        // 탭 수정으로 업데이트
+                        updateTabLink();
+
+                        // filelist 처리
+                        let fileList = Array.isArray(data2.filelist) ? data2.filelist : [];
+
+                        deletedFiles = [];
+                        uploadedFiles = [];
+
+
+                        fileList.forEach(file => {
+                            let newFile = {
+                                name: file.fileornm,
+                                size: file.filesize,
+                                type: file.fileextns,
+                                lastModified: new Date().getTime(),
+                                spcompcd: file.spcompcd,
+                                spplancd: file.spplancd,
+                                spworkcd: file.spworkcd,
+                                registdt: file.registdt,
+                                checkseq: file.checkseq,
+                                docseq: file.docseq,
+
+                            };
+                            console.log('registdt', file.registdt);
+                            uploadedFiles.push(newFile); // 파일 리스트에 추가
+                        });
+
+
+                        $('.filelist').empty(); // 파일 리스트 초기화
+                        updateFileListUI();
+                        updateFileCount();
+
+                    } else {
+                        Alert.alert('', '불러오기에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid() {
+
+            let delList = [];
+            let selectedItems = theGrid.selectedItems; // 선택된 항목 가져오기
+
+
+            for (let i = 0; i < selectedItems.length; i++) {
+                let registdtFormatted = selectedItems[i].registdt.replace(/-/g, '');
+                delList.push({
+                    spworkcd: selectedItems[i].spworkcd,
+                    spcompcd: selectedItems[i].spcompcd,
+                    spplancd: selectedItems[i].spplancd,
+                    registdt: registdtFormatted,
+                    checkseq: selectedItems[i].checkseq
+                });
+            }
+
+            if (delList.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/inspec_doc/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(delList),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 수정에서 삭제 버튼
+        function deleteForm() {
+
+            let data = [{
+                'spworkcd': $('#spworkcd').val(),
+                'spcompcd': $('#spcompcd').val(),
+                'spplancd': $('#spplancd').val(),
+                'registdt': $('#registdt').val(),
+                'checkseq': $('#checkseq').val()
+            }];
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+
+                if ($('#checkseq').val() === '') {
+                    Alert.alert('', '삭제할 내용이 없습니다.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/inspec_doc/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            $('#listTabLink').click();
+                            fetchListData();
+                            clearForm();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '삭제에 실패했습니다.');
+                    }
+                });
+            });
+        }
+
+        $(document).ready(function (e) {
+            // 글자수 제한
+            $('#docrem').on('input', function () {
+                let value = $(this).val();
+                if (value.length > 100) {
+                    $(this).val(value.substring(0, 100));  // 초과된 글자 제거
+                }
+            });
+
+
+            // 점검결과 공통코드 리스트
+            const parentId = 236;
+            const selectElementId = 'finddocdv';
+            fetchCommonCodes(parentId, selectElementId);
+
+
+            // 점검결과 공통코드 리스트
+            const parentId1 = 236;
+            const selectElementId1 = 'docdv';
+            fetchCommonCodes(parentId1, selectElementId1);
+
+            // checkseq 값 있으면 수정 탭으로 변경
+            const checkseq = document.getElementById('checkseq').value;
+            const inputTabLink = document.getElementById('inputTabLink');
+
+            if (checkseq) {
+                inputTabLink.textContent = '수정';
+                inputTabLink.title = '수정';
+            }
+
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function(input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
+            // 자동완성
+            const autoCompleteFields = [
+                { inputId: 'doctitle', suggestionId: 'suggestions-doctitle', apiUrl: '/api/inspec_doc/autocomplete'}
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
+
+            updateTabLink();
+        })
+
+    </script>
+</th:block>
+
+</html>

@@ -1,0 +1,806 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+
+<th:block layout:fragment="content">
+
+
+    <div class="layout-contents" style="margin-bottom: 1%">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>FieldService Report</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>FieldService Report</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <!--<ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="승인" id="inputTabLink">승인</a>
+                </li>
+            </ul>-->
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" style="border-radius: 15px">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+
+                            <dl>
+                                <dt>
+                                    <label for="text1">
+                                        사이트명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"><div class="input-clear">
+                                            <input type="text" id="searchsitename" name="searchsitename" class="input-srch" style="border-radius: 5px;" autocomplete="off"><span class="btn-clear">×</span>
+                                        </div>
+                                            <span class="btn-clear">×</span></div>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    <label for="searchesname">
+                                        ES명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <div class="input-clear"><div class="input-clear">
+                                            <input type="text" id="searchesname" name="searchesname" class="input-srch" style="border-radius: 5px;" autocomplete="off"><span class="btn-clear">×</span>
+                                        </div>
+                                            <span class="btn-clear">×</span></div>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li style="cursor: default; list-style-image: none;">
+                                        <a class="btn btn-delete" title="검색" id="searchgrid" onclick="searchData()" onkeyup="searchData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-edit" title="수정" onclick="modifyData()">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <div id="theGrid" style="height: 320px"></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+
+
+                </section>
+
+                <section class="tab-item" style="display: block; margin-top: 20px; border-radius: 15px">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>점검등록</h3>
+                            <input type="hidden" id="spuncode" name="spuncode" />
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn file_btn" title="파일첨부" onclick="showPopup2()">
+
+                                        파일첨부<span>(0)</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>사용자권한신청조회 승인 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label>
+                                        S-Number
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="srnumber" name="divinm" class="wp100">
+                                </td>
+
+                                <th>
+                                    <label for="sitename">
+                                        사이트명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="sitename" name="sitename" class="wp100">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="purpvisit">
+                                        방문목적
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="purpvisit" name="purpvisit" class="wp100">
+                                </td>
+                                <th>
+                                    <label for="esname">
+                                        ES명(ES No.)
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="esname" name="esname" class="wp100">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="servicertm">
+                                        서비스발생시간
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="servicertm" name="servicertm" autocomplete="off">
+                                </td>
+                                <th>
+                                    <label for="serviceftm">
+                                        서비스종료시간
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="serviceftm" name="serviceftm" autocomplete="off">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label>
+                                        담당자
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-clear">
+                                        <select class="mg-r5" id="fsresponnm" name="fsresponnm" style="width: 100%">
+                                        </select>
+                                    </div>
+                                </td>
+                                <th>
+                                    <label for="sncode">
+                                        S-N
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="sncode" name="sncode" class="wp100">
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="servicecause">
+                                        서비스발생사유
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div class="input-btnbox">
+                                        <input type="text" id="servicecause" name="reason" class="wp100">
+                                    </div>
+                                </td>
+                                <!--<th>
+                                    <label for="reason">
+                                        훈련계획
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="reason" name="reason" class="wp100">
+                                    </div>
+                                </td>-->
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="addregitem">
+                                        추가사항
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="addregitem" name="addregitem" class="wp100" maxlength="100">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+                <!-- Section -->
+
+            </div> <!--//tab-contens end-->
+
+            <!--
+                        <div style="height: 50px"></div>
+            -->
+
+
+        </div> <!--//tab-wrap end-->
+    </div>
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+    <!-- 팝업 -->
+    <!-- 파일 첨부 팝업 -->
+
+    <div class="modal3">
+        <div class="popup-wrapper3 w800" id="popup2">
+            <div class="popup-title">
+                <a title="팝업닫기" onclick="closeFilePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>
+                                첨부파일
+                            </th>
+                            <td colspan="3">
+                                <div id="uploadComponent1" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput1" class="fileInput" multiple>
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete
+                                                all</a>
+                                        </div>
+                                        <ul class="filelist" id="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closeFilePopup()" style="border: 1px solid #03428E !important; font-size: 15px !important;">닫기</button>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader" ></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box" ></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let selectedFiles = [];
+        let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
+
+        var columns = [
+            { binding: 'indatem', header: '등록일자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'inusernm', header: '등록자', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'purpvisit', header: '방문목적', align: 'center', width: '*', minWidth: 290 },
+            { binding: 'servicecause', header: '서비스발생사유', align: 'center', width: '*', minWidth: 390 },
+            { binding: 'sitename', header: '사이트명', align: 'center', width: '0.5*', minWidth: 180 },
+            { binding: 'sncode', header: 'S-N', align: 'center', width: '0.5*', minWidth: 190 },
+
+        ];
+
+        function searchData(){
+
+            let param = {
+                'searchfrdate' : $('#searchfrdate').val(),
+                'searchtodate' : $('#searchtodate').val(),
+                'searchsitename': $('#searchsitename').val(),
+                'searchesname' : $('#searchesname').val()
+            }
+            let result = AjaxUtil.getSyncData('/api/fieldService/read', param);
+
+            if(result.success){
+                if(!theGrid){
+                    viewdata = new wijmo.collections.CollectionView(result.data);
+
+                    theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                        autoGenerateColumns: false,
+                        showMarquee: true,
+                        columns: columns,
+                        itemsSource: viewdata,
+                        isReadOnly: true
+                    });
+                    theGrid.rowHeaders.columns.splice(0,1);
+                    new FlexGridContextMenu(theGrid);
+                    window.downloadFileName = 'FieldService';
+                    theGrid.hostElement.addEventListener('dblclick', function(e){
+                        let hitTest = theGrid.hitTest(e);
+                        if (hitTest.cellType === wijmo.grid.CellType.Cell){
+                            let row = hitTest.row;
+                            let item = theGrid.rows[row].dataItem;
+
+                            console.log('tiem', item);
+
+                            let data = {
+                                'spuncode' : item.spuncode }
+
+                            let result = AjaxUtil.getSyncData('/api/fieldService/fileList', data);
+                            if(result.success){
+                                console.log('file12', result.data);
+                            }
+                            document.getElementById('srnumber').value = item.srnumber;
+                            document.getElementById('sitename').value = item.sitename;
+                            document.getElementById('purpvisit').value = item.purpvisit;
+                            document.getElementById('servicertm').value = item.checkstdt;
+                            document.getElementById('servicecause').value = item.servicecause;
+                            document.getElementById('addregitem').value = item.addregitem;
+                            document.getElementById('esname').value = item.esname;
+                            document.getElementById('serviceftm').value = item.checkendt;
+                            document.getElementById('sncode').value = item.sncode;
+                            document.getElementById('spuncode').value = item.spuncode;
+
+                            const selectElement = document.getElementById('fsresponnm');
+
+                            for(let i=0; i < selectElement.options.length; i++){
+                                if (selectElement.options[i].text === item.fsresponnm) {
+                                    // 일치하는 옵션이 있으면 선택
+                                    selectElement.selectedIndex = i;
+                                    break;
+                                }
+                            }
+
+                            let fileList = Array.isArray(result.data) ? result.data : [];
+
+                            deletedFiles = [];
+                            uploadedFiles = [];
+                            $('.filelist').empty(); // 파일 리스트 초기화
+
+                            fileList.forEach(file => {
+                                let newFile = {
+                                    name: file.fileornm,
+                                    size: file.filesize,
+                                    type: file.fileextns,
+                                    spuncode_id: file.spuncode_id,
+                                    checkseq: file.checkseq,
+                                    filepath: file.filepath,
+                                    filesvnm: file.filesvnm
+
+                                };
+                                uploadedFiles.push(newFile); // 파일 리스트에 추가
+                            });
+                            console.log('파일목록확인', uploadedFiles)
+                            updateFileListUI();
+                            updateFileCount();
+                        }
+                    })
+                }else{
+                    theGrid.itemsSource = new wijmo.collections.CollectionView(result.data);
+                }
+
+            }
+        }
+
+        function modifyData(){
+
+            let selectedItems = theGrid.selectedItems;
+
+            console.log('selectedItems', selectedItems);
+
+            let data = { 'spuncode' : selectedItems[0].spuncode }
+
+            let result = AjaxUtil.getSyncData('/api/fieldService/fileList', data);
+            if(result.success){
+                console.log('file12', result.data);
+            }
+
+            document.getElementById('srnumber').value = selectedItems[0].srnumber;
+            document.getElementById('sitename').value = selectedItems[0].sitename;
+            document.getElementById('purpvisit').value = selectedItems[0].purpvisit;
+            document.getElementById('servicertm').value = selectedItems[0].checkstdt;
+            document.getElementById('servicecause').value = selectedItems[0].servicecause;
+            document.getElementById('addregitem').value = selectedItems[0].addregitem;
+            document.getElementById('esname').value = selectedItems[0].esname;
+            document.getElementById('serviceftm').value = selectedItems[0].checkendt;
+            document.getElementById('sncode').value = selectedItems[0].sncode;
+            document.getElementById('spuncode').value = selectedItems[0].spuncode;
+
+            const selectElement = document.getElementById('fsresponnm');
+
+            for(let i=0; i < selectElement.options.length; i++){
+                if (selectElement.options[i].text === selectedItems[0].fsresponnm) {
+                    // 일치하는 옵션이 있으면 선택
+                    selectElement.selectedIndex = i;
+                    break;
+                }
+            }
+
+            let fileList = Array.isArray(result.data) ? result.data : [];
+
+            deletedFiles = [];
+            uploadedFiles = [];
+            $('.filelist').empty(); // 파일 리스트 초기화
+
+            fileList.forEach(file => {
+                let newFile = {
+                    name: file.fileornm,
+                    size: file.filesize,
+                    type: file.fileextns,
+                    spuncode_id: file.spuncode_id,
+                    checkseq: file.checkseq,
+                    filepath: file.filepath,
+                    filesvnm: file.filesvnm
+
+                };
+                uploadedFiles.push(newFile); // 파일 리스트에 추가
+            });
+            console.log('파일목록확인', uploadedFiles)
+            updateFileListUI();
+            updateFileCount();
+
+
+        }
+
+        function closeFilePopup(){
+            const modal = document.querySelector('.modal3');
+
+            modal.style.display = 'none';
+
+            updateFileCount();
+        }
+
+        function showPopup2(){
+
+            const modal = document.querySelector('.modal3');
+            const modalContent = document.querySelector('.popup-wrapper3');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+        }
+
+
+        function submitTextarea(event){
+            let key = event.key || event.keyCode;
+
+            if(key === 'Enter' || key == 13){
+                searchData();
+            }
+        }
+
+        let searchesnameval = document.getElementById('searchesname');
+        searchesnameval.addEventListener('keyup', event => submitTextarea(event))
+        let searchsitename = document.getElementById('searchsitename');
+        searchsitename.addEventListener('keyup', event => submitTextarea(event))
+
+
+        let filelist = [];
+
+        $(document).ready(function (e) {
+            initializeSelections();
+            readPsResPonNm();
+
+            //등록일자 셋팅
+            document.getElementById("searchfrdate").value = getDateYYYYMMDD().slice(0, 7) + "-" + "01";
+            document.getElementById("searchtodate").value = getLastDayOfCurrentMonth();
+            searchData();
+
+
+        });
+
+        function readPsResPonNm(){
+            let result = AjaxUtil.getSyncData('/api/fieldService/fsresponList');
+
+            if(result.success){
+                console.log('succ', result.data);
+
+                populateSelectOptions(result, 'fsresponnm');
+
+            }else{
+                console.log('err');
+            }
+        }
+
+        function populateSelectOptions(result, ele){
+            const selectElement = document.getElementById(ele);
+
+            result.data.forEach(item => {
+                const option = document.createElement("option");
+                option.value = item.id;
+                option.textContent = item.first_name;
+
+                selectElement.appendChild(option);
+            });
+        }
+
+        const requiredFields = [
+            { id: 'srnumber', name: 'S-Number' },
+            { id: 'sitename', name: '사이트명' },
+            { id: 'purpvisit', name: '방문목적' },
+            { id: 'servicertm', name: '서비스발생시간' },
+            { id: 'serviceftm', name: '서비스종료시간' },
+            { id: 'servicecause', name: '서비스발생사유' },
+            { id: 'esname', name: 'ES명' },
+            { id: 'fsresponnm', name: '담당자' }
+        ]
+
+            // 저장 시작
+            $('#btnSave').click(function (e){
+
+                for(let i=0; i< requiredFields.length; i++){
+                    let chk = validateFieldById(requiredFields[i].id, requiredFields[i].name)
+
+                    if(!chk){
+                        return;
+                    }
+                }
+
+
+                Alert.confirm('', '저장하시겠습니까?', function() {
+
+                        //S면 저장, M이면 수정
+                        let changeFlag = "S";
+
+                        let formData = new FormData();
+
+                        for (let i = 0; i < uploadedFiles.length; i++) {
+                            formData.append('filelist', uploadedFiles[i]);
+                        }
+
+                        let SpunCodeValue = $('#spuncode').val();
+                        let randomString;
+
+                        if(SpunCodeValue === ""){
+                            randomString = generateRandomStringWithDate();
+
+                        }else{
+                            randomString = SpunCodeValue;
+                            changeFlag = "M";
+                        }
+                        formData.append('fsresponnm', $('#fsresponnm').val());
+                        formData.append('flag', changeFlag);
+                        formData.append('_csrf', csrfToken);
+                    const jsonData = {
+                        srnumber: $('#srnumber').val(),
+                        sitename: $('#sitename').val(),
+                        purpvisit: $('#purpvisit').val(),
+                        servicertm: $('#servicertm').val(),
+                        servicecause: $('#servicecause').val(),
+                        addregitem: $('#addregitem').val(),
+                        esname: $('#esname').val(),
+                        serviceftm: $('#serviceftm').val(),
+                        sncode: $('#sncode').val(),
+                        spuncode: randomString,
+                        spworkcd: $('#spworkcd').val(),
+                        spworknm: $('#spworknm').val(),
+                        spcompcd: $('#spcompcd').val(),
+                        spcompnm: $('#spcompnm').val(),
+                        spplancd: $('#spplancd').val(),
+                        spplannm: $('#spplannm').val()
+
+                    };
+                    formData.append('jsonData', new Blob([JSON.stringify(jsonData)], { type: 'application/json' }));
+
+                        // 삭제된 파일 목록 추가
+                        deletedFiles.forEach((file, index) => {
+                            formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                        });
+                    AjaxFunction.PostAjaxRequest('/api/fieldService/save', true, false, false, formData, fnSuccess, fnFailure)
+                    },
+
+                )
+            });
+            let fnFailure = function(){
+                Alert.alert('', '에러가발생하였습니다.');
+            }
+            let fnSuccess = function (res){
+                Alert.alert('', res.message, function(){
+                    clearForm();
+                    searchData();
+                    let inputFields = document.querySelectorAll('.addusr');
+                    if (inputFields) {
+
+                        inputFields.forEach(r => {
+                            deleteInputField(r);
+                        })
+
+                    }
+                });
+            }
+
+            function clearForm(){
+
+                //let dataset = DataLoad('/api/inspec_report/recentData', '').data;
+
+                ['srnumber', 'sitename', 'purpvisit', 'servicertm', 'fsresponnm', 'servicecause', 'addregitem', 'esname',
+                    'serviceftm', 'sncode'].forEach(id => {
+                    document.getElementById(id).value = '';
+                });
+
+                //document.getElementById('checkarea').value = dataset.checkarea;
+                //document.getElementById('checkusr').value = dataset.checkusr;
+                //document.getElementById('supplier').value = dataset.supplier;
+
+                $('#spuncode').val('');
+                $('.filelist').empty();
+
+                uploadedFiles = [];
+                deletedFiles = [];
+                //updateTabLink('spuncode');
+                updateFileCount();
+                resetFileInput($('.fileInput'));
+
+            }
+
+            //이거는 따로 못뺀다.
+            function updateFileCount() {
+                const fileCount = uploadedFiles.length;
+                $('.upload-filelist .title h5').text(`Files (${fileCount})`);
+                $('.file_btn span').text(`(${fileCount})`);
+
+            }
+            // 파일 인풋 초기화
+            function resetFileInput($input) {
+                $input.val('');
+            }
+
+            //삭제
+            $('#btnDelete').click(function (e) {
+
+                let delList = [];
+                let selectedItems = theGrid.selectedItems;
+
+                console.log(selectedItems, '삭제목록');
+
+                for (let i = 0; i < selectedItems.length; i++) {
+                    delList.push(
+                        selectedItems[i].spuncode,
+                    );
+                }
+                Alert.confirm('', '삭제하시겠습니까?', function(){
+                    let data = {
+                        'spuncode': JSON.stringify(delList),
+                        '_csrf': csrfToken
+                    }
+                    let fnSuccess = function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            searchData();
+                        }
+                    }
+                    AjaxUtil.postAsyncData('/api/fieldService/delete', data, fnSuccess);
+                });
+
+            })
+
+
+
+    </script>
+</th:block>
+
+</html>

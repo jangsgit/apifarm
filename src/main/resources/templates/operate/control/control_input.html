@@ -1,0 +1,1128 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 360px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 60px; /* 충분한 공간을 확보 */
+        }
+
+        .input-wrapper .unit {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            bottom: 0;
+            height: 20px;
+            line-height: 20px; /* input 높이에 맞게 조절 */
+            margin: auto;
+            font-size: 12px;
+            color: #999;
+            pointer-events: none; /* 텍스트가 클릭 이벤트를 받지 않도록 설정 */
+        }
+
+        .wj-header {
+            text-align: center !important;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>제어이행 관리</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                       alt="알람 아이콘"></a>
+                <!--                <a title="북마크" class="bookmark toggle">-->
+                <!--                    내메뉴-->
+                <!--                </a>-->
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>운영 관리</li>
+                <li>제어이행 관리</li>
+                <!--                <li>제어이행 등록</li>-->
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <input type="hidden" id="checkdtParam" name="checkdtParam" th:value="${checkdt}"/>
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>제어이행 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록" onclick="newForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <!--                                <li>-->
+                                <!--                                    <a class="btn btn-delete" title="삭제">-->
+                                <!--                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">-->
+                                <!--                                        삭제-->
+                                <!--                                    </a>-->
+                                <!--                                </li>-->
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-edit" id="btnSave" title="저장" onclick="saveForm()">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>제어이행등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="checkdt">
+                                        작성일자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="checkdt">
+                                </td>
+                                <th>
+                                    <label for="contusr">
+                                        작성자
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="contusr">
+                                    <ul id="suggestions-contusr" class="suggestions-list"></ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contdt">
+                                        제어일자
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="date" id="contdt" style="width: 160px;">
+
+                                    <input type="time" id="contstime" style="width: 160px;">
+                                    ~
+                                    <input type="time" id="contetime" style="width: 160px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contarea">
+                                        대상
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="contarea">
+                                    <ul id="suggestions-contarea" class="suggestions-list"></ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contdrive">
+                                        이행방법
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <input type="text" id="contdrive">
+                                    <ul id="suggestions-contdrive" class="suggestions-list"></ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="implement">
+                                        조치
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div class="input-wrapper">
+                                        <input type="text" id="implement" disabled style="text-align: right;">
+                                        <span class="unit">MW</span>
+                                    </div>
+                                    <a class="btn btn-popup-open" data-popup="popup1" onclick="showPopup()">
+                                        <img src="/images/icon/ico-plus.svg" style="margin: 0">
+                                    </a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="section-top" style="margin-top:40px;">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    제어일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="srch-box">
+                                        <li>
+                                            <input type="date" id="startDate" name="startDate">
+                                            <label for="startDate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="endDate" name="endDate">
+                                            <label for="endDate" class="hide">종료일</label>
+                                        </li>
+                                        <!--                                        <li>-->
+                                        <!--                                            <div style="margin-left: -20px" class="srch-box">-->
+                                        <!--                                                <a href="#a" class="btn-srch" title="검색" onclick="searchData()"-->
+                                        <!--                                                   onkeyup="searchData()"></a>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </li>-->
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="searchButton1"
+                                           onclick="fetchListData()">
+                                            <!--                                        class 쓰이는 곳 찾고 없으면 클래스명 수정하기-->
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li th:if="${write_flag}">
+                                    <a class="btn btn-delete" title="삭제" onclick="checkAndDelete();">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="height: 435px"></div>
+                    </div>
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+    <div style="height: 10px"></div>
+    <!-- [대시보드] 팝업  -->
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>상세조치</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <tbody>
+                        <input type="hidden" id="contseq">
+                        <input type="hidden" id="checkdt2">
+                        <input type="hidden" id="contdt2">
+                        <tr>
+                            <th>
+                                <label for="conttime">
+                                    조치일자
+                                </label>
+                            </th>
+                            <td>
+                                <div>
+                                    <input type="datetime-local" id="conttime" style="width: 360px;">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="contsequsr">
+                                    조치자
+                                </label>
+                            </th>
+                            <td>
+                                <div>
+                                    <input type="text" id="contsequsr">
+                                    <ul id="suggestions-contsequsr" class="suggestions-list"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="contnum">
+                                    조치내역
+                                </label>
+                            </th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+                                    <input style="text-align: right; padding: 0 16px;" type="number" id="contnum"
+                                           autocomplete="none">
+                                    <span style="margin-left: 5px; color:#999;">MW 제어</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()" class="btn-popup-close">취소</button>
+                <button th:if="${write_flag}" class="btn-navy" onclick="checkAndSave()">저장</button>
+            </div>
+        </div>
+    </div> <!-- //dashboard-layout-popup end -->
+
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;    // 목록에 뿌림
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            // 산단 연동
+            initializeSelections();
+
+            setDefaultDates('startDate', 'endDate');
+
+            fetchListData();
+
+            clearForm();
+
+            // spworkcd, spcompcd, spplancd의 값이 변경될 때마다 데이터 다시 로드
+            document.getElementById('spworkcd').addEventListener('change', fetchListData);
+            document.getElementById('spcompcd').addEventListener('change', fetchListData);
+            document.getElementById('spplancd').addEventListener('change', fetchListData);
+            document.getElementById('spworkcd').addEventListener('change', clearForm);
+            document.getElementById('spcompcd').addEventListener('change', clearForm);
+            document.getElementById('spplancd').addEventListener('change', clearForm);
+        }
+
+        // 병합
+        class RestrictedMergeManager extends wijmo.grid.MergeManager {
+            getMergedRange(p, r, c, clip = true) {
+                // 병합을 하지 않도록 하는 열(조치 열의 경우) 처리
+                let contnumColIndex = p.columns.getColumn('contnum').index;  // contnum 열의 인덱스를 가져옴
+                if (c === contnumColIndex) {
+                    return null;  // 조치 열의 경우 병합하지 않음
+                }
+
+                // 기본 cell range를 생성
+                let rng = new wijmo.grid.CellRange(r, c);
+
+                // 병합 기준이 되는 제어일자 가져오기
+                let contdt = p.getCellData(r, 'contdt', false);
+                let currentValue = p.getCellData(r, c, false);
+
+                // 위로 확장
+                while (rng.row > 0 &&
+                p.getCellData(rng.row - 1, 'contdt', false) === contdt &&  // 제어일자가 같을 때만 병합
+                p.getCellData(rng.row - 1, c, false) === currentValue) {   // 현재 값도 동일해야 병합
+                    rng.row--;
+                }
+
+                // 아래로 확장
+                while (rng.row2 < p.rows.length - 1 &&
+                p.getCellData(rng.row2 + 1, 'contdt', false) === contdt &&  // 제어일자가 같을 때만 병합
+                p.getCellData(rng.row2 + 1, c, false) === currentValue) {   // 현재 값도 동일해야 병합
+                    rng.row2++;
+                }
+
+                // 단일 셀 범위는 처리하지 않음
+                if (rng.isSingleCell) {
+                    rng = null;
+                }
+
+                // 완료
+                return rng;
+            }
+        }
+
+        function fetchListData() {
+            let spworkcd = document.getElementById('spworkcd').value;
+            let spcompcd = document.getElementById('spcompcd').value;
+            let spplancd = document.getElementById('spplancd').value;
+
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/operate/control/read',
+                type: 'GET',
+                data: {
+                    'startDate': $('#startDate').val(),
+                    'endDate': $('#endDate').val(),
+                    spworkcd: spworkcd,
+                    spcompcd: spcompcd,
+                    spplancd: spplancd
+                },
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    allowMerging: 'Cells',
+                    columns: [
+                        {binding: 'rownum', header: '순번', width: 80, align: 'center', isReadOnly: true},
+                        {
+                            binding: 'contdt',
+                            header: '제어일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true,
+                            allowMerging: true
+                        },
+                        {
+                            binding: 'contarea',
+                            header: '대상',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true,
+                            allowMerging: true
+                        },
+                        {
+                            binding: 'contdrive',
+                            header: '이행방법',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true,
+                            allowMerging: true
+                        },
+                        {
+                            binding: 'contusr',
+                            header: '작성자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true,
+                            allowMerging: true
+                        },
+                        {
+                            binding: 'checkdt',
+                            header: '작성일자',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'center',
+                            isReadOnly: true,
+                            allowMerging: true
+                        },
+                        {
+                            binding: 'contnum',
+                            header: '조치(MW)',
+                            width: '*',
+                            minWidth: 100,
+                            align: 'right',
+                            isReadOnly: true,
+                            format: 'n3'
+                        },
+                    ],
+                    itemsSource: viewdata,
+                });
+                theGrid.mergeManager = new RestrictedMergeManager();
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '제어이행현황';
+                addTotalRows(theGrid);
+
+                // 그리드의 더블클릭 이벤트 추가
+                let lastClickTime = 0;
+                theGrid.hostElement.addEventListener('click', function (e) {
+                    const now = new Date().getTime();
+
+                    // 히트 테스트를 사용하여 클릭된 셀 정보를 가져옴
+                    let ht = theGrid.hitTest(e);
+
+                    if (now - lastClickTime < 300) { // 300ms 이내의 두 번 클릭은 더블클릭으로 인식
+                        let r = ht.row;  // 클릭된 행
+                        let c = ht.col;  // 클릭된 열
+
+                        // 병합된 셀 범위를 가져옴
+                        let mergeRange = theGrid.getMergedRange(theGrid.cells, r, c);
+
+                        // 병합된 셀이 있는 경우
+                        if (mergeRange) {
+                            let topRow = mergeRange.topRow;
+                            theGrid.select(new wijmo.grid.CellRange(topRow, c)); // 최상단 셀 선택
+                            modifyData(); // 병합된 범위의 셀을 더블클릭하면 modifyData 실행
+                        }
+                        // 2. 병합되지 않은 셀 또는 조치 열의 처리
+                        else {
+                            // 조치 열인지 확인
+                            if (c === theGrid.columns.getColumn('contnum').index) {
+                                let contnum = theGrid.getCellData(r, 'contnum', false);  // 현재 행의 조치 값
+                                if (!contnum) {
+                                    // contnum 값이 없으면 ContainshowPopup 실행 안 함
+                                    console.log('contnum 값이 없으므로 ContainshowPopup 실행 안 함');
+                                    return;
+                                }
+
+                                let contdt = theGrid.getCellData(r, 'contdt', false);  // 현재 행의 제어일자
+                                let isFirstContnumCell = true;  // 해당 제어일자 그룹의 첫 번째 셀인지 확인하기 위한 플래그
+
+                                // 이전 행의 제어일자와 비교하여 첫 번째 셀인지 확인
+                                if (r > 0) {
+                                    let prevContdt = theGrid.getCellData(r - 1, 'contdt', false);
+                                    if (contdt === prevContdt) {
+                                        isFirstContnumCell = false;  // 이전 행과 제어일자가 같으면 첫 번째 셀이 아님
+                                    }
+                                }
+
+                                // 제어일자 그룹의 첫 번째 조치 셀인 경우
+                                if (isFirstContnumCell) {
+                                    modifyData(); // 첫 번째 조치 셀이면 modifyData 실행
+                                } else {
+                                    ContainshowPopup();  // 나머지 조치 셀은 showPopup 실행
+                                }
+                            }
+                        }
+                    }
+                    lastClickTime = now;
+                });
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+                addTotalRows(theGrid);
+            }
+        }
+
+        // 조치 값 합계를 구하고 첫 번째 행에 합계를 표시하는 행 추가
+        function addTotalRows(grid) {
+            let currentContdt = null;
+            let currentContarea = null;
+            let currentContdrive = null;
+            let currentContusr = null;
+            let currentCheckdt = null;
+            let sum = 0;
+            let newData = [];
+            let tempData = [];  // 현재 제어일자 그룹의 데이터를 저장할 임시 배열
+
+            for (let i = 0; i < grid.rows.length; i++) {
+                let contdt = grid.getCellData(i, 'contdt', false);
+                let contarea = grid.getCellData(i, 'contarea', false);
+                let contdrive = grid.getCellData(i, 'contdrive', false);
+                let contusr = grid.getCellData(i, 'contusr', false);
+                let checkdt = grid.getCellData(i, 'checkdt', false);
+                let contnum = parseFloat(grid.getCellData(i, 'contnum', false)) || 0;
+
+                // 새로운 제어일자가 나타나면 이전 제어일자 그룹의 데이터를 처리
+                if (currentContdt !== null && currentContdt !== contdt) {
+                    // 합계 행을 먼저 추가, 같은 값을 넣어서 병합이 되도록 함
+                    newData.push({
+                        contdt: currentContdt,
+                        contarea: currentContarea,    // 실제 값 추가
+                        contdrive: currentContdrive,  // 실제 값 추가
+                        contusr: currentContusr,      // 실제 값 추가
+                        checkdt: currentCheckdt,      // 실제 값 추가
+                        contnum: `총 조치량: ${sum.toFixed(3)}`
+                    });
+
+                    newData = newData.concat(tempData); // 나머지 그룹 데이터를 추가
+
+                    // 초기화
+                    sum = 0;
+                    tempData = [];
+                }
+
+                // 현재 데이터를 임시 배열에 저장
+                tempData.push(grid.rows[i].dataItem);
+
+                // 조치값 합계 계산
+                sum += contnum;
+
+                // 현재 행의 값을 다음 그룹에도 전달
+                currentContdt = contdt;
+                currentContarea = contarea;
+                currentContdrive = contdrive;
+                currentContusr = contusr;
+                currentCheckdt = checkdt;
+            }
+
+            // 마지막 제어일자 그룹에 대한 합계 처리
+            if (currentContdt !== null) {
+                newData.push({
+                    contdt: currentContdt,
+                    contarea: currentContarea,    // 실제 값 추가
+                    contdrive: currentContdrive,  // 실제 값 추가
+                    contusr: currentContusr,      // 실제 값 추가
+                    checkdt: currentCheckdt,      // 실제 값 추가
+                    contnum: `총 조치량: ${sum.toFixed(3)}`
+                });
+                newData = newData.concat(tempData);  // 나머지 데이터 추가
+            }
+
+            // 새로운 데이터로 그리드 업데이트
+            grid.itemsSource = new wijmo.collections.CollectionView(newData);
+
+        }
+
+        // 초기화
+        function clearForm() {
+            const date = new Date();
+            const today = date.toISOString().split('T')[0];
+            document.getElementById('checkdt').value = today;
+            document.getElementById('contdt').value = today;
+
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            const today_alltime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            const today_time = `${hours}:${minutes}`;
+            document.getElementById('contstime').value = today_time;
+            document.getElementById('contetime').value = today_time;
+            document.getElementById('conttime').value = today_alltime;
+            document.getElementById('contusr').value = '[[${username}]]';
+
+            ['contarea', 'contdrive', 'contsequsr', 'contnum', 'implement', 'contseq'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+
+            DisableToAble();
+
+        }
+
+        function clearPopup() {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 +1
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            const today_alltime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+            document.getElementById('conttime').value = today_alltime;
+            ['contsequsr', 'contseq', 'contnum', 'checkdt2', 'contdt2'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        function closePopup() {
+            clearPopup();
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup() {
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+        }
+
+        function ContainshowPopup() {
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+            let selectedItem = theGrid.selectedItems[0];
+            console.log('ContainshowPopup_selectedItem', selectedItem);
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
+            let contdtFormatted = selectedItem.contdt.replace(/-/g, '');
+
+            document.getElementById('contnum').value = selectedItem.contnum;
+            document.getElementById('contseq').value = selectedItem.contseq;
+            document.getElementById('contsequsr').value = selectedItem.contsequsr;
+            document.getElementById('checkdt2').value = checkdtFormatted;
+            document.getElementById('contdt2').value = contdtFormatted;
+            // conttime 값 변환 후 설정 (ISO 8601 -> datetime-local 형식)
+            if (selectedItem.conttime) {
+                let date = new Date(selectedItem.conttime);
+
+                let year = date.getFullYear();
+                let month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+                let day = String(date.getDate()).padStart(2, '0');
+                let hours = String(date.getHours()).padStart(2, '0');
+                let minutes = String(date.getMinutes()).padStart(2, '0');
+
+                // "YYYY-MM-DDTHH:MM" 형식으로 변환
+                let formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                document.getElementById('conttime').value = formattedDateTime;
+            }
+
+        }
+
+        // 불러오기
+        function modifyData() {
+            clearForm();
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+            console.log('modifyData_selectedItem', selectedItem);
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
+            let contdtFormatted = selectedItem.contdt.replace(/-/g, '');
+            let contnum = selectedItem.contnum;
+            let processedContnum = contnum.replace("총 조치량: ", "").trim();
+
+            let data = {
+                spworkcd: document.getElementById('spworkcd').value,
+                spcompcd: document.getElementById('spcompcd').value,
+                spplancd: document.getElementById('spplancd').value,
+                checkdt: checkdtFormatted,
+                contdt: contdtFormatted
+            };
+
+            $.ajax({
+                url: "/api/operate/control/modfind",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+
+                        document.getElementById('checkdt').value = formatDate(data2.checkdt);
+                        document.getElementById('contusr').value = data2.contusr;
+                        document.getElementById('contdt').value = formatDate(data2.contdt);
+                        document.getElementById('contstime').value = data2.contstime;
+                        document.getElementById('contetime').value = data2.contetime;
+                        document.getElementById('contarea').value = data2.contarea;
+                        document.getElementById('contdrive').value = data2.contdrive;
+                        document.getElementById('implement').value = processedContnum;
+
+                        updateDisable();
+
+                    } else {
+                        Alert.alert('', '불러오기에 실패했습니다. ');
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가 발생하였습니다.');
+                }
+            });
+        }
+
+        // 수정불가
+        function updateDisable() {
+            const checkdt = document.getElementById('checkdt');
+            const contdt = document.getElementById('contdt');
+            const contstime = document.getElementById('contstime');
+            const contetime = document.getElementById('contetime');
+
+            checkdt.disabled = true;
+            contdt.disabled = true;
+            contstime.disabled = true;
+            contetime.disabled = true;
+        }
+
+        // 수정가능
+        function DisableToAble() {
+            const checkdt = document.getElementById('checkdt');
+            const contdt = document.getElementById('contdt');
+            const contstime = document.getElementById('contstime');
+            const contetime = document.getElementById('contetime');
+
+            checkdt.disabled = false;
+            contdt.disabled = false;
+            contstime.disabled = false;
+            contetime.disabled = false;
+        }
+
+        function checkAndSave() {
+            // contseq 값을 가져옴 (여기서는 input 필드를 예로 들었습니다)
+            let contseq = document.getElementById('contseq').value;
+
+            if (!contseq) {
+                // contseq 값이 없으면 saveForm() 실행
+                saveForm();
+            } else {
+                // contseq 값이 있으면 saveForm_detail() 실행
+                saveForm_detail();
+            }
+        }
+
+        // 정보 저장
+        function saveForm() {
+
+            // 필수 입력 필드 검사
+            // let requiredFields = [
+            //     {id: '#checktitle', label: '점검명을 입력해주세요'},
+            //     {id: '#registdt', label: '등록 일자를 입력해주세요'},
+            //     {id: '#checkdt', label: '점검 일자를 입력해주세요'},
+            //     {id: '#checkarea', label: '점검 장소를 선택해주세요'},
+            //     {id: '#endresult', label: '점검 결과를 선택해주세요'},
+            //     {id: '#bfconsres', label: '점검 사항을 입력해주세요'},
+            //     {id: '#checkusr', label: '전기안전 관리자를 입력해주세요'}
+            // ];
+            //
+            // for (let i = 0; i < requiredFields.length; i++) {
+            //     let field = requiredFields[i];
+            //     if ($(field.id).val().trim() === '') {
+            //         Alert.alert('', field.label);
+            //         return;
+            //     }
+            // }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+                formData.append('checkdt', $('#checkdt').val());
+                formData.append('contdt', $('#contdt').val());
+
+                formData.append('contstime', $('#contstime').val());
+                formData.append('contetime', $('#contetime').val());
+                formData.append('contdrive', $('#contdrive').val());
+                formData.append('contusr', $('#contusr').val());
+                formData.append('contarea', $('#contarea').val());
+
+                formData.append('contnum', $('#contnum').val());
+                formData.append('conttime', $('#conttime').val());
+                formData.append('contsequsr', $('#contsequsr').val());
+
+                $.ajax({
+                    url: "/api/operate/control/save",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                fetchListData();
+                                closePopup();
+                                clearForm();
+                                DisableToAble();
+                            });
+
+                        } else {
+                            Alert.alert('', response.message);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        function saveForm_detail() {
+            // 필수 입력 필드 검사
+            // let requiredFields = [
+            //     {id: '#checktitle', label: '점검명을 입력해주세요'},
+            //     {id: '#registdt', label: '등록 일자를 입력해주세요'},
+            //     {id: '#checkdt', label: '점검 일자를 입력해주세요'},
+            //     {id: '#checkarea', label: '점검 장소를 선택해주세요'},
+            //     {id: '#endresult', label: '점검 결과를 선택해주세요'},
+            //     {id: '#bfconsres', label: '점검 사항을 입력해주세요'},
+            //     {id: '#checkusr', label: '전기안전 관리자를 입력해주세요'}
+            // ];
+            //
+            // for (let i = 0; i < requiredFields.length; i++) {
+            //     let field = requiredFields[i];
+            //     if ($(field.id).val().trim() === '') {
+            //         Alert.alert('', field.label);
+            //         return;
+            //     }
+            // }
+
+            Alert.confirm('', '저장하시겠습니까?', function () {
+
+                let formData = new FormData();
+                formData.append('contseq', $('#contseq').val());
+                formData.append('contnum', $('#contnum').val());
+                formData.append('conttime', $('#conttime').val());
+                formData.append('contsequsr', $('#contsequsr').val());
+                formData.append('checkdt', $('#checkdt2').val());
+                formData.append('contdt', $('#contdt2').val());
+
+                formData.append('spworkcd', $('#spworkcd').val());
+                formData.append('spcompcd', $('#spcompcd').val());
+                formData.append('spplancd', $('#spplancd').val());
+
+                $.ajax({
+                    url: "/api/operate/control/save_detail",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                fetchListData();
+                                closePopup();
+                            });
+
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            })
+        }
+
+        function checkAndDelete() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+
+            if (!selectedItem.contseq) {
+                deleteGrid();
+            } else {
+                deleteGrid_detail();
+
+            }
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
+            let contdtFormatted = selectedItem.contdt.replace(/-/g, '');
+            let data = {
+                spworkcd: document.getElementById('spworkcd').value,
+                spcompcd: document.getElementById('spcompcd').value,
+                spplancd: document.getElementById('spplancd').value,
+                checkdt: checkdtFormatted,
+                contdt: contdtFormatted
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/operate/control/delete',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 그리드에서 삭제 버튼
+        function deleteGrid_detail() {
+
+            let selectedItem = theGrid.selectedItems[0]; // 선택된 항목 가져오기
+
+            let checkdtFormatted = selectedItem.checkdt.replace(/-/g, '');
+            let contdtFormatted = selectedItem.contdt.replace(/-/g, '');
+            let data = {
+                contseq: selectedItem.contseq,
+                checkdt: checkdtFormatted,
+                contdt: contdtFormatted
+            };
+
+            if (selectedItem.length === 0) {
+                Alert.alert('', '삭제할 항목을 선택하세요.');
+                return;
+            }
+
+            Alert.confirm('', '삭제하시겠습니까?', function () {
+                $.ajax({
+                    url: '/api/operate/control/delete_detail',
+                    type: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    async: false,
+                    success: function (res) {
+                        if (res.success) {
+                            Alert.alert('', '삭제되었습니다.');
+                            fetchListData();
+                        }
+                    }
+                });
+            });
+        }
+
+        // 신규등록 버튼
+        function newForm() {
+            clearForm();
+
+            $.ajax({
+                url: '/api/operate/control/newform',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    'spworkcd': $('#spworkcd').val(),
+                    'spcompcd': $('#spcompcd').val(),
+                    'spplancd': $('#spplancd').val(),
+                },
+                headers: {
+                    'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                },
+                async: false,
+                success: function (data) {
+                    if (data.success) {
+                        let data2 = data.data;
+                        document.getElementById('contusr').value = data2.contusr;
+                        document.getElementById('contarea').value = data2.contarea;
+                        document.getElementById('contdrive').value = data2.contdrive;
+                        document.getElementById('contsequsr').value = data2.contsequsr || '';
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '불러오기에 실패했습니다.');
+                }
+            });
+        }
+
+
+        $(document).ready(function (e) {
+            // 크롬에서 제공해주는 자동완성 비활성화
+            document.querySelectorAll('input[type="text"]').forEach(function (input) {
+                input.setAttribute('autocomplete', 'off');
+            });
+
+            // 자동완성
+            const autoCompleteFields = [
+                {
+                    inputId: 'contusr',
+                    suggestionId: 'suggestions-contusr',
+                    apiUrl: '/api/operate/control/autocomplete'
+                },
+                {
+                    inputId: 'contarea',
+                    suggestionId: 'suggestions-contarea',
+                    apiUrl: '/api/operate/control/autocomplete'
+                },
+                {
+                    inputId: 'contdrive',
+                    suggestionId: 'suggestions-contdrive',
+                    apiUrl: '/api/operate/control/autocomplete'
+                },
+                {
+                    inputId: 'contsequsr',
+                    suggestionId: 'suggestions-contsequsr',
+                    apiUrl: '/api/operate/control/autocomplete'
+                }
+            ];
+
+            autoCompleteFields.forEach(field => {
+                initializeAutoComplete(field.inputId, field.apiUrl, field.suggestionId);
+            });
+
+        });
+
+
+    </script>
+
+</th:block>
+</html>
+

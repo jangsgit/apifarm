@@ -1,0 +1,2774 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<th:block layout:fragment="content">
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>매출 조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                     alt="알람 아이콘"></a>
+                <!--<a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>-->
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스 분석</li>
+                <li>매출 관리</li>
+                <li>매출 조회</li>
+            </ul>
+        </div>
+
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+
+        <!-- 매출 조회 -->
+        <div id="salesContent" class="dynamic-content" style="display: block;">
+            <div class="tab-wrap">
+                <ul class="tab-links">
+                    <li>
+                        <a href="#sales-tab1" title="기간별조회" class="tab-button">기간별 조회</a>
+                    </li>
+                    <li>
+                        <a href="#sales-tab2" title="기간별대비" class="tab-button">기간별 대비</a>
+                    </li>
+                </ul>
+
+                <div class="tab-contents">
+
+                    <!-- tab1 -->
+                    <section class="tab-item" id="sales-tab1" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="sales-categoryType">
+                                            목록<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="">
+                                            <li>
+                                                <select id="sales-categoryType" name="categoryType" onchange="loadContent()">
+                                                    <option value="sales" selected>매출조회</option>
+                                                    <option value="smpsales">SMP 매출조회</option>
+                                                    <option value="recsales">REC 매출조회</option>
+                                                    <option value="serviceanalysis">서비스 분석현황</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        <label for="sales-periodType">
+                                            기간유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="sales-periodType" name="periodType"
+                                                        onchange="updatePeriodInputs()">
+                                                    <option value="hourly">시간별</option>
+                                                    <option value="monthly" selected>월별</option>
+                                                    <option value="quarterly">분기별</option>
+                                                    <option value="halfyearly">반기별</option>
+                                                    <option value="yearly">연도별</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회연도<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="sales-yearSelectTab1" name="yearSelectTab1">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="sales-dateBoxContainer">
+                                            <li id="sales-startDateContainer">
+                                                <input type="month" id="sales-startDate" name="startDate" value="2024-01">
+                                            </li>
+                                            <li id="sales-endDateContainer">
+                                                <input type="month" id="sales-endDate" name="endDate" value="2024-12">
+                                            </li>
+
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="sales-btn-search"
+                                                   onclick="searchDataTab1()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <!-- 4분할 레이아웃 -->
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>총 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab1_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab1_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_1 -->
+                                        <div class="tab-item-sub" id="sales-tab1_1">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_2 -->
+                                        <div class="tab-item-sub" id="sales-tab1_2">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>영업 이익</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab1_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab1_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_3 -->
+                                        <div class="tab-item-sub" id="sales-tab1_3">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_4 -->
+                                        <div class="tab-item-sub" id="sales-tab1_4">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>사업 경비</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab1_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab1_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_5 -->
+                                        <div class="tab-item-sub" id="sales-tab1_5">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder3" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab1_6 -->
+                                        <div class="tab-item-sub" id="sales-tab1_6">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid3" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>원가율</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab1_7" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab1_8" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_7 -->
+                                        <div class="tab-item-sub" id="sales-tab1_7">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_8 -->
+                                        <div class="tab-item-sub" id="sales-tab1_8">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                    </section>
+                    <!-- Section -->
+
+                    <!-- tab2 -->
+                    <section class="tab-item" id="sales-tab2" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="sales-comparisonType">
+                                            비교유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="sales-comparisonType" name="comparisonType">
+                                                    <option value="YoY">YoY</option>
+                                                    <option value="QoQ">QoQ</option>
+                                                    <option value="MoM">MoM</option>
+                                                    <option value="YTD">YTD</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="sales-dateBoxContainerTab2">
+                                            <li id="sales-startDateContainerTab2">
+                                                <select id="sales-startDateTab2" name="startDateTab2">
+                                                    <option selected>2023</option>
+                                                    <option>2024</option>
+                                                </select>
+                                            </li>
+                                            <li id="sales-endDateContainerTab2">
+                                                <select id="sales-endDateTab2" name="endDateTab2">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="sales-btn-searchTab2"
+                                                   onclick="searchDataTab2()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>총 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab2_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab2_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_1 -->
+                                        <div class="tab-item-sub" id="sales-tab2_1">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder5" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_2 -->
+                                        <div class="tab-item-sub" id="sales-tab2_2">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid5" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>영업 이익</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab2_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab2_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_3 -->
+                                        <div class="tab-item-sub" id="sales-tab2_3">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder6" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_4 -->
+                                        <div class="tab-item-sub" id="sales-tab2_4">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid6" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>사업 경비</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab2_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab2_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_5 -->
+                                        <div class="tab-item-sub" id="sales-tab2_5">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder7" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab2_6 -->
+                                        <div class="tab-item-sub" id="sales-tab2_6">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid7" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>원가율</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#sales-tab2_7" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#sales-tab2_8" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_7 -->
+                                        <div class="tab-item-sub" id="sales-tab2_7">
+                                            <div class="chart-wrap">
+                                                <div id="sales-chartHolder8" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_8 -->
+                                        <div class="tab-item-sub" id="sales-tab2_8">
+                                            <div class="container-fluid">
+                                                <div id="sales-theGrid8" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Section -->
+
+                </div> <!--//tab-contens end-->
+            </div> <!--//tab-wrap end-->
+        </div>
+
+
+        <!-- SMP 매출 조회 -->
+        <div id="smpSalesContent" class="dynamic-content" style="display: none;">
+            <div class="tab-wrap">
+                <ul class="tab-links">
+                    <li>
+                        <a href="#smp-tab1" title="기간별조회" class="tab-button">기간별 조회</a>
+                    </li>
+                    <li>
+                        <a href="#smp-tab2" title="기간별대비" class="tab-button">기간별 대비</a>
+                    </li>
+                </ul>
+
+                <div class="tab-contents">
+
+                    <!-- tab1 -->
+                    <section class="tab-item" id="smp-tab1" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="smp-categoryType">
+                                            목록<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="">
+                                            <li>
+                                                <select id="smp-categoryType" name="categoryType" onchange="loadContent()">
+                                                    <option value="sales">매출조회</option>
+                                                    <option value="smpsales" selected>SMP 매출조회</option>
+                                                    <option value="recsales">REC 매출조회</option>
+                                                    <option value="serviceanalysis">서비스 분석현황</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="smp-periodType">
+                                            기간유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="smp-periodType" name="periodType"
+                                                        onchange="updatePeriodInputs()">
+                                                    <option value="hourly">시간별</option>
+                                                    <option value="monthly" selected>월별</option>
+                                                    <option value="quarterly">분기별</option>
+                                                    <option value="halfyearly">반기별</option>
+                                                    <option value="yearly">연도별</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회연도<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="smp-yearSelectTab1" name="yearSelectTab1">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="smp-dateBoxContainer">
+                                            <li id="smp-startDateContainer">
+                                                <input type="month" id="smp-startDate" name="startDate" value="2024-01">
+                                            </li>
+                                            <li id="smp-endDateContainer">
+                                                <input type="month" id="smp-endDate" name="endDate" value="2024-12">
+                                            </li>
+
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="smp-btn-search"
+                                                   onclick="searchDataTab1()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+
+                        <!-- 3분할 레이아웃 -->
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>SMP 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab1_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab1_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_1 -->
+                                        <div class="tab-item-sub" id="smp-tab1_1">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_2 -->
+                                        <div class="tab-item-sub" id="smp-tab1_2">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>SMP 단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab1_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab1_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_3 -->
+                                        <div class="tab-item-sub" id="smp-tab1_3">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_4 -->
+                                        <div class="tab-item-sub" id="smp-tab1_4">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>SMP 평균단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab1_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab1_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_5 -->
+                                        <div class="tab-item-sub" id="smp-tab1_5">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder3" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab1_6 -->
+                                        <div class="tab-item-sub" id="smp-tab1_6">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid3" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50"></div>
+                        </div>
+
+                    </section>
+                    <!-- Section -->
+
+                    <!-- tab2 -->
+                    <section class="tab-item" id="smp-tab2" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="smp-comparisonType">
+                                            비교유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="smp-comparisonType" name="comparisonType">
+                                                    <option value="YoY">YoY</option>
+                                                    <option value="QoQ">QoQ</option>
+                                                    <option value="MoM">MoM</option>
+                                                    <option value="YTD">YTD</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="smp-dateBoxContainerTab2">
+                                            <li id="smp-startDateContainerTab2">
+                                                <select id="smp-startDateTab2" name="startDateTab2">
+                                                    <option selected>2023</option>
+                                                    <option>2024</option>
+                                                </select>
+                                            </li>
+                                            <li id="smp-endDateContainerTab2">
+                                                <select id="smp-endDateTab2" name="endDateTab2">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="smp-btn-searchTab2"
+                                                   onclick="searchDataTab2()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>SMP 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab2_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab2_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_1 -->
+                                        <div class="tab-item-sub" id="smp-tab2_1">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_2 -->
+                                        <div class="tab-item-sub" id="smp-tab2_2">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>SMP 단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab2_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab2_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_3 -->
+                                        <div class="tab-item-sub" id="smp-tab2_3">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder5" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_4 -->
+                                        <div class="tab-item-sub" id="smp-tab2_4">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid5" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>SMP 평균단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#smp-tab2_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#smp-tab2_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_5 -->
+                                        <div class="tab-item-sub" id="smp-tab2_5">
+                                            <div class="chart-wrap">
+                                                <div id="smp-chartHolder6" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab2_6 -->
+                                        <div class="tab-item-sub" id="smp-tab2_6">
+                                            <div class="container-fluid">
+                                                <div id="smp-theGrid6" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50"></div>
+                        </div>
+                    </section>
+                    <!-- Section -->
+
+                </div> <!--//tab-contens end-->
+            </div> <!--//tab-wrap end-->
+        </div>
+
+
+        <!-- REC 매출 조회 -->
+        <div id="recSalesContent" class="dynamic-content" style="display: none;">
+            <div class="tab-wrap">
+                <ul class="tab-links">
+                    <li>
+                        <a href="#rec-tab1" title="기간별조회" class="tab-button">기간별 조회</a>
+                    </li>
+                    <li>
+                        <a href="#rec-tab2" title="기간별대비" class="tab-button">기간별 대비</a>
+                    </li>
+                </ul>
+
+                <div class="tab-contents">
+
+                    <!-- tab1 -->
+                    <section class="tab-item tab-content" id="rec-tab1">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="rec-categoryType">
+                                            목록<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="">
+                                            <li>
+                                                <select id="rec-categoryType" name="categoryType" onchange="loadContent()">
+                                                    <option value="sales">매출조회</option>
+                                                    <option value="smpsales">SMP 매출조회</option>
+                                                    <option value="recsales" selected>REC 매출조회</option>
+                                                    <option value="serviceanalysis">서비스 분석현황</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="rec-periodType">
+                                            기간유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="rec-periodType" name="periodType"
+                                                        onchange="updatePeriodInputs()">
+                                                    <option value="hourly">시간별</option>
+                                                    <option value="monthly" selected>월별</option>
+                                                    <option value="quarterly">분기별</option>
+                                                    <option value="halfyearly">반기별</option>
+                                                    <option value="yearly">연도별</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회연도<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="rec-yearSelectTab1" name="yearSelectTab1">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="rec-dateBoxContainer">
+                                            <li id="rec-startDateContainer">
+                                                <input type="month" id="rec-startDate" name="startDate" value="2024-01">
+                                            </li>
+                                            <li id="rec-endDateContainer">
+                                                <input type="month" id="rec-endDate" name="endDate" value="2024-12">
+                                            </li>
+
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="rec-btn-search"
+                                                   onclick="searchDataTab1()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <!-- 6분할 레이아웃 -->
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_1 -->
+                                        <div class="tab-item-sub" id="rec-tab1_1">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_2 -->
+                                        <div class="tab-item-sub" id="rec-tab1_2">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid1" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_3 -->
+                                        <div class="tab-item-sub" id="rec-tab1_3">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_4 -->
+                                        <div class="tab-item-sub" id="rec-tab1_4">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid2" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 평균단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_5 -->
+                                        <div class="tab-item-sub" id="rec-tab1_5">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder3" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab1_6 -->
+                                        <div class="tab-item-sub" id="rec-tab1_6">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid3" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 발급수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_7" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_8" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_7 -->
+                                        <div class="tab-item-sub" id="rec-tab1_7">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_8 -->
+                                        <div class="tab-item-sub" id="rec-tab1_8">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid4" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 매도수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_9" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_10" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_9 -->
+                                        <div class="tab-item-sub" id="rec-tab1_9">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder5" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab1_10 -->
+                                        <div class="tab-item-sub" id="rec-tab1_10">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid5" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 잔여수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab1_11" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab1_12" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab1_11 -->
+                                        <div class="tab-item-sub" id="rec-tab1_11">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder6" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab1_12 -->
+                                        <div class="tab-item-sub" id="rec-tab1_12">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid6" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                    </section>
+                    <!-- Section -->
+
+                    <!-- tab2 -->
+                    <section class="tab-item tab-content" id="rec-tab2">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="rec-comparisonType">
+                                            비교유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="rec-comparisonType" name="comparisonType">
+                                                    <option value="YoY">YoY</option>
+                                                    <option value="QoQ">QoQ</option>
+                                                    <option value="MoM">MoM</option>
+                                                    <option value="YTD">YTD</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="rec-dateBoxContainerTab2">
+                                            <li id="rec-startDateContainerTab2">
+                                                <select id="rec-startDateTab2" name="startDateTab2">
+                                                    <option selected>2023</option>
+                                                    <option>2024</option>
+                                                </select>
+                                            </li>
+                                            <li id="rec-endDateContainerTab2">
+                                                <select id="rec-endDateTab2" name="endDateTab2">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="rec-btn-searchTab2"
+                                                   onclick="searchDataTab2()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 매출액</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_1" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_2" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_1 -->
+                                        <div class="tab-item-sub" id="rec-tab2_1">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder7" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_2 -->
+                                        <div class="tab-item-sub" id="rec-tab2_2">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid7" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_3" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_4" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_3 -->
+                                        <div class="tab-item-sub" id="rec-tab2_3">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder8" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_4 -->
+                                        <div class="tab-item-sub" id="rec-tab2_4">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid8" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 평균단가</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_5" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_6" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_5 -->
+                                        <div class="tab-item-sub" id="rec-tab2_5">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder9" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab2_6 -->
+                                        <div class="tab-item-sub" id="rec-tab2_6">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid9" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 발급수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_7" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_8" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_7 -->
+                                        <div class="tab-item-sub" id="rec-tab2_7">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder10" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_8 -->
+                                        <div class="tab-item-sub" id="rec-tab2_8">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid10" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row row-2" style="margin-bottom: 10px">
+                            <div class="col wp50" style="margin-right: 15px">
+                                <section class="tab-section section_top" style="border-radius: 10px; height: 350px; ">
+                                    <div class="title-wrap">
+                                        <h3>REC 매도수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_9" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_10" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_9 -->
+                                        <div class="tab-item-sub" id="rec-tab2_9">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder11" style="height:269px; width:100%;"></div>
+
+                                            </div>
+                                        </div>
+                                        <!-- tab2_10 -->
+                                        <div class="tab-item-sub" id="rec-tab2_10">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid11" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <div class="col wp50">
+                                <section class="tab-section section_top" style="height: 350px;">
+                                    <div class="title-wrap">
+                                        <h3>REC 잔여수량</h3>
+                                        <ul class="tab-links-sub">
+                                            <li>
+                                                <a href="#rec-tab2_11" title="통계">통계</a>
+                                            </li>
+                                            <li>
+                                                <a href="#rec-tab2_12" title="현황">현황</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-contents">
+                                        <!-- tab2_11 -->
+                                        <div class="tab-item-sub" id="rec-tab2_11">
+                                            <div class="chart-wrap">
+                                                <div id="rec-chartHolder12" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- tab2_12 -->
+                                        <div class="tab-item-sub" id="rec-tab2_12">
+                                            <div class="container-fluid">
+                                                <div id="rec-theGrid12" style="height:269px; width:100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Section -->
+                </div> <!--//tab-contens end-->
+            </div> <!--//tab-wrap end-->
+        </div>
+
+
+        <!-- 서비스 분석 현황 -->
+        <div id="serviceAnalysisContent" class="dynamic-content" style="display: none;">
+            <div class="tab-wrap">
+                <ul class="tab-links">
+                    <li>
+                        <a href="#service-tab1" title="기간별조회" class="tab-button">기간별 조회</a>
+                    </li>
+                    <li>
+                        <a href="#service-tab2" title="기간별대비" class="tab-button">기간별 대비</a>
+                    </li>
+                </ul>
+
+                <div class="tab-contents">
+                    <!-- tab1 -->
+                    <section class="tab-item" id="service-tab1" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="service-categoryType">
+                                            목록<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="">
+                                            <li>
+                                                <select id="service-categoryType" name="categoryType" onchange="loadContent()">
+                                                    <option value="sales">매출조회</option>
+                                                    <option value="smpsales">SMP 매출조회</option>
+                                                    <option value="recsales">REC 매출조회</option>
+                                                    <option value="serviceanalysis" selected>서비스 분석현황</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="service-serviceCategory">
+                                            항목<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="service-serviceCategory" name="serviceCategory">
+                                                    <option value="전체">전체</option>
+                                                    <option value="매출">매출</option>
+                                                    <option value="비용">비용</option>
+                                                    <option value="수익">수익</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="service-periodType">
+                                            기간유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="service-periodType" name="periodType"
+                                                        onchange="updatePeriodInputs()">
+                                                    <option value="hourly">시간별</option>
+                                                    <option value="monthly" selected>월별</option>
+                                                    <option value="quarterly">분기별</option>
+                                                    <option value="halfyearly">반기별</option>
+                                                    <option value="yearly">연도별</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회연도<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="service-yearSelectTab1" name="yearSelectTab1">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="service-dateBoxContainer">
+                                            <li id="service-startDateContainer">
+                                                <input type="month" id="service-startDate" name="startDate" value="2024-01">
+                                            </li>
+                                            <li id="service-endDateContainer">
+                                                <input type="month" id="service-endDate" name="endDate" value="2024-05">
+                                            </li>
+
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="service-btn-search"
+                                                   onclick="searchDataTab1()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <div class="row row-2">
+                            <section class="wp50" style="border-radius: 10px;">
+                                <!-- 그래프 -->
+                                <!--                                <div class="chart-wrap">-->
+                                <div id="service-chartHolder1" style="height:668px; width:100%;"></div>
+                                <!--                                </div>-->
+                            </section>
+                            <section class="wp50">
+                                <div class="container-fluid">
+                                    <p id="service-selectedItem"></p>
+                                    <div id="service-theGrid1" style="height: 668px;"></div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+
+                    <!-- tab2 -->
+                    <section class="tab-item" id="service-tab2" style="height: 840px;">
+                        <div class="section-top">
+                            <div class="search-wrap">
+                                <dl>
+                                    <dt>
+                                        <label for="serviceCategory">
+                                            항목<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="serviceCategory" name="serviceCategory">
+                                                    <option value="매출">매출</option>
+                                                    <option value="비용">비용</option>
+                                                    <option value="수익">수익</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>
+                                        <label for="service-comparisonType">
+                                            비교유형<span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box">
+                                            <li>
+                                                <select id="service-comparisonType" name="comparisonType">
+                                                    <option value="YoY">YoY</option>
+                                                    <option value="QoQ">QoQ</option>
+                                                    <option value="MoM">MoM</option>
+                                                    <option value="YTD">YTD</option>
+                                                </select>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        조회기간<span class="eq">*</span>
+                                    </dt>
+                                    <dd>
+                                        <ul class="date-box" id="service-dateBoxContainerTab2">
+                                            <li id="service-startDateContainerTab2">
+                                                <select id="service-startDateTab2" name="startDateTab2">
+                                                    <option selected>2023</option>
+                                                    <option>2024</option>
+                                                </select>
+                                            </li>
+                                            <li id="service-endDateContainerTab2">
+                                                <select id="service-endDateTab2" name="endDateTab2">
+                                                    <option>2023</option>
+                                                    <option selected>2024</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <a class="btn btn-delete" title="검색" id="service-btn-searchTab2"
+                                                   onclick="searchDataTab2()">
+                                                    <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                    검색
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div> <!--//section-top end -->
+
+                        <div class="row row-2">
+                            <section class="wp50" style="border-radius: 10px;">
+                                <!-- 그래프 -->
+                                <!--                                <div class="chart-wrap">-->
+                                <div id="service-chartHolder2" style="height:668px; width:100%;"></div>
+                                <!--                                </div>-->
+                            </section>
+                            <section class="wp50">
+                                <div class="container-fluid">
+                                    <p id="selectedItem"></p>
+                                    <div id="service-theGrid2" style="height: 668px"></div>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+
+                </div><!--//tab-contents end -->
+            </div><!--//tab-wrap end -->
+        </div>
+    </div> <!--//layout-contents end -->
+
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+
+</th:block>
+
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+
+            // 카테고리 변경 이벤트 리스너
+            document.querySelectorAll('[id$="-categoryType"]').forEach(select => {
+                // select.removeEventListener('change', loadContent);  // 기존 리스너 제거
+                select.addEventListener('change', loadContent);      // 새 리스너 등록
+            });
+
+            loadContent(); // 초기 로드
+
+            // 페이지 로드시 첫 번째 탭 활성화
+            activateTab('sales-tab1');
+
+            // 모든 차트 생성 (tab1과 tab2)
+            setTimeout(function () {
+                createAllCharts();
+                showTab1Charts(); // 초기에 첫 번째 탭의 차트만 표시
+            }, 100);
+
+            // 그리드 초기화
+            initializeAllGrids();
+
+            // 각 섹션의 기간유형 선택에 이벤트 리스너 추가
+            document.getElementById("sales-periodType").addEventListener("change", () => updatePeriodInputs('sales'));
+            document.getElementById("smp-periodType").addEventListener("change", () => updatePeriodInputs('smp'));
+            document.getElementById("rec-periodType").addEventListener("change", () => updatePeriodInputs('rec'));
+            document.getElementById("service-periodType").addEventListener("change", () => updatePeriodInputs('service'));
+
+            // 초기 설정을 위해 각 섹션의 updatePeriodInputs 함수 호출
+            updatePeriodInputs('sales');
+            updatePeriodInputs('smp');
+            updatePeriodInputs('rec');
+            updatePeriodInputs('service');
+
+            // 각 비교유형에 대해 이벤트 리스너 추가
+            document.getElementById("sales-comparisonType").addEventListener("change", () => updateComparisonType('sales'));
+            document.getElementById("smp-comparisonType").addEventListener("change", () => updateComparisonType('smp'));
+            document.getElementById("rec-comparisonType").addEventListener("change", () => updateComparisonType('rec'));
+            document.getElementById("service-comparisonType").addEventListener("change", () => updateComparisonType('service'));
+
+            // 초기 실행 시에도 각 섹션의 비교유형을 확인하여 MoM일 경우 처리
+            updateComparisonType('sales');
+            updateComparisonType('smp');
+            updateComparisonType('rec');
+            updateComparisonType('service');
+
+        }
+
+        // 콘텐츠 로드 함수
+        function loadContent(event) {
+            var selectedType = event ? event.target.value : document.getElementById('sales-categoryType').value;
+            // console.log("Selected category:", selectedType);
+
+            // 모든 콘텐츠 섹션 숨기기
+            var contents = document.getElementsByClassName('dynamic-content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].style.display = 'none';
+            }
+
+            // 선택된 카테고리에 맞는 콘텐츠 로드
+            switch (selectedType) {
+                case 'sales':
+                    document.getElementById('salesContent').style.display = 'block';
+                    activateTab('sales-tab1');
+                    break;
+                case 'smpsales':
+                    document.getElementById('smpSalesContent').style.display = 'block';
+                    activateTab('smp-tab1');
+                    break;
+                case 'recsales':
+                    document.getElementById('recSalesContent').style.display = 'block';
+                    activateTab('rec-tab1');
+                    break;
+                case 'serviceanalysis':
+                    document.getElementById('serviceAnalysisContent').style.display = 'block';
+                    activateTab('service-tab1');
+                    break;
+                default:
+                    // console.log('유효하지 않은 카테고리입니다:', selectedType);
+                    return;
+            }
+
+            // console.log('Content loaded:', selectedType);
+
+
+            // 카테고리에 맞는 기간 입력 필드 업데이트
+            // updatePeriodInputs(selectedType);
+
+            // 차트 리사이즈
+            setTimeout(function() {
+                showTab1Charts();
+            }, 100);
+        }
+
+        function activateTab(tabId) {
+            var tabContent = document.getElementById(tabId);
+            if (!tabContent) return;
+
+            // 현재 탭이 속한 탭 그룹을 찾는다
+            var tabContainer = tabContent.closest('.tab-wrap');
+            if (!tabContainer) return;
+
+            // 모든 탭 콘텐츠 숨기기
+            var allTabContents = tabContainer.querySelectorAll('.tab-item');
+            allTabContents.forEach(function(tab) {
+                tab.style.display = 'none';
+            });
+
+            // 선택된 탭 보이기
+            tabContent.style.display = 'block';
+
+            // 탭 버튼 활성화 상태 업데이트
+            var tabButtons = tabContainer.querySelectorAll('.tab-links a');
+            tabButtons.forEach(function(button) {
+                if (button.getAttribute('href') === '#' + tabId) {
+                    button.parentElement.classList.add('active');
+                } else {
+                    button.parentElement.classList.remove('active');
+                }
+            });
+
+            // 차트 리사이즈
+            setTimeout(function() {
+                if (tabId.includes('tab1')) {
+                    showTab1Charts();
+                } else if (tabId.includes('tab2')) {
+                    showTab2Charts();
+                }
+            }, 100);
+        }
+
+
+        // 각 탭 버튼에 이벤트 리스너 추가
+        document.addEventListener('DOMContentLoaded', function() {
+            var tabButtons = document.getElementsByClassName('tab-button');
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var tabId = this.getAttribute('href').substring(1);
+                    activateTab(tabId);
+                });
+            }
+
+            // 페이지가 로드되었을 때 카테고리를 초기화하고 탭을 활성화
+            loadContent();
+        });
+
+        // 서브 탭 클릭 이벤트
+        // $(".tab-links-sub a").click(function (event) {
+        //     event.preventDefault();
+        //     var tabId = $(this).attr("href");
+        //     $(this).closest('.tab-section').find('.tab-item-sub').hide();
+        //     $(tabId).show();
+        //     $(this).closest('.tab-links-sub').find('li').removeClass('active');
+        //     $(this).parent().addClass('active');
+        //
+        //     // 차트 리사이즈
+        //     var chartId = tabId.replace('tab', 'chart');
+        //     if (document.getElementById(chartId)) {
+        //         document.getElementById(chartId).resize();
+        //     }
+        // });
+
+        // 탭 전환 함수
+        // function switchTab(tabId) {
+        //     // 모든 탭 숨기기
+        //     document.querySelectorAll('.tab-item').forEach(function (tab) {
+        //         tab.style.display = 'none';
+        //     });
+        //
+        //     // 선택된 탭 보이기
+        //     document.getElementById(tabId).style.display = 'block';
+        //
+        //     // 탭에 따른 차트 표시
+        //     if (tabId.includes('tab1')) {
+        //         showTab1Charts();
+        //     } else if (tabId.includes('tab2')) {
+        //         showTab2Charts();
+        //     }
+        //
+        //     // 탭 링크 활성화 상태 변경
+        //     document.querySelectorAll('.tab-button').forEach(function (tab) {
+        //         tab.parentElement.classList.remove('active');
+        //     });
+        //     document.querySelector('.tab-button[href="#' + tabId + '"]').parentElement.classList.add('active');
+        // }
+
+        // 해당 탭에서 현황 탭 누른 상태에서 다른 탭 이동 후 다시 해당 탭 돌아와서 통계 탭 클릭 시 차트 안나타날때
+        $(".tab-links-sub a").click(function (event) {
+            event.preventDefault();
+
+            var tabId = $(this).attr("href");
+            $(this).closest('.tab-section').find('.tab-item-sub').hide(); // 모든 탭 내용 숨기기
+            $(tabId).show(); // 선택한 탭 내용 보여주기
+            $(this).closest('.tab-links-sub').find('li').removeClass('active'); // 모든 탭 버튼 비활성화
+            $(this).parent().addClass('active'); // 선택한 탭 버튼 활성화
+
+            // 현재 선택된 categoryType에 따라 차트 다시 로드
+            var categoryType = $("#sales-categoryType").val(); // 목록 선택 상태 확인
+
+            if (categoryType === "sales") {
+                if (tabId.includes('tab1_1') || tabId.includes('tab1_3') || tabId.includes('tab1_5') || tabId.includes('tab1_7')) {
+                    showTab1Charts(); // 기간별 조회 차트 리사이즈 및 렌더링
+                } else if (tabId.includes('tab2_1') || tabId.includes('tab2_3') || tabId.includes('tab2_5') || tabId.includes('tab2_7')) {
+                    showTab2Charts(); // 기간별 대비 차트 리사이즈 및 렌더링
+                }
+            } else if (categoryType === "smpsales") {
+                if (tabId.includes('tab1_1') || tabId.includes('tab1_3') || tabId.includes('tab1_5')) {
+                    showTab1Charts(); // SMP 매출 기간별 조회 차트 리사이즈 및 렌더링
+                } else if (tabId.includes('tab2_1') || tabId.includes('tab2_3') || tabId.includes('tab2_5')) {
+                    showTab2Charts(); // SMP 매출 기간별 대비 차트 리사이즈 및 렌더링
+                }
+            } else if (categoryType === "recsales") {
+                if (tabId.includes('tab1_1') || tabId.includes('tab1_3')) {
+                    showTab1Charts(); // REC 매출 기간별 조회 차트 리사이즈 및 렌더링
+                } else if (tabId.includes('tab2_1') || tabId.includes('tab2_3')) {
+                    showTab2Charts(); // REC 매출 기간별 대비 차트 리사이즈 및 렌더링
+                }
+            } else if (categoryType === "serviceanalysis") {
+                // 서비스 분석 현황은 이중 탭이 없으므로, 단순히 차트 리사이즈만 처리
+                if (tabId.includes('service-tab1')) {
+                    showTab1Charts(); // 서비스 분석 기간별 조회 차트 리사이즈 및 렌더링
+                } else if (tabId.includes('service-tab2')) {
+                    showTab2Charts(); // 서비스 분석 기간별 대비 차트 리사이즈 및 렌더링
+                }
+            }
+        });
+
+        // -----------------------차트 설정 시작-----------------------
+
+        // 차트 생성 및 표시 함수
+        function createAllCharts() {
+            var chartVars = "rMateOnLoadCallFunction=chartReadyHandler";
+
+            // 매출조회 차트
+            for (let i = 1; i <= 8; i++) {
+                rMateChartH5.create("sales-chart" + i, "sales-chartHolder" + i, chartVars, "100%", "100%");
+            }
+
+            // SMP 매출조회 차트
+            for (let i = 1; i <= 6; i++) {
+                rMateChartH5.create("smp-chart" + i, "smp-chartHolder" + i, chartVars, "100%", "100%");
+            }
+
+            // REC 매출조회 차트
+            for (let i = 1; i <= 12; i++) {
+                rMateChartH5.create("rec-chart" + i, "rec-chartHolder" + i, chartVars, "100%", "100%");
+            }
+
+            // 서비스 분석현황 차트
+            // rMateChartH5.create("service-chart1", "service-chartHolder1", chartVars, "100%", "100%");
+            // rMateChartH5.create("service-chart2", "service-chartHolder2", chartVars, "100%", "100%");
+            for (let i = 1; i <= 2; i++) {
+                rMateChartH5.create("service-chart" + i, "service-chartHolder" + i, chartVars, "100%", "100%");
+            }
+        }
+
+        function showTab1Charts() {
+            // 차트 리사이즈
+            resizeCharts('sales', 1, 4);
+            resizeCharts('smp', 1, 3);
+            resizeCharts('rec', 1, 6);
+            resizeCharts('service', 1, 1);
+        }
+
+        function showTab2Charts() {
+            // 차트 리사이즈
+            resizeCharts('sales', 5, 8);
+            resizeCharts('smp', 4, 6);
+            resizeCharts('rec', 7, 12);
+            resizeCharts('service', 2, 2);
+        }
+
+        // function resizeCharts(prefix, start, end) {
+        //     for (let i = start; i <= end; i++) {
+        //         if (document.getElementById(prefix + '-chart' + i)) {
+        //             document.getElementById(prefix + '-chart' + i).resize();
+        //         }
+        //     }
+        // }
+
+        // function resizeCharts(prefix, start, end) {
+        //     console.log(`Attempting to resize charts for ${prefix} from ${start} to ${end}`);
+        //     for (let i = start; i <= end; i++) {
+        //         let chartId = `${prefix}-chart${i}`;
+        //         let chartElement = document.getElementById(chartId);
+        //         console.log(`Checking chart: ${chartId}`);
+        //         console.log(`Chart element exists: ${!!chartElement}`);
+        //         if (chartElement) {
+        //             console.log(`Chart element type: ${chartElement.tagName}`);
+        //             console.log(`Chart resize function exists: ${typeof chartElement.resize === 'function'}`);
+        //         }
+        //         if (chartElement && typeof chartElement.resize === 'function') {
+        //             console.log(`Resizing chart: ${chartId}`);
+        //             chartElement.resize();
+        //         } else {
+        //             console.log(`Chart not found or resize not available: ${chartId}`);
+        //         }
+        //     }
+        // }
+
+        function resizeCharts(prefix, start, end) {
+            for (let i = start; i <= end; i++) {
+                let chartElement = document.getElementById(prefix + '-chart' + i);
+                if (chartElement && typeof chartElement.resize === 'function') {
+                    // console.log(`Resizing chart: ${prefix}-chart${i}`);
+                    chartElement.resize();
+
+                    // 서비스 분석 현황 차트의 경우 데이터와 레이아웃 재설정
+                    if (prefix === 'service') {
+                        // console.log(`Updating data for service chart: ${i}`);
+                        let [chartData, layoutStr] = getServiceChartConfig(prefix + '-chart' + i);
+                        chartElement.setData(chartData);
+                        chartElement.setLayout(layoutStr);
+                    }
+                } else {
+                    // console.log(`Chart not found or resize not available: ${prefix}-chart${i}`);
+                }
+            }
+        }
+
+        // 차트 준비 핸들러
+        function chartReadyHandler(id) {
+            // 각 차트 ID에 따른 데이터와 레이아웃 설정
+            var chartData, layoutStr;
+
+            // ID에 따라 적절한 데이터와 레이아웃 선택
+            if (id.startsWith('sales-chart')) {
+                [chartData, layoutStr] = getSalesChartConfig(id);
+            } else if (id.startsWith('smp-chart')) {
+                [chartData, layoutStr] = getSMPChartConfig(id);
+            } else if (id.startsWith('rec-chart')) {
+                [chartData, layoutStr] = getRECChartConfig(id);
+            } else if (id.startsWith('service-chart')) {
+                [chartData, layoutStr] = getServiceChartConfig(id);
+            }
+
+            // 차트 설정
+            if (chartData && layoutStr) {
+                document.getElementById(id).setLayout(layoutStr);
+                document.getElementById(id).setData(chartData);
+            }
+        }
+
+        // 매출 조회 차트 데이터와 레이아웃
+        function getSalesChartConfig(id) {
+
+            let chartData, layoutStr;
+
+            switch (id) {
+                case "sales-chart1":
+                case "sales-chart2":
+                case "sales-chart3":
+                case "sales-chart4":
+                    chartData = [
+                        {"Month": "1월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "2월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "3월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "4월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "5월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "6월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "7월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "8월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "9월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "10월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "11월", "Profit": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "12월", "Profit": Math.floor(Math.random() * 1000) + 500}
+                    ];
+                    layoutStr = `
+                <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+                    <Column2DChart showDataTips="true">
+                        <horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>
+                        <verticalAxis><LinearAxis/></verticalAxis>
+                        <series>
+                            <Column2DSeries yField="Profit" fill="#62b2fd">
+                                <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            </Column2DSeries>
+                        </series>
+                    </Column2DChart>
+                </rMateChart>
+            `;
+                    break;
+                case "sales-chart5":
+                case "sales-chart6":
+                case "sales-chart7":
+                case "sales-chart8":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    layoutStr = getCombinationChartLayout();
+                    break;
+            }
+
+            return [chartData, layoutStr];
+        }
+
+        // SMP 매출 조회 차트의 데이터와 레이아웃 반환
+        function getSMPChartConfig(id) {
+
+            let chartData, layoutStr;
+
+            switch (id) {
+                case "smp-chart1":
+                case "smp-chart2":
+                case "smp-chart3":
+                    chartData = [
+                        {"Month": "1월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "2월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "3월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "4월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "5월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "6월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "7월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "8월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "9월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "10월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "11월", "SMPSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "12월", "SMPSales": Math.floor(Math.random() * 1000) + 500}
+                    ];
+
+                    layoutStr = `
+                <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+                    <Column2DChart showDataTips="true">
+                        <horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>
+                        <verticalAxis><LinearAxis/></verticalAxis>
+                        <series>
+                            <Column2DSeries yField="SMPSales" fill="#62b2fd">
+                                <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            </Column2DSeries>
+                        </series>
+                    </Column2DChart>
+                </rMateChart>
+            `;
+                    break;
+                case "smp-chart4":
+                case "smp-chart5":
+                case "smp-chart6":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    layoutStr = getCombinationChartLayout();
+                    break;
+            }
+
+            return [chartData, layoutStr];
+        }
+
+        // REC 매출 조회 차트의 데이터와 레이아웃 반환
+        function getRECChartConfig(id) {
+
+            let chartData, layoutStr;
+
+            switch (id) {
+                case "rec-chart1":
+                case "rec-chart2":
+                case "rec-chart3":
+                case "rec-chart4":
+                case "rec-chart5":
+                case "rec-chart6":
+                    chartData = [
+                        {"Month": "1월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "2월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "3월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "4월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "5월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "6월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "7월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "8월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "9월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "10월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "11월", "RECSales": Math.floor(Math.random() * 1000) + 500},
+                        {"Month": "12월", "RECSales": Math.floor(Math.random() * 1000) + 500}
+                    ];
+                    layoutStr = `
+                <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+                    <Column2DChart showDataTips="true">
+                        <horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>
+                        <verticalAxis><LinearAxis/></verticalAxis>
+                        <series>
+                            <Column2DSeries yField="RECSales" fill="#62b2fd">
+                                <showDataEffect><SeriesInterpolate/></showDataEffect>
+                            </Column2DSeries>
+                        </series>
+                    </Column2DChart>
+                </rMateChart>
+            `;
+                    break;
+                case "rec-chart7":
+                case "rec-chart8":
+                case "rec-chart9":
+                case "rec-chart10":
+                case "rec-chart11":
+                case "rec-chart12":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    layoutStr = getCombinationChartLayout();
+                    break;
+            }
+
+            return [chartData, layoutStr];
+        }
+
+        // 서비스 분석 현황 차트의 데이터와 레이아웃 반환
+        function getServiceChartConfig(id) {
+            let chartData, layoutStr;
+
+            switch (id) {
+                case "service-chart1":
+                    chartData = [
+                        {"Month": "1월", "Sales": 38.5, "Cost": 20, "Profit": 50},
+                        {"Month": "2월", "Sales": 56.57, "Cost": 27.52, "Profit": 42},
+                        {"Month": "3월", "Sales": 58.57, "Cost": 23.65, "Profit": 40},
+                        {"Month": "4월", "Sales": 41.13, "Cost": 29.54, "Profit": 60},
+                        {"Month": "5월", "Sales": 40.58, "Cost": 24.21, "Profit": 50},
+                        {"Month": "6월", "Sales": 60.79, "Cost": 39.12, "Profit": 52.5},
+                        {"Month": "7월", "Sales": 49.14, "Cost": 32.56, "Profit": 70.64},
+                        {"Month": "8월", "Sales": 89.35, "Cost": 39.24, "Profit": 68.57},
+                        {"Month": "9월", "Sales": 65.21, "Cost": 32.12, "Profit": 54.14},
+                        {"Month": "10월", "Sales": 75.15, "Cost": 42.12, "Profit": 57.58},
+                        {"Month": "11월", "Sales": 69.12, "Cost": 35.54, "Profit": 54.47},
+                        {"Month": "12월", "Sales": 73.24, "Cost": 40.45, "Profit": 62.47}
+                    ];
+                    layoutStr = `
+            <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+            <Options>
+            <Legend useVisibleCheck="true"/>
+            </Options>
+            <NumberFormatter id="numFmt" precision="0"/>
+                <Line2DChart showDataTips="true">
+                    <horizontalAxis>
+                        <CategoryAxis categoryField="Month" padding="1"/>
+                    </horizontalAxis>
+                    <verticalAxis>
+                        <LinearAxis minimum="0" maximum="100" interval="10" formatter="{numFmt}"/>
+                    </verticalAxis>
+                    <series>
+                        <Line2DSeries labelPosition="up" yField="Sales" radius="5" itemRenderer="RectangleItemRenderer" displayName="매출" showValueLabels="[7]">
+                            <lineStroke><Stroke color="#62b2fd" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Line2DSeries>
+                        <Line2DSeries labelPosition="up" yField="Cost" radius="5" itemRenderer="CircleItemRenderer" displayName="비용" showValueLabels="[7]">
+                            <lineStroke><Stroke color="#01dbab" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Line2DSeries>
+                        <Line2DSeries labelPosition="up" yField="Profit" radius="5" itemRenderer="TriangleItemRenderer" displayName="수익" showValueLabels="[7]">
+                            <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Line2DSeries>
+                    </series>
+                    <backgroundElements>
+                    <GridLines horizontalShowOrigin="false"/>
+                    </backgroundElements>
+                    <annotationElements>
+                    <CrossRangeZoomer zoomType="both" verticalLabelFormatter="{numFmt}" horizontalLabelFormatter="{numFmt}"/>
+                    </annotationElements>
+                </Line2DChart>
+            </rMateChart>
+            `;
+                    break;
+                case "service-chart2":
+                    chartData = [
+                        {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+                        {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+                        {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+                        {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+                        {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+                        {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+                        {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+                        {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+                        {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+                        {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+                    ];
+                    layoutStr = getCombinationChartLayout();
+                    break;
+            }
+
+            return [chartData, layoutStr];
+        }
+
+        // getCombinationChartLayout 함수
+        function getCombinationChartLayout() {
+            return `
+    <rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Caption text=""/>
+            <Legend defaultMouseOverAction="true"/>
+        </Options>
+        <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        <Combination2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month"/>
+            </horizontalAxis>
+            <verticalAxis>
+                <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}" maximum="3000"/>
+            </verticalAxis>
+            <series>
+                <Column2DSet type="clustered">
+                    <series>
+                        <Column2DSeries yField="Sales2023" displayName="2023" fill="#62b2fd">
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Column2DSeries>
+                        <Column2DSeries yField="Sales2024" displayName="2024" fill="#01dbab">
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Column2DSeries>
+                    </series>
+                </Column2DSet>
+                <Line2DSeries yField="Profit2023" displayName="2023 (%)" itemRenderer="DiamondItemRenderer">
+                    <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                    <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+                    </verticalAxis>
+                </Line2DSeries>
+                <Line2DSeries yField="Profit2024" displayName="2024 (%)" itemRenderer="DiamondItemRenderer">
+                    <lineStroke><Stroke color="#f99bab" weight="2"/></lineStroke>
+                    <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis2" interval="10" maximum="100"/>
+                    </verticalAxis>
+                </Line2DSeries>
+            </series>
+            <verticalAxisRenderers>
+                <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+                <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+            </verticalAxisRenderers>
+        </Combination2DChart>
+    </rMateChart>`;
+        }
+
+        // -----------------------차트 설정 끝 -----------------------
+
+
+        // -----------------------그리드 설정 시작 -----------------------
+
+        function addGridStyles(prefix, count) {
+            let style = document.createElement('style');
+            style.type = 'text/css';
+            let css = '';
+
+            // theGrid로 최대한 통일시키고 추후에 이거 삭제해
+            for (let i = 1; i <= count; i++) {
+                css += `#${prefix}-theGrid${i}.wj-flexgrid .wj-cell { padding: 14px; }\n`;
+            }
+
+            style.appendChild(document.createTextNode(css));
+            document.head.appendChild(style);
+        }
+
+        function initializeGrids(prefix, count) {
+            addGridStyles(prefix, count);
+            for (let i = 1; i <= count; i++) {
+                initGrid(prefix, i);
+            }
+        }
+
+        function initializeAllGrids() {
+            initializeGrids('sales', 8);
+            initializeGrids('smp', 6);
+            initializeGrids('rec', 12);
+            initializeGrids('service', 2);
+        }
+
+        function initGrid(prefix, gridNumber) {
+            let columns, data;
+            const gridId = '#' + prefix + '-theGrid' + gridNumber;
+
+            // 각 그리드에 맞는 컬럼과 데이터 설정
+            [columns, data] = getGridConfig(prefix, gridNumber);
+
+            let viewdata = new wijmo.collections.CollectionView(data);
+            let grid = new wijmo.grid.FlexGrid(gridId, {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                isReadOnly: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
+
+            grid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+            // 전역 변수에 그리드 할당
+            window[prefix + 'TheGrid' + gridNumber] = grid;
+            window[prefix + 'Viewdata' + gridNumber] = viewdata;
+        }
+
+        function getGridConfig(prefix, gridNumber) {
+            // 각 그리드 타입에 따른 컬럼과 데이터 설정
+            let columns, data;
+
+            switch(prefix) {
+                case 'sales':
+                    // 매출 조회 그리드 설정
+                    switch(gridNumber) {
+                        case 1:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'TotalSales', header: '총 매출액', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 2:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'OperatingProfit', header: '영업이익', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 3:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'BusinessExpenses', header: '사업 경비', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 4:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'CostRate', header: '원가율', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'Year2023', header: '2023', width: '*', align: 'center'},
+                                {binding: 'Year2024', header: '2024', width: '*', align: 'center'}
+                            ];
+                            break;
+                    }
+
+                    // 데이터 생성
+                    data = Array.from({length: 12}, (_, i) => ({
+                        No: i + 1,
+                        Period: `2024-${String(i + 1).padStart(2, '0')}`,
+                        TotalSales: Math.floor(Math.random() * 1000000) + 500000,
+                        OperatingProfit: Math.floor(Math.random() * 500000) + 100000,
+                        BusinessExpenses: Math.floor(Math.random() * 300000) + 50000,
+                        CostRate: `${(Math.random() * 20 + 60).toFixed(2)}%`,
+                        Year2023: Math.floor(Math.random() * 1000000) + 500000,
+                        Year2024: Math.floor(Math.random() * 1000000) + 500000
+                    }));
+                    break;
+
+                case 'smp':
+                    // SMP 매출 조회 그리드 설정
+                    switch(gridNumber) {
+                        case 1:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'SMPSales', header: 'SMP 매출액', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 2:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'SMPPrice', header: 'SMP 단가', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 3:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'SMPAvgPrice', header: 'SMP 평균단가', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 4:
+                        case 5:
+                        case 6:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'Year2023', header: '2023', width: '*', align: 'center'},
+                                {binding: 'Year2024', header: '2024', width: '*', align: 'center'}
+                            ];
+                            break;
+                    }
+
+                    // 데이터 생성
+                    data = Array.from({length: 12}, (_, i) => ({
+                        No: i + 1,
+                        Period: `2024-${String(i + 1).padStart(2, '0')}`,
+                        SMPSales: Math.floor(Math.random() * 1000000) + 500000,
+                        SMPPrice: Math.floor(Math.random() * 1000) + 100,
+                        SMPAvgPrice: Math.floor(Math.random() * 1000) + 100,
+                        Year2023: Math.floor(Math.random() * 1000000) + 500000,
+                        Year2024: Math.floor(Math.random() * 1000000) + 500000
+                    }));
+                    break;
+
+                case 'rec':
+                    // REC 매출 조회 그리드 설정
+                    switch(gridNumber) {
+                        case 1:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECSales', header: 'REC 매출액', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 2:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECPrice', header: 'REC 단가', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 3:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECAvgPrice', header: 'REC 평균단가', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 4:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECIssued', header: 'REC 발급수량', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 5:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECSold', header: 'REC 매도수량', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 6:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'RECRemaining', header: 'REC 잔여수량', width: '*', align: 'center'}
+                            ];
+                            break;
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                        case 11:
+                        case 12:
+                            columns = [
+                                {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                                {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                                {binding: 'Year2023', header: '2023', width: '*', align: 'center'},
+                                {binding: 'Year2024', header: '2024', width: '*', align: 'center'}
+                            ];
+                            break;
+                    }
+
+                    // 데이터 생성
+                    data = Array.from({length: 12}, (_, i) => ({
+                        No: i + 1,
+                        Period: `2024-${String(i + 1).padStart(2, '0')}`,
+                        RECSales: Math.floor(Math.random() * 1000000) + 500000,
+                        RECPrice: Math.floor(Math.random() * 1000) + 100,
+                        RECAvgPrice: Math.floor(Math.random() * 1000) + 100,
+                        RECIssued: Math.floor(Math.random() * 10000) + 5000,
+                        RECSold: Math.floor(Math.random() * 8000) + 4000,
+                        RECRemaining: Math.floor(Math.random() * 2000) + 1000,
+                        Year2023: Math.floor(Math.random() * 1000000) + 500000,
+                        Year2024: Math.floor(Math.random() * 1000000) + 500000
+                    }));
+                    break;
+
+                case 'service':
+                    // 서비스 분석 현황 그리드 설정
+                    switch(gridNumber) {
+                        case 1:
+                            columns = [
+                                {binding: 'Period', header: ' ', width: 80, align: 'center', isReadOnly: true},
+                                {binding: 'Sales', header: '매출', width: '*', align: 'center', isReadOnly: true},
+                                {binding: 'Cost', header: '비용', width: '*', align: 'center', isReadOnly: true},
+                                {binding: 'Profit', header: '수익', width: '*', align: 'center', isReadOnly: true}
+                            ];
+                            data = Array.from({length: 12}, (_, i) => ({
+                                Period: `24-${String(i + 1).padStart(2, '0')}`,
+                                Sales: Math.floor(Math.random() * 1000000) + 500000,
+                                Cost: Math.floor(Math.random() * 800000) + 400000,
+                                Profit: Math.floor(Math.random() * 200000) + 100000
+                            }));
+                            break;
+                        case 2:
+                            columns = [
+                                {binding: 'Period', header: '기간', width: 80, align: 'center', isReadOnly: true},
+                                {binding: 'Year2023', header: '2023', width: '*', align: 'center', isReadOnly: true},
+                                {binding: 'Year2024', header: '2024', width: '*', align: 'center', isReadOnly: true}
+                            ];
+                            data = Array.from({length: 12}, (_, i) => ({
+                                Period: `24-${String(i + 1).padStart(2, '0')}`,
+                                Year2023: Math.floor(Math.random() * 1000000) + 500000,
+                                Year2024: Math.floor(Math.random() * 1000000) + 500000
+                            }));
+                            break;
+                    }
+                    break;
+            }
+            return [columns, data];
+        }
+
+
+        // -----------------------그리드 설정 끝 -----------------------
+
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs(prefix) {
+            const periodType = document.getElementById(`${prefix}-periodType`).value;
+            const selectedYear = document.getElementById(`${prefix}-yearSelectTab1`).value;
+            const dateBoxContainer = document.getElementById(`${prefix}-dateBoxContainer`);
+            const startDateContainer = document.getElementById(`${prefix}-startDateContainer`);
+            const endDateContainer = document.getElementById(`${prefix}-endDateContainer`);
+            const periodLabel = dateBoxContainer.closest('dl').querySelector('dt');
+
+            const yearSelectContainer = Array.from(document.querySelectorAll('dl')).find(dl => {
+                const dt = dl.querySelector('dt');
+                return dt && dt.textContent.includes("조회연도");
+            });
+
+            if (periodType === "hourly" || periodType === "monthly") {
+                if (yearSelectContainer) yearSelectContainer.style.display = "none";
+            } else {
+                if (yearSelectContainer) yearSelectContainer.style.display = "block";
+            }
+
+            if (periodType === "yearly") {
+                periodLabel.style.visibility = "hidden";
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+            } else {
+                periodLabel.style.visibility = "visible";
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
+
+                if (periodType === "hourly") {
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
+
+                    startDateContainer.innerHTML = `
+                <input type="date" id="${prefix}-startDate" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
+
+                    endDateContainer.innerHTML = `
+                <select id="${prefix}-startHour" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="${prefix}-endHour" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    startDateContainer.innerHTML = `<input type="month" id="${prefix}-startDate" name="startDate" value="${startDate}">`;
+                    endDateContainer.innerHTML = `<input type="month" id="${prefix}-endDate" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    startDateContainer.innerHTML = `<select id="${prefix}-startQuarter">${options}</select>`;
+                    endDateContainer.innerHTML = `<select id="${prefix}-endQuarter">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    startDateContainer.innerHTML = `<select id="${prefix}-startHalf">${options}</select>`;
+                    endDateContainer.innerHTML = `<select id="${prefix}-endHalf">${options}</select>`;
+                }
+            }
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
+        }
+
+        // tab2 MoM 선택시, 월 선택 셀렉트 생성
+        function createMonthSelect(id) {
+            const monthSelect = document.createElement('select');
+            monthSelect.id = id;
+            monthSelect.name = id;
+            monthSelect.style.width = '70px';
+
+            const months = [
+                "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+            ];
+
+            months.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = `${month}월`;
+                monthSelect.appendChild(option);
+            });
+
+            return monthSelect;
+        }
+
+        // tab2 비교유형 변경시 실행될 함수
+        function updateComparisonType(section) {
+            const comparisonType = document.getElementById(`${section}-comparisonType`).value;
+            const startDateContainer = document.getElementById(`${section}-startDateContainerTab2`);
+            const endDateContainer = document.getElementById(`${section}-endDateContainerTab2`);
+
+            // 기존 월 선택 셀렉트를 제거
+            const existingStartMonthSelect = document.getElementById(`${section}-startMonthTab2`);
+            const existingEndMonthSelect = document.getElementById(`${section}-endMonthTab2`);
+
+            if (existingStartMonthSelect) startDateContainer.removeChild(existingStartMonthSelect);
+            if (existingEndMonthSelect) endDateContainer.removeChild(existingEndMonthSelect);
+
+            // "MoM"이 선택된 경우에만 새로운 월 셀렉트 추가
+            if (comparisonType === "MoM") {
+                const startMonthSelect = createMonthSelect(`${section}-startMonthTab2`);
+                const endMonthSelect = createMonthSelect(`${section}-endMonthTab2`);
+
+                // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
+                startMonthSelect.addEventListener("change", function () {
+                    endMonthSelect.value = startMonthSelect.value;
+                });
+
+                startDateContainer.appendChild(startMonthSelect);
+                endDateContainer.appendChild(endMonthSelect);
+            }
+        }
+
+        $(document).ready(function() {
+            // 공통 모달 HTML을 body 태그에 추가
+            const modalHTML = `
+        <div id="chartModal" class="modal" style="opacity:100">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modalChartHolder" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+    `;
+
+            // body 태그에 모달 HTML을 추가
+            $('body').append(modalHTML);
+
+            // 모달 닫기 이벤트
+            $(document).on('click', '.close', function () {
+                $('#chartModal').hide();
+                $('#modalChartHolder').html('');  // 모달 내용 초기화
+            });
+
+            // 모든 chart-wrap 요소에 투명한 오버레이를 자동으로 추가
+            $('div[id^="chartHolder"], div[id^="sales-chartHolder"], div[id^="smp-chartHolder"], div[id^="rec-chartHolder"], div[id^="service-chartHolder"]').each(function () {
+                // 오버레이 요소를 생성
+                let overlay = $('<div class="chart-overlay"></div>');
+
+                // 오버레이 스타일 적용
+                overlay.css({
+                    'position': 'absolute',
+                    'top': '0',
+                    'left': '0',
+                    'width': '100%',
+                    'height': '100%',
+                    'cursor': 'pointer',
+                    'z-index': '10',
+                    'background': 'transparent'
+                });
+
+                // chart-wrap에 오버레이 추가
+                $(this).css('position', 'relative').append(overlay);
+            });
+
+            // .chart-overlay에 클릭 이벤트 바인딩 (동적 요소에 대해서도 대응)
+            $(document).on('click', '.chart-overlay', function() {
+                // 클릭한 차트의 div ID 가져오기
+                let chartHolder = $(this).closest('div[id^="chartHolder"], div[id^="sales-chartHolder"], div[id^="smp-chartHolder"], div[id^="rec-chartHolder"], div[id^="service-chartHolder"]');
+                let chartHolderId = chartHolder.attr('id');
+
+                // ID가 제대로 추출되었는지 확인
+                console.log("Clicked chartHolder ID: " + chartHolderId);
+
+                // 모달 열기
+                let modal = document.getElementById("chartModal");
+                let modalChartHolder = document.getElementById("modalChartHolder");
+                modal.style.display = "block";
+
+                // 기존 차트의 레이아웃과 데이터를 모달 차트로 설정
+                rMateChartH5.create(chartHolderId + "_modal", "modalChartHolder", "rMateOnLoadCallFunction=chartReadyHandler", "100%", "100%");
+
+                // 모달 닫기 버튼 클릭 시 모달 닫기
+                let closeModal = document.getElementsByClassName("close")[0];
+                closeModal.onclick = function() {
+                    modal.style.display = "none";
+                    modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                }
+
+                // 모달 외부를 클릭하면 모달 닫기
+                window.onclick = function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                        modalChartHolder.innerHTML = ""; // 모달 차트 초기화
+                    }
+                }
+            });
+        });
+
+
+    </script>
+</th:block>
+</html>

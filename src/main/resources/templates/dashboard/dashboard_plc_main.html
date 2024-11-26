@@ -1,0 +1,409 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>계통도</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                   alt="알람 아이콘"></a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내메뉴-->
+<!--                </a>-->
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>모니터링</li>
+                <li>계통도</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역">
+                        <option>대구</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="구">
+                        <option>성서산단</option>
+                    </select>
+                </li>
+                <li>
+                    <select title="동">
+                        <option>성서</option>
+                    </select>
+                </li>
+<!--                <li>-->
+<!--                    <select title="FC">-->
+<!--                        <option>FC#1</option>-->
+<!--                    </select>-->
+<!--                </li>-->
+            </ul>
+        </div>
+
+        <div class="tab-wrap">
+<!--            <ul class="tab-links">-->
+<!--                <li>-->
+<!--                    <a href="#tab1" title="계통도">계통도</a>-->
+<!--                </li>-->
+<!--&lt;!&ndash;                <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a href="#tab2" title="실시간현황">실시간 현황</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </li>&ndash;&gt;-->
+<!--            </ul>-->
+            <div class="tab-contents">
+                <!-- Section -->
+                <div class="tab-item" id="tab1">
+                    <div class="row">
+                        <section class="wp80" style="height: 885px; border-radius: 15px;">
+                            <div class="section-top">
+                                <h3>연료전지 실시간 운전현황</h3>
+                                <dl class="temperature">
+                                    <dt>
+                                        <img src="/images/icon/ico-temperature.svg" alt="온도계">
+                                        외기온도
+                                    </dt>
+                                    <dd>
+                                        21.60 <span class="unit">℃</span>
+                                    </dd>
+                                </dl>
+                            </div> <!--//section-top end -->
+
+                            <div class="realtime-status">
+                                <div class="databox-wrap">
+                                    <div class="databox gas">
+                                        <div class="icon-box">
+                                            <img src="/images/icon/ico-gas.svg" alt="가스 아이콘">
+                                            <p>가스</p>
+                                        </div>
+                                        <dl>
+                                            <dt>가스 유량</dt>
+                                            <dd>146.92 <span class="unit">Nm³/h</span></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>가스 누출 농도</dt>
+                                            <dd>0 <span class="unit">%</span></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="databox elec">
+                                        <div class="icon-box">
+                                            <img src="/images/icon/ico-power.svg" alt="전력 아이콘">
+                                            <p>전기</p>
+                                        </div>
+                                        <dl>
+                                            <dt>전력 생산량</dt>
+                                            <dd>914.50 <span class="unit">kW</span></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>효율</dt>
+                                            <dd>61.20 <span class="unit">%</span></dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>역률</dt>
+                                            <dd>0.98</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>주파수</dt>
+                                            <dd>38.60 <span class="unit"> Hz</span></dd>
+                                        </dl>
+                                    </div>
+                                    <div class="databox water">
+                                        <div class="icon-box">
+                                            <img src="/images/icon/ico-waterpump.png" alt="워퍼펌프 아이콘">
+                                            <p>WP#1</p>
+                                        </div>
+                                        <dl>
+                                            <dt>급수 유량</dt>
+                                            <dd>146.92 <span class="unit">Nm³/h</span></dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="fcbox-wrap">
+                                    <div class="title">
+                                        <dl>
+                                            <dt>총 운전시간</dt>
+                                            <dd>000 hour</dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>전체 가스함 알람</dt>
+                                            <dd>
+                                                <p class="status-off">OFF</p>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                    <div class="fcbox-group">
+                                        <!--FC#1-->
+                                        <div class="fc-box">
+                                            <div class="fc-img">
+                                                <p>FC#1</p>
+                                                <img src="/images/icon/img-fc.png" alt="fc 이미지">
+                                            </div>
+                                            <div class="fc-txt">
+                                                <p>가스누출</p>
+                                                <dl>
+                                                    <dt>가스농도</dt>
+                                                    <dd class="fs18">0%</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>가스누출알람</dt>
+                                                    <dd>
+                                                        <p class="status-off">OFF</p>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <!--FC#2-->
+                                        <div class="fc-box">
+                                            <div class="fc-img">
+                                                <p>FC#2</p>
+                                                <img src="/images/icon/img-fc.png" alt="fc 이미지">
+                                            </div>
+                                            <div class="fc-txt">
+                                                <p>가스누출</p>
+                                                <dl>
+                                                    <dt>가스농도</dt>
+                                                    <dd class="fs18">0%</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>가스누출알람</dt>
+                                                    <dd>
+                                                        <p class="status-off">OFF</p>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                        <!--FC#3-->
+                                        <div class="fc-box">
+                                            <div class="fc-img">
+                                                <p>FC#3</p>
+                                                <img src="/images/icon/img-fc.png" alt="fc 이미지">
+                                            </div>
+                                            <div class="fc-txt">
+                                                <p>가스누출</p>
+                                                <dl>
+                                                    <dt>가스농도</dt>
+                                                    <dd class="fs18">0%</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>가스누출알람</dt>
+                                                    <dd>
+                                                        <p class="status-off">OFF</p>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cycle-wrap">
+                                    <div class="cycle">
+                                        304.3 kW
+                                    </div>
+                                    <div class="cycle">
+                                        304.3 kW
+                                    </div>
+                                    <div class="cycle">
+                                        304.3 kW
+                                    </div>
+                                </div>
+                                <div class="totalepo-wrap">
+                                    <dl>
+                                        <dt>Total EPO Status</dt>
+                                        <dd>
+                                            <img src="/images/icon/ico-good.svg" alt="good">
+                                            GOOD
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="w400" style="height: 885px">
+                            <div class="table-setting-wrap">
+                                <table class="view-table">
+                                    <caption>Alarm 테이블</caption>
+                                    <colgroup>
+                                        <col class="wauto">
+                                        <col class="w50">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2" class="ta-c fs18">Alarm</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            수배전반알람
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            EBOX 하부 기기 에러
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="view-table">
+                                    <caption>Trip 테이블</caption>
+                                    <colgroup>
+                                        <col class="wauto">
+                                        <col class="w50">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2" class="ta-c fs18">Trip</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            HV 503 Trip
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            LV 501 Trip
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            LV 503 Trip
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="view-table">
+                                    <caption>고온경보 테이블</caption>
+                                    <colgroup>
+                                        <col class="wauto">
+                                        <col class="w50">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2" class="ta-c fs18">고온경보</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            변압기501 권선온도 A상
+                                        </td>
+                                        <td class="ta-c">
+                                            <a title="설정" class="">
+                                                <img src="/images/icon/ico-setting.svg" alt="설정">
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+
+
+    <script>
+        var swiper = new Swiper(".card-swiper", {
+            slidesPerView: 5,
+            spaceBetween: 20,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+    </script>
+    <!--</body>-->
+</th:block>
+</html>

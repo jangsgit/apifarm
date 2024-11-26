@@ -1,0 +1,1363 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        #theGrid1.wj-flexgrid .wj-cell,
+        #theGrid2.wj-flexgrid .wj-cell,
+        #theGrid3.wj-flexgrid .wj-cell,
+        #theGrid4.wj-flexgrid .wj-cell,
+        #theGrid5.wj-flexgrid .wj-cell,
+        #theGrid6.wj-flexgrid .wj-cell,
+        #theGrid7.wj-flexgrid .wj-cell,
+        #theGrid8.wj-flexgrid .wj-cell,
+        #theGrid9.wj-flexgrid .wj-cell,
+        #theGrid10.wj-flexgrid .wj-cell,
+        #theGrid11.wj-flexgrid .wj-cell,
+        #theGrid12.wj-flexgrid .wj-cell{
+            padding: 12px;
+
+        }
+
+        #theGrid1.wj-flexgrid .downloads,
+        #theGrid2.wj-flexgrid .downloads,
+        #theGrid3.wj-flexgrid .downloads,
+        #theGrid4.wj-flexgrid .downloads,
+        #theGrid5.wj-flexgrid .downloads,
+        #theGrid6.wj-flexgrid .downloads,
+        #theGrid7.wj-flexgrid .downloads,
+        #theGrid8.wj-flexgrid .downloads,
+        #theGrid9.wj-flexgrid .downloads,
+        #theGrid10.wj-flexgrid .downloads,
+        #theGrid11.wj-flexgrid .downloads,
+        #theGrid12.wj-flexgrid .downloads {
+            padding-top: 0px;
+        }
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>REC 매출 조회</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png" alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>서비스 분석</li>
+                <li>매출 관리</li>
+                <li>REC 매출 조회</li>
+            </ul>
+        </div>
+
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd" onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+           <!-- <div class="card-btn-wrap">
+                <a title="탭설정" class="btn btn-popup-open" data-popup="popup1">
+                    <img src="/images/icon/btn-setting.svg" alt="설정아이콘">
+                </a>
+            </div>-->
+        </div>
+
+        <!-- REC 매출 조회 -->
+        <div id="recSalesContent" class="dynamic-content" style="display: none;">
+        <div class="tab-wrap" id="jqueryTabs">
+            <ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="기간별조회" class="tab-button">기간별 조회</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="기간별대비" class="tab-button">기간별 대비</a>
+                </li>
+            </ul>
+
+            <div class="tab-contents">
+
+                <!-- tab1 -->
+                <section class="tab-item tab-content" id="tab1">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="categoryType">
+                                        목록<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="">
+                                        <li>
+                                            <select id="categoryType" name="categoryType" onchange="loadContent()">
+                                                <option value="sales" selected>매출조회</option>
+                                                <option value="smpsales" >SMP 매출조회</option>
+                                                <option value="recsales">REC 매출조회</option>
+                                                <option value="serviceanalysis">서비스 분석현황</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="periodType">
+                                        기간유형<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="periodType" name="periodType" onchange="updatePeriodInputs()">
+                                                <option value="hourly">시간별</option>
+                                                <option value="monthly" selected>월별</option>
+                                                <option value="quarterly">분기별</option>
+                                                <option value="halfyearly">반기별</option>
+                                                <option value="yearly">연도별</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    조회연도<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="yearSelectTab1" name="yearSelectTab1">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainer">
+                                        <li id="startDateContainer">
+                                            <input type="month" id="startDate" name="startDate" value="2024-01">
+                                        </li>
+                                        <li id="endDateContainer">
+                                            <input type="month" id="endDate" name="endDate" value="2024-12">
+                                        </li>
+
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-search"
+                                               onclick="searchDataTab1()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <!--<div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>-->
+                    </div> <!--//section-top end -->
+
+
+                    <!-- 6분할 레이아웃 -->
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 매출액</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_1" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_2" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_1 -->
+                                    <div class="tab-item-sub" id="tab1_1">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder1" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab1_2 -->
+                                    <div class="tab-item-sub" id="tab1_2">
+                                        <div class="container-fluid">
+                                            <div id="theGrid1" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 단가</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_3" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_4" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_3 -->
+                                    <div class="tab-item-sub" id="tab1_3">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder2" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab1_4 -->
+                                    <div class="tab-item-sub" id="tab1_4">
+                                        <div class="container-fluid">
+                                            <div id="theGrid2" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 평균단가</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_5" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_6" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_5 -->
+                                    <div class="tab-item-sub" id="tab1_5">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder3" style="height:230px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab1_6 -->
+                                    <div class="tab-item-sub" id="tab1_6">
+                                        <div class="container-fluid">
+                                            <div id="theGrid3" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 발급수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_7" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_8" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_7 -->
+                                    <div class="tab-item-sub" id="tab1_7">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder4" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab1_8 -->
+                                    <div class="tab-item-sub" id="tab1_8">
+                                        <div class="container-fluid">
+                                            <div id="theGrid4" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 매도수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_9" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_10" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_9 -->
+                                    <div class="tab-item-sub" id="tab1_9">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder5" style="height:230px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab1_10 -->
+                                    <div class="tab-item-sub" id="tab1_10">
+                                        <div class="container-fluid">
+                                            <div id="theGrid5" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 잔여수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab1_11" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab1_12" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab1_11 -->
+                                    <div class="tab-item-sub" id="tab1_11">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder6" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab1_12 -->
+                                    <div class="tab-item-sub" id="tab1_12">
+                                        <div class="container-fluid">
+                                            <div id="theGrid6" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                </section>
+                <!-- Section -->
+
+                <!-- tab2 -->
+                <section class="tab-item tab-content" id="tab2">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    <label for="comparisonType">
+                                        비교유형<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <select id="comparisonType" name="comparisonType">
+                                                <option value="YoY">YoY</option>
+                                                <option value="QoQ">QoQ</option>
+                                                <option value="MoM">MoM</option>
+                                                <option value="YTD">YTD</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    조회기간<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box" id="dateBoxContainerTab2">
+                                        <li id="startDateContainerTab2">
+                                            <select id="startDateTab2" name="startDateTab2">
+                                                <option selected>2023</option>
+                                                <option>2024</option>
+                                            </select>
+                                        </li>
+                                        <li id="endDateContainerTab2">
+                                            <select id="endDateTab2" name="endDateTab2">
+                                                <option>2023</option>
+                                                <option selected>2024</option>
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-delete" title="검색" id="btn-searchTab2"
+                                               onclick="searchDataTab2()">
+                                                <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                                검색
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <!--<div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-excell.svg" alt="엑셀 아이콘">
+                                        엑셀다운로드
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>-->
+                    </div> <!--//section-top end -->
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 매출액</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_1" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_2" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_1 -->
+                                    <div class="tab-item-sub" id="tab2_1">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder7" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_2 -->
+                                    <div class="tab-item-sub" id="tab2_2">
+                                        <div class="container-fluid">
+                                            <div id="theGrid7" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 단가</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_3" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_4" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_3 -->
+                                    <div class="tab-item-sub" id="tab2_3">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder8" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_4 -->
+                                    <div class="tab-item-sub" id="tab2_4">
+                                        <div class="container-fluid">
+                                            <div id="theGrid8" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 평균단가</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_5" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_6" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_5 -->
+                                    <div class="tab-item-sub" id="tab2_5">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder9" style="height:230px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab2_6 -->
+                                    <div class="tab-item-sub" id="tab2_6">
+                                        <div class="container-fluid">
+                                            <div id="theGrid9" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 발급수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_7" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_8" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_7 -->
+                                    <div class="tab-item-sub" id="tab2_7">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder10" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_8 -->
+                                    <div class="tab-item-sub" id="tab2_8">
+                                        <div class="container-fluid">
+                                            <div id="theGrid10" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="row row-2" style="margin-bottom: 10px">
+                        <div class="col wp50" style="margin-right: 15px">
+                            <section class="tab-section section_top" style="border-radius: 10px; height: 330px; ">
+                                <div class="title-wrap">
+                                    <h3>REC 매도수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_9" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_10" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_9 -->
+                                    <div class="tab-item-sub" id="tab2_9">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder11" style="height:230px; width:100%;"></div>
+
+                                        </div>
+                                    </div>
+                                    <!-- tab2_10 -->
+                                    <div class="tab-item-sub" id="tab2_10">
+                                        <div class="container-fluid">
+                                            <div id="theGrid11" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col wp50">
+                            <section class="tab-section section_top" style="height: 330px;">
+                                <div class="title-wrap">
+                                    <h3>REC 잔여수량</h3>
+                                    <ul class="tab-links-sub">
+                                        <li>
+                                            <a href="#tab2_11" title="통계">통계</a>
+                                        </li>
+                                        <li>
+                                            <a href="#tab2_12" title="현황">현황</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-contents">
+                                    <!-- tab2_11 -->
+                                    <div class="tab-item-sub" id="tab2_11">
+                                        <div class="chart-wrap">
+                                            <div id="chartHolder12" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- tab2_12 -->
+                                    <div class="tab-item-sub" id="tab2_12">
+                                        <div class="container-fluid">
+                                            <div id="theGrid12" style="height:230px; width:100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+                <!-- Section -->
+
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+        </div>
+    </div> <!--//layout-contents end -->
+
+</th:block>
+
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        function init() {
+            initializeSelections();  //위에 산단, 발전소명 관련 함수
+            updatePeriodInputs();
+            updateComparisonType();
+
+            // 모든 차트 생성 (tab1과 tab2)
+            setTimeout(function () {
+                createAllCharts();
+                showTab1Charts(); // 초기에 첫 번째 탭의 차트만 표시
+            }, 100);
+
+
+            // 탭 전환 이벤트 리스너 추가
+            document.querySelectorAll('.tab-button').forEach(function (tab) {
+                tab.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var tabId = this.getAttribute('href').substring(1);
+                    switchTab(tabId);
+                });
+            });
+
+            // 초기 탭 설정
+            switchTab('tab1');
+
+            // 그리드
+            initializeAllGrids();
+
+            document.getElementById("comparisonType").addEventListener("change", updateComparisonType);
+
+        }
+
+        function switchTab(tabId) {
+            // 모든 탭 숨기기
+            document.querySelectorAll('.tab-item').forEach(function (tab) {
+                tab.style.display = 'none';
+            });
+
+            // 선택된 탭 보이기
+            document.getElementById(tabId).style.display = 'block';
+
+            // 탭에 따른 차트 표시
+            if (tabId === 'tab1') {
+                showTab1Charts();
+            } else if (tabId === 'tab2') {
+                showTab2Charts();
+            }
+
+            // 탭 링크 활성화 상태 변경
+            document.querySelectorAll('.tab-button').forEach(function (tab) {
+                tab.parentElement.classList.remove('active');
+            });
+            document.querySelector('.tab-button[href="#' + tabId + '"]').parentElement.classList.add('active');
+        }
+
+        // 해당 탭에서 현황 탭 누른 상태에서 다른 탭 이동 후 다시 해당 탭 돌아와서 통계 탭 클릭 시 차트 안나타날때
+        $(".tab-links-sub a").click(function(event) {
+            event.preventDefault();
+            var tabId = $(this).attr("href");
+            $(this).closest('.tab-section').find('.tab-item-sub').hide();
+            $(tabId).show();
+            $(this).closest('.tab-links-sub').find('li').removeClass('active');
+            $(this).parent().addClass('active');
+
+            if (tabId.includes('tab1_1') || tabId.includes('tab1_3') || tabId.includes('tab1_5') || tabId.includes('tab1_7') || tabId.includes('tab1_9') || tabId.includes('tab1_11')) {
+                showTab1Charts(tabId);
+            } else if (tabId.includes('tab2_1') || tabId.includes('tab2_3') || tabId.includes('tab2_5') || tabId.includes('tab2_7') || tabId.includes('tab2_9') || tabId.includes('tab2_11')) {
+                showTab2Charts();
+            }
+        });
+
+
+        // -----------------------차트 설정 시작-----------------------
+
+        function createAllCharts() {
+            var chartVars1 = "rMateOnLoadCallFunction=chartReadyHandler";
+            var chartVars2 = "rMateOnLoadCallFunction=chartReadyHandlerTab2";
+
+            // tab1 차트 생성
+            for (let i = 1; i <= 6; i++) {
+                rMateChartH5.create("chart" + i, "chartHolder" + i, chartVars1, "100%", "100%");
+            }
+
+            // tab2 차트 생성
+            for (let i = 7; i <= 12; i++) {
+                rMateChartH5.create("chart" + i, "chartHolder" + i, chartVars2, "100%", "100%");
+            }
+        }
+
+        function showTab1Charts() {
+            // 차트 리사이즈
+            for (let i = 1; i <= 6; i++) {
+                if (document.getElementById('chart' + i)) {
+                    document.getElementById('chart' + i).resize();
+                }
+            }
+        }
+
+        function showTab2Charts() {
+            // 차트 리사이즈
+            for (let i = 7; i <= 12; i++) {
+                if (document.getElementById('chart' + i)) {
+                    document.getElementById('chart' + i).resize();
+                }
+            }
+        }
+
+        // tab1 단일차트 6개
+        function chartReadyHandler(id) {
+            var chartData;
+
+            switch (id) {
+                case "chart1":
+                    chartData = [
+                        {"Month": "1월", "Profit": 900},
+                        {"Month": "2월", "Profit": 1400},
+                        {"Month": "3월", "Profit": 1500},
+                        {"Month": "4월", "Profit": 1900},
+                        {"Month": "5월", "Profit": 1400},
+                        {"Month": "6월", "Profit": 2000},
+                        {"Month": "7월", "Profit": 1800},
+                        {"Month": "8월", "Profit": 2500},
+                        {"Month": "9월", "Profit": 2850},
+                        {"Month": "10월", "Profit": 2000},
+                        {"Month": "11월", "Profit": 2100},
+                        {"Month": "12월", "Profit": 1700}
+                    ];
+                    break;
+                case "chart2":
+                    chartData = [
+                        {"Month": "1월", "Profit": 1100},
+                        {"Month": "2월", "Profit": 1400},
+                        {"Month": "3월", "Profit": 1700},
+                        {"Month": "4월", "Profit": 1600},
+                        {"Month": "5월", "Profit": 1500},
+                        {"Month": "6월", "Profit": 1500},
+                        {"Month": "7월", "Profit": 1400},
+                        {"Month": "8월", "Profit": 1300},
+                        {"Month": "9월", "Profit": 1200},
+                        {"Month": "10월", "Profit": 1150},
+                        {"Month": "11월", "Profit": 1100},
+                        {"Month": "12월", "Profit": 1200}
+                    ];
+                    break;
+                case "chart3":
+                    chartData = [
+                        {"Month": "1월", "Profit": 900},
+                        {"Month": "2월", "Profit": 800},
+                        {"Month": "3월", "Profit": 1000},
+                        {"Month": "4월", "Profit": 1200},
+                        {"Month": "5월", "Profit": 1100},
+                        {"Month": "6월", "Profit": 1300},
+                        {"Month": "7월", "Profit": 1400},
+                        {"Month": "8월", "Profit": 1500},
+                        {"Month": "9월", "Profit": 1350},
+                        {"Month": "10월", "Profit": 1600},
+                        {"Month": "11월", "Profit": 1300},
+                        {"Month": "12월", "Profit": 1250}
+                    ];
+                    break;
+                case "chart4":
+                    chartData = [
+                        {"Month": "1월", "Profit": 1000},
+                        {"Month": "2월", "Profit": 1400},
+                        {"Month": "3월", "Profit": 1600},
+                        {"Month": "4월", "Profit": 1000},
+                        {"Month": "5월", "Profit": 1400},
+                        {"Month": "6월", "Profit": 2000},
+                        {"Month": "7월", "Profit": 1800},
+                        {"Month": "8월", "Profit": 1850},
+                        {"Month": "9월", "Profit": 2300},
+                        {"Month": "10월", "Profit": 2000},
+                        {"Month": "11월", "Profit": 2100},
+                        {"Month": "12월", "Profit": 1700}
+                    ];
+                    break;
+                case "chart5":
+                    chartData = [
+                        {"Month": "1월", "Profit": 900},
+                        {"Month": "2월", "Profit": 800},
+                        {"Month": "3월", "Profit": 1000},
+                        {"Month": "4월", "Profit": 1200},
+                        {"Month": "5월", "Profit": 1100},
+                        {"Month": "6월", "Profit": 1300},
+                        {"Month": "7월", "Profit": 1400},
+                        {"Month": "8월", "Profit": 1500},
+                        {"Month": "9월", "Profit": 1350},
+                        {"Month": "10월", "Profit": 1600},
+                        {"Month": "11월", "Profit": 1300},
+                        {"Month": "12월", "Profit": 1250}
+                    ];
+                    break;
+                case "chart6":
+                    chartData = [
+                        {"Month": "1월", "Profit": 1100},
+                        {"Month": "2월", "Profit": 1400},
+                        {"Month": "3월", "Profit": 1700},
+                        {"Month": "4월", "Profit": 1600},
+                        {"Month": "5월", "Profit": 1500},
+                        {"Month": "6월", "Profit": 1500},
+                        {"Month": "7월", "Profit": 1400},
+                        {"Month": "8월", "Profit": 1300},
+                        {"Month": "9월", "Profit": 1200},
+                        {"Month": "10월", "Profit": 1150},
+                        {"Month": "11월", "Profit": 1100},
+                        {"Month": "12월", "Profit": 1200}
+                    ];
+                    break;
+            }
+
+            var layoutStr = '<rMateChart backgroundColor="#FFFFFF" borderStyle="none">'
+                + '<Column2DChart showDataTips="true">'
+                + '<horizontalAxis><CategoryAxis categoryField="Month"/></horizontalAxis>'
+                + '<series>'
+                + '<Column2DSeries yField="Profit" fill="#62b2fd">'
+                + '<showDataEffect><SeriesInterpolate/></showDataEffect>'
+                + '</Column2DSeries>'
+                + '</series>'
+                + '</Column2DChart>'
+                + '</rMateChart>';
+
+            document.getElementById(id).setLayout(layoutStr);
+            document.getElementById(id).setData(chartData);
+        }
+
+
+        // tab2 슬라이드 차트 6개
+        function chartReadyHandlerTab2(id) {
+            var layoutSet, dataSet;
+
+            switch (id) {
+                case "chart7":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+                case "chart8":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+                case "chart9":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+                case "chart10":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+                case "chart11":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+                case "chart12":
+                    layoutSet = [getCombinationChartLayout(), getRadarChartLayout()];
+                    dataSet = [chartDataCombo, chartDataRadar];
+                    break;
+            }
+
+            document.getElementById(id).setSlideLayoutSet(layoutSet);
+            document.getElementById(id).setSlideDataSet(dataSet);
+        }
+
+        // Combination Chart 레이아웃 (바 + 선)
+        function getCombinationChartLayout() {
+            return `<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+        <Options>
+            <Caption text=""/>
+            <Legend defaultMouseOverAction="true"/>
+        </Options>
+        <NumberFormatter id="numFmt" useThousandsSeparator="true"/>
+        <Combination2DChart showDataTips="true">
+            <horizontalAxis>
+                <CategoryAxis categoryField="Month"/>
+            </horizontalAxis>
+            <verticalAxis>
+                <LinearAxis id="vAxis1" interval="500" formatter="{numFmt}" maximum="3000"/>
+            </verticalAxis>
+            <series>
+                <Column2DSet type="clustered">
+                    <series>
+                        <Column2DSeries yField="Sales2023" displayName="2023" fill="#62b2fd">
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Column2DSeries>
+                        <Column2DSeries yField="Sales2024" displayName="2024" fill="#01dbab">
+                            <showDataEffect><SeriesInterpolate/></showDataEffect>
+                        </Column2DSeries>
+                    </series>
+                </Column2DSet>
+                <Line2DSeries yField="Profit2023" displayName="2023 (%)" itemRenderer="DiamondItemRenderer">
+                    <lineStroke><Stroke color="#ffa336" weight="2"/></lineStroke>
+                    <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis2" interval="10" maximum="100"/>  <!-- 오른쪽 축 최대값 100 -->
+                    </verticalAxis>
+                </Line2DSeries>
+                <Line2DSeries yField="Profit2024" displayName="2024 (%)" itemRenderer="DiamondItemRenderer">
+                    <lineStroke><Stroke color="#f99bab" weight="2"/></lineStroke>
+                    <showDataEffect><SeriesInterpolate/></showDataEffect>
+                    <verticalAxis>
+                        <LinearAxis id="vAxis2" interval="10" maximum="100"/>  <!-- 오른쪽 축 최대값 100 -->
+                    </verticalAxis>
+                </Line2DSeries>
+            </series>
+            <verticalAxisRenderers>
+                <Axis2DRenderer axis="{vAxis1}" showLine="true"/>
+                <Axis2DRenderer axis="{vAxis2}" showLine="true" side="right"/>
+            </verticalAxisRenderers>
+        </Combination2DChart>
+    </rMateChart>`;
+        }
+
+
+        // Radar Chart 레이아웃
+        function getRadarChartLayout() {
+            return `
+<rMateChart backgroundColor="#FFFFFF" borderStyle="none">
+    <Options>
+        <Caption text=""/>
+        <Legend useVisibleCheck="true"/>
+    </Options>
+    <RadarChart showDataTips="true" isSeriesOnAxis="true" type="polygon" paddingTop="25" paddingBottom="25">
+        <radialAxis>
+            <LinearAxis id="rAxis"/>
+        </radialAxis>
+        <angularAxis>
+            <CategoryAxis id="aAxis" categoryField="Month" displayName="Month"/>
+        </angularAxis>
+        <radialAxisRenderers>
+            <Axis2DRenderer axis="{rAxis}" horizontal="true" visible="false" tickPlacement="outside" tickLength="4">
+                <axisStroke>
+                    <Stroke color="#555555" weight="1"/>
+                </axisStroke>
+            </Axis2DRenderer>
+            <Axis2DRenderer axis="{rAxis}" horizontal="false" visible="true" tickPlacement="outside" tickLength="4">
+                <axisStroke>
+                    <Stroke color="#555555" weight="1"/>
+                </axisStroke>
+            </Axis2DRenderer>
+        </radialAxisRenderers>
+        <angularAxisRenderers>
+            <AngularAxisRenderer axis="{aAxis}"/>
+        </angularAxisRenderers>
+        <series>
+            <RadarSeries field="Amount2023" displayName="2023" fillLineArea="false" radius="4">
+                <fill>
+                    <SolidColor color="#ffa336"/>
+                </fill>
+                <lineStroke>
+                    <Stroke color="#ffa336" weight="2"/>
+                </lineStroke>
+                <showDataEffect>
+                    <SeriesInterpolate/>
+                </showDataEffect>
+            </RadarSeries>
+            <RadarSeries field="Amount2024" displayName="2024" fillLineArea="false" radius="4">
+                <fill>
+                    <SolidColor color="#f99bab"/>
+                </fill>
+                <lineStroke>
+                    <Stroke color="#f99bab" weight="2"/>
+                </lineStroke>
+                <showDataEffect>
+                    <SeriesInterpolate/>
+                </showDataEffect>
+            </RadarSeries>
+        </series>
+    </RadarChart>
+</rMateChart>`;
+        }
+
+
+        // 차트 데이터
+        // 슬라이드 1 데이터
+        var chartDataCombo = [
+            {"Month": "1월", "Sales2023": 1000, "Sales2024": 1200, "Profit2023": 10, "Profit2024": 20},
+            {"Month": "2월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 20, "Profit2024": 30},
+            {"Month": "3월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 30, "Profit2024": 45},
+            {"Month": "4월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 50, "Profit2024": 60},
+            {"Month": "5월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "6월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 85, "Profit2024": 95},
+            {"Month": "7월", "Sales2023": 1500, "Sales2024": 1600, "Profit2023": 40, "Profit2024": 50},
+            {"Month": "8월", "Sales2023": 2000, "Sales2024": 2200, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "9월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 70, "Profit2024": 75},
+            {"Month": "10월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 80, "Profit2024": 85},
+            {"Month": "11월", "Sales2023": 2500, "Sales2024": 2400, "Profit2023": 60, "Profit2024": 65},
+            {"Month": "12월", "Sales2023": 3000, "Sales2024": 2800, "Profit2023": 90, "Profit2024": 95}
+        ];
+
+
+        // 슬라이드 2 데이터
+        var chartDataRadar = [
+            {"Month": "1월", "Amount2023": 1200, "Amount2024": 2800},
+            {"Month": "2월", "Amount2023": 2500, "Amount2024": 1900},
+            {"Month": "3월", "Amount2023": 1800, "Amount2024": 3200},
+            {"Month": "4월", "Amount2023": 3100, "Amount2024": 2600},
+            {"Month": "5월", "Amount2023": 2200, "Amount2024": 3500},
+            {"Month": "6월", "Amount2023": 3800, "Amount2024": 2100},
+            {"Month": "7월", "Amount2023": 2700, "Amount2024": 3900},
+            {"Month": "8월", "Amount2023": 3500, "Amount2024": 2800},
+            {"Month": "9월", "Amount2023": 2900, "Amount2024": 3700},
+            {"Month": "10월", "Amount2023": 3200, "Amount2024": 2400},
+            {"Month": "11월", "Amount2023": 2400, "Amount2024": 3300},
+            {"Month": "12월", "Amount2023": 3600, "Amount2024": 2700}
+        ];
+
+        // -----------------------차트 설정 끝 -----------------------
+
+
+        // -----------------------그리드 설정 시작 -----------------------
+
+
+        let theGrid1, theGrid2, theGrid3, theGrid4, theGrid5, theGrid6, theGrid7, theGrid8, theGrid9, theGrid10, theGrid11, theGrid12;
+        let viewdata1, viewdata2, viewdata3, viewdata4, viewdata5, viewdata6, viewdata7, viewdata8, viewdata9, viewdata10, viewdata11, viewdata12;
+
+        function initializeAllGrids() {
+            for (let i = 1; i <= 12; i++) {
+                initGrid(i);
+            }
+        }
+
+        function initGrid(gridNumber) {
+            let columns, data;
+            const gridId = '#theGrid' + gridNumber;
+
+            switch (gridNumber) {
+                case 1:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'TotalSales', header: 'REC 매출액', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 2:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'OperatingProfit', header: 'REC 단가', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 3:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'BusinessExpenses', header: 'REC 평균단가', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 4:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'CostRate', header: 'REC 발급수량', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 5:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'CostRate', header: 'REC 매도수량', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 6:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'CostRate', header: 'REC 잔여수량', width: '*', align: 'center'}
+                    ];
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                    columns = [
+                        {binding: 'No', header: 'NO', width: 50, align: 'center'},
+                        {binding: 'Period', header: '기간', width: 140, align: 'center'},
+                        {binding: 'Year2023', header: '2023', width: '*', align: 'center'},
+                        {binding: 'Year2024', header: '2024', width: '*', align: 'center'}
+                    ];
+                    break;
+            }
+
+            data = getGridData(gridNumber);
+
+            let viewdata = new wijmo.collections.CollectionView(data);
+            let grid = new wijmo.grid.FlexGrid(gridId, {
+                autoGenerateColumns: false,
+                showMarquee: true,
+                isReadOnly: true,
+                columns: columns,
+                itemsSource: viewdata
+            });
+
+            // 맨 앞에 헤더부분 없애기
+            grid.rowHeaders.columns.splice(0, 1);
+
+            // 전역 변수에 그리드 할당
+            window['theGrid' + gridNumber] = grid;
+            window['viewdata' + gridNumber] = viewdata;
+        }
+
+        function getGridData(gridNumber) {
+            let baseData = Array.from({length: 12}, (_, i) => ({
+                No: i + 1,
+                Period: `2024-${String(i + 1).padStart(2, '0')}`
+            }));
+
+            switch (gridNumber) {
+                case 1:
+                    return baseData.map(item => ({...item, TotalSales: Math.floor(Math.random() * 1000000) + 500000}));
+                case 2:
+                    return baseData.map(item => ({
+                        ...item,
+                        OperatingProfit: Math.floor(Math.random() * 500000) + 100000
+                    }));
+                case 3:
+                    return baseData.map(item => ({
+                        ...item,
+                        BusinessExpenses: Math.floor(Math.random() * 300000) + 50000
+                    }));
+                case 4:
+                    return baseData.map(item => ({...item, TotalSales: Math.floor(Math.random() * 1000000) + 500000}));
+                case 5:
+                    return baseData.map(item => ({
+                        ...item,
+                        OperatingProfit: Math.floor(Math.random() * 500000) + 100000
+                    }));
+                case 6:
+                    return baseData.map(item => ({
+                        ...item,
+                        BusinessExpenses: Math.floor(Math.random() * 300000) + 50000
+                    }));
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                    return baseData.map(item => ({
+                        ...item,
+                        Year2023: Math.floor(Math.random() * 1000000) + 500000,
+                        Year2024: Math.floor(Math.random() * 1000000) + 500000
+                    }));
+            }
+        }
+
+
+        // -----------------------그리드 설정 끝 -----------------------
+
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+
+        // 조회기간 변동 함수 -> 입력 필드를 동적으로 업데이트
+        function updatePeriodInputs() {
+            const periodType = document.getElementById("periodType").value;
+            const selectedYear = document.getElementById("yearSelectTab1").value; // 선택된 조회연도 가져오기
+            const dateBoxContainer = document.getElementById("dateBoxContainer");
+            const startDateContainer = document.getElementById("startDateContainer");
+            const endDateContainer = document.getElementById("endDateContainer");
+            const periodLabel = dateBoxContainer.closest('dl').querySelector('dt'); // <dl> 요소를 가져옴
+
+            // 기존 내용을 초기화
+            // document.getElementById("startDateContainer").innerHTML = "";
+            // document.getElementById("endDateContainer").innerHTML = "";
+
+            // 조회연도 필드를 가져옴
+            const yearSelectContainer = Array.from(document.querySelectorAll('dl')).find(dl => {
+                const dt = dl.querySelector('dt');
+                return dt && dt.textContent.includes("조회연도");
+            });
+
+            // 시간별, 월별일 경우 조회연도 필드를 숨기거나 표시
+            if (periodType === "hourly" || periodType === "monthly") {
+                if (yearSelectContainer) yearSelectContainer.style.display = "none"; // 조회연도 숨기기
+            } else {
+                if (yearSelectContainer) yearSelectContainer.style.display = "block"; // 조회연도 표시
+            }
+
+            if (periodType === "yearly") { // 연도별 조회가 선택된 경우
+                // 조회기간 글자 숨기기
+                periodLabel.style.visibility = "hidden";
+                // startDate와 endDate input 요소 숨기기
+                startDateContainer.style.display = "none";
+                endDateContainer.style.display = "none";
+            } else {
+                // 조회기간 글자 보이기
+                periodLabel.style.visibility = "visible";
+                // startDate와 endDate input 요소 보이기
+                startDateContainer.style.display = "inline-block";
+                endDateContainer.style.display = "inline-block";
+
+                // 각 기간유형에 맞는 요소 설정
+                if (periodType === "hourly") {
+                    const currentDate = new Date();
+                    const defaultMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const defaultDay = currentDate.getDate().toString().padStart(2, '0');
+
+                    document.getElementById("startDateContainer").innerHTML = `
+                <input type="date" id="startDate" name="startDate" value="${selectedYear}-${defaultMonth}-${defaultDay}">
+            `;
+
+                    document.getElementById("endDateContainer").innerHTML = `
+                <select id="startHour" name="startHour" style="width: 60px;">
+                    ${generateHourOptions()}
+                </select>
+                -
+                <select id="endHour" name="endHour" style="width: 60px;">
+                    ${generateHourOptions(true)}
+                </select>
+            `;
+                } else if (periodType === "monthly") {
+                    const startDate = `${selectedYear}-01`;
+                    const endDate = `${selectedYear}-12`;
+
+                    document.getElementById("startDateContainer").innerHTML = `<input type="month" id="startDate" name="startDate" value="${startDate}">`;
+                    document.getElementById("endDateContainer").innerHTML = `<input type="month" id="endDate" name="endDate" value="${endDate}">`;
+                } else if (periodType === "quarterly") {
+                    const options = `
+                <option value="Q1">1분기</option>
+                <option value="Q2">2분기</option>
+                <option value="Q3">3분기</option>
+                <option value="Q4">4분기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startQuarter">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endQuarter">${options}</select>`;
+                } else if (periodType === "halfyearly") {
+                    const options = `
+                <option value="H1">상반기</option>
+                <option value="H2">하반기</option>
+            `;
+                    document.getElementById("startDateContainer").innerHTML = `<select id="startHalf">${options}</select>`;
+                    document.getElementById("endDateContainer").innerHTML = `<select id="endHalf">${options}</select>`;
+                }
+            }
+        }
+
+        // 시간 옵션 생성 함수
+        function generateHourOptions(isEnd = false) {
+            return Array.from({length: 24}, (_, i) => {
+                const hour = (i + 1).toString().padStart(2, '0');
+                return `<option value="${hour}"${isEnd && hour === '24' || !isEnd && hour === '01' ? ' selected' : ''}>${hour}</option>`;
+            }).join('');
+        }
+
+        // tab2 MoM 선택시, 월 선택 셀렉트 생성
+        function createMonthSelect(id) {
+            const monthSelect = document.createElement('select');
+            monthSelect.id = id;
+            monthSelect.name = id;
+            monthSelect.style.width = '70px';
+
+            const months = [
+                "01", "02", "03", "04", "05", "06",
+                "07", "08", "09", "10", "11", "12"
+            ];
+
+            months.forEach(month => {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = `${month}월`;
+                monthSelect.appendChild(option);
+            });
+
+            return monthSelect;
+        }
+
+        // tab2 비교유형 변경시 실행될 함수
+        function updateComparisonType() {
+            const comparisonType = document.getElementById("comparisonType").value;
+            const startDateContainerTab2 = document.getElementById("startDateContainerTab2");
+            const endDateContainerTab2 = document.getElementById("endDateContainerTab2");
+
+            // 기존 월 선택 셀렉트를 제거
+            const existingStartMonthSelect = document.getElementById("startMonthTab2");
+            const existingEndMonthSelect = document.getElementById("endMonthTab2");
+
+            if (existingStartMonthSelect) startDateContainerTab2.removeChild(existingStartMonthSelect);
+            if (existingEndMonthSelect) endDateContainerTab2.removeChild(existingEndMonthSelect);
+
+            // "MoM"이 선택된 경우에만 새로운 월 셀렉트 추가
+            if (comparisonType === "MoM") {
+                const startMonthSelect = createMonthSelect("startMonthTab2");
+                const endMonthSelect = createMonthSelect("endMonthTab2");
+
+                // 첫 번째 셀렉트가 변경될 때 두 번째 셀렉트도 동일한 값으로 설정
+                startMonthSelect.addEventListener("change", function () {
+                    endMonthSelect.value = startMonthSelect.value;
+                });
+
+                startDateContainerTab2.appendChild(startMonthSelect);
+                endDateContainerTab2.appendChild(endMonthSelect);
+            }
+        }
+
+    </script>
+
+</th:block>
+
+</html>

@@ -1,0 +1,583 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+</style>
+<th:block layout:fragment="content">
+
+    <!--- (레이아웃) Contents 영역 -->
+    <div class="layout-contents">
+        <!-- Page Title -->
+
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>안전보건교육일지</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                         alt="알람 아이콘"></a>
+<!--                <a title="북마크" class="bookmark toggle">-->
+<!--                    내 메뉴-->
+<!--                </a>-->
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>전기안전관리</li>
+                <li>안전보건교육일지</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <!--<ul class="tab-links">
+                <li>
+                    <a href="#tab1" title="목록" id="listTabLink">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+            </ul>-->
+            <div class="tab-contents">
+                <!-- Section -->
+                <section class="tab-item" id="tab1">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>안전보건교육 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a  class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th>
+                                    <label for="supplier">
+                                        공사명
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="공사명">
+                                </td>
+
+                                <th>
+                                    <label for="supplier">
+                                        시공사
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="supplier" name="supplier" class="wp100" maxlength="50" placeholder="시공사명">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="checkstdt">
+                                        교육시작일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="checkstdt" name="checkstdt" autocomplete="off">
+                                </td>
+                                <th>
+                                    <label for="checkendt">
+                                        교육종료일자<span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="datetime-local" id="checkendt" name="checkendt" autocomplete="off">
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="checkusr">
+                                        참석자
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <input type="text" id="checkcn" name="checkcn" class="wp100" placeholder="회사명" maxlength="5">
+                                        <br/>
+                                        <input type="text" id="checkusr" name="checkusr" class="wp100" placeholder="성명" maxlength="5">
+                                        <button onclick="addInputField(this)" class="mg-l8">참석자 추가</button>
+                                    </div>
+                                </td>
+
+
+                                <th>
+                                    <label for="checkarea">
+                                        교육장소 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" placeholder="교육장소">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkusr">
+                                        교육종류
+                                    </label>
+                                </th>
+                                <td>
+                                    <div class="input-btnbox">
+                                        <select>
+                                            <option>정기</option>
+                                            <option>신규</option>
+                                            <option>특별</option>
+                                            <option>작업내용변경시</option>
+                                            <option>관리감독자</option>
+                                        </select>
+                                    </div>
+                                </td>
+
+
+                                <th>
+                                    <label for="checkarea">
+                                        현장 대리인 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" >
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <label for="checkusr">
+                                        교육내용
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" >
+                                </td>
+                                <th>
+                                    <label for="checkarea">
+                                        교육실시자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="checkarea" name="checkarea" maxlength="100" class="wp100" >
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                    <div class="section-top" style="margin-top:24px;">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchusr">
+                                        공사명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <input type="text" id="searchusr" class="input-srch" style="border-radius: 5px 5px 5px 5px;">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchcom">
+                                        교육종류<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select style="border-radius: 5px 5px 5px 5px;">
+                                            <option>정기</option>
+                                            <option>신규</option>
+                                            <option>특별</option>
+                                            <option>작업내용변경시</option>
+                                            <option>관리감독자</option>
+                                        </select>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt><span class="eq"></span></dt>
+                                <dd>
+                                    <li>
+                                        <a class="btn btn-delete" title="검색" id="btnSreach">
+                                            <img src="/images/icon/btn-srch.svg" alt="검색 아이콘">
+                                            검색
+                                        </a>
+                                    </li>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid"  >
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 450px;"></div>
+                    </div>
+                </section>
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+
+                </section>
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <footer>
+        <p>Copyrightⓒ 0000 corp. All rights reserved.</p>
+    </footer>
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/columns_setting :: columns_setting"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;    // 목록에 뿌림
+        var theGrid1;   // 등록에서 insert
+        var viewdata;
+        var data1 = [];
+
+        document.readyState === 'complete' ? init() : window.onload = init;
+
+        <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+        function init() {
+            fetchListData();
+            inputData();
+        }
+
+        function fetchListData() {
+            let data2 = [];
+
+            $.ajax({
+                url: '/api/inspec/safety_health/read',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    data2 = data.data;
+                }
+            })
+
+            // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+            if (data2.length === 0) {
+                let emptyRowsCount = 14;  // 원하는 빈 행의 수
+                for (let i = 0; i < emptyRowsCount; i++) {
+                    data2.push({});
+                }
+                console.log('Grid initialized with empty data.');
+            }
+
+            viewdata = new wijmo.collections.CollectionView(data2);
+
+            if (!theGrid) {
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: [
+                        {binding: '', header: 'No', width: 80, align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육일자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육종류', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '등록자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육내용', width: "*", align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육장소', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육실시자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '교육참석자', width: 160, align: 'center', isReadOnly: true},
+                        {binding: '', header: '시공사', width: 160, align: 'center', isReadOnly: true},
+                    ],
+                    itemsSource: viewdata
+                });
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+                new FlexGridContextMenu(theGrid);
+                window.downloadFileName = '합동안전점검';
+            } else {
+                // 이미 FlexGrid이 존재하는 경우, 데이터만 업데이트
+                theGrid.itemsSource = viewdata;
+            }
+        }
+
+        // 점검리스트 input 박스
+        function inputData() {
+
+            var checkobj = "", checkitem = "", data1 = [];
+            for (var i = 0; i < 1; i++) {
+                data1.push({
+                    checkseq: i + 1,
+                    checkobj: checkobj,
+                    checkitem: checkitem
+                });
+            }
+            // 그리드
+            theGrid1 = new wijmo.grid.FlexGrid('#theGrid1', {
+                itemsSource: data1,
+                allowAddNew: true,
+                allowDelete: true,
+                newRowAtTop: false, // 처음에는 false로 설정
+                columns: [
+                    {binding: 'checkseq', header: 'NO.', width: 80, align: 'center'},
+                    {binding: 'checkobj', header: '점검대상', width: 210, align: 'center'},
+                    {binding: 'checkitem', header: '점검항목', width: 210, align: 'center'},
+                ],
+            });
+            // 새 열 추가
+            document.getElementById('newRowAtTop').addEventListener('click', function (e) {
+                theGrid1.newRowAtTop = e.target.checked;
+            });
+
+            // 넘버 자동 생성
+            theGrid1.collectionView.collectionChanged.addHandler(function (sender, e) {
+                if (e.action === wijmo.collections.NotifyCollectionChangedAction.Add) {
+                    var newItem = e.item;
+                    newItem.checkseq = sender.sourceCollection.length; // set new id to the number of items in the source
+                }
+            });
+
+            // 새로운 행 표시기를 커스터마이징
+            var style = document.createElement('style');
+            style.innerHTML = `
+
+            `;
+            document.head.appendChild(style);
+        }
+        <!-- 점검자 추가 버튼 이벤트-->
+        function addInputField(button) {
+            // 새로운 td 요소를 생성합니다.
+            var newTd = document.createElement('div');
+            newTd.className = 'input-btnbox';
+
+
+            // 새로운 input 요소를 생성합니다.
+            var newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.className = 'wp100';
+            newInput.placeholder = '회사명';
+            newInput.name = 'checkcn'
+            newInput.maxLength = 5;
+
+            var newInput2 = document.createElement('input');
+            newInput2.type = 'text';
+            newInput2.className = 'wp100';
+            newInput2.placeholder = '성명';
+            newInput2.name = 'checkusr'
+            newInput2.maxLength = 5;
+
+            // 삭제 버튼을 생성합니다.
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = '참석자 삭제';
+            deleteButton.onclick = function() {
+                deleteInputField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
+                deleteInputField(newInput2);
+            };
+            deleteButton.style.marginLeft = '8px'; // 삭제 버튼에 직접 style 속성을 사용하여 margin-left을 설정합니다.
+            deleteButton.style.color = 'red';
+            deleteButton.style.marginTop = '5px';
+            // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
+            newTd.appendChild(newInput);
+            newTd.appendChild(newInput2);
+            newTd.appendChild(deleteButton);
+
+            // 클릭된 버튼의 부모 td 요소를 찾습니다.
+            var parentTd = button.parentElement;
+
+            // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
+            parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
+        }
+
+        function deleteInputField(inputField) {
+            // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
+            var tdToDelete = inputField.parentElement;
+            tdToDelete.parentElement.removeChild(tdToDelete);
+        }
+
+        <!-- 점검자 추가 버튼 이벤트 끝-->
+
+
+        document.addEventListener('DOMContentLoaded', inputData);
+
+        $(document).ready(function (e) {
+            initializeSelections();
+
+            // 현재 연도를 가져옴
+            const currentYear = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate = `${currentYear}-01-01`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchfrdate').value = defaultDate;
+
+            // 현재 연도를 가져옴
+            const currentYear2 = new Date().getFullYear();
+            // 1월 1일 날짜 문자열 생성
+            const defaultDate2 = `${currentYear2}-12-31`;
+            // input 요소에 기본값 설정
+            document.getElementById('searchtodate').value = defaultDate2;
+
+            //점검결과 클릭시 텍스트 순환
+            $('.checkbox-cell').click(function () {
+                const span = $(this).find('span');
+                if (span.text() === 'X') {
+                    span.text('O');
+                } else if (span.text() === 'O') {
+                    span.text('X');
+                }
+            });
+
+            // 정보 저장
+            $('#btnSave').click(function (e) {
+                Alert.confirm('', '저장하시겠습니까?', function () {
+
+                    // theGrid1의 데이터를 data1 배열에 업데이트
+                    var updatedData1 = theGrid1.collectionView.items;
+
+                    // data1이 제대로 업데이트되었는지 확인하는 로그 추가
+                    console.log("Updated data1:", updatedData1);
+
+                    let formData = new FormData();
+
+                    formData.append('spworkcd', $('#spworkcd').val());
+                    formData.append('spworknm', $('#spworknm').val());
+                    formData.append('spcompcd', $('#spcompcd').val());
+                    formData.append('spcompnm', $('#spcompnm').val());
+                    formData.append('spplancd', $('#spplancd').val());
+                    formData.append('spplannm', $('#spplannm').val());
+                    formData.append('checkdt', $('#checkdt').val());
+                    formData.append('checknm', $('#checknm').val());
+                    formData.append('checkusr', $('#checkusr').val());
+                    formData.append('checkresult', $('#checkresult').val());
+                    formData.append('checkrem', $('#checkrem').val());
+                    formData.append('filelist', $('#filelist').val());
+                    formData.append('_csrf', $('[name=_csrf]').val());
+                    // 점검리스트 데이터 추가
+                    formData.append('inspectlist', JSON.stringify(updatedData1));
+
+                    $.ajax({
+                        url: "/api/inspec/hap/save",
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (response.success) {
+                                Alert.alert('', response.message, function () {
+                                    $('#listTabLink').click();
+                                    fetchListData();
+
+                                });
+
+                            } else {
+                                Alert.alert('', '저장에 실패했습니다. ');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Alert.alert('', '에러가 발생하였습니다.');
+                        }
+                    });
+                })
+            })
+            // select 아이디에 따라 히든 input 설정
+            const selects = [
+                {selectId: 'spworkcd', hiddenInputId: 'spworknm'},
+                {selectId: 'spcompcd', hiddenInputId: 'spcompnm'},
+                {selectId: 'spplancd', hiddenInputId: 'spplannm'}
+            ];
+            selects.forEach(item => updateSelect(item.selectId, item.hiddenInputId));
+
+        });
+
+        //  select 바뀌면 hidden input 변경
+        function updateSelect(selectId, hiddenInputId) {
+            var selectElement = document.getElementById(selectId);
+            var selectedOptionText = selectElement.options[selectElement.selectedIndex].text;
+            document.getElementById(hiddenInputId).value = selectedOptionText;
+        }
+
+    </script>
+
+</th:block>
+</html>
+

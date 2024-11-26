@@ -1,0 +1,1491 @@
+<html layout:decorate="~{layout_page}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<style>
+
+    /*table tr.reset-style {*/
+
+    /*}*/
+
+    .custom-width {
+        width: 10%; /* 테이블 기본 너비의 영향을 받지 않도록 설정 */
+        /*flex-grow: 1; !* 필요에 따라 셀의 내용에 맞게 확장 가능 *!*/
+        /*padding: 5px; !* 추가 스타일 예시 *!*/
+    }
+
+</style>
+
+<th:block layout:fragment="content">
+
+
+    <div class="layout-contents">
+        <!-- Page Title -->
+        <div class="page-title-wrap">
+            <div class="left">
+                <h2>비상훈련결과등록</h2><a id="toggleButton" onclick="toggleSearchWrap()"><img src="/images/icon/ico-down.png"
+                                                                                           alt="알람 아이콘"></a>
+                <a title="북마크" class="bookmark toggle">
+                    내 메뉴
+                </a>
+            </div>
+            <ul class="page-navi">
+                <li><img src="/images/icon/ico-nav-home.svg" alt="홈아이콘"></li>
+                <li>점검관리</li>
+                <li>전기안전관리</li>
+                <li>비상훈련결과등록</li>
+            </ul>
+        </div>
+        <!-- Select -->
+        <div class="search-wrap" id="searchWrap" style="display: none">
+            <ul>
+                <li>
+                    <select title="지역" id="spworkcd" name="spworkcd"
+                            onchange="updateCompcdOptions(); saveSelectedSandanData(); ">
+                        <!-- 지역 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spworknm" name="spworknm">
+                </li>
+                <li>
+                    <select title="산단" id="spcompcd" name="spcompcd"
+                            onchange="updatePlancdOptions(); saveSelectedSandanData();">
+                        <!-- 산단 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spcompnm" name="spcompnm">
+                </li>
+                <li>
+                    <select title="시설" id="spplancd" name="spplancd"
+                            onchange="updatePlannm(); saveSelectedSandanData()">
+                        <!-- 시설 옵션을 JavaScript에서 동적으로 채움 -->
+                    </select>
+                    <input type="hidden" id="spplannm" name="spplannm">
+                </li>
+            </ul>
+        </div>
+        <div class="tab-wrap">
+            <ul class="tab-links">
+                <input type="hidden" id="spuncode" name="spuncode" />
+                <li>
+                    <a href="#tab1" title="목록">목록</a>
+                </li>
+                <li>
+                    <a href="#tab2" title="등록">등록</a>
+                </li>
+                <li>
+                    <a href="#tab3" title="별첨">별첨</a>
+                </li>
+            </ul>
+            <div class="tab-contents" style="margin-bottom: 70px">
+                <!-- Section -->
+                <section class="tab-item" id="tab1" style="height: 800px;">
+                    <div class="section-top">
+                        <div class="search-wrap">
+                            <dl>
+                                <dt>
+                                    등록일자<span class="eq">*</span>
+                                </dt>
+                                <dd>
+                                    <ul class="date-box">
+                                        <li>
+                                            <input type="date" id="searchfrdate" name="searchfrdate">
+                                            <label for="searchfrdate" class="hide">시작일</label>
+                                        </li>
+                                        <li>
+                                            <input type="date" id="searchtodate" name="searchtodate">
+                                            <label for="searchtodate" class="hide">종료일</label>
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtrainnm">
+                                        훈련명<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <input type="text" id="searchtrainnm" name="searchtrainnm" class="input-srch">
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="searchtraindv">
+                                        훈련구분<span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="srch-box">
+                                        <select id="searchtraindv" class="w120">
+                                            <option value="">전체</option>
+                                            <option value="0">자체</option>
+                                            <option value="1">외부합동</option>
+                                        </select>
+                                        <a class="btn-srch" id="btnSreach" title="검색"></a>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제" id="btnDelete">
+                                        <img src="/images/icon/ico-delete.svg" alt="엑셀 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" title="수정">
+                                        <img src="/images/icon/ico-edit.svg" alt="엑셀 아이콘">
+                                        수정
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-print" title="순회점검일지 출력" onclick="DownloadDoc()">
+                                        <img src="/images/icon/ico-print.svg" alt="엑셀 아이콘">
+                                        비상훈련결과 출력
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div> <!--//section-top end -->
+                    <div class="container-fluid">
+                        <p id="selectedItem"></p>
+                        <div id="theGrid" style="max-height: 700px;" ></div>
+                    </div>
+                    <div class="btn-wrap">
+                    </div>
+                </section>
+
+
+
+                <!-- Section -->
+                <section class="tab-item" id="tab2">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>점검 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="엑셀다운로드">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-delete" title="삭제">
+                                        <img src="/images/icon/ico-delete.svg" alt="삭제 아이콘">
+                                        삭제
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <form id="emergency_result">
+                            <table class="write-table">
+                                <caption>점검등록 테이블</caption>
+                                <colgroup>
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                    <col class="wp12">
+                                    <col class="wp40">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th>
+                                        <label for="supplier">
+                                            훈련계획선택
+                                        </label>
+                                    </th>
+                                    <td>
+    <!--이부분은 계획서 등록에서 가져와야함-->
+                                        <select class="wp100">
+                                            <option>2024-05-22 화재시 대피 및 대응훈련, 소화기 사용법 실습</option>
+                                        </select>
+                                    </td>
+
+                                    <th>
+                                        <label for="traindt">
+                                            등록일자
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="date" id="traindt" name="traindt" readonly>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>
+                                        <label for="trainnm">
+                                            훈련명
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <div class="input-btnbox">
+                                            <input type="text" id="trainnm" name="trainnm" class="wp100">
+                                        </div>
+                                    </td>
+                                    <th>
+                                        <label for="trainarea">
+                                            훈련장소 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="trainarea" name="trainarea" maxlength="100" class="wp100">
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>
+                                        <label for="trainst">
+                                            훈련시작일자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="datetime-local" id="trainst" name="trainst" autocomplete="off">
+                                    </td>
+                                    <th>
+                                        <label for="trainet">
+                                            훈련종료일자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="datetime-local" id="trainet" name="trainet" autocomplete="off">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="traindv">
+                                            훈련구분 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <select id="select2" class="w120" name="traindv">
+                                            <option value="">전체</option>
+                                            <option value="0">자체</option>
+                                            <option value="1">외부합동</option>
+                                        </select>
+                                    </td>
+
+                                    <th>
+                                        <label for="trainusr">
+                                            훈련참가자 <span class="req">*</span>
+                                        </label>
+                                    </th>
+                                    <td>
+                                        <input type="text" id="trainusr" name="trainusr" maxlength="100" class="wp100">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="traincont">
+                                            훈련내용
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <textarea class="text-count" id="traincont" name="traincont"></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="trainresult">
+                                            훈련성과 및 강평
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <textarea class="text-count" id="trainresult" name="trainresult"></textarea>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label>
+                                            문제점 및 시나리오 개정사항
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <table>
+                                            <thead>
+                                                <tr style="text-align: center;">
+                                                    <th>문제점</th>
+                                                    <th>개선(개정)계획</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <textarea class="text-count" id="trainproblem" name="trainproblem"></textarea>
+                                                    </td>
+                                                    <td>
+                                                        <textarea class="text-count" id="improveplan" name="improveplan"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>
+                                        <label for="nextplan">
+                                            차기계획
+                                        </label>
+                                    </th>
+                                    <td colspan="3">
+                                        <textarea class="text-count" id="nextplan" name="nextplan"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        첨부파일
+                                    </th>
+                                    <td colspan="3">
+                                        <div id="uploadComponent1" class="upload-component">
+                                            <div class="upload-filebox">
+                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <input type="file" id="fileInput1" name="filelist" class="fileInput"
+                                                       onchange="test(this.files)" multiple>
+                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                            </div>
+                                            <div class="upload-filelist">
+                                                <div class="title">
+                                                    <h5>Files (0)</h5>
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                                </div>
+                                                <ul class="filelist">
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </section>
+
+
+
+
+                <section class="tab-item" id="tab3">
+                    <div class="section-top">
+                        <div class="title-wrap">
+                            <h3>비상훈련결과 별첨 등록</h3>
+                        </div>
+                        <div class="button-wrap">
+                            <ul>
+                                <li>
+                                    <a class="btn btn-excell" title="신규등록" onclick="clearForm()">
+                                        <img src="/images/icon/ico-plus.svg" alt="등록 아이콘">
+                                        신규등록
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-edit" id="btnSave2" title="저장">
+                                        <img src="/images/icon/ico-save.svg" alt="저장 아이콘">
+                                        저장
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="write-table">
+                            <caption>점검등록 테이블</caption>
+                            <colgroup>
+                                <col class="wp12">
+                                <col class="wp40">
+                                <col class="wp12">
+                                <col class="wp40">
+                            </colgroup>
+                            <tbody>
+
+                            <tr>
+                                <th>
+                                    <label for="trainnm">
+                                        훈련명
+                                    </label>
+                                </th>
+                                <td colspan="3">
+                                    <div class="input-btnbox">
+                                        <input type="text" id="trainnm2" name="trainnm2" class="wp100">
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>
+                                    <label for="assessdt">
+                                        평가일자 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="date" id="assessdt" name="assessdt" autocomplete="off" readonly>
+                                </td>
+                                <th>
+                                    <label for="assestm">
+                                        평가팀 <span class="req">*</span>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text" id="assestm" name="assestm" class="wp100">
+                                </td>
+                            </tr>
+                            <tr>
+                              <th>평가자 소속</th>
+                                <td>
+                                    <input type="text" id="assessusrdiv" name="assessusrdiv" class="wp100">
+                                </td>
+
+                                <th>평가자 성명</th>
+                                <td>
+                                    <input type="text" id="assessusrnm" name="assessusrnm" class="wp100">
+                                </td>
+                            </tr>
+
+                            <table style="margin: 15px 0px;" class="write-table doc-table">
+                                <caption>sad</caption>
+                                <colgroup>
+                                    <col width="">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col" rowspan="2" style="width: 10%;">순번</th>
+                                    <th scope="col" rowspan="2" style="width: 25%;">평가내용</th>
+                                    <th scope="col" colspan="2" style="width: 10%;">평가팀</th>
+                                    <th scope="col" rowspan="2">비고</th>
+                                </tr>
+                                <tr>
+                                    <td style="width: 5%;">배점</td>
+                                    <td style="width: 5%;">득점</td>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr>
+                                    <td><span id="assesdivision1">01</span></td>
+                                    <td>
+                                        <span id="assesrm1">훈련계획서의 적절성</span>
+                                        <input type="hidden" id="seq1" name="seq1" />
+                                    </td>
+                                    <td><span>5</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth1" style="width: 50px;" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm1" name="assessrerm1" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision2">02</span></td>
+                                    <td>
+                                        <span id="assesrm2">훈련계획서의 적절성</span>
+                                        <input type="hidden" id="seq2" name="seq2" />
+                                    </td>
+                                    <td><span>5</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth2" style="width: 50px;" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm2" name="assessrerm2" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision3">03</span></td>
+                                    <td>
+                                        <span id="assesrm3">상황전파 및 계통별 보고의 적절성</span>
+                                        <input type="hidden" id="seq3" name="seq3" />
+                                    </td>
+                                    <td><span>5</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth3" style="width: 50px;" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm3" name="assessrerm3" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision4">04</span></td>
+                                    <td>
+                                        <span id="assesrm4">대피절차와 통제, 상황대체 적절성 여부</span>
+                                        <input type="hidden" id="seq4" name="seq4" />
+                                    </td>
+                                    <td><span>20</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth4" style="width: 50px;" value="20">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm4" name="assessrerm4" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision5">05</span></td>
+                                    <td>
+                                        <span id="assesrm5">사고자 구출의 적절성</span>
+                                        <input type="hidden" id="seq5" name="seq5" />
+                                    </td>
+                                    <td><span>20</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth5" style="width: 50px;" value="20">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm5" name="assessrerm5" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision6">06</span></td>
+                                    <td>
+                                        <span id="assesrm6">응급처치 방법의 정확성</span>
+                                        <input type="hidden" id="seq6" name="seq6" />
+                                    </td>
+                                    <td><span>15</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth6" style="width: 50px;" value="15">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm6" name="assessrerm6" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision7">07</span></td>
+                                    <td>
+                                        <span id="assesrm7">지취통제부의 활동 (상황별 임무부여)</span>
+                                        <input type="hidden" id="seq7" name="seq7" />
+                                    </td>
+                                    <td><span>5</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth7" style="width: 50px;" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm7" name="assessrerm7" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision8">08</span></td>
+                                    <td>
+                                        <span id="assesrm8">복구, 지원반의 활동 (현장 정리정돈)</span>
+                                        <input type="hidden" id="seq8" name="seq8" />
+                                    </td>
+                                    <td><span>5</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth8" style="width: 50px;" value="5">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm8" name="assessrerm8" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision9">09</span></td>
+                                    <td>
+                                        <span id="assesrm9">후속조치의 적절성</span>
+                                        <input type="hidden" id="seq9" name="seq9" />
+                                    </td>
+                                    <td><span>10</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth9" style="width: 50px;" value="10">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm9" name="assessrerm9" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><span id="assesdivision10">10</span></td>
+                                    <td>
+                                        <span id="assesrm10">훈련 참가자 수</span>
+                                        <input type="hidden" id="seq10" name="seq10" />
+                                    </td>
+                                    <td><span>10</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesmeth10" style="width: 50px;" value="10">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm10" name="assessrerm10" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                             <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision11">계</span></td>
+                                    <td>
+                                        <span id="assesrm11"></span>
+                                        <input type="hidden" id="seq11" name="seq11" />
+                                    </td>
+                                    <td><span>100</span></td>
+                                    <td>
+                                        <div>
+                                            <input type="text" name="number" id="assesscore" style="width: 50px;" readonly>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="textarea-box">
+                                            <textarea id="assessrerm11" name="assessrerm11" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                            <p class="text-count" name="assessrerm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision12">판정기준</span></td>
+                                    <input type="hidden" id="seq12" name="seq12" />
+                                    <td colspan="2">
+                                        <span id="assesrm12">ㅇ 0~50점 : 재훈련
+                                            <br>ㅇ 51~60점 : 이론교육 추가 실시 (실적 제출)
+                                            <br>ㅇ 61~69점 : 조건부 합격 (지적사항 제출)
+                                            <br>ㅇ 70점 이상 : 합격
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span id="inspecresult12">훈련결과</span>
+                                    </td>
+                                    <td>
+                                        <select id="assessresult" class="w120" name="assessresult">
+                                            <option value="Y">합격</option>
+                                            <option value="N">불합격</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td><span id="assesdivision13">평가자 의견</span></td>
+                                    <input type="hidden" id="seq13" name="seq13" />
+                                    <td colspan="4">
+                                        <div class="textarea-box">
+                                            <textarea id="assessusrrm" name="assessusrrm" maxlength="100"
+                                                      style="height: 60px;"></textarea>
+                                            <p class="text-count" name="assessusrrm">0/100</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                                <tr>
+                                    <th>
+                                        첨부파일
+                                    </th>
+                                    <td colspan="3">
+                                        <div id="uploadComponent3" class="upload-component">
+                                            <div class="upload-filebox">
+                                                <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                                <a class="btn" title="파일업로드">파일업로드</a>
+                                                <input type="file" id="fileInput3" name="filelist" class="fileInput"
+                                                       onchange="test(this.files)" multiple>
+                                                <p>Maximun upload file size <span>1GiB</span></p>
+                                            </div>
+                                            <div class="upload-filelist">
+                                                <div class="title">
+                                                    <h5>Files (0)</h5>
+                                                    <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                                </div>
+                                                <ul class="filelist">
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
+            </div> <!--//tab-contens end-->
+        </div> <!--//tab-wrap end-->
+    </div> <!--//layout-contents end -->
+
+    <!-- 팝업 -->
+    <div class="modal">
+        <div class="popup-wrapper w700" id="popup1">
+            <div class="popup-title">
+                <h3>점검일지 업로드</h3>
+                <a title="팝업닫기" onclick="closePopup()" class="btn-popup-close">
+                    <img src="/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <table class="write-table">
+                        <caption>점검등록 테이블</caption>
+                        <colgroup>
+                            <col class="wp20">
+                            <col class="wp80">
+                        </colgroup>
+                        <input type="hidden" id="popup-spuncode">
+                        <tbody>
+                        <tr>
+                            <th>
+                                <label for="date6">등록일자</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-date" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popup-checkusr">점검자</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-checkusr" readonly class="wp60" placeholder="점검자">
+                                    <span class="btn-clear">×</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="popuptext2">점검장소</label>
+                            </th>
+                            <td>
+                                <div class="input-clear">
+                                    <input type="text" id="popup-checkarea" readonly class="wp100" placeholder="점검장소">
+                                    <span class="btn-clear">×</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>첨부파일</th>
+                            <td>
+                                <div id="uploadComponent2" class="upload-component">
+                                    <div class="upload-filebox">
+                                        <img src="/images/icon/ico-fileupload.svg" alt="업로드아이콘">
+                                        <a class="btn" title="파일업로드">파일업로드</a>
+                                        <input type="file" id="fileInput2" name="filelist2" class="fileInput">
+                                        <p>Maximun upload file size <span>1GiB</span></p>
+                                    </div>
+                                    <div class="upload-filelist">
+                                        <div class="title">
+                                            <h5>Files (0)</h5>
+                                            <a title="Delete all" class="btn-file-deleteall">Delete all</a>
+                                        </div>
+                                        <ul class="filelist">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button onclick="closePopup()"
+                        style="border: 1px solid #03428E !important; font-size: 15px !important;">취소
+                </button>
+                <button onclick="saveFile()"
+                        style="border: 1px solid #03428E !important;color: white;background: #03428E !important;font-size: 15px !important;">
+                    저장
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</th:block>
+<th:block layout:fragment="scripts">
+    <th:block th:replace="/common/approve_box :: approve_box"></th:block>
+    <th:block th:replace="/common/ax5_uploader :: ax5_uploader"></th:block>
+    <th:block th:replace="/common/upload_one_image_box :: upload_one_image_box"></th:block>
+    <th:block th:replace="/common/popup_select_user_code :: popup_select_user_code"></th:block>
+
+    <script type="text/javascript">
+
+        var theGrid;
+        var viewdata;
+        let selectedFiles = [];
+        let SelectItem;
+        let csrfToken = $("[name=_csrf]").val();
+
+        var columns = [
+            {binding: 'rownum', header: 'No', align: 'center', width: 140},
+            {binding: 'traindt', header: '등록일자', align: 'center', width: 140},
+            {binding: 'trainusr', header: '훈련참가자', align: 'center', width: 265},
+            {binding: 'traindv_text', header: '훈련구분', align: 'center', width: 140},
+            {binding: 'trainnm', header: '훈련명', align: 'center', width: 300},
+            {binding: 'download', header: '첨부파일', align: 'center', width: 200},
+            {binding: '', header: '비고', align: 'center', width: "*"},
+        ];
+
+        /**점검일지 업로드(파일만 전송)**/
+        function saveFile() {
+            let file = document.getElementById('fileInput2');
+            let formData = new FormData();
+
+            console.log('file2', file.files);
+
+            if (file.files.length === 0) {
+                Alert.alert('', '파일을 첨부해주세요.');
+                return false;
+            }
+
+            formData.append('file', file.files[0]);
+            //formData.append('_csrf', $('[name=_csrf]').val());
+            formData.append('_csrf', csrfToken);
+            formData.append('spuncode', $('#popup-spuncode').val());
+
+            $.ajax({
+                url: '/api/inspec_report/filesave',
+                type: 'POST',
+                data: formData,
+                processData: false,  // 기본적으로 jQuery는 데이터를 문자열로 변환하려고 하므로 이를 비활성화
+                contentType: false,  // 기본적으로 jQuery는 Content-Type을 설정하려고 하므로 이를 비활성화
+                success: function (response) {
+                    if (response.success) {
+                        Alert.alert('', response.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    Alert.alert('', '에러가발생하였습니다.');
+                }
+            });
+        }
+
+
+        function test(files) {
+            console.log('파일테스트', files);
+            const fileList = document.getElementById('upload-filelist');
+            for (let i = 0; i < files.length; i++) {
+                selectedFiles.push(files[i]);
+            }
+        }
+
+
+        // function submitTextarea(event) {
+        //     let key = event.key || event.keyCode;
+        //
+        //     if (key === 'Enter' || key == 13) {
+        //         searchData();
+        //     }
+        // }
+
+        // let searchusrval = document.getElementById('searchusr');
+        // searchusrval.addEventListener('keyup', event => submitTextarea(event))
+
+
+        function closePopup() {
+            /*const modal2 = document.querySelector('.modal');
+            const modalOpen = document.querySelector('.popup-wrapper');
+            modal2.style.display = 'none';
+            modalOpen.style.display = 'none';*/
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 애니메이션을 위한 클래스 제거
+            modal.classList.remove('show');
+            modalContent.classList.remove('show');
+
+            // 애니메이션이 끝난 후 모달을 숨기기 위해 타임아웃 설정
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modalContent.style.display = 'none';
+            }, 300); // 애니메이션 지속 시간 (0.3초)과 동일하게 설정
+        }
+
+        function showPopup(ctx) {
+
+            $('#popup-date').val(ctx.item.checkdt);
+            $('#popup-checkusr').val(ctx.item.checkusr);
+            $('#popup-checkarea').val(ctx.item.checkarea);
+            $('#popup-spuncode').val(ctx.item.spuncode);
+
+            const modal = document.querySelector('.modal');
+            const modalContent = document.querySelector('.popup-wrapper');
+
+            // 모달과 콘텐츠를 표시
+            modal.style.display = 'block';
+            modalContent.style.display = 'block';
+
+            // 애니메이션을 위한 클래스 추가
+            requestAnimationFrame(() => {
+                modal.classList.add('show');
+                modalContent.classList.add('show');
+            });
+
+
+        }
+
+
+            document.readyState === 'complete' ? init() : window.onload = init;
+
+
+            <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+            function init() {
+                let data2 = [];
+                let searchfrdate = $('#searchfrdate').val();
+                let searchtodate = $('#searchtodate').val();
+                let searchtrainnm = $('#searchtrainnm').val();
+                let searchtraindv = $('#searchtraindv').val();
+
+
+                $.ajax({
+                    url: '/api/emergency_plan/result_read',
+                    type: 'GET',
+                    data: {
+                        'searchfrdate': searchfrdate,
+                        'searchtodate': searchtodate,
+                        'searchtrainnm': searchtrainnm,
+                        'searchtraindv': searchtraindv,
+                    },
+                    async: false,
+                    success: function (data) {
+                        console.log('wijmo', data.data);
+                        data2 = data.data;
+                    }
+                })
+
+                // 데이터 배열이 비어있을 경우 여러 개의 빈 객체 추가
+                if (data2.length !== 0) {
+                    let emptyRowsCount = 12;  // 원하는 빈 행의 수
+                    for (let i = 0; i < emptyRowsCount; i++) {
+                        data2.push({});
+                    }
+                    console.log('Grid initialized with empty data.');
+                }
+
+
+                viewdata = new wijmo.collections.CollectionView(data2);
+                // 데이터 그리드에 바인딩
+                theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    columns: columns,
+                    itemsSource: viewdata
+                });
+
+
+                let selector = new wijmo.grid.selector.Selector(theGrid, {
+                    itemChecked: (e, ctx) => {
+                        SelectItem = theGrid.rows.filter(r => r.isSelected);
+
+                    }
+                })
+
+
+                // 선택이 변경될 때, 현재 항목 업데이트
+
+                theGrid.rowHeaders.columns.splice(0, 1);  //맨 앞에 헤더부분 없애기
+
+                $('#btnSave').click(save);
+            }
+
+            <!-- 초반 페이지 진입시 그리드 바인딩 끝-->
+
+            // 입력 필드의 값이 변경될 때마다 합계를 업데이트하는 함수 (배점 항목에 자동으로 값을 채워지게 하는 함수)
+            function updateTotal() {
+                let total = 0;
+                for (let i = 1; i <= 10; i++) {
+                    let value = parseInt($('#assesmeth' + i).val()) || 0;
+                    total += value;
+                }
+                $('#assesscore').val(total);
+            }
+
+
+            // tab2 정보 저장
+            function save() {
+
+                let url = '/api/emergency_plan/result_save';
+
+                let SpunCodeValue = $('#spuncode').val();
+                let randomString;
+
+                if (SpunCodeValue === "") {
+                    randomString = generateRandomStringWithDate();
+                } else {
+                    randomString = SpunCodeValue;
+                }
+
+                console.log(SpunCodeValue);
+
+                // FormData 객체 생성
+                let formData = new FormData();
+
+                // let data = FormUtil.extractForm($('#emergency_plan'));
+                //
+                // if (!data.trainnm || !data.trainarea || !data.traindv || !data.trainusr || !data.trainpurp || !data.trainplan
+                //     || !data.trainst || !data.trainet) {
+                //     Alert.alert('', '필수항목을 입력해주세요');
+                //     return;
+                // }
+
+                // 폼 데이터 추가
+                $('#emergency_result').find('input, select, textarea').each(function () {
+                    let name = $(this).attr('name');
+                    let value = $(this).val();
+                    if (name && value !== undefined) {
+                        formData.append(name, value);
+                    }
+                });
+
+                formData.append('randomuuid', randomString);
+                formData.append('_csrf', csrfToken);
+
+
+                // 파일 입력에서 파일 추가
+                let fileInput = document.getElementById('fileInput1');
+                if (fileInput && fileInput.files.length > 0) {
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        formData.append('filelist', fileInput.files[i]);
+                    }
+                }
+
+                // 삭제된 파일 목록 추가
+                if (deletedFiles && deletedFiles.length > 0) {
+                    formData.append('deletedFiles', JSON.stringify(deletedFiles));
+                }
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-Token': $('[name=_csrf]').val() // CSRF 토큰을 헤더에 추가
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            Alert.alert('', response.message, function () {
+                                clearForm();
+                            });
+                        } else {
+                            Alert.alert('', '저장에 실패했습니다. ');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Alert.alert('', '에러가 발생하였습니다.');
+                    }
+                });
+            }
+
+
+            let filelist = [];
+
+
+            //검색
+            function searchData() {
+
+                let data = {
+
+                    'searchfrdate': $('#searchfrdate').val(),
+                    'searchtodate': $('#searchtodate').val(),
+                    'searchtrainnm': $('#searchtrainnm').val(),
+                    'searchtraindv': $('#searchtraindv').val()
+                }
+
+                let result = AjaxUtil.getSyncData('/api/emergency_plan/result_read', data);
+
+                if (result.success) {
+                    console.log(result.data);
+                    grid_binding(result.data);
+                }
+            }
+
+            // function grid_binding(data) {
+            //     var inspecDto = data;
+            //     var inspecData = [];
+            //     var cnt = 1;
+            //     for (var i = 0; i < inspecDto.length; i++) {
+            //         inspecData.push({
+            //             spuncode: inspecDto[i]["spuncode"],
+            //             spworknm: inspecDto[i]["spworknm"],
+            //             spcompnm: inspecDto[i]["spcompnm"],
+            //             spplannm: inspecDto[i]["spplannm"],
+            //             checkdt: inspecDto[i]["checkdt"],
+            //             checkusr: inspecDto[i]["checkusr"],
+            //             checkarea: inspecDto[i]["checkarea"],
+            //             checktmdt: inspecDto[i]["checktmdt"],
+            //
+            //         });
+            //         cnt++;
+            //     }
+            //
+            //     theGrid.columns.clear();
+            //     theGrid.autoGenerateColumns = false;
+            //     viewdata.sourceCollection = inspecData;
+            //
+            //     for (var i = 0; i < columns.length; i++) {
+            //         var col = new wijmo.grid.Column(columns[i]);
+            //         theGrid.columns.push(col);
+            //     }
+            //
+            //
+            // }
+
+            function SelectItemPush() {
+
+                let selectedList = [];
+                for (let i = 0; i < SelectItem.length; i++) {
+                    selectedList.push(SelectItem[i]._data.spuncode);
+                }
+                return selectedList;
+            }
+
+            function DownloadDoc() {
+
+                let selectedList = SelectItemPush();
+
+
+                console.log('selected', selectedList);
+
+                //csrf토큰은 바디가 아니라 헤더에 포함하는거구나 기억해두자 개념이 부족하다.
+                fetch('/api/inspec_report/download-docs', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken
+                    },
+                    body: JSON.stringify(selectedList)  //JSON으로 전송된다.
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'modified_documents.zip'; // 다운로드 받을 zip 파일 이름
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url); // URL 객체 해제
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with the fetch operation:', error);
+                        alert("File download failed!");
+                    });
+            }
+
+            $(document).ready(function (e) {
+                initializeSelections();
+
+
+
+                // 현재 연도를 가져옴
+                const currentYear = new Date().getFullYear();
+                // 1월 1일 날짜 문자열 생성
+                const defaultDate = `${currentYear}-01-01`;
+                // input 요소에 기본값 설정
+                document.getElementById('searchfrdate').value = defaultDate;
+
+                // 현재 연도를 가져옴
+                const currentYear2 = new Date().getFullYear();
+                // 1월 1일 날짜 문자열 생성
+                const defaultDate2 = `${currentYear2}-12-31`;
+                // input 요소에 기본값 설정
+                document.getElementById('searchtodate').value = defaultDate2;
+
+
+                // tab2 등록 훈련시작일자 오늘날짜 기본값지정
+                const datetimeInput = document.getElementById('trainst');
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                datetimeInput.value = formattedDateTime;
+
+                //등록일자 기본값 설정
+                const dateInput2 = document.getElementById('traindt');
+                const today2 = new Date();
+                const year2 = today2.getFullYear();
+                const month2 = String(today2.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const day2 = String(today2.getDate()).padStart(2, '0');
+                const dateValue2 = `${year2}-${month2}-${day2}`;
+                dateInput2.value = dateValue2;
+
+                //등록일자 기본값 설정
+                const dateInput3 = document.getElementById('assessdt');
+                const today3 = new Date();
+                const year3 = today3.getFullYear();
+                const month3 = String(today3.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const day3 = String(today3.getDate()).padStart(2, '0');
+                const dateValue3 = `${year3}-${month3}-${day3}`;
+                dateInput3.value = dateValue3;
+
+
+                for (let i = 1; i <= 10; i++) {
+                    $('#assesmeth' + i).on('input', updateTotal);
+                }
+                // 초기 로드 시에 총합을 한번 계산해 놓기
+                updateTotal();
+
+
+                $('#btnSave2').click(function (e){
+
+
+                    // Alert.confirm('', '저장하시겠습니까?', function() {
+                    //
+                    //         let formData = new FormData();
+                    //
+                    //         // 점검항목 값 가져오기
+                    //         const table = document.querySelector('table.doc-table');
+                    //         const rows = table.querySelectorAll('tbody tr');
+                    //         let results = [];
+                    //         let currentDivision = '';
+                    //
+                    //         rows.forEach((row, index)=> {
+                    //             let cells = row.querySelectorAll('td');
+                    //
+                    //             // Check if the first cell has rowspan attribute, indicating a new division
+                    //             if (cells[0].hasAttribute('rowspan')) {
+                    //                 currentDivision = cells[0].innerText.trim();
+                    //             } else {
+                    //                 cells = Array.from(cells);
+                    //                 cells.unshift(document.createElement('td')); // Insert a placeholder cell
+                    //             }
+                    //
+                    //             const inspectionItem = cells[1].innerText.trim().replace(/\n/g, ' ');
+                    //             const inspectionResult = cells[2].innerText.trim();
+                    //             const improvement = cells[3].querySelector('textarea').value;
+                    //
+                    //             const seqId = `seq${index + 1}`;
+                    //             const seqElement = document.getElementById(seqId);
+                    //             let seqValue = '';
+                    //
+                    //             if(seqElement){
+                    //                 seqValue = seqElement.value.trim();
+                    //             }
+                    //
+                    //             const combinedText = `${currentDivision}@ ${inspectionItem}@ ${inspectionResult}@ ${improvement}@ ${seqValue}`;
+                    //             console.log('combinedText: ', combinedText);
+                    //             formData.append('doc-list', combinedText);
+                    //
+                    //
+                    //
+                    //             results.push(combinedText);
+                    //         });
+                    //         // 점검항목 값 가져오기 끝, 코드작성 의도 -> 점검항목이 나중에 바뀌고 갯수도 바뀌고 했을때 동적으로 서버에 값을 넘기고 서버에서 분기해서 처리함
+                    //         console.log('파일확인2', uploadedFiles)
+                    //         for (let i = 0; i < uploadedFiles.length; i++) {
+                    //             formData.append('filelist', uploadedFiles[i]);
+                    //         }
+                    //
+                    //         let SpunCodeValue = $('#spuncode').val();
+                    //         let randomString;
+                    //
+                    //         if(SpunCodeValue === ""){
+                    //             randomString = generateRandomStringWithDate();
+                    //         }else{
+                    //             randomString = SpunCodeValue;
+                    //         }
+                    //
+                    //
+                    //         var inputs = document.querySelectorAll('input[name="checkusr"]');
+                    //         var values = [];
+                    //
+                    //         inputs.forEach(function (input) {
+                    //             values.push(input.value);
+                    //
+                    //         })
+                    //
+                    //         var checkusrString = values.join(',');
+                    //
+                    //
+                    //         // 다른 데이터를 FormData에 추가합니다.
+                    //         formData.append('supplier', $('#supplier').val());
+                    //         formData.append('checkdt', $('#checkdt').val());
+                    //         formData.append('checkstdt', $('#checkstdt').val());
+                    //         formData.append('checkendt', $('#checkendt').val());
+                    //         formData.append('checkusr', checkusrString); // 이미 문자열로 변환된 checkusr
+                    //         formData.append('checkarea', $('#checkarea').val());
+                    //         formData.append('randomuuid', randomString);
+                    //         //formData.append('_csrf', $('[name=_csrf]').val());
+                    //         formData.append('_csrf', csrfToken);
+                    //         formData.append('ReformList', $('#inspecreform1').val());
+                    //         formData.append('ReformList', $('#inspecreform2').val());
+                    //         formData.append('ReformList', $('#inspecreform3').val());
+                    //         formData.append('ReformList', $('#inspecreform4').val());
+                    //         formData.append('ReformList', $('#inspecreform5').val());
+                    //
+                    //
+                    //         // 삭제된 파일 목록 추가
+                    //         deletedFiles.forEach((file, index) => {
+                    //             formData.append('deletedFiles', new Blob([JSON.stringify(file)], { type: 'application/json' }));
+                    //         });
+                    //
+                    //         AjaxFunction.PostAjaxRequest('/api/inspec_report/save', true, false, false, formData, fnSuccess, fnFailure)
+                    //
+                    //     },
+                    //
+                    // )
+
+                        // 테이블 데이터 읽기
+                        var tableData = {
+                            trainnm2: $('#trainnm2').val(),
+                            assessdt: $('#assessdt').val(),
+                            assestm: $('#assestm').val(),
+                            assessments: []
+                        };
+
+                        // 평가 항목 읽기
+                        $('table.doc-table tbody tr').each(function() {
+                            var row = $(this);
+                            var assessment = {
+                                division: row.find('td:first-child span').text(),
+                                content: row.find('td:eq(1) span').text(),
+                                score: row.find('td:eq(2) span').text(),
+                                method: row.find('td:eq(3) input').val(),
+                                remark: row.find('td:eq(4) textarea').val()
+                            };
+
+                            if (assessment.content) { // 내용이 비어있지 않은 경우만 추가
+                                tableData.assessments.push(assessment);
+                            }
+                        });
+
+                        // 판정기준과 결과 읽기
+                        tableData.judgmentCriteria = $('#assesrm12').text();
+                        tableData.result = $('#assessresult').val();
+
+                        // 평가자 정보 읽기
+                        tableData.evaluator = {
+                            division: $('#assessusrdiv').val(),
+                            name: $('#assessusrnm').val()
+                        };
+
+                        // 첨부파일 처리 (파일 목록을 수집하고 전송하는 방법)
+                        var files = $('#fileInput3')[0].files;
+                        var formData = new FormData();
+                        formData.append('trainnm2', tableData.trainnm2);
+                        formData.append('assessdt', tableData.assessdt);
+                        formData.append('assestm', tableData.assestm);
+                        formData.append('result', tableData.result);
+
+
+                        for (var i = 0; i < files.length; i++) {
+                            formData.append('filelist[]', files[i]);
+                        }
+                        console.log("formDate 데이터 확인 :",formData);
+
+
+                    //     form 데이터 확인방법
+                    for (var pair of formData.entries()) {
+                        console.log(pair[0] + ': ' + pair[1]);
+                    }
+
+
+                        // 서버로 POST 요청 전송
+                        $.ajax({
+                            url: '/api/emergency_plan/result_tab3_save', // 서버 URL
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                alert('Data saved successfully');
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Error: ' + error);
+                            }
+                        });
+
+                });
+
+
+
+            });
+
+
+
+    </script>
+</th:block>
+
+</html>
