@@ -17,15 +17,21 @@
     <title>SMART ACTAS</title>
 
 </head>
+<style>
+.login-wrap{
+    margin: auto;
+}
+
+</style>
 <body>
 
     <div class="mobile-wrapper page-login"><!-- ★페이지 Class명 -->
     <div class="mobile-login-wrap">
         <div class="login-wrap">
-            <form method="post" class="form" role="form" id="loginFrm" action="/postLogin">
+            <form method="post" class="form" role="form" id="loginFrm" style=" margin: 0 auto;" action="/postLogin">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="login-logo">
-                    <img src="/assets_mobile/images/logo/login-logo-new.png" alt="로고">
+                    <img src="/assets_mobile/images/logo/actas_log.png" alt="로고">
                 </div>
                 <div class="login-form">
                     <dl>
@@ -70,24 +76,75 @@
         </div>
         <!-- <p class="copyright">ⓒ Kt Corp. All rights reserved.</p> -->
     </div>
-    <!-- [사용자권한] 팝업  -->
-    <div class="mobile-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup1">
-            <div class="popup-title">
-                <h3>사용자권한신청</h3>
-                <a href="#" title="팝업닫기" class="btn-popup-close">
-                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <div class="write-wrap">
-                        <div class="row">
+        <!-- [사용자권한] 팝업  -->
+        <div class="mobile-layout-popup">
+            <div class="popup-overlay"></div>
+            <div class="popup-wrapper" id="popup1">
+                <div class="popup-title">
+                    <h3>사용자등록</h3>
+                    <a href="#" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            소속사
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="" name="">
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            소속부서
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="" name="">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            직급
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="" name="">
+                                        </div>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            성명
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="" name="">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
                             <dl>
                                 <dt>
                                     <label for="">
-                                        소속사
+                                        핸드폰
                                     </label>
                                 </dt>
                                 <dd>
@@ -99,162 +156,111 @@
                             <dl>
                                 <dt>
                                     <label for="">
-                                        소속부서
+                                        이메일
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
                                         <input type="text" id="" name="">
+                                    </div>
+                                    <a href="#" class="btn" title="코드발급">코드발급</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        인증코드
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="" name="">
+                                    </div>
+                                    <a href="#" class="btn" title="코드인증">코드인증</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        아이디 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="" name="">
+                                    </div>
+                                    <a href="#" class="btn" title="중복확인">중복확인</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        비밀번호 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="password" id="" name="">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        비밀번호 확인 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="password" id="" name="">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        발전시설
+                                    </label>
+                                </dt>
+                                <dd class="fl-fc">
+                                    <div class="row">
+                                        <select title="전체">
+                                            <option>전체</option>
+                                        </select>
+                                        <select title="전체">
+                                            <option>전체</option>
+                                        </select>
+                                    </div>
+                                    <div class="row">
+                                        <select title="전체">
+                                            <option>전체</option>
+                                        </select>
+                                        <a href="#" class="btn" title="발전시설 추가">발전시설 추가</a>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        신청사유
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="textarea-box">
+                                        <textarea id="textarea1" placeholder="신청사유를 입력해주세요."></textarea>
+                                        <p class="text-count" id="text-count1">0/100</p>
                                     </div>
                                 </dd>
                             </dl>
                         </div>
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        직급
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="" name="">
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        성명
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="" name="">
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    핸드폰
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="" name="">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    이메일
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="" name="">
-                                </div>
-                                <a href="#" class="btn" title="코드발급">코드발급</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    인증코드
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="" name="">
-                                </div>
-                                <a href="#" class="btn" title="코드인증">코드인증</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    아이디 <span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="" name="">
-                                </div>
-                                <a href="#" class="btn" title="중복확인">중복확인</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    비밀번호 <span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="password" id="" name="">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    비밀번호 확인 <span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="password" id="" name="">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    발전시설
-                                </label>
-                            </dt>
-                            <dd class="fl-fc">
-                                <div class="row">
-                                    <select title="전체">
-                                        <option>전체</option>
-                                    </select>
-                                    <select title="전체">
-                                        <option>전체</option>
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <select title="전체">
-                                        <option>전체</option>
-                                    </select>
-                                    <a href="#" class="btn" title="발전시설 추가">발전시설 추가</a>
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    신청사유
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="textarea-box">
-                                    <textarea id="textarea1" placeholder="신청사유를 입력해주세요."></textarea>
-                                    <p class="text-count" id="text-count1">0/100</p>
-                                </div>
-                            </dd>
-                        </dl>
                     </div>
                 </div>
+                <div class="popup-button">
+                    <button class="btn-navy">권한신청</button>
+                </div>
             </div>
-            <div class="popup-button">
-                <button class="btn-navy">권한신청</button>
-            </div>
-        </div>
-    </div> <!-- //mobile-layout-popup end -->
-</div> <!-- //page-wrapper end-->
+        </div> <!-- //mobile-layout-popup end -->
+    </div> <!-- //page-wrapper end-->
 
 <script type="text/javascript" src="/resource/jquery.min.js"></script>
 <script type="text/javascript" src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
@@ -264,13 +270,7 @@
 <script type="text/javascript" src="/js/common.js?v=1050"></script>
 <script type="text/javascript" src="/resource/JavaScript-Templates/tmpl.js"></script>
 
-
-
-
 <script type="text/javascript" src="/js/ax5commUtil.js?v=1050"></script>
-
-
-
 
 <script type="text/javascript">
 
@@ -280,14 +280,10 @@
             'width=1000,height=1000,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
     }
 
-
-
     // 로딩바를 숨기는 함수
     function hideLoader() {
         document.getElementById('loader2').style.display = 'none';
     }
-
-
 
 
     function openPwModal() {
@@ -310,149 +306,6 @@
 
     //document.querySelector('.close').onclick = closeModal;
     //##############################################  아이디 찾기 모달 끝
-
-
-    <!-- 발전시설 추가 버튼 이벤트-->
-    function addselectField(button) {
-        // 새로운 td 요소를 생성합니다.
-        var newTd = document.createElement('div');
-        newTd.className = 'fl-ac new-fl-ac';
-
-        if(!window.cloneCounter){
-            window.cloneCounter = 1;
-        } else {
-            window.cloneCounter++;
-        }
-
-        // 새로운 input 요소를 생성합니다.
-        var originalSelect1 = document.getElementById('firstSelect');
-        var newInput = originalSelect1.cloneNode(true);
-        newInput.name = 'spworkcd';
-        newInput.id = originalSelect1.id + window.cloneCounter;
-        // newInput.className = 'wp100';
-        newInput.type = 'select';
-        newInput.width = 180;
-
-        var originalSelect2 = document.getElementById('secondSelect');
-        var newInput2 = originalSelect2.cloneNode(true);
-        newInput2.name = 'spcompcd';
-        // newInput2.className = 'wp100';
-        newInput2.type = 'select';
-        newInput2.id = originalSelect2.id + window.cloneCounter;
-        newInput2.width = 180;
-
-        var originalSelect3 = document.getElementById('thirdSelect');
-        var newInput3 = originalSelect3.cloneNode(true);
-        newInput3.name = 'spplancd';
-        // newInput2.className = 'wp100';
-        newInput3.type = 'select';
-        newInput3.id = originalSelect3.id + window.cloneCounter;
-        newInput3.width = 180;
-
-        // 삭제 버튼을 생성합니다.
-        var deleteButton = document.createElement('button');
-        deleteButton.textContent = '발전시설 삭제';
-        deleteButton.onclick = function() {
-            deleteSelectField(newInput); // 삭제 버튼을 클릭하면 해당 입력 필드를 삭제하는 함수 호출
-            deleteSelectField(newInput2);
-            deleteSelectField(newInput3);
-        };
-        deleteButton.style.marginLeft = '8px';
-        deleteButton.style.color = 'red';
-        deleteButton.style.marginTop = '5px';
-        // 새로운 td에 input 요소와 삭제 버튼을 추가합니다.
-        newTd.appendChild(newInput);
-        newTd.appendChild(newInput2);
-        newTd.appendChild(newInput3);
-        newTd.appendChild(deleteButton);
-
-        // 클릭된 버튼의 부모 td 요소를 찾습니다.
-        var parentTd = button.parentElement;
-
-        // 부모 td 요소 다음에 새로운 td 요소를 추가합니다.
-        parentTd.parentElement.insertBefore(newTd, parentTd.nextSibling);
-    }
-
-    function deleteSelectField(inputField) {
-        // 입력 필드의 부모 요소(td)를 찾아서 삭제합니다.
-        var tdToDelete = inputField.parentElement;
-        tdToDelete.parentElement.removeChild(tdToDelete);
-    }
-
-
-    function updateNextSelect(param) {
-        let code = param.value;
-
-        // param의 다음 형제 요소를 찾습니다.
-        let nextSelect = $(param).next('select');
-
-        if (nextSelect.length) {
-
-            $.ajax({
-                url: '/user-codes/code_spcompcd',
-                type: 'GET',
-                data: { code: code },
-                success: function(data) {
-                    nextSelect.empty();
-                    nextSelect.append('<option value="">선택하세요</option>');
-                    data.forEach(function(item) {
-                        nextSelect.append('<option value="' + item.dtlcd + '">' + item.spcompnm + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // 통신 실패 시 처리
-
-
-                    // 선택 옵션을 비우거나 기본 옵션을 설정할 수 있습니다.
-                    nextSelect.empty();
-                    nextSelect.append('<option value=""></option>');
-                }
-            });
-        } else {
-            console.error('다음 select 요소를 찾을 수 없습니다.');
-        }
-    }
-
-    function updateNextSelect2(param) {
-        let code = param.value;
-
-        // param의 다음 형제 요소를 찾습니다.
-        let nextSelect = $(param).next('select');
-
-        if (nextSelect.length) {
-
-            $.ajax({
-                url: '/user-codes/code_spplancd',
-                type: 'GET',
-                data: { code: code },
-                success: function(data) {
-                    nextSelect.empty();
-                    if(data.length === 0){
-                        Alert.alert('', '해당 지역은 발전소가 없습니다.');
-                    }
-                    nextSelect.append('<option value="">선택하세요</option>');
-
-                    console.log('items', data);
-
-
-                    data.forEach(function(item) {
-                        nextSelect.append('<option value="' + item.spplancd + '">' + item.spplannm + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // 통신 실패 시 처리
-
-
-                    // 선택 옵션을 비우거나 기본 옵션을 설정할 수 있습니다.
-                    nextSelect.empty();
-                    nextSelect.append('<option value=""></option>');
-                }
-            });
-        } else {
-            console.error('다음 select 요소를 찾을 수 없습니다.');
-        }
-    }
-
 
     const requiredFields = [
         { id: 'agency', name: '소속사' },
