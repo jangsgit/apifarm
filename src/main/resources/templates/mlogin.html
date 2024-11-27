@@ -18,9 +18,7 @@
 
 </head>
 <style>
-.login-wrap{
-    margin: auto;
-}
+
 
 </style>
 <body>
@@ -62,13 +60,13 @@
                     <button type="submit" class="btn-login" id="login">로그인</button>
                     <ul class="btn-login-etc">
                         <li>
-                            <a href="#" class="btn btn-popup-open" data-popup="popup1" title="사용자신청">사용자신청</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup1" onclick="RegisterUser()" title="사용자신청">사용자신청</a>
                         </li>
                         <li>
-                            <a href="#" class="btn" title="아이디 찾기">아이디 찾기</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup2" title="아이디 찾기" onclick="openModal()">아이디 찾기</a>
                         </li>
                         <li>
-                            <a href="#" class="btn" title="비밀번호 찾기">비밀번호 찾기</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup3" onclick="openPwModal()" title="비밀번호 찾기">비밀번호 찾기</a>
                         </li>
                     </ul>
                 </div>
@@ -76,13 +74,13 @@
         </div>
         <!-- <p class="copyright">ⓒ Kt Corp. All rights reserved.</p> -->
     </div>
-        <!-- [사용자권한] 팝업  -->
+        <!-- [사용자등록] 팝업  -->
         <div class="mobile-layout-popup">
             <div class="popup-overlay"></div>
             <div class="popup-wrapper" id="popup1">
-                <div class="popup-title">
+            <div class="popup-title">
                     <h3>사용자등록</h3>
-                    <a href="#" title="팝업닫기" class="btn-popup-close">
+                    <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
                         <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
                     </a>
                 </div>
@@ -93,54 +91,53 @@
                                 <dl>
                                     <dt>
                                         <label for="">
-                                            소속사
+                                            아이디 <span class="eq">*</span>
                                         </label>
                                     </dt>
                                     <dd>
                                         <div class="input-clear">
-                                            <input type="text" id="" name="">
+                                            <input type="text" id="id" name="id">
                                         </div>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            소속부서
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="" name="">
-                                        </div>
+                                        <a href="#" class="btn" title="중복확인">중복확인</a>
                                     </dd>
                                 </dl>
                             </div>
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            직급
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="" name="">
-                                        </div>
-                                    </dd>
-                                </dl>
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            성명
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="" name="">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        비밀번호 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="password" id="password1" name="password1">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        비밀번호 확인 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="password" id="password2" name="password2">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        성명
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="name" name="name">
+                                    </div>
+                                </dd>
+                            </dl>
                             <dl>
                                 <dt>
                                     <label for="">
@@ -149,7 +146,7 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="" name="">
+                                        <input type="text" id="Phone" name="Phone">
                                     </div>
                                 </dd>
                             </dl>
@@ -161,7 +158,7 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="" name="">
+                                        <input type="email" id="email" name="email">
                                     </div>
                                     <a href="#" class="btn" title="코드발급">코드발급</a>
                                 </dd>
@@ -174,93 +171,171 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="" name="">
+                                        <input type="text" id="findEmail" name="findEmail">
                                     </div>
                                     <a href="#" class="btn" title="코드인증">코드인증</a>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        아이디 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="" name="">
-                                    </div>
-                                    <a href="#" class="btn" title="중복확인">중복확인</a>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        비밀번호 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="password" id="" name="">
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        비밀번호 확인 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="password" id="" name="">
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        발전시설
-                                    </label>
-                                </dt>
-                                <dd class="fl-fc">
-                                    <div class="row">
-                                        <select title="전체">
-                                            <option>전체</option>
-                                        </select>
-                                        <select title="전체">
-                                            <option>전체</option>
-                                        </select>
-                                    </div>
-                                    <div class="row">
-                                        <select title="전체">
-                                            <option>전체</option>
-                                        </select>
-                                        <a href="#" class="btn" title="발전시설 추가">발전시설 추가</a>
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        신청사유
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="textarea-box">
-                                        <textarea id="textarea1" placeholder="신청사유를 입력해주세요."></textarea>
-                                        <p class="text-count" id="text-count1">0/100</p>
-                                    </div>
                                 </dd>
                             </dl>
                         </div>
                     </div>
                 </div>
                 <div class="popup-button">
-                    <button class="btn-navy">권한신청</button>
+                    <button class="btn-navy">사용자 등록</button>
                 </div>
             </div>
         </div> <!-- //mobile-layout-popup end -->
-    </div> <!-- //page-wrapper end-->
+        <!--################# 아이디 ##################################################-->
+        <div class="mobile-layout-popup">
+            <div class="popup-overlay"></div>
+            <div class="popup-wrapper" id="popup2">
+                <div class="popup-title">
+                    <h3>아이디 찾기</h3>
+                    <a onclick="ModalClose()" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            이름 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="findName" name="findName">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            이메일 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="verifyEmail" name="verifyEmail">
+                                        </div>
+                                    </dd>
+                                    <dd class="hint-red">
+                                        <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="popup-button">
+                            <button class="btn-navy"> 아이디 전송</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--mobile-layout-popup and (아이디 찾기)-->
+
+        <!--비밀번호 찾기-->
+        <div class="mobile-layout-popup">
+            <div class="popup-overlay"></div>
+            <div class="popup-wrapper" id="popup3">
+                <div class="popup-title">
+                    <h3>아이디 찾기</h3>
+                    <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            아이디 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="findPwID" name="findPwID">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            이메일 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="findPwEmail" name="findPwEmail">
+                                        </div>
+                                        <a href="#" class="btn" title="코드인증">코드인증</a>
+                                    </dd>
+                                    <dd class="hint-red">
+                                        <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            인증코드 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="AuthenticationCode" name="AuthenticationCode">
+                                            <span id="timer" style="width: 10%; text-align: right; color: red; display: inline-block;">00:59</span>
+                                        </div>
+                                        <a href="#" class="btn" title="코드확인">코드확인</a>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            변경 비밀번호 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="PasswordChange" name="PasswordChange">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            비밀번호 확인 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="PasswordChangeChk" name="PasswordChangeChk">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="popup-button">
+                            <button class="btn-navy"> 비밀번호 변경</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- //page-wrapper end-->
 
 <script type="text/javascript" src="/resource/jquery.min.js"></script>
 <script type="text/javascript" src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
@@ -285,23 +360,50 @@
         document.getElementById('loader2').style.display = 'none';
     }
 
-
     function openPwModal() {
-        document.getElementById('pwFindModal').style.display = 'block';
+        let popup = document.getElementById('popup3');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup2 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
     }
 
     function closePwModal() {
-        document.getElementById('pwFindModal').style.display = 'none';
+        let popup = document.getElementById('popup3');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.remove('active'); // 팝업 비활성화
+            overlay.style.display = 'none'; // 오버레이 숨기기
+        }
     }
 
 
     //##############################################  아이디 찾기 모달
     function openModal() {
-        document.getElementById('idFindModal').style.display = 'block';
+        let popup = document.getElementById('popup2');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup2 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
     }
 
-    function closeModal() {
-        document.getElementById('idFindModal').style.display = 'none';
+    function ModalClose() {
+        let popup = document.getElementById('popup2');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.remove('active'); // 팝업 비활성화
+            overlay.style.display = 'none'; // 오버레이 숨기기
+        }
     }
 
     //document.querySelector('.close').onclick = closeModal;
@@ -380,43 +482,29 @@
         return true;
     }
 
-
-    function RegisterUser(){
+    //사용자등록 팝업열기
+    function RegisterUser() {
         let popup = document.getElementById('popup1');
-        let wrapper = document.getElementById('wrapper1');
+        let overlay = document.querySelector('.popup-overlay');
 
-        popup.style.display = 'block';
-        wrapper.style.display = 'block';
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
     }
-
-    function RegisterUserClose(){
+    function RegisterUserClose() {
         let popup = document.getElementById('popup1');
-        let wrapper = document.getElementById('wrapper1');
+        let overlay = document.querySelector('.popup-overlay');
 
-        popup.style.display = 'none';
-        wrapper.style.display = 'none';
+        if (popup && overlay) {
+            popup.classList.remove('active'); // 팝업 비활성화
+            overlay.style.display = 'none'; // 오버레이 숨기기
+        } else {
+            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
     }
-
-
-    function initializeSelect({
-                                  url,               // API 엔드포인트 URL
-                                  params = {},       // 요청 매개변수 (기본값은 빈 객체)
-                                  elementId,         // 셀렉트 요소의 ID
-                                  defaultOption = "선택하세요",  // 기본 옵션 텍스트
-                                  valueField = "code",    // 데이터의 값 필드 이름
-                                  textField = "value"     // 데이터의 표시 필드 이름
-                              }) {
-        $.get(url, params, function(data){
-            let selectElement = $(`#${elementId}`);
-            selectElement.empty();
-            selectElement.append(`<option value="">${defaultOption}</option>`);
-            data.forEach(function(item) {
-                selectElement.append(`<option value="${item[valueField]}">${item[textField]}</option>`);
-            });
-        });
-    }
-
-
 
 
     var userinfo = {
@@ -451,6 +539,40 @@
         return result;
     };
 
+
+    /* 타이머 */
+    function startTimer(duration, ele) {
+        // 기존 타이머가 있으면 제거
+        if (activeTimerInterval) {
+            clearInterval(activeTimerInterval);
+        }
+
+        let timer = duration, minutes, seconds;
+        let timerElement = document.getElementById(ele);
+
+        timerElement.textContent = '';
+
+        activeTimerInterval = setInterval(function () {
+            minutes = Math.floor(timer / 60);
+            seconds = Math.floor(timer % 60);
+
+            // 분과 초가 10보다 작으면 앞에 0을 붙임
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            // 타이머 요소에 현재 시간 표시
+            timerElement.textContent = minutes + ":" + seconds;
+
+            // 타이머를 1초 줄임
+            timer--;
+
+            // 타이머가 0보다 작으면 종료
+            if (timer < 0) {
+                clearInterval(activeTimerInterval);
+                timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
+            }
+        }, 1000);
+    }
 
 </script>
 
