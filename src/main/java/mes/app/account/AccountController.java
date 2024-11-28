@@ -3,6 +3,8 @@ package mes.app.account;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -13,24 +15,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 import mes.app.MailService;
-import mes.app.account.service.TB_RP940_Service;
-import mes.app.account.service.TB_RP945_Service;
-import mes.app.account.service.TB_XClientService;
-import mes.app.account.service.UserProfileService;
+import mes.app.account.service.*;
 import mes.app.system.service.AuthListService;
 import mes.app.system.service.UserService;
 import mes.domain.DTO.UserCodeDto;
 import mes.domain.entity.*;
-import mes.domain.entity.actasEntity.TB_XA012;
-import mes.domain.entity.actasEntity.TB_XCLIENT;
-import mes.domain.entity.actasEntity.TB_XCLIENTId;
+import mes.domain.entity.actasEntity.*;
 import mes.domain.repository.*;
 import mes.domain.repository.actasRepository.TB_XA012Repository;
 import mes.domain.repository.actasRepository.TB_XClientRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,7 @@ import mes.domain.security.Pbkdf2Sha256;
 import mes.domain.services.AccountService;
 import mes.domain.services.SqlRunner;
 
-
+@Slf4j
 @RestController
 public class AccountController {
 
@@ -71,7 +70,7 @@ public class AccountController {
 	MailService emailService;
 
 	@Autowired
-	TB_XA012Repository tbXA012Repository;
+	TB_xusersService tbxusersService;
 	@Autowired
 	TB_XClientService tbXClientService;
 	@Autowired
@@ -89,8 +88,12 @@ public class AccountController {
 
 	private final ConcurrentHashMap<String, String> tokenStore = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String, Long> tokenExpiry = new ConcurrentHashMap<>();
-    @Autowired
+
+	@Autowired
     private UserService userService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/login")
 	public ModelAndView loginPage(
@@ -160,12 +163,12 @@ public class AccountController {
 			user.getActive();
 			data.put("code", "OK");
 
-			try {
+			/*try {
 				this.accountService.saveLoginLog("login", auth);
 			} catch (UnknownHostException e) {
 				// Handle the exception (e.g., log it)
 				e.printStackTrace();
-			}
+			}*/
 		} else {
 			result.success=false;
 			data.put("code", "NOID");
@@ -261,101 +264,85 @@ public class AccountController {
 
 	}
 
+	//사용자 신청()
 	@PostMapping("/Register/save")
 	@Transactional
 	public AjaxResult RegisterUser(
-			@RequestParam(value = "cltnm") String cltnm, // 업체명
-			@RequestParam(value = "prenm") String prenm, // 대표자
-			@RequestParam(value = "biztypenm") String biztypenm, // 업태
-			@RequestParam(value = "bizitemnm") String bizitemnm, // 종목
 			@RequestParam(value = "phone", required = false) String phone,
-			@RequestParam(value = "tel", required = false) String tel,
 			@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "id") String id,
-			@RequestParam(value = "password") String password,
-			@RequestParam(value = "postno") String postno,
-			@RequestParam(value = "address1") String address1,
-			@RequestParam(value = "address2") String address2
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "password") String password
 	) {
+		log.info("phone: {}, email: {}, id: {}, name: {}, password: {}", phone, email, id, name, password);
 		AjaxResult result = new AjaxResult();
-		MapSqlParameterSource Param = new MapSqlParameterSource();
 
 		try {
 			if (flag) {
+				// "ZZ" 값을 전달하여 호출
+				List<Map<String, Object>> results = userService.getCustcdAndSpjangcd("ZZ");
+
+				if (results.isEmpty()) {
+					System.out.println("No data found for spjangcd = 'ZZ'");
+				} else {
+					results.forEach(row -> {
+						System.out.println("custcd: " + row.get("custcd"));
+						System.out.println("spjangcd: " + row.get("spjangcd"));
+					});
+				}
+				// 첫 번째 조회된 데이터 사용
+				Map<String, Object> firstRow = results.get(0);
+				String custcd = (String) firstRow.get("custcd");
+				String spjangcd = (String) firstRow.get("spjangcd");
+
+				// 비밀번호 해싱
+				String hashedPassword = passwordEncoder.encode(password);
+
 				// 사용자 저장
 				User user = User.builder()
 						.username(id)
-						.password(Pbkdf2Sha256.encode(password))
+						.password(hashedPassword)
+						.phone(phone)
 						.email(email)
-						.first_name(prenm)
+						.first_name(name)
 						.last_name("")
-						.tel(tel)
+						.tel("")
+						.spjangcd(spjangcd)
 						.active(true)
 						.is_staff(false)
 						.date_joined(new Timestamp(System.currentTimeMillis()))
 						.superUser(false)
-						.phone(phone)
-						.spjangcd("ZZ")
 						.build();
 
 				userService.save(user); // User 저장
 
 				jdbcTemplate.execute("SET IDENTITY_INSERT user_profile ON");
 				// UserProfile 저장 (JDBC 사용)
-				String sql = "INSERT INTO user_profile (_created, lang_code, Name, UserGroup_id, User_id) VALUES (?,?, ?, ?, ?)";
+				String sql = "INSERT INTO user_profile (_created, lang_code, Name, User_id) VALUES (?,?, ?, ?)";
 				jdbcTemplate.update(sql,
 						new Timestamp(System.currentTimeMillis()), // 현재 시간
 						"ko-KR", // lang_code (예: 한국어)
-						prenm, // Name (사용자 이름)
-						35 ,// UserGroup_id (일반거래처)
+						name, // Name (사용자 이름)
 						user.getId() // User_id
 				);
 				jdbcTemplate.execute("SET IDENTITY_INSERT user_profile OFF");
 
-				// TB_XA012에서 custcd와 spjangcd로 조회
-				String custcd = "SWSPANEL";
-				List<String> spjangcds = Arrays.asList("ZZ", "YY");
+				String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-				List<TB_XA012> tbX_A012List = tbXA012Repository.findByCustcdAndSpjangcds(custcd, spjangcds);
-				if (tbX_A012List.isEmpty()) {
-					result.success = false;
-					result.message = "custcd 및 spjangcd에 해당하는 데이터를 찾을 수 없습니다.";
-					return result;
-				}
-
-				String fullAddress = address1 + (address2 != null && !address2.isEmpty() ? " " + address2 : "");
-
-				// TB_XCLIENT 저장
-				String maxCltcd = tbXClientRepository.findMaxCltcd(); // 최대 cltcd 조회
-				String newCltcd = generateNewCltcd(maxCltcd); // 새로운 cltcd 생성
-
-				TB_XCLIENT tbXClient = TB_XCLIENT.builder()
-						.saupnum(id) // 사업자번호
-						.prenm(prenm) // 대표자명
-						.cltnm(cltnm)	//업체명
-						.biztypenm(biztypenm) // 업태명
-						.bizitemnm(bizitemnm) // 종목명
-						.zipcd(postno) // 우편번호
-						.cltadres(fullAddress) // 주소
-						.telnum(tel) // 전화번호
-						.hptelnum(phone) // 핸드폰번호
-						.agneremail(email) // 담당자 email
-						.id(new TB_XCLIENTId(custcd, newCltcd))
-
-						// 기본값 설정된 필드들
-						.rnumchk(String.valueOf(0))                 // rnumchk = 0
-						.corpperclafi(String.valueOf(0))            // corpperclafi = 0 (법인구분, 기본 = 법인)
-						.cltdv(String.valueOf(1))                   // cltdv = 1 (거래처구분)
-						.prtcltnm(cltnm) 							   // prtcltnm = "인쇄 거래처명 - 거래처명"
-						.foreyn(String.valueOf(0))                  // foreyn = 0
-						.relyn(String.valueOf(0))                   // relyn = 0
-						.bonddv(String.valueOf(0))                  // bonddv = 0
-						/*.nation("KR")               // nation = "KR"*/
-						.clttype(String.valueOf(2))                 // clttype = 2 (거래구분)
-						.cltynm(String.valueOf(0))                  // cltynm = 0 (약명)
+				TB_XUSERS xusers = TB_XUSERS.builder()
+						.passwd1(password)
+						.passwd2(password)
+						.shapass(hashedPassword)
+						.pernm(name)
+						.useyn("1")
+						.domcls("%")
+						.spjangcd(spjangcd)
+						.upddate(currentDate)
+						.id(new TB_XUSERSId(custcd, id))
 						.build();
 
-				tbXClientService.save(tbXClient); // TB_XCLIENT 저장
+				tbxusersService.save(xusers);
+
 
 				result.success = true;
 				result.message = "등록이 완료되었습니다.";
@@ -373,18 +360,6 @@ public class AccountController {
 		return result;
 	}
 
-
-	// 새로운 cltcd 생성 메서드
-	private String generateNewCltcd(String maxCltcd) {
-		int newNumber = 1; // 기본값
-		// 최대 cltcd 값이 null이 아니고 "SW"로 시작하는 경우
-		if (maxCltcd != null && maxCltcd.startsWith("SW")) {
-			String numberPart = maxCltcd.substring(2); // "SW"를 제외한 부분
-			newNumber = Integer.parseInt(numberPart) + 1; // 숫자 증가
-		}
-		// 새로운 cltcd 생성: "SW" 접두사와 5자리 숫자로 포맷
-		return String.format("SW%05d", newNumber);
-	}
 	
 	@PostMapping("/account/updateUserInfo")
 	@Transactional
@@ -545,13 +520,13 @@ public class AccountController {
 
 	@PostMapping("/user-auth/SaveAuthenticationEmail")
 	public AjaxResult saveMail(@RequestParam("usernm") final String usernm,
-							   @RequestParam("prenm") final String prenm,
+							   @RequestParam("name") final String name,
 							   @RequestParam("mail") final String mail) {
 
 		AjaxResult result = new AjaxResult();
 
 		if (usernm.equals("empty")) {
-			saveEmailLogic(mail, prenm);
+			saveEmailLogic(mail, name);
 
 			result.success = true;
 			result.message = "인증 메일이 발송되었습니다.";

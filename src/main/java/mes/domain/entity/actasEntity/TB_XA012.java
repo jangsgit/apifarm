@@ -19,14 +19,6 @@ public class TB_XA012 {
     @EmbeddedId
     private TB_XA012ID id;
 
-   /* @Id
-    @Column(name = "custcd", nullable = false, length = 8)
-    private String custcd;
-
-    @Id
-    @Column(name = "spjangcd", nullable = false, length = 2)
-    private String spjangcd;*/
-
     @Column(name = "saupnum", length = 13)
     private String saupnum; // 사업자 번호
 

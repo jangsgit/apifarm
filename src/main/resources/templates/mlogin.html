@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <link rel="icon" type="image/png" href="/img/favicon.png">
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> <!-- Slide css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> <!-- Slide css -->
     <link rel="stylesheet" href="/assets_mobile/css/import.css"/>
-    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css" />
+    <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css"/>
 
 
     <title>SMART ACTAS</title>
@@ -22,12 +23,16 @@
 
 </style>
 <body>
-
-    <div class="mobile-wrapper page-login"><!-- ★페이지 Class명 -->
+<div id="loader2">
+    <div class="loader">
+        <span></span>
+    </div>
+</div>
+<div class="mobile-wrapper page-login"><!-- ★페이지 Class명 -->
     <div class="mobile-login-wrap">
         <div class="login-wrap">
             <form method="post" class="form" role="form" id="loginFrm" style=" margin: 0 auto;" action="/postLogin">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="login-logo">
                     <img src="/assets_mobile/images/logo/actas_log.png" alt="로고">
                 </div>
@@ -60,13 +65,16 @@
                     <button type="submit" class="btn-login" id="login">로그인</button>
                     <ul class="btn-login-etc">
                         <li>
-                            <a href="#" class="btn btn-popup-open" data-popup="popup1" onclick="RegisterUser()" title="사용자신청">사용자신청</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup1" onclick="RegisterUser()"
+                               title="사용자신청">사용자신청</a>
                         </li>
                         <li>
-                            <a href="#" class="btn btn-popup-open" data-popup="popup2" title="아이디 찾기" onclick="openModal()">아이디 찾기</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup2" title="아이디 찾기"
+                               onclick="openModal()">아이디 찾기</a>
                         </li>
                         <li>
-                            <a href="#" class="btn btn-popup-open" data-popup="popup3" onclick="openPwModal()" title="비밀번호 찾기">비밀번호 찾기</a>
+                            <a href="#" class="btn btn-popup-open" data-popup="popup3" onclick="openPwModal()"
+                               title="비밀번호 찾기">비밀번호 찾기</a>
                         </li>
                     </ul>
                 </div>
@@ -74,46 +82,251 @@
         </div>
         <!-- <p class="copyright">ⓒ Kt Corp. All rights reserved.</p> -->
     </div>
-        <!-- [사용자등록] 팝업  -->
-        <div class="mobile-layout-popup">
-            <div class="popup-overlay"></div>
-            <div class="popup-wrapper" id="popup1">
+    <!-- [사용자등록] 팝업  -->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup1">
             <div class="popup-title">
-                    <h3>사용자등록</h3>
-                    <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
-                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                    </a>
-                </div>
-                <div class="popup-contents">
-                    <div class="table-wrap">
-                        <div class="write-wrap">
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            아이디 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="id" name="id">
-                                        </div>
-                                        <a href="#" class="btn" title="중복확인">중복확인</a>
-                                    </dd>
-                                </dl>
-                            </div>
+                <h3>사용자등록</h3>
+                <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap" id="bomForm">
+                    <div class="write-wrap">
+                        <div class="row">
                             <dl>
                                 <dt>
                                     <label for="">
-                                        비밀번호 <span class="eq">*</span>
+                                        아이디 <span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="password" id="password1" name="password1">
+                                        <input type="text" id="id" name="id" placeholder="아이디" autocomplete="off">
+                                    </div>
+                                    <a href="#" class="btn" id="btnDuplicate" title="중복확인">중복확인</a>
+                                </dd>
+                            </dl>
+                        </div>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    비밀번호 <span class="eq">*</span>
+                                </label>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="password" id="password1" name="password1" placeholder="비밀번호"
+                                           autocomplete="new-password">
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    비밀번호 확인 <span class="eq">*</span>
+                                </label>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="password" id="password2" name="password2" placeholder="비밀번호 확인">
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    성명
+                                </label>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="text" id="name" name="name" placeholder="성명">
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    핸드폰
+                                </label>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="text" id="Phone" name="Phone" placeholder="핸드폰">
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    이메일
+                                </label>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="email" id="email" name="email" placeholder="이메일">
+                                </div>
+                                <a href="#" class="btn" id="BtnAuthenticationRegister2" title="코드발급">코드발급</a>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                                <label for="">
+                                    인증코드
+                                </label>
+                                <span id="timer2" style="margin-left: 10px;"></span>
+                            </dt>
+                            <dd>
+                                <div class="input-clear">
+                                    <input type="text" id="AuthenticationCodeRegister" name="AuthenticationCodeRegister"
+                                           placeholder="인증코드">
+                                </div>
+                                <a href="#" class="btn" id="Authentication" title="코드인증">코드인증</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-button">
+                <button class="btn-navy" id="btnSaveAuth">사용자 등록</button>
+            </div>
+        </div>
+    </div> <!-- //mobile-layout-popup end -->
+    <!--################# 아이디 ##################################################-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup2">
+            <div class="popup-title">
+                <h3>아이디 찾기</h3>
+                <a onclick="ModalClose()" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <div class="write-wrap">
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        이름 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="findName" name="findName">
                                     </div>
                                 </dd>
                             </dl>
+                        </div>
+                    </div>
+                    <div class="write-wrap">
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        이메일 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="verifyEmail" name="verifyEmail">
+                                    </div>
+                                </dd>
+                                <dd class="hint-red">
+                                    <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="popup-button">
+                        <button class="btn-navy"> 아이디 전송</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--mobile-layout-popup and (아이디 찾기)-->
+
+    <!--비밀번호 찾기-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup3">
+            <div class="popup-title">
+                <h3>아이디 찾기</h3>
+                <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <div class="write-wrap">
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        아이디 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="findPwID" name="findPwID">
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        이메일 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="findPwEmail" name="findPwEmail">
+                                    </div>
+                                    <a href="#" class="btn" title="코드인증">코드인증</a>
+                                </dd>
+                                <dd class="hint-red">
+                                    <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        인증코드 <span class="eq">*</span>
+                                        <span id="timer3"
+                                              style="width: 10%; text-align: right; color: red; display: inline-block;"></span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="AuthenticationCode" name="AuthenticationCode">
+                                    </div>
+                                    <a href="#" class="btn" title="코드확인">코드확인</a>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="row">
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        변경 비밀번호 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="PasswordChange" name="PasswordChange">
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="row">
                             <dl>
                                 <dt>
                                     <label for="">
@@ -122,220 +335,20 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="password" id="password2" name="password2">
+                                        <input type="text" id="PasswordChangeChk" name="PasswordChangeChk">
                                     </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        성명
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="name" name="name">
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        핸드폰
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="Phone" name="Phone">
-                                    </div>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        이메일
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="email" id="email" name="email">
-                                    </div>
-                                    <a href="#" class="btn" title="코드발급">코드발급</a>
-                                </dd>
-                            </dl>
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        인증코드
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="findEmail" name="findEmail">
-                                    </div>
-                                    <a href="#" class="btn" title="코드인증">코드인증</a>
                                 </dd>
                             </dl>
                         </div>
                     </div>
-                </div>
-                <div class="popup-button">
-                    <button class="btn-navy">사용자 등록</button>
-                </div>
-            </div>
-        </div> <!-- //mobile-layout-popup end -->
-        <!--################# 아이디 ##################################################-->
-        <div class="mobile-layout-popup">
-            <div class="popup-overlay"></div>
-            <div class="popup-wrapper" id="popup2">
-                <div class="popup-title">
-                    <h3>아이디 찾기</h3>
-                    <a onclick="ModalClose()" title="팝업닫기" class="btn-popup-close">
-                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                    </a>
-                </div>
-                <div class="popup-contents">
-                    <div class="table-wrap">
-                        <div class="write-wrap">
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            이름 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="findName" name="findName">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="write-wrap">
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            이메일 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="verifyEmail" name="verifyEmail">
-                                        </div>
-                                    </dd>
-                                    <dd class="hint-red">
-                                        <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="popup-button">
-                            <button class="btn-navy"> 아이디 전송</button>
-                        </div>
+                    <div class="popup-button">
+                        <button class="btn-navy"> 비밀번호 변경</button>
                     </div>
                 </div>
             </div>
-        </div><!--mobile-layout-popup and (아이디 찾기)-->
-
-        <!--비밀번호 찾기-->
-        <div class="mobile-layout-popup">
-            <div class="popup-overlay"></div>
-            <div class="popup-wrapper" id="popup3">
-                <div class="popup-title">
-                    <h3>아이디 찾기</h3>
-                    <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
-                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                    </a>
-                </div>
-                <div class="popup-contents">
-                    <div class="table-wrap">
-                        <div class="write-wrap">
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            아이디 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="findPwID" name="findPwID">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            이메일 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="findPwEmail" name="findPwEmail">
-                                        </div>
-                                        <a href="#" class="btn" title="코드인증">코드인증</a>
-                                    </dd>
-                                    <dd class="hint-red">
-                                        <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            인증코드 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="AuthenticationCode" name="AuthenticationCode">
-                                            <span id="timer" style="width: 10%; text-align: right; color: red; display: inline-block;">00:59</span>
-                                        </div>
-                                        <a href="#" class="btn" title="코드확인">코드확인</a>
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            변경 비밀번호 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="PasswordChange" name="PasswordChange">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                            <div class="row">
-                                <dl>
-                                    <dt>
-                                        <label for="">
-                                            비밀번호 확인 <span class="eq">*</span>
-                                        </label>
-                                    </dt>
-                                    <dd>
-                                        <div class="input-clear">
-                                            <input type="text" id="PasswordChangeChk" name="PasswordChangeChk">
-                                        </div>
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="popup-button">
-                            <button class="btn-navy"> 비밀번호 변경</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- //page-wrapper end-->
+        </div>
+    </div> <!-- //page-wrapper end-->
+</div>
 
 <script type="text/javascript" src="/resource/jquery.min.js"></script>
 <script type="text/javascript" src="/resource/jquery-validation/1.17.0/jquery.validate.min.js"></script>
@@ -360,6 +373,7 @@
         document.getElementById('loader2').style.display = 'none';
     }
 
+    //##############################################  비밀번호 찾기 모달
     function openPwModal() {
         let popup = document.getElementById('popup3');
         let overlay = document.querySelector('.popup-overlay');
@@ -382,6 +396,7 @@
         }
     }
 
+    //##############################################  비밀번호 찾기 모달 끝
 
     //##############################################  아이디 찾기 모달
     function openModal() {
@@ -409,43 +424,33 @@
     //document.querySelector('.close').onclick = closeModal;
     //##############################################  아이디 찾기 모달 끝
 
-    const requiredFields = [
-        { id: 'agency', name: '소속사' },
-        { id: 'agencyDepartment', name: '소속부서' },
-        { id: 'name', name: '성명' },
-        { id: 'id', name: 'ID' },
-        { id: 'password', name: '비밀번호' },
-        { id: 'passwordchk', name: '비밀번호확인' },
-        /*{ id: 'authType', name: '권한그룹' },*/
-        { id: 'firstSelect', name: '관할지역' },
-        { id: 'secondSelect', name: '발전산단' },
-        { id: 'thirdSelect', name: '발전소' }
+    //사용자 등록(유효성 검사용)
+    const userSave = [
+        {id: 'name', name: '성명'},
+        {id: 'id', name: '아이디'},
+        {id: 'password1', name: '비밀번호'},
+        {id: 'password2', name: '비밀번호확인'},
+        {id: 'Phone', name: '핸드폰'},
+        {id: 'email', name: '이메일'}
     ];
 
-    // 필드명과 name값으로 유효성 검사할 필드 배열
-    const nameBasedFields = [
-        { name: 'spworkcd', displayName: '관할지역' },
-        { name: 'spcompcd', displayName: '발전산단' },
-        { name: 'spplancd', displayName: '발전소' }
-    ];
-
-    const clearFieldList = ['agency', 'agencyDepartment', 'name', 'id', 'password', 'passwordchk',
+    const clearFieldList = ['agencyDepartment', 'name', 'id', 'password', 'passwordchk',
         'firstSelect', 'secondSelect', 'thirdSelect', 'tel', 'level', 'email',
         'reason', 'AuthenticationCodeRegister']
 
     // 유효성 검사
     function validateFields() {
-        for (let field of requiredFields) {
+        for (let field of userSave) {
             if (!validateFieldById(field.id, field.name)) {
                 return false;
             }
         }
 
-        for (let field of nameBasedFields) {
+        /*for (let field of nameBasedFields) {
             if (!validateFieldsByName(field.name, field.displayName)) {
                 return false;
             }
-        }
+        }*/
 
         return true;  // 모든 유효성 검사를 통과했을 경우
     }
@@ -494,6 +499,7 @@
             console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
         }
     }
+
     function RegisterUserClose() {
         let popup = document.getElementById('popup1');
         let overlay = document.querySelector('.popup-overlay');
@@ -539,52 +545,19 @@
         return result;
     };
 
-
-    /* 타이머 */
-    function startTimer(duration, ele) {
-        // 기존 타이머가 있으면 제거
-        if (activeTimerInterval) {
-            clearInterval(activeTimerInterval);
-        }
-
-        let timer = duration, minutes, seconds;
-        let timerElement = document.getElementById(ele);
-
-        timerElement.textContent = '';
-
-        activeTimerInterval = setInterval(function () {
-            minutes = Math.floor(timer / 60);
-            seconds = Math.floor(timer % 60);
-
-            // 분과 초가 10보다 작으면 앞에 0을 붙임
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            // 타이머 요소에 현재 시간 표시
-            timerElement.textContent = minutes + ":" + seconds;
-
-            // 타이머를 1초 줄임
-            timer--;
-
-            // 타이머가 0보다 작으면 종료
-            if (timer < 0) {
-                clearInterval(activeTimerInterval);
-                timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
-            }
-        }, 1000);
-    }
-
 </script>
 
 <script type="text/javascript">
     var isChangeLang = 'N';
 
 
+    // 로딩바를 보여주는 함수
     function showLoader() {
         document.getElementById('loader2').style.display = 'block';
     }
 
-    function emailValidate(emailVal){
+    //이메일 유효성 검사
+    function emailValidate(emailVal) {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         return emailPattern.test(emailVal);
@@ -594,46 +567,41 @@
 
         let activeTimerInterval; // 전역 변수로 interval ID를 저장
 
-        function startTimer(duration, ele) {
-            // 기존 타이머가 있으면 제거
+        window.startTimer = function (duration, ele) {
+            // 기존 타이머 제거
             if (activeTimerInterval) {
                 clearInterval(activeTimerInterval);
             }
 
-            let timer = duration, minutes, seconds;
+            // 타이머 요소 가져오기
             let timerElement = document.getElementById(ele);
 
+            if (!timerElement) {
+                console.error(`Element with ID "${ele}" not found.`);
+                return; // DOM 요소가 없으면 종료
+            }
+
+            // 초기화
             timerElement.textContent = '';
+            let timer = duration, minutes, seconds;
 
             activeTimerInterval = setInterval(function () {
                 minutes = Math.floor(timer / 60);
                 seconds = Math.floor(timer % 60);
 
-                // 분과 초가 10보다 작으면 앞에 0을 붙임
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                // 타이머 요소에 현재 시간 표시
-                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds ;
+                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds;
 
-                // 타이머를 1초 줄임
                 timer--;
 
-                // 타이머가 0보다 작으면 종료
                 if (timer < 0) {
                     clearInterval(activeTimerInterval);
-                    timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
+                    timerElement.textContent = "시간 초과";
                 }
             }, 1000);
         }
-
-
-        const selectConfigurations = [
-            {  url: '/user-codes/parent',params: { parentId: 154 },elementId: 'agency', valueField: "id"},
-            {  url: '/user-codes/parent',params: { parentId: 110 },elementId: 'firstSelect', valueField: "code"},
-            /*{  url: '/user-auth/type',params: {},elementId: 'authType',valueField: "code",textField: 'name'}*/
-        ];
-        selectConfigurations.forEach(config => initializeSelect(config));
 
         let emailAuthCode = false;
         let emailAuthCode_pw = false;
@@ -642,41 +610,82 @@
         let _CsrfValue = _csrf[0].value;
 
         let btnAuthentication = $('#Authentication');
-        btnAuthentication.click(function (e){
+        btnAuthentication.click(function (e) {
             let emailDom = document.getElementById('email');
             let email = emailDom.value;
             let AuthenticationCode = document.getElementById('AuthenticationCodeRegister').value;
-            let data = { email, AuthenticationCode, type: 'new' }
+            let data = {email, AuthenticationCode, type: 'new'}
 
 
-            let fnSuccess = function (res){
-                if(res.success){
+            let fnSuccess = function (res) {
+                if (res.success) {
                     emailAuthCode = true;
                     Alert.alert('', res.message);
                     emailDom.readOnly = true;
-                    document.getElementById('timer2').style.display = 'none';
+                    document.getElementById('timer').style.display = 'none';
 
-                }else{
+                } else {
                     emailAuthCode = false;
                     Alert.alert('', res.message);
                 }
             }
             AjaxUtil.postAsyncData("/authentication", data, fnSuccess);
         })
+        //사용자 등록(이메일 코드발급)
+        $('#BtnAuthenticationRegister2').click(function (e) {
+            let email = document.getElementById('email');
+            let mail = email.value;
 
-        $('#Authentication_pw').click(function(e){
+            let nameInput = document.getElementById('name');
+            let name = nameInput.value;
+
+            if (mail.trim().length === 0) {
+                Alert.alert('', '이메일을 입력해주세요.');
+                email.focus();
+                return;
+            }
+            if (!emailValidate(mail.trim())) {
+                Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+                email.focus();
+                return false;
+            }
+
+            // usernm과 name의 실제 입력값을 서버로 전송
+            let data = {usernm: 'empty', name, mail, _CsrfValue};
+
+            showLoader();
+            let fnSuccess = function (res) {
+                if (res.success) {
+                    hideLoader();
+                    Alert.alert('', res.message, function (e) {
+                        startTimer(180, 'timer2');
+                    });
+                } else {
+                    hideLoader();
+                    Alert.alert('', res.message);
+                }
+            };
+
+            AjaxUtil.postAsyncData("/user-auth/SaveAuthenticationEmail", data, fnSuccess, function () {
+                hideLoader();
+                Alert.alert('', '서버통신 실패');
+            });
+        }); //사용자 등록(이메일 코드발급)
+
+
+        $('#Authentication_pw').click(function (e) {
             let emailDom = document.getElementById('mailAddres');
             let email = emailDom.value;
             let AuthenticationCode = document.getElementById('AuthenticationCode').value;
-            let data = { email, AuthenticationCode, type : 'password' }
+            let data = {email, AuthenticationCode, type: 'password'}
 
             let fnSuccess = function (res) {
-                if(res.success){
+                if (res.success) {
                     emailAuthCode_pw = true;
                     Alert.alert('', res.message);
                     emailDom.readOnly = true;
                     document.getElementById('timer').style.display = 'none';
-                }else{
+                } else {
                     emailAuthCode_pw = false;
                     Alert.alert('', res.message);
 
@@ -684,455 +693,457 @@
             }
             AjaxUtil.postAsyncData("/authentication", data, fnSuccess);
 
-        })
+        })//비밀번호 이메일인증
+    })
 
+    //아이디 중복확인 (사용자 등록)
+    let btnDuplicate = $('#btnDuplicate');
+    btnDuplicate.click(function (e){
 
-        //아이디 중복확인 신청
-        let btnDuplicate = $('#btnDuplicate');
-        btnDuplicate.click(function (e){
+        let userid = document.getElementById('id').value;
+        if(userid.trim() === '' || userid === null){
+            Alert.alert('', '빈 값은 불가능합니다.');
+            return;
+        }
+        let data = {  userid }
 
-            let userid = document.getElementById('id').value;
-            if(userid.trim() === '' || userid === null){
-                Alert.alert('', '빈 값은 불가능합니다.');
-                return;
+        let fnSuccess = function (res) {
+            if(res.success){
+                AuthCode = true;
+                Alert.alert('', res.message);
+                document.getElementById('id').readOnly = true;
+
+            } else if (!res.success){
+                AuthCode = false;
+                Alert.alert('', res.message);
             }
-            let data = {  userid }
+        };
+        AjaxUtil.postAsyncData("/useridchk", data, fnSuccess);
 
-            let fnSuccess = function (res) {
-                if(res.success){
-                    Alert.alert('', res.message);
+    })
 
-                } else if (!res.success){
-                    Alert.alert('', res.message);
+    //아이디 찾기
+    $('#btnSearch').click(function (e) {
+
+        const errMsgDiv = document.getElementById('ErrMsg');
+        const errMsgSpan = errMsgDiv.querySelector('span');
+
+        errMsgDiv.style.display = 'none';
+        errMsgDiv.style.color = 'red';
+        errMsgDiv.classList.remove('show');
+        errMsgSpan.textContent = '해당 사용자는 존재하지 않습니다.';
+
+        let usernm = document.getElementById('usernm').value;
+        let mail = document.getElementById('mail').value;
+
+        if (usernm.trim().length === 0 || mail.trim().length === 0) {
+            Alert.alert('', '빈 값은 불가능합니다.');
+            return false;
+        }
+
+
+        if (!emailValidate(mail.trim())) {
+            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+            return false;
+        }
+
+        let data = {usernm, mail, _CsrfValue}
+
+        let fnSuccess = function (res) {
+            if (res.success) {
+                if (Array.isArray(res.data)) {
+                    errMsgSpan.textContent = res.data.join(', ') + '입니다.'; // 각 배열 요소를 쉼표로 구분하여 표시
+                } else {
+                    errMsgSpan.textContent = res.data + '입니다.'; // 배열이 아니면 그대로 표시
                 }
-            };
-            AjaxUtil.postAsyncData("/useridchk", data, fnSuccess);
+                errMsgDiv.style.display = 'block';
+                errMsgDiv.style.color = 'black';
+                errMsgDiv.classList.add('show');
+            } else if (!res.success) {
 
-        })
+                errMsgDiv.style.display = 'block';
+                errMsgDiv.classList.add('show');
 
-        //아이디 찾기
-        $('#btnSearch').click(function (e){
+                errMsgDiv.addEventListener('animationend', function () {
+                    errMsgDiv.classList.remove('show');
+                });
 
-            const errMsgDiv = document.getElementById('ErrMsg');
-            const errMsgSpan = errMsgDiv.querySelector('span');
-
-            errMsgDiv.style.display = 'none';
-            errMsgDiv.style.color = 'red';
-            errMsgDiv.classList.remove('show');
-            errMsgSpan.textContent = '해당 사용자는 존재하지 않습니다.';
-
-            let usernm = document.getElementById('usernm').value;
-            let mail = document.getElementById('mail').value;
-
-            if(usernm.trim().length === 0 || mail.trim().length === 0){
-                Alert.alert('', '빈 값은 불가능합니다.');
-                return false;
             }
-
-
-            if(!emailValidate(mail.trim()))
-            { Alert.alert('', '유효한 이메일 형식을 입력하세요.'); return false; }
-
-            let data = { usernm, mail, _CsrfValue }
-
-            let fnSuccess = function (res){
-                if(res.success){
-                    if (Array.isArray(res.data)) {
-                        errMsgSpan.textContent = res.data.join(', ') + '입니다.'; // 각 배열 요소를 쉼표로 구분하여 표시
-                    } else {
-                        errMsgSpan.textContent = res.data + '입니다.'; // 배열이 아니면 그대로 표시
-                    }
-                    errMsgDiv.style.display = 'block';
-                    errMsgDiv.style.color = 'black';
-                    errMsgDiv.classList.add('show');
-                } else if (!res.success){
-
-                    errMsgDiv.style.display = 'block';
-                    errMsgDiv.classList.add('show');
-
-                    errMsgDiv.addEventListener('animationend', function() {
-                        errMsgDiv.classList.remove('show');
-                    });
-
-                }
-            };
-            AjaxUtil.postAsyncData("/user-auth/searchAccount", data, fnSuccess, function(){ Alert.alert('', '서버통신 실패') });
-        })
-
-        //비밀번호  찾기 > 이메일 인증
-        $('#BtnAuthentication').click(function (e){
-            let user = document.getElementById('userid');
-            let usernm = user.value;
-
-            let email = document.getElementById('mailAddres');
-            let mail   = email.value;
-            let content = "비밀번호 재설정"
-
-            if(usernm.trim().length === 0){ Alert.alert('', '아이디를 입력해주세요.'); user.focus(); return;}
-            else if(mail.trim().length === 0){ Alert.alert('', '이메일을 입력해주세요.'); email.focus();  return;}
-
-            if(!emailValidate(mail.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return false; }
-            let data = { usernm, mail, content, type : "password" }
-            showLoader();
-
-            let fnSuccess = function (res){
-                if(res.success){
-                    hideLoader();
-                    $('#userid').attr('readonly', true);
-
-                    Alert.alert('', res.message, function(e){
-
-                        startTimer(180, 'timer');
-                    });
-                }
-                else if(!res.success){
-                    hideLoader();
-                    Alert.alert('', res.message, function(){});
-
-                }
-            };
-            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoader(); Alert.alert('', '서버통신 실패');});
-        })
-
-        $('#BtnAuthenticationRegister').click(function (e){
-
-            console.log('클릭');
-            let email = document.getElementById('email');
-            let mail   = email.value;
-
-            let usernm = document.getElementById('name').value;
-            let content = "사용자권한신청";
-
-
-            if(mail.trim().length === 0){ Alert.alert('', '이메일을 입력해주세요.'); email.focus();  return;}
-            if(!emailValidate(mail.trim())){ Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return false; }
-            let data = {  usernm : usernm || "신규사용자", mail, content, type: "new" }
-            showLoader();
-            let fnSuccess = function (res){
-                if(res.success){
-                    hideLoader();
-
-                    Alert.alert('', res.message, function(e){
-
-                        startTimer(180, 'timer2');
-                    });
-                }
-                else if(!res.success){
-                    hideLoader();
-                    Alert.alert('', res.message, function(){});
-
-                }
-            };
-            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function(){hideLoader(); Alert.alert('', '서버통신 실패');});
+        };
+        AjaxUtil.postAsyncData("/user-auth/searchAccount", data, fnSuccess, function () {
+            Alert.alert('', '서버통신 실패')
         });
+    })
 
+    //비밀번호  찾기 > 이메일 인증
+    $('#BtnAuthentication').click(function (e) {
+        let user = document.getElementById('userid');
+        let usernm = user.value;
 
+        let email = document.getElementById('mailAddres');
+        let mail = email.value;
+        let content = "비밀번호 재설정"
 
-        //비밀번호 재설정
-        $('#btnPwSearch').click(function(){
+        if (usernm.trim().length === 0) {
+            Alert.alert('', '아이디를 입력해주세요.');
+            user.focus();
+            return;
+        } else if (mail.trim().length === 0) {
+            Alert.alert('', '이메일을 입력해주세요.');
+            email.focus();
+            return;
+        }
 
-            const authCode = $('#AuthenticationCode').val().trim();
-            const email = $('#mailAddres').val().trim();
-            const password = $('#PasswordChange').val().trim();
-            const passwordChk = $('#PasswordChangeChk').val().trim();
-            const userid = $('#userid').val().trim();
+        if (!emailValidate(mail.trim())) {
+            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+            email.focus();
+            return false;
+        }
+        let data = {usernm, mail, content, type: "password"}
+        showLoader();
 
-            if(!emailAuthCode_pw){
-                Alert.alert('', '코드가 인증되지 않았습니다.');
-                return;
-            }
-            if (!authCode) {
-                Alert.alert('', '인증코드를 입력해주세요.');
-                $('#AuthenticationCode').focus();
-                return;
-            }
-            if (!email) {
-                Alert.alert('', '이메일을 입력해주세요.');
-                $('#mailAddres').focus();
-                return;
-            }
-            if (!password) {
-                Alert.alert('', '변경할 비밀번호를 입력해주세요.');
-                $('#PasswordChange').focus();
-                return;
-            }
-            if (!passwordChk) {
-                Alert.alert('', '비밀번호 확인을 입력해주세요.');
-                $('#PasswordChangeChk').focus();
-                return;
-            }
-            if (!userid) {
-                Alert.alert('', '아이디를 입력해주세요.');
-                $('#userid').focus();
-                return;
-            }
-            if (password !== passwordChk) {
-                Alert.alert('', '변경 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
-                return;
-            }
-            if(!emailValidate(email.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return; }
-
-            const data = { code: authCode, _CsrfValue, mail: email, password: password, userid : userid };
-
-            const fnSuccess = function (res) {
-                Alert.alert('', res.message, function(){
-                    emailAuthCode_pw = false;
-                    location.reload(); });
-            };
-
-            AjaxUtil.postAsyncData("/user-auth/verifyCode", data, fnSuccess, function () {
+        let fnSuccess = function (res) {
+            if (res.success) {
                 hideLoader();
-                Alert.alert('', '서버 통신 실패');
-            });
+                $('#userid').attr('readonly', true);
 
-        })
+                Alert.alert('', res.message, function (e) {
 
-        //권한신청 버튼 클릭
-        let btnRegistersend = $('#btnSaveAuth');
+                    startTimer(180, 'timer2');
+                });
+            } else if (!res.success) {
+                hideLoader();
+                Alert.alert('', res.message, function () {
+                });
 
-        btnRegistersend.click(function (e) {
-
-            const authCode = $('#AuthenticationCodeRegister').val().trim();
-            if (!authCode) {
-                Alert.alert('', '인증코드를 입력해주세요.');
-                $('#AuthenticationCodeRegister').focus();
-                return;
             }
+        };
 
-            /*let authType = document.getElementById('authType');
-            let authTypeText = authType.options[authType.selectedIndex].text;*/
-
-            if (!validateFields()) {
-                return false;
-            }
-
-            if(!emailAuthCode){
-                Alert.alert('', '코드가 인증되지 않았습니다.');
-                return;
-            }
-
-
-            const emailInput = document.getElementById('email');
-            const emailValue = emailInput.value.trim();
-
-            if (!emailValidate(emailValue.trim()))
-            { Alert.alert('', '유효한 이메일 형식을 입력하세요.'); return false; }
-
-
-            let password = document.getElementById('password').value;
-            let password2 = document.getElementById('passwordchk').value;
-
-            if(password !== password2){
-                Alert.alert('', '비밀번호가 맞지 않습니다.');
-                return;
-            }
-
-            function extractSelectValues(selectName) {
-                let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
-                return Array.from(inputs).map(input => input.value).join(',');
-            }
-
-            function extractSelectTexts(selectName) {
-                let inputs = document.querySelectorAll(`select[name="${selectName}"]`);
-                return Array.from(inputs).map(input => input.options[input.selectedIndex].text).join(',');
-            }
-
-            let spworkcdString = extractSelectValues('spworkcd');
-            let spcompcdString = extractSelectValues('spcompcd');
-            let spplancdString = extractSelectValues('spplancd');
-
-            let firstText  = extractSelectTexts('spworkcd');
-            let secondText = extractSelectTexts('spcompcd');
-            let thirdText  = extractSelectTexts('spplancd');
-            let agencynm = extractSelectTexts('agency');
-
-            let data = FormUtil.extractForm($('#bomForm'));
-
-            data.spworkcd = spworkcdString;
-            data.spcompcd = spcompcdString;
-            data.spplancd = spplancdString;
-
-            data.firstText = firstText;
-            data.secondText = secondText;
-            data.thirdText = thirdText;
-            //data.authTypeText = authTypeText;
-            data.agencynm = agencynm;
-
-            data.AuthenticationCode = $('#AuthenticationCodeRegister').val().trim();
-
-
-            let fnSuccess = function (res) {
-                if(res.success){
-                    Alert.alert('', res.message);
-                    $("#modal-close-button").trigger('click');
-
-                    emailAuthCode = false;
-
-                    for(let i=0; i < clearFieldList.length; i++){
-                        clearForm(clearFieldList[i]);
-                    }
-                    let idfield = document.getElementById('id')
-                    idfield.removeAttribute('readonly')
-
-                    //추가된 발전지역 요소들 삭제
-                    const elements = document.getElementsByClassName('new-fl-ac');
-                    const elementsArray = Array.from(elements);
-
-                    elementsArray.forEach(element => {
-                        element.remove();
-                    });
-                    //끝
-
-                    RegisterUserClose();
-                }else if (!res.success){
-                    Alert.alert('', res.message);
-                }
-            };
-            AjaxUtil.postAsyncData("/Register/save", data, fnSuccess, function(res){
-                Alert.alert('', '에러가 발생하였습니다.');
-            });
-
-
-        })
-
-        function clearForm(param){
-            let clearValue = document.getElementById(param);
-            if(clearValue){
-                clearValue.value = '';
-            }
-
-            $('#email').prop('readonly', false);
-
-
-            if (activeTimerInterval) {
-                clearInterval(activeTimerInterval);
-            }
-        }
-
-        if (top.location != window.location) {
-            alert('로그아웃 되었습니다. 로그인 화면으로 이동합니다.')
-            top.location.reload();
-        }
-
-        if (localStorage.getItem('theme-top') === null && localStorage.getItem('theme-left') === null) {
-            dynamicLinkCss('/css/theme-top-a', '/css/theme-left-a');
-        } else {
-            dynamicLinkCss(localStorage.getItem('theme-top'), localStorage.getItem('theme-left'));
-        }
-
-        // Password show/hide
-        $('.pass_box i').on('click', function () {
-            $('.pass_box input').toggleClass('active');
-            if ($('.pass_box input').hasClass('active')) {
-                $(this).attr('class', "icon ion-md-eye").css({ "color": "#5567ff" }).prev('input').attr('type', "text");
-            } else {
-                $(this).attr('class', "icon ion-md-eye-off").css({ "color": "#989db1" }).prev('.pass_box input').attr('type', 'password');
-            }
+        AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function () {
+            hideLoader();
+            Alert.alert('', '서버통신 실패');
         });
+    })
 
-        //// 로그인ID 저장 Cokiee 관련 처리
-        $('#loginId').val(Cookies.get('loginId'));
-        if ($('#loginId').val() != '') {
-            $('#login_chk').attr('checked', true);
-            $('#loginPwd').focus();
+    $('#BtnAuthenticationRegister').click(function (e) {
+
+        console.log('클릭');
+        let email = document.getElementById('email');
+        let mail = email.value;
+
+        let usernm = document.getElementById('name').value;
+        let content = "사용자권한신청";
+
+
+        if (mail.trim().length === 0) {
+            Alert.alert('', '이메일을 입력해주세요.');
+            email.focus();
+            return;
         }
+        if (!emailValidate(mail.trim())) {
+            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+            email.focus();
+            return false;
+        }
+        let data = {usernm: usernm || "신규사용자", mail, content, type: "new"}
+        showLoader();
+        let fnSuccess = function (res) {
+            if (res.success) {
+                hideLoader();
 
-        $('#login_chk').change(function () {
-            if ($('#login_chk').is(':checked')) {
-                Cookies.set('loginId', $('#loginId').val(), { expires: 7 });
-            } else {
-                Cookies.remove('loginId');
+                Alert.alert('', res.message, function (e) {
+
+                    startTimer(180, 'timer2');
+                });
+            } else if (!res.success) {
+                hideLoader();
+                Alert.alert('', res.message, function () {
+                });
+
             }
+        };
+        AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function () {
+            hideLoader();
+            Alert.alert('', '서버통신 실패');
         });
-
-        $('#loginId').keyup(function () {
-            if ($('#login_chk').is(':checked')) {
-                Cookies.set('loginId', $('#loginId').val(), { path: '/', expires: 7 });
-            }
-        });
-
-        function clearFields() {
-            $('#loginId').val('');
-            $('#loginPwd').val('');
-            $('#loginId').focus();
-        }
-
-        function submitHandler(form) {
-            console.log('submitHandler');
-            var submitData = $(form).serialize() + '&isChangeLang=' + isChangeLang;
-            $.post('/login', submitData, function (result) {
-                console.log('/login');
-                let code = result.data.code;
-                if (code == 'NOUSER') {
-
-                    Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.');
-                    return false;
-                }
-                if (code == 'NOID') {
-
-                    let redtext = document.getElementById('hint-red');
-                    redtext.style.display = 'block';
-                    Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.', clearFields);
-                }
-                else if (code == 'NOPW') {
-                    Alert.alert('', '비밀번호가 일치하지 않습니다', function () { $('#loginPwd').val(''); $('#loginPwd').focus(); });
-                }
-                else if (code == 'ETC') {
-                    Alert.alert('', '로그인에 실패했습니다.&lt;br&gt;다시 시도하십시요', clearFields);
-                } else if (code == 'NOAUTH') {
-                    Alert.alert('', '시스템 접근 권한이 없습니다. 시스템관리자에게 확인하시기 바랍니다', clearFields);
-                } else if (code == 'FIRST') {
-                    Alert.alert('', '비밀번호를 변경하십시요.', function () { location.href = '/pwdchange'; });
-                } else if (code == 'NOTCONFIRM') {
-                    Alert.alert('', '승인되지 않은 사용자입니다.', clearFields);
-                } else if (code == 'noactive') {
-                    Alert.alert('', '사용 불가능한 사용자입니다.', clearFields);
-                }
-                else {
-                    if (code == 'OK') {
-                        let lang_cd = sessionStorage.getItem('lang_code');
-                        let url = '/api/common/labels';
-                        let pData = { lang_code: lang_cd };
-                        let fnsuccess = function (result) {
-                            dic = {};
-                            $.each(result, function (idx, item) {
-                                let storageKey = lang_cd + '_' + item.gui_code + '_' + item.template_key;
-                                let data = [];
-                                if (dic.hasOwnProperty(storageKey)) {
-                                    data = dic[storageKey];
-                                } else {
-                                    dic[storageKey] = data;
-                                }
-                                data.push({ 'label_code': item.label_code, 'text': item.text, 'desc': item.descr });
-                            });
-
-                            $.each(dic, function (k, v) {
-                                let sessionData = JSON.stringify(v);
-                                sessionStorage.setItem(k, sessionData);
-                            });
-                            location.href = "/";
-                        };
-
-                        let fnfailure = function () {
-                            location.href = "/login";
-                        };
-                        AjaxUtil.getAsyncData(url, pData, fnsuccess, fnfailure);
-                        //location.href = "/";
-                    } else {
-                        location.href = '/';
-                    }
-                }
-            }).fail(function (e) {
-                Alert.alert('', JSON.parse(e.responseText).message);
-            });
-        }
-        $('#loginFrm').validate({ submitHandler: submitHandler });
     });
 
-    function cancel (){
 
+    //비밀번호 재설정
+    $('#btnPwSearch').click(function () {
+
+        const authCode = $('#AuthenticationCode').val().trim();
+        const email = $('#mailAddres').val().trim();
+        const password = $('#PasswordChange').val().trim();
+        const passwordChk = $('#PasswordChangeChk').val().trim();
+        const userid = $('#userid').val().trim();
+
+        if (!emailAuthCode_pw) {
+            Alert.alert('', '코드가 인증되지 않았습니다.');
+            return;
+        }
+        if (!authCode) {
+            Alert.alert('', '인증코드를 입력해주세요.');
+            $('#AuthenticationCode').focus();
+            return;
+        }
+        if (!email) {
+            Alert.alert('', '이메일을 입력해주세요.');
+            $('#mailAddres').focus();
+            return;
+        }
+        if (!password) {
+            Alert.alert('', '변경할 비밀번호를 입력해주세요.');
+            $('#PasswordChange').focus();
+            return;
+        }
+        if (!passwordChk) {
+            Alert.alert('', '비밀번호 확인을 입력해주세요.');
+            $('#PasswordChangeChk').focus();
+            return;
+        }
+        if (!userid) {
+            Alert.alert('', '아이디를 입력해주세요.');
+            $('#userid').focus();
+            return;
+        }
+        if (password !== passwordChk) {
+            Alert.alert('', '변경 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+            return;
+        }
+        if (!emailValidate(email.trim())) {
+            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+            email.focus();
+            return;
+        }
+
+        const data = {code: authCode, _CsrfValue, mail: email, password: password, userid: userid};
+
+        const fnSuccess = function (res) {
+            Alert.alert('', res.message, function () {
+                emailAuthCode_pw = false;
+                location.reload();
+            });
+        };
+
+        AjaxUtil.postAsyncData("/user-auth/verifyCode", data, fnSuccess, function () {
+            hideLoader();
+            Alert.alert('', '서버 통신 실패');
+        });
+
+    })
+    let AuthCode = false; // 전역 변수로 선언
+
+    //권한신청 버튼 클릭
+    let btnRegistersend = $('#btnSaveAuth');
+
+    btnRegistersend.click(function (e) {
+        e.preventDefault(); // 기본 버튼 클릭 동작 방지
+
+        const authCode = $('#AuthenticationCodeRegister').val().trim();
+        if (!authCode) {
+            Alert.alert('', '인증코드를 입력해주세요.');
+            $('#AuthenticationCodeRegister').focus();
+            return;
+        }
+
+        if (!validateFields()) {
+            return false;
+        }
+        // 중복 확인 여부 체크
+        if (!AuthCode) {
+            Alert.alert('', '아이디 중복 확인을 하지 않으셨습니다.');
+            return;
+        }
+
+        //비밀번호 검사
+        let password = document.getElementById('password1').value;
+        let password2 = document.getElementById('password2').value;
+
+        if (password !== password2) {
+            Alert.alert('', '비밀번호가 맞지 않습니다.');
+            return;
+        }
+
+        const emailInput = document.getElementById('email');
+        const emailValue = emailInput.value.trim();
+
+        // 이메일 유효성 검사
+        if (!emailValidate(emailValue)) {
+            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+            return false;
+        }
+
+        // 폼 데이터 추출
+        /* let data = FormUtil.extractForm($('#bomForm'));
+        * data.AuthenticationCode = authCode;
+         console.log("요청 data : ", data);*/
+        let data = {
+            id: $('#id').val().trim(),
+            name: $('#name').val().trim(),
+            password: $('#password1').val().trim(),
+            email: $('#email').val().trim(),
+            Phone: $('#Phone').val().trim(),
+            AuthenticationCode: $('#AuthenticationCodeRegister').val().trim(),
+            _csrf: $('input[name="_csrf"]').val() // CSRF 토큰
+        };
+        console.log("직접 수집한 데이터: ", data);
+
+        let fnSuccess = function (res) {
+            if (res.success) {
+                Alert.alert('', res.message);
+                $("#modal-close-button").trigger('click');
+            } else {
+                Alert.alert('', res.message);
+            }
+        };
+
+        // AJAX 요청
+        AjaxUtil.postAsyncData("/Register/save", data, fnSuccess);
+
+        // 폼 필드 초기화
+        AuthCode = false;
+        clearFieldList.forEach(field => clearForm(field));
+
+        RegisterUserClose();
+    });//사용자등록
+
+    function clearForm(param) {
+        let clearValue = document.getElementById(param);
+        if (clearValue) {
+            clearValue.value = '';
+        }
+
+        $('#email').prop('readonly', false);
+
+
+        if (activeTimerInterval) {
+            clearInterval(activeTimerInterval);
+        }
     }
-</script>
 
+    if (top.location != window.location) {
+        alert('로그아웃 되었습니다. 로그인 화면으로 이동합니다.')
+        top.location.reload();
+    }
+
+    if (localStorage.getItem('theme-top') === null && localStorage.getItem('theme-left') === null) {
+        dynamicLinkCss('/css/theme-top-a', '/css/theme-left-a');
+    } else {
+        dynamicLinkCss(localStorage.getItem('theme-top'), localStorage.getItem('theme-left'));
+    }
+
+    // Password show/hide
+    $('.pass_box i').on('click', function () {
+        $('.pass_box input').toggleClass('active');
+        if ($('.pass_box input').hasClass('active')) {
+            $(this).attr('class', "icon ion-md-eye").css({"color": "#5567ff"}).prev('input').attr('type', "text");
+        } else {
+            $(this).attr('class', "icon ion-md-eye-off").css({"color": "#989db1"}).prev('.pass_box input').attr('type', 'password');
+        }
+    });
+
+    //// 로그인ID 저장 Cokiee 관련 처리
+    $('#loginId').val(Cookies.get('loginId'));
+    if ($('#loginId').val() != '') {
+        $('#login_chk').attr('checked', true);
+        $('#loginPwd').focus();
+    }
+
+    $('#login_chk').change(function () {
+        if ($('#login_chk').is(':checked')) {
+            Cookies.set('loginId', $('#loginId').val(), {expires: 7});
+        } else {
+            Cookies.remove('loginId');
+        }
+    });
+
+    $('#loginId').keyup(function () {
+        if ($('#login_chk').is(':checked')) {
+            Cookies.set('loginId', $('#loginId').val(), {path: '/', expires: 7});
+        }
+    });
+
+    function clearFields() {
+        $('#loginId').val('');
+        $('#loginPwd').val('');
+        $('#loginId').focus();
+    }
+
+    function submitHandler(form) {
+        console.log('submitHandler');
+        var submitData = $(form).serialize() + '&isChangeLang=' + isChangeLang;
+        $.post('/login', submitData, function (result) {
+            console.log('/login');
+            let code = result.data.code;
+            if (code == 'NOUSER') {
+
+                Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.');
+                return false;
+            }
+            if (code == 'NOID') {
+
+                let redtext = document.getElementById('hint-red');
+                redtext.style.display = 'block';
+                Alert.alert('', '아이디 또는 비밀번호가 일치하지 않습니다.', clearFields);
+            } else if (code == 'NOPW') {
+                Alert.alert('', '비밀번호가 일치하지 않습니다', function () {
+                    $('#loginPwd').val('');
+                    $('#loginPwd').focus();
+                });
+            } else if (code == 'ETC') {
+                Alert.alert('', '로그인에 실패했습니다.&lt;br&gt;다시 시도하십시요', clearFields);
+            } else if (code == 'NOAUTH') {
+                Alert.alert('', '시스템 접근 권한이 없습니다. 시스템관리자에게 확인하시기 바랍니다', clearFields);
+            } else if (code == 'FIRST') {
+                Alert.alert('', '비밀번호를 변경하십시요.', function () {
+                    location.href = '/pwdchange';
+                });
+            } else if (code == 'NOTCONFIRM') {
+                Alert.alert('', '승인되지 않은 사용자입니다.', clearFields);
+            } else if (code == 'noactive') {
+                Alert.alert('', '사용 불가능한 사용자입니다.', clearFields);
+            } else {
+                if (code == 'OK') {
+                    let lang_cd = sessionStorage.getItem('lang_code');
+                    let url = '/api/common/labels';
+                    let pData = {lang_code: lang_cd};
+                    let fnsuccess = function (result) {
+                        dic = {};
+                        $.each(result, function (idx, item) {
+                            let storageKey = lang_cd + '_' + item.gui_code + '_' + item.template_key;
+                            let data = [];
+                            if (dic.hasOwnProperty(storageKey)) {
+                                data = dic[storageKey];
+                            } else {
+                                dic[storageKey] = data;
+                            }
+                            data.push({'label_code': item.label_code, 'text': item.text, 'desc': item.descr});
+                        });
+
+                        $.each(dic, function (k, v) {
+                            let sessionData = JSON.stringify(v);
+                            sessionStorage.setItem(k, sessionData);
+                        });
+                        location.href = "/";
+                    };
+
+                    let fnfailure = function () {
+                        location.href = "/login";
+                    };
+                    AjaxUtil.getAsyncData(url, pData, fnsuccess, fnfailure);
+                    //location.href = "/";
+                } else {
+                    location.href = '/';
+                }
+            }
+        }).fail(function (e) {
+            Alert.alert('', JSON.parse(e.responseText).message);
+        });
+    }
+
+    $('#loginFrm').validate({submitHandler: submitHandler});
+
+</script>
 </body>
 </html>
