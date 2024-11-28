@@ -30,12 +30,13 @@ public class MailService {
         mailSender.send(message);
     }
 
-    public void saveVerificationEmail(String to, String prenm, String uuid){
-        if (prenm == null || prenm.isEmpty()) {
-            prenm = "사용자";
+    //사용자등록 (이메일 인증)
+    public void saveVerificationEmail(String to, String name, String uuid){
+        if (name == null || name.isEmpty()) {
+            name = "사용자";
         }
         String subject = "사용자등록 인증 메일입니다.";
-        String text = "안녕하세요, " + prenm + "님.\n\n"
+        String text = "안녕하세요, " + name + "님.\n\n"
                 + "다음 인증 코드를 입력하여 사용자등록을 완료하세요:\n"
                 + uuid + "\n\n"
                 + "이 코드는 3분 동안 유효합니다.";

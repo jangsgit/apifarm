@@ -14,6 +14,7 @@ import mes.domain.repository.actasRepository.TB_XClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -31,6 +32,7 @@ public class UserService {
     private UserGroupRepository userGroupRepository;
     @Autowired
     TB_XClientRepository tbXClientRepository;
+
 
     // 사용자 리스트
     /*필요시
@@ -342,5 +344,19 @@ public class UserService {
         }
         return addressParts;
     }
+
+    public List<Map<String, Object>> getCustcdAndSpjangcd(String spjangcd) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("spjangcd", spjangcd);
+
+        String sql = """
+        select custcd, spjangcd 
+        from tb_xa012 
+        where spjangcd = :spjangcd
+        """;
+
+        return sqlRunner.getRows(sql, params);
+    }
+
 
 }
