@@ -43,4 +43,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	List<String> findByFirstNameAndBusinessNumberNative(@Param("firstName") String firstName, @Param("userid1") String userid1);
 
 	boolean existsByUsername(String username);
+
+	Optional<User> findByPassword(String storedPassword);
 }

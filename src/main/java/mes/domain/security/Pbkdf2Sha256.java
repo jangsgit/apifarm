@@ -2,11 +2,14 @@ package mes.domain.security;
 
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +20,7 @@ import java.util.Random;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 
+@Slf4j
 public class Pbkdf2Sha256 {
 	 /**
      * Length of salt
@@ -153,7 +157,7 @@ public class Pbkdf2Sha256 {
      * @param hashedPassword ciphertext
      * @return
      */
-    public static boolean verification(String password, String hashedPassword) {
+    /*public static boolean verification(String password, String hashedPassword) {
         //hashedPassword = algorithm name + number of iterations + salt value + ciphertext;
         String[] parts = hashedPassword.split("\\$");
         if (parts.length != 4) {
@@ -164,6 +168,36 @@ public class Pbkdf2Sha256 {
         String salt = parts[2];
         String hash = encode(password, salt, iterations);
         return hash.equals(hashedPassword);
-    }	
+    }*/
+    public static boolean verification(String password, String hashedPassword) {
+        // 해시 문자열이 null이거나 비어 있는지 확인
+        if (hashedPassword == null || hashedPassword.isEmpty()) {
+            log.error("Empty or null hashedPassword provided");
+            return false;
+        }
+
+        // 해시 문자열 분리
+        String[] parts = hashedPassword.split("\\$");
+        if (parts.length != 4) {
+            log.error("Invalid hashedPassword format: {}", hashedPassword);
+            return false;
+        }
+
+        // 반복 횟수 파싱
+        int iterations;
+        try {
+            iterations = Integer.parseInt(parts[1]); // 두 번째 부분에서 반복 횟수 추출
+        } catch (NumberFormatException e) {
+            log.error("Invalid iterations format in hashedPassword: {}", hashedPassword, e);
+            return false;
+        }
+
+        String salt = parts[2];
+        String computedHash = encode(password, salt, iterations);
+
+        // 고정 시간 비교
+        return MessageDigest.isEqual(computedHash.getBytes(StandardCharsets.UTF_8), hashedPassword.getBytes(StandardCharsets.UTF_8));
+    }
+
 
 }

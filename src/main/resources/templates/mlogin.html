@@ -43,20 +43,20 @@
                             <input type="text" id="loginId" name="username" placeholder="아이디를 입력해주세요">
                         </dd>
                         <!-- 에러메시지 출력 -->
-                        <dd class="hint-red">
-                            <img src="/assets_mobile/images/icon/ico-info-red.svg" alt="힌트메세지">
+                        <!--<dd class="hint-red">
+                            <img src="/assets_mobile/images/icon/ico-info-red.svg" alt=" 에러메세지 출력">
                             에러메세지 출력
-                        </dd>
+                        </dd>-->
                     </dl>
                     <dl>
                         <dt><label for="loginPwd">비밀번호</label></dt>
                         <dd>
                             <input type="password" id="loginPwd" name="password" placeholder="비밀번호를 입력해주세요">
                         </dd>
-                        <dd class="hint">
+                        <!--<dd class="hint">
                             <img src="/assets_mobile/images/icon/ico-info.svg" alt="힌트메세지">
                             힌트메세지
-                        </dd>
+                        </dd>-->
                     </dl>
                     <div class="check-save">
                         <input type="checkbox" id="id_save">
@@ -66,7 +66,7 @@
                     <ul class="btn-login-etc">
                         <li>
                             <a href="#" class="btn btn-popup-open" data-popup="popup1" onclick="RegisterUser()"
-                               title="사용자신청">사용자신청</a>
+                               title="사용자 등록">사용자 등록</a>
                         </li>
                         <li>
                             <a href="#" class="btn btn-popup-open" data-popup="popup2" title="아이디 찾기"
@@ -86,247 +86,45 @@
     <div class="mobile-layout-popup">
         <div class="popup-overlay"></div>
         <div class="popup-wrapper" id="popup1">
-            <div class="popup-title">
-                <h3>사용자등록</h3>
-                <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
-                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap" id="bomForm">
-                    <div class="write-wrap">
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        아이디 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="id" name="id" placeholder="아이디" autocomplete="off">
-                                    </div>
-                                    <a href="#" class="btn" id="btnDuplicate" title="중복확인">중복확인</a>
-                                </dd>
-                            </dl>
-                        </div>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    비밀번호 <span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="password" id="password1" name="password1" placeholder="비밀번호"
-                                           autocomplete="new-password">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    비밀번호 확인 <span class="eq">*</span>
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="password" id="password2" name="password2" placeholder="비밀번호 확인">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    성명
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="name" name="name" placeholder="성명">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    핸드폰
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="Phone" name="Phone" placeholder="핸드폰">
-                                </div>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    이메일
-                                </label>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="email" id="email" name="email" placeholder="이메일">
-                                </div>
-                                <a href="#" class="btn" id="BtnAuthenticationRegister2" title="코드발급">코드발급</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>
-                                <label for="">
-                                    인증코드
-                                </label>
-                                <span id="timer2" style="margin-left: 10px;"></span>
-                            </dt>
-                            <dd>
-                                <div class="input-clear">
-                                    <input type="text" id="AuthenticationCodeRegister" name="AuthenticationCodeRegister"
-                                           placeholder="인증코드">
-                                </div>
-                                <a href="#" class="btn" id="Authentication" title="코드인증">코드인증</a>
-                            </dd>
-                        </dl>
-                    </div>
+            <form id="bomForm1">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="popup-title">
+                    <h3>사용자등록</h3>
+                    <a onclick="RegisterUserClose()" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
                 </div>
-            </div>
-            <div class="popup-button">
-                <button class="btn-navy" id="btnSaveAuth">사용자 등록</button>
-            </div>
-        </div>
-    </div> <!-- //mobile-layout-popup end -->
-    <!--################# 아이디 ##################################################-->
-    <div class="mobile-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup2">
-            <div class="popup-title">
-                <h3>아이디 찾기</h3>
-                <a onclick="ModalClose()" title="팝업닫기" class="btn-popup-close">
-                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <div class="write-wrap">
-                        <div class="row">
+                <div class="popup-contents">
+                    <div class="table-wrap" id="bomForm">
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            아이디 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="id" name="id" placeholder="아이디" autocomplete="off">
+                                        </div>
+                                        <a href="#" class="btn" id="btnDuplicate" title="중복확인">중복확인</a>
+                                    </dd>
+                                </dl>
+                            </div>
                             <dl>
                                 <dt>
                                     <label for="">
-                                        이름 <span class="eq">*</span>
+                                        비밀번호 <span class="eq">*</span>
                                     </label>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="findName" name="findName">
+                                        <input type="password" id="password" name="password" placeholder="비밀번호"
+                                               autocomplete="new-password">
                                     </div>
                                 </dd>
                             </dl>
-                        </div>
-                    </div>
-                    <div class="write-wrap">
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        이메일 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="verifyEmail" name="verifyEmail">
-                                    </div>
-                                </dd>
-                                <dd class="hint-red">
-                                    <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-                    <div class="popup-button">
-                        <button class="btn-navy"> 아이디 전송</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!--mobile-layout-popup and (아이디 찾기)-->
-
-    <!--비밀번호 찾기-->
-    <div class="mobile-layout-popup">
-        <div class="popup-overlay"></div>
-        <div class="popup-wrapper" id="popup3">
-            <div class="popup-title">
-                <h3>아이디 찾기</h3>
-                <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
-                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
-                </a>
-            </div>
-            <div class="popup-contents">
-                <div class="table-wrap">
-                    <div class="write-wrap">
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        아이디 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="findPwID" name="findPwID">
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        이메일 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="findPwEmail" name="findPwEmail">
-                                    </div>
-                                    <a href="#" class="btn" title="코드인증">코드인증</a>
-                                </dd>
-                                <dd class="hint-red">
-                                    <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
-                                </dd>
-                            </dl>
-                        </div>
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        인증코드 <span class="eq">*</span>
-                                        <span id="timer3"
-                                              style="width: 10%; text-align: right; color: red; display: inline-block;"></span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="AuthenticationCode" name="AuthenticationCode">
-                                    </div>
-                                    <a href="#" class="btn" title="코드확인">코드확인</a>
-                                </dd>
-                            </dl>
-                        </div>
-                        <div class="row">
-                            <dl>
-                                <dt>
-                                    <label for="">
-                                        변경 비밀번호 <span class="eq">*</span>
-                                    </label>
-                                </dt>
-                                <dd>
-                                    <div class="input-clear">
-                                        <input type="text" id="PasswordChange" name="PasswordChange">
-                                    </div>
-                                </dd>
-                            </dl>
-                        </div>
-                        <div class="row">
                             <dl>
                                 <dt>
                                     <label for="">
@@ -335,17 +133,233 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="PasswordChangeChk" name="PasswordChangeChk">
+                                        <input type="password" id="password2" name="password2" placeholder="비밀번호 확인" >
                                     </div>
                                 </dd>
                             </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        성명
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="name" name="name" placeholder="성명">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        핸드폰
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="Phone" name="Phone" placeholder="핸드폰">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        이메일
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="email" id="email" name="email" placeholder="이메일">
+                                    </div>
+                                    <a href="#" class="btn" id="BtnAuthenticationRegister2" title="코드발급">코드발급</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label for="">
+                                        인증코드
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="AuthenticationCodeRegister"
+                                               name="AuthenticationCodeRegister"
+                                               placeholder="인증코드">
+                                    </div>
+                                    <a href="#" class="btn" id="Authentication" title="코드인증">코드인증</a>
+                                </dd>
+                                <div style="margin-top: 5px; display: inline-block;">
+                                    <span id="timer2" style="width: 10%;  text-align: right; color: red;"></span>
+                                </div>
+                            </dl>
                         </div>
                     </div>
-                    <div class="popup-button">
-                        <button class="btn-navy"> 비밀번호 변경</button>
+                </div>
+                <div class="popup-button">
+                    <button class="btn-navy" id="btnSaveAuth">사용자 등록</button>
+                </div>
+            </form>
+        </div>
+    </div> <!-- //mobile-layout-popup end -->
+    <!--################# 아이디 ##################################################-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup2">
+            <form id="bomForm2">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="popup-title">
+                    <h3>아이디 찾기</h3>
+                    <a onclick="ModalClose()" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <div class="write-wrap">
+
+                            <dl>
+                                <dt>
+                                    <label>
+                                        이름
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="usernm" name="usernm" placeholder="이름">
+                                    </div>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>
+                                    <label>
+                                        이메일
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="text" id="mail" name="mail" placeholder="이메일">
+                                    </div>
+                                </dd>
+                                <div id="ErrMsg"
+                                     style="margin-top: 10px;text-align: center; display: none; color: red;"><span>해당 사용자는 존재하지 않습니다.</span>
+                                </div>
+                                <div class="hint-red" id="ErrMessage" style="margin: 5px auto 0;">
+                                    <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">신청시 등록한 이메일을 입력해주세요.
+                                </div>
+
+                            </dl>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="popup-button">
+                    <button class="btn-navy" type="button" id="btnSearch">아이디찾기</button>
+                </div>
+            </form>
+        </div>
+    </div><!--mobile-layout-popup and (아이디 찾기)-->
+
+    <!--비밀번호 찾기-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup3">
+            <form id="bomForm3">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="popup-title">
+                    <h3>아이디 찾기</h3>
+                    <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
+                        <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                    </a>
+                </div>
+                <div class="popup-contents">
+                    <div class="table-wrap">
+                        <div class="write-wrap">
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            아이디 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="findPwID" name="findPwID" placeholder="아이디" autocomplete="off">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            이메일 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="findPwEmail" name="findPwEmail" placeholder=이메일>
+                                        </div>
+                                        <a href="#" class="btn" title="코드인증" id="BtnAuthentication">코드인증</a>
+                                    </dd>
+                                    <dd class="hint-red">
+                                        <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            인증코드 <span class="eq">*</span>
+                                            <span id="timer3"
+                                                  style="text-align: right; color: red; display: inline-block;"></span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="text" id="AuthenticationCode" name="AuthenticationCode"
+                                                   placeholder="인증코드">
+                                        </div>
+                                        <!-- <a href="#" class="btn" title="코드확인">코드확인</a>-->
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            변경 비밀번호 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="password" id="PasswordChange" name="PasswordChange"
+                                                   placeholder="변경 비밀번호">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="row">
+                                <dl>
+                                    <dt>
+                                        <label for="">
+                                            비밀번호 확인 <span class="eq">*</span>
+                                        </label>
+                                    </dt>
+                                    <dd>
+                                        <div class="input-clear">
+                                            <input type="password" id="PasswordChangeChk" name="PasswordChangeChk"
+                                                   placeholder="비밀번호 확인">
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="popup-button">
+                            <button class="btn-navy" id="btnPwSearch"> 비밀번호 변경</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </div> <!-- //page-wrapper end-->
 </div>
@@ -394,10 +408,13 @@
             popup.classList.remove('active'); // 팝업 비활성화
             overlay.style.display = 'none'; // 오버레이 숨기기
         }
+        const inputs = popup.querySelectorAll('input'); // popup 내부의 모든 input 태그 선택
+        inputs.forEach(input => {
+            input.value = ''; // 모든 input 값 초기화
+        });
     }
 
     //##############################################  비밀번호 찾기 모달 끝
-
     //##############################################  아이디 찾기 모달
     function openModal() {
         let popup = document.getElementById('popup2');
@@ -419,24 +436,70 @@
             popup.classList.remove('active'); // 팝업 비활성화
             overlay.style.display = 'none'; // 오버레이 숨기기
         }
+        const inputs = popup.querySelectorAll('input'); // popup 내부의 모든 input 태그 선택
+        inputs.forEach(input => {
+            input.value = ''; // 모든 input 값 초기화
+        });
+
+        const errMsgDiv = document.getElementById('ErrMsg');
+        if (errMsgDiv) {
+            errMsgDiv.style.display = 'none'; // 에러 메시지 숨기기
+            errMsgDiv.querySelector('span').textContent = '해당 사용자는 존재하지 않습니다.'; // 기본 텍스트로 초기화
+        }
     }
 
     //document.querySelector('.close').onclick = closeModal;
     //##############################################  아이디 찾기 모달 끝
 
+    //사용자등록 팝업열기
+    function RegisterUser() {
+        let popup = document.getElementById('popup1');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
+    }
+
+    /*function RegisterUserClose() {
+        let popup = document.getElementById('popup1');
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            // 팝업 비활성화
+            popup.classList.remove('active');
+
+            // 오버레이 숨기기
+            overlay.style.display = 'none';
+
+            // 입력 폼 초기화
+            const inputs = popup.querySelectorAll('input'); // popup 내부의 모든 input 태그 선택
+            inputs.forEach(input => {
+                input.value = ''; // 모든 input 값 초기화
+            });
+            stopTimer();
+        } else {
+            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
+    }*/
+
+    //##############################################  사용자 등록 끝
+
     //사용자 등록(유효성 검사용)
     const userSave = [
         {id: 'name', name: '성명'},
         {id: 'id', name: '아이디'},
-        {id: 'password1', name: '비밀번호'},
+        {id: 'password', name: '비밀번호'},
         {id: 'password2', name: '비밀번호확인'},
         {id: 'Phone', name: '핸드폰'},
         {id: 'email', name: '이메일'}
     ];
 
-    const clearFieldList = ['agencyDepartment', 'name', 'id', 'password', 'passwordchk',
-        'firstSelect', 'secondSelect', 'thirdSelect', 'tel', 'level', 'email',
-        'reason', 'AuthenticationCodeRegister']
+
+    const clearFieldList = ['name', 'id', 'password', 'passwordchk', 'Phone' ,'email', 'AuthenticationCodeRegister']
 
     // 유효성 검사
     function validateFields() {
@@ -446,11 +509,11 @@
             }
         }
 
-        /*for (let field of nameBasedFields) {
+        for (let field of nameBasedFields) {
             if (!validateFieldsByName(field.name, field.displayName)) {
                 return false;
             }
-        }*/
+        }
 
         return true;  // 모든 유효성 검사를 통과했을 경우
     }
@@ -460,7 +523,7 @@
         const value = document.getElementById(id)?.value.trim();
 
         if (!value) {
-            Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+            Alert.alert('', `${fieldName}가 입력되지 않았습니다.`);
             return false;
         }
 
@@ -479,39 +542,13 @@
         for (let element of elements) {
             const value = element.value.trim();
             if (!value) {
-                Alert.alert('', `${fieldName}이(가) 입력되지 않았습니다.`);
+                Alert.alert('', `${fieldName}가 입력되지 않았습니다.`);
                 return false;
             }
         }
 
         return true;
     }
-
-    //사용자등록 팝업열기
-    function RegisterUser() {
-        let popup = document.getElementById('popup1');
-        let overlay = document.querySelector('.popup-overlay');
-
-        if (popup && overlay) {
-            popup.classList.add('active'); // 팝업 활성화
-            overlay.style.display = 'block'; // 오버레이 보이기
-        } else {
-            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
-        }
-    }
-
-    function RegisterUserClose() {
-        let popup = document.getElementById('popup1');
-        let overlay = document.querySelector('.popup-overlay');
-
-        if (popup && overlay) {
-            popup.classList.remove('active'); // 팝업 비활성화
-            overlay.style.display = 'none'; // 오버레이 숨기기
-        } else {
-            console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
-        }
-    }
-
 
     var userinfo = {
         username: '',
@@ -549,7 +586,7 @@
 
 <script type="text/javascript">
     var isChangeLang = 'N';
-
+    /*let _CsrfValue = _csrf[0].value;*/
 
     // 로딩바를 보여주는 함수
     function showLoader() {
@@ -603,6 +640,41 @@
             }, 1000);
         }
 
+        window.stopTimer = function (ele) {
+            if (activeTimerInterval) {
+                clearInterval(activeTimerInterval);
+                activeTimerInterval = null;
+            }
+
+            let timerElement = document.getElementById(ele);
+            if (timerElement) {
+                timerElement.textContent = ''; // 타이머 내용 초기화
+            }
+        };
+
+        window.RegisterUserClose = function () {
+            let popup = document.getElementById('popup1');
+            let overlay = document.querySelector('.popup-overlay');
+
+            if (popup && overlay) {
+                // 팝업 비활성화
+                popup.classList.remove('active');
+                overlay.style.display = 'none';
+
+                // 입력 필드 초기화
+                const inputs = popup.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.value = ''; // 모든 input 값 초기화
+                });
+
+                // 타이머 중지 및 초기화
+                stopTimer('timer');
+            } else {
+                console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
+            }
+        };
+
+
         let emailAuthCode = false;
         let emailAuthCode_pw = false;
 
@@ -631,6 +703,7 @@
             }
             AjaxUtil.postAsyncData("/authentication", data, fnSuccess);
         })
+
         //사용자 등록(이메일 코드발급)
         $('#BtnAuthenticationRegister2').click(function (e) {
             let email = document.getElementById('email');
@@ -722,65 +795,12 @@
 
     })
 
-    //아이디 찾기
-    $('#btnSearch').click(function (e) {
-
-        const errMsgDiv = document.getElementById('ErrMsg');
-        const errMsgSpan = errMsgDiv.querySelector('span');
-
-        errMsgDiv.style.display = 'none';
-        errMsgDiv.style.color = 'red';
-        errMsgDiv.classList.remove('show');
-        errMsgSpan.textContent = '해당 사용자는 존재하지 않습니다.';
-
-        let usernm = document.getElementById('usernm').value;
-        let mail = document.getElementById('mail').value;
-
-        if (usernm.trim().length === 0 || mail.trim().length === 0) {
-            Alert.alert('', '빈 값은 불가능합니다.');
-            return false;
-        }
-
-
-        if (!emailValidate(mail.trim())) {
-            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
-            return false;
-        }
-
-        let data = {usernm, mail, _CsrfValue}
-
-        let fnSuccess = function (res) {
-            if (res.success) {
-                if (Array.isArray(res.data)) {
-                    errMsgSpan.textContent = res.data.join(', ') + '입니다.'; // 각 배열 요소를 쉼표로 구분하여 표시
-                } else {
-                    errMsgSpan.textContent = res.data + '입니다.'; // 배열이 아니면 그대로 표시
-                }
-                errMsgDiv.style.display = 'block';
-                errMsgDiv.style.color = 'black';
-                errMsgDiv.classList.add('show');
-            } else if (!res.success) {
-
-                errMsgDiv.style.display = 'block';
-                errMsgDiv.classList.add('show');
-
-                errMsgDiv.addEventListener('animationend', function () {
-                    errMsgDiv.classList.remove('show');
-                });
-
-            }
-        };
-        AjaxUtil.postAsyncData("/user-auth/searchAccount", data, fnSuccess, function () {
-            Alert.alert('', '서버통신 실패')
-        });
-    })
-
     //비밀번호  찾기 > 이메일 인증
     $('#BtnAuthentication').click(function (e) {
-        let user = document.getElementById('userid');
+        let user = document.getElementById('findPwID');
         let usernm = user.value;
 
-        let email = document.getElementById('mailAddres');
+        let email = document.getElementById('findPwEmail');
         let mail = email.value;
         let content = "비밀번호 재설정"
 
@@ -870,18 +890,14 @@
 
 
     //비밀번호 재설정
-    $('#btnPwSearch').click(function () {
+    $('#btnPwSearch').click(function(){
 
         const authCode = $('#AuthenticationCode').val().trim();
-        const email = $('#mailAddres').val().trim();
+        const email = $('#findPwEmail').val().trim();
         const password = $('#PasswordChange').val().trim();
         const passwordChk = $('#PasswordChangeChk').val().trim();
-        const userid = $('#userid').val().trim();
+        const userid = $('#findPwID').val().trim();
 
-        if (!emailAuthCode_pw) {
-            Alert.alert('', '코드가 인증되지 않았습니다.');
-            return;
-        }
         if (!authCode) {
             Alert.alert('', '인증코드를 입력해주세요.');
             $('#AuthenticationCode').focus();
@@ -889,7 +905,7 @@
         }
         if (!email) {
             Alert.alert('', '이메일을 입력해주세요.');
-            $('#mailAddres').focus();
+            $('#findPwEmail').focus();
             return;
         }
         if (!password) {
@@ -904,26 +920,19 @@
         }
         if (!userid) {
             Alert.alert('', '아이디를 입력해주세요.');
-            $('#userid').focus();
+            $('#findPwID').focus();
             return;
         }
         if (password !== passwordChk) {
             Alert.alert('', '변경 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
             return;
         }
-        if (!emailValidate(email.trim())) {
-            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
-            email.focus();
-            return;
-        }
+        if(!emailValidate(email.trim())){Alert.alert('', '유효한 이메일 형식을 입력하세요.'); email.focus();  return; }
 
-        const data = {code: authCode, _CsrfValue, mail: email, password: password, userid: userid};
+        const data = { code: authCode, mail: email, password: password, userid : userid };
 
         const fnSuccess = function (res) {
-            Alert.alert('', res.message, function () {
-                emailAuthCode_pw = false;
-                location.reload();
-            });
+            Alert.alert('', res.message, function(){ location.reload(); });
         };
 
         AjaxUtil.postAsyncData("/user-auth/verifyCode", data, fnSuccess, function () {
@@ -932,6 +941,7 @@
         });
 
     })
+
     let AuthCode = false; // 전역 변수로 선언
 
     //권한신청 버튼 클릭
@@ -957,7 +967,7 @@
         }
 
         //비밀번호 검사
-        let password = document.getElementById('password1').value;
+        let password = document.getElementById('password').value;
         let password2 = document.getElementById('password2').value;
 
         if (password !== password2) {
@@ -973,17 +983,12 @@
             Alert.alert('', '유효한 이메일 형식을 입력하세요.');
             return false;
         }
-
-        // 폼 데이터 추출
-        /* let data = FormUtil.extractForm($('#bomForm'));
-        * data.AuthenticationCode = authCode;
-         console.log("요청 data : ", data);*/
         let data = {
             id: $('#id').val().trim(),
             name: $('#name').val().trim(),
-            password: $('#password1').val().trim(),
+            password: $('#password').val().trim(),
             email: $('#email').val().trim(),
-            Phone: $('#Phone').val().trim(),
+            phone: $('#Phone').val().trim(),
             AuthenticationCode: $('#AuthenticationCodeRegister').val().trim(),
             _csrf: $('input[name="_csrf"]').val() // CSRF 토큰
         };
@@ -992,7 +997,7 @@
         let fnSuccess = function (res) {
             if (res.success) {
                 Alert.alert('', res.message);
-                $("#modal-close-button").trigger('click');
+                RegisterUserClose();
             } else {
                 Alert.alert('', res.message);
             }
@@ -1004,8 +1009,6 @@
         // 폼 필드 초기화
         AuthCode = false;
         clearFieldList.forEach(field => clearForm(field));
-
-        RegisterUserClose();
     });//사용자등록
 
     function clearForm(param) {
@@ -1143,6 +1146,55 @@
     }
 
     $('#loginFrm').validate({submitHandler: submitHandler});
+
+    //아이디 찾기
+    $('#btnSearch').click(function (e){
+
+        const errMsgDiv = document.getElementById('ErrMsg');
+        const errMsgSpan = errMsgDiv.querySelector('span');
+
+        errMsgDiv.style.display = 'none';
+        errMsgDiv.style.color = 'red';
+        errMsgDiv.classList.remove('show');
+        errMsgSpan.textContent = '해당 사용자는 존재하지 않습니다.';
+
+        let usernm = document.getElementById('usernm').value;
+        let mail = document.getElementById('mail').value;
+
+        if(usernm.trim().length === 0 || mail.trim().length === 0){
+            Alert.alert('', '빈 값은 불가능합니다.');
+            return false;
+        }
+
+
+        if(!emailValidate(mail.trim()))
+        { Alert.alert('', '유효한 이메일 형식을 입력하세요.'); return false; }
+
+        let data = { usernm, mail}
+
+        let fnSuccess = function (res){
+            if(res.success){
+                if (Array.isArray(res.data)) {
+                    errMsgSpan.textContent = res.data.join(', ') + '입니다.'; // 각 배열 요소를 쉼표로 구분하여 표시
+                } else {
+                    errMsgSpan.textContent = res.data + '입니다.'; // 배열이 아니면 그대로 표시
+                }
+                errMsgDiv.style.display = 'block';
+                errMsgDiv.style.color = 'black';
+                errMsgDiv.classList.add('show');
+            } else if (!res.success){
+
+                errMsgDiv.style.display = 'block';
+                errMsgDiv.classList.add('show');
+
+                errMsgDiv.addEventListener('animationend', function() {
+                    errMsgDiv.classList.remove('show');
+                });
+
+            }
+        };
+        AjaxUtil.postAsyncData("/user-auth/searchAccount", data, fnSuccess, function(){ Alert.alert('', '서버통신 실패') });
+    })
 
 </script>
 </body>

@@ -142,46 +142,88 @@ public class AccountController {
 			@RequestParam("username") final String username,
 			@RequestParam("password") final String password,
 			final HttpServletRequest request) throws UnknownHostException {
-		// 여기로 들어오지 않음.
-		AjaxResult result = new AjaxResult();
 
-		HashMap<String, Object> data = new HashMap<String, Object>();
+		log.info("로그인 시도, username: {}", username);
+
+		AjaxResult result = new AjaxResult();
+		HashMap<String, Object> data = new HashMap<>();
 		result.data = data;
 
-		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
-		CustomAuthenticationToken auth = null;
-		try{
-			auth = (CustomAuthenticationToken)authManager.authenticate(authReq);
-		}catch (AuthenticationException e){
-			//e.printStackTrace();
+		// 사용자 조회
+		Optional<User> optionalUser = userRepository.findByUsername(username);
+		if (optionalUser.isEmpty()) {
 			data.put("code", "NOUSER");
 			return result;
 		}
 
-		if(auth!=null) {
-			User user = (User)auth.getPrincipal();
-			user.getActive();
+		User user = optionalUser.get();
+		String storedPassword = user.getPassword();
+
+		// 비밀번호 검증
+		if (!authenticate(password, storedPassword)) {
+			data.put("code", "NOPW");
+			return result;
+		}
+
+		// 인증 성공 처리
+		UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
+		CustomAuthenticationToken auth = (CustomAuthenticationToken) authManager.authenticate(authReq);
+
+		if (auth != null) {
 			data.put("code", "OK");
 
-			/*try {
-				this.accountService.saveLoginLog("login", auth);
+			try {
+				accountService.saveLoginLog("login", auth);
 			} catch (UnknownHostException e) {
-				// Handle the exception (e.g., log it)
-				e.printStackTrace();
-			}*/
+				log.error("로그 저장 중 에러 발생", e);
+			}
+
+			// Spring Security 세션 설정
+			SecurityContext sc = SecurityContextHolder.getContext();
+			sc.setAuthentication(auth);
+
+			HttpSession session = request.getSession(true);
+			session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
 		} else {
-			result.success=false;
+			result.success = false;
 			data.put("code", "NOID");
 		}
 
-		SecurityContext sc = SecurityContextHolder.getContext();
-		sc.setAuthentication(auth);
-
-		HttpSession session = request.getSession(true);
-		session.setAttribute("SPRING_SECURITY_CONTEXT", sc);
-
 		return result;
 	}
+
+	public boolean authenticate(String rawPassword, String storedPassword) {
+		// 신규 방식 검증
+		if (passwordEncoder.matches(rawPassword, storedPassword)) {
+			return true;
+		}
+
+		// 기존 방식 검증
+		if (Pbkdf2Sha256.verification(rawPassword, storedPassword)) {
+			// 기존 방식 검증 성공 시 새로운 방식으로 저장
+			String newEncodedPassword = passwordEncoder.encode(rawPassword);
+			updatePasswordInDatabase(newEncodedPassword);
+			return true;
+		}
+
+		// 두 방식 모두 실패
+		return false;
+	}
+
+	private void updatePasswordInDatabase(String newPassword) {
+		Optional<User> optionalUser = userRepository.findByUsername(
+				SecurityContextHolder.getContext().getAuthentication().getName());
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			user.setPassword(newPassword); // 새로운 비밀번호 설정
+			userRepository.save(user);    // 변경 내용 저장
+		}
+	}
+
+
+
+
+
 
 
 	@GetMapping("/account/myinfo")
@@ -305,7 +347,7 @@ public class AccountController {
 						.phone(phone)
 						.email(email)
 						.first_name(name)
-						.last_name("")
+						.last_name(name)
 						.tel("")
 						.spjangcd(spjangcd)
 						.active(true)
@@ -318,11 +360,12 @@ public class AccountController {
 
 				jdbcTemplate.execute("SET IDENTITY_INSERT user_profile ON");
 				// UserProfile 저장 (JDBC 사용)
-				String sql = "INSERT INTO user_profile (_created, lang_code, Name, User_id) VALUES (?,?, ?, ?)";
+				String sql = "INSERT INTO user_profile (_created, lang_code, Name, UserGroup_id, User_id) VALUES (?,?, ?, ?, ?)";
 				jdbcTemplate.update(sql,
 						new Timestamp(System.currentTimeMillis()), // 현재 시간
 						"ko-KR", // lang_code (예: 한국어)
 						name, // Name (사용자 이름)
+						35 ,// UserGroup_id (일반거래처)
 						user.getId() // User_id
 				);
 				jdbcTemplate.execute("SET IDENTITY_INSERT user_profile OFF");
@@ -458,12 +501,12 @@ public class AccountController {
 
 	@PostMapping("/user-auth/searchAccount")
 	public AjaxResult IdSearch(@RequestParam("usernm") final String usernm,
-							   @RequestParam("userid1") final String userid1) {
+							   @RequestParam("mail") final String mail){
 
 		AjaxResult result = new AjaxResult();
 
 		// 사업자 번호와 대표자를 기반으로 사용자 검색
-		List<String> user = userRepository.findByFirstNameAndBusinessNumberNative(usernm, userid1);
+		List<String> user = userRepository.findByFirstNameAndEmailNative(usernm, mail);
 
 		if (!user.isEmpty()) {
 			result.success = true;
@@ -506,12 +549,11 @@ public class AccountController {
 	}
 
 
-
-	private void sendEmailLogic(String mail, String prenm){
+	private void sendEmailLogic(String mail, String usernm){
 		Random random = new Random();
 		int randomNum = 100000 + random.nextInt(900000); // 100000부터 999999까지의 랜덤 난수 생성
 		String verificationCode = String.valueOf(randomNum); // 정수를 문자열로 변환
-		emailService.sendVerificationEmail(mail, prenm, verificationCode);
+		emailService.sendVerificationEmail(mail, usernm, verificationCode);
 
 		tokenStore.put(mail, verificationCode);
 		tokenExpiry.put(mail, System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3));
