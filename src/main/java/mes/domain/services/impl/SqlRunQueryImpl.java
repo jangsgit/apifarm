@@ -26,26 +26,6 @@ public class SqlRunQueryImpl implements SqlRunner {
 	LogWriter logWriter;
 
 
-	public List<Map<String, Object>> selectList(String sql, Map<String, Object> dicParam){
-
-		List<Map<String, Object>> rows = null;
-		try {
-			// SQL 실행
-			rows = jdbcTemplate.queryForList(sql, dicParam);
-		} catch (DataAccessException dae) {
-			// 데이터 액세스 관련 예외 처리
-			System.err.println("DataAccessException 발생: " + dae.getMessage());
-			logWriter.addDbLog("error", "SqlRunQueryImpl.selectList", dae);
-		} catch (Exception e) {
-			// 일반 예외 처리
-			System.err.println("예기치 못한 오류 발생: " + e.getMessage());
-			logWriter.addDbLog("error", "SqlRunQueryImpl.selectList", e);
-		}
-
-		// 결과 반환
-		return rows != null ? rows : List.of(); // null 방지
-	}
-
 
 	public List<Map<String, Object>> getRows(String sql, MapSqlParameterSource dicParam){
     	
