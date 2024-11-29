@@ -13,7 +13,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-
     <script src="/assets_mobile/js/ui.js"></script> <!-- Common js -->
     <script th:inline="javascript">
         var sandanData = /*[[${session.sandanList}]]*/ [];
@@ -26,6 +25,7 @@
 
     <script src="/js/common.js?v=1060"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> <!-- Slide js -->
+    <script src="/js/Mobile.js"></script>
 </head>
 
 <body>
@@ -85,7 +85,8 @@
                         <dd>
                             <div style="display: flex; gap: 10px">
                                 <div style="width: 100%">
-                                    <input type="text" id="searchcltcd" placeholder="거래처를 입력해주세요">
+                                    <input type="text" id="searchcltnm" placeholder="거래처를 입력해주세요">
+                                    <input type="hidden" id="searchcltcd">
                                 </div>
                                 <div>
                                     <a href="#" class="btn" title="검색" onclick="searchCltcd()"
@@ -101,7 +102,8 @@
                         <dd>
                             <div style="display: flex; gap: 10px">
                                 <div style="width: 100%">
-                                    <input type="text" id="searchproduct" placeholder="품목을 입력해주세요">
+                                    <input type="text" id="searchproductnm" placeholder="품목을 입력해주세요">
+                                    <input type="hidden" id="searchproductcd">
                                 </div>
                                 <div>
                                     <a href="#" class="btn" title="검색" onclick="searchProduct()"
@@ -123,48 +125,9 @@
                     <div class="list-num">
                         목록 <span class="blue">- 건</span>
                     </div>
-                    <a href="#" title="범례정보" class="btn-question">
-                        <img src="/assets_mobile/images/icon/ico-question.svg" alt="범례정보 아이콘">
-                    </a>
                 </div>
                 <div class="list-card-wrap" id="cardWrap">
-                    <!-- ★ status : green(생성) / blue(진행) / black(완료) / red(취소) -->
-                    <div class="card-box">
-                        <div class="card-cont">
-                            <dl>
-                                <dt>계획일자</dt>
-                                <dd>24.11.05 / PR-2024-0001</dd>
-                            </dl>
-                            <dl>
-                                <dt>품목명</dt>
-                                <dd>평코일-4(검정스톤)</dd>
-                            </dl>
-                            <dl>
-                                <dt>수주량</dt>
-                                <dd>270</dd>
-                            </dl>
-                            <dl>
-                                <dt>계획량</dt>
-                                <dd>270</dd>
-                            </dl>
-                            <dl>
-                                <dt>작업공정</dt>
-                                <dd>적재공정</dd>
-                            </dl>
-                            <dl>
-                                <dt>작업일자</dt>
-                                <dd>2024-10-22</dd>
-                            </dl>
-                            <dl>
-                                <dt>작업량</dt>
-                                <dd>253</dd>
-                            </dl>
-                        </div>
-                        <div class="card-btn">
-                            <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
-                        </div>
-                    </div>
-                    <!--임시 하드코딩-->
+
                 </div> <!--//card-wrap end-->
             </div> <!--// contents-wrap end-->
         </div> <!--//layout-contents end -->
@@ -183,17 +146,95 @@
             <div class="popup-contents">
                 <div class="ticket-tit">
                     <dl>
-                        <dt>티켓명</dt>
-                        <dd>전지부품교체</dd>
+                        <dt class="wonotext">작업일지번호 : </dt>
+                    </dl>
+                    <dl>
+                        <dt class="producttext">품목 : </dt>
+                    </dl>
+                    <dl>
+                        <dt class="sizetext">규격 : </dt>
                     </dl>
                 </div>
                 <div class="list-card-wrap">
-                    <!-- ★ 상태배지 : green(생성) / blue(진행) / black(완료) / red(취소) -->
 
                 </div>
             </div>
             <div class="popup-button">
                 <button class="btn-popup-close btn-navy">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!--거래처 검색 팝업-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup1">
+            <div class="popup-title">
+                <h3>거래처 검색</h3>
+                <a onclick="ModalClose('popup1')" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <div class="write-wrap">
+                        <div class="row">
+                            <dl style="padding-bottom: 300px">
+                                <h4>검색한 거래처명</h4>
+                                <h5 id="cltcdText" style="margin-bottom: 15px">-</h5>
+                                <dt>
+                                    <label for="selectcltcd">
+                                        거래처명 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <select id="selectcltcd" name="searchOrdflag" onchange="selectText('popup1', 'searchcltnm', 'searchcltcd')">
+                                            <option value="">전체</option>
+                                        </select>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 품목 검색 팝업-->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup2">
+            <div class="popup-title">
+                <h3>품목 검색</h3>
+                <a onclick="ModalClose('popup2')" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">
+                <div class="table-wrap">
+                    <div class="write-wrap">
+                        <div class="row">
+                            <dl style="padding-bottom: 300px">
+                                <h4>검색한 품목명</h4>
+                                <h5 id="productText" style="margin-bottom: 15px">-</h5>
+                                <dt>
+                                    <label for="selectproduct">
+                                        품목명 <span class="eq">*</span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <select id="selectproduct" name="searchOrdflag" onchange="selectText('popup2', 'searchproductnm', 'searchproductcd')">
+                                            <option value="">전체</option>
+                                        </select>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -217,14 +258,19 @@
 <script type="text/javascript">
 
     document.readyState === 'complete' ? init() : window.onload = init;
+    // 오늘 날짜 설정
+    const date = new Date();
+    date.setHours(date.getHours() + 9); // UTC+9로 한국 시간 설정
+    const today = date.toISOString().split('T')[0];
+    // 현재 년도를 가져옵니다
+    const currentYear = new Date().getFullYear();
+    // 시작일 input에 올해 1월 1일을 설정합니다
+    document.getElementById('startDate').value = `${currentYear}-01-01`;
+    document.getElementById('endDate').value = today;
 
     function init() {
 
         fetchListData();
-        // fetchListData_ticket();
-        // fetchListData_action();
-        // clearForm();
-        // clearForm_action();
     }
 
 
@@ -233,91 +279,75 @@
         const availableColors = ['card-blue', 'card-green', 'card-black', 'card-red', 'card-yellow', 'card-purple'];
         listCardWrap.innerHTML = ''; // 기존 내용을 초기화
 
+        // 날자 변환
+
         data.forEach(item => {
 
-            let hasWorkdt = false;
-            let actionsHtml = '';
-            if (item.actions && item.actions.length > 0) {
-                item.actions.forEach(action => {
-                    const workdt = action.workdt || ''; // 조치일자
-                    const workrm = action.workrm || ''; // 조치내용
-                    const ordertext = action.ordertext || ''; // 요청사항
-
-                    // workdt가 있을 때
-                    if (workdt) {
-                        hasWorkdt = true;
-                        actionsHtml += `
-                                <dl>
-                                    <dt>조치일자</dt>
-                                    <dd>${workdt}</dd>
-                                </dl>
-                            `;
-
-                        // workrm이 있을 경우에만 추가 출력
-                        if (workrm) {
-                            actionsHtml += `
-                                    <dl>
-                                        <dt>조치내용</dt>
-                                        <dd>${workrm.replace(/\r\n/g, '<br>')}</dd>
-                                    </dl>
-                                `;
-                        }
-                    }
-
-                    // ordertext가 있을 경우 추가 출력
-                    if (ordertext) {
-                        actionsHtml += `
-                                <dl>
-                                    <dt>요청사항</dt>
-                                    <dd>${ordertext.replace(/\r\n/g, '<br>')}</dd>
-                                </dl>
-                            `;
-                    }
-                });
-            }
-
             // 버튼 처리
-            let buttonsHtml = '';
-
-            buttonsHtml += `
-                        <button>첨부파일</button>
-                        <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
-                    `;
-
+            let buttonsHtml = `<button class="btn btn-popup-open" data-popup="popup-history" title="작업이력">
+                    작업이력
+                </button>`;
 
             const cardHtml = `
-                        <div class="card-box ${cardClass}" data-tketnum="${item.tketnum}">
+                        <div class="card-box" data-wono="${item.WONO}">
                             <div class="card-tit">
-                                <h3>${item.tketnm}</h3>
-                                <div class="status-tag">
-                                    <span class="sta-${cardClass.split('-')[1]}">${item.tketflag}</span>
-                                    <span class="sta-bgnavy">${item.tkettypecd || ''}</span>
-                                </div>
+                                <h3>${`${item.WONO.slice(0, 2)}-${item.WONO.slice(2, 6)}-${item.WONO.slice(6)}`}</h3>
                             </div>
                             <div class="card-cont">
                                 <dl>
-                                    <dt>발생일자 / 요청자</dt>
-                                    <dd>${item.tketcrdtm || ''} / ${item.tketrusernm || ''}</dd>
+                                    <dt>계획일자</dt>
+                                    <dd>${item.PRODDATE}</dd>
                                 </dl>
                                 <dl>
-                                    <dt>소속사 / 연락처</dt>
-                                    <dd>${item.tketrcpnm || ''} / ${item.requesterhp || ''}</dd>
+                                    <dt>품목명</dt>
+                                    <dd>${item.PNAME}</dd>
                                 </dl>
                                 <dl>
-                                    <dt>작업내용</dt>
-                                    <dd>${item.tketrem.replace(/\r\n/g, '<br>')}</dd>
+                                    <dt>수주량</dt>
+                                    <dd>${item.ORDQTY}</dd>
                                 </dl>
-                                ${actionsHtml}
+                                <dl>
+                                    <dt>계획량</dt>
+                                    <dd>${item.PRODQTY}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업공정</dt>
+                                    <dd>${item.WFLAG01}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업일자</dt>
+                                    <dd>${item.WORDT01}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업공정</dt>
+                                    <dd>${item.WFLAG02}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업일자</dt>
+                                    <dd>${item.WORDT02}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업공정</dt>
+                                    <dd>${item.WFLAG03}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업일자</dt>
+                                    <dd>${item.WORDT03}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>작업량</dt>
+                                    <dd>${item.WORQT01}</dd>
+                                </dl>
                             </div>
                             <div class="card-btn">
-                                <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
+                                ${buttonsHtml}
                             </div>
                         </div>
                     `;
             listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
             // 작업이력 버튼에 클릭 이벤트 추가
             const historyButton = listCardWrap.querySelector(
-                `.card-box[data-tketnum="${item.tketnum}"] .btn-popup-open[data-popup="popup-history"]`
+                `.card-box[data-wono="${item.WONO}"] .btn-popup-open[data-popup="popup-history"]`
             );
             attachPopupEvent(historyButton, item, 'popup-history');
         });
@@ -325,119 +355,79 @@
     function attachPopupEvent(button, item, popupType) {
         if (!button) return;
         button.addEventListener('click', () => {
+
+        if (popupType === 'popup-history') {
                 fetchListData_action(item);
+            }
         });
     }
     // 작업이력 불러오기
     function fetchListData_action(item) {
         // wono 작지번호
-        let wono = item.wono;
-        let wdate = item.wdate;
+        let wono = item.WONO;
 
         $.ajax({
             url: '/api/mobile_production/read_work',
             type: 'GET',
             data: {
                 wono: wono,
-                wdate: wdate
             },
             success: function (data) {
-                renderActionHistory(data.data);
+                console.log(data.data)
+                if(data.data.length > 0) {
+                    renderActionHistory(data.data);
+                }else {
+                    Alert.alert('','작업이력이 없습니다.');
+                }
             }
         });
     }
     function renderActionHistory(data) {
-        const listCardWrap = document.getElementById('cardWrap');
-        const availableColors = ['card-blue', 'card-green', 'card-black', 'card-red', 'card-yellow', 'card-purple'];
+        // 작업이력 작업일지번호 표시
+        const wonoNamaElement = document.querySelector('#popup-history .ticket-tit .wonotext');
+        wonoNamaElement.textContent = '작업일지번호 : ' + data[0].wono.slice(0, 2) + '-' + data[0].wono.slice(2, 6) + '-' + data[0].wono.slice(6); // 작업일지번호 표시
+        // 작업이력 품목 표시
+        const productNameElement = document.querySelector('#popup-history .ticket-tit .producttext');
+        productNameElement.textContent = '품목 : ' + data[0].pname; // 작업일지번호 표시
+        // 작업이력 규격 표시
+        const sizeNameElement = document.querySelector('#popup-history .ticket-tit .sizetext');
+        sizeNameElement.textContent = '규격 : ' + data[0].psize; // 작업일지번호 표시
+
+        // 작업이력 내용 렌더링
+        const listCardWrap = document.querySelector('#popup-history .list-card-wrap');
         listCardWrap.innerHTML = ''; // 기존 내용을 초기화
+        const popup = document.getElementById('popup-history');
+        popup.scrollTop = 0;
+        const availableColors = ['card-blue', 'card-green', 'card-black', 'card-red', 'card-yellow', 'card-purple'];
 
         data.forEach(item => {
-
-            let hasWorkdt = false;
-            let actionsHtml = '';
-            if (item.actions && item.actions.length > 0) {
-                item.actions.forEach(action => {
-                    const workdt = action.workdt || ''; // 조치일자
-                    const workrm = action.workrm || ''; // 조치내용
-                    const ordertext = action.ordertext || ''; // 요청사항
-
-                    // workdt가 있을 때
-                    if (workdt) {
-                        hasWorkdt = true;
-                        actionsHtml += `
-                                <dl>
-                                    <dt>조치일자</dt>
-                                    <dd>${workdt}</dd>
-                                </dl>
-                            `;
-
-                        // workrm이 있을 경우에만 추가 출력
-                        if (workrm) {
-                            actionsHtml += `
-                                    <dl>
-                                        <dt>조치내용</dt>
-                                        <dd>${workrm.replace(/\r\n/g, '<br>')}</dd>
-                                    </dl>
-                                `;
-                        }
-                    }
-
-                    // ordertext가 있을 경우 추가 출력
-                    if (ordertext) {
-                        actionsHtml += `
-                                <dl>
-                                    <dt>요청사항</dt>
-                                    <dd>${ordertext.replace(/\r\n/g, '<br>')}</dd>
-                                </dl>
-                            `;
-                    }
-                });
-            }
-
-            // 버튼 처리
-            let buttonsHtml = '';
-
-            buttonsHtml += `
-                        <button>첨부파일</button>
-                        <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
-                    `;
-
-
             const cardHtml = `
-                        <div class="card-box ${cardClass}" data-tketnum="${item.tketnum}">
-                            <div class="card-tit">
-                                <h3>${item.tketnm}</h3>
-                                <div class="status-tag">
-                                    <span class="sta-${cardClass.split('-')[1]}">${item.tketflag}</span>
-                                    <span class="sta-bgnavy">${item.tkettypecd || ''}</span>
-                                </div>
-                            </div>
+                        <div class="card-box">
                             <div class="card-cont">
                                 <dl>
-                                    <dt>발생일자 / 요청자</dt>
-                                    <dd>${item.tketcrdtm || ''} / ${item.tketrusernm || ''}</dd>
+                                    <dt>일자</dt>
+                                    <dd>${item.wtrdt}</dd>
                                 </dl>
                                 <dl>
-                                    <dt>소속사 / 연락처</dt>
-                                    <dd>${item.tketrcpnm || ''} / ${item.requesterhp || ''}</dd>
+                                    <dt>작업공정</dt>
+                                    <dd>${item.wflag}</dd>
                                 </dl>
                                 <dl>
-                                    <dt>작업내용</dt>
-                                    <dd>${item.tketrem.replace(/\r\n/g, '<br>')}</dd>
+                                    <dt>생산량</dt>
+                                    <dd>${item.wotqt}</dd>
                                 </dl>
-                                ${actionsHtml}
-                            </div>
-                            <div class="card-btn">
-                                <button class="btn btn-popup-open" data-popup="popup_mob" title="작업이력">작업이력</button>
+                                <dl>
+                                    <dt>불량</dt>
+                                    <dd>${item.wbdqt}</dd>
+                                </dl>
+                                <dl>
+                                    <dt>완료량</dt>
+                                    <dd>${item.wokqt}</dd>
+                                </dl>
                             </div>
                         </div>
                     `;
             listCardWrap.insertAdjacentHTML('beforeend', cardHtml);
-            // 작업이력 버튼에 클릭 이벤트 추가
-            const historyButton = listCardWrap.querySelector(
-                `.card-box[data-tketnum="${item.tketnum}"] .btn-popup-open[data-popup="popup-history"]`
-            );
-            attachPopupEvent(historyButton, item, 'popup-history');
         });
     }
 
@@ -448,17 +438,19 @@
             url: '/api/mobile_production/read_all',
             type: 'GET',
             data: {
-                'startDate': $('#startDate').val(),
-                'endDate': $('#endDate').val(),
+                'search_startDate': $('#startDate').val(),
+                'search_endDate': $('#endDate').val(),
                 'searchcltcd': $('#searchcltcd').val(),
-                'searchproduct': $('#searchproduct').val(),
+                'searchproductcd': $('#searchproductcd').val(),
             },
             success: function (data) {
                 console.log("작업목록 : ",data.data);
-                //renderCards(data.data);
-                const historyButton = document.getElementById('cardWrap').querySelector(
-                    `.btn-popup-open[data-popup="popup-history"]`
-                );
+                // 목록 건수 업데이트
+                const listNumElement = document.querySelector('.list-num .blue');
+                if (listNumElement) {
+                    listNumElement.textContent = `${data.data.length} 건`;
+                }
+                renderCards(data.data);
             }
         });
     }
@@ -475,30 +467,99 @@
     // 거래처명 검색 팝업
     function searchCltcd() {
         $.ajax({
-            url: '/api/mobile_production/searchcltcd',
+            url: '/api/mobile_production/search_cltcd',
             type: 'GET',
             data: {
-                'searchcltcd': $('#searchcltcd').val(),
+                'search_cltnm': $('#searchcltnm').val(),
             },
             success: function (data) {
                 console.log(data.data);
+                document.getElementById("cltcdText").textContent = document.getElementById("searchcltnm").value;
+                const data2 = data.data;
+                const selectElement = document.getElementById("selectcltcd");
+                selectElement.innerHTML = '';
+                // 새로운 option 생성 및 추가
+                data2.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.cltcd; // 거래처 코드 (예: item["cltcd"])
+                    option.textContent = item.cltnm; // 거래처명 (예: item["cltnm"])
+                    selectElement.appendChild(option);
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
             }
         });
+        openModal('popup1');
     }
     // 품목명 검색 팝업
     function searchProduct() {
         $.ajax({
-            url: '/api/mobile_production/searchproduct',
+            url: '/api/mobile_production/search_product',
             type: 'GET',
             data: {
-                'searchproduct': $('#searchproduct').val(),
+                'search_productnm': $('#searchproductnm').val(),
             },
             success: function (data) {
                 console.log(data.data);
+                document.getElementById("productText").textContent = document.getElementById("searchproductnm").value;
+                const data2 = data.data;
+                const selectElement = document.getElementById("selectproduct");
+                selectElement.innerHTML = '';
+                // 새로운 option 생성 및 추가
+                data2.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.phm_pcod; // 거래처 코드 (예: item["cltcd"])
+                    option.textContent = item.phm_pnam; // 거래처명 (예: item["cltnm"])
+                    selectElement.appendChild(option);
+                });
+            },
+            error: function (error) {
+                console.error("Error fetching data:", error);
             }
         });
+        openModal('popup2');
+    }
+    // 거래처 / 품목명 select 완료
+    function selectText(popupId, documentName, documentCode) {
+        if(popupId === 'popup1'){
+            // 선택된 옵션 가져오기
+            const selectElement = document.getElementById("selectcltcd");
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            // 선택된 옵션의 텍스트와 값 설정
+            document.getElementById(documentName).value = selectedOption.text;
+            document.getElementById(documentCode).value = selectedOption.value;
+        }else if(popupId === 'popup2') {
+            const selectElement = document.getElementById("selectproduct");
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            document.getElementById(documentName).value = selectedOption.text;
+            document.getElementById(documentCode).value = selectedOption.value;
+        }
+        ModalClose(popupId)
+    }
+    function openModal(popupId) {
+        let popup = document.getElementById(popupId);
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup2 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
     }
 
+    function ModalClose(popupId) {
+        let popup = document.getElementById(popupId);
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.remove('active'); // 팝업 비활성화
+            overlay.style.display = 'none'; // 오버레이 숨기기
+        }
+    }
 
 </script>
 </body>
