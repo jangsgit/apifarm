@@ -34,6 +34,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,6 +270,29 @@ public class AccountController {
 
 		return result;
 	}
+
+	@GetMapping("/account/userinfo")
+	@ResponseBody
+	public AjaxResult getUserInfos(Authentication auth) {
+		AjaxResult result = new AjaxResult();
+
+		try {
+			User user = (User) auth.getPrincipal();
+			String username = user.getFirst_name();
+
+			Map<String, String> data = new HashMap<>();
+			data.put("username", username);
+
+			result.success=(true);
+			result.data = (data);
+		} catch (Exception e) {
+			result.success = (false);
+			result.message = ("사용자 정보를 가져오는 중 오류가 발생했습니다.");
+		}
+
+		return result; // JSON 형식으로 반환
+	}
+
 
 
 	@PostMapping("/account/myinfo/password_change")

@@ -182,11 +182,9 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="text" id="AuthenticationCodeRegister"
-                                               name="AuthenticationCodeRegister"
-                                               placeholder="인증코드">
+                                        <input type="text" id="AuthenticationCodeRegister" name="AuthenticationCodeRegister" maxlength="38" autocomplete="off" placeholder="인증코드">
                                     </div>
-                                    <a href="#" class="btn" id="Authentication" title="코드인증">코드인증</a>
+                                    <button type="button" class="btn" id="Authentication" name="Authentication" title="코드인증">코드인증</button>
                                 </dd>
                                 <div style="margin-top: 5px; display: inline-block;">
                                     <span id="timer2" style="width: 10%;  text-align: right; color: red;"></span>
@@ -464,7 +462,7 @@
         }
     }
 
-    /*function RegisterUserClose() {
+    function RegisterUserClose() {
         let popup = document.getElementById('popup1');
         let overlay = document.querySelector('.popup-overlay');
 
@@ -480,11 +478,12 @@
             inputs.forEach(input => {
                 input.value = ''; // 모든 input 값 초기화
             });
-            stopTimer();
+            // 타이머 숨기기
+            document.getElementById('timer2').style.display = 'none';
         } else {
             console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
         }
-    }*/
+    }
 
     //##############################################  사용자 등록 끝
 
@@ -639,41 +638,6 @@
             }, 1000);
         }
 
-        window.stopTimer = function (ele) {
-            if (activeTimerInterval) {
-                clearInterval(activeTimerInterval);
-                activeTimerInterval = null;
-            }
-
-            let timerElement = document.getElementById(ele);
-            if (timerElement) {
-                timerElement.textContent = ''; // 타이머 내용 초기화
-            }
-        };
-
-        window.RegisterUserClose = function () {
-            let popup = document.getElementById('popup1');
-            let overlay = document.querySelector('.popup-overlay');
-
-            if (popup && overlay) {
-                // 팝업 비활성화
-                popup.classList.remove('active');
-                overlay.style.display = 'none';
-
-                // 입력 필드 초기화
-                const inputs = popup.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.value = ''; // 모든 input 값 초기화
-                });
-
-                // 타이머 중지 및 초기화
-                stopTimer('timer');
-            } else {
-                console.error('popup1 또는 popup-overlay 요소를 찾을 수 없습니다.');
-            }
-        };
-
-
         let emailAuthCode = false;
         let emailAuthCode_pw = false;
 
@@ -681,21 +645,21 @@
         let _CsrfValue = _csrf[0].value;
 
         let btnAuthentication = $('#Authentication');
-        btnAuthentication.click(function (e) {
+        btnAuthentication.click(function (e){
             let emailDom = document.getElementById('email');
             let email = emailDom.value;
             let AuthenticationCode = document.getElementById('AuthenticationCodeRegister').value;
-            let data = {email, AuthenticationCode, type: 'new'}
+            let data = { email, AuthenticationCode, type: 'new' }
 
 
-            let fnSuccess = function (res) {
-                if (res.success) {
+            let fnSuccess = function (res){
+                if(res.success){
                     emailAuthCode = true;
                     Alert.alert('', res.message);
                     emailDom.readOnly = true;
-                    document.getElementById('timer').style.display = 'none';
+                    document.getElementById('timer2').style.display = 'none';
 
-                } else {
+                }else{
                     emailAuthCode = false;
                     Alert.alert('', res.message);
                 }
@@ -705,6 +669,7 @@
 
         //사용자 등록(이메일 코드발급)
         $('#BtnAuthenticationRegister2').click(function (e) {
+
             let email = document.getElementById('email');
             let mail = email.value;
 
@@ -728,16 +693,19 @@
             showLoader();
             let fnSuccess = function (res){
                 if(res.success){
-                    emailAuthCode = true;
-                    Alert.alert('', res.message);
-                    emailDom.readOnly = true;
-                    document.getElementById('timer2').style.display = 'none';
+                    hideLoader();
 
-                }else{
-                    emailAuthCode = false;
-                    Alert.alert('', res.message);
+                    Alert.alert('', res.message, function(e){
+
+                        startTimer(180, 'timer2');
+                    });
                 }
-            }
+                else if(!res.success){
+                    hideLoader();
+                    Alert.alert('', res.message, function(){});
+
+                }
+            };
 
             AjaxUtil.postAsyncData("/user-auth/SaveAuthenticationEmail", data, fnSuccess, function () {
                 hideLoader();

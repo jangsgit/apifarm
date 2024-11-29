@@ -805,3 +805,30 @@ function getFormattedDateTime() {
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
 }
+
+// 사용자 데이터를 가져오는 함수
+function loadUserInfo() {
+    $.ajax({
+        url: '/account/userinfo',
+        type: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            console.log('응답 데이터:', response); // 응답 확인
+            if (response.success) {
+                $('#userName').text(response.data.username || '사용자명');
+            } else {
+                console.error('사용자 정보를 가져올 수 없습니다:', response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX 요청 실패:', status, error);
+        }
+    });
+}
+
+// DOM 로드 후 실행
+$(document).ready(function() {
+    loadUserInfo();
+});
+
+
