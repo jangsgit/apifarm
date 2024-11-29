@@ -10,18 +10,20 @@ import mes.domain.entity.User;
 @Setter
 public class UserDto {
 
+    private String userid;
     private Integer id;
     private String username;
     private String first_name;
     private String email;
+    private String pw;
+    private String pw2;
     private Boolean superUser;
     private Boolean active;
     private String last_name;
     private Boolean is_staff;
     private String tel;
-    private String agencycd;
-    private String divinm;
-
+    private String phone;
+    private String custcd;
 
     public UserDto toDto(User userEntity) {
         UserDto userDto = new UserDto();
@@ -34,8 +36,6 @@ public class UserDto {
         userDto.setLast_name(userEntity.getLast_name());
         userDto.setIs_staff(userEntity.getIs_staff());
         userDto.setTel(userEntity.getTel());
-        userDto.setAgencycd(userEntity.getAgencycd());
-        userDto.setDivinm(userEntity.getDivinm());
         return userDto;
     }
 

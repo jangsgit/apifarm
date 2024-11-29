@@ -133,7 +133,7 @@
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
-                                        <input type="password" id="password2" name="password2" placeholder="비밀번호 확인" >
+                                        <input type="password" id="password2" name="password2" placeholder="비밀번호 확인" autocomplete="new-password" >
                                     </div>
                                 </dd>
                             </dl>
@@ -498,7 +498,6 @@
         {id: 'email', name: '이메일'}
     ];
 
-
     const clearFieldList = ['name', 'id', 'password', 'passwordchk', 'Phone' ,'email', 'AuthenticationCodeRegister']
 
     // 유효성 검사
@@ -509,11 +508,11 @@
             }
         }
 
-        for (let field of nameBasedFields) {
+       /* for (let field of nameBasedFields) {
             if (!validateFieldsByName(field.name, field.displayName)) {
                 return false;
             }
-        }
+        }*/
 
         return true;  // 모든 유효성 검사를 통과했을 경우
     }
@@ -727,17 +726,18 @@
             let data = {usernm: 'empty', name, mail, _CsrfValue};
 
             showLoader();
-            let fnSuccess = function (res) {
-                if (res.success) {
-                    hideLoader();
-                    Alert.alert('', res.message, function (e) {
-                        startTimer(180, 'timer2');
-                    });
-                } else {
-                    hideLoader();
+            let fnSuccess = function (res){
+                if(res.success){
+                    emailAuthCode = true;
+                    Alert.alert('', res.message);
+                    emailDom.readOnly = true;
+                    document.getElementById('timer2').style.display = 'none';
+
+                }else{
+                    emailAuthCode = false;
                     Alert.alert('', res.message);
                 }
-            };
+            }
 
             AjaxUtil.postAsyncData("/user-auth/SaveAuthenticationEmail", data, fnSuccess, function () {
                 hideLoader();
@@ -752,16 +752,16 @@
             let AuthenticationCode = document.getElementById('AuthenticationCode').value;
             let data = {email, AuthenticationCode, type: 'password'}
 
-            let fnSuccess = function (res) {
-                if (res.success) {
-                    emailAuthCode_pw = true;
+            let fnSuccess = function (res){
+                if(res.success){
+                    emailAuthCode = true;
                     Alert.alert('', res.message);
                     emailDom.readOnly = true;
-                    document.getElementById('timer').style.display = 'none';
-                } else {
-                    emailAuthCode_pw = false;
-                    Alert.alert('', res.message);
+                    document.getElementById('timer2').style.display = 'none';
 
+                }else{
+                    emailAuthCode = false;
+                    Alert.alert('', res.message);
                 }
             }
             AjaxUtil.postAsyncData("/authentication", data, fnSuccess);

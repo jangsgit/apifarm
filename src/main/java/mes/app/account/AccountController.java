@@ -21,14 +21,18 @@ import mes.app.account.service.*;
 import mes.app.system.service.AuthListService;
 import mes.app.system.service.UserService;
 import mes.domain.DTO.UserCodeDto;
+import mes.domain.DTO.UserDto;
 import mes.domain.entity.*;
 import mes.domain.entity.actasEntity.*;
 import mes.domain.repository.*;
 import mes.domain.repository.actasRepository.TB_XA012Repository;
 import mes.domain.repository.actasRepository.TB_XClientRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -143,7 +147,7 @@ public class AccountController {
 			@RequestParam("password") final String password,
 			final HttpServletRequest request) throws UnknownHostException {
 
-		log.info("로그인 시도, username: {}", username);
+		//log.info("로그인 시도, username: {}", username);
 
 		AjaxResult result = new AjaxResult();
 		HashMap<String, Object> data = new HashMap<>();
@@ -220,21 +224,52 @@ public class AccountController {
 		}
 	}
 
-
-
-
-
-
-
+	//내정보 불러오기
 	@GetMapping("/account/myinfo")
-	public AjaxResult getUserInfo(Authentication auth){
-		User user = (User)auth.getPrincipal();
+	public AjaxResult getUserInfo(Authentication auth) {
 		AjaxResult result = new AjaxResult();
 
-		Map<String, Object> dicData = userService.getUserInfo(user.getUsername());
-		result.data = dicData;
+		try {
+			User user = (User) auth.getPrincipal();
+			String username = user.getUsername();
+
+			Map<String, Object> userInform = userService.getUserInform(username);
+
+			if (userInform == null) {
+				result.success = false;
+				result.data = "사용자 정보를 찾을 수 없습니다.";
+			} else {
+				result.success = true;
+				result.data = userInform;
+			}
+		} catch (Exception e) {
+			result.success = false;
+			result.data = "시스템 에러가 발생했습니다.";
+		}
+
 		return result;
 	}
+
+
+	@PostMapping("/account/myinfosave")
+	public AjaxResult setUserInfo(@RequestBody UserDto userDto){
+		AjaxResult result = new AjaxResult();
+		log.info("받은 요청 데이터: {}", userDto);
+		if(userDto.getPw() != null && !userDto.getPw().isEmpty()){
+			if(!userDto.getPw().equals(userDto.getPw2())){
+				result.success = false;
+				result.message = "입력하신 비밀번호가 맞지 않습니다.";
+				log.error("비밀번호 불일치 - pw: {}, pw2: {}", userDto.getPw(), userDto.getPw2());
+				return result;
+			}
+		}
+
+		result = userService.updateUserInfo(userDto);
+		log.info("사용자 정보 업데이트 결과: success={}, message={}", result.success, result.message);
+
+		return result;
+	}
+
 
 	@PostMapping("/account/myinfo/password_change")
 	public AjaxResult userPasswordChange(

@@ -15,4 +15,5 @@ import java.io.Serializable;
 public class TB_XUSERSId implements Serializable {
     private String custcd;
     private String userid;
+
 }
