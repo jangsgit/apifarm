@@ -30,20 +30,15 @@ public class ProductionController {
                                      Authentication auth) {
         User user = (User) auth.getPrincipal();
         String username = user.getUsername();
-//        Map<String, Object> userInfo = productionService.getUserInfo(username);
+        Map<String, Object> userInfo = productionService.getUserInfo(username);
         String search_startDate = (searchStartDate).replaceAll("-","");
         String search_endDate = (searchEndDate).replaceAll("-","");
-//        임시 spjangcd / custcd
-        String spjangcd = "ZZ";
-        String custcd = "GRACE";
 
         Map<String, Object> searchLabels = new HashMap<>();
-        searchLabels.put("search_startDate", searchStartDate);
-        searchLabels.put("search_endDate", searchEndDate);
-//        searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
-//        searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
-        searchLabels.put("search_spjangcd", spjangcd);
-        searchLabels.put("search_custcd", custcd);
+        searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
+        searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
+        searchLabels.put("search_startDate", search_startDate);
+        searchLabels.put("search_endDate", search_endDate);
         searchLabels.put("search_product", searchProduct);
         searchLabels.put("search_cltcd", searchCltcd);
         List<Map<String, Object>> productList = productionService.getProductionList(searchLabels);
@@ -124,13 +119,8 @@ public class ProductionController {
         Map<String, Object> userInfo = productionService.getUserInfo(username);
 
         Map<String, Object> searchLabels = new HashMap<>();
-//        searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
-//        searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
-        String spjangcd = "ZZ";
-        searchLabels.put("search_spjangcd", spjangcd);
-        String custcd = "GRACE";
-        searchLabels.put("search_custcd", custcd);
-
+        searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
+        searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
         searchLabels.put("wono", wono);
         List<Map<String, Object>> productList = productionService.getWorkList(searchLabels);
         productList.forEach(product -> {

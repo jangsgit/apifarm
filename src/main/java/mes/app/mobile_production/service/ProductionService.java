@@ -24,9 +24,8 @@ public class ProductionService {
 
         String sql = """
                 select xs.custcd,
-                       au.spjangcd
+                       xs.spjangcd
                 FROM TB_XUSERS xs
-                left join auth_user au on au."username" = xs.userid
                 WHERE xs.userid = :username
                 """;
         dicParam.addValue("username", username);
@@ -39,22 +38,22 @@ public class ProductionService {
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
         List<Map<String, Object>> items = new ArrayList<>();
         String sql = "EXEC SP_FPLAN_VIEW :param1, :param2, :param3, :param4, :param5, :param6, :param7";
-        Map<String, Object> searchLabels_02 = Map.of(
-                "param1", "GRACE",
-                "param2", "ZZ",
-                "param3", "20230101",
-                "param4", "20241201",
-                "param5", "00",
-                "param6", "%",
-                "param7", "%"
-        );
-        dicParam.addValue("param1", searchLabels_02.get("param1"));  // searchLabels.get("param1")
-        dicParam.addValue("param2", searchLabels_02.get("param2"));
-        dicParam.addValue("param3", searchLabels_02.get("param3"));
-        dicParam.addValue("param4", searchLabels_02.get("param4"));
-        dicParam.addValue("param5", searchLabels_02.get("param5"));
-        dicParam.addValue("param6", searchLabels_02.get("param6"));
-        dicParam.addValue("param7", searchLabels_02.get("param7"));
+
+        dicParam.addValue("param1", searchLabels.get("search_custcd"));  // searchLabels.get("param1")
+        dicParam.addValue("param2", searchLabels.get("search_spjangcd"));
+        dicParam.addValue("param3", searchLabels.get("search_startDate"));
+        dicParam.addValue("param4", searchLabels.get("search_endDate"));
+        dicParam.addValue("param5", "00");
+        if(!searchLabels.get("search_cltcd").toString().isEmpty()) {
+            dicParam.addValue("param6", searchLabels.get("search_cltcd"));
+        }else {
+            dicParam.addValue("param6", "%");
+        }
+        if(!searchLabels.get("search_product").toString().isEmpty()) {
+            dicParam.addValue("param7", searchLabels.get("search_product"));
+        }else {
+            dicParam.addValue("param7", "%");
+        }
 
         try {
             items = this.sqlRunner.getRows(sql, dicParam);
