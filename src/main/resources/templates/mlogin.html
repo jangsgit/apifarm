@@ -19,8 +19,9 @@
 
 </head>
 <style>
-
-
+.btn-close {
+    display: none !important; /* 강제로 숨김 */
+}
 </style>
 <body>
 <div id="loader2">
@@ -263,7 +264,7 @@
             <form id="bomForm3">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <div class="popup-title">
-                    <h3>아이디 찾기</h3>
+                    <h3>비밀번호 찾기</h3>
                     <a onclick="closePwModal()" title="팝업닫기" class="btn-popup-close">
                         <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
                     </a>
@@ -294,9 +295,9 @@
                                     </dt>
                                     <dd>
                                         <div class="input-clear">
-                                            <input type="text" id="findPwEmail" name="findPwEmail" placeholder=이메일>
+                                            <input type="text" id="findPwEmail" name="findPwEmail" placeholder=이메일 autocomplete="off">
                                         </div>
-                                        <a href="#" class="btn" title="코드인증" id="BtnAuthentication">코드인증</a>
+                                        <button type="button" class="btn" id="BtnAuthentication" name="BtnAuthentication" title="코드발급">코드발급</button>
                                     </dd>
                                     <dd class="hint-red">
                                         <img src="/images/icon/ico-info-red.svg" alt="힌트메세지">등록시 등록한 이메일을 입력해주세요.
@@ -314,11 +315,13 @@
                                     </dt>
                                     <dd>
                                         <div class="input-clear">
-                                            <input type="text" id="AuthenticationCode" name="AuthenticationCode"
-                                                   placeholder="인증코드">
+                                            <input type="text" id="AuthenticationCode" name="AuthenticationCode" maxlength="38" autocomplete="off" placeholder="인증코드">
                                         </div>
-                                        <!-- <a href="#" class="btn" title="코드확인">코드확인</a>-->
+                                        <button type="button" class="btn" id="Authentication_pw" name="Authentication_pw" title="코드인증">코드인증</button>
                                     </dd>
+                                    <div style="margin-top: 5px; display: inline-block;">
+                                        <span id="timer" style="width: 10%;  text-align: right; color: red;"></span>
+                                    </div>
                                 </dl>
                             </div>
                             <div class="row">
@@ -330,7 +333,7 @@
                                     </dt>
                                     <dd>
                                         <div class="input-clear">
-                                            <input type="password" id="PasswordChange" name="PasswordChange"
+                                            <input type="password" id="PasswordChange" name="PasswordChange" autocomplete="new-password"
                                                    placeholder="변경 비밀번호">
                                         </div>
                                     </dd>
@@ -602,38 +605,35 @@
 
         let activeTimerInterval; // 전역 변수로 interval ID를 저장
 
-        window.startTimer = function (duration, ele) {
-            // 기존 타이머 제거
+        function startTimer(duration, ele) {
+            // 기존 타이머가 있으면 제거
             if (activeTimerInterval) {
                 clearInterval(activeTimerInterval);
             }
 
-            // 타이머 요소 가져오기
+            let timer = duration, minutes, seconds;
             let timerElement = document.getElementById(ele);
 
-            if (!timerElement) {
-                console.error(`Element with ID "${ele}" not found.`);
-                return; // DOM 요소가 없으면 종료
-            }
-
-            // 초기화
             timerElement.textContent = '';
-            let timer = duration, minutes, seconds;
 
             activeTimerInterval = setInterval(function () {
                 minutes = Math.floor(timer / 60);
                 seconds = Math.floor(timer % 60);
 
+                // 분과 초가 10보다 작으면 앞에 0을 붙임
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds;
+                // 타이머 요소에 현재 시간 표시
+                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds ;
 
+                // 타이머를 1초 줄임
                 timer--;
 
+                // 타이머가 0보다 작으면 종료
                 if (timer < 0) {
                     clearInterval(activeTimerInterval);
-                    timerElement.textContent = "시간 초과";
+                    timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
                 }
             }, 1000);
         }
@@ -714,27 +714,77 @@
         }); //사용자 등록(이메일 코드발급)
 
 
-        $('#Authentication_pw').click(function (e) {
-            let emailDom = document.getElementById('mailAddres');
+        $('#Authentication_pw').click(function(e){
+            let emailDom = document.getElementById('findPwEmail');
             let email = emailDom.value;
             let AuthenticationCode = document.getElementById('AuthenticationCode').value;
-            let data = {email, AuthenticationCode, type: 'password'}
+            let data = { email, AuthenticationCode, type : 'password' }
 
-            let fnSuccess = function (res){
+            let fnSuccess = function (res) {
                 if(res.success){
-                    emailAuthCode = true;
+                    emailAuthCode_pw = true;
                     Alert.alert('', res.message);
                     emailDom.readOnly = true;
-                    document.getElementById('timer2').style.display = 'none';
-
+                    document.getElementById('timer').style.display = 'none';
                 }else{
-                    emailAuthCode = false;
+                    emailAuthCode_pw = false;
                     Alert.alert('', res.message);
+
                 }
             }
             AjaxUtil.postAsyncData("/authentication", data, fnSuccess);
 
         })//비밀번호 이메일인증
+
+        //비밀번호  찾기 > 이메일 인증
+        $('#BtnAuthentication').click(function (e) {
+            let user = document.getElementById('findPwID');
+            let usernm = user.value;
+
+            let email = document.getElementById('findPwEmail');
+            let mail = email.value;
+            let content = "비밀번호 재설정"
+
+            if (usernm.trim().length === 0) {
+                Alert.alert('', '아이디를 입력해주세요.');
+                user.focus();
+                return;
+            } else if (mail.trim().length === 0) {
+                Alert.alert('', '이메일을 입력해주세요.');
+                email.focus();
+                return;
+            }
+
+            if (!emailValidate(mail.trim())) {
+                Alert.alert('', '유효한 이메일 형식을 입력하세요.');
+                email.focus();
+                return false;
+            }
+            let data = {usernm, mail, content, type: "password"}
+            showLoader();
+
+            let fnSuccess = function (res){
+                if(res.success){
+                    hideLoader();
+                    $('#findPwID').attr('readonly', true);
+
+                    Alert.alert('', res.message, function(e){
+
+                        startTimer(180, 'timer');
+                    });
+                }
+                else if(!res.success){
+                    hideLoader();
+                    Alert.alert('', res.message, function(){});
+
+                }
+            };
+            AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function () {
+                hideLoader();
+                Alert.alert('', '서버통신 실패');
+            });
+        })
+
     })
 
     //아이디 중복확인 (사용자 등록)
@@ -761,56 +811,6 @@
         };
         AjaxUtil.postAsyncData("/useridchk", data, fnSuccess);
 
-    })
-
-    //비밀번호  찾기 > 이메일 인증
-    $('#BtnAuthentication').click(function (e) {
-        let user = document.getElementById('findPwID');
-        let usernm = user.value;
-
-        let email = document.getElementById('findPwEmail');
-        let mail = email.value;
-        let content = "비밀번호 재설정"
-
-        if (usernm.trim().length === 0) {
-            Alert.alert('', '아이디를 입력해주세요.');
-            user.focus();
-            return;
-        } else if (mail.trim().length === 0) {
-            Alert.alert('', '이메일을 입력해주세요.');
-            email.focus();
-            return;
-        }
-
-        if (!emailValidate(mail.trim())) {
-            Alert.alert('', '유효한 이메일 형식을 입력하세요.');
-            email.focus();
-            return false;
-        }
-        let data = {usernm, mail, content, type: "password"}
-        showLoader();
-
-        let fnSuccess = function (res) {
-            if (res.success) {
-                hideLoader();
-                $('#userid').attr('readonly', true);
-
-                Alert.alert('', res.message, function (e) {
-
-                    startTimer(180, 'timer2');
-                });
-            } else if (!res.success) {
-                hideLoader();
-                Alert.alert('', res.message, function () {
-                });
-
-            }
-        };
-
-        AjaxUtil.postAsyncData("/user-auth/AuthenticationEmail", data, fnSuccess, function () {
-            hideLoader();
-            Alert.alert('', '서버통신 실패');
-        });
     })
 
     $('#BtnAuthenticationRegister').click(function (e) {

@@ -567,38 +567,35 @@
 
         let activeTimerInterval; // 전역 변수로 interval ID를 저장
 
-        window.startTimer = function (duration, ele) {
-            // 기존 타이머 제거
+        function startTimer(duration, ele) {
+            // 기존 타이머가 있으면 제거
             if (activeTimerInterval) {
                 clearInterval(activeTimerInterval);
             }
 
-            // 타이머 요소 가져오기
+            let timer = duration, minutes, seconds;
             let timerElement = document.getElementById(ele);
 
-            if (!timerElement) {
-                console.error(`Element with ID "${ele}" not found.`);
-                return; // DOM 요소가 없으면 종료
-            }
-
-            // 초기화
             timerElement.textContent = '';
-            let timer = duration, minutes, seconds;
 
             activeTimerInterval = setInterval(function () {
                 minutes = Math.floor(timer / 60);
                 seconds = Math.floor(timer % 60);
 
+                // 분과 초가 10보다 작으면 앞에 0을 붙임
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds;
+                // 타이머 요소에 현재 시간 표시
+                timerElement.textContent = '코드유효시간: ' + minutes + ":" + seconds ;
 
+                // 타이머를 1초 줄임
                 timer--;
 
+                // 타이머가 0보다 작으면 종료
                 if (timer < 0) {
                     clearInterval(activeTimerInterval);
-                    timerElement.textContent = "시간 초과";
+                    timerElement.textContent = "시간 초과"; // 타이머가 끝나면 메시지 표시
                 }
             }, 1000);
         }

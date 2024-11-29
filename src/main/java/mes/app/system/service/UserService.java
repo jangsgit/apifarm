@@ -411,7 +411,7 @@ public class UserService {
             }
 
             result.success = true;
-            result.message = "사용자 정보가 성공적으로 변경되었습니다.";
+            result.message = "사용자 정보가 성공적으로<br>변경되었습니다.";
         } else {
             result.success = false;
             result.message = "사용자를 찾을 수 없습니다.";
