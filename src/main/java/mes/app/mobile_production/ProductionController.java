@@ -171,5 +171,23 @@ public class ProductionController {
         result.data = productList;
         return result;
     }
+    // 프로시저 리스트
+    @GetMapping("/todayGrid")
+    public AjaxResult searchTodayGrid(@RequestParam(value = "search_todayDate", required = false) String searchTodayDate,
+                                      Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        String username = user.getUsername();
+        Map<String, Object> userInfo = productionService.getUserInfo(username);
+        String search_todayDate = (searchTodayDate).replaceAll("-","");
 
+        Map<String, Object> searchLabels = new HashMap<>();
+        searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
+        searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
+        searchLabels.put("search_todayDate", search_todayDate);
+        List<Map<String, Object>> productList = productionService.searchTodayGrid(searchLabels);
+
+        AjaxResult result = new AjaxResult();
+        result.data = productList;
+        return result;
+    }
 }
