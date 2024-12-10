@@ -21,6 +21,11 @@ public class MobileController {
         model.addAttribute("currentPage", "ticket-register");
         return "mobile/ticket-register"; // "mobile/ticket-register.html"로 매핑
     }
+    @GetMapping("/current-status")
+    public String currentStatusPage(Model model) {
+        model.addAttribute("currentPage", "current-status");
+        return "mobile/current-status"; // Return the Thymeleaf view name
+    }
 
     @GetMapping("/fsr-register")
     public String fsrRegister() {
