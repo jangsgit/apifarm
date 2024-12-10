@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +20,13 @@ public class CurrentStatusService {
 
     public List<Map<String, Object>> getCurrentStatus(String custCd, String spjangCd) {
         MapSqlParameterSource param = new MapSqlParameterSource();
+        // 날짜를 yyyyMMdd 형식으로 포맷
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDate = LocalDate.now().format(formatter);
+
         param.addValue("PS_CUSTCD", custCd);
         param.addValue("PS_SPJANGCD", spjangCd);
-        param.addValue("PS_TODAY", LocalDate.now());
+        param.addValue("PS_TODAY", formattedDate);
 
         String sql= """
        SELECT TB_FPLAN.ord_edate,
@@ -45,9 +50,9 @@ public class CurrentStatusService {
           ORDER BY 1, 2, 4                
           """;
 
-        log.info("SQL: {}", sql);
+        /*log.info("SQL: {}", sql);
         log.info("Parameters: {}", param.getValues());
-
+*/
         return sqlRunner.getRows(sql, param);
     }
 

@@ -22,38 +22,8 @@ public class CurrentStatusController {
     @Autowired
     public CurrentStatusService currentStatusService;
 
-   /* @GetMapping("/read")
-    public AjaxResult read(Authentication auth) {
-        log.info("출고 형황 들어옴");
-        AjaxResult result = new AjaxResult();
-
-        try {
-            User user = (User) auth.getPrincipal();
-            String spjangCd  = user.getSpjangcd();
-
-            String username = auth.getName();
-
-            String custCd = currentStatusService.getCustCdByUsername(username);
-
-            // 데이터 조회
-            List<Map<String, Object>> data = currentStatusService.getCurrentStatus(custCd, spjangCd);
-
-            // JSON 형태로 출력
-            log.info("조회된 데이터: {}", new ObjectMapper().writeValueAsString(data));
-            result.success = true;
-            result.data = data; // 데이터 반환
-        } catch (Exception e) {
-            log.error("에러 발생", e);
-            result.success = false;
-            result.message = "알 수 없는 오류가 발생했습니다.";
-        }
-
-        return result;
-    }*/
-
     @GetMapping("/read")
     public AjaxResult read(Authentication auth) {
-        log.info("출고 현황 API 호출");
         AjaxResult result = new AjaxResult();
 
         try {
@@ -70,7 +40,11 @@ public class CurrentStatusController {
 
             // JSON 형태로 데이터 출력
             if (data != null && !data.isEmpty()) {
-                log.info("조회된 데이터: {}", new ObjectMapper().writeValueAsString(data));
+                int maxLogCount = 2;
+                List<Map<String, Object>> limitedData = data.size() > maxLogCount ? data.subList(0, maxLogCount) : data;
+
+                /*log.info("조회된 데이터 (총 {}건, 최대 {}건 출력): {}", data.size(), maxLogCount,
+                        new ObjectMapper().writeValueAsString(limitedData));*/
             } else {
                 log.info("조회된 데이터가 없습니다.");
             }

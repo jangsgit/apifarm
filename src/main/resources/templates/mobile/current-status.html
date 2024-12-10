@@ -7,6 +7,80 @@
     .btn-close {
         display: none !important; /* 강제로 숨김 */
     }
+    /* 기본 레이아웃 스타일 */
+    .contents-wrap {
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* 상단 목록 정보 스타일 */
+    .list-top-wrap {
+        margin-bottom: 15px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .list-top-wrap .blue {
+        color: #007bff; /* 파란색 강조 */
+    }
+    .list-card-wrap {
+        display: block;
+        overflow-x: auto; /* 수평 스크롤 활성화 */
+        white-space: nowrap; /* 줄바꿈 방지 */
+    }
+
+    .container-fluid {
+        width: 100%; /* 가로 공간을 충분히 확보 */
+        overflow-x: auto; /* 수평 스크롤 활성화 */
+        white-space: nowrap;
+    }
+
+    /* 그리드 컨테이너 스타일 */
+    #gridContainer {
+        display: flex;
+        overflow-x: auto; /* 수평 스크롤 가능 */
+        white-space: nowrap; /* 줄바꿈 방지 */
+        margin-top: 15px;
+        min-width: auto;
+    }
+
+    #theGrid {
+        height: 400px; /* 기본 높이 */
+        border: 1px solid #ddd;
+        display: inline-block; /* 콘텐츠 크기에 맞추기 */
+        min-width: auto; /* 자동 너비 */
+    }
+
+
+    /* 모바일 화면용 스타일 */
+    @media (max-width: 768px) {
+        #theGrid {
+            height: 80vh; /* 모바일 화면에서는 70% 높이 */
+        }
+    }
+
+    /* 작은 모바일 화면용 스타일 */
+    @media (max-width: 480px) {
+        #theGrid {
+            height: 70vh; /* 더 작은 화면에서는 60% 높이 */
+        }
+    }
+
+    /* 모바일 화면용 스크롤바 숨기기 */
+    @media (max-width: 768px) {
+        .list-card-wrap, .container-fluid, #gridContainer, #theGrid {
+            -ms-overflow-style: none; /* IE에서 스크롤바 숨김 */
+            scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
+        }
+
+        .list-card-wrap::-webkit-scrollbar,
+        .container-fluid::-webkit-scrollbar,
+        #gridContainer::-webkit-scrollbar,
+        #theGrid::-webkit-scrollbar {
+            display: none; /* Chrome, Safari에서 스크롤바 숨김 */
+        }
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -254,6 +328,7 @@
 <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.min.js"></script>
 <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
 <script type="text/javascript">
+    var theGrid;
 
     document.readyState === 'complete' ? init() : window.onload = init;
     // 오늘 날짜 설정
@@ -289,7 +364,7 @@
     });
 
     // 데이터를 받아와 그리드 렌더링
-    function fetchListData(searchTypeValue) {
+    function fetchListData() {
         let data2 = [];
         const emptyRowsCount = 8;
 
@@ -297,20 +372,21 @@
             url: '/api/CurrentStatus/read', // API URL
             type: 'GET',
             data: {
-                search_type: searchTypeValue
             },
             async: false,
             success: function (response) {
                 console.log("Response received: ", response); // 응답 확인 로그 추가
                 if (response && Array.isArray(response.data)) {
-                    data2 = response.data.map(item => ({
+                    data2 = response.data.map((item, index) => ({
+                        rownum: index + 1,
                         ord_edate: item.ord_edate || '',
                         cltcd: item.cltcd || '',
                         cltnm: item.cltnm || '',
                         pcode: item.pcode || '',
                         pname: item.pname || '',
-                        qty: item.qty || 0
+                        qty: item.qty || 0,
                     }));
+
                 } else {
                     console.warn("Response data is not valid or empty");
                 }
@@ -323,6 +399,7 @@
         // 빈 행 추가 (emptyRowsCount 기준)
         while (data2.length < emptyRowsCount) {
             data2.push({
+                rownum: data2.length + 1,
                 ord_edate: '',
                 cltcd: '',
                 cltnm: '',
@@ -332,6 +409,12 @@
             });
         }
 
+        // 조회된 데이터 개수 표시
+        const listNumElement = document.querySelector('.list-num > span.blue');
+        if (listNumElement) {
+            listNumElement.textContent = `${data2.length} 건`; // 데이터 건수 표시
+        }
+
         const viewdata2 = new wijmo.collections.CollectionView(data2);
 
         if (!window.theGrid) {
@@ -339,15 +422,18 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 columns: [
+                    { binding: 'rownum', header: '순번', width: 50, align: 'center' },
                     { binding: 'ord_edate', header: '납기예정일', align: 'center', width: 120 },
-                    { binding: 'cltcd', header: '거래처코드', align: 'center', width: 120, visible: false },
+                    { binding: 'cltcd', header: '거래처코드', align: 'left', width: 120, visible: false },
                     { binding: 'cltnm', header: '거래처', align: 'center', width: 150 },
                     { binding: 'pcode', header: '품목코드', align: 'center', width: 150, visible: false },
-                    { binding: 'pname', header: '품목명', align: 'center', width: 150 },
+                    { binding: 'pname', header: '품목명', align: 'left', width: 150 },
                     { binding: 'qty', header: '출고대기량', align: 'right', width: 100, format: 'n0' }
                 ],
                 itemsSource: viewdata2
             });
+            // FlexGrid의 행 헤더 제거
+            theGrid.rowHeaders.columns.splice(0, 1);
         } else {
             window.theGrid.itemsSource = viewdata2;
         }
