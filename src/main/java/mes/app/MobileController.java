@@ -16,10 +16,10 @@ public class MobileController {
         return "mobile/ticket-list"; // "mobile/ticket-list.html"로 매핑
     }
 
-    @GetMapping("/ticket-register")
-    public String ticketRegister(Model model) {
-        model.addAttribute("currentPage", "ticket-register");
-        return "mobile/ticket-register"; // "mobile/ticket-register.html"로 매핑
+    @GetMapping("/work-list")
+    public String workList(Model model) {
+        model.addAttribute("currentPage", "work-list");
+        return "mobile/work-list"; // 작지별 현황
     }
     @GetMapping("/current-status")
     public String currentStatusPage(Model model) {
