@@ -174,30 +174,56 @@ public class ProductionService {
     public List<Map<String, Object>> searchTodayGrid(Map<String, Object> searchLabels){
         List<Map<String, Object>> items = new ArrayList<>();
         MapSqlParameterSource dicParam = new MapSqlParameterSource();
-        String sql = "SELECT TB_FPLAN.cltcd,   \n" +
-                "       DBO.DF_NM_RTN('Tb_XCLIENT', TB_FPLAN.custcd, TB_FPLAN.cltcd, '', '') cltnm,  \n" +
-                "       TB_FPLAN.pcode,   \n" +
-                "       DBO.DF_NM_RTN('Tb_CA501', TB_FPLAN.pcode, '', '', '') pname,  \n" +
-                "       TB_FPLAN.prod_qty,   \n" +
-                "       TB_FPLAN.end_qty,   \n" +
-                "       CASE TB_FPLAN.cls_flag WHEN '1' THEN '미진행' WHEN '2' THEN '진행' WHEN '3' THEN '진행' WHEN '4' THEN '완료' END cls_flag\n" +
-                "   FROM {oj TB_FPLAN WITH(NOLOCK) LEFT OUTER JOIN TB_FPLAN_WORK WITH(NOLOCK) \n" +
-                "        ON TB_FPLAN.custcd = TB_FPLAN_WORK.custcd \n" +
-                "        AND TB_FPLAN.spjangcd = TB_FPLAN_WORK.spjangcd \n" +
-                "        AND TB_FPLAN.plan_no = TB_FPLAN_WORK.plan_no}  \n" +
-                "  WHERE (TB_FPLAN.custcd     = :custcd)\n" +
-                "    AND (TB_FPLAN.spjangcd   = :spjangcd)\n" +
-                "    AND (TB_FPLAN_WORK.wstdt = :today\n" +
-                "     OR  TB_FPLAN_WORK.wendt = :today\n" +
-                "     OR (TB_FPLAN.prod_sdate = :today AND TB_FPLAN.cls_flag = '1'))\n" +
-                "    AND (TB_FPLAN.cls_flag   NOT IN ('0', '9'))\n" +
-                "  ORDER BY 1, 3\n";
+        StringBuilder sql = new StringBuilder("""
+                       SELECT
+                           TB_FPLAN.cltcd,
+                           DBO.DF_NM_RTN('Tb_XCLIENT', TB_FPLAN.custcd, TB_FPLAN.cltcd, '', '') cltnm,
+                           TB_FPLAN.pcode,
+                           DBO.DF_NM_RTN('Tb_CA501', TB_FPLAN.pcode, '', '', '') pname,
+                           TB_FPLAN.prod_qty,
+                           TB_FPLAN.end_qty,
+                           CASE TB_FPLAN.cls_flag WHEN '1' THEN '미진행' WHEN '2' THEN '진행' WHEN '3' THEN '진행' WHEN '4' THEN '완료' END cls_flag
+                       FROM {oj TB_FPLAN WITH(NOLOCK) LEFT OUTER JOIN TB_FPLAN_WORK WITH(NOLOCK)
+                            ON TB_FPLAN.custcd = TB_FPLAN_WORK.custcd
+                            AND TB_FPLAN.spjangcd = TB_FPLAN_WORK.spjangcd
+                            AND TB_FPLAN.plan_no = TB_FPLAN_WORK.plan_no}
+                       WHERE (TB_FPLAN.custcd     = :custcd)
+                        AND (TB_FPLAN.spjangcd   = :spjangcd)
+                        AND (TB_FPLAN.cls_flag   NOT IN ('0', '9'))
+                        AND (TB_FPLAN.cltcd LIKE :cltcd)
+                        AND (TB_FPLAN.pcode LIKE :pcode)
+                  """);
+        // 날짜 필터
+        if (searchLabels.get("search_startDate") != null && !searchLabels.get("search_startDate").toString().isEmpty()) {
+            sql.append(" AND (TB_FPLAN_WORK.wstdt >= :searchStartDate\n" +
+                    "                         OR  TB_FPLAN_WORK.wendt >= :searchStartDate\n" +
+                    "                         OR (TB_FPLAN.prod_sdate >= :searchStartDate AND TB_FPLAN.cls_flag = '1'))");
+        }
+        if (searchLabels.get("search_endDate") != null && !searchLabels.get("search_endDate").toString().isEmpty()) {
+            sql.append(" AND (TB_FPLAN_WORK.wstdt <= :searchEndDate\n" +
+                    "                         OR  TB_FPLAN_WORK.wendt <= :searchEndDate\n" +
+                    "                         OR (TB_FPLAN.prod_sdate <= :searchEndDate AND TB_FPLAN.cls_flag = '1'))");
+        }
+        // 정렬 조건 추가
+        sql.append(" ORDER BY 1, 3");
+
+        dicParam.addValue("searchStartDate", searchLabels.get("search_startDate"));
+        dicParam.addValue("searchEndDate", searchLabels.get("search_endDate"));
         dicParam.addValue("custcd", searchLabels.get("search_custcd"));
         dicParam.addValue("spjangcd", searchLabels.get("search_spjangcd"));
-        dicParam.addValue("today", searchLabels.get("search_todayDate"));
+        if(!searchLabels.get("search_cltcd").toString().isEmpty()) {
+            dicParam.addValue("cltcd", searchLabels.get("search_cltcd"));
+        }else {
+            dicParam.addValue("cltcd", "%");
+        }
+        if(!searchLabels.get("search_pcode").toString().isEmpty()) {
+            dicParam.addValue("pcode", searchLabels.get("search_pcode"));
+        }else {
+            dicParam.addValue("pcode", "%");
+        }
 
         try {
-            items = this.sqlRunner.getRows(sql, dicParam);
+            items = this.sqlRunner.getRows(sql.toString(), dicParam);
         } catch (Exception e) {
             e.printStackTrace();
         }

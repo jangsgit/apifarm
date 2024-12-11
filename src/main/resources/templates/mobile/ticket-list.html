@@ -330,7 +330,7 @@
     // 현재 년도를 가져옵니다
     const currentYear = new Date().getFullYear();
     // 시작일 input에 올해 1월 1일을 설정합니다
-    document.getElementById('startDate').value = `${currentYear}-01-01`;
+    document.getElementById('startDate').value = today;
     document.getElementById('endDate').value = today;
 
     function init() {
@@ -695,7 +695,7 @@
         }
     }
     function handleSearch(){
-        fetchListData();
+        fetchGridData();
         closeSearch();
     }
     // 조회버튼 클릭시 검색창 close
@@ -708,12 +708,21 @@
         $.ajax({
             url: '/api/mobile_production/todayGrid',
             type: 'GET',
-            data: { 'search_todayDate': today },
+            data: {
+                'search_startDate': $('#startDate').val(),
+                'search_endDate': $('#endDate').val(),
+                'search_cltcd': $('#searchcltcd').val(),
+                'search_product': $('#searchproductcd').val(),
+            },
             async: false,
             success: function (data) {
                 data2 = data.data;
                 console.log("data2", data2);
-                console.log("today-1", today-1);
+                // 목록 건수 업데이트
+                const listNumElement = document.querySelector('.list-num .blue');
+                if (listNumElement) {
+                    listNumElement.textContent = `${data.data.length} 건`;
+                }
             }
         });
 
@@ -724,7 +733,7 @@
                 autoGenerateColumns: false,
                 showMarquee: true,
                 isReadOnly: true,
-                selectionMode: wijmo.grid.SelectionMode.Row,
+                selectionMode: 'None',
                 columns: [
                     { binding: 'cltnm', header: '거래처', width: 150, align: 'left' }, // 열 너비를 픽셀로 고정
                     { binding: 'pname', header: '품목명', width: 200, align: 'left' },
