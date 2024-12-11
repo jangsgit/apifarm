@@ -6,9 +6,12 @@ import mes.app.mobile_CurrentStatus.service.CurrentStatusService;
 import mes.domain.entity.User;
 import mes.domain.model.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,9 +26,13 @@ public class CurrentStatusController {
     public CurrentStatusService currentStatusService;
 
     @GetMapping("/read")
-    public AjaxResult read(Authentication auth) {
-        AjaxResult result = new AjaxResult();
-
+    public ResponseEntity<?> getCurrentStatus(
+            Authentication auth,
+            @RequestParam(required = false) String cltnm,
+            @RequestParam(required = false) String pname,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate
+    ) {
         try {
             // 사용자 정보 추출
             User user = (User) auth.getPrincipal();
@@ -36,28 +43,28 @@ public class CurrentStatusController {
             String custCd = currentStatusService.getCustCdByUsername(username);
 
             // 데이터 조회
-            List<Map<String, Object>> data = currentStatusService.getCurrentStatus(custCd, spjangCd);
+            List<Map<String, Object>> data = currentStatusService.getCurrentStatus(
+                    custCd, spjangCd, cltnm, pname, startDate, endDate
+            );
 
-            // JSON 형태로 데이터 출력
+          /*  // 로그 출력 (최대 2건만 출력)
             if (data != null && !data.isEmpty()) {
-                int maxLogCount = 2;
+                int maxLogCount = 10;
                 List<Map<String, Object>> limitedData = data.size() > maxLogCount ? data.subList(0, maxLogCount) : data;
 
-                /*log.info("조회된 데이터 (총 {}건, 최대 {}건 출력): {}", data.size(), maxLogCount,
-                        new ObjectMapper().writeValueAsString(limitedData));*/
+                log.info("조회된 데이터 (총 {}건, 최대 {}건 출력): {}", data.size(), maxLogCount,
+                        new ObjectMapper().writeValueAsString(limitedData));
             } else {
                 log.info("조회된 데이터가 없습니다.");
-            }
+            }*/
 
-            result.success = true;
-            result.data = data; // 데이터 반환
+            // 데이터 반환
+            return ResponseEntity.ok(data);
         } catch (Exception e) {
             log.error("에러 발생", e);
-            result.success = false;
-            result.message = "알 수 없는 오류가 발생했습니다.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "알 수 없는 오류가 발생했습니다."));
         }
-
-        return result;
     }
 
 

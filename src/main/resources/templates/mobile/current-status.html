@@ -52,33 +52,17 @@
         min-width: auto; /* 자동 너비 */
     }
 
-
     /* 모바일 화면용 스타일 */
     @media (max-width: 768px) {
         #theGrid {
-            height: 80vh; /* 모바일 화면에서는 70% 높이 */
+            height: 80vh;
         }
     }
 
     /* 작은 모바일 화면용 스타일 */
     @media (max-width: 480px) {
         #theGrid {
-            height: 70vh; /* 더 작은 화면에서는 60% 높이 */
-        }
-    }
-
-    /* 모바일 화면용 스크롤바 숨기기 */
-    @media (max-width: 768px) {
-        .list-card-wrap, .container-fluid, #gridContainer, #theGrid {
-            -ms-overflow-style: none; /* IE에서 스크롤바 숨김 */
-            scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
-        }
-
-        .list-card-wrap::-webkit-scrollbar,
-        .container-fluid::-webkit-scrollbar,
-        #gridContainer::-webkit-scrollbar,
-        #theGrid::-webkit-scrollbar {
-            display: none; /* Chrome, Safari에서 스크롤바 숨김 */
+            height: 70vh;
         }
     }
 </style>
@@ -363,30 +347,56 @@
         }
     });
 
-    // 데이터를 받아와 그리드 렌더링
+    function adjustGridHeight(gridElement, rowCount, rowHeight = 40, minRows = 8) {
+        const isSmallScreen = window.innerWidth <= 768; // 작은 화면 판단 기준
+        let maxGridHeight;
+
+        if (isSmallScreen) {
+            // 작은 화면은 CSS 미디어 쿼리에 맡김
+            return;
+        } else {
+            // 큰 화면에서는 동적으로 높이 계산
+            maxGridHeight = window.innerHeight * 0.85; // 큰 화면의 최대 높이
+        }
+
+        const effectiveRowCount = Math.max(rowCount, minRows + 1); // 데이터가 없을 경우 최소 행 수 사용
+        const gridHeight = Math.min(effectiveRowCount * rowHeight, maxGridHeight); // 높이 계산
+        gridElement.style.height = `${gridHeight}px`; // 동적으로 높이 설정
+    }
+
     function fetchListData() {
         let data2 = [];
         const emptyRowsCount = 8;
+        const rowHeight = 30;
 
+        // 검색 조건 가져오기
+        const searchParams = {
+            custCd: $('#custCd').val(),
+            spjangCd: $('#spjangCd').val(),
+            cltnm: $('#searchcltnm').val(),
+            pname: $('#searchproductnm').val(),
+            startDate: $('#startDate').val(),
+            endDate: $('#endDate').val()
+        };
+
+        // Ajax 요청
         $.ajax({
             url: '/api/CurrentStatus/read', // API URL
             type: 'GET',
-            data: {
-            },
+            data: searchParams, // 검색 조건 전달
             async: false,
             success: function (response) {
                 console.log("Response received: ", response); // 응답 확인 로그 추가
-                if (response && Array.isArray(response.data)) {
-                    data2 = response.data.map((item, index) => ({
+                if (response && Array.isArray(response)) {
+                    data2 = response.map((item, index) => ({
                         rownum: index + 1,
-                        ord_edate: item.ord_edate || '',
+                        ord_edate: formatDateString(item.ord_edate),
                         cltcd: item.cltcd || '',
                         cltnm: item.cltnm || '',
                         pcode: item.pcode || '',
                         pname: item.pname || '',
                         qty: item.qty || 0,
                     }));
-
                 } else {
                     console.warn("Response data is not valid or empty");
                 }
@@ -396,10 +406,18 @@
             }
         });
 
-        // 빈 행 추가 (emptyRowsCount 기준)
-        while (data2.length < emptyRowsCount) {
-            data2.push({
-                rownum: data2.length + 1,
+        // 조회된 데이터 개수 표시 (빈 행 제외)
+        const listNumElement = document.querySelector('.list-num > span.blue');
+        if (listNumElement) {
+            const actualCount = data2.length; // 실제 데이터 개수
+            listNumElement.textContent = `${actualCount} 건`; // 데이터 건수 표시
+        }
+
+        // FlexGrid에 표시할 데이터 (빈 행 포함)
+        const displayData = [...data2]; // 실제 데이터 복사
+        while (displayData.length < emptyRowsCount) {
+            displayData.push({
+                rownum: displayData.length + 1,
                 ord_edate: '',
                 cltcd: '',
                 cltnm: '',
@@ -409,13 +427,7 @@
             });
         }
 
-        // 조회된 데이터 개수 표시
-        const listNumElement = document.querySelector('.list-num > span.blue');
-        if (listNumElement) {
-            listNumElement.textContent = `${data2.length} 건`; // 데이터 건수 표시
-        }
-
-        const viewdata2 = new wijmo.collections.CollectionView(data2);
+        const viewdata2 = new wijmo.collections.CollectionView(displayData);
 
         if (!window.theGrid) {
             window.theGrid = new wijmo.grid.FlexGrid('#theGrid', {
@@ -425,9 +437,9 @@
                     { binding: 'rownum', header: '순번', width: 50, align: 'center' },
                     { binding: 'ord_edate', header: '납기예정일', align: 'center', width: 120 },
                     { binding: 'cltcd', header: '거래처코드', align: 'left', width: 120, visible: false },
-                    { binding: 'cltnm', header: '거래처', align: 'center', width: 150 },
+                    { binding: 'cltnm', header: '거래처', align: 'left', width: 150 },
                     { binding: 'pcode', header: '품목코드', align: 'center', width: 150, visible: false },
-                    { binding: 'pname', header: '품목명', align: 'left', width: 150 },
+                    { binding: 'pname', header: '품목명', align: 'left', width: 200 },
                     { binding: 'qty', header: '출고대기량', align: 'right', width: 100, format: 'n0' }
                 ],
                 itemsSource: viewdata2
@@ -437,6 +449,20 @@
         } else {
             window.theGrid.itemsSource = viewdata2;
         }
+
+        // 그리드 높이 조정
+        const gridElement = document.getElementById('theGrid');
+        if (gridElement) {
+            adjustGridHeight(gridElement, data2.length || 1, rowHeight);
+        }
+    }
+
+    function formatDateString(dateString) {
+        if (!dateString || dateString.length !== 8) return dateString; // 유효성 검사
+        const year = dateString.substring(0, 4);
+        const month = dateString.substring(4, 6);
+        const day = dateString.substring(6, 8);
+        return `${year}-${month}-${day}`;
     }
 
     // 거래처명 검색 팝업
@@ -568,14 +594,23 @@
             overlay.style.display = 'none'; // 오버레이 숨기기
         }
     }
+ /*   function handleSearch(){
+        fetchListData();
+        closeSearch();
+    }*/
     function handleSearch(){
         fetchListData();
         closeSearch();
     }
+
+
+
     // 조회버튼 클릭시 검색창 close
     function closeSearch(){
         document.querySelector('.btn-aco').click();
     }
+
+
 
 </script>
 </body>
