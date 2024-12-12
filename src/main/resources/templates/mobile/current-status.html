@@ -42,7 +42,7 @@
         overflow-x: auto; /* 수평 스크롤 가능 */
         white-space: nowrap; /* 줄바꿈 방지 */
         margin-top: 15px;
-        min-width: auto;
+        min-width: 0;
     }
 
     #theGrid {
@@ -433,14 +433,15 @@
             window.theGrid = new wijmo.grid.FlexGrid('#theGrid', {
                 autoGenerateColumns: false,
                 showMarquee: true,
+                isReadOnly: true,
                 columns: [
                     { binding: 'rownum', header: '순번', width: 50, align: 'center' },
                     { binding: 'ord_edate', header: '납기예정일', align: 'center', width: 120 },
-                    { binding: 'cltcd', header: '거래처코드', align: 'left', width: 120, visible: false },
+                    { binding: 'cltcd', header: '거래처코드', align: 'left', visible: false },
                     { binding: 'cltnm', header: '거래처', align: 'left', width: 150 },
-                    { binding: 'pcode', header: '품목코드', align: 'center', width: 150, visible: false },
-                    { binding: 'pname', header: '품목명', align: 'left', width: 200 },
-                    { binding: 'qty', header: '출고대기량', align: 'right', width: 100, format: 'n0' }
+                    { binding: 'pcode', header: '품목코드', align: 'center',visible: false },
+                    { binding: 'pname', header: '품목명', align: 'left', width: '*', minWidth: 200 },
+                    { binding: 'qty', header: '출고대기량', align: 'right', width: 120, format: 'n0' }
                 ],
                 itemsSource: viewdata2
             });
