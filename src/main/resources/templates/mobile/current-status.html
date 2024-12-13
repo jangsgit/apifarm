@@ -424,23 +424,6 @@
         gridElement.style.height = `${gridHeight}px`; // 동적으로 높이 설정
     }
 
-    function adjustGridHeight(gridElement, rowCount, rowHeight = 40, minRows = 8) {
-        const isSmallScreen = window.innerWidth <= 768; // 작은 화면 판단 기준
-        let maxGridHeight;
-
-        if (isSmallScreen) {
-            // 작은 화면은 CSS 미디어 쿼리에 맡김
-            return;
-        } else {
-            // 큰 화면에서는 동적으로 높이 계산
-            maxGridHeight = window.innerHeight * 0.85; // 큰 화면의 최대 높이
-        }
-
-        const effectiveRowCount = Math.max(rowCount, minRows + 1); // 데이터가 없을 경우 최소 행 수 사용
-        const gridHeight = Math.min(effectiveRowCount * rowHeight, maxGridHeight); // 높이 계산
-        gridElement.style.height = `${gridHeight}px`; // 동적으로 높이 설정
-    }
-
     function fetchListData() {
         let data2 = [];
         const emptyRowsCount = 8;
@@ -467,7 +450,7 @@
                 if (response && Array.isArray(response)) {
                     data2 = response.map((item, index) => ({
                         rownum: index + 1,
-                        ord_edate: formatDateString(item.ord_edate),
+                        ord_edate: formatDateString(item.ord_edate) || '0', // 값이 없을 경우 기본값 0 설정
                         cltcd: item.cltcd || '',
                         cltnm: item.cltnm || '',
                         pcode: item.pcode || '',
@@ -541,7 +524,7 @@
                         { binding: 'cltcd', header: '거래처코드', align: 'left', visible: false },
                         { binding: 'cltnm', header: '거래처', align: 'left', width: 150 },
                         { binding: 'pcode', header: '품목코드', align: 'center', visible: false },
-                        { binding: 'pname', header: '품목명', align: 'left', width: '*', minWidth: 200 },
+                        { binding: 'pname', header: '품목명', align: 'left', width: '*', minWidth: 250 },
                         { binding: 'qty', header: '출고대기량', align: 'right', width: 120, format: 'n0' }
                     ],
                     itemsSource: viewdata2
@@ -565,7 +548,7 @@
                     }
                 });
 
-// 그룹 헤더 커스터마이징
+                // 그룹 헤더 커스터마이징
                 theGrid.formatItem.addHandler((s, e) => {
                     if (e.panel.cellType === wijmo.grid.CellType.Cell) {
                         const row = s.rows[e.row];
