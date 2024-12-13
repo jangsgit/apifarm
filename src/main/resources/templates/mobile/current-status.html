@@ -75,45 +75,38 @@
         margin-left: auto; !important;/* 버튼을 오른쪽으로 밀기 */
     }
 
-    .wj-cell.wj-group {
-        display: flex; /* 플렉스 박스를 사용 */
+    div.wj-cell.wj-group {
+        display: flex !important; /* Flexbox 활성화 */
+        align-items: center !important; /* 세로 중앙 정렬 */
+        justify-content: flex-start !important; /* 가로 왼쪽 정렬 */
+        overflow: visible !important; /* 텍스트 잘리지 않도록 설정 */
+        white-space: nowrap !important; /* 줄바꿈 방지 */
+        text-overflow: ellipsis !important; /* 텍스트가 길면 말줄임 표시 */
+        padding: 5px 10px !important; /* 내부 여백 */
+    }
+
+    .wj-btn.wj-btn-glyph {
+        display: flex;
+        justify-content: flex-start;
         align-items: center; /* 세로 중앙 정렬 */
-        justify-content: flex-start;!important; /* 가로 왼쪽 정렬 */
-        overflow: visible; /* 텍스트가 잘리지 않도록 설정 */
-        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
-        text-overflow: ellipsis; /* 길면 말줄임 표시 */
-        padding: 5px 10px; /* 셀 내부 여백 */
+        gap: 2px; /* 아이콘과 텍스트 간격 줄이기 */
+        border: none;
+        background: none;
+        padding: 2px; /* 버튼 내부 여백 조정 */
+        width: auto; /* 버튼 크기를 텍스트와 아이콘 크기에 맞춤 */
+        height: auto; /* 버튼 높이를 자동으로 조정 */
+        cursor: pointer;
     }
 
-    .wj-btn {
-        margin-right: 5px; /* 아이콘과 텍스트 간격 조정 */
-        display: flex; /* 플렉스 컨테이너 */
-        align-items: center; /* 버튼 내부의 아이콘 중앙 정렬 */
-        padding: 0; /* 불필요한 여백 제거 */
-        border: none; /* 버튼 테두리 제거 */
-        background: none; /* 버튼 배경 제거 */
+    .wj-btn.wj-btn-glyph span {
+        margin-right: 3px; /* 텍스트와 간격 */
+        text-align: left; /* 텍스트 왼쪽 정렬 */
+        vertical-align: middle; /* 텍스트와 아이콘 정렬 */
     }
-
-    .wj-btn-glyph {
-        display: flex; /* 아이콘 내부의 정렬 */
-        justify-content: center; /* 가로 중앙 정렬 */
-        align-items: center; /* 세로 중앙 정렬 */
-        margin: 0; /* 불필요한 여백 제거 */
-        padding: 0; /* 불필요한 여백 제거 */
-    }
-
-    .wj-glyph-down-right {
-        display: inline-block;!important; /* 기본적으로 왼쪽 정렬 유지 */
-        margin: 0;!important; /* 불필요한 여백 제거 */
-        padding: 0;!important; /* 불필요한 여백 제거 */
-        text-align: left;!important; /* 텍스트가 있다면 왼쪽 정렬 */
-        vertical-align: middle;!important; /* 세로 가운데 정렬 */
-    }
-
-    .wj-cell.wj-group b {
-        margin-left: 5px; /* 텍스트와 아이콘 사이의 간격 조정 */
+    .wj-btn.wj-btn-glyph b {
         font-weight: bold; /* 텍스트 강조 */
-        line-height: 1; /* 텍스트 높이 조정 */
+        margin-left: 0; /* 간격 제거 */
+        text-align: left; /* 텍스트 왼쪽 정렬 */
     }
 
 </style>
@@ -122,6 +115,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[KTFOMS] AI 기반 연료전지 인프라 구축 - 모바일</title>
     <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.grapecity.com/wijmo/5.latest/styles/wijmo.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/> <!-- Slide css -->
     <link rel="stylesheet" href="/resource/ax5ui/ax5ui.all.css">
@@ -242,7 +236,7 @@
                         목록 <span class="blue">- 건</span>
                     </div>
                     <div>
-                        <button id="saveXlsx" class="btn btn-default">Export</button>
+                        <button id="saveXlsx" class="btn btn-default">Excel</button>
                     </div>
 
                 </div>
@@ -305,11 +299,18 @@
                         <div class="row">
                             <dl style="padding-bottom: 300px">
                                 <h4>검색한 거래처명</h4>
-                                <h5 id="cltcdText" style="margin-bottom: 15px">-</h5>
                                 <dt>
-                                    <label for="selectcltcd">
-                                        거래처명 <span class="eq">*</span>
-                                    </label>
+                                    <div style="display: flex; gap: 10px">
+                                        <div style="width: 100%">
+                                            <input type="text" id="searchcltnm2" placeholder="거래처를 입력해주세요">
+                                        </div>
+                                        <div>
+                                            <a href="#" class="btn" title="검색" onclick="searchCltcd($('#searchcltnm2').val())"
+                                               style="background-color: #022D60; color: #fff; text-decoration: none; border-radius: 4px; width: 80px;">
+                                                검색
+                                            </a>
+                                        </div>
+                                    </div>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
@@ -363,11 +364,10 @@
         </div>
     </div>
 </div> <!-- //page-wrapper end-->
-<link rel="stylesheet" href="https://cdn.grapecity.com/wijmo/5.latest/styles/wijmo.min.css">
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script> <!-- JSZip 추가 -->
-<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.min.js"></script>
-<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script>
-<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.xlsx.min.js"></script> <!--xlsx 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script><!-- JSZip-->
+<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.min.js"></script><!-- Wijmo Core -->
+<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.min.js"></script><!-- Wijmo Grid -->
+<script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.xlsx.min.js"></script><!-- Wijmo Excel Export -->
 <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.xlsx.min.js"></script>
 <script type="text/javascript">
 
@@ -424,6 +424,23 @@
         gridElement.style.height = `${gridHeight}px`; // 동적으로 높이 설정
     }
 
+    function adjustGridHeight(gridElement, rowCount, rowHeight = 40, minRows = 8) {
+        const isSmallScreen = window.innerWidth <= 768; // 작은 화면 판단 기준
+        let maxGridHeight;
+
+        if (isSmallScreen) {
+            // 작은 화면은 CSS 미디어 쿼리에 맡김
+            return;
+        } else {
+            // 큰 화면에서는 동적으로 높이 계산
+            maxGridHeight = window.innerHeight * 0.85; // 큰 화면의 최대 높이
+        }
+
+        const effectiveRowCount = Math.max(rowCount, minRows + 1); // 데이터가 없을 경우 최소 행 수 사용
+        const gridHeight = Math.min(effectiveRowCount * rowHeight, maxGridHeight); // 높이 계산
+        gridElement.style.height = `${gridHeight}px`; // 동적으로 높이 설정
+    }
+
     function fetchListData() {
         let data2 = [];
         const emptyRowsCount = 8;
@@ -446,7 +463,7 @@
             data: searchParams, // 검색 조건 전달
             async: false,
             success: function (response) {
-                console.log("Response received: ", response); // 응답 확인 로그 추가
+                console.log("Response received: ", response);
                 if (response && Array.isArray(response)) {
                     data2 = response.map((item, index) => ({
                         rownum: index + 1,
@@ -469,12 +486,12 @@
         // 조회된 데이터 개수 표시 (빈 행 제외)
         const listNumElement = document.querySelector('.list-num > span.blue');
         if (listNumElement) {
-            const actualCount = data2.length; // 실제 데이터 개수
-            listNumElement.textContent = `${actualCount} 건`; // 데이터 건수 표시
+            const actualCount = data2.length;
+            listNumElement.textContent = `${actualCount} 건`;
         }
 
         // FlexGrid에 표시할 데이터 (빈 행 포함)
-        const displayData = [...data2]; // 실제 데이터 복사
+        let displayData = [...data2];
         while (displayData.length < emptyRowsCount) {
             displayData.push({
                 rownum: displayData.length + 1,
@@ -487,43 +504,123 @@
             });
         }
 
-        const viewdata2 = new wijmo.collections.CollectionView(displayData);
-        //그룹 설정
-        viewdata2.groupDescriptions.push(new wijmo.collections.PropertyGroupDescription('ord_edate', (item, propName) => {
-            if (!item || !item[propName]) {
-                return '미정'; // 값이 없을 때 기본 그룹 이름
+        if (displayData.length > 0) {
+            const viewdata2 = new wijmo.collections.CollectionView(displayData);
+
+            viewdata2.groupDescriptions.push(new wijmo.collections.PropertyGroupDescription('ord_edate', (item, propName) => {
+                if (!item || !item[propName]) {
+                    return null;
+                }
+                return `납기예정일: ${item[propName]}`;
+            }));
+
+            // 그룹별 행 번호 다시 설정
+            const resetRowNumbers = () => {
+                if (viewdata2.groups) {
+                    viewdata2.groups.forEach(group => {
+                        let rowNumber = 1;
+                        group.items.forEach(item => {
+                            item.rownum = rowNumber++;
+                        });
+                    });
+                }
+            };
+
+            // 검색 후 데이터를 업데이트한 경우에도 초기화
+            resetRowNumbers();
+
+            // FlexGrid 초기화
+            if (!window.theGrid) {
+                window.theGrid = new wijmo.grid.FlexGrid('#theGrid', {
+                    autoGenerateColumns: false,
+                    showMarquee: true,
+                    isReadOnly: true,
+                    columns: [
+                        { binding: 'rownum', header: '순번', width: 50, align: 'center' },
+                        { binding: 'ord_edate', header: '납기예정일', align: 'center', width: 120 },
+                        { binding: 'cltcd', header: '거래처코드', align: 'left', visible: false },
+                        { binding: 'cltnm', header: '거래처', align: 'left', width: 150 },
+                        { binding: 'pcode', header: '품목코드', align: 'center', visible: false },
+                        { binding: 'pname', header: '품목명', align: 'left', width: '*', minWidth: 200 },
+                        { binding: 'qty', header: '출고대기량', align: 'right', width: 120, format: 'n0' }
+                    ],
+                    itemsSource: viewdata2
+                });
+
+                // FlexGrid의 행 헤더 제거
+                theGrid.rowHeaders.columns.splice(0, 1);
+
+                // 그룹 행 클릭 이벤트
+                theGrid.hostElement.addEventListener('click', (e) => {
+                    const ht = theGrid.hitTest(e);
+                    if (ht.cellType === wijmo.grid.CellType.RowHeader || ht.cellType === wijmo.grid.CellType.Cell) {
+                        const row = theGrid.rows[ht.row];
+
+                        if (row instanceof wijmo.grid.GroupRow) {
+                            // 클릭한 요소가 버튼이 아니면 그룹 상태 토글
+                            if (!e.target.closest('button')) {
+                                row.isCollapsed = !row.isCollapsed;
+                            }
+                        }
+                    }
+                });
+
+// 그룹 헤더 커스터마이징
+                theGrid.formatItem.addHandler((s, e) => {
+                    if (e.panel.cellType === wijmo.grid.CellType.Cell) {
+                        const row = s.rows[e.row];
+                        if (row.isGroup) {
+                            const groupData = row.dataItem;
+                            const groupName = groupData.name || '납기예정일: 미정';
+                            const itemCount = groupData.items ? groupData.items.length : 0;
+
+                            e.cell.innerHTML = `
+                            <button class="wj-btn wj-btn-glyph wj-elem-collapse" type="button" aria-expanded="${row.isCollapsed}"
+                                style="text-align: left; width: auto; display: flex; align-items: center; padding: 2px; height: auto;">
+                                <span class="${row.isCollapsed ? 'wj-glyph-right' : 'wj-glyph-down-right'}" style="margin-right: 3px; font-size: 12px;"></span>
+                                <b style="font-size: 12px;">${groupName}</b> (${itemCount} items)
+                            </button>
+                        `;
+                            // 버튼 클릭 이벤트 처리
+                            const button = e.cell.querySelector('button');
+                            if (button) {
+                                button.addEventListener('click', (event) => {
+                                    // 그룹 상태 토글
+                                    row.isCollapsed = !row.isCollapsed;
+
+                                    // 버튼 아이콘 상태 업데이트
+                                    const span = button.querySelector('span');
+                                    if (span) {
+                                        span.className = row.isCollapsed ? 'wj-glyph-right' : 'wj-glyph-down-right';
+                                    }
+
+                                    // aria-expanded 속성 업데이트
+                                    button.setAttribute('aria-expanded', String(!row.isCollapsed));
+
+                                    // 클릭 이벤트 전파 방지 (그리드 기본 동작 방지)
+                                    event.stopPropagation();
+                                });
+                            }
+                        }
+                    }
+                });
+
+
+            } else {
+                window.theGrid.itemsSource = viewdata2;
+                // 검색 후 행 번호 초기화
+                resetRowNumbers();
             }
-            return `납기예정일: ${item[propName]}`;
-        }));
 
-        if (!window.theGrid) {
-            window.theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-                autoGenerateColumns: false,
-                showMarquee: true,
-                isReadOnly: true,
-                columns: [
-                    { binding: 'rownum', header: '순번', width: 50, align: 'center' },
-                    { binding: 'ord_edate', header: '납기예정일', align: 'center', width: 120 },
-                    { binding: 'cltcd', header: '거래처코드', align: 'left', visible: false },
-                    { binding: 'cltnm', header: '거래처', align: 'left', width: 150 },
-                    { binding: 'pcode', header: '품목코드', align: 'center', visible: false },
-                    { binding: 'pname', header: '품목명', align: 'left', width: '*', minWidth: 200 },
-                    { binding: 'qty', header: '출고대기량', align: 'right', width: 120, format: 'n0' }
-                ],
-                itemsSource: viewdata2
-            });
-
-            // FlexGrid의 행 헤더 제거
-            theGrid.rowHeaders.columns.splice(0, 1);
+            // 그리드 높이 조정
+            const gridElement = document.getElementById('theGrid');
+            if (gridElement) {
+                adjustGridHeight(gridElement, data2.length || 1, rowHeight);
+            }
         } else {
-            window.theGrid.itemsSource = viewdata2;
+            console.warn("No data available to display");
         }
 
-        // 그리드 높이 조정
-        const gridElement = document.getElementById('theGrid');
-        if (gridElement) {
-            adjustGridHeight(gridElement, data2.length || 1, rowHeight);
-        }
     }
 
     document.getElementById('saveXlsx').addEventListener('click', function () {
@@ -535,7 +632,7 @@
                     includeStyles: false,       // 스타일 포함 여부
                     formatItem: null            // 커스텀 포맷 설정 (필요시 추가)
                 },
-                '당월기준 출고 대기현황.xlsx'                 // 저장할 파일 이름
+                '당일기준 출고 대기현황.xlsx'            // 저장할 파일 이름
             );
         } else {
             console.error('FlexGrid is not initialized');
@@ -551,18 +648,18 @@
     }
 
     // 거래처명 검색 팝업
-    function searchCltcd() {
+    function searchCltcd(searchCltnm) {
         $.ajax({
             url: '/api/mobile_production/search_cltcd',
             type: 'GET',
             data: {
-                'search_cltnm': $('#searchcltnm').val(),
+                'search_cltnm': searchCltnm
             },
             success: function (data) {
                 console.log(data.data);
 
                 // 거래처명 업데이트
-                document.getElementById("cltcdText").textContent = document.getElementById("searchcltnm").value;
+                document.getElementById("searchcltnm2").value = searchCltnm;
 
                 const data2 = data.data;
                 const selectElement = document.getElementById("selectcltcd");
