@@ -174,7 +174,6 @@ public class ProductionController {
     // 그리드 리스트
     @GetMapping("/todayGrid")
     public AjaxResult searchTodayGrid(@RequestParam(value = "search_startDate", required = false) String searchStartDate,
-                                      @RequestParam(value = "search_endDate", required = false) String searchEndDate,
                                       @RequestParam(value = "search_cltcd", required = false) String searchCltcd,
                                       @RequestParam(value = "search_product", required = false) String searchPcode,
                                       Authentication auth) {
@@ -182,13 +181,11 @@ public class ProductionController {
         String username = user.getUsername();
         Map<String, Object> userInfo = productionService.getUserInfo(username);
         String search_startDate = (searchStartDate).replaceAll("-","");
-        String search_endDate = (searchEndDate).replaceAll("-","");
 
         Map<String, Object> searchLabels = new HashMap<>();
         searchLabels.put("search_spjangcd", (String) userInfo.get("spjangcd"));
         searchLabels.put("search_custcd", (String) userInfo.get("custcd"));
         searchLabels.put("search_startDate", search_startDate);
-        searchLabels.put("search_endDate", search_endDate);
         searchLabels.put("search_cltcd", searchCltcd);
         searchLabels.put("search_pcode", searchPcode);
 

@@ -192,23 +192,13 @@ public class ProductionService {
                         AND (TB_FPLAN.cls_flag   NOT IN ('0', '9'))
                         AND (TB_FPLAN.cltcd LIKE :cltcd)
                         AND (TB_FPLAN.pcode LIKE :pcode)
+                        AND (TB_FPLAN_WORK.wstdt = :searchStartDate
+                         OR  TB_FPLAN_WORK.wendt = :searchStartDate
+                         OR (TB_FPLAN.prod_sdate = :searchStartDate AND TB_FPLAN.cls_flag = '1'))
+                        ORDER BY 1, 3
                   """);
-        // 날짜 필터
-        if (searchLabels.get("search_startDate") != null && !searchLabels.get("search_startDate").toString().isEmpty()) {
-            sql.append(" AND (TB_FPLAN_WORK.wstdt >= :searchStartDate\n" +
-                    "                         OR  TB_FPLAN_WORK.wendt >= :searchStartDate\n" +
-                    "                         OR (TB_FPLAN.prod_sdate >= :searchStartDate AND TB_FPLAN.cls_flag = '1'))");
-        }
-        if (searchLabels.get("search_endDate") != null && !searchLabels.get("search_endDate").toString().isEmpty()) {
-            sql.append(" AND (TB_FPLAN_WORK.wstdt <= :searchEndDate\n" +
-                    "                         OR  TB_FPLAN_WORK.wendt <= :searchEndDate\n" +
-                    "                         OR (TB_FPLAN.prod_sdate <= :searchEndDate AND TB_FPLAN.cls_flag = '1'))");
-        }
-        // 정렬 조건 추가
-        sql.append(" ORDER BY 1, 3");
 
         dicParam.addValue("searchStartDate", searchLabels.get("search_startDate"));
-        dicParam.addValue("searchEndDate", searchLabels.get("search_endDate"));
         dicParam.addValue("custcd", searchLabels.get("search_custcd"));
         dicParam.addValue("spjangcd", searchLabels.get("search_spjangcd"));
         if(!searchLabels.get("search_cltcd").toString().isEmpty()) {

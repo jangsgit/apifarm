@@ -78,6 +78,7 @@
     <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.xlsx.min.js"></script>
     <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.pdf.min.js"></script>
     <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.pdf.min.js"></script>
+    <script src="https://cdn.grapecity.com/wijmo/5.latest/controls/wijmo.grid.xlsx.min.js"></script>
     <script src="/js/flex-grid-context-menu.js"></script>
 
     <!-- Wijmo 배포라이선스키 적용 (배포 시 필요) -->
@@ -127,14 +128,14 @@
                         </dt>
                         <dd>
                             <ul class="date-box">
-                                <li>
+                                <li style="width: 100%">
                                     <input type="date" id="startDate" name="startDate">
                                     <label for="startDate" class="hide">시작일</label>
                                 </li>
-                                <li>
-                                    <input type="date" id="endDate" name="endDate">
-                                    <label for="endDate" class="hide">종료일</label>
-                                </li>
+<!--                                <li>-->
+<!--                                    <input type="date" id="endDate" name="endDate">-->
+<!--                                    <label for="endDate" class="hide">종료일</label>-->
+<!--                                </li>-->
                             </ul>
                         </dd>
                     </dl>
@@ -182,6 +183,9 @@
                 <div class="list-top-wrap">
                     <div class="list-num">
                         목록 <span class="blue">- 건</span>
+                    </div>
+                    <div>
+                        <button id="saveXlsx" class="btn btn-default">Excel</button>
                     </div>
                 </div>
                 <div class="list-card-wrap" id="cardWrap">
@@ -344,8 +348,8 @@
     // 현재 년도를 가져옵니다
     const currentYear = new Date().getFullYear();
     // 시작일 input에 올해 1월 1일을 설정합니다
-    document.getElementById('startDate').value = `${currentYear}-01-01`;
-    document.getElementById('endDate').value = today;
+    document.getElementById('startDate').value = today;
+    // document.getElementById('endDate').value = today;
 
     function init() {
         //fetchListData();
@@ -802,6 +806,23 @@
         // 윈도우 크기 변경 시 리프레시
         window.addEventListener('resize', () => theGrid.refresh());
     }
+
+    // 엑셀파일 다운로드
+    document.getElementById('saveXlsx').addEventListener('click', function () {
+        if (window.theGrid) {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                window.theGrid, // FlexGrid 객체
+                {
+                    includeColumnHeaders: true,  // 컬럼 헤더 포함 여부
+                    includeStyles: false,       // 스타일 포함 여부
+                    formatItem: null            // 커스텀 포맷 설정 (필요시 추가)
+                },
+                '당일기준 생산 진행현황.xlsx'                 // 저장할 파일 이름
+            );
+        } else {
+            console.error('FlexGrid is not initialized');
+        }
+    });
 
 
 </script>
