@@ -147,7 +147,7 @@
                                     <input type="hidden" id="searchcltcd">
                                 </div>
                                 <div>
-                                    <a href="#" class="btn" title="검색" onclick="searchCltcd()"
+                                    <a href="#" class="btn" title="검색" onclick="searchCltcd($('#searchcltnm').val())"
                                        style="background-color: #022D60; color: #fff; text-decoration: none; border-radius: 4px; width: 80px;">
                                         검색
                                     </a>
@@ -164,7 +164,7 @@
                                     <input type="hidden" id="searchproductcd">
                                 </div>
                                 <div>
-                                    <a href="#" class="btn" title="검색" onclick="searchProduct()"
+                                    <a href="#" class="btn" title="검색" onclick="searchProduct($('#searchproductnm').val())"
                                        style="background-color: #022D60; color: #fff; text-decoration: none; border-radius: 4px; width: 80px;">
                                         검색
                                     </a>
@@ -244,11 +244,18 @@
                         <div class="row">
                             <dl style="padding-bottom: 300px">
                                 <h4>검색한 거래처명</h4>
-                                <h5 id="cltcdText" style="margin-bottom: 15px">-</h5>
                                 <dt>
-                                    <label for="selectcltcd">
-                                        거래처명 <span class="eq">*</span>
-                                    </label>
+                                    <div style="display: flex; gap: 10px">
+                                        <div style="width: 100%">
+                                            <input type="text" id="searchcltnm2" placeholder="거래처를 입력해주세요">
+                                        </div>
+                                        <div>
+                                            <a href="#" class="btn" title="검색" onclick="searchCltcd($('#searchcltnm2').val())"
+                                               style="background-color: #022D60; color: #fff; text-decoration: none; border-radius: 4px; width: 80px;">
+                                                검색
+                                            </a>
+                                        </div>
+                                    </div>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
@@ -281,11 +288,18 @@
                         <div class="row">
                             <dl style="padding-bottom: 300px">
                                 <h4>검색한 품목명</h4>
-                                <h5 id="productText" style="margin-bottom: 15px">-</h5>
                                 <dt>
-                                    <label for="selectproduct">
-                                        품목명 <span class="eq">*</span>
-                                    </label>
+                                    <div style="display: flex; gap: 10px">
+                                        <div style="width: 100%">
+                                            <input type="text" id="searchproductnm2" placeholder="품목을 입력해주세요">
+                                        </div>
+                                        <div>
+                                            <a href="#" class="btn" title="검색" onclick="searchProduct($('#searchproductnm2').val())"
+                                               style="background-color: #022D60; color: #fff; text-decoration: none; border-radius: 4px; width: 80px;">
+                                                검색
+                                            </a>
+                                        </div>
+                                    </div>
                                 </dt>
                                 <dd>
                                     <div class="input-clear">
@@ -330,7 +344,7 @@
     // 현재 년도를 가져옵니다
     const currentYear = new Date().getFullYear();
     // 시작일 input에 올해 1월 1일을 설정합니다
-    document.getElementById('startDate').value = today;
+    document.getElementById('startDate').value = `${currentYear}-01-01`;
     document.getElementById('endDate').value = today;
 
     function init() {
@@ -566,18 +580,18 @@
     //     });
     // });
     // 거래처명 검색 팝업
-    function searchCltcd() {
+    function searchCltcd(searchCltnm) {
         $.ajax({
             url: '/api/mobile_production/search_cltcd',
             type: 'GET',
             data: {
-                'search_cltnm': $('#searchcltnm').val(),
+                'search_cltnm': searchCltnm
             },
             success: function (data) {
                 console.log(data.data);
 
                 // 거래처명 업데이트
-                document.getElementById("cltcdText").textContent = document.getElementById("searchcltnm").value;
+                document.getElementById("searchcltnm2").value = searchCltnm;
 
                 const data2 = data.data;
                 const selectElement = document.getElementById("selectcltcd");
@@ -614,16 +628,16 @@
     }
 
     // 품목명 검색 팝업
-    function searchProduct() {
+    function searchProduct(searchProductnm) {
         $.ajax({
             url: '/api/mobile_production/search_product',
             type: 'GET',
             data: {
-                'search_productnm': $('#searchproductnm').val(),
+                'search_productnm': searchProductnm
             },
             success: function (data) {
                 console.log(data.data);
-                document.getElementById("productText").textContent = document.getElementById("searchproductnm").value;
+                document.getElementById("searchproductnm2").value = searchProductnm;
                 const data2 = data.data;
                 const selectElement = document.getElementById("selectproduct");
                 // 기존 옵션 제거
@@ -723,6 +737,11 @@
                 if (listNumElement) {
                     listNumElement.textContent = `${data.data.length} 건`;
                 }
+                if (data2.length === 0) {
+                    for(let i = 0; i<5; i++){
+                        data2.push({});
+                    }
+                }
             }
         });
 
@@ -754,7 +773,7 @@
                         e.cell.style.backgroundColor = '#B6BABA';
                     } else if (clsFlagValue === '진행') {
                         e.cell.style.backgroundColor = '#F0EDC3';
-                    } else {
+                    } else if(clsFlagValue === '완료'){
                         e.cell.style.backgroundColor = '#BFE5EB';
                     }
                 }
