@@ -75,9 +75,9 @@ public class HomeController {
 
 
 		// 모바일 첫페이지
-		mv.addObject("currentPage", "ticket-list");
+		mv.addObject("currentPage", "farm-list01");
 //		mv.addObject("default_menu_code", "wm_dashboard_summary");
-		mv.setViewName(isMobile ? "mobile/ticket-list" : "index");
+		mv.setViewName(isMobile ? "mobile/farm-list01" : "mobile/farm-list01");
 		return mv;
 	}
 	
