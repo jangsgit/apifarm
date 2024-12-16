@@ -10,17 +10,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/mobile")
 public class MobileController {
 
-    @GetMapping("/ticket-list")
-    public String ticketList(Model model) {
-        model.addAttribute("currentPage", "ticket-list");
-        return "mobile/ticket-list"; // "mobile/ticket-list.html"로 매핑
+
+    @GetMapping("/farm-list01")
+    public String farmList01(Model model) {
+        model.addAttribute("currentPage", "farm-list01");
+        return "mobile/farm-list01"; // 하이팜컨트롤러
     }
 
-    @GetMapping("/work-list")
-    public String workList(Model model) {
-        model.addAttribute("currentPage", "work-list");
-        return "mobile/work-list"; // 작지별 현황
+
+    @GetMapping("/farm-list02")
+    public String farmList02(Model model) {
+        model.addAttribute("currentPage", "farm-list02");
+        return "mobile/farm-list02"; // 하이팜상태보기
     }
+
+    @GetMapping("/farm-list03")
+    public String farmList03(Model model) {
+        model.addAttribute("currentPage", "farm-list03");
+        return "mobile/farm-list03"; // 버섯컨트롤
+    }
+
+    @GetMapping("/farm-list04")
+    public String farmList04(Model model) {
+        model.addAttribute("currentPage", "farm-list04");
+        return "mobile/farm-list04"; // 운영정보
+    }
+
+    @GetMapping("/farm-list05")
+    public String farmList05(Model model) {
+        model.addAttribute("currentPage", "farm-list05");
+        return "mobile/farm-list05"; // 스케줄정보
+    }
+
     @GetMapping("/current-status")
     public String currentStatusPage(Model model) {
         model.addAttribute("currentPage", "current-status");
