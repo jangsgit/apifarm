@@ -259,49 +259,64 @@
  
  
     $('#btnSave').click(function () {
-    const IdInput =    Number(document.getElementById("inputid").value); 
-    const LedStHourInput = Number(document.getElementById('LedStHour').value); 
-    const LedEdHourInput = Number(document.getElementById('LedEdHour').value); 
-    const WaterStHourInput = Number(document.getElementById('WaterStHour').value); 
-    const WaterEdHourInput = Number(document.getElementById('WaterEdHour').value); 
-    const WateringOnMinuteInput = Number(document.getElementById('WateringOnMinute').value); 
-    const WateringOffMinuteInput = Number(document.getElementById('WateringOffMinute').value); 
+        const IdInput =    Number(document.getElementById("inputid").value); 
+        const LedStHourInput = Number(document.getElementById('LedStHour').value); 
+        const LedEdHourInput = Number(document.getElementById('LedEdHour').value); 
+        const WaterStHourInput = Number(document.getElementById('WaterStHour').value); 
+        const WaterEdHourInput = Number(document.getElementById('WaterEdHour').value); 
+        const WateringOnMinuteInput = Number(document.getElementById('WateringOnMinute').value); 
+        const WateringOffMinuteInput = Number(document.getElementById('WateringOffMinute').value); 
  
 
-    // 전송 데이터
-    let data = {
-      'Id': IdInput,
-      'LedStHour': LedStHourInput,
-      'LedEdHour': LedEdHourInput,
-      'WaterStHour': WaterStHourInput,
-      'WaterEdHour': WaterEdHourInput,
-      'WateringOnMinute': WateringOnMinuteInput,
-      'WateringOffMinute': WateringOffMinuteInput, 
-    };
+        // 전송 데이터
+        let data = {
+        'Id': IdInput,
+        'LedStHour': LedStHourInput,
+        'LedEdHour': LedEdHourInput,
+        'WaterStHour': WaterStHourInput,
+        'WaterEdHour': WaterEdHourInput,
+        'WateringOnMinute': WateringOnMinuteInput,
+        'WateringOffMinute': WateringOffMinuteInput, 
+        };
 
-    console.log('전송 데이터:', data); 
-    // AJAX 요청
-    $.ajax({
-      url: 'http://10.141.8.162/api/Schedule',
-      type: 'POST',
-      async: true,
-      data: JSON.stringify(data),
-      contentType: 'application/json',
-      headers: {
-        'X-CSRF-Token': $('[name=_csrf]').val(),
-      },
-      success: function (response) { 
-        console.log("response ==>" + response.success);
-          if (response.success) {
-            //fetchListData();
-          }
+        console.log('전송 데이터:', data); 
+        
+        // fetch API를 사용하여 PUT 요청 전송
+        fetch('http://10.141.8.162/api/Schedule', {
+                method: 'PUT', // HTTP 메서드: PUT
+                headers: {
+                    'Content-Type': 'application/json', // 요청의 Content-Type
+                    'accept': '*/*' // 헤더에서 응답 형식 지정 (옵션)
+                },
+                body: JSON.stringify(data) // JSON 형식으로 변환하여 전송
+            })
+            .then(response => {
+                // console.log(response)
+            // 응답 상태 확인
+            if (!response.ok) {
+                throw new Error('서버 응답 오류: ' + response.statusText);
+            }
+            Alert.alert('', "전송되었습니다.", function () {
+                fetchListData();
+            });
+            return true; // 응답을 문자열로 받음
+        })
+        .then(text => {
+        if (text) {
+            // JSON이 비어있지 않으면 파싱
+            const result = JSON.parse(text);
+            console.log('서버 응답:', result);
+            // alert('데이터 전송 성공!');
+        } else {
+            console.log('서버 응답이 비어 있습니다.');
+            // alert('서버에서 빈 응답을 반환했습니다.');
+        }
+        })
+        .catch(error => {
+            console.error('오류 발생:', error);
+            alert('데이터 전송 중 오류가 발생했습니다.');
         }); 
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error('AJAX 오류:', textStatus, errorThrown);
-        Alert.alert('', '에러가 발생하였습니다.');
-      }
     });
-  });
 </script>
 </body>
 </html>
