@@ -23,6 +23,74 @@ public class ProductionController {
     @Autowired
     private ProductionService productionService;
 
+    @GetMapping("/flist01")  // 메인컨트롤조정
+    public AjaxResult productionList01(@RequestParam(value = "search", required = false) String searchStartDate,
+                                     Authentication auth) {
+        User user = (User) auth.getPrincipal();
+        String username = user.getUsername();
+        Map<String, Object> userInfo = productionService.getUserInfo(username);
+        String search_startDate = (searchStartDate).replaceAll("-","");
+
+        // 제어모드 상태 API URL
+        String url01 = "http://10.141.8.162/api/Control/GetRunControlMode";
+        // 장치상태 API URL
+        String url02 = "http://10.141.8.162/api/Control/GetEquipState";
+        // 스케줄정보 API URL
+        String url03 = "http://10.141.8.162/api/Schedule";
+
+
+        // RestTemplate 객체 생성
+        RestTemplate restTemplate = new RestTemplate();
+        // 결과 통합
+        Map<String, Object> result = new HashMap<>();
+
+        // HTTP 헤더 설정 (예: JSON 데이터 전송)
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("accept", "*/*");
+        // HttpEntity: 헤더만 담아 전송
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        try {
+            // 제어모드 상태 API 호출 및 응답 처리
+            ResponseEntity<String> response01 = restTemplate.exchange(
+                    url01,
+                    HttpMethod.GET,
+                    requestEntity,
+                    String.class
+            );
+            // 장치상태 상태 API 호출 및 응답 처리
+            ResponseEntity<String> response02 = restTemplate.exchange(
+                    url02,
+                    HttpMethod.GET,
+                    requestEntity,
+                    String.class
+            );
+            // 스케줄 상태 API 호출 및 응답 처리
+            ResponseEntity<String> response03 = restTemplate.exchange(
+                    url03,
+                    HttpMethod.GET,
+                    requestEntity,
+                    String.class
+            );
+            result.put("api1", response01);
+            result.put("api2", response02);
+            result.put("api3", response03);
+
+            // 응답 출력
+//            System.out.println("Response Status: " + response01.getStatusCode());
+//            System.out.println("Response01 Body: " + response01.getBody());
+
+        } catch (Exception e) {
+            // 예외 처리
+            System.err.println("Error occurred while calling the API: " + e.getMessage());
+        }
+
+        AjaxResult resultmodel = new AjaxResult();
+        resultmodel.data = result;
+//        System.out.println("result: " + result);
+        // 결과 반환
+        return resultmodel;
+    }
+
     @GetMapping("/flist02")  // 메인컨트롤상태
     public AjaxResult productionList(@RequestParam(value = "search", required = false) String searchStartDate,
                                      Authentication auth) {

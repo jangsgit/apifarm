@@ -93,9 +93,9 @@
                                 </dl> 
                             </div>
                             <div class="card-btn">
-                                <button>실행</button>
-                                <button>수동</button>
-                                <button>정지</button>
+                                <button id="btnRun01">실행</button>
+                                <button id="btnRun02">수동</button>
+                                <button id="btnRun03">정지</button>
                             </div>
                         </div> <!--//card end -->
                         
@@ -115,8 +115,9 @@
                                 </dl> 
                             </div>
                             <div class="card-btn"> 
-                                <button>작동</button>
-                                <button>중지</button>
+                                <button  id="btnRun04">작동</button>
+                                <button  id="btnRun05">중지</button>
+                                <a href="#a" class="btn btn-popup-open" data-popup="popup1" title="수치조정" onclick=fncctrl01()>수치조정</a> 
                             </div>
                         </div> <!--//card end -->
                         
@@ -136,8 +137,9 @@
                                 </dl> 
                             </div>
                             <div class="card-btn">
-                                <button>작동</button>
-                                <button>중지</button>
+                                <button id="btnRun06">작동</button>
+                                <button id="btnRun07">중지</button>
+                                <a href="#a" class="btn btn-popup-open" data-popup="popup2" title="수치조정" onclick=fncctrl02()>수치조정</a> 
                             </div>
                         </div> <!--//card end -->
                         
@@ -157,39 +159,118 @@
                                 </dl> 
                             </div>
                             <div class="card-btn">
-                                <button>작동</button>
-                                <button>중지</button>
+                                <button  id="btnRun08">작동</button>
+                                <button  id="btnRun09">중지</button>
                             </div>
-                        </div> <!--//card end -->
-                        <!-- <div class="card-box card-green"> 
-                            <div class="card-tit">
-                                <h3>릴레이제어</h3>
-                                <div class="status-tag">
-                                    <span class="sta-green" id="input05">00</span> 
-                                </div> 
-                            </div>
-                            <div class="card-cont">
-                                <dl>
-                                    <dt>RunRelay</dt>
-                                    <dd>index순서의 릴레이를 on/off합니다.</dd>
-                                </dl> 
-                                <dl>
-                                    <dt>&nbsp;</dt>
-                                    <dd>&nbsp;</dd>
-                                </dl> 
-                            </div>
-                            <div class="card-btn">
-                                <button>ON</button>
-                                <button>OFF</button>
-                            </div>
-                        </div> //card end -->
+                        </div> <!--//card end --> 
                     </div> <!--//card-wrap end-->
                 </div> <!--// contents-wrap end-->
         </div> <!--//layout-contents end -->
 
     </div> <!-- //mobile-layout-contents end-->
  
- 
+
+    <!-- [모바일] 팝업  -->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup1">
+            <div class="popup-title">
+                <h3>급수펌프설정</h3>
+                <a onclick="ModalClose('popup1')" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">  
+                <div class="list-card-wrap"> 
+                    <div class="card-box card-blue"> 
+                        <div class="card-cont"> 
+                            <dl>
+                                <dt>WaterStHour</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="WaterStHour" name="WaterStHour" value=0>
+                                    </div>
+                                </dd>   
+                            </dl> 
+                            <dl>
+                                <dt>WaterEdHour</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="WaterEdHour" name="WaterEdHour" value=0>
+                                    </div>
+                                </dd>   
+                            </dl> 
+                            <dl>
+                                <dt>Water OnMinute</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="WateringOnMinute" name="WateringOnMinute" value=0>
+                                    </div>
+                                </dd>    
+                            </dl> 
+                            <dl>
+                                <dt>Water OffMinute</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="WateringOffMinute" name="WateringOffMinute" value=0>
+                                    </div>
+                                </dd>   
+                            </dl>  
+                        </div>
+                    </div> <!--//card-box end --> 
+                </div> <!--//card-wrap end-->
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy" id="btnSave01">저장</button>
+            </div>
+        </div>
+    </div> <!-- //mobile-layout-popup end -->
+
+
+
+    <!-- [모바일] 팝업  -->
+    <div class="mobile-layout-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-wrapper" id="popup2">
+            <div class="popup-title">
+                <h3>LED설정</h3>
+                <a onclick="ModalClose('popup2')" title="팝업닫기" class="btn-popup-close">
+                    <img src="/assets_mobile/images/icon/btn-popup-close.svg" alt="닫기">
+                </a>
+            </div>
+            <div class="popup-contents">  
+                <div class="list-card-wrap"> 
+                    <div class="card-box card-black"> 
+                        <div class="card-cont"> 
+                            <dl>
+                                <dt>LedStHour</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="LedStHour" name="LedStHour" value=0>
+                                        <input type="hidden" id="inputid" name="inputid"  >
+                                    </div>
+                                </dd> 
+                            </dl> 
+                            <dl>
+                                <dt>LedEdHour</dt>
+                                <dd>
+                                    <div class="input-clear">
+                                        <input type="number" id="LedEdHour" name="LedEdHour" value=0>
+                                    </div>
+                                </dd>  
+                            </dl> 
+                        </div>
+                    </div> <!--//card-box end --> 
+                </div> <!--//card-wrap end-->
+            </div>
+            <div class="popup-button">
+                <button class="btn-popup-close btn-navy" id="btnSave02">저장</button>
+            </div>
+        </div>
+    </div> <!-- //mobile-layout-popup end -->
+
+
+    
 </div> <!-- //page-wrapper end-->
  
 
@@ -209,11 +290,20 @@
         fetchListData();
     } 
  
+    function fncctrl01(){
+        openModal('popup1')
+    }
+
+    function fncctrl02(){
+        openModal('popup2')
+    }
+
+
     // 데이터를 받아와 카드 렌더링
     function fetchListData() {
 
         $.ajax({
-            url: '/api/mobile_production/flist02',
+            url: '/api/mobile_production/flist01',
             type: 'GET',
             data: {
                 'search': ''
@@ -236,27 +326,310 @@
 
                 // JSON 문자열을 객체로 변환
                 const parsedData02 = JSON.parse(data.data.api2.body); 
-                equipFan = parsedData02.fan; 
-                EquipElement01.textContent = equipFan ? "작동" : "중지" ;   
-                equipMotor = parsedData02.motor;
-                EquipElement02.textContent  = equipMotor ? "작동" : "중지" ;   
-                equipLed = parsedData02.led; 
-                EquipElement03.textContent  = equipLed ? "작동" : "중지" ; 
+                equipMotor = parsedData02.motor; 
+                EquipElement01.textContent = equipMotor ? "작동" : "중지" ;   
+                equipLed = parsedData02.led;
+                EquipElement02.textContent  = equipLed ? "작동" : "중지" ;   
+                equipFan = parsedData02.fan;  
+                EquipElement03.textContent  = equipFan ? "작동" : "중지" ; 
 
                 
-                // const parsedData03 = JSON.parse(data.data.api3.body); 
-                // equipTemp = parsedData03.temp; 
-                // document.getElementById("input05").innerText = equipTemp  ;   
-                // equipHumity = parsedData03.humity;
-                // document.getElementById("input06").innerText = equipHumity  ;   
-                // equipLight = parsedData03.light; 
-                // document.getElementById("input07").innerText = equipLight  ;   
-                // equipWater = parsedData03.waterlevel; 
-                // document.getElementById("input08").innerText = equipWater  ; 
+                const parsedData03 = JSON.parse(data.data.api3.body); 
+
+                RunData00 = parsedData03.Id;    
+                document.getElementById("inputid").value = RunData00  ;  
+
+                RunData01 = parsedData03.LedStHour;   
+                document.getElementById("LedStHour").value = RunData01  ;  
+
+                RunData02 = parsedData03.LedEdHour;   
+                document.getElementById("LedEdHour").value = RunData02  ;   
+
+                RunData03 = parsedData03.WaterStHour;  
+                document.getElementById("WaterStHour").value = RunData03  ; 
+
+                RunData04 = parsedData03.WaterEdHour;   
+                document.getElementById("WaterEdHour").value = RunData04  ; 
+
+                RunData05 = parsedData03.WateringOnMinute;  
+                document.getElementById("WateringOnMinute").value = RunData05  ; 
+
+                RunData06 = parsedData03.WateringOffMinute;  
+                document.getElementById("WateringOffMinute").value = RunData06  ;  
+ 
  
             }
         });
     }  
+
+    
+    function openModal(popupId) {
+        let popup = document.getElementById(popupId);
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.add('active'); // 팝업 활성화
+            overlay.style.display = 'block'; // 오버레이 보이기
+        } else {
+            console.error('popup2 또는 popup-overlay 요소를 찾을 수 없습니다.');
+        }
+    }
+
+
+    function ModalClose(popupId) {
+        let popup = document.getElementById(popupId);
+        let overlay = document.querySelector('.popup-overlay');
+
+        if (popup && overlay) {
+            popup.classList.remove('active'); // 팝업 비활성화
+            overlay.style.display = 'none'; // 오버레이 숨기기
+        }
+    }
+ 
+
+    $('#btnSave01').click(function () {
+        const IdInput =    Number(document.getElementById("inputid").value); 
+        const LedStHourInput = Number(document.getElementById('LedStHour').value); 
+        const LedEdHourInput = Number(document.getElementById('LedEdHour').value);  
+        const WaterStHourInput = Number(document.getElementById('WaterStHour').value); 
+        const WaterEdHourInput = Number(document.getElementById('WaterEdHour').value); 
+        const WateringOnMinuteInput = Number(document.getElementById('WateringOnMinute').value); 
+        const WateringOffMinuteInput = Number(document.getElementById('WateringOffMinute').value); 
+
+        // 전송 데이터
+        let data = {
+        'Id': IdInput,
+        'LedStHour': LedStHourInput,
+        'LedEdHour': LedEdHourInput ,
+        'WaterStHour': WaterStHourInput,
+        'WaterEdHour': WaterEdHourInput,
+        'WateringOnMinute': WateringOnMinuteInput,
+        'WateringOffMinute': WateringOffMinuteInput, 
+        };
+
+        console.log('전송 데이터:', data); 
+        
+        // fetch API를 사용하여 PUT 요청 전송
+        fetch('http://10.141.8.162/api/Schedule', {
+                method: 'PUT', // HTTP 메서드: PUT
+                headers: {
+                    'Content-Type': 'application/json', // 요청의 Content-Type
+                    'accept': '*/*' // 헤더에서 응답 형식 지정 (옵션)
+                },
+                body: JSON.stringify(data) // JSON 형식으로 변환하여 전송
+            })
+            .then(response => {
+                // console.log(response)
+            // 응답 상태 확인
+            if (!response.ok) {
+                throw new Error('서버 응답 오류: ' + response.statusText);
+            }
+            Alert.alert('', "전송되었습니다.", function () {
+                fetchListData();
+            });
+            return true; // 응답을 문자열로 받음
+        })
+        .then(text => {
+        if (text) {
+            // JSON이 비어있지 않으면 파싱
+            const result = JSON.parse(text);
+            console.log('서버 응답:', result);
+            // alert('데이터 전송 성공!');
+        } else {
+            console.log('서버 응답이 비어 있습니다.');
+            // alert('서버에서 빈 응답을 반환했습니다.');
+        }
+        })
+        .catch(error => {
+            console.error('오류 발생:', error);
+            alert('데이터 전송 중 오류가 발생했습니다.');
+        }); 
+    });
+
+    $('#btnSave02').click(function () {
+        const IdInput =    Number(document.getElementById("inputid").value);  
+        const LedStHourInput = Number(document.getElementById('LedStHour').value); 
+        const LedEdHourInput = Number(document.getElementById('LedEdHour').value);  
+        const WaterStHourInput = Number(document.getElementById('WaterStHour').value); 
+        const WaterEdHourInput = Number(document.getElementById('WaterEdHour').value); 
+        const WateringOnMinuteInput = Number(document.getElementById('WateringOnMinute').value); 
+        const WateringOffMinuteInput = Number(document.getElementById('WateringOffMinute').value); 
+ 
+
+        // 전송 데이터
+        let data = {
+        'Id': IdInput, 
+        'LedStHour': LedStHourInput,
+        'LedEdHour': LedEdHourInput ,
+        'WaterStHour': WaterStHourInput,
+        'WaterEdHour': WaterEdHourInput,
+        'WateringOnMinute': WateringOnMinuteInput,
+        'WateringOffMinute': WateringOffMinuteInput, 
+        };
+
+        console.log('전송 데이터:', data); 
+        
+        // fetch API를 사용하여 PUT 요청 전송
+        fetch('http://10.141.8.162/api/Schedule', {
+                method: 'PUT', // HTTP 메서드: PUT
+                headers: {
+                    'Content-Type': 'application/json', // 요청의 Content-Type
+                    'accept': '*/*' // 헤더에서 응답 형식 지정 (옵션)
+                },
+                body: JSON.stringify(data) // JSON 형식으로 변환하여 전송
+            })
+            .then(response => {
+                // console.log(response)
+            // 응답 상태 확인
+            if (!response.ok) {
+                throw new Error('서버 응답 오류: ' + response.statusText);
+            }
+            Alert.alert('', "전송되었습니다.", function () {
+                fetchListData();
+            });
+            return true; // 응답을 문자열로 받음
+        })
+        .then(text => {
+        if (text) {
+            // JSON이 비어있지 않으면 파싱
+            const result = JSON.parse(text);
+            console.log('서버 응답:', result);
+            // alert('데이터 전송 성공!');
+        } else {
+            console.log('서버 응답이 비어 있습니다.');
+            // alert('서버에서 빈 응답을 반환했습니다.');
+        }
+        })
+        .catch(error => {
+            console.error('오류 발생:', error);
+            alert('데이터 전송 중 오류가 발생했습니다.');
+        }); 
+    });
+
+    //실행
+    $('#btnRun01').click(function () {  
+        const mode = "1"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/RunControl/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //수동
+    $('#btnRun02').click(function () {  
+        const mode = "2"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/RunControl/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //중지
+    $('#btnRun03').click(function () {  
+        const mode = "3"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/RunControl/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //급수펌프실행
+    $('#btnRun04').click(function () {  
+        const mode = "true"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActMotor/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //급수펌프중지
+    $('#btnRun05').click(function () {  
+        const mode = "false"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActMotor/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //led실행
+    $('#btnRun06').click(function () {  
+        const mode = "true"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActLED/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //led중지
+    $('#btnRun07').click(function () {  
+        const mode = "false"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActLED/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //fan실행
+    $('#btnRun08').click(function () {  
+        const mode = "true"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActFan/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+    //fan중지
+    $('#btnRun09').click(function () {  
+        const mode = "false"; // 실행할 모드로 변경
+        const url = `http://10.141.8.162/api/Control/ActFan/${mode}`;
+        const data = {
+            key1: ""
+        }; 
+        crlControl(url, data)
+    });
+
+
+
+
+
+    function crlControl(url, data){
+
+        // fetch API를 사용하여 PUT 요청 전송
+        fetch(url, {
+                method: 'PUT', // HTTP 메서드: PUT
+                headers: {
+                    'Content-Type': 'application/json', // 요청의 Content-Type
+                    'accept': '*/*' // 헤더에서 응답 형식 지정 (옵션)
+                },
+                body: JSON.stringify(data) // JSON 형식으로 변환하여 전송
+            })
+            .then(response => {
+                // console.log(response)
+            // 응답 상태 확인
+            if (!response.ok) {
+                throw new Error('서버 응답 오류: ' + response.statusText);
+            }
+            Alert.alert('', "전송되었습니다.", function () {
+                fetchListData();
+            });
+            return true; // 응답을 문자열로 받음
+        })
+        .then(text => {
+        if (text) {
+            // JSON이 비어있지 않으면 파싱
+            const result = JSON.parse(text);
+            console.log('서버 응답:', result);
+            // alert('데이터 전송 성공!');
+        } else {
+            console.log('서버 응답이 비어 있습니다.');
+            // alert('서버에서 빈 응답을 반환했습니다.');
+        }
+        })
+        .catch(error => {
+            console.error('오류 발생:', error);
+            alert('데이터 전송 중 오류가 발생했습니다.');
+        });         
+    } 
 
 </script>
 </body>
