@@ -32,11 +32,11 @@ public class ProductionController {
         String search_startDate = (searchStartDate).replaceAll("-","");
 
         // 제어모드 상태 API URL
-        String url01 = "http://10.141.8.162/api/Control/GetRunControlMode";
+        String url01 = "http://10.156.129.208/api/Control/GetRunControlMode";
         // 장치상태 API URL
-        String url02 = "http://10.141.8.162/api/Control/GetEquipState";
+        String url02 = "http://10.156.129.208/api/Control/GetEquipState";
         // 스케줄정보 API URL
-        String url03 = "http://10.141.8.162/api/Schedule";
+        String url03 = "http://10.156.129.208/api/Schedule";
 
 
         // RestTemplate 객체 생성
@@ -100,11 +100,11 @@ public class ProductionController {
         String search_startDate = (searchStartDate).replaceAll("-","");
 
         // 제어모드 상태 API URL
-        String url01 = "http://10.141.8.162/api/Control/GetRunControlMode";
+        String url01 = "http://10.156.129.208/api/Control/GetRunControlMode";
         // 장치상태 API URL
-        String url02 = "http://10.141.8.162/api/Control/GetEquipState";
+        String url02 = "http://10.156.129.208/api/Control/GetEquipState";
         // 센서값 API URL
-        String url03 = "http://10.141.8.162/api/Control/ReadMiniFarmSensorValues";
+        String url03 = "http://10.156.129.208/api/Control/ReadMiniFarmSensorValues";
 
         // RestTemplate 객체 생성
         RestTemplate restTemplate = new RestTemplate();
@@ -169,7 +169,7 @@ public class ProductionController {
         String search_startDate = (searchStartDate).replaceAll("-","");
 
         // 운영정보 API URL
-        String url01 = "http://10.141.8.162/api/MushroomCtrlCondition";
+        String url01 = "http://10.156.129.208/api/MushroomCtrlCondition";
 
         // RestTemplate 객체 생성
         RestTemplate restTemplate = new RestTemplate();
@@ -216,7 +216,7 @@ public class ProductionController {
         String search_startDate = (searchStartDate).replaceAll("-","");
 
         // 운영정보 API URL
-        String url01 = "http://10.141.8.162/api/RunControlInfo";
+        String url01 = "http://10.156.129.208/api/RunControlInfo";
 
         // RestTemplate 객체 생성
         RestTemplate restTemplate = new RestTemplate();
@@ -265,7 +265,7 @@ public class ProductionController {
         String search_startDate = (searchStartDate).replaceAll("-","");
 
         // 스케줄정보 API URL
-        String url01 = "http://10.141.8.162/api/Schedule";
+        String url01 = "http://10.156.129.208/api/Schedule";
 
         // RestTemplate 객체 생성
         RestTemplate restTemplate = new RestTemplate();
